@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search: "Rome" — Cultural Entity Navigator</title>
+  <title>Søg: "Rom" — H.C. Andersen Dagbogsindeks</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">Cultural Entity Navigator</a>
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
     <form class="search-form" role="search" onsubmit="return false">
-      <input type="search" value="Rome" class="search-input">
-      <button type="submit" class="search-btn">Search</button>
+      <input type="search" value="Rom" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
     </form>
   </div>
 </header>
@@ -23,9 +23,9 @@
   <div style="background:var(--color-surface);border-bottom:1px solid var(--color-border);padding:12px 0">
     <div class="container">
       <div class="breadcrumb">
-        <a href="index.html">Home</a>
+        <a href="index.html">Forside</a>
         <span class="breadcrumb__sep">›</span>
-        <span class="breadcrumb__current">Search results for "Rome"</span>
+        <span class="breadcrumb__current">Søgeresultater for "Rom"</span>
       </div>
     </div>
   </div>
@@ -34,32 +34,26 @@
     <div class="container">
       <div class="browse-layout">
 
-        <!-- Facet panel -->
         <aside class="facet-panel">
           <div class="facet-panel__header">
-            <span class="facet-panel__title">Refine</span>
-            <button class="facet-panel__clear">Clear all</button>
+            <span class="facet-panel__title">Afgræns</span>
+            <button class="facet-panel__clear">Nulstil</button>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Result type <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Kildetype <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Places</span><span class="facet-item__count">1</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Diary entries</span><span class="facet-item__count">13</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Persons</span><span class="facet-item__count">0</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Works</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Stedregister</span><span class="facet-item__count">1</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Dagbogsider</span><span class="facet-item__count">13</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Personregister</span><span class="facet-item__count">0</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Billedkunst</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Teater &amp; Musik</span><span class="facet-item__count">0</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Bogsamling</span><span class="facet-item__count">0</span></label>
             </div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Institution <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Royal Danish Library</span><span class="facet-item__count">16</span></label>
-            </div>
-          </div>
-
-          <div class="facet-group">
-            <div class="facet-group__header">Date range <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
               <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
                 <span>1825</span>
@@ -72,98 +66,96 @@
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Entity type <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Registertype (H1) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Person</span><span class="facet-item__count">4</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Place</span><span class="facet-item__count">1</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Work (visual art)</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">PERSON-REGISTER</span><span class="facet-item__count">0</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">STED-REGISTER</span><span class="facet-item__count">1</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">VÆRK-REGISTER</span><span class="facet-item__count">2</span></label>
             </div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Relationship type <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Kategori (H2/H3) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">located_in</span><span class="facet-item__count">11</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">mentions</span><span class="facet-item__count">2</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">depicts</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">BILLEDKUNST · Skulptur</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">BILLEDKUNST · Malerier og Tegninger</span><span class="facet-item__count">1</span></label>
             </div>
           </div>
 
         </aside>
 
-        <!-- Results -->
         <div>
           <div class="results-header">
-            <span class="results-count"><strong>16</strong> results for &ldquo;Rome&rdquo;</span>
+            <span class="results-count"><strong>16</strong> resultater for &ldquo;Rom&rdquo;</span>
             <div class="layout-switcher">
-              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Grid</button>
-              <button class="layout-switcher__btn" data-layout="list">List</button>
-              <button class="layout-switcher__btn" data-layout="map">Map</button>
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+              <button class="layout-switcher__btn" data-layout="grid">Gitter</button>
             </div>
           </div>
 
-          <!-- Place result (entity card) -->
+          <!-- Stedregister best match -->
           <div style="margin-bottom:var(--sp5);padding:var(--sp5);background:var(--color-surface);border:1px solid var(--color-accent);border-radius:var(--radius-lg)">
-            <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Best match — Place entity</div>
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Bedste match — Stedregister</div>
             <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px">
-              <a href="place.html" style="font-size:1.05rem;font-weight:700;color:var(--color-text)">Rome / Rom</a>
-              <span class="chip chip--place">Place</span>
-              <span style="font-size:0.78rem;color:var(--color-text-muted)">Reg001001 · STED-REGISTER</span>
+              <a href="place.html" style="font-size:1.05rem;font-weight:700;color:var(--color-text)">Rom</a>
+              <span class="chip chip--place">Sted</span>
+              <span style="font-size:0.78rem;color:var(--color-text-muted);font-family:monospace">Reg0017430 · STED-REGISTER</span>
             </div>
-            <div style="font-size:0.83rem;color:var(--color-text-muted)">Italy, Lazio · 41.9028° N, 12.4964° E · 13 diary references · 4 persons co-occurring</div>
+            <div style="font-size:0.83rem;color:var(--color-text-muted)">Italien, Lazio · 41.9028° N, 12.4964° Ø · 332 dagbogsreferencer</div>
             <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
-              <a href="person.html" class="chip chip--person">H.C. Andersen</a>
-              <a href="person.html" class="chip chip--person">Bertel Thorvaldsen</a>
-              <a href="place.html" class="chip chip--place">Naples</a>
+              <a href="person.html" class="chip chip--person">Thorvaldsen, Bertel</a>
+              <a href="place.html" class="chip chip--place">Napoli</a>
+              <a href="work.html" class="chip">Laokoon-Gruppen</a>
+              <a href="work.html" class="chip">Apollo di Belvedere</a>
             </div>
           </div>
 
           <div class="result-grid">
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100100 · Vol XII</div>
+              <div class="result-card__thumb">Pag100100 · Bind XII</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Rome, Oct–Nov 1833</div>
-                <div class="result-card__meta">Diary entry · 1833 · Pag100100</div>
+                <div class="result-card__title">Rom, 18. oktober 1833</div>
+                <div class="result-card__meta">Dagbogsside · 1833 · Pag100100</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--place">Rome</span>
+                  <span class="chip chip--place">Rom</span>
                   <span class="chip chip--person">Thorvaldsen</span>
                 </div>
               </div>
             </a>
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100200 · Vol XII</div>
+              <div class="result-card__thumb">Pag100200 · Bind XII</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Naples, Nov–Dec 1833</div>
-                <div class="result-card__meta">Diary entry · 1833 · Pag100200 · mentions Rome</div>
+                <div class="result-card__title">Napoli, 12. november 1833</div>
+                <div class="result-card__meta">Dagbogsside · 1833 · Pag100200 · omtaler Rom</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--place">Naples</span>
-                  <span class="chip chip--place">Rome</span>
+                  <span class="chip chip--place">Napoli</span>
+                  <span class="chip chip--place">Rom</span>
                 </div>
               </div>
             </a>
 
-            <a href="#" class="result-card">
-              <div class="result-card__thumb">BILLEDKUNST</div>
+            <a href="work.html" class="result-card">
+              <div class="result-card__thumb">Reg002041 · Skulptur</div>
               <div class="result-card__body">
-                <div class="result-card__title">Udsigt over Roms tage (View over Rome's rooftops)</div>
-                <div class="result-card__meta">Visual art · Reg002210 · VÆRK-REGISTER</div>
+                <div class="result-card__title">Laokoon-Gruppen (Vatikanet, Rom)</div>
+                <div class="result-card__meta">BILLEDKUNST · Skulptur · Reg002041</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--work">Painting</span>
-                  <span class="chip chip--place">Rome</span>
+                  <span class="chip chip--place">Rom</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">7 refs.</span>
                 </div>
               </div>
             </a>
 
-            <a href="#" class="result-card">
-              <div class="result-card__thumb">BILLEDKUNST</div>
+            <a href="work.html" class="result-card">
+              <div class="result-card__thumb">Reg000248 · Skulptur</div>
               <div class="result-card__body">
-                <div class="result-card__title">Det Colosseum ved Maaneskin (Colosseum by Moonlight)</div>
-                <div class="result-card__meta">Visual art · Reg002318 · VÆRK-REGISTER</div>
+                <div class="result-card__title">Apollo di Belvedere (Vatikanet, Rom)</div>
+                <div class="result-card__meta">BILLEDKUNST · Skulptur · Reg000248</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--work">Painting</span>
-                  <span class="chip chip--place">Rome</span>
+                  <span class="chip chip--place">Rom</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
                 </div>
               </div>
             </a>
@@ -179,7 +171,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.1 &nbsp;·&nbsp; Data: H.C. Andersen Archive, The Royal Danish Library
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
   </div>
 </footer>
 

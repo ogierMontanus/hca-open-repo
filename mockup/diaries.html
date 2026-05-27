@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>H.C. Andersen Diaries — Cultural Entity Navigator</title>
+  <title>Dagbøger — H.C. Andersen Dagbogsindeks</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">Cultural Entity Navigator</a>
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
     <form class="search-form" role="search" onsubmit="return false">
-      <input type="search" placeholder="Search entities, works, places…" class="search-input">
-      <button type="submit" class="search-btn">Search</button>
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
     </form>
   </div>
 </header>
@@ -23,19 +23,15 @@
   <div class="page-hero page-hero--sm">
     <div class="container">
       <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
-        <a href="index.html">Home</a>
+        <a href="index.html">Forside</a>
         <span class="breadcrumb__sep">›</span>
-        <a href="library.html">Libraries</a>
-        <span class="breadcrumb__sep">›</span>
-        <a href="library.html">The Royal Danish Library</a>
-        <span class="breadcrumb__sep">›</span>
-        <span class="breadcrumb__current">H.C. Andersen Diaries</span>
+        <span class="breadcrumb__current">Dagbøger</span>
       </nav>
-      <h1>H.C. Andersen Diaries</h1>
-      <p>Handwritten travel and personal diaries, 1825–1875. The Royal Danish Library.</p>
+      <h1>Dagbøger</h1>
+      <p>H.C. Andersens håndskrevne rejse- og personlige dagbøger, 1825–1875</p>
       <div class="page-hero__meta">
-        <span>38 diary entries</span>
-        <span>Manuscript / Diary</span>
+        <span>2.177 dagbogssider</span>
+        <span>Bind I–XII</span>
         <span>1825–1875</span>
       </div>
     </div>
@@ -45,26 +41,14 @@
     <div class="container">
       <div class="browse-layout">
 
-        <!-- Facet panel -->
         <aside class="facet-panel">
           <div class="facet-panel__header">
-            <span class="facet-panel__title">Filters</span>
-            <button class="facet-panel__clear">Clear all</button>
+            <span class="facet-panel__title">Filtrér</span>
+            <button class="facet-panel__clear">Nulstil</button>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Creator <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item">
-                <input type="checkbox" checked>
-                <span class="facet-item__label">H.C. Andersen</span>
-                <span class="facet-item__count">38</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="facet-group">
-            <div class="facet-group__header">Date range <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
               <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
                 <span>1825</span>
@@ -73,89 +57,105 @@
                 <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
                 <span>1875</span>
               </div>
-              <div style="font-size:0.73rem;color:var(--color-text-muted);text-align:center;margin-top:6px">All years selected</div>
+              <div style="font-size:0.73rem;color:var(--color-text-muted);text-align:center;margin-top:6px">Alle år valgt</div>
             </div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Geography <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Omtalte steder <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Italy</span><span class="facet-item__count">11</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Denmark</span><span class="facet-item__count">8</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Germany</span><span class="facet-item__count">7</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">France</span><span class="facet-item__count">6</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">United Kingdom</span><span class="facet-item__count">4</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Switzerland</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">København</span><span class="facet-item__count">1.564</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">373</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rolighed</span><span class="facet-item__count">346</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rom</span><span class="facet-item__count">332</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Dresden</span><span class="facet-item__count">325</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Odense</span><span class="facet-item__count">287</span></label>
             </div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Persons mentioned <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Omtalte personer <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Jenny Lind</span><span class="facet-item__count">9</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Édouard Collin</span><span class="facet-item__count">7</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Charles Dickens</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Franz Liszt</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">H.C. Ørsted</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Bertel Thorvaldsen</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Edvard</span><span class="facet-item__count">767</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Henriques, Martin R.</span><span class="facet-item__count">462</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Melchior, Moritz G.</span><span class="facet-item__count">457</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Henriette Oline</span><span class="facet-item__count">438</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Lind, Jenny</span><span class="facet-item__count">318</span></label>
             </div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Theme <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Omtalte værker — Bogsamling <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Travel</span><span class="facet-item__count">31</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Music &amp; opera</span><span class="facet-item__count">14</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Literature</span><span class="facet-item__count">12</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Visual arts</span><span class="facet-item__count">9</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Nature</span><span class="facet-item__count">7</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Eventyr (H.C.A.)</span><span class="facet-item__count">2.784</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte (H.C.A.)</span><span class="facet-item__count">770</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Romaner og Noveller (H.C.A.)</span><span class="facet-item__count">417</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Skuespil og Operatekster (H.C.A.)</span><span class="facet-item__count">681</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte (Andre forfattere)</span><span class="facet-item__count">341</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Omtalte værker — Teater &amp; Musik <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Operaer og Syngestykker</span><span class="facet-item__count">1.041</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Skuespil — Andre forfattere</span><span class="facet-item__count">1.479</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Balletter</span><span class="facet-item__count">292</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Vokal- og Instrumentalmusik</span><span class="facet-item__count">218</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Omtalte værker — Billedkunst <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Malerier og Tegninger</span><span class="facet-item__count">758</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Skulptur</span><span class="facet-item__count">489</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Museer og Samlinger</span><span class="facet-item__count">189</span></label>
             </div>
           </div>
         </aside>
 
-        <!-- Results -->
         <div>
           <div class="results-header">
-            <span class="results-count"><strong>38</strong> diary entries</span>
+            <span class="results-count"><strong>2.177</strong> dagbogssider</span>
             <div class="layout-switcher">
-              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Grid</button>
-              <button class="layout-switcher__btn" data-layout="list">List</button>
-              <button class="layout-switcher__btn" data-layout="timeline">Timeline</button>
-              <button class="layout-switcher__btn" data-layout="map">Map</button>
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+              <button class="layout-switcher__btn" data-layout="grid">Gitter</button>
+              <button class="layout-switcher__btn" data-layout="timeline">Tidslinje</button>
             </div>
           </div>
 
           <div class="result-grid">
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100100 · Vol XII</div>
+              <div class="result-card__thumb">Pag100100 · Bind XII</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Rome, Oct–Nov 1833</div>
-                <div class="result-card__meta">1833 · Rome, Italy · Vol XII p. 100</div>
+                <div class="result-card__title">Rom, 18. oktober 1833</div>
+                <div class="result-card__meta">1833 · Rom, Italien · Bind XII s. 100</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--place">Rome</span>
+                  <span class="chip chip--place">Rom</span>
                   <span class="chip chip--person">Thorvaldsen</span>
                 </div>
               </div>
             </a>
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100200 · Vol XII</div>
+              <div class="result-card__thumb">Pag100200 · Bind XII</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Naples, Nov–Dec 1833</div>
-                <div class="result-card__meta">1833 · Naples, Italy · Vol XII p. 140</div>
+                <div class="result-card__title">Napoli, 12. november 1833</div>
+                <div class="result-card__meta">1833 · Napoli, Italien · Bind XII s. 140</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--place">Naples</span>
-                  <span class="chip chip--place">Vesuvius</span>
+                  <span class="chip chip--place">Napoli</span>
+                  <span class="chip chip--place">Vesuv</span>
                 </div>
               </div>
             </a>
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100300 · Vol XVI</div>
+              <div class="result-card__thumb">Pag100300 · Bind XVI</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Paris, Sep–Oct 1843</div>
-                <div class="result-card__meta">1843 · Paris, France · Vol XVI p. 55</div>
+                <div class="result-card__title">Paris, 24. september 1843</div>
+                <div class="result-card__meta">1843 · Paris, Frankrig · Bind XVI s. 55</div>
                 <div class="result-card__chips">
                   <span class="chip chip--place">Paris</span>
                   <span class="chip chip--person">Heine</span>
@@ -164,23 +164,23 @@
             </a>
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100400 · Vol XVIII</div>
+              <div class="result-card__thumb">Pag100400 · Bind XVIII</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: London, June 1847</div>
-                <div class="result-card__meta">1847 · London, United Kingdom · Vol XVIII p. 82</div>
+                <div class="result-card__title">London, 30. juni 1847</div>
+                <div class="result-card__meta">1847 · London · Bind XVIII s. 82</div>
                 <div class="result-card__chips">
                   <span class="chip chip--place">London</span>
                   <span class="chip chip--person">Dickens</span>
-                  <span class="chip chip--person">Jenny Lind</span>
+                  <span class="chip chip--person">Lind, Jenny</span>
                 </div>
               </div>
             </a>
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100500 · Vol XX</div>
+              <div class="result-card__thumb">Pag100500 · Bind XX</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Weimar, Nov–Dec 1854</div>
-                <div class="result-card__meta">1854 · Weimar, Germany · Vol XX p. 210</div>
+                <div class="result-card__title">Weimar, 17. november 1854</div>
+                <div class="result-card__meta">1854 · Weimar, Tyskland · Bind XX s. 210</div>
                 <div class="result-card__chips">
                   <span class="chip chip--place">Weimar</span>
                   <span class="chip chip--person">Liszt</span>
@@ -189,26 +189,26 @@
             </a>
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100600 · Vol XXII</div>
+              <div class="result-card__thumb">Pag100600 · Bind XXII</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Copenhagen, Jul–Aug 1860</div>
-                <div class="result-card__meta">1860 · Copenhagen, Denmark · Vol XXII p. 44</div>
+                <div class="result-card__title">Kjøbenhavn, 15. juli 1860</div>
+                <div class="result-card__meta">1860 · København, Danmark · Bind XXII s. 44</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--place">Copenhagen</span>
+                  <span class="chip chip--place">København</span>
                   <span class="chip chip--person">Ørsted</span>
-                  <span class="chip chip--person">Collin</span>
+                  <span class="chip chip--person">Collin, Edvard</span>
                 </div>
               </div>
             </a>
 
             <a href="entry.html" class="result-card">
-              <div class="result-card__thumb">Pag100700 · Vol XXIV</div>
+              <div class="result-card__thumb">Pag100700 · Bind XXIV</div>
               <div class="result-card__body">
-                <div class="result-card__title">Diary: Nice, Dec 1862–Jan 1863</div>
-                <div class="result-card__meta">1862–1863 · Nice, France · Vol XXIV p. 330</div>
+                <div class="result-card__title">Nizza, 5. december 1862</div>
+                <div class="result-card__meta">1862 · Nizza, Frankrig · Bind XXIV s. 330</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--place">Nice</span>
-                  <span class="chip chip--person">Jenny Lind</span>
+                  <span class="chip chip--place">Nizza</span>
+                  <span class="chip chip--person">Lind, Jenny</span>
                 </div>
               </div>
             </a>
@@ -224,7 +224,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.1 &nbsp;·&nbsp; Data: H.C. Andersen Archive, The Royal Danish Library
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
   </div>
 </footer>
 

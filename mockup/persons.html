@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personregister — H.C. Andersen Dagbogsindeks</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Personregister</span>
+      </nav>
+      <h1>Personregister</h1>
+      <p>H1 = PERSON-REGISTER — navne omtalt i H.C. Andersens dagbøger</p>
+      <div class="page-hero__meta">
+        <span>10.228 registerposter</span>
+        <span>39.361 dagbogsreferencer</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Alphabet navigation -->
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:var(--sp6)">
+        <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
+        <a href="#" class="chip" style="background:var(--color-accent);color:#fff">A</a>
+        <a href="#" class="chip">B</a>
+        <a href="#" class="chip">C</a>
+        <a href="#" class="chip chip--active">D</a>
+        <a href="#" class="chip">E</a>
+        <a href="#" class="chip">F</a>
+        <a href="#" class="chip">G</a>
+        <a href="#" class="chip">H</a>
+        <a href="#" class="chip">I</a>
+        <a href="#" class="chip">J</a>
+        <a href="#" class="chip">K</a>
+        <a href="#" class="chip">L</a>
+        <a href="#" class="chip">M</a>
+        <a href="#" class="chip">N</a>
+        <a href="#" class="chip">O</a>
+        <a href="#" class="chip">P</a>
+        <a href="#" class="chip">R</a>
+        <a href="#" class="chip">S</a>
+        <a href="#" class="chip">T</a>
+        <a href="#" class="chip">U</a>
+        <a href="#" class="chip">V</a>
+        <a href="#" class="chip">W</a>
+        <a href="#" class="chip">Ø</a>
+        <a href="#" class="chip">Å</a>
+      </div>
+
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filtrér</span>
+            <button class="facet-panel__clear">Nulstil</button>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Nationalitet <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Dansk</span><span class="facet-item__count">4.218</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Tysk</span><span class="facet-item__count">1.847</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Engelsk</span><span class="facet-item__count">987</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Fransk</span><span class="facet-item__count">743</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Svensk</span><span class="facet-item__count">512</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Øvrige</span><span class="facet-item__count">1.921</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Rolle / Erhverv <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Kunstner / Maler</span><span class="facet-item__count">892</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Forfatter / Digter</span><span class="facet-item__count">743</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Musiker / Komponist</span><span class="facet-item__count">618</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Adelsperson / Adel</span><span class="facet-item__count">541</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Skuespiller / Sanger</span><span class="facet-item__count">498</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Samtidige steder <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">København</span><span class="facet-item__count">2.847</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">412</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Wien</span><span class="facet-item__count">318</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">London</span><span class="facet-item__count">287</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rom</span><span class="facet-item__count">214</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Årstal for omtale <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
+                <span>1825</span>
+                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
+                <span>—</span>
+                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
+                <span>1875</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div>
+          <div class="results-header">
+            <span class="results-count"><strong>10.228</strong> personer i Personregister</span>
+            <div class="layout-switcher">
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+              <button class="layout-switcher__btn" data-layout="grid">Gitter</button>
+            </div>
+          </div>
+
+          <!-- Top referenced persons list -->
+          <div class="result-list" style="display:flex;flex-direction:column;gap:var(--sp3)">
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0048570</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Collin, Edvard</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk embedsmand og ven</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">767 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0069470</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Henriques, Martin R.</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk bankier og ven</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">462 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0090690</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Melchior, Moritz G.</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk grosserer og velynder</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">457 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0046040</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Collin, Henriette Oline</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk, gift med Edvard Collin</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">438 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0082540</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Koch, Ida f. Wulff</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">419 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0046030</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Collin, Jonas</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk kongelig embedsmand og mæcen</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">412 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0161110</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Melchior, Dorothea</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">398 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0169560</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Ørsted, Hans Christian</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk fysiker</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">387 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0097310</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Lind, Jenny</div>
+                <div class="result-card__meta">PERSON-REGISTER · svensk operasangerinde (sopran)</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">318 refs.</div>
+            </a>
+
+            <a href="person.html" class="result-card result-card--list" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0061810</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Hartmann, Johan Peter Emilius</div>
+                <div class="result-card__meta">PERSON-REGISTER · dansk komponist</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">312 refs.</div>
+            </a>
+
+          </div>
+
+          <!-- Pagination -->
+          <div style="display:flex;justify-content:center;gap:6px;margin-top:var(--sp8)">
+            <button class="layout-switcher__btn layout-switcher__btn--active">1</button>
+            <button class="layout-switcher__btn">2</button>
+            <button class="layout-switcher__btn">3</button>
+            <span style="align-self:center;color:var(--color-text-muted);font-size:0.8rem">… 1.023 sider</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>
