@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stedregister — H.C. Andersen Dagbogsindeks</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Stedregister</span>
+      </nav>
+      <h1>Stedregister</h1>
+      <p>H1 = STED-REGISTER — steder omtalt i H.C. Andersens dagbøger</p>
+      <div class="page-hero__meta">
+        <span>2.508 registerposter</span>
+        <span>18.849 dagbogsreferencer</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filtrér</span>
+            <button class="facet-panel__clear">Nulstil</button>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Land <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Danmark</span><span class="facet-item__count">612</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Tyskland</span><span class="facet-item__count">487</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Italien</span><span class="facet-item__count">341</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Frankrig</span><span class="facet-item__count">218</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Sverige</span><span class="facet-item__count">187</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Øvrige lande</span><span class="facet-item__count">663</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Stedstype <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">By</span><span class="facet-item__count">1.247</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Herregård / Gods</span><span class="facet-item__count">384</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Hotel / Kur</span><span class="facet-item__count">219</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Natur / Landskab</span><span class="facet-item__count">198</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Kirke / Monument</span><span class="facet-item__count">176</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Samtidige personer <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Edvard</span><span class="facet-item__count">412</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Lind, Jenny</span><span class="facet-item__count">198</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Henriques, Martin R.</span><span class="facet-item__count">187</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Årstal for omtale <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
+                <span>1825</span>
+                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
+                <span>—</span>
+                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
+                <span>1875</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div>
+          <div class="results-header">
+            <span class="results-count"><strong>2.508</strong> steder i Stedregister</span>
+            <div class="layout-switcher">
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+              <button class="layout-switcher__btn" data-layout="grid">Gitter</button>
+            </div>
+          </div>
+
+          <!-- Top referenced places list -->
+          <div style="display:flex;flex-direction:column;gap:var(--sp3)">
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0010880</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">København</div>
+                <div class="result-card__meta">STED-REGISTER · Danmark · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">1.564 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0015520</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Paris</div>
+                <div class="result-card__meta">STED-REGISTER · Frankrig · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">373 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0161130</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Rolighed</div>
+                <div class="result-card__meta">STED-REGISTER · Danmark · villa ved Øresund</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">346 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0017430</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Rom</div>
+                <div class="result-card__meta">STED-REGISTER · Italien · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">332 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0034900</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Dresden</div>
+                <div class="result-card__meta">STED-REGISTER · Sachsen, Tyskland · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">325 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0128480</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Odense</div>
+                <div class="result-card__meta">STED-REGISTER · Danmark · fødeby</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">287 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0012430</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">München</div>
+                <div class="result-card__meta">STED-REGISTER · Bayern, Tyskland · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">241 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0013800</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Wien</div>
+                <div class="result-card__meta">STED-REGISTER · Østrig · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">228 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0018650</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Stockholm</div>
+                <div class="result-card__meta">STED-REGISTER · Sverige · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">198 refs.</div>
+            </a>
+
+            <a href="place.html" class="result-card" style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">
+              <div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">Reg0119810</div>
+              <div style="flex:1">
+                <div class="result-card__title" style="font-size:0.95rem">Napoli</div>
+                <div class="result-card__meta">STED-REGISTER · Italien · by</div>
+              </div>
+              <div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">184 refs.</div>
+            </a>
+
+          </div>
+
+          <div style="display:flex;justify-content:center;gap:6px;margin-top:var(--sp8)">
+            <button class="layout-switcher__btn layout-switcher__btn--active">1</button>
+            <button class="layout-switcher__btn">2</button>
+            <button class="layout-switcher__btn">3</button>
+            <span style="align-self:center;color:var(--color-text-muted);font-size:0.8rem">… 251 sider</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>

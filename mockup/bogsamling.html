@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bogsamling — H.C. Andersen Dagbogsindeks</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Bogsamling</span>
+      </nav>
+      <h1>Bogsamling</h1>
+      <p>Trykte og litterære værker — H.C. Andersen og andre forfattere</p>
+      <div class="page-hero__meta">
+        <span>1.516 registerposter</span>
+        <span>5.048 dagbogsreferencer</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Author group tabs -->
+      <div class="author-tabs">
+        <button class="author-tab author-tab--active" data-group="hca">H.C. Andersen (775 poster)</button>
+        <button class="author-tab" data-group="andre">Andre Forfattere (741 poster)</button>
+      </div>
+
+      <!-- H.C. Andersen sub-sections -->
+      <div id="group-hca">
+        <div class="subsection-grid" style="margin-bottom:var(--sp10)">
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Eventyr</h3>
+            <p class="subsection-card__example">
+              Den grimme Ælling · Dryaden · Tommelise · Snedronningen ·
+              Den lille Havfrue · Klods-Hans …
+            </p>
+            <div class="subsection-card__stats">288 poster · 2.784 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Digte</h3>
+            <p class="subsection-card__example">
+              Det døende Barn · Gurre · Musik til Digte af HCA ·
+              Digte (i Almindelighed) · Kjendte og glemte Digte …
+            </p>
+            <div class="subsection-card__stats">342 poster · 770 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Romaner og Noveller</h3>
+            <p class="subsection-card__example">
+              Improvisatoren · O.T. · Kun en Spillemand ·
+              De to Baronesser · At være eller ikke være …
+            </p>
+            <div class="subsection-card__stats">33 poster · 417 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Rejseskildringer</h3>
+            <p class="subsection-card__example">
+              En Digters Bazar · I Spanien · I Sverrig ·
+              Fodreise fra Holmens Canal til Østpynten …
+            </p>
+            <div class="subsection-card__stats">21 poster · 245 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Afhandlinger, Artikler m.m.</h3>
+            <p class="subsection-card__example">
+              Artikler i aviser og tidsskrifter · Foredrag ·
+              Breve til redaktioner …
+            </p>
+            <div class="subsection-card__stats">19 poster · 214 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Selvbiografier</h3>
+            <p class="subsection-card__example">
+              Mit Livs Eventyr · Das Märchen meines Lebens ·
+              Levnedsbog · True Story of My Life …
+            </p>
+            <div class="subsection-card__stats">10 poster · 196 dagbogsrefs.</div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Andre Forfattere sub-sections (hidden by default) -->
+      <div id="group-andre" style="display:none">
+        <div class="subsection-grid" style="margin-bottom:var(--sp10)">
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Digte</h3>
+            <p class="subsection-card__example">
+              Gjenganger-Breve (Henrik Hertz) · La Divina Commedia (Dante) ·
+              Frithiofs Saga (Tegnér) · Peder Paars (Holberg) …
+            </p>
+            <div class="subsection-card__stats">250 poster · 341 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Romaner, Noveller, Eventyr</h3>
+            <p class="subsection-card__example">
+              Romaner af Dickens, Hugo og Dostoevskyj ·
+              Noveller af Tieck og Hoffmann …
+            </p>
+            <div class="subsection-card__stats">229 poster · 338 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Faglitteratur</h3>
+            <p class="subsection-card__example">
+              Videnskabelige afhandlinger · Historieskrivning ·
+              Religionsfilosofi · Naturvidenskab …
+            </p>
+            <div class="subsection-card__stats">216 poster · 347 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Tidsskrifter og Aarbøger (Periodica)</h3>
+            <p class="subsection-card__example">
+              Illustreret Tidende · Fædrelandet · Berlingske Tidende ·
+              Flyveposten · Ugeblade og vittighedsblade …
+            </p>
+            <div class="subsection-card__stats">84 poster · 318 dagbogsrefs.</div>
+          </a>
+
+          <a href="diaries.html" class="subsection-card">
+            <h3>Samlede og blandede Skrifter</h3>
+            <p class="subsection-card__example">
+              Udvalgte Skrifter · Samlede Værker i bind ·
+              Posthume udgaver …
+            </p>
+            <div class="subsection-card__stats">19 poster · 33 dagbogsrefs.</div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Browse layout -->
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filtrér</span>
+            <button class="facet-panel__clear">Nulstil</button>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Forfattergruppe (H2) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">H. C. ANDERSEN</span><span class="facet-item__count">775</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">ANDRE FORFATTERE</span><span class="facet-item__count">741</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Form (H3) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Eventyr</span><span class="facet-item__count">288</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte</span><span class="facet-item__count">592</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Romaner og Noveller</span><span class="facet-item__count">262</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Faglitteratur</span><span class="facet-item__count">216</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Periodica</span><span class="facet-item__count">84</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rejseskildringer</span><span class="facet-item__count">21</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
+                <span>1825</span>
+                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
+                <span>—</span>
+                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
+                <span>1875</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div>
+          <div class="results-header">
+            <span class="results-count"><strong>1.516</strong> poster i Bogsamling</span>
+            <div class="layout-switcher">
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Gitter</button>
+              <button class="layout-switcher__btn" data-layout="list">Liste</button>
+            </div>
+          </div>
+
+          <div class="result-grid">
+            <a href="work.html" class="result-card">
+              <div class="result-card__thumb">Reg000713 · Eventyr</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Den grimme Ælling</div>
+                <div class="result-card__meta">H. C. ANDERSEN · Eventyr</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">59 refs.</span></div>
+              </div>
+            </a>
+            <a href="work.html" class="result-card">
+              <div class="result-card__thumb">Reg001003 · Eventyr</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Dryaden</div>
+                <div class="result-card__meta">H. C. ANDERSEN · Eventyr</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">58 refs.</span></div>
+              </div>
+            </a>
+            <a href="work.html" class="result-card">
+              <div class="result-card__thumb">Reg000846 · Digt</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Det døende Barn</div>
+                <div class="result-card__meta">H. C. ANDERSEN · Digte</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">14 refs.</span></div>
+              </div>
+            </a>
+            <a href="work.html" class="result-card">
+              <div class="result-card__thumb">Reg001979 · Digt</div>
+              <div class="result-card__body">
+                <div class="result-card__title">La Divina Commedia (Dante)</div>
+                <div class="result-card__meta">ANDRE FORFATTERE · Digte</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script>
+  document.querySelectorAll('.author-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.author-tab').forEach(function(b) { b.classList.remove('author-tab--active'); });
+      btn.classList.add('author-tab--active');
+      var group = btn.dataset.group;
+      document.getElementById('group-hca').style.display = group === 'hca' ? '' : 'none';
+      document.getElementById('group-andre').style.display = group === 'andre' ? '' : 'none';
+    });
+  });
+</script>
+</body>
+</html>

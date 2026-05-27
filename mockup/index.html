@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cultural Entity Navigator</title>
+  <title>H.C. Andersen Dagbogsindeks</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">Cultural Entity Navigator</a>
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
     <form class="search-form" role="search" onsubmit="return false">
-      <input type="search" placeholder="Search entities, works, places…" class="search-input">
-      <button type="submit" class="search-btn">Search</button>
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
     </form>
   </div>
 </header>
@@ -22,91 +22,110 @@
 
   <section class="page-hero">
     <div class="container">
-      <h1>Explore Cultural Collections</h1>
-      <p>Navigate artworks, texts, performances, and heritage collections through named entities — across institutions, media types, and time.</p>
+      <h1>H.C. Andersens Dagbogsindeks</h1>
+      <p>Naviger i 2.177 dagbogssider og 16.453 registerposter — fordelt på treværkregistre og to navneregistre.</p>
     </div>
   </section>
 
+  <!-- Row 1: Three wings (VÆRK-REGISTER sub-divisions) -->
   <section class="section">
     <div class="container">
-      <h2 class="section-title">Browse by Institution</h2>
-      <div class="institution-grid">
+      <h2 class="section-title">Værk-Register</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
 
-        <a href="library.html" class="institution-card institution-card--active">
-          <div class="institution-card__icon">LIB</div>
-          <h3>Libraries</h3>
-          <p>Manuscripts, diaries, letters, printed books, periodicals</p>
-          <span class="institution-card__count">3 institutions · 1,842 works</span>
+        <a href="billedkunst.html" class="wing-card">
+          <div class="wing-card__label">BIL</div>
+          <h3>Billedkunst</h3>
+          <p>Malerier, tegninger, skulpturer og museumsamlinger</p>
+          <div class="wing-card__subs">
+            <span>Malerier og Tegninger <em>587</em></span>
+            <span>Skulptur <em>315</em></span>
+            <span>Museer og Samlinger <em>39</em></span>
+          </div>
+          <div class="wing-card__stats">941 poster · 1.436 dagbogsrefs.</div>
         </a>
 
-        <a href="#" class="institution-card institution-card--dimmed">
-          <div class="institution-card__icon">GAL</div>
-          <h3>Galleries</h3>
-          <p>Paintings, drawings, prints, photographs, decorative arts</p>
-          <span class="institution-card__count">Coming soon</span>
+        <a href="teater-musik.html" class="wing-card">
+          <div class="wing-card__label">TEA</div>
+          <h3>Teater &amp; Musik</h3>
+          <p>Operaer, skuespil, balletter og instrumentalmusik</p>
+          <div class="wing-card__subs">
+            <span>Operaer og Syngestykker <em>241</em></span>
+            <span>Skuespil — Andre Forfattere <em>747</em></span>
+            <span>Skuespil og Operatekster — HCA <em>57</em></span>
+            <span>Balletter <em>80</em></span>
+            <span>Vokal- og Instrumentalmusik <em>135</em></span>
+          </div>
+          <div class="wing-card__stats">1.260 poster · 3.711 dagbogsrefs.</div>
         </a>
 
-        <a href="#" class="institution-card institution-card--dimmed">
-          <div class="institution-card__icon">MUS</div>
-          <h3>Museums</h3>
-          <p>Objects, sculpture, material culture, historical artefacts</p>
-          <span class="institution-card__count">Coming soon</span>
-        </a>
-
-        <a href="#" class="institution-card institution-card--dimmed">
-          <div class="institution-card__icon">ARC</div>
-          <h3>Archives</h3>
-          <p>Records, administrative documents, institutional histories</p>
-          <span class="institution-card__count">Coming soon</span>
-        </a>
-
-        <a href="#" class="institution-card institution-card--dimmed">
-          <div class="institution-card__icon">THE</div>
-          <h3>Theaters</h3>
-          <p>Plays, opera, ballet, stage documentation</p>
-          <span class="institution-card__count">Coming soon</span>
-        </a>
-
-        <a href="#" class="institution-card institution-card--dimmed">
-          <div class="institution-card__icon">FLM</div>
-          <h3>Film</h3>
-          <p>Moving image, documentary, film archives</p>
-          <span class="institution-card__count">Coming soon</span>
-        </a>
-
-        <a href="#" class="institution-card institution-card--dimmed">
-          <div class="institution-card__icon">MUS</div>
-          <h3>Music</h3>
-          <p>Scores, recordings, concert programs, music manuscripts</p>
-          <span class="institution-card__count">Coming soon</span>
-        </a>
-
-        <a href="#" class="institution-card institution-card--dimmed">
-          <div class="institution-card__icon">HER</div>
-          <h3>Heritage</h3>
-          <p>Cultural heritage sites, vernacular collections, folk traditions</p>
-          <span class="institution-card__count">Coming soon</span>
+        <a href="bogsamling.html" class="wing-card">
+          <div class="wing-card__label">BOG</div>
+          <h3>Bogsamling</h3>
+          <p>Eventyr, digte, romaner, faglitteratur og periodica</p>
+          <div class="wing-card__subs">
+            <span>H.C. Andersen — Eventyr <em>288</em></span>
+            <span>H.C. Andersen — Digte <em>342</em></span>
+            <span>Andre Forfattere — Skuespiltekster <em>747</em> (→ Teater)</span>
+            <span>Andre Forfattere — Digte, Romaner… <em>578</em></span>
+          </div>
+          <div class="wing-card__stats">1.516 poster · 5.048 dagbogsrefs.</div>
         </a>
 
       </div>
     </div>
   </section>
 
-  <section class="section section--light section--border-top">
+  <!-- Row 2: Flat registers + Diary -->
+  <section class="section section--light section--border-top" style="padding-top:var(--sp8);padding-bottom:var(--sp8)">
     <div class="container">
-      <h2 class="section-title">Explore by Dimension</h2>
-      <div class="dimension-grid">
+      <h2 class="section-title">Navneregistre &amp; Dagbøger</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
+
+        <a href="persons.html" class="dimension-card">
+          <h3>Personregister</h3>
+          <p>10.228 personer · 39.361 dagbogsrefs.</p>
+          <p style="font-size:0.78rem;color:var(--color-text-muted);margin-top:6px">
+            Collin, Edvard · Henriques, Martin R. · Melchior, Moritz G. …
+          </p>
+        </a>
+
+        <a href="places.html" class="dimension-card">
+          <h3>Stedregister</h3>
+          <p>2.508 steder · 18.849 dagbogsrefs.</p>
+          <p style="font-size:0.78rem;color:var(--color-text-muted);margin-top:6px">
+            København · Paris · Rom · Dresden · Odense …
+          </p>
+        </a>
+
+        <a href="diaries.html" class="dimension-card">
+          <h3>Dagbøger</h3>
+          <p>2.177 dagbogssider · 69.405 registrerede henvisninger</p>
+          <p style="font-size:0.78rem;color:var(--color-text-muted);margin-top:6px">
+            Bind I–XII · 1825–1875 · med fuldtekst
+          </p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 3: Explorer tools -->
+  <section class="section section--border-top" style="padding-top:var(--sp8);padding-bottom:var(--sp8)">
+    <div class="container">
+      <h2 class="section-title">Udforsk</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
         <a href="search.html" class="dimension-card">
-          <h3>Named Entities</h3>
-          <p>Browse persons, places, works, events, and themes across all institutions and media types.</p>
+          <h3>Søg</h3>
+          <p>Fritekst- og registersøgning på tværs af alle poster og dagbøger</p>
         </a>
         <a href="#" class="dimension-card">
-          <h3>Timeline Explorer</h3>
-          <p>Navigate collections by historical period, date range, and chronological context.</p>
+          <h3>Tidslinje</h3>
+          <p>Naviger i dagbøgerne efter årstal og historisk periode</p>
         </a>
         <a href="#" class="dimension-card">
-          <h3>Map Explorer</h3>
-          <p>Explore geographic connections — travel routes, depicted locations, production sites.</p>
+          <h3>Kort</h3>
+          <p>Geografiske forbindelser — rejseruter, omtalte steder</p>
         </a>
       </div>
     </div>
@@ -116,7 +135,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.1 &nbsp;·&nbsp; Data: H.C. Andersen Archive, The Royal Danish Library
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
   </div>
 </footer>
 
