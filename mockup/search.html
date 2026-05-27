@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search: "Rome" — Cultural Entity Navigator</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">Cultural Entity Navigator</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" value="Rome" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div style="background:var(--color-surface);border-bottom:1px solid var(--color-border);padding:12px 0">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Search results for "Rome"</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:var(--sp8)">
+    <div class="container">
+      <div class="browse-layout">
+
+        <!-- Facet panel -->
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Refine</span>
+            <button class="facet-panel__clear">Clear all</button>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Result type <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Places</span><span class="facet-item__count">1</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Diary entries</span><span class="facet-item__count">13</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Persons</span><span class="facet-item__count">0</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Works</span><span class="facet-item__count">2</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Institution <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Royal Danish Library</span><span class="facet-item__count">16</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Date range <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
+                <span>1825</span>
+                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
+                <span>—</span>
+                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
+                <span>1875</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Entity type <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Person</span><span class="facet-item__count">4</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Place</span><span class="facet-item__count">1</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Work (visual art)</span><span class="facet-item__count">2</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Relationship type <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">located_in</span><span class="facet-item__count">11</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">mentions</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">depicts</span><span class="facet-item__count">2</span></label>
+            </div>
+          </div>
+
+        </aside>
+
+        <!-- Results -->
+        <div>
+          <div class="results-header">
+            <span class="results-count"><strong>16</strong> results for &ldquo;Rome&rdquo;</span>
+            <div class="layout-switcher">
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Grid</button>
+              <button class="layout-switcher__btn" data-layout="list">List</button>
+              <button class="layout-switcher__btn" data-layout="map">Map</button>
+            </div>
+          </div>
+
+          <!-- Place result (entity card) -->
+          <div style="margin-bottom:var(--sp5);padding:var(--sp5);background:var(--color-surface);border:1px solid var(--color-accent);border-radius:var(--radius-lg)">
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--color-accent);margin-bottom:8px">Best match — Place entity</div>
+            <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px">
+              <a href="place.html" style="font-size:1.05rem;font-weight:700;color:var(--color-text)">Rome / Rom</a>
+              <span class="chip chip--place">Place</span>
+              <span style="font-size:0.78rem;color:var(--color-text-muted)">Reg001001 · STED-REGISTER</span>
+            </div>
+            <div style="font-size:0.83rem;color:var(--color-text-muted)">Italy, Lazio · 41.9028° N, 12.4964° E · 13 diary references · 4 persons co-occurring</div>
+            <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+              <a href="person.html" class="chip chip--person">H.C. Andersen</a>
+              <a href="person.html" class="chip chip--person">Bertel Thorvaldsen</a>
+              <a href="place.html" class="chip chip--place">Naples</a>
+            </div>
+          </div>
+
+          <div class="result-grid">
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100100 · Vol XII</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Diary: Rome, Oct–Nov 1833</div>
+                <div class="result-card__meta">Diary entry · 1833 · Pag100100</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Rome</span>
+                  <span class="chip chip--person">Thorvaldsen</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100200 · Vol XII</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Diary: Naples, Nov–Dec 1833</div>
+                <div class="result-card__meta">Diary entry · 1833 · Pag100200 · mentions Rome</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Naples</span>
+                  <span class="chip chip--place">Rome</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="#" class="result-card">
+              <div class="result-card__thumb">BILLEDKUNST</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Udsigt over Roms tage (View over Rome's rooftops)</div>
+                <div class="result-card__meta">Visual art · Reg002210 · VÆRK-REGISTER</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--work">Painting</span>
+                  <span class="chip chip--place">Rome</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="#" class="result-card">
+              <div class="result-card__thumb">BILLEDKUNST</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Det Colosseum ved Maaneskin (Colosseum by Moonlight)</div>
+                <div class="result-card__meta">Visual art · Reg002318 · VÆRK-REGISTER</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--work">Painting</span>
+                  <span class="chip chip--place">Rome</span>
+                </div>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.1 &nbsp;·&nbsp; Data: H.C. Andersen Archive, The Royal Danish Library
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>
