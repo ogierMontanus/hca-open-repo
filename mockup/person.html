@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jenny Lind — Cultural Entity Navigator</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">Cultural Entity Navigator</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search entities, works, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="search.html">Named Entities</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="search.html">Persons</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Jenny Lind</span>
+      </nav>
+      <h1>Jenny Lind</h1>
+      <p>Person &nbsp;·&nbsp; PERSON-REGISTER &nbsp;·&nbsp; Reg000042</p>
+      <div class="page-hero__meta">
+        <span>1820–1887</span>
+        <span>Swedish</span>
+        <span>Opera singer (soprano)</span>
+        <span>9 diary references</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="entity-layout">
+
+        <div class="entity-main">
+
+          <!-- Biography -->
+          <div>
+            <h2 class="section-title">Biography</h2>
+            <p style="font-size:0.92rem;line-height:1.75;max-width:640px">
+              Johanna Maria Lind (1820–1887), known as the "Swedish Nightingale", was one of the most celebrated
+              opera singers of the nineteenth century. She was closely acquainted with H.C. Andersen, who is
+              believed to have harboured romantic feelings for her; she does not appear to have reciprocated.
+              Andersen mentions her repeatedly in his diaries across three decades, most notably in connection
+              with her London triumph in 1847 and her retirement from the operatic stage in the 1850s.
+            </p>
+          </div>
+
+          <!-- Timeline -->
+          <div>
+            <h2 class="section-title">Timeline</h2>
+            <div class="timeline-bar">
+              <div class="timeline-bar__title">Life span and HCA diary references</div>
+              <div class="timeline-track">
+                <div class="timeline-track__span" style="left:0%;width:100%"></div>
+                <div class="timeline-track__dot" style="left:38%" title="1847 — London diary"></div>
+                <div class="timeline-track__dot" style="left:66%" title="1862 — Nice diary"></div>
+                <div class="timeline-track__dot" style="left:72%" title="1865 — Mentioned in letters"></div>
+              </div>
+              <div class="timeline-labels">
+                <span>1820</span>
+                <span>1840</span>
+                <span>1860</span>
+                <span>1887</span>
+              </div>
+              <div class="timeline-events">
+                <div class="timeline-event">
+                  <span class="timeline-event__year">1847</span>
+                  <span class="timeline-event__text">Mentioned in London diary (Pag100400) — Andersen notes her operatic triumph in the city</span>
+                </div>
+                <div class="timeline-event">
+                  <span class="timeline-event__year">1862</span>
+                  <span class="timeline-event__text">Mentioned in Nice diary (Pag100700) — Andersen reads of her London concert season</span>
+                </div>
+                <div class="timeline-event">
+                  <span class="timeline-event__year">1865</span>
+                  <span class="timeline-event__text">Referenced in letter to Édouard Collin — reflections on past friendship</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Related works (tabs by institution) -->
+          <div>
+            <h2 class="section-title">Related diary entries</h2>
+            <div class="tabs">
+              <button class="tab-btn tab-btn--active">All (9)</button>
+              <button class="tab-btn">Mentions (7)</button>
+              <button class="tab-btn">Direct meetings (2)</button>
+            </div>
+            <div class="result-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+
+              <a href="entry.html" class="result-card">
+                <div class="result-card__body">
+                  <div class="result-card__title">Diary: London, June 1847</div>
+                  <div class="result-card__meta">1847 · London, UK · Pag100400</div>
+                  <div class="result-card__chips">
+                    <span class="chip chip--place" style="font-size:0.68rem">London</span>
+                    <span class="chip chip--person" style="font-size:0.68rem">Dickens</span>
+                  </div>
+                </div>
+              </a>
+
+              <a href="entry.html" class="result-card">
+                <div class="result-card__body">
+                  <div class="result-card__title">Diary: Nice, Dec 1862</div>
+                  <div class="result-card__meta">1862 · Nice, France · Pag100700</div>
+                  <div class="result-card__chips">
+                    <span class="chip chip--place" style="font-size:0.68rem">Nice</span>
+                  </div>
+                </div>
+              </a>
+
+            </div>
+          </div>
+
+          <!-- Network relations -->
+          <div>
+            <h2 class="section-title">Network relations</h2>
+            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Entities co-occurring with Jenny Lind in the diary corpus</p>
+            <div class="network-chips">
+              <a href="person.html" class="chip chip--person">H.C. Andersen</a>
+              <a href="person.html" class="chip chip--person">Charles Dickens</a>
+              <a href="person.html" class="chip chip--person">Édouard Collin</a>
+              <a href="place.html" class="chip chip--place">London</a>
+              <a href="place.html" class="chip chip--place">Nice</a>
+              <a href="place.html" class="chip chip--place">Stockholm</a>
+              <span class="chip chip--theme">Music &amp; opera</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="entity-sidebar">
+
+          <div class="info-block">
+            <div class="info-block__header">Entity metadata</div>
+            <div class="info-block__body">
+              <table class="info-table">
+                <tr><td>ID</td><td>Reg000042</td></tr>
+                <tr><td>Category</td><td>PERSON-REGISTER</td></tr>
+                <tr><td>Label</td><td>Lind, Jenny</td></tr>
+                <tr><td>Born</td><td>1820, Stockholm</td></tr>
+                <tr><td>Died</td><td>1887, Malvern, UK</td></tr>
+                <tr><td>Nationality</td><td>Swedish</td></tr>
+                <tr><td>Role</td><td>Opera singer</td></tr>
+                <tr><td>References</td><td>9 diary entries</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info-block__header">Authority links</div>
+            <div class="info-block__body" style="display:flex;flex-direction:column;gap:6px;font-size:0.82rem">
+              <a href="#">VIAF 32167</a>
+              <a href="#">Wikidata Q153626</a>
+              <a href="#">SNAC Ark 71583</a>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info-block__header">Geographic relations</div>
+            <div class="info-block__body">
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <a href="place.html" class="chip chip--place">Stockholm</a>
+                <a href="place.html" class="chip chip--place">London</a>
+                <a href="place.html" class="chip chip--place">Nice</a>
+                <a href="place.html" class="chip chip--place">Hamburg</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-block">
+            <div class="info-block__header">Institutions</div>
+            <div class="info-block__body">
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <a href="library.html" class="chip chip--inst">Royal Danish Library</a>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.1 &nbsp;·&nbsp; Data: H.C. Andersen Archive, The Royal Danish Library
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>
