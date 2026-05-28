@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Romaner og Noveller — H.C. Andersen Dagbogsindeks</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .posttype-badge {
+      display: inline-block;
+      font-size: 0.67rem;
+      padding: 1px 5px;
+      border-radius: var(--radius);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      font-style: normal;
+      white-space: nowrap;
+    }
+    .posttype-badge--redirect {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    .posttype-badge--container {
+      border-color: var(--color-text-muted);
+      font-style: italic;
+    }
+    .roman-entry {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: var(--sp3) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .roman-entry:last-child { border-bottom: none; }
+    .roman-entry__title {
+      font-size: 0.93rem;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+    .roman-entry__title.is-container { font-style: italic; }
+    .roman-entry__redirect {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+    .roman-entry__redirect a { color: var(--color-accent); }
+    .roman-entry__meta {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp3);
+      align-items: center;
+    }
+    .roman-entry__see-also {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+    }
+    .roman-entry__see-also a { color: var(--color-accent); }
+    .lang-chip {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 1px 4px;
+      border-radius: 2px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .h4-group {
+      margin-top: var(--sp6);
+    }
+    .h4-group__header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      padding: var(--sp2) 0 var(--sp3);
+      border-bottom: 1.5px solid var(--color-border);
+      margin-bottom: var(--sp2);
+    }
+    .roman-list {
+      list-style: none;
+    }
+    .roman-section-label {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      margin-top: var(--sp6);
+      margin-bottom: var(--sp3);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .roman-entry--plan .roman-entry__title {
+      color: var(--color-text-muted);
+    }
+    .roman-entry--plan .roman-entry__title::before {
+      content: '✎ ';
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="bogsamling.html">Bogsamling</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Romaner og Noveller</span>
+      </nav>
+      <h1>Romaner og Noveller</h1>
+      <p>BOGSAMLING &nbsp;·&nbsp; ROMANER OG NOVELLER</p>
+      <div class="page-hero__meta">
+        <span>33 poster (H.C. Andersen)</span>
+        <span>219 poster (Andre Forfattere)</span>
+        <span>417 + 338 dagbogsreferencer</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Author group tabs -->
+      <div class="author-tabs" style="margin-bottom:var(--sp6)">
+        <button class="author-tab author-tab--active" data-group="hca">H.C. Andersen <span style="font-size:0.75em;opacity:0.7">(33 poster)</span></button>
+        <button class="author-tab" data-group="andre">Andre Forfattere <span style="font-size:0.75em;opacity:0.7">(219 standardpost · 10 krydshenvisninger · 6 samlinger)</span></button>
+      </div>
+
+      <!-- ── H.C. ANDERSEN TAB ── -->
+      <div id="group-hca">
+        <div class="browse-layout">
+          <aside class="facet-panel">
+            <div class="facet-panel__header">
+              <span class="facet-panel__title">Filtrér</span>
+              <button class="facet-panel__clear">Nulstil</button>
+            </div>
+
+            <div class="facet-group">
+              <div class="facet-group__header">Posttype <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body">
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Standardpost</span><span class="facet-item__count">21</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Ideer og Planer</span><span class="facet-item__count">12</span></label>
+              </div>
+            </div>
+
+            <div class="facet-group">
+              <div class="facet-group__header">Sprog <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body">
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Dansk</span><span class="facet-item__count">22</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Tysk</span><span class="facet-item__count">6</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Engelsk</span><span class="facet-item__count">3</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Ubestemt</span><span class="facet-item__count">2</span></label>
+              </div>
+            </div>
+
+            <div class="facet-group">
+              <div class="facet-group__header">Dagbogsrefs. (interval) <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body" style="padding:8px 16px 14px">
+                <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
+                  <span>1825</span>
+                  <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
+                  <span>—</span>
+                  <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
+                  <span>1875</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div>
+            <div class="results-header">
+              <span class="results-count"><strong>33</strong> poster · H.C. Andersen · Romaner og Noveller</span>
+            </div>
+
+            <!-- Main novels -->
+            <div class="h4-group">
+              <div class="h4-group__header">Romaner og Noveller — Hoveddel</div>
+              <ul class="roman-list">
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">At være eller ikke være</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg000270</span>
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Billedbog uden Billeder</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg000357</span>
+                  </div>
+                  <div class="roman-entry__see-also">Se ogsaa: <a href="work.html">Billedbog uden Billeder — 5. Udgave (1866)</a> (Reg000358)</div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Christian den Andens Dverg</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg000495</span>
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Fodreise fra Holmens Kanal til Østpynten af Amager</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg001312</span>
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Improvisatoren</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg001737</span>
+                  </div>
+                  <div class="roman-entry__see-also">
+                    Se ogsaa: <a href="work.html">Improvisatoren — 3. Opl. (1866)</a> (Reg001738) ·
+                    <a href="work.html">Jugendleben und Träume eines Italienischen Dichters</a> (Reg001837, <span class="lang-chip">de</span>)
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Kun en Spillemand</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg001953</span>
+                  </div>
+                  <div class="roman-entry__see-also">
+                    Se ogsaa: <a href="work.html">Nur ein Geiger</a> (Reg002536, <span class="lang-chip">de</span>) ·
+                    <a href="work.html">Only a Fiddler</a> (Reg002614, <span class="lang-chip">en</span>)
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Lykke-Peer</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg002203</span>
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">O.T.</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg002581</span>
+                  </div>
+                  <div class="roman-entry__see-also">Se ogsaa: <a href="work.html">O.Z.</a> (Reg002582)</div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">De to Baronesser</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg000654</span>
+                  </div>
+                  <div class="roman-entry__see-also">Se ogsaa: <a href="work.html">De to Baronesser — 2. Opl. (1866)</a> (Reg000655)</div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Romanerne (i Almindelighed)</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg002838</span>
+                    <span class="posttype-badge">samlekategori</span>
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Abentheuer und Märchen einer Neujahrsnacht</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">de</span>
+                    <span>Reg000142</span>
+                    <span class="posttype-badge">oversættelse / udg.</span>
+                  </div>
+                </li>
+
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Danske Folkesagn</a></div>
+                  <div class="roman-entry__meta">
+                    <span>H.C. Andersen</span>
+                    <span class="lang-chip">da</span>
+                    <span>Reg000580</span>
+                  </div>
+                </li>
+
+              </ul>
+            </div>
+
+            <!-- Ideas and plans -->
+            <div class="h4-group">
+              <div class="h4-group__header">Ideer til Noveller m.m. (12 poster)</div>
+              <ul class="roman-list">
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Drengen fra Oberammergau (Novelleplan)</div>
+                  <div class="roman-entry__meta"><span>Reg000988</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">En Hundehvalp (Novelleplan 1861, benyttet i Iisjomfruen)</div>
+                  <div class="roman-entry__meta"><span>Reg001088</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Italien (Idé til komisk Roman)</div>
+                  <div class="roman-entry__meta"><span>Reg001760</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">En romersk Slave og hans Elskede (Novelleplan)</div>
+                  <div class="roman-entry__meta"><span>Reg001141</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">En Rotte, der kritiserer Menneskene (1861) — Idé til Historie, benyttet i Dryaden</div>
+                  <div class="roman-entry__meta"><span>Reg001111</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Scene fra Reformationstiden (Plan)</div>
+                  <div class="roman-entry__meta"><span>Reg002964</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Svalerne (Novelleplan)</div>
+                  <div class="roman-entry__meta"><span>Reg003136</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">To Studenter i Coimbra (Idé til en Roman)</div>
+                  <div class="roman-entry__meta"><span>Reg003285</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Uden Kjærlighed (Novelleplan)</div>
+                  <div class="roman-entry__meta"><span>Reg003358</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Upsala hvide Møtzer (Novelleplan)</div>
+                  <div class="roman-entry__meta"><span>Reg003388</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Det første Besøg i Dagvognen (Novelleplan)</div>
+                  <div class="roman-entry__meta"><span>Reg000849</span></div>
+                </li>
+
+                <li class="roman-entry roman-entry--plan">
+                  <div class="roman-entry__title">Fortrolige Breve. Første Gang i Sporvogn, Brev fra en ung Landsbypige til hendes Veninde</div>
+                  <div class="roman-entry__meta"><span>Reg001332</span></div>
+                </li>
+
+              </ul>
+            </div>
+
+          </div><!-- end main area -->
+        </div><!-- end browse-layout -->
+      </div><!-- end #group-hca -->
+
+
+      <!-- ── ANDRE FORFATTERE TAB ── -->
+      <div id="group-andre" style="display:none">
+        <div class="browse-layout">
+          <aside class="facet-panel">
+            <div class="facet-panel__header">
+              <span class="facet-panel__title">Filtrér</span>
+              <button class="facet-panel__clear">Nulstil</button>
+            </div>
+
+            <div class="facet-group">
+              <div class="facet-group__header">Posttype <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body">
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Standardpost</span><span class="facet-item__count">219</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Krydshenvisning</span><span class="facet-item__count">10</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Samling (infereret)</span><span class="facet-item__count">6</span></label>
+              </div>
+            </div>
+
+            <div class="facet-group">
+              <div class="facet-group__header">Sprog <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body">
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Dansk/Norsk</span><span class="facet-item__count">79</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Tysk</span><span class="facet-item__count">62</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Engelsk</span><span class="facet-item__count">34</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Fransk</span><span class="facet-item__count">22</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Svensk</span><span class="facet-item__count">8</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Russisk</span><span class="facet-item__count">7</span></label>
+                <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Øvrige</span><span class="facet-item__count">23</span></label>
+              </div>
+            </div>
+
+            <div class="facet-group">
+              <div class="facet-group__header">Forfatter (top) <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body">
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Dickens, Charles</span><span class="facet-item__count">7</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Scott, W.</span><span class="facet-item__count">5</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Hugo, V.</span><span class="facet-item__count">3</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Ingemann, B.S.</span><span class="facet-item__count">4</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Turgenjev, I.</span><span class="facet-item__count">5</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Bulwer, Edward</span><span class="facet-item__count">4</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Auerbach, B.</span><span class="facet-item__count">4</span></label>
+                <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Hoffmann, E.T.A.</span><span class="facet-item__count">3</span></label>
+              </div>
+            </div>
+
+            <div class="facet-group">
+              <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body" style="padding:8px 16px 14px">
+                <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
+                  <span>1825</span>
+                  <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
+                  <span>—</span>
+                  <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
+                  <span>1875</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div>
+            <div class="results-header">
+              <span class="results-count"><strong>219</strong> standardpost · <strong>10</strong> krydshenvisninger · <strong>6</strong> samlinger</span>
+              <div class="layout-switcher">
+                <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+              </div>
+            </div>
+
+            <!-- Krydshenvisninger note -->
+            <div style="font-size:0.78rem;color:var(--color-text-muted);background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--sp3) var(--sp4);margin-bottom:var(--sp5)">
+              <strong>Krydshenvisninger</strong> (→) peger på en kanonisk post og tæller ikke som selvstændige resultater.
+              <strong>Samlinger (infererede)</strong> er konstruerede beholdere for grupperinger uden selvstændig registrering — vist i kursiv.
+            </div>
+
+            <!-- Charles Dickens -->
+            <div class="h4-group">
+              <div class="h4-group__header">Charles Dickens</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">A Christmas Carol</a></div>
+                  <div class="roman-entry__meta"><span>Charles Dickens</span><span class="lang-chip">en</span><span>Reg000124</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Bleak House</a></div>
+                  <div class="roman-entry__meta"><span>Charles Dickens</span><span class="lang-chip">en</span><span>Reg000365</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">The Cricket on the Hearth</a></div>
+                  <div class="roman-entry__meta"><span>Charles Dickens</span><span class="lang-chip">en</span><span>Reg003206</span></div>
+                  <div class="roman-entry__see-also">Se ogsaa: <a href="work.html">Das Heimchen am Herde</a> (Reg000594, <span class="lang-chip">de</span>)</div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Dombey &amp; Son</a></div>
+                  <div class="roman-entry__meta"><span>Charles Dickens</span><span class="lang-chip">en</span><span>Reg000960</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Little Dorrit</a></div>
+                  <div class="roman-entry__meta"><span>Charles Dickens</span><span class="lang-chip">en</span><span>Reg002161</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Master Humphreys Wanduhr</a></div>
+                  <div class="roman-entry__meta"><span>Charles Dickens</span><span class="lang-chip">de</span><span>Reg002344</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Nicholas Nickleby</a></div>
+                  <div class="roman-entry__meta"><span>Charles Dickens</span><span class="lang-chip">en</span><span>Reg002505</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Walter Scott -->
+            <div class="h4-group">
+              <div class="h4-group__header">W. Scott</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">The Bride of Lammermoor</a></div>
+                  <div class="roman-entry__meta"><span>W. Scott</span><span class="lang-chip">en</span><span>Reg003203</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Midlothians Hjerte</a></div>
+                  <div class="roman-entry__meta"><span>W. Scott</span><span class="lang-chip">da</span><span>Reg002389</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Røde Robin</a></div>
+                  <div class="roman-entry__meta"><span>W. Scott</span><span class="lang-chip">da</span><span>Reg002863</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Sanct Ronans Brønd</a></div>
+                  <div class="roman-entry__meta"><span>W. Scott</span><span class="lang-chip">da</span><span>Reg002934</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Søerøveren</a></div>
+                  <div class="roman-entry__meta"><span>W. Scott</span><span class="lang-chip">da</span><span>Reg003165</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Victor Hugo -->
+            <div class="h4-group">
+              <div class="h4-group__header">V. Hugo</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Bug-Jargal</a></div>
+                  <div class="roman-entry__meta"><span>V. Hugo</span><span class="lang-chip">fr</span><span>Reg000417</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Manden, som ler</a></div>
+                  <div class="roman-entry__meta"><span>V. Hugo</span><span class="lang-chip">da</span><span>Reg002294</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Notre-Dame de Paris</a></div>
+                  <div class="roman-entry__meta"><span>V. Hugo</span><span class="lang-chip">fr</span><span>Reg002532</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Goethe -->
+            <div class="h4-group">
+              <div class="h4-group__header">J.W. von Goethe</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Die Leiden des jungen Werthers</a></div>
+                  <div class="roman-entry__meta"><span>J.W. von Goethe</span><span class="lang-chip">de</span><span>Reg000894</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Wilhelm Meisters Lehrjahre</a></div>
+                  <div class="roman-entry__meta"><span>J.W. von Goethe</span><span class="lang-chip">de</span><span>Reg003503</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Berthold Auerbach -->
+            <div class="h4-group">
+              <div class="h4-group__header">Berthold Auerbach</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Barfüssele</a></div>
+                  <div class="roman-entry__meta"><span>B. Auerbach</span><span class="lang-chip">de</span><span>Reg000311</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Das Schatzkästlein des Gevattersmanns</a></div>
+                  <div class="roman-entry__meta"><span>B. Auerbach</span><span class="lang-chip">de</span><span>Reg000607</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Schwarzwälder Dorfgeschichten</a></div>
+                  <div class="roman-entry__meta"><span>Berthold Auerbach</span><span class="lang-chip">de</span><span>Reg002971</span></div>
+                  <div class="roman-entry__see-also">Se ogsaa: <a href="work.html">Village Tales from the Black Forests</a> (Reg003455, <span class="lang-chip">en</span>)</div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Village Tales from the Black Forests</a></div>
+                  <div class="roman-entry__meta"><span>Berthold Auerbach</span><span class="lang-chip">en</span><span>Reg003455</span></div>
+                  <div class="roman-entry__see-also">Se ogsaa: <a href="work.html">Schwarzwälder Dorfgeschichten</a> (Reg002971, <span class="lang-chip">de</span>)</div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Bjørnson -->
+            <div class="h4-group">
+              <div class="h4-group__header">Bj. Bjørnson</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Arne</a></div>
+                  <div class="roman-entry__meta"><span>Bj. Bjørnson</span><span class="lang-chip">no</span><span>Reg000264</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Brude-Slaatten</a></div>
+                  <div class="roman-entry__meta"><span>Bj. Bjørnson</span><span class="lang-chip">no</span><span>Reg000399</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- B.S. Ingemann -->
+            <div class="h4-group">
+              <div class="h4-group__header">B.S. Ingemann</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Araberen i Constantinopel</a></div>
+                  <div class="roman-entry__meta"><span>B.S. Ingemann</span><span class="lang-chip">da</span><span>Reg000257</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Landsbybørnene</a></div>
+                  <div class="roman-entry__meta"><span>B.S. Ingemann</span><span class="lang-chip">da</span><span>Reg002035</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Prinds Otto af Danmark</a></div>
+                  <div class="roman-entry__meta"><span>B.S. Ingemann</span><span class="lang-chip">da</span><span>Reg002732</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">De sidste Herrer af Gervansborg</a></div>
+                  <div class="roman-entry__meta"><span>B.S. Ingemann</span><span class="lang-chip">da</span><span>Reg000650</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- E.T.A. Hoffmann -->
+            <div class="h4-group">
+              <div class="h4-group__header">E.T.A. Hoffmann</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Majoratet</a></div>
+                  <div class="roman-entry__meta"><span>E. Th. A. Hoffmann</span><span class="lang-chip">de</span><span>Reg002286</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Meister Floh</a></div>
+                  <div class="roman-entry__meta"><span>E. Th. A. Hoffmann</span><span class="lang-chip">de</span><span>Reg002367</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Die Serapionsbrüder</a></div>
+                  <div class="roman-entry__meta"><span>E. Th. A. Hoffmann</span><span class="lang-chip">de</span><span>Reg000914</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Turgenjev -->
+            <div class="h4-group">
+              <div class="h4-group__header">I. Turgenjev</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Lieutenant Jergunovs Eventyr</a></div>
+                  <div class="roman-entry__meta"><span>I. Turgenjev</span><span class="lang-chip">da</span><span>Reg002150</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Et overflødigt Menneskes Dagbog</a></div>
+                  <div class="roman-entry__meta"><span>I. Turgenjev</span><span class="lang-chip">da</span><span>Reg001220</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Rudin</a></div>
+                  <div class="roman-entry__meta"><span>I. Turgenjev</span><span class="lang-chip">da</span><span>Reg002859</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Tropmanns sidste Nat</a></div>
+                  <div class="roman-entry__meta"><span>I. Turgenjev</span><span class="lang-chip">da</span><span>Reg003326</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Visioner</a></div>
+                  <div class="roman-entry__meta"><span>I. Turgenjev</span><span class="lang-chip">da</span><span>Reg003464</span><span class="posttype-badge">oversættelse</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Misc Danish/Norwegian -->
+            <div class="h4-group">
+              <div class="h4-group__header">Øvrige Dansk/Norsk</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Avromche Nattergal</a></div>
+                  <div class="roman-entry__meta"><span>M. Goldschmidt</span><span class="lang-chip">da</span><span>Reg000284</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Erindringer fra min Onkels Huus</a></div>
+                  <div class="roman-entry__meta"><span>M. Goldschmidt</span><span class="lang-chip">da</span><span>Reg001182</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Ravnen</a></div>
+                  <div class="roman-entry__meta"><span>M. Goldschmidt</span><span class="lang-chip">da</span><span>Reg002775</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Broget Selskab</a></div>
+                  <div class="roman-entry__meta"><span>Carit Etlar</span><span class="lang-chip">da</span><span>Reg000397</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Livets Conflicter</a></div>
+                  <div class="roman-entry__meta"><span>Carit Etlar</span><span class="lang-chip">da</span><span>Reg002163</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Min første Drøm i Rom</a></div>
+                  <div class="roman-entry__meta"><span>Vilh. Bergsøe</span><span class="lang-chip">da</span><span>Reg002397</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Landsbydoctoren</a></div>
+                  <div class="roman-entry__meta"><span>St. St. Blicher</span><span class="lang-chip">da</span><span>Reg002036</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Noveller</a></div>
+                  <div class="roman-entry__meta"><span>St. St. Blicher</span><span class="lang-chip">da</span><span>Reg002533</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Den blege Ridder</a></div>
+                  <div class="roman-entry__meta"><span>A. Oehlenschlæger</span><span class="lang-chip">da</span><span>Reg000687</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Norske Folkeeventyr</a></div>
+                  <div class="roman-entry__meta"><span>P.C. Asbjørnsen og Jørgen Moe</span><span class="lang-chip">no</span><span>Reg002531</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Breve fra Helvede, udgivne af M. Rowel</a></div>
+                  <div class="roman-entry__meta"><span>Valdemar Thisted</span><span class="lang-chip">da</span><span>Reg000391</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Misc German -->
+            <div class="h4-group">
+              <div class="h4-group__header">Øvrige Tyske</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Das Buch Le Grand</a></div>
+                  <div class="roman-entry__meta"><span>H. Heine</span><span class="lang-chip">de</span><span>Reg000588</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Der Rabbi von Bacharach</a></div>
+                  <div class="roman-entry__meta"><span>H. Heine</span><span class="lang-chip">de</span><span>Reg000800</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Undine</a></div>
+                  <div class="roman-entry__meta"><span>Fr. de la Motte Fouqué</span><span class="lang-chip">de</span><span>Reg003379</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Wundersame Liebesgeschichte der schönen Magelone</a></div>
+                  <div class="roman-entry__meta"><span>L. Tieck</span><span class="lang-chip">de</span><span>Reg003515</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Berlin wie es ist und — trinkt, 1. Hefte: Eckensteher</a></div>
+                  <div class="roman-entry__meta"><span>Ad. Glassbrenner</span><span class="lang-chip">de</span><span>Reg000333</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Die Abderiten</a></div>
+                  <div class="roman-entry__meta"><span>C.M. Wieland</span><span class="lang-chip">de</span><span>Reg000869</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Erzählungen und Bilder aus dem Volksleben der Schweiz</a></div>
+                  <div class="roman-entry__meta"><span>Jeremias Gotthelf</span><span class="lang-chip">de</span><span>Reg001188</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Waldeinsamkeit</a></div>
+                  <div class="roman-entry__meta"><span>Carl Alexander af Sachsen-Weimar-Eisenach</span><span class="lang-chip">de</span><span>Reg003478</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Die unsichtbare Loge</a></div>
+                  <div class="roman-entry__meta"><span>Jean Paul</span><span class="lang-chip">de</span><span>Reg000932</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- French -->
+            <div class="h4-group">
+              <div class="h4-group__header">Franske</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Les Trois mousquetaires</a></div>
+                  <div class="roman-entry__meta"><span>A. Dumas père</span><span class="lang-chip">fr</span><span>Reg002135</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Corinne</a></div>
+                  <div class="roman-entry__meta"><span>Germaine de Staël-Holstein</span><span class="lang-chip">fr</span><span>Reg000543</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Voyage autour de ma chambre</a></div>
+                  <div class="roman-entry__meta"><span>Xavier de Maistre</span><span class="lang-chip">fr</span><span>Reg003471</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Le Diable boiteux</a></div>
+                  <div class="roman-entry__meta"><span>Le Sage</span><span class="lang-chip">fr</span><span>Reg002064</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Swedish -->
+            <div class="h4-group">
+              <div class="h4-group__header">Svenske</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Syskonlif</a></div>
+                  <div class="roman-entry__meta"><span>Fredrika Bremer</span><span class="lang-chip">sv</span><span>Reg003155</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Enslingen på Johannisskäret</a></div>
+                  <div class="roman-entry__meta"><span>Emilie Flygare-Carlén</span><span class="lang-chip">sv</span><span>Reg001167</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Classic/world lit -->
+            <div class="h4-group">
+              <div class="h4-group__header">Klassikere og Verdenslitteratur</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Don Quijote</a></div>
+                  <div class="roman-entry__meta"><span>Cervantes</span><span class="lang-chip">es</span><span>Reg000974</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Il Decamerone</a></div>
+                  <div class="roman-entry__meta"><span>Boccaccio</span><span class="lang-chip">it</span><span>Reg001714</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">I promessi sposi</a></div>
+                  <div class="roman-entry__meta"><span>A. Manzoni</span><span class="lang-chip">it</span><span>Reg001705</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Tusind og een Nat</a></div>
+                  <div class="roman-entry__meta"><span class="posttype-badge">anonym</span><span class="lang-chip">da</span><span>Reg003335</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">Tom Jones</a></div>
+                  <div class="roman-entry__meta"><span>Henry Fielding</span><span class="lang-chip">en</span><span>Reg003290</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title"><a href="work.html">The Vicar of Wakefield</a></div>
+                  <div class="roman-entry__meta"><span>Oliver Goldsmith</span><span class="lang-chip">en</span><span>Reg003230</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Infererede samlinger -->
+            <div class="h4-group">
+              <div class="h4-group__header">Samlinger (infererede beholdere) — 6 poster</div>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__title is-container"><a href="work.html">Guldmageren</a> <span class="posttype-badge posttype-badge--container">infereret samling</span></div>
+                  <div class="roman-entry__meta"><span>C. Hauch</span><span>Reg001503</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title is-container"><a href="work.html">Romantiske Skildringer</a> <span class="posttype-badge posttype-badge--container">infereret samling</span></div>
+                  <div class="roman-entry__meta"><span>Thomas Lange</span><span>Reg002842</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title is-container"><a href="work.html">Livsbilleder af I</a> <span class="posttype-badge posttype-badge--container">infereret samling</span></div>
+                  <div class="roman-entry__meta"><span>Cornelia v. Levetzow</span><span>Reg002167</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title is-container">Ben Brace <span class="posttype-badge posttype-badge--container">infereret samling</span></div>
+                  <div class="roman-entry__meta"><span>Fr. Chamier</span><span style="font-style:italic;font-size:0.75rem">intet Reg-ID</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title is-container">Tre Fortællinger <span class="posttype-badge posttype-badge--container">infereret samling</span></div>
+                  <div class="roman-entry__meta"><span>Sigurd Müller</span><span style="font-style:italic;font-size:0.75rem">intet Reg-ID</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__title is-container"><a href="work.html">Fortællinger og Skizzer</a> <span class="posttype-badge posttype-badge--container">infereret samling</span></div>
+                  <div class="roman-entry__meta"><span>Johanne Schjørring</span><span>Reg001339</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Krydshenvisninger -->
+            <div class="h4-group">
+              <div class="h4-group__header">Krydshenvisninger — 10 poster</div>
+              <p style="font-size:0.78rem;color:var(--color-text-muted);margin-bottom:var(--sp3)">Tæller ikke som selvstændige registerposter. Peger på kanonisk post.</p>
+              <ul class="roman-list">
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Aschenbrödel</strong> → <a href="work.html">Asschepoester</a> <span style="font-size:0.75rem">(Reg000267)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Banditten</strong> → <a href="work.html">Pietro Mancino, der Bandit</a> <span style="font-size:0.75rem">(Reg002688)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Berliner Eckensteher</strong> → <a href="work.html">Berlin wie es ist und — trinkt</a> <span style="font-size:0.75rem">(Reg000333)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Brændehuggeren og hans Kone</strong> → <a href="work.html">Den nysgjerrige Kone</a> <span style="font-size:0.75rem">(Reg000744)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Cendrillon</strong> → <a href="work.html">Asschepoester</a> <span style="font-size:0.75rem">(Reg000269)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Eventyr (Oscar von Knorring)</strong> → <a href="work.html">Englen Guldgod</a> <span style="font-size:0.75rem">(Reg001149)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Kirkens Datter (O.C. Lund)</strong> → <a href="work.html">Zitta, Domkirkens Datter</a> <span style="font-size:0.75rem">(Reg003529)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Skjenkestuen</strong> → <a href="work.html">Erindringer fra min Onkels Huus</a> <span style="font-size:0.75rem">(Reg001182)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>En Tour i mit Værelse</strong> → <a href="work.html">Voyage autour de ma chambre</a> <span style="font-size:0.75rem">(Reg003471)</span></div>
+                </li>
+                <li class="roman-entry">
+                  <div class="roman-entry__redirect"><span class="posttype-badge posttype-badge--redirect">→</span> <strong>Tømmerpladsen</strong> → <a href="work.html">Erindringer fra min Onkels Huus</a> <span style="font-size:0.75rem">(Reg001182)</span></div>
+                </li>
+              </ul>
+            </div>
+
+          </div><!-- end main area -->
+        </div><!-- end browse-layout -->
+      </div><!-- end #group-andre -->
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script>
+  document.querySelectorAll('.author-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.author-tab').forEach(function(b) { b.classList.remove('author-tab--active'); });
+      btn.classList.add('author-tab--active');
+      var group = btn.dataset.group;
+      document.getElementById('group-hca').style.display = group === 'hca' ? '' : 'none';
+      document.getElementById('group-andre').style.display = group === 'andre' ? '' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
