@@ -1,16 +1,12 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Andersen — Hvem · Hvad · Hvor?</title>
+  <title>Andersen's — Who · What · Where</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Landing-page specific styles */
-
-    body.landing-page {
-      background: var(--color-bg);
-    }
+    body.landing-page { background: var(--color-bg); }
 
     /* Minimal header */
     .landing-header {
@@ -38,19 +34,10 @@
       color: var(--color-text-muted);
     }
     .landing-header__link:hover { color: var(--color-accent); text-decoration: none; }
-    .lang-switch {
-      display: flex; align-items: center; gap: 6px; font-size: 0.76rem;
-    }
-    .lang-switch a {
-      color: var(--color-text-muted); padding: 2px 6px;
-      border-radius: var(--radius); border: 1px solid transparent;
-    }
-    .lang-switch a:hover { text-decoration: none; color: var(--color-accent); }
-    .lang-switch a.active { border-color: var(--color-border); color: var(--color-text); font-weight: 600; }
 
-    /* Hero: title + search */
+    /* Hero */
     .landing-hero {
-      min-height: 46vh;
+      min-height: 48vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -59,9 +46,11 @@
       background: var(--color-bg);
     }
     .landing-hero__inner {
-      max-width: 640px;
+      max-width: 660px;
       width: 100%;
     }
+
+    /* "Andersen's" */
     .landing-title {
       font-family: var(--font-serif);
       font-size: 3.4rem;
@@ -69,8 +58,23 @@
       letter-spacing: -0.02em;
       color: var(--color-text);
       line-height: 1.05;
-      margin-bottom: 0.1em;
+      margin-bottom: 0.25em;
     }
+
+    /* WWW display line */
+    .landing-www {
+      font-family: var(--font-serif);
+      font-size: 2.9rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--color-accent);
+      line-height: 1;
+      margin-bottom: 0.1em;
+      opacity: 0.18;
+      user-select: none;
+    }
+
+    /* "Who — What — Where" subtitle with W highlights */
     .landing-subtitle {
       font-family: var(--font-serif);
       font-size: 1.45rem;
@@ -78,7 +82,15 @@
       color: var(--color-text-muted);
       letter-spacing: 0.01em;
       margin-bottom: var(--sp8);
+      line-height: 1.3;
     }
+    .landing-subtitle .w {
+      color: var(--color-accent);
+      font-weight: 700;
+      font-size: 1.55rem;
+    }
+
+    /* Search */
     .landing-search-form {
       display: flex;
       max-width: 540px;
@@ -120,11 +132,8 @@
     }
     .landing-search-btn:hover { background: var(--color-accent-hover); }
 
-    /* Three-column section */
-    .landing-three {
-      padding: 0 0 var(--sp12);
-      background: var(--color-bg);
-    }
+    /* Three columns */
+    .landing-three { padding: 0 0 var(--sp12); }
     .landing-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -136,7 +145,6 @@
       box-shadow: var(--shadow);
     }
 
-    /* Individual cards */
     .landing-card {
       display: flex;
       flex-direction: column;
@@ -148,24 +156,29 @@
       position: relative;
     }
     .landing-card:last-child { border-right: none; }
-    .landing-card:hover {
-      background: var(--color-accent-light);
-      text-decoration: none;
-    }
+    .landing-card:hover { background: var(--color-accent-light); text-decoration: none; }
+
+    /* W + rest of heading */
     .landing-card__heading {
       font-family: var(--font-serif);
       font-size: 2rem;
       font-weight: 400;
-      color: var(--color-accent);
+      color: var(--color-text);
       margin-bottom: var(--sp2);
       letter-spacing: -0.01em;
+      line-height: 1;
     }
+    .landing-card__heading .w {
+      color: var(--color-accent);
+      font-weight: 700;
+      font-size: 2.3rem;
+    }
+
     .landing-card__count {
       font-size: 0.78rem;
       color: var(--color-text-muted);
       margin-bottom: var(--sp5);
       font-weight: 500;
-      letter-spacing: 0.01em;
     }
     .landing-card__list {
       list-style: none;
@@ -187,7 +200,6 @@
     .landing-card__list li::before {
       content: '›';
       color: var(--color-accent);
-      font-size: 0.9rem;
     }
     .landing-card__list li:last-child { border-bottom: none; }
     .landing-card__examples {
@@ -208,10 +220,7 @@
       opacity: 0;
       transition: opacity 0.15s, transform 0.15s;
     }
-    .landing-card:hover .landing-card__arrow {
-      opacity: 1;
-      transform: translateX(3px);
-    }
+    .landing-card:hover .landing-card__arrow { opacity: 1; transform: translateX(3px); }
 
     /* Bottom nav strip */
     .landing-nav {
@@ -233,12 +242,9 @@
       display: flex;
       align-items: center;
       gap: var(--sp2);
-      transition: color 0.15s;
     }
     .landing-nav__item:hover { color: var(--color-accent); text-decoration: none; }
-    .landing-nav__sep {
-      color: var(--color-border);
-    }
+    .landing-nav__sep { color: var(--color-border); }
 
     /* Footer */
     .landing-footer {
@@ -248,37 +254,60 @@
       color: var(--color-text-muted);
       border-top: 1px solid var(--color-border);
     }
+
+    /* Language switcher */
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+    }
+    .lang-switch a {
+      color: var(--color-text-muted);
+      padding: 2px 6px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+    }
+    .lang-switch a:hover { text-decoration: none; color: var(--color-accent); }
+    .lang-switch a.active {
+      border-color: var(--color-border);
+      color: var(--color-text);
+      font-weight: 600;
+    }
   </style>
 </head>
 <body class="landing-page">
 
 <header class="landing-header">
   <div class="container">
-    <span class="landing-header__logo">H.C. Andersen Dagbogsindeks</span>
+    <span class="landing-header__logo">H.C. Andersen Diary Index</span>
     <div style="display:flex;align-items:center;gap:var(--sp6)">
       <div class="lang-switch">
-        <a href="index.html" class="active">DA</a>
+        <a href="index.html">DA</a>
         <span style="color:var(--color-border)">|</span>
-        <a href="index_en.html">EN</a>
+        <a href="index_en.html" class="active">EN</a>
       </div>
-      <a href="index_detailed.html" class="landing-header__link">Registeroversigt →</a>
+      <a href="index_detailed.html" class="landing-header__link">Full index →</a>
     </div>
   </div>
 </header>
 
 <main>
 
-  <!-- Title + search -->
+  <!-- Title + WWW + search -->
   <section class="landing-hero">
     <div class="landing-hero__inner">
-      <div class="landing-title">Andersen</div>
-      <div class="landing-subtitle">Hvem — hvad — hvor?</div>
+      <div class="landing-title">Andersen's</div>
+      <div class="landing-www" aria-hidden="true">W&nbsp;&nbsp;&nbsp;W&nbsp;&nbsp;&nbsp;W</div>
+      <div class="landing-subtitle">
+        <span class="w">W</span>ho&ensp;—&ensp;<span class="w">W</span>hat&ensp;—&ensp;<span class="w">W</span>here
+      </div>
       <form class="landing-search-form" role="search" onsubmit="return false">
         <input type="search"
                class="landing-search-input"
-               placeholder="Jenny Lind · Rom · Improvisatoren · teater…"
-               aria-label="Søg på tværs af personer, steder, værker og emner">
-        <button type="submit" class="landing-search-btn">Søg</button>
+               placeholder="Jenny Lind · Rome · The Ugly Duckling · theatre…"
+               aria-label="Search across persons, places, works and themes">
+        <button type="submit" class="landing-search-btn">Search</button>
       </form>
     </div>
   </section>
@@ -288,16 +317,16 @@
     <div class="container">
       <div class="landing-grid">
 
-        <!-- 1. Hvem -->
+        <!-- Who -->
         <a href="persons.html" class="landing-card">
-          <div class="landing-card__heading">Hvem</div>
-          <div class="landing-card__count">10.228 personer · 39.361 dagbogsrefs.</div>
+          <div class="landing-card__heading"><span class="w">W</span>ho</div>
+          <div class="landing-card__count">10,228 persons · 39,361 diary refs.</div>
           <ul class="landing-card__list">
-            <li>Digtere</li>
-            <li>Familie</li>
-            <li>Venner</li>
-            <li>Kunstnere</li>
-            <li>Kongelige</li>
+            <li>Poets &amp; Authors</li>
+            <li>Family</li>
+            <li>Friends</li>
+            <li>Artists</li>
+            <li>Royalty</li>
           </ul>
           <div class="landing-card__examples">
             E. Collin · Jenny Lind · Thorvaldsen · Bournonville · H.C. Ørsted …
@@ -305,34 +334,34 @@
           <span class="landing-card__arrow">→</span>
         </a>
 
-        <!-- 2. Hvad -->
+        <!-- What -->
         <a href="index_detailed.html" class="landing-card">
-          <div class="landing-card__heading">Hvad</div>
-          <div class="landing-card__count">3.717 registerposter · 11.195 dagbogsrefs.</div>
+          <div class="landing-card__heading"><span class="w">W</span>hat</div>
+          <div class="landing-card__count">3,717 works · 11,195 diary refs.</div>
           <ul class="landing-card__list">
-            <li>Teater &amp; Musik</li>
-            <li>Malerier &amp; Billedkunst</li>
-            <li>Bøger &amp; Digte</li>
+            <li>Theatre &amp; Music</li>
+            <li>Paintings &amp; Visual Art</li>
+            <li>Books &amp; Poetry</li>
           </ul>
           <div class="landing-card__examples">
-            Billedkunst · Teater &amp; Musik · Bogsamling — Eventyr, Balletter, Operaer, Skulpturer …
+            Visual art · Theatre &amp; Music · Book collection — Fairy tales, Ballets, Operas, Sculptures …
           </div>
           <span class="landing-card__arrow">→</span>
         </a>
 
-        <!-- 3. Hvor -->
+        <!-- Where -->
         <a href="places.html" class="landing-card">
-          <div class="landing-card__heading">Hvor</div>
-          <div class="landing-card__count">2.508 steder · 18.849 dagbogsrefs.</div>
+          <div class="landing-card__heading"><span class="w">W</span>here</div>
+          <div class="landing-card__count">2,508 places · 18,849 diary refs.</div>
           <ul class="landing-card__list">
-            <li>København</li>
-            <li>Italien</li>
+            <li>Copenhagen</li>
+            <li>Italy</li>
             <li>Odense</li>
-            <li>Hoteller</li>
-            <li>Teatre</li>
+            <li>Hotels</li>
+            <li>Theatres</li>
           </ul>
           <div class="landing-card__examples">
-            Berlin · Paris · Rom · Dresden · Stockholm · Weimar · Nizza …
+            Berlin · Paris · Rome · Dresden · Stockholm · Weimar · Nice …
           </div>
           <span class="landing-card__arrow">→</span>
         </a>
@@ -341,23 +370,23 @@
     </div>
   </section>
 
-  <!-- Secondary navigation strip -->
-  <nav class="landing-nav" aria-label="Sekundær navigation">
+  <!-- Secondary navigation -->
+  <nav class="landing-nav" aria-label="Secondary navigation">
     <div class="container">
       <a href="diaries.html" class="landing-nav__item">
-        Dagbøger
-        <span style="font-size:0.72rem;color:var(--color-text-muted)">(2.177 sider)</span>
+        Diaries
+        <span style="font-size:0.72rem;color:var(--color-text-muted)">(2,177 pages)</span>
       </a>
       <span class="landing-nav__sep">·</span>
-      <a href="search.html" class="landing-nav__item">Søg</a>
+      <a href="search.html" class="landing-nav__item">Search</a>
       <span class="landing-nav__sep">·</span>
-      <a href="#" class="landing-nav__item">Tidslinje</a>
+      <a href="#" class="landing-nav__item">Timeline</a>
       <span class="landing-nav__sep">·</span>
-      <a href="#" class="landing-nav__item">Kort</a>
+      <a href="#" class="landing-nav__item">Map</a>
       <span class="landing-nav__sep">·</span>
       <a href="index_detailed.html" class="landing-nav__item">
-        Registeroversigt
-        <span style="font-size:0.72rem;color:var(--color-text-muted)">(avanceret)</span>
+        Full index
+        <span style="font-size:0.72rem;color:var(--color-text-muted)">(advanced)</span>
       </a>
     </div>
   </nav>
@@ -366,7 +395,7 @@
 
 <footer class="landing-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Diary Index — The Royal Danish Library
   </div>
 </footer>
 
