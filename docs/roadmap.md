@@ -18,6 +18,8 @@ Create a stable, machine-readable, migration-friendly editorial layer before maj
 
 This phase is foundational.
 
+> **Status:** the methodology layer for this phase is now in place — see [`data-model/`](data-model/) and [`pipeline/`](pipeline/) for the documented schema rationale and conversion stages, plus `scripts/parsers/` for the section-specific parsers that consume `raw/HCA-Repository V*.xlsx`.
+
 ---
 
 ## 1.1 Encoding Strategy

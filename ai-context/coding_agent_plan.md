@@ -2,6 +2,8 @@
 # Coding-Agent-Oriented Implementation Plan
 ## Cultural Entity Navigation Platform
 
+> **Related methodology docs:** see [`docs/data-model/`](../docs/data-model/) for the WEMI/FRBR rationale behind the entity schema and the printed-index conventions parsers must handle, and [`docs/pipeline/`](../docs/pipeline/) for the five-stage conversion pipeline from `raw/HCA-Repository V*.xlsx` to the normalised CSVs referenced in §4.
+
 # 1. Primary Objective
 
 Build a modular web platform for exploring named entities across cultural collections.

@@ -17,6 +17,8 @@ ai-context/                   # Context files for AI coding agents and project c
 
 docs/                         # Human-facing documentation
   roadmap.md                  # Phased implementation roadmap (phases 1–5)
+  data-model/                 # WEMI/FRBR rationale, relation tables, source-data conventions
+  pipeline/                   # Five-stage conversion pipeline from raw register to normalized CSV
   inspiration/
     sampo-analysis.md         # Analysis of the Finnish SAMPO ecosystem as design reference
 
@@ -36,6 +38,9 @@ tests/
 | `ai-context/project_memory_recap.md` | Origin, intellectual problem, conceptual evolution |
 | `docs/roadmap.md` | Phased roadmap from data encoding through frontend prototype |
 | `docs/inspiration/sampo-analysis.md` | UI/UX patterns drawn from the Finnish SAMPO portals |
+| `docs/data-model/wemi-and-relations.md` | Work / Expression boundary, alias vs. relation, hybrid relational + JSONB design |
+| `docs/data-model/source-data-characteristics.md` | Printed-index conventions a parser must handle (parens, names, `se:` / `Se ogsaa:`, special tokens) |
+| `docs/pipeline/stages.md` | Five-stage conversion pipeline from `raw/HCA-Repository V*.xlsx` to normalized CSVs |
 
 ## Core Principles
 
