@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jenny Lind — Cultural Entity Navigator</title>
+  <title>Jenny Lind — H.C. Andersen Dagbogsindeks</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">Cultural Entity Navigator</a>
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
     <form class="search-form" role="search" onsubmit="return false">
-      <input type="search" placeholder="Search entities, works, places…" class="search-input">
-      <button type="submit" class="search-btn">Search</button>
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
     </form>
   </div>
 </header>
@@ -23,11 +23,9 @@
   <div class="page-hero page-hero--sm">
     <div class="container">
       <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
-        <a href="index.html">Home</a>
+        <a href="index.html">Forside</a>
         <span class="breadcrumb__sep">›</span>
-        <a href="search.html">Named Entities</a>
-        <span class="breadcrumb__sep">›</span>
-        <a href="search.html">Persons</a>
+        <a href="persons.html">Personregister</a>
         <span class="breadcrumb__sep">›</span>
         <span class="breadcrumb__current">Jenny Lind</span>
       </nav>
@@ -50,7 +48,7 @@
 
           <!-- Biography -->
           <div>
-            <h2 class="section-title">Biography</h2>
+            <h2 class="section-title">Biografi</h2>
             <p style="font-size:0.92rem;line-height:1.75;max-width:640px">
               Johanna Maria Lind (1820–1887), known as the "Swedish Nightingale", was one of the most celebrated
               opera singers of the nineteenth century. She was closely acquainted with H.C. Andersen, who is
@@ -62,9 +60,9 @@
 
           <!-- Timeline -->
           <div>
-            <h2 class="section-title">Timeline</h2>
+            <h2 class="section-title">Tidslinje</h2>
             <div class="timeline-bar">
-              <div class="timeline-bar__title">Life span and HCA diary references</div>
+              <div class="timeline-bar__title">Levetid og HCA-dagbogsreferencer</div>
               <div class="timeline-track">
                 <div class="timeline-track__span" style="left:0%;width:100%"></div>
                 <div class="timeline-track__dot" style="left:38%" title="1847 — London diary"></div>
@@ -96,11 +94,11 @@
 
           <!-- Related works (tabs by institution) -->
           <div>
-            <h2 class="section-title">Related diary entries</h2>
+            <h2 class="section-title">Dagbogsreferencer</h2>
             <div class="tabs">
-              <button class="tab-btn tab-btn--active">All (9)</button>
-              <button class="tab-btn">Mentions (7)</button>
-              <button class="tab-btn">Direct meetings (2)</button>
+              <button class="tab-btn tab-btn--active">Alle (9)</button>
+              <button class="tab-btn">Omtaler (7)</button>
+              <button class="tab-btn">Direkte møder (2)</button>
             </div>
             <div class="result-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
 
@@ -130,8 +128,8 @@
 
           <!-- Network relations -->
           <div>
-            <h2 class="section-title">Network relations</h2>
-            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Entities co-occurring with Jenny Lind in the diary corpus</p>
+            <h2 class="section-title">Netværksrelationer</h2>
+            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Registerposter der forekommer samtidig med Jenny Lind i dagbøgerne</p>
             <div class="network-chips">
               <a href="person.html" class="chip chip--person">H.C. Andersen</a>
               <a href="person.html" class="chip chip--person">Charles Dickens</a>
@@ -149,23 +147,23 @@
         <aside class="entity-sidebar">
 
           <div class="info-block">
-            <div class="info-block__header">Entity metadata</div>
+            <div class="info-block__header">Registerdata</div>
             <div class="info-block__body">
               <table class="info-table">
                 <tr><td>ID</td><td>Reg000042</td></tr>
-                <tr><td>Category</td><td>PERSON-REGISTER</td></tr>
+                <tr><td>Register</td><td>PERSON-REGISTER</td></tr>
                 <tr><td>Label</td><td>Lind, Jenny</td></tr>
-                <tr><td>Born</td><td>1820, Stockholm</td></tr>
-                <tr><td>Died</td><td>1887, Malvern, UK</td></tr>
-                <tr><td>Nationality</td><td>Swedish</td></tr>
-                <tr><td>Role</td><td>Opera singer</td></tr>
-                <tr><td>References</td><td>9 diary entries</td></tr>
+                <tr><td>Født</td><td>1820, Stockholm</td></tr>
+                <tr><td>Død</td><td>1887, Malvern</td></tr>
+                <tr><td>Nationalitet</td><td>Svensk</td></tr>
+                <tr><td>Rolle</td><td>Operasangerinde</td></tr>
+                <tr><td>Dagbogsrefs.</td><td>9 poster</td></tr>
               </table>
             </div>
           </div>
 
           <div class="info-block">
-            <div class="info-block__header">Authority links</div>
+            <div class="info-block__header">Autoritetslinks</div>
             <div class="info-block__body" style="display:flex;flex-direction:column;gap:6px;font-size:0.82rem">
               <a href="#">VIAF 32167</a>
               <a href="#">Wikidata Q153626</a>
@@ -174,7 +172,7 @@
           </div>
 
           <div class="info-block">
-            <div class="info-block__header">Geographic relations</div>
+            <div class="info-block__header">Geografiske relationer</div>
             <div class="info-block__body">
               <div style="display:flex;flex-wrap:wrap;gap:6px">
                 <a href="place.html" class="chip chip--place">Stockholm</a>
@@ -186,10 +184,10 @@
           </div>
 
           <div class="info-block">
-            <div class="info-block__header">Institutions</div>
+            <div class="info-block__header">Samling</div>
             <div class="info-block__body">
               <div style="display:flex;flex-wrap:wrap;gap:6px">
-                <a href="library.html" class="chip chip--inst">Royal Danish Library</a>
+                <a href="diaries.html" class="chip">HCA Dagbøger</a>
               </div>
             </div>
           </div>
@@ -204,7 +202,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.1 &nbsp;·&nbsp; Data: H.C. Andersen Archive, The Royal Danish Library
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
   </div>
 </footer>
 

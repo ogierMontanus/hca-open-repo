@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rome — Cultural Entity Navigator</title>
+  <title>Rom — H.C. Andersen Dagbogsindeks</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">Cultural Entity Navigator</a>
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsindeks</a>
     <form class="search-form" role="search" onsubmit="return false">
-      <input type="search" placeholder="Search entities, works, places…" class="search-input">
-      <button type="submit" class="search-btn">Search</button>
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
     </form>
   </div>
 </header>
@@ -23,20 +23,18 @@
   <div class="page-hero page-hero--sm">
     <div class="container">
       <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
-        <a href="index.html">Home</a>
+        <a href="index.html">Forside</a>
         <span class="breadcrumb__sep">›</span>
-        <a href="search.html">Named Entities</a>
+        <a href="places.html">Stedregister</a>
         <span class="breadcrumb__sep">›</span>
-        <a href="search.html">Places</a>
-        <span class="breadcrumb__sep">›</span>
-        <span class="breadcrumb__current">Rome / Rom</span>
+        <span class="breadcrumb__current">Rom</span>
       </nav>
-      <h1>Rome <span style="opacity:0.65;font-weight:400;font-size:1.1rem">/ Rom</span></h1>
-      <p>Place &nbsp;·&nbsp; STED-REGISTER &nbsp;·&nbsp; Reg001001</p>
+      <h1>Rom</h1>
+      <p>Sted &nbsp;·&nbsp; STED-REGISTER &nbsp;·&nbsp; Reg0017430</p>
       <div class="page-hero__meta">
-        <span>Italy · Lazio</span>
-        <span>41.9028° N, 12.4964° E</span>
-        <span>13 diary references</span>
+        <span>Italien · Lazio</span>
+        <span>41.9028° N, 12.4964° Ø</span>
+        <span>332 dagbogsreferencer</span>
       </div>
     </div>
   </div>
@@ -49,18 +47,18 @@
 
           <!-- Map placeholder -->
           <div>
-            <h2 class="section-title">Geographic context</h2>
+            <h2 class="section-title">Geografisk kontekst</h2>
             <div class="map-placeholder">
-              <span>Map placeholder — 41.9028° N, 12.4964° E</span>
-              <span class="map-placeholder__note">Interactive map will be enabled in a later phase</span>
+              <span>Kortplacering — 41.9028° N, 12.4964° Ø</span>
+              <span class="map-placeholder__note">Interaktivt kort aktiveres i en senere fase</span>
             </div>
           </div>
 
           <!-- Timeline -->
           <div>
-            <h2 class="section-title">Timeline of references</h2>
+            <h2 class="section-title">Tidslinje for omtaler</h2>
             <div class="timeline-bar">
-              <div class="timeline-bar__title">Diary references to Rome, 1825–1875</div>
+              <div class="timeline-bar__title">Dagbogsreferencer til Rom, 1825–1875</div>
               <div class="timeline-track">
                 <div class="timeline-track__span" style="left:15%;width:30%"></div>
                 <div class="timeline-track__dot" style="left:15%" title="1833 — First Italian journey"></div>
@@ -92,11 +90,11 @@
 
           <!-- Related diary entries -->
           <div>
-            <h2 class="section-title">Related diary entries</h2>
+            <h2 class="section-title">Dagbogsreferencer</h2>
             <div class="tabs">
-              <button class="tab-btn tab-btn--active">All (13)</button>
-              <button class="tab-btn">Located in (11)</button>
-              <button class="tab-btn">Mentioned (2)</button>
+              <button class="tab-btn tab-btn--active">Alle (332)</button>
+              <button class="tab-btn">Opholdsted (298)</button>
+              <button class="tab-btn">Omtalt (34)</button>
             </div>
             <div class="result-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
 
@@ -125,8 +123,8 @@
 
           <!-- Persons associated -->
           <div>
-            <h2 class="section-title">Persons associated with Rome</h2>
-            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Persons co-occurring in diary entries where Rome is referenced</p>
+            <h2 class="section-title">Samtidige personer</h2>
+            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Personer der optræder i dagbogsider, hvor Rom er omtalt</p>
             <div class="network-chips">
               <a href="person.html" class="chip chip--person">H.C. Andersen</a>
               <a href="person.html" class="chip chip--person">Bertel Thorvaldsen</a>
@@ -141,24 +139,24 @@
         <aside class="entity-sidebar">
 
           <div class="info-block">
-            <div class="info-block__header">Place metadata</div>
+            <div class="info-block__header">Stedsdata</div>
             <div class="info-block__body">
               <table class="info-table">
-                <tr><td>ID</td><td>Reg001001</td></tr>
-                <tr><td>Category</td><td>STED-REGISTER</td></tr>
-                <tr><td>Label (DK)</td><td>Rom</td></tr>
+                <tr><td>ID</td><td>Reg0017430</td></tr>
+                <tr><td>Register</td><td>STED-REGISTER</td></tr>
+                <tr><td>Label (DA)</td><td>Rom</td></tr>
                 <tr><td>Label (EN)</td><td>Rome</td></tr>
-                <tr><td>Country</td><td>Italy</td></tr>
+                <tr><td>Land</td><td>Italien</td></tr>
                 <tr><td>Region</td><td>Lazio</td></tr>
-                <tr><td>Latitude</td><td>41.9028° N</td></tr>
-                <tr><td>Longitude</td><td>12.4964° E</td></tr>
-                <tr><td>References</td><td>13 diary entries</td></tr>
+                <tr><td>Breddegrad</td><td>41.9028° N</td></tr>
+                <tr><td>Længdegrad</td><td>12.4964° Ø</td></tr>
+                <tr><td>Dagbogsrefs.</td><td>332 poster</td></tr>
               </table>
             </div>
           </div>
 
           <div class="info-block">
-            <div class="info-block__header">Authority links</div>
+            <div class="info-block__header">Autoritetslinks</div>
             <div class="info-block__body" style="display:flex;flex-direction:column;gap:6px;font-size:0.82rem">
               <a href="#">Wikidata Q220</a>
               <a href="#">GeoNames 3169070</a>
@@ -166,7 +164,7 @@
           </div>
 
           <div class="info-block">
-            <div class="info-block__header">Related places</div>
+            <div class="info-block__header">Relaterede steder</div>
             <div class="info-block__body">
               <div style="display:flex;flex-wrap:wrap;gap:6px">
                 <a href="place.html" class="chip chip--place">Naples</a>
@@ -187,7 +185,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.1 &nbsp;·&nbsp; Data: H.C. Andersen Archive, The Royal Danish Library
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsindeks — Det Kongelige Bibliotek
   </div>
 </footer>
 
