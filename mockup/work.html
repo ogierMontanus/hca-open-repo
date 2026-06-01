@@ -5,6 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bleak House — H.C. Andersen Dagbogsregister</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .wd-badge {
+      display: inline-block;
+      font-size: 0.63rem;
+      font-family: monospace;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: #edf4fb;
+      border: 1px solid #93bcd9;
+      color: #2a5e8a;
+      text-decoration: none;
+      white-space: nowrap;
+      vertical-align: middle;
+      line-height: 1.7;
+    }
+    .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
+    .lod-callout {
+      background: #edf4fb;
+      border: 1px solid #93bcd9;
+      border-radius: var(--radius-lg);
+      padding: var(--sp4) var(--sp5);
+      margin-bottom: var(--sp5);
+      font-size: 0.81rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+    .lod-callout strong { color: #1a4a72; }
+    .lod-bridge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: var(--sp3);
+      font-size: 0.77rem;
+    }
+    .lod-node {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: 600;
+    }
+    .lod-node--local {
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+    .lod-node--wd {
+      background: #edf4fb;
+      border: 1px solid #93bcd9;
+      color: #2a5e8a;
+    }
+    .lod-node--owl { color: var(--color-text-muted); font-size: 0.8rem; }
+  </style>
 </head>
 <body>
 
@@ -36,6 +90,7 @@
         <span class="chip">ANDRE FORFATTERE</span>
         <span class="chip">Romaner, Noveller, Eventyr</span>
         <span class="chip chip--work">Reg000365</span>
+        <a href="https://www.wikidata.org/wiki/Q219420" class="wd-badge" target="_blank" rel="noopener" title="Åbn i Wikidata">wd:Q219420</a>
       </div>
       <div class="page-hero__meta">
         <span>5 poster i dagbøgerne</span>
@@ -64,7 +119,10 @@
               <dt style="color:var(--color-text-muted);font-weight:600">H3</dt>
               <dd>Romaner, Nov., Eventyr</dd>
               <dt style="color:var(--color-text-muted);font-weight:600">Forfatter</dt>
-              <dd><a href="person.html" style="color:var(--color-accent)">Charles Dickens</a></dd>
+              <dd>
+                <a href="person.html" style="color:var(--color-accent)">Charles Dickens</a>
+                <a href="https://www.wikidata.org/wiki/Q5686" class="wd-badge" target="_blank" rel="noopener" title="Charles Dickens på Wikidata" style="margin-left:4px">wd:Q5686</a>
+              </dd>
               <dt style="color:var(--color-text-muted);font-weight:600">Originalsprog</dt>
               <dd>Engelsk</dd>
               <dt style="color:var(--color-text-muted);font-weight:600">Antal refs.</dt>
@@ -86,9 +144,15 @@
 
           <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp5);margin-bottom:var(--sp5)">
             <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--color-text-muted);margin-bottom:var(--sp3)">Autoritetslinks</div>
-            <div style="display:flex;flex-direction:column;gap:6px;font-size:0.82rem">
-              <a href="#">Wikidata Q219420</a>
-              <a href="#">WorldCat</a>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
+              <a href="https://www.wikidata.org/wiki/Q219420" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px">
+                <span class="wd-badge">wd:Q219420</span>
+                <span style="color:var(--color-text-muted)">Wikidata</span>
+              </a>
+              <a href="https://www.worldcat.org/search?q=bleak+house+dickens" target="_blank" rel="noopener" style="color:inherit;display:flex;align-items:center;gap:6px">
+                <span style="font-size:0.72rem;font-family:monospace;padding:1px 5px;border-radius:3px;background:var(--color-surface-2);border:1px solid var(--color-border)">OCLC</span>
+                <span style="color:var(--color-text-muted)">WorldCat</span>
+              </a>
             </div>
           </div>
 
@@ -96,11 +160,17 @@
             <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--color-text-muted);margin-bottom:var(--sp3)">Hyppigst samtidige steder</div>
             <div style="display:flex;flex-direction:column;gap:6px">
               <div style="display:flex;justify-content:space-between;align-items:center">
-                <a href="place.html" class="chip chip--place">London</a>
+                <span style="display:inline-flex;align-items:center;gap:4px">
+                  <a href="place.html" class="chip chip--place">London</a>
+                  <a href="https://www.wikidata.org/wiki/Q84" class="wd-badge" target="_blank" rel="noopener" title="London på Wikidata">Q84</a>
+                </span>
                 <span style="font-size:0.75rem;color:var(--color-text-muted)">3 gange</span>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:center">
-                <a href="place.html" class="chip chip--place">Odense</a>
+                <span style="display:inline-flex;align-items:center;gap:4px">
+                  <a href="place.html" class="chip chip--place">Odense</a>
+                  <a href="https://www.wikidata.org/wiki/Q3650" class="wd-badge" target="_blank" rel="noopener" title="Odense på Wikidata">Q3650</a>
+                </span>
                 <span style="font-size:0.75rem;color:var(--color-text-muted)">1 gang</span>
               </div>
             </div>
@@ -109,6 +179,18 @@
 
         <!-- Diary references -->
         <div>
+          <div class="lod-callout">
+            <strong>Linked Open Data (LOD)</strong> — Enhederne på denne side er beriget med autoritetsidentifikatorer,
+            der forbinder registret til det globale vidensgraf-netværk.
+            <div class="lod-bridge">
+              <span class="lod-node lod-node--local">Reg000365</span>
+              <span class="lod-node lod-node--owl">→ owl:sameAs →</span>
+              <a href="https://www.wikidata.org/wiki/Q219420" class="lod-node lod-node--wd" target="_blank" rel="noopener">wikidata:Q219420</a>
+              <span class="lod-node lod-node--owl">→ sameAs →</span>
+              <span class="lod-node lod-node--local" style="color:var(--color-text-muted)">VIAF · BnF · GND · …</span>
+            </div>
+          </div>
+
           <div class="results-header">
             <span class="results-count"><strong>5</strong> poster i dagbøgerne til Bleak House</span>
             <div class="layout-switcher">
@@ -127,9 +209,11 @@
               <div style="font-size:0.84rem;color:var(--color-text-muted);font-style:italic;margin-bottom:8px;line-height:1.5">
                 "Dickens viste mig sine Bøger — Bleak House laa fremme og han fortalte mig at det var den Roman han selv holdt mest af. Den er lang, men levende."
               </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
                 <a href="place.html" class="chip chip--place">Gad's Hill</a>
+                <a href="https://www.wikidata.org/wiki/Q5517152" class="wd-badge" target="_blank" rel="noopener" title="Gad's Hill Place på Wikidata">Q5517152</a>
                 <a href="person.html" class="chip chip--person">Dickens, Charles</a>
+                <a href="https://www.wikidata.org/wiki/Q5686" class="wd-badge" target="_blank" rel="noopener" title="Charles Dickens på Wikidata">Q5686</a>
               </div>
             </a>
 
@@ -141,8 +225,9 @@
               <div style="font-size:0.84rem;color:var(--color-text-muted);font-style:italic;margin-bottom:8px;line-height:1.5">
                 "Læste om Aftenen i Bleak House — Dickens er den eneste Engelske Forfatter der kan røre mig som et Eventyr rører."
               </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
                 <a href="place.html" class="chip chip--place">Odense</a>
+                <a href="https://www.wikidata.org/wiki/Q3650" class="wd-badge" target="_blank" rel="noopener" title="Odense på Wikidata">Q3650</a>
               </div>
             </a>
 
@@ -156,11 +241,17 @@
             </p>
             <div class="network-chips">
               <a href="work.html" class="chip" style="background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">A Christmas Carol</a>
+              <a href="https://www.wikidata.org/wiki/Q200773" class="wd-badge" target="_blank" rel="noopener" title="A Christmas Carol på Wikidata">Q200773</a>
               <a href="work.html" class="chip" style="background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">Nicholas Nickleby</a>
+              <a href="https://www.wikidata.org/wiki/Q527099" class="wd-badge" target="_blank" rel="noopener" title="Nicholas Nickleby på Wikidata">Q527099</a>
               <a href="work.html" class="chip" style="background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">Little Dorrit</a>
+              <a href="https://www.wikidata.org/wiki/Q327788" class="wd-badge" target="_blank" rel="noopener" title="Little Dorrit på Wikidata">Q327788</a>
               <a href="person.html" class="chip chip--person">Dickens, Charles</a>
+              <a href="https://www.wikidata.org/wiki/Q5686" class="wd-badge" target="_blank" rel="noopener" title="Charles Dickens på Wikidata">Q5686</a>
               <a href="place.html" class="chip chip--place">London</a>
+              <a href="https://www.wikidata.org/wiki/Q84" class="wd-badge" target="_blank" rel="noopener" title="London på Wikidata">Q84</a>
               <a href="place.html" class="chip chip--place">Gad's Hill</a>
+              <a href="https://www.wikidata.org/wiki/Q5517152" class="wd-badge" target="_blank" rel="noopener" title="Gad's Hill Place på Wikidata">Q5517152</a>
             </div>
           </div>
 
