@@ -102,6 +102,35 @@
       content: '✎ ';
       font-size: 0.8em;
     }
+    .roman-entry--plan .roman-entry__title a { color: inherit; text-decoration: none; }
+    /* Clickable rows */
+    .roman-entry.is-clickable {
+      cursor: pointer;
+      padding-inline: 8px;
+      margin-inline: -8px;
+      border-radius: var(--radius);
+      transition: background 0.12s ease;
+    }
+    .roman-entry.is-clickable:hover { background: var(--color-accent-light); }
+    /* Sort control */
+    .sort-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+    .sort-control select {
+      font-size: 0.8rem;
+      padding: 3px 7px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      background: var(--color-surface);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+    .results-tools { display: flex; align-items: center; gap: var(--sp4); }
   </style>
 </head>
 <body>
@@ -190,6 +219,16 @@
           <div>
             <div class="results-header">
               <span class="results-count"><strong>33</strong> poster · H.C. Andersen · Romaner og Noveller</span>
+              <div class="sort-control">
+                <label for="sort-hca">Sortér efter:</label>
+                <select id="sort-hca" class="roman-sort">
+                  <option value="default">Registerorden</option>
+                  <option value="title-asc">Titel (A–Å)</option>
+                  <option value="title-desc">Titel (Å–A)</option>
+                  <option value="reg">Reg-ID</option>
+                  <option value="lang">Sprog</option>
+                </select>
+              </div>
             </div>
 
             <!-- Main novels -->
@@ -467,8 +506,20 @@
           <div>
             <div class="results-header">
               <span class="results-count"><strong>219</strong> standardpost · <strong>10</strong> krydshenvisninger · <strong>6</strong> samlinger</span>
-              <div class="layout-switcher">
-                <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+              <div class="results-tools">
+                <div class="sort-control">
+                  <label for="sort-andre">Sortér efter:</label>
+                  <select id="sort-andre" class="roman-sort">
+                    <option value="default">Registerorden</option>
+                    <option value="title-asc">Titel (A–Å)</option>
+                    <option value="title-desc">Titel (Å–A)</option>
+                    <option value="reg">Reg-ID</option>
+                    <option value="lang">Sprog</option>
+                  </select>
+                </div>
+                <div class="layout-switcher">
+                  <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+                </div>
               </div>
             </div>
 
@@ -1034,6 +1085,82 @@
   });
 
   apply();
+})();
+</script>
+<script>
+/* Clickable rows + sortable novel lists (within each author/section group) */
+(function () {
+
+  /* ---- Clickable rows ---- */
+  document.querySelectorAll('.roman-entry').forEach(function (e) {
+    var href = null;
+    var titleEl = e.querySelector('.roman-entry__title');
+    if (titleEl) {
+      var link = titleEl.querySelector('a');
+      href = link ? link.getAttribute('href')
+                  : (/Reg\d+/.test(e.textContent) ? 'work.html' : null);
+    } else {
+      var red = e.querySelector('.roman-entry__redirect a');
+      href = red ? red.getAttribute('href') : null;
+    }
+    if (!href) return; // nothing to link to (e.g. container without Reg-ID)
+    e.classList.add('is-clickable');
+    e.addEventListener('click', function (ev) {
+      if (ev.target.closest('a')) return; // a real inner link was clicked
+      window.location.href = href;
+    });
+  });
+
+  /* ---- Sort keys ---- */
+  function titleKey(e) {
+    var titleEl = e.querySelector('.roman-entry__title');
+    if (titleEl) {
+      var clone = titleEl.cloneNode(true);
+      clone.querySelectorAll('.posttype-badge').forEach(function (b) { b.remove(); });
+      return clone.textContent.trim().toLowerCase();
+    }
+    var red = e.querySelector('.roman-entry__redirect strong');
+    return (red ? red.textContent : e.textContent).trim().toLowerCase();
+  }
+  function regKey(e) {
+    var m = e.textContent.match(/Reg\d+/);
+    return m ? m[0] : 'Reg999999'; // missing Reg-ID sorts last
+  }
+  function langKey(e) {
+    var c = e.querySelector('.lang-chip');
+    return c ? c.textContent.trim().toLowerCase() : 'zzz';
+  }
+
+  function comparator(mode) {
+    return function (a, b) {
+      switch (mode) {
+        case 'title-asc':  return titleKey(a).localeCompare(titleKey(b), 'da');
+        case 'title-desc': return titleKey(b).localeCompare(titleKey(a), 'da');
+        case 'reg':        return regKey(a).localeCompare(regKey(b));
+        case 'lang':
+          var d = langKey(a).localeCompare(langKey(b), 'da');
+          return d !== 0 ? d : titleKey(a).localeCompare(titleKey(b), 'da');
+        default:           return (+a.dataset.order) - (+b.dataset.order);
+      }
+    };
+  }
+
+  /* ---- Capture original order, then wire each sort <select> ---- */
+  document.querySelectorAll('.roman-sort').forEach(function (sel) {
+    var container = sel.closest('[id^="group-"]');
+    if (!container) return;
+    container.querySelectorAll('.roman-list').forEach(function (list) {
+      Array.prototype.forEach.call(list.children, function (li, i) { li.dataset.order = i; });
+    });
+    sel.addEventListener('change', function () {
+      var cmp = comparator(sel.value);
+      container.querySelectorAll('.roman-list').forEach(function (list) {
+        var items = Array.prototype.slice.call(list.children)
+          .filter(function (n) { return n.classList.contains('roman-entry'); });
+        items.sort(cmp).forEach(function (it) { list.appendChild(it); });
+      });
+    });
+  });
 })();
 </script>
 </body>
