@@ -53,9 +53,11 @@ The bulk of relationships are **1-to-M** (one Diary-day → many References; one
 
 The slides ("Fætter BR-keyboard" → "Orgel med 7+ keyboards") frame the MVP as **ambitious-but-bounded**: build the full star schema, but inside Excel, before moving any of it onto a web stack.
 
+The MVP workbook lives in [`raw/`](../../raw/) alongside the canonical `HCA-Repository V*.xlsx` — the highest-versioned workbook in that folder *is* the MVP (Power Query queries and Power Pivot model embedded directly inside it). Versioning rule from `scripts/parsers/_common.py:resolve_ground_truth_xlsx()` applies: when a new version lands, the rest of the pipeline picks it up automatically.
+
 | Layer | Tool | Role |
 |---|---|---|
-| Source | `raw/HCA-Repository V*.xlsx` (canonical workbook) | Single file, multiple sheets |
+| Source | `raw/HCA-Repository V*.xlsx` (canonical workbook, highest version wins) | Single file, multiple sheets |
 | ETL | **Power Query** | Loads sheets, cleans, splits the parent Registry into Work/Person/Place sub-types, joins Sørens auxiliary registers |
 | Model | **Power Pivot Data Model** | Holds the dimensions, facts, and relationships as a star schema |
 | Interaction | **Pivot tables + slicers** | Demo / analysis surface — no web frontend required for the first round |
@@ -63,11 +65,33 @@ The slides ("Fætter BR-keyboard" → "Orgel med 7+ keyboards") frame the MVP as
 
 This MVP is **a prototype platform, not the endpoint**. Its purpose is:
 
-1. Validate that the star schema answers real research questions (the planned 3–5 demo queries).
+1. Validate that the star schema answers real research questions (the planned 3–5 demo queries — see Places focus below).
 2. Stress-test relationships against the live data at full scale.
 3. Give collaborators a clickable surface for early feedback before any web development cost is sunk.
 
 The MVP layer's outputs (cleaned dimension and fact tables) are intended to migrate one-to-one into the eventual web back-end's database.
+
+## Web-facing target: thin layer between data and presentation
+
+The web-facing model is **not yet locked**. The committed direction is:
+
+> Aim for a very thin layer on top of the data layer and before the presentation layer.
+
+Implication: the API surface should expose the star schema close to its physical shape — minimal new abstractions, minimal server-side query construction. Whether the consumer is SQL, a graph store, or both is deferred; the architectural rule is that whatever layer mediates between data and UI stays small and transparent.
+
+A practical consequence for upcoming web work: assume pivot-style queries (filter on dimensions, aggregate on facts) translate one-for-one into the API. Avoid building heavy ORM / domain layers until the data model itself is stable enough that they wouldn't immediately need to change.
+
+## October demo — Places as the focus entity
+
+The first thoroughly modelled and queryable entity through the demo queries is **Places** (`STED-REGISTER`, 2,508 rows in V0.82, extended by Sørens Sted register and the M-M edge to Works). Persons (10,228 rows) and Works are deferred to later rounds.
+
+Reasons for picking Places first:
+- Mid-sized, manageable data scale — bigger than Works' most heterogeneous subsets but smaller than Persons.
+- Spatial dimension renders naturally — maps, route overlays, calendar-of-places-visited all sit close to the Calendar1800 + Diary join the star schema already supports.
+- The Work ↔ Place M-M relationship (via Sørens 2. register) is the most distinctive structural feature in the model; demonstrating it makes the architectural choice visible to non-technical viewers.
+- Lower modelling weight than Works (no FRBR/WEMI complexity, fewer parsing edge cases than the literary registers).
+
+The 3–5 demo queries should be drafted around Places — to be specified in a follow-up session.
 
 ## How this relates to the existing CSV layer
 
@@ -94,10 +118,15 @@ From the 2026-06-01 meeting, the rules that govern how this layer evolves:
 
 ## Open questions
 
-These are flagged so the next session can resolve them — see also the conversation following this document's commit.
+Resolutions from the planning conversation on 2026-06-02:
 
-1. **Sørens registers** (Artist, Sted, Almanak): are they separate files dropped into `raw/`, or stay outside this repo entirely?
-2. **MVP scope in the repo:** does the Excel/Power Pivot model live in this repo (e.g. `mvp/HCA-mvp.xlsx`) or in a sibling repo?
-3. **Web-facing target:** is the eventual API surface the star schema as-is (DAX-style measures translated into SQL), or a graph layer derived from it?
-4. **October milestone:** does this repo need a deliverable (mockup, prototype API, documentation page) or is the October demo Excel-based?
-5. **Demo entity:** Person, Place, or Work — which becomes the first thoroughly-modelled and queryable entity through the demo queries?
+- **MVP location** — settled: the MVP lives in `raw/` as the highest-versioned `HCA-Repository V*.xlsx`. Power Query and Power Pivot are embedded in the workbook itself.
+- **Demo entity** — settled: Places (`STED-REGISTER`). 3–5 demo queries to be drafted next.
+- **Web-facing target** — partial: thin layer between data and presentation, but the exact target (SQL only, graph store, both) is deferred.
+
+Still open:
+
+1. **Sørens registers** (Artist, Sted, Almanak): location and ownership pending clarification with Søren. Treat the Power Query joins as placeholders until the files arrive or a reference path is agreed.
+2. **October milestone:** does this repo need a deliverable (mockup, prototype API, documentation page) or is the October demo Excel-based only?
+3. **Web-facing target:** SQL-served star schema, derived graph layer, or both? Decision needed once the "thin layer" constraint can be measured against concrete query patterns from the Places demo.
+4. **3–5 demo queries for Places:** to be drafted — e.g. "places visited on travel days", "works mentioned per visited place", "place-Andersen co-occurrence map by year".
