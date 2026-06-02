@@ -11,6 +11,8 @@ These apply at every stage:
 - **Original data is never lost, only supplemented.** Cleaning produces new columns; it does not overwrite the source. Every transformation must be reversible to the raw entry it came from.
 - **Transformations are traceable.** Each parsed row keeps `RegistryTitelID` (`PKRegistryTitelID` in the workbook) as its provenance pointer.
 - **Ambiguity is escalated, not guessed.** When a parenthetical or relation marker has more than one plausible classification, parsers flag the row for review.
+- **Data quality before interface.** A weak grounding cannot be rescued by a smart frontend or a chatbot. Reference fields (volume, page, date) must be reliable before any analytic or presentation layer is built on top.
+- **Narrow dimensions, rich facts.** Stable, universally-present attributes live in dimension rows. Combinations and relations (work × person × date × place × page) live in fact rows. Avoid early over-modelling on the dimension side.
 
 ## Stage 1 — Slice
 
@@ -58,15 +60,29 @@ This stage is optional: simple registers may go straight from Stage 2 to Stage 4
 
 `scripts/normalization/hca_xlsx_to_csv.py` consumes the canonical workbook plus parsed register slices and produces the three CSVs that the rest of the platform consumes. The output schema is documented in [`ai-context/coding_agent_plan.md`](../../ai-context/coding_agent_plan.md) §4.
 
-This is the canonical handoff between the pipeline and the application: anything downstream (frontend, backend API, search index, graph build) reads from these files.
+This is the canonical handoff between the pipeline and the application: anything downstream (frontend, backend API, search index, graph build) reads from these files. These CSVs are the early, hand-shaped form of the star-schema model that Stage 5 promotes them into.
 
-## Stage 5 — Optional Postgres load
+## Stage 5 — Star-schema model (Power Query / Power Pivot MVP)
 
-**Input:** the three normalised CSVs from Stage 4.
+**Input:** the normalised CSVs from Stage 4 (and, for the in-Excel MVP, the canonical workbook directly).
 
-**Output:** populated `record`, `alias`, `see_also`, and `relation` tables in a PostgreSQL database.
+**Output:** a Power Pivot data model — explicit dimension and fact tables connected by relationships — exposed through pivot tables, slicers, and optionally a Copilot/chat layer.
 
-Recommended schema in [`docs/data-model/wemi-and-relations.md`](../data-model/wemi-and-relations.md). The CSVs are the canonical form; the database is a derived artifact that supports graph traversal and full-text search beyond what CSV can answer.
+This stage is where the data model documented in [`docs/data-model/star-schema.md`](../data-model/star-schema.md) takes physical shape:
+
+- **Power Query** loads the workbook, splits the parent Registry into Work / Person / Place sub-types, and joins Sørens auxiliary registers (Artist, Sted, Almanak).
+- **Power Pivot** holds the dimensions (Calendar, Diary, Work-Registry, Person-Registry, Location-Registry, Sørens registers) and facts (References-In-Diary-Page as the spine, plus finer-grained section/date/place facts) as a star schema.
+- **Pivot tables and slicers** are the demonstration surface for the first round. They double as a laboratory for the standard queries that any later web UI will need to support.
+
+This is the "Excel-MVP" referenced throughout the meeting notes — a prototype platform, not the endpoint. Its purpose is to validate the model at full data scale and give collaborators a clickable surface before any web-stack investment.
+
+## Stage 6 — Optional Postgres warehouse
+
+**Input:** the validated dimensions and facts from Stage 5.
+
+**Output:** a PostgreSQL star schema, with the alias / see_also / relation tables alongside for graph traversal.
+
+Schema in [`docs/data-model/wemi-and-relations.md`](../data-model/wemi-and-relations.md) (entity + relation layer) and [`docs/data-model/star-schema.md`](../data-model/star-schema.md) (dimensions + facts). The database is a derived artifact: it supports full-text search and multi-hop traversal beyond what the Excel MVP can deliver, but the Power Pivot model remains the authoritative model definition until the web back-end exists.
 
 ## Stage extension: language tagging
 
