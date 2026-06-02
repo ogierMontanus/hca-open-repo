@@ -34,6 +34,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -115,6 +116,61 @@ def country_for(lat, lon):
         if lat_min <= lat <= lat_max and lon_min <= lon <= lon_max:
             return name_da, name_en
     return None, None
+
+
+# Lazy parsing of Work labels (Rule 1 in october-pipeline.md): publication
+# place and year live as parenthetical fragments at the end of the title.
+# Language detection is heuristic — falls back to the explicit Danish-prefix
+# convention for translations ("Tyske -", "Engelske -", …). Deeper passes
+# can later swap in scripts/parsers/add_language_column.py.
+
+PAREN_RE = re.compile(r"\(([^()]+?)\)")
+YEAR_RE = re.compile(r"\b(1[5-9]\d{2}|20\d{2})\b")
+NOISE_MARKERS = ("ill.", " af ", "oversat", "tr.", "trans.", "ff.", "opl.",
+                 "bind", "samling", "række", "oplag", "udgave", "pp.")
+LANGUAGE_PREFIX = {
+    "tyske": "de", "tysk": "de",
+    "engelske": "en", "engelsk": "en",
+    "franske": "fr", "fransk": "fr",
+    "hollandske": "nl", "hollandsk": "nl",
+    "italienske": "it", "italiensk": "it",
+    "svenske": "sv", "svensk": "sv",
+    "spanske": "es", "spansk": "es",
+    "russiske": "ru", "russisk": "ru",
+    "norske": "no", "norsk": "no",
+    "latinske": "la", "latinsk": "la",
+    "portugisiske": "pt", "portugisisk": "pt",
+}
+
+
+def parse_publication(label):
+    """Return (place_label, year) extracted from the right-most parens segment
+    that contains a year. Skips noise segments like '(Ill. af V. Pedersen)'."""
+    for m in reversed(list(PAREN_RE.finditer(label))):
+        content = m.group(1).strip()
+        ym = YEAR_RE.search(content)
+        if not ym:
+            continue
+        year = ym.group(1)
+        before = content[:ym.start()].strip()
+        before = re.sub(r"\d+\.\d+\.?\s*$", "", before).strip()
+        before = before.rstrip(".,;:- ").strip()
+        if any(n in before.lower() for n in NOISE_MARKERS):
+            return None, year
+        if not before or not re.search(r"[A-Za-zÆØÅæøåüöäß]", before):
+            return None, year
+        return before, year
+    return None, None
+
+
+def parse_language(label):
+    """Return (iso_code, source) — explicit prefix when present, else
+    ('und', 'default')."""
+    head = re.split(r"[\s\-—]+", label.strip(), maxsplit=1)[0].rstrip(":,.")
+    code = LANGUAGE_PREFIX.get(head.lower())
+    if code:
+        return code, "prefix"
+    return "und", "default"
 
 
 def latest_xlsx(raw_dir):
@@ -307,6 +363,57 @@ def build(verbose=False):
         "the Work↔Place M-M edge from Sørens 2. register (pending)."
     )
 
+    place_label_to_id = {}
+    for p in places_payload:
+        place_label_to_id[p["label"].casefold().strip()] = p["id"]
+        if p.get("destination_en"):
+            place_label_to_id.setdefault(p["destination_en"].casefold().strip(), p["id"])
+
+    works_payload = []
+    form_counts = defaultdict(int)
+    lang_counts = defaultdict(int)
+    matched_pub = 0
+    for w in entities:
+        if w["entity_type"] != "work":
+            continue
+        label = w["label"]
+        place_label, year = parse_publication(label)
+        lang, lang_src = parse_language(label)
+        pub_place_id = None
+        if place_label:
+            pub_place_id = place_label_to_id.get(place_label.casefold().strip())
+            if pub_place_id:
+                matched_pub += 1
+        rec = {
+            "id": w["entity_id"],
+            "label": label,
+            "form_h3": w["form_h3"],
+            "genre_h2": w["genre_h2"],
+            "subform_h4": w["subform_h4"],
+            "year_derived": w["year_derived"],
+            "language": lang,
+            "language_source": lang_src,
+            "publication_place_label": place_label,
+            "publication_place_id": pub_place_id,
+            "publication_year": year,
+            "description": w["description"],
+        }
+        works_payload.append(rec)
+        if w["form_h3"]:
+            form_counts[w["form_h3"]] += 1
+        lang_counts[lang] += 1
+    works_payload.sort(key=lambda x: x["label"].lower())
+    print(f"  works: {len(works_payload):,}  "
+          f"with parsed publication place: {sum(1 for w in works_payload if w['publication_place_label']):,}  "
+          f"matched to a Place id: {matched_pub:,}")
+    print(f"  forms: {dict(sorted(form_counts.items(), key=lambda kv: -kv[1])[:8])}")
+    print(f"  languages: {dict(sorted(lang_counts.items(), key=lambda kv: -kv[1]))}")
+    warnings.append(
+        "Work language is heuristic: explicit Danish-prefix convention "
+        "(Tyske/Engelske/…) when present, 'und' otherwise. Deeper detection "
+        "via scripts/parsers/add_language_column.py is a separate pass."
+    )
+
     rejser_payload = {
         "source": "hcax.dk Rejser (data/raw/Rejser_HCA_X.htm)",
         "journeys": [
@@ -343,8 +450,13 @@ def build(verbose=False):
             "place_references": len(refs_for_places),
             "rejser_legs": len(rejser_legs),
             "rejser_journeys": len(rejser_journeys),
+            "works": len(works_payload),
+            "works_with_publication_place": sum(1 for w in works_payload if w["publication_place_label"]),
+            "works_publication_place_matched": matched_pub,
         },
         "places_by_country": dict(sorted(country_counts.items(), key=lambda kv: -kv[1])),
+        "works_by_form": dict(sorted(form_counts.items(), key=lambda kv: -kv[1])),
+        "works_by_language": dict(sorted(lang_counts.items(), key=lambda kv: -kv[1])),
         "warnings": warnings,
     }
 
@@ -355,6 +467,7 @@ def build(verbose=False):
     write_json("places_timeline.json", timeline_payload)
     write_json("places_works.json", works_payload)
     write_json("rejser.json", rejser_payload)
+    write_json("works.json", works_payload)
     print("Done.")
 
 
