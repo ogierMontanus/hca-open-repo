@@ -319,6 +319,24 @@ main { flex: 1; }
 }
 .result-grid--list .result-card__body { padding: var(--sp3) var(--sp4); }
 
+/* Featured (one representative per H3) */
+.result-card--featured {
+  border-color: var(--color-accent);
+  border-width: 2px;
+}
+.result-card--featured .result-card__title { font-weight: 700; }
+.result-card--featured .result-card__thumb { position: relative; }
+.result-card--featured .result-card__thumb::after {
+  content: 'eksempel';
+  position: absolute; top: 6px; right: 6px;
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+  background: var(--color-accent); color: #fff;
+  padding: 1px 5px; border-radius: 2px; font-style: normal;
+}
+.result-card__thumb img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
 /* === Chips === */
 .chip {
   display: inline-flex; align-items: center; gap: 4px;

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bibliotek — H.C. Andersen Dagbogsregister</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Compact H2/H3 overview table replacing the old subsection-card grid */
+    .h2h3-overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp4);
+      margin-bottom: var(--sp8);
+    }
+    .h2h3-group {
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .h2h3-group__header {
+      background: var(--color-surface-2);
+      padding: var(--sp3) var(--sp5);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .h2h3-group__total {
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+    .h2h3-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 6px var(--sp5);
+      border-top: 1px solid var(--color-border);
+      font-size: 0.83rem;
+      color: var(--color-text);
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    a.h2h3-row:hover {
+      background: var(--color-accent-light);
+      text-decoration: none;
+    }
+    .h2h3-row__counts {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      margin-left: var(--sp4);
+    }
+    .h2h3-row__counts strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    @media (max-width: 640px) {
+      .h2h3-overview { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Bibliotek</span>
+      </nav>
+      <h1>Bibliotek</h1>
+      <p>Trykte og litterære værker — H.C. Andersen og andre forfattere</p>
+      <div class="page-hero__meta">
+        <span>1.516 registerposter</span>
+        <span>5.048 poster i dagbøgerne</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- H2/H3 overview — subtotals for all categories -->
+      <div class="h2h3-overview">
+
+        <div class="h2h3-group">
+          <div class="h2h3-group__header">
+            H. C. Andersen
+            <span class="h2h3-group__total">775 poster · 4.710 refs.</span>
+          </div>
+          <a href="#" class="h2h3-row" data-h3="eventyr">
+            Eventyr
+            <span class="h2h3-row__counts"><strong>288</strong> poster · 2.784 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="digte-hca">
+            Digte
+            <span class="h2h3-row__counts"><strong>342</strong> poster · 770 refs.</span>
+          </a>
+          <a href="romaner.html" class="h2h3-row">
+            Romaner og Noveller
+            <span class="h2h3-row__counts"><strong>33</strong> poster · 417 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="rejse">
+            Rejseskildringer
+            <span class="h2h3-row__counts"><strong>21</strong> poster · 245 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="afhandlinger">
+            Afhandlinger, Artikler m.m.
+            <span class="h2h3-row__counts"><strong>19</strong> poster · 214 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="selvbio">
+            Selvbiografier
+            <span class="h2h3-row__counts"><strong>10</strong> poster · 196 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="samlede-hca">
+            Samlede og blandede Skrifter
+            <span class="h2h3-row__counts"><strong>5</strong> poster · 45 refs.</span>
+          </a>
+        </div>
+
+        <div class="h2h3-group">
+          <div class="h2h3-group__header">
+            Andre Forfattere
+            <span class="h2h3-group__total">741 poster · 1.376 refs.</span>
+          </div>
+          <a href="romaner.html" class="h2h3-row">
+            Romaner, Noveller, Eventyr
+            <span class="h2h3-row__counts"><strong>229</strong> poster · 338 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="digte-andre">
+            Digte
+            <span class="h2h3-row__counts"><strong>250</strong> poster · 341 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="faglitteratur">
+            Faglitteratur
+            <span class="h2h3-row__counts"><strong>216</strong> poster · 347 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="periodica">
+            Tidsskrifter og Aarbøger (Periodica)
+            <span class="h2h3-row__counts"><strong>84</strong> poster · 318 refs.</span>
+          </a>
+          <a href="#" class="h2h3-row" data-h3="samlede-andre">
+            Samlede og blandede Skrifter
+            <span class="h2h3-row__counts"><strong>19</strong> poster · 33 refs.</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Browse layout: facets + results -->
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filtrér</span>
+            <button class="facet-panel__clear">Nulstil</button>
+          </div>
+
+          <!-- H2 -->
+          <div class="facet-group">
+            <div class="facet-group__header">Forfattergruppe (H2) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">H. C. Andersen</span><span class="facet-item__count">775</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Andre Forfattere</span><span class="facet-item__count">741</span></label>
+            </div>
+          </div>
+
+          <!-- H3 — full list, split by H2 -->
+          <div class="facet-group">
+            <div class="facet-group__header">Form (H3) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-muted);padding:4px 0 2px">H.C. Andersen</div>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Eventyr</span><span class="facet-item__count">288</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte</span><span class="facet-item__count">342</span></label>
+              <label class="facet-item"><input type="checkbox" id="facet-romaner-hca"><span class="facet-item__label">Romaner og Noveller</span><span class="facet-item__count">33</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rejseskildringer</span><span class="facet-item__count">21</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Afhandlinger, Artikler m.m.</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Selvbiografier</span><span class="facet-item__count">10</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">5</span></label>
+              <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-muted);padding:8px 0 2px">Andre Forfattere</div>
+              <label class="facet-item"><input type="checkbox" id="facet-romaner-andre"><span class="facet-item__label">Romaner, Noveller, Eventyr</span><span class="facet-item__count">229</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte</span><span class="facet-item__count">250</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Faglitteratur</span><span class="facet-item__count">216</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Tidsskrifter og Aarbøger</span><span class="facet-item__count">84</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">19</span></label>
+            </div>
+          </div>
+
+          <!-- Årstal -->
+          <div class="facet-group">
+            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
+                <span>1825</span>
+                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
+                <span>—</span>
+                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
+                <span>1875</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Result area -->
+        <div>
+          <div class="results-header">
+            <span class="results-count"><strong>1.516</strong> poster i Bibliotek &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— fedmarkerede kort = et eksempel pr. H3</span></span>
+            <div class="layout-switcher">
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Gitter</button>
+              <button class="layout-switcher__btn" data-layout="list">Liste</button>
+            </div>
+          </div>
+
+          <div class="result-grid">
+
+            <!-- ★ Eventyr (HCA) — featured -->
+            <a href="work.html?reg=Reg000713" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg000713 · Eventyr</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Den grimme Ælling</div>
+                <div class="result-card__meta">H.C. Andersen · Eventyr</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">59 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Digte (HCA) — featured -->
+            <a href="work.html?reg=Reg000846" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg000846 · Digt</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Det døende Barn</div>
+                <div class="result-card__meta">H.C. Andersen · Digte</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">14 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Romaner og Noveller (HCA) — featured -->
+            <a href="work.html?reg=Reg001737" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg001737 · Roman</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Improvisatoren</div>
+                <div class="result-card__meta">H.C. Andersen · Romaner og Noveller</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">22 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Rejseskildringer (HCA) — featured -->
+            <a href="work.html?reg=Reg000688" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg000688 · Rejse</div>
+              <div class="result-card__body">
+                <div class="result-card__title">En Digters Bazar</div>
+                <div class="result-card__meta">H.C. Andersen · Rejseskildringer</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">31 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Afhandlinger, Artikler m.m. (HCA) — featured -->
+            <a href="work.html?reg=Reg000201" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg000201 · Afhandling</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Ahasverus</div>
+                <div class="result-card__meta">H.C. Andersen · Afhandlinger, Artikler m.m.</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">11 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Selvbiografier (HCA) — featured -->
+            <a href="work.html?reg=Reg002444" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg002444 · Selvbiografi</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Mit Livs Eventyr</div>
+                <div class="result-card__meta">H.C. Andersen · Selvbiografier</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">45 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Samlede og blandede Skrifter (HCA) — featured -->
+            <a href="work.html?reg=Reg002902" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg002902 · Samlede Skrifter</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Samlede Skrifter (1853–54)</div>
+                <div class="result-card__meta">H.C. Andersen · Samlede og blandede Skrifter</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">9 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Romaner, Noveller, Eventyr (Andre Forfattere) — featured -->
+            <a href="work.html?reg=Reg000365" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg000365 · Roman</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Bleak House</div>
+                <div class="result-card__meta">Charles Dickens · Romaner, Nov., Eventyr</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">5 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- Romaner, Nov., Eventyr (Andre) — secondary -->
+            <a href="work.html?reg=Reg000124" class="result-card">
+              <div class="result-card__thumb">Reg000124 · Roman</div>
+              <div class="result-card__body">
+                <div class="result-card__title">A Christmas Carol</div>
+                <div class="result-card__meta">Charles Dickens · Romaner, Nov., Eventyr</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">8 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Digte (Andre Forfattere) — featured -->
+            <a href="work.html?reg=Reg001979" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg001979 · Digt</div>
+              <div class="result-card__body">
+                <div class="result-card__title">La Divina Commedia</div>
+                <div class="result-card__meta">Dante Alighieri · Digte</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- Romaner (HCA) — secondary -->
+            <a href="work.html?reg=Reg001953" class="result-card">
+              <div class="result-card__thumb">Reg001953 · Roman</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Kun en Spillemand</div>
+                <div class="result-card__meta">H.C. Andersen · Romaner og Noveller</div>
+                <div class="result-card__chips"><span style="font-size:0.7rem;color:var(--color-text-muted)">18 refs.</span></div>
+              </div>
+            </a>
+
+            <!-- ★ Faglitteratur (Andre Forfattere) — featured -->
+            <a href="work.html?reg=Reg001919" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg001919 · Faglitteratur</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Kosmos</div>
+                <div class="result-card__meta">A. von Humboldt · Faglitteratur</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--person">Humboldt</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">14 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- ★ Tidsskrifter og Aarbøger (Andre Forfattere) — featured -->
+            <a href="work.html?reg=Reg002816" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg002816 · Tidsskrift</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Revue des deux Mondes</div>
+                <div class="result-card__meta">Tidsskrifter og Aarbøger (Periodica)</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Paris</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">12 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- ★ Samlede og blandede Skrifter (Andre Forfattere) — featured -->
+            <a href="work.html?reg=Reg002902" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg001406 · Samlede Skrifter</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Goethes Werke</div>
+                <div class="result-card__meta">J.W. von Goethe · Samlede og blandede Skrifter</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--person">Goethe</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">7 refs.</span>
+                </div>
+              </div>
+            </a>
+
+          </div>
+
+          <!-- "Vis alle romaner" shortcut when romaner facet would be active -->
+          <div style="margin-top:var(--sp5);font-size:0.82rem;color:var(--color-text-muted)">
+            For fuldt gennemse af Romaner og Noveller:
+            <a href="romaner.html" style="color:var(--color-accent)">Åbn Romaner-register →</a>
+            &ensp;(33 HCA + 219 Andre Forfattere)
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>
