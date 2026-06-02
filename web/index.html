@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HCA — Places mockup</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>H. C. Andersen — Places</h1>
+    <p id="manifest-line" class="muted">loading…</p>
+  </header>
+
+  <main>
+    <section id="left">
+      <input id="search" type="search" placeholder="Filter places…" autocomplete="off" />
+      <ol id="place-list" aria-label="Places, ranked by visit count"></ol>
+    </section>
+
+    <section id="right">
+      <article id="detail" hidden>
+        <h2 id="detail-label"></h2>
+        <p id="detail-meta" class="muted"></p>
+
+        <div id="map" aria-label="Map of selected place"></div>
+        <p id="map-note" class="muted">
+          Map coordinates are not yet in the source data — geocoding pass TBD.
+        </p>
+
+        <h3>Timeline of mentions</h3>
+        <div id="timeline" aria-label="Year histogram"></div>
+
+        <h3>Works co-occurring on the same diary pages</h3>
+        <p class="muted">
+          Placeholder for the Work↔Place edge from Sørens 2. register.
+          Currently computed from page-level co-occurrence.
+        </p>
+        <ol id="works-list"></ol>
+
+        <h3>Diary entries mentioning this place</h3>
+        <ol id="visits-list"></ol>
+      </article>
+
+      <p id="detail-empty" class="muted">Select a place to see its detail.</p>
+    </section>
+  </main>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

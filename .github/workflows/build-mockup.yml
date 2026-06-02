@@ -1,0 +1,54 @@
+name: Build Places mockup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/raw/**'
+      - 'data/normalized/**'
+      - 'scripts/normalization/**'
+      - 'scripts/build_web/**'
+      - 'web/**'
+      - '.github/workflows/build-mockup.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f scripts/parsers/requirements.txt ]; then
+            pip install -r scripts/parsers/requirements.txt
+          fi
+          pip install openpyxl
+
+      - name: Stage 1 — xlsx to normalised CSVs
+        run: python scripts/normalization/hca_xlsx_to_csv.py
+
+      - name: Stage 2 — CSVs to web JSON
+        run: python scripts/build_web/build_web_data.py
+
+      - name: Bundle static site
+        run: |
+          mkdir -p _site
+          cp -r web/* _site/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: places-mockup
+          path: _site
+          retention-days: 30
+
+      # Deploy step is intentionally a stub — un-comment after the hosting
+      # choice is confirmed (see docs/data-model/october-pipeline.md §"Open
+      # items"). For GitHub Pages, replace the artifact upload above with
+      # actions/upload-pages-artifact and add an actions/deploy-pages step.
