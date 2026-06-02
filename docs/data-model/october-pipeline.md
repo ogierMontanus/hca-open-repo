@@ -21,27 +21,36 @@ The door stays open: every intermediate CSV is a clean dimension or fact table, 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  raw/HCA-Repository V*.xlsx       (canonical source)        │
+│  data/raw/HCA-Repository V*.xlsx  (canonical source)        │
 │  └── Power Query + Power Pivot star schema embedded         │
-│  raw/sorens/*.xlsx | *.csv        (optional, when provided) │
+│  data/raw/Rejser_HCA_X.htm        (geocoded add-on,         │
+│                                    sourced from hcax.dk)    │
+│  data/raw/sorens/*.xlsx | *.csv   (optional, when provided) │
 └─────────────────────────────────────────────────────────────┘
                          │
                          ▼
          ┌──────────────────────────────┐
-         │ [1] scripts/normalization/   │
-         │     hca_xlsx_to_csv.py       │   (exists; extend for star tables)
+         │ [1a] scripts/normalization/  │
+         │      hca_xlsx_to_csv.py      │   (exists; extend for star tables)
          │                              │
          │  xlsx → dimension + fact CSV │
+         └──────────────────────────────┘
+         ┌──────────────────────────────┐
+         │ [1b] scripts/build_web/      │
+         │      parse_rejser_htm.py     │   (new)
+         │                              │
+         │  Rejser_HCA_X.htm → TSV      │
+         │  (table only; jpg ignored)   │
          └──────────────────────────────┘
                          │
                          ▼
          ┌──────────────────────────────┐
-         │  data/normalized/*.csv       │
-         │   dim_place.csv              │
-         │   dim_calendar.csv           │
-         │   dim_diary.csv              │
-         │   fact_reference.csv         │
-         │   fact_place_work.csv  (M-M) │
+         │  data/normalized/             │
+         │   entities.csv                │
+         │   diary.csv                   │
+         │   references.csv              │
+         │   rejser.tsv          (add-on)│
+         │   rejser_journeys.tsv (add-on)│
          └──────────────────────────────┘
                          │
                          ▼
@@ -57,10 +66,14 @@ The door stays open: every intermediate CSV is a clean dimension or fact table, 
          ┌──────────────────────────────┐
          │  web/data/                   │
          │   manifest.json              │
-         │   places.json                │
+         │   places.json   (lat/lon for │
+         │                  matched 377)│
          │   places_visits.json         │
          │   places_works.json          │
          │   places_timeline.json       │
+         │   rejser.json   (geocoded    │
+         │                  add-on,     │
+         │                  separate)   │
          └──────────────────────────────┘
                          │
                          ▼
@@ -194,9 +207,27 @@ Skipping SQLite costs:
 
 For an October mockup demoing 3–5 fixed Places queries, neither cost is real. If the mockup later wants user-driven exploration over the full star schema, swapping in DuckDB-WASM (option 2 from `star-schema.md`) means *adding* a query layer over the same CSVs — no rework of Stage 1.
 
+## Geocoded add-on — hcax.dk Rejser table
+
+The October scope is focused on Q1, Q2, and Q4 from the candidate query list, with Q4 (map view) limited to places that can be geocoded **without an open-ended geocoding pass**. The supplementary HTML table at `data/raw/Rejser_HCA_X.htm` (scraped from rejser.hcax.dk) carries lat/lon for every leg of every Andersen journey.
+
+Stage 1b (`scripts/build_web/parse_rejser_htm.py`) converts the table to TSV — `rejser.tsv` (one row per leg, 10 columns including separate Latitude/Longitude) and `rejser_journeys.tsv` (one row per journey, with Danish dates and descriptions). Embedded `<img>` rejsekort `.jpg` references are ignored.
+
+Stage 2 matches Place labels from the Excel workbook against `Destination_DA` from the Rejser TSV (case-insensitive exact match). Matched places get `lat`, `lon`, `geocoded: true`, `destination_en`, `journey_count`, and `leg_count` injected into `places.json`. Unmatched places carry `geocoded: false` with null coordinates.
+
+The Rejser-derived data is also emitted as its own artifact, `web/data/rejser.json`, keeping it **distinct from the Excel-derived JSON** so provenance is never blurred.
+
+Current match rate against V0.82: **377 of 2,508 places** carry coordinates. The remaining majority is intentionally not geocoded for the October demo.
+
+Front-end behaviour (`web/app.js`):
+
+- Geocoded places sort to the top of the list and render with an accent colour, a blue "●" pin glyph, and a "Nj" journey-count badge.
+- The detail panel shows a "Journeys passing through this place" section with arrival/departure dates, transport methods (emojis preserved), and journey context (description, countries) for every matched place.
+- The Leaflet map renders a real marker for geocoded places; for non-matched places the map zooms out and a muted note explains the place isn't in the Rejser table.
+- A "Geocoded only" toggle in the left rail filters the list to the 377 places that have map data.
+
 ## Open items before implementation
 
-1. **The 3–5 Places demo queries** — Stage 2 cannot be coded until the query list is fixed. Drafting these is the next planning step.
-2. **Coordinates for Places** — are lat/lon already in `STED-REGISTER`, or does Stage 1 need a geocoding fallback? If geocoding, what gazetteer (GeoNames, Wikidata, manual)?
-3. **Sørens registers** — schema and arrival date still pending Søren's clarification.
-4. **Hosting** — GitHub Pages is the default assumption; confirm or pick an alternative static host before wiring the Action's deploy step.
+1. **The remaining demo queries** — Q1 and Q2 are wired against the existing data; Q4 is now answered for the 377-place subset. Q3 and Q5 (works-co-occurrence using Sørens 2. register; Place typology from Sørens-Sted) remain placeholders.
+2. **Sørens registers** — schema and arrival date still pending Søren's clarification.
+3. **Hosting** — GitHub Pages is the default assumption; confirm or pick an alternative static host before wiring the Action's deploy step.

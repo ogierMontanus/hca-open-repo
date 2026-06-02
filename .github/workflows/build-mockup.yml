@@ -30,8 +30,12 @@ jobs:
           fi
           pip install openpyxl
 
-      - name: Stage 1 — xlsx to normalised CSVs
+      - name: Stage 1a — xlsx to normalised CSVs
         run: python scripts/normalization/hca_xlsx_to_csv.py
+
+      - name: Stage 1b — parse Rejser HTM add-on
+        run: python scripts/build_web/parse_rejser_htm.py
+        continue-on-error: true
 
       - name: Stage 2 — CSVs to web JSON
         run: python scripts/build_web/build_web_data.py

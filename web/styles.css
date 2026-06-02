@@ -38,13 +38,29 @@ main {
   background: var(--panel);
 }
 
+.left-controls {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
 #search {
   padding: 0.5rem 0.75rem;
-  margin: 0.75rem;
   font-size: 0.95rem;
   border: 1px solid var(--border);
   border-radius: 6px;
 }
+.toggle {
+  font-size: 0.85em;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  user-select: none;
+  cursor: pointer;
+}
+.toggle input { margin: 0; }
 
 #place-list {
   list-style: none;
@@ -65,10 +81,53 @@ main {
 #place-list li.selected { background: var(--accent-bg); color: var(--accent); }
 #place-list .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #place-list .count { color: var(--muted); font-variant-numeric: tabular-nums; }
+#place-list li.geocoded { background: #f8fbff; }
+#place-list li.geocoded:hover { background: #eef4ff; }
+#place-list li.geocoded.selected { background: var(--accent-bg); }
+#place-list li.geocoded .label { color: var(--accent); font-weight: 500; }
+#place-list .pin { color: var(--accent); font-size: 0.7rem; margin-right: 0.3rem; }
+#place-list .journey-tag {
+  font-size: 0.7rem;
+  background: var(--accent);
+  color: white;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-right: 0.4rem;
+}
 
 #right { padding: 1.25rem; overflow-y: auto; }
-#detail h2 { margin: 0 0 0.25rem 0; }
+#detail h2 { margin: 0 0 0.25rem 0; display: flex; align-items: baseline; gap: 0.6rem; }
 #detail h3 { margin: 1.5rem 0 0.5rem 0; font-size: 1rem; }
+.badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+#map-note.warn { color: #a05a00; }
+#journeys-list { list-style: none; margin: 0; padding: 0; }
+#journeys-list .journey {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.6rem;
+  background: #f8fbff;
+}
+#journeys-list .journey-title { font-weight: 600; }
+#journeys-list .journey-meta { font-size: 0.8em; }
+#journeys-list .journey-desc { font-size: 0.9em; margin: 0.25rem 0; }
+#journeys-list .leg-list {
+  list-style: disc inside;
+  margin: 0.25rem 0 0 0;
+  padding: 0;
+  font-size: 0.85em;
+  color: #444;
+}
 
 #map { height: 280px; border: 1px solid var(--border); border-radius: 6px; margin-top: 0.5rem; }
 

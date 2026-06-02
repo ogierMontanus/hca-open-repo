@@ -20,21 +20,33 @@
 
   <main>
     <section id="left">
-      <input id="search" type="search" placeholder="Filter places…" autocomplete="off" />
+      <div class="left-controls">
+        <input id="search" type="search" placeholder="Filter places…" autocomplete="off" />
+        <label class="toggle">
+          <input id="geocoded-only" type="checkbox" />
+          <span>Geocoded only</span>
+        </label>
+      </div>
       <ol id="place-list" aria-label="Places, ranked by visit count"></ol>
     </section>
 
     <section id="right">
       <article id="detail" hidden>
-        <h2 id="detail-label"></h2>
+        <h2 id="detail-label">
+          <span id="detail-label-text"></span>
+          <span id="detail-badge" class="badge" hidden>geocoded</span>
+        </h2>
         <p id="detail-meta" class="muted"></p>
 
         <div id="map" aria-label="Map of selected place"></div>
-        <p id="map-note" class="muted">
-          Map coordinates are not yet in the source data — geocoding pass TBD.
-        </p>
+        <p id="map-note" class="muted"></p>
 
-        <h3>Timeline of mentions</h3>
+        <section id="journeys-section" hidden>
+          <h3>Journeys passing through this place</h3>
+          <ol id="journeys-list"></ol>
+        </section>
+
+        <h3>Timeline of diary mentions</h3>
         <div id="timeline" aria-label="Year histogram"></div>
 
         <h3>Works co-occurring on the same diary pages</h3>

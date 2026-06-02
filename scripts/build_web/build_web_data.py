@@ -7,22 +7,26 @@ Stage 2 of the October mockup pipeline (see docs/data-model/october-pipeline.md)
 Reads star-shaped CSVs from data/normalized/ and emits denormalised JSON
 artifacts to web/data/ that the static mockup can fetch directly.
 
-Inputs (produced by scripts/normalization/hca_xlsx_to_csv.py):
+Inputs (produced by scripts/normalization/hca_xlsx_to_csv.py and
+scripts/build_web/parse_rejser_htm.py):
   data/normalized/entities.csv
   data/normalized/diary.csv
   data/normalized/references.csv
+  data/normalized/rejser.tsv            (optional, geocoded add-on)
+  data/normalized/rejser_journeys.tsv   (optional)
 
 Outputs:
   web/data/manifest.json         pipeline + source provenance
-  web/data/places.json           Places dimension + visit counts
+  web/data/places.json           Places dimension + visit counts + coords
+                                  (lat/lon populated where the place name
+                                   matches the hcax.dk Rejser add-on)
   web/data/places_visits.json    per-Place diary entries
   web/data/places_timeline.json  per-Place year histogram
   web/data/places_works.json     per-Place co-occurring Works
                                   (page-level co-occurrence; placeholder
                                    until Sørens 2. register lands)
-
-This skeleton implements the shapes; refine the per-query semantics once
-the 3-5 Places demo queries are pinned down.
+  web/data/rejser.json           geocoded travel add-on, kept separate
+                                  from the Excel-derived data
 """
 
 import argparse
@@ -45,6 +49,13 @@ SNIPPET_CHARS = 220
 def load_csv(path):
     with open(path, encoding="utf-8") as f:
         return list(csv.DictReader(f))
+
+
+def load_tsv(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        return list(csv.DictReader(f, delimiter="\t"))
 
 
 def sha256_of(path):
@@ -134,18 +145,76 @@ def build(verbose=False):
             if eid in works and eid != pid:
                 work_cooccurrence[pid][eid] += 1
 
+    print("Loading Rejser add-on (hcax.dk)…")
+    rejser_legs = load_tsv(os.path.join(NORMALIZED_DIR, "rejser.tsv"))
+    rejser_journeys = load_tsv(os.path.join(NORMALIZED_DIR, "rejser_journeys.tsv"))
+    print(f"  {len(rejser_legs):,} legs, {len(rejser_journeys):,} journeys")
+
+    rejser_by_da = {}
+    for leg in rejser_legs:
+        da = (leg.get("Destination_DA") or "").strip()
+        lat = (leg.get("Latitude") or "").strip()
+        lon = (leg.get("Longitude") or "").strip()
+        if not da or not lat or not lon:
+            continue
+        key = da.casefold()
+        entry = rejser_by_da.setdefault(key, {
+            "da": da,
+            "en": (leg.get("Destination_EN") or "").strip(),
+            "lat": float(lat),
+            "lon": float(lon),
+            "journeys": set(),
+            "leg_count": 0,
+        })
+        entry["journeys"].add(leg["RejseID"])
+        entry["leg_count"] += 1
+
+    journey_titles = {j["RejseID"]: j.get("Title", "") for j in rejser_journeys}
+
     places_payload = []
+    matched = 0
+    legs_by_place_id = {}
     for p in places:
         pid = p["entity_id"]
-        places_payload.append({
+        label = p["label"]
+        rec = {
             "id": pid,
-            "label": p["label"],
+            "label": label,
             "visit_count": len(visits.get(pid, [])),
             "lat": None,
             "lon": None,
-        })
+            "geocoded": False,
+        }
+        match = rejser_by_da.get(label.casefold().strip())
+        if match:
+            matched += 1
+            rec["lat"] = match["lat"]
+            rec["lon"] = match["lon"]
+            rec["geocoded"] = True
+            rec["destination_en"] = match["en"]
+            rec["journey_count"] = len(match["journeys"])
+            rec["leg_count"] = match["leg_count"]
+            legs_by_place_id[pid] = [
+                {
+                    "rejse_id": leg["RejseID"],
+                    "journey_title": journey_titles.get(leg["RejseID"], ""),
+                    "destination_type": leg["DestinationType"],
+                    "arrival_date": leg["ArrivalDate"],
+                    "departure_date": leg["DepartureDate"],
+                    "arrival_method": leg["ArrivalMethod"],
+                    "lat": float(leg["Latitude"]) if leg["Latitude"] else None,
+                    "lon": float(leg["Longitude"]) if leg["Longitude"] else None,
+                }
+                for leg in rejser_legs
+                if leg["Destination_DA"].casefold().strip() == label.casefold().strip()
+            ]
+        places_payload.append(rec)
     places_payload.sort(key=lambda x: x["label"].lower())
-    warnings.append("Places dimension has no coordinates — geocoding pass TBD.")
+    print(f"  matched {matched} of {len(places_payload)} places against Rejser DA names")
+    warnings.append(
+        f"Coordinates available for {matched}/{len(places_payload)} places via the "
+        "hcax.dk Rejser add-on; the remaining majority is not geocoded for the October demo."
+    )
 
     visits_payload = {
         pid: sorted(rows, key=lambda v: (v["year"] or "", v["date"] or ""))
@@ -173,18 +242,42 @@ def build(verbose=False):
         "the Work↔Place M-M edge from Sørens 2. register (pending)."
     )
 
+    rejser_payload = {
+        "source": "hcax.dk Rejser (data/raw/Rejser_HCA_X.htm)",
+        "journeys": [
+            {
+                "rejse_id": j["RejseID"],
+                "title": j["Title"],
+                "year_range": j["YearRange"],
+                "departure": j["Departure"],
+                "return": j["Return"],
+                "description": j["Description"],
+                "countries": j["Countries"],
+                "cost": j["Cost"],
+            }
+            for j in rejser_journeys
+        ],
+        "legs_by_place_id": legs_by_place_id,
+    }
+
     xlsx_fn = latest_xlsx(RAW_DIR)
     source_xlsx_path = os.path.join(RAW_DIR, xlsx_fn) if xlsx_fn else None
+    rejser_htm_path = os.path.join(RAW_DIR, "Rejser_HCA_X.htm")
     manifest = {
         "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source_xlsx": xlsx_fn,
         "source_xlsx_sha256": sha256_of(source_xlsx_path) if source_xlsx_path else None,
+        "source_rejser_htm": "Rejser_HCA_X.htm" if os.path.exists(rejser_htm_path) else None,
+        "source_rejser_sha256": sha256_of(rejser_htm_path) if os.path.exists(rejser_htm_path) else None,
         "counts": {
             "places": len(places_payload),
+            "places_geocoded": matched,
             "places_with_visits": len(visits_payload),
             "diary_entries": len(diary),
             "references": len(refs),
             "place_references": len(refs_for_places),
+            "rejser_legs": len(rejser_legs),
+            "rejser_journeys": len(rejser_journeys),
         },
         "warnings": warnings,
     }
@@ -195,6 +288,7 @@ def build(verbose=False):
     write_json("places_visits.json", visits_payload)
     write_json("places_timeline.json", timeline_payload)
     write_json("places_works.json", works_payload)
+    write_json("rejser.json", rejser_payload)
     print("Done.")
 
 
