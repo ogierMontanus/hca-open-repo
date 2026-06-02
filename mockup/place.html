@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rom — H.C. Andersen Dagbogsregister</title>
   <link rel="stylesheet" href="css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin="">
 </head>
 <body>
 
@@ -45,13 +50,15 @@
 
         <div class="entity-main">
 
-          <!-- Map placeholder -->
-          <div>
+          <!-- Geografisk kontekst: vises kun for entiteter med geokoder.
+               Skjules ved person-, værk- og dagbogssider, samt ved stednavne
+               i STED-REGISTER der endnu ikke har lat/lon. -->
+          <div data-has-coords="true">
             <h2 class="section-title">Geografisk kontekst</h2>
-            <div class="map-placeholder">
-              <span>Kortplacering — 41.9028° N, 12.4964° Ø</span>
-              <span class="map-placeholder__note">Interaktivt kort aktiveres i en senere fase</span>
-            </div>
+            <div id="place-map" class="map-leaflet" aria-label="Kort over Rom"></div>
+            <p class="map-meta">41.9028° N, 12.4964° Ø &nbsp;·&nbsp;
+              <a href="https://www.openstreetmap.org/?mlat=41.9028&amp;mlon=12.4964#map=11/41.9028/12.4964"
+                 target="_blank" rel="noopener">OpenStreetMap</a></p>
           </div>
 
           <!-- Timeline -->
@@ -190,5 +197,26 @@
 </footer>
 
 <script src="js/nav.js"></script>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
+<script>
+  // Leaflet for STED-REGISTER detail page. Initialised only when the
+  // surrounding element exists — i.e. when the entity has geocodes.
+  (function () {
+    const el = document.getElementById('place-map');
+    if (!el) return;
+    const lat = 41.9028, lon = 12.4964, label = 'Rom';
+    const map = L.map(el).setView([lat, lon], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap',
+      maxZoom: 18
+    }).addTo(map);
+    L.marker([lat, lon]).addTo(map)
+      .bindPopup('<b>' + label + '</b><br>' + lat + '° N, ' + lon + '° Ø')
+      .openPopup();
+  })();
+</script>
 </body>
 </html>
