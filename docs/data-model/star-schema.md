@@ -116,17 +116,75 @@ From the 2026-06-01 meeting, the rules that govern how this layer evolves:
 5. **Bounded enrichment.** External contributions (students, partners) arrive in standardised schemas with controlled vocabularies and merge back into the dimensions without rebuilding them.
 6. **Demo-driven scoping.** The next demonstration round picks the entity with the best ratio of demonstration value to modelling weight — likely Persons or Places, not Works.
 
+## Web-facing target — five candidate architectures
+
+Spanning the spectrum from no-database to NoSQL, evaluated against the "thin layer between data and presentation" constraint and the Places-first demo. Listed cheapest-to-heaviest in infrastructure terms.
+
+### 1. No database — pure structured-file bundle
+
+Export the star schema as a versioned bundle of Parquet (or JSON / CSV) files. Web app loads them directly; in-browser SQL via **DuckDB-WASM** turns the bundle into a queryable star schema without any server.
+
+- **Pros:** zero ops, zero hosting cost, fully static deploy (GitHub Pages / Netlify); the data layer *is* the artifact, reproducible by commit hash; survives long-term archival trivially.
+- **Cons:** no write path, no per-user state, no auth beyond static hosting; full dataset shipped client-side (fine at 2.5k Places + 10k Persons, less so as facts grow).
+- **Fit for Places demo:** very good — small enough to fit comfortably in DuckDB-WASM; pivot-style queries (filter dimensions, aggregate facts) are exactly DuckDB's strength.
+
+### 2. Single-file embedded database (SQLite / DuckDB)
+
+Same shape as #1 but the file is an actual database. Server-side: a tiny Python / Node API serves `SELECT` statements. Or client-side via `sql.js` / DuckDB-WASM, identically to option 1.
+
+- **Pros:** still essentially file-based — one artifact, one commit-hash version; minimal API surface (literally "execute this SQL"); easiest path to honour the "thin layer" rule because there is barely a layer.
+- **Cons:** single-writer (irrelevant for read-only repo data, relevant if mock-up later wants annotation/comments); no concurrent transactional writes; backup story is "copy the file".
+- **Fit for Places demo:** excellent — SQLite/DuckDB queries map directly to Power Pivot DAX expressions; quickest port from MVP.
+
+### 3. PostgreSQL — classic relational star schema
+
+Dimensions and facts as normalised tables with explicit FKs and indexes. A thin REST or GraphQL endpoint exposes either parameterised queries or a tiny query-builder over a fixed set of dimensions/facts.
+
+- **Pros:** mature ecosystem, strong consistency, expressive SQL (window functions, CTEs, geo via PostGIS — relevant for Places); standard hosting; clean migration path from SQLite if the project outgrows option 2.
+- **Cons:** real infrastructure to run, monitor, back up; schema migrations become a process; the "thin layer" rule is hardest to keep here because Postgres invites ORMs and service layers.
+- **Fit for Places demo:** strong long-term, slightly heavy for a *mockup* whose lifetime is October.
+
+### 4. PostgreSQL with JSONB — hybrid relational + document
+
+Relational core for dimensions and facts (Calendar, Diary, Place IDs, fact rows), but heterogeneous attributes — variable Person/Place/Work properties, Sørens overlays, source-specific metadata — live in `JSONB` columns. SQL joins still work; document-shaped fields stay flexible.
+
+- **Pros:** best fit for the WEMI/sub-type heterogeneity already documented (Works' Literary/Musical/Visual subtypes have very different field sets); GIN indexes on JSONB keep ad-hoc queries fast; lets the schema evolve without DDL churn during the still-stabilising modelling phase.
+- **Cons:** two query idioms in one engine (relational + JSON path expressions) — easy to misuse; query plans on JSONB need attention; tooling/ORM support for JSONB is weaker than for plain columns.
+- **Fit for Places demo:** good — Places themselves are well-typed, but Sørens-Sted overlay attributes and per-place source notes are exactly the kind of variable bag JSONB handles cleanly.
+
+### 5. Dedicated document or graph store (Mongo / Neo4j)
+
+Fully NoSQL. Either a document store (MongoDB / Elasticsearch) optimised for faceted browse and full-text search, or a property graph (Neo4j) that makes the Work↔Place / Person↔Place / Person↔Work edges first-class — matching the project's eventual "graph layer" trajectory.
+
+- **Pros:** Mongo/ES — best-in-class search/facets UX; Neo4j — relationships *are* the query primitive, ideal for the M-M edges the star schema currently models awkwardly; visually compelling for demos (graph viz, search-as-you-type).
+- **Cons:** two databases to keep in sync if used alongside the relational warehouse; star-schema aggregations are not the native idiom for either; bigger conceptual jump for collaborators used to spreadsheets / SQL.
+- **Fit for Places demo:** Neo4j makes the Place↔Work edge demo-spectacular but locks in a paradigm shift before the relational MVP has fully proven itself; Mongo/ES adds search polish that isn't strictly required for the October mockup.
+
+### Recommendation framing (not yet decided)
+
+Given **October = mockup only** and the **thin-layer** constraint, options 1 or 2 are the most honest match for the milestone — the data layer is the artifact and the presentation layer sits right on top of it. Option 4 (Postgres + JSONB) is the natural next step if the mockup graduates into a longer-lived tool, because it can absorb the WEMI heterogeneity without flattening it. Option 5 (graph) belongs to the post-mockup trajectory hinted at in the original CSV → star → graph plan.
+
+## October milestone — mockup only
+
+This repo's October deliverable is a **mockup**, not a deployed service or production data layer. That means:
+
+- The Excel MVP + Power Pivot model continues as the **analysis surface**.
+- The web-facing artifact is a **clickable mockup** of the Places-centred demo queries — wireframes, prototype pages, or a thin static site driven by exported data — sufficient to make the architectural choice (one of the five above) visible to stakeholders.
+- No requirement for live API, authentication, hosting infrastructure, or persistence beyond what the mockup needs to render.
+
+Picking between the five web-target candidates is therefore **not blocking the October milestone**; the mockup can be built directly on top of an exported data bundle (option 1) and remain compatible with any of the five long-term choices.
+
 ## Open questions
 
 Resolutions from the planning conversation on 2026-06-02:
 
 - **MVP location** — settled: the MVP lives in `raw/` as the highest-versioned `HCA-Repository V*.xlsx`. Power Query and Power Pivot are embedded in the workbook itself.
 - **Demo entity** — settled: Places (`STED-REGISTER`). 3–5 demo queries to be drafted next.
-- **Web-facing target** — partial: thin layer between data and presentation, but the exact target (SQL only, graph store, both) is deferred.
+- **October milestone** — settled: mockup only (see above).
+- **Web-facing target** — five candidate architectures laid out above; choice deferred and not blocking October.
 
 Still open:
 
 1. **Sørens registers** (Artist, Sted, Almanak): location and ownership pending clarification with Søren. Treat the Power Query joins as placeholders until the files arrive or a reference path is agreed.
-2. **October milestone:** does this repo need a deliverable (mockup, prototype API, documentation page) or is the October demo Excel-based only?
-3. **Web-facing target:** SQL-served star schema, derived graph layer, or both? Decision needed once the "thin layer" constraint can be measured against concrete query patterns from the Places demo.
-4. **3–5 demo queries for Places:** to be drafted — e.g. "places visited on travel days", "works mentioned per visited place", "place-Andersen co-occurrence map by year".
+2. **Web-facing target — final pick** among the five candidates above. Likely deferred until the Places demo has surfaced concrete query patterns.
+3. **3–5 demo queries for Places:** to be drafted — e.g. "places visited on travel days", "works mentioned per visited place", "place-Andersen co-occurrence map by year".
