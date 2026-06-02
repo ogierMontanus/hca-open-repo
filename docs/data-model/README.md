@@ -9,6 +9,7 @@ The current core schema (tables, fields, relationship vocabulary) lives in [`ai-
 | File | Purpose |
 |---|---|
 | [`star-schema.md`](star-schema.md) | Dimensions + facts target model, Power Query / Power Pivot MVP, evolution path from the current CSV layer to the eventual PostgreSQL warehouse |
+| [`october-pipeline.md`](october-pipeline.md) | Proposed end-to-end CSV + JSON pipeline for the October mockup — automated `raw/*.xlsx` → `data/normalized/*.csv` → `web/data/*.json` → static site, no SQL/SQLite |
 | [`wemi-and-relations.md`](wemi-and-relations.md) | Work / Expression / Manifestation / Item boundary; how `se:` and `Se ogsaa:` markers in printed indexes map to alias and relation tables; the hybrid relational + JSONB design for heterogeneous parsed fields |
 | [`source-data-characteristics.md`](source-data-characteristics.md) | How a printed-index entry is structured — parentheses as primary separator, name conventions, multilingual titles, special tokens (`Ͻ:`, `[...]`, guillemets) — with worked examples |
 
