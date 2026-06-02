@@ -66,6 +66,57 @@ def sha256_of(path):
     return h.hexdigest()
 
 
+# Aggregate dimension: present-day country derived from (lat, lon).
+# Hand-coded bounding boxes are accurate enough for HCA's Europe-focused
+# travels; smaller / inland countries are listed first so they win the
+# lookup when they overlap a larger neighbour.
+COUNTRY_BBOXES = [
+    # name_da,  name_en,         lat_min, lat_max, lon_min, lon_max
+    ("Luxembourg",   "Luxembourg",     49.4, 50.2,  5.7,   6.6),
+    ("Schweiz",      "Switzerland",    45.8, 47.9,  5.9,  10.6),
+    ("Belgien",      "Belgium",        49.5, 51.6,  2.5,   6.5),
+    ("Holland",      "Netherlands",    50.7, 53.7,  3.3,   7.3),
+    ("Tjekkiet",     "Czech Republic", 48.5, 51.1, 12.0,  18.9),
+    ("Slovakiet",    "Slovakia",       47.7, 49.6, 16.8,  22.6),
+    ("Slovenien",    "Slovenia",       45.4, 46.9, 13.4,  16.6),
+    ("Kroatien",     "Croatia",        42.4, 46.6, 13.4,  19.4),
+    ("Østrig",       "Austria",        46.3, 49.0,  9.5,  17.2),
+    ("Ungarn",       "Hungary",        45.7, 48.6, 16.1,  22.9),
+    ("Polen",        "Poland",         49.0, 55.0, 14.1,  24.2),
+    ("Danmark",      "Denmark",        54.5, 57.8,  8.0,  15.4),
+    ("Tyskland",     "Germany",        47.3, 55.0,  5.8,  15.1),
+    ("Frankrig",     "France",         41.3, 51.1, -5.2,  10.0),
+    ("Italien",      "Italy",          36.5, 47.1,  6.6,  18.6),
+    ("Spanien",      "Spain",          36.0, 43.8, -9.3,   4.4),
+    ("Portugal",     "Portugal",       36.9, 42.2, -9.6,  -6.2),
+    ("Irland",       "Ireland",        51.4, 55.4,-10.6,  -5.9),
+    ("Storbritannien","United Kingdom",49.9, 59.5, -8.0,   2.0),
+    ("Norge",        "Norway",         57.9, 71.2,  4.4,  31.1),
+    ("Sverige",      "Sweden",         55.3, 69.1, 11.0,  24.2),
+    ("Finland",      "Finland",        59.7, 70.1, 20.5,  31.6),
+    ("Grækenland",   "Greece",         34.8, 41.8, 19.4,  28.3),
+    ("Tyrkiet",      "Turkey",         36.0, 42.1, 26.0,  45.0),
+    ("Malta",        "Malta",          35.8, 36.1, 14.2,  14.6),
+    ("Marokko",      "Morocco",        21.4, 35.9,-17.0,  -1.0),
+    ("Serbien",      "Serbia",         42.2, 46.2, 18.9,  23.0),
+    ("Rumænien",     "Romania",        43.6, 48.3, 20.3,  29.7),
+    ("Bulgarien",    "Bulgaria",       41.2, 44.3, 22.4,  28.6),
+    ("Nordmakedonien","North Macedonia",40.8,42.4, 20.5,  23.0),
+    ("Bosnien-Hercegovina","Bosnia and Herzegovina",42.5,45.3,15.7,19.6),
+    ("Albanien",     "Albania",        39.6, 42.7, 19.3,  21.1),
+    ("Montenegro",   "Montenegro",     41.8, 43.6, 18.4,  20.4),
+]
+
+
+def country_for(lat, lon):
+    if lat is None or lon is None:
+        return None, None
+    for name_da, name_en, lat_min, lat_max, lon_min, lon_max in COUNTRY_BBOXES:
+        if lat_min <= lat <= lat_max and lon_min <= lon <= lon_max:
+            return name_da, name_en
+    return None, None
+
+
 def latest_xlsx(raw_dir):
     candidates = []
     if not os.path.isdir(raw_dir):
@@ -194,6 +245,9 @@ def build(verbose=False):
             rec["destination_en"] = match["en"]
             rec["journey_count"] = len(match["journeys"])
             rec["leg_count"] = match["leg_count"]
+            country_da, country_en = country_for(match["lat"], match["lon"])
+            rec["country_da"] = country_da
+            rec["country_en"] = country_en
             legs_by_place_id[pid] = [
                 {
                     "rejse_id": leg["RejseID"],
@@ -211,6 +265,17 @@ def build(verbose=False):
         places_payload.append(rec)
     places_payload.sort(key=lambda x: x["label"].lower())
     print(f"  matched {matched} of {len(places_payload)} places against Rejser DA names")
+
+    country_counts = defaultdict(int)
+    uncountried = 0
+    for rec in places_payload:
+        if rec.get("country_da"):
+            country_counts[rec["country_da"]] += 1
+        elif rec["geocoded"]:
+            uncountried += 1
+    print(f"  countries: {dict(sorted(country_counts.items(), key=lambda kv: -kv[1]))}")
+    if uncountried:
+        print(f"  {uncountried} geocoded places fell outside the bounding-box gazetteer")
     warnings.append(
         f"Coordinates available for {matched}/{len(places_payload)} places via the "
         "hcax.dk Rejser add-on; the remaining majority is not geocoded for the October demo."
@@ -279,6 +344,7 @@ def build(verbose=False):
             "rejser_legs": len(rejser_legs),
             "rejser_journeys": len(rejser_journeys),
         },
+        "places_by_country": dict(sorted(country_counts.items(), key=lambda kv: -kv[1])),
         "warnings": warnings,
     }
 

@@ -8,6 +8,7 @@ const state = {
   rejser: { journeys: [], legs_by_place_id: {} },
   journeyById: {},
   filter: "",
+  country: "",
   geocodedOnly: false,
   selectedId: null,
 };
@@ -28,7 +29,18 @@ async function loadAll() {
   state.rejser = rejser;
   state.journeyById = Object.fromEntries(rejser.journeys.map(j => [j.rejse_id, j]));
   renderManifest(manifest);
+  populateCountryFilter(manifest.places_by_country || {});
   renderList();
+}
+
+function populateCountryFilter(byCountry) {
+  const sel = document.getElementById("country-filter");
+  for (const [name, n] of Object.entries(byCountry)) {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = `${name} (${n})`;
+    sel.appendChild(opt);
+  }
 }
 
 function renderManifest(m) {
@@ -45,7 +57,8 @@ function renderList() {
   const q = state.filter.toLowerCase();
   let ranked = state.places
     .filter(p => !q || p.label.toLowerCase().includes(q));
-  if (state.geocodedOnly) ranked = ranked.filter(p => p.geocoded);
+  if (state.country) ranked = ranked.filter(p => p.country_da === state.country);
+  if (state.geocodedOnly || state.country) ranked = ranked.filter(p => p.geocoded);
   ranked = ranked
     .sort((a, b) => {
       if (a.geocoded !== b.geocoded) return a.geocoded ? -1 : 1;
@@ -88,6 +101,9 @@ function selectPlace(id) {
   if (place.geocoded) {
     if (place.destination_en && place.destination_en !== place.label) {
       meta.push(`a.k.a. ${place.destination_en}`);
+    }
+    if (place.country_da) {
+      meta.push(`${place.country_da}${place.country_en && place.country_en !== place.country_da ? " / " + place.country_en : ""}`);
     }
     meta.push(`${place.lat.toFixed(4)}, ${place.lon.toFixed(4)}`);
   }
@@ -240,6 +256,10 @@ document.getElementById("search").addEventListener("input", e => {
 });
 document.getElementById("geocoded-only").addEventListener("change", e => {
   state.geocodedOnly = e.target.checked;
+  renderList();
+});
+document.getElementById("country-filter").addEventListener("change", e => {
+  state.country = e.target.value;
   renderList();
 });
 

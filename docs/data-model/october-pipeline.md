@@ -226,6 +226,89 @@ Front-end behaviour (`web/app.js`):
 - The Leaflet map renders a real marker for geocoded places; for non-matched places the map zooms out and a muted note explains the place isn't in the Rejser table.
 - A "Geocoded only" toggle in the left rail filters the list to the 377 places that have map data.
 
+## Integration direction — lean cross-entity model
+
+Resolution from the 2026-06-02 planning session (second round):
+
+> Focus on integrating the different named entities. For place names,
+> focus on the places contained in the index of words — e.g., place of
+> publication for paintings and sculptures, gallery location, person's
+> place of birth, death, or professional activity. Keep the basic data
+> lean and limit the number of cross-connections between entities; add
+> aggregate categories per entity so people can do broader searches.
+
+This translates into two design rules:
+
+### Rule 1 — no new M-N fact tables between entities
+
+The cross-references that link Persons ↔ Works ↔ Places already exist as
+parenthetical fragments inside the index labels themselves:
+
+- Work labels carry the publication place: `(Napoli 1846)`,
+  `(Hamburg 1846)`, `(Leipzig 5.7.1841)`, `(Utrecht 1869)`,
+  `(New York 1869)`.
+- Person labels carry life dates: `(1807–1883)`, `(1818–1880)`,
+  `(død 1181)`, `(525–456 f. Chr.)`.
+- Where birth / death / activity place is recorded in the source, it
+  also sits in the label or description string, not in a separate
+  column.
+
+Surface these as **lazily-parsed derived fields** at display time, not
+as new fact tables. A Work's detail panel runs a small regex over its
+label to expose `publication_place_label` + `publication_year`; that
+label string is then matched (case-insensitive) against the Places
+dimension to resolve to a Place id and inherit its coordinates +
+country. The reverse view ("Works published in Hamburg") is a cheap
+string-equality scan over the 3,717-row Work register — no
+pre-computed index needed.
+
+### Rule 2 — every entity gets aggregate dimensions
+
+Each entity type carries a small set of broad categorical columns so
+the mockup can answer "show me everything from category X":
+
+| Entity | Aggregate dimensions | Source |
+|---|---|---|
+| **Place** | `country_da` / `country_en` | Lat/lon → bounding-box gazetteer (377 geocoded places via Rejser add-on; see below) |
+| **Work** | `language`, `form_h3` (genre) | `form_h3` already in `entities.csv`; language via existing `scripts/parsers/add_language_column.py` |
+| **Person** | `birth_year`, `death_year`, era band | Regex on label parens: `(YYYY–YYYY)`, `(død YYYY)`, `(ca. YYYY–YYYY)`, `(YYYY–YYYY f. Chr.)` |
+
+The aggregates are the search facets the user described:
+- "All places in Italy"
+- "All works in French"
+- "All persons born after 1800"
+
+### Currently implemented
+
+- **Place → country** is now in `places.json`. The 377 geocoded places
+  are tagged via a 33-country European bounding-box gazetteer inlined
+  in `scripts/build_web/build_web_data.py`. Distribution against V0.82:
+  Tyskland 82, Schweiz 49, Frankrig 45, Italien 38, Danmark 36, Østrig
+  26, Norge 26, Tjekkiet 16, Storbritannien 14, Spanien 14, Holland 11,
+  + 12 smaller countries. Coverage: 377/377 of geocoded places. The UI
+  carries a `country-filter` dropdown populated from
+  `manifest.places_by_country`.
+
+### Not yet implemented (proposed next, awaiting confirmation)
+
+- **Work → language + form aggregates.** Extend Stage 1 to materialise a
+  per-Work `language` column (re-use `scripts/parsers/add_language_column.py`)
+  and emit `web/data/works.json` containing `{id, label, form_h3, language,
+  publication_place_label, publication_year}`. Mockup adds a Works tab
+  with language + form filters.
+- **Person → life-dates aggregate.** Stage 2 adds a `parse_person_label`
+  step extracting `birth_year`, `death_year` from the parens patterns
+  catalogued in `wemi-and-relations.md`; emit `web/data/persons.json`
+  with `{id, label, birth_year, death_year, era}`.
+- **Lazy cross-refs.** When a Work detail panel is opened, run a regex
+  over `label` to surface `publication_place_label`; resolve that string
+  against `places.json` for a "show on map" link. Same pattern for
+  Person → place-of-birth/death once those are parsed.
+
+The intent is that the Places, Works, and Persons JSON files stay
+**flat and small**, with no cross-entity arrays. Connectivity happens
+at display time via cheap string lookups.
+
 ## Open items before implementation
 
 1. **The remaining demo queries** — Q1 and Q2 are wired against the existing data; Q4 is now answered for the 377-place subset. Q3 and Q5 (works-co-occurrence using Sørens 2. register; Place typology from Sørens-Sted) remain placeholders.
