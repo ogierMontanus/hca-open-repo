@@ -102,8 +102,10 @@ function selectPlace(id) {
     if (place.destination_en && place.destination_en !== place.label) {
       meta.push(`a.k.a. ${place.destination_en}`);
     }
+    // Danish UI shows the Danish country form only — see docs/i18n-policy.md.
+    // country_en stays in places.json for future EN view but is not surfaced here.
     if (place.country_da) {
-      meta.push(`${place.country_da}${place.country_en && place.country_en !== place.country_da ? " / " + place.country_en : ""}`);
+      meta.push(place.country_da);
     }
     meta.push(`${place.lat.toFixed(4)}, ${place.lon.toFixed(4)}`);
   }

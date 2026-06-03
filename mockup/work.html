@@ -88,6 +88,7 @@
 </footer>
 
 <script src="js/nav.js"></script>
+<script src="data/works-extra.js"></script>
 <script>
 const WORKS = {
   // ── BILLEDKUNST ───────────────────────────────────────────────────────────
@@ -326,7 +327,7 @@ const WORKS = {
     author: 'Chr. E. F. Weyse', lang: null, refs: 19, wd: null,
     diary: [
       { date: '3. november 1836, København', pag: 'Pag018900',
-        text: '"Elverskud af Weyse — Hertz's Ord og Weyse's Toner; den Nordiske Elververden er bleven til Musik, og jeg var bevæget til Taarer."',
+        text: '"Elverskud af Weyse — Hertz\'s Ord og Weyse\'s Toner; den Nordiske Elververden er bleven til Musik, og jeg var bevæget til Taarer."',
         chips: [{label:'København',type:'place'}] }
     ],
     related: [{title:'Ravnen',reg:'Reg002774'},{title:'Waldemar',reg:'Reg003479'}],
@@ -539,10 +540,17 @@ function wdBadge(q, label) {
   return `<a href="https://www.wikidata.org/wiki/${q}" class="wd-badge" target="_blank" rel="noopener" title="${label||q} på Wikidata">wd:${q}</a>`;
 }
 
+// Merge auto-generated works under hand-curated ones.
+// WORKS (this file, hand-curated) overrides WORKS_EXTRA (generated from
+// entities.csv via scripts/build_mockup/build_works_extra.py) — so any
+// ?reg=… link from a category page resolves to real metadata even when
+// no hand-curated entry exists.
+const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_EXTRA : {}), WORKS);
+
 (function () {
   const params = new URLSearchParams(location.search);
   const reg = params.get('reg') || 'Reg000365';
-  const w = WORKS[reg];
+  const w = ALL_WORKS[reg];
 
   if (!w) {
     document.getElementById('js-title').textContent = 'Ukendt værk — ' + reg;

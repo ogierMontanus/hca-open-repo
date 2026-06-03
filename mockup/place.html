@@ -209,9 +209,16 @@
     if (!el) return;
     const lat = 41.9028, lon = 12.4964, label = 'Rom';
     const map = L.map(el).setView([lat, lon], 11);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 18
+    // CARTO Voyager tiles — OSM data, but served via CARTO's CDN which does
+    // not require a Referer header. The osm.org volunteer tile servers
+    // block file:// and any request without a Referer (403r "Access blocked");
+    // CARTO is the standard low-friction fallback for prototypes and local
+    // viewing. referrerPolicy is set as belt-and-braces for non-file:// hosting.
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19,
+      referrerPolicy: 'strict-origin-when-cross-origin'
     }).addTo(map);
     L.marker([lat, lon]).addTo(map)
       .bindPopup('<b>' + label + '</b><br>' + lat + '° N, ' + lon + '° Ø')
