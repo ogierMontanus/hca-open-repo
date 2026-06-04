@@ -77,3 +77,22 @@ derfor under både `file://` og senere HTTP-hosting.
 **Følg denne præference i kode:** brug ikke `tile.openstreetmap.org`
 direkte. Hvis en anden flise-leverandør overvejes (Stadia, MapTiler,
 Mapbox), bekræft med brugeren først.
+
+---
+
+## Brugerens lokale miljø — Windows / PowerShell
+
+**Brugerpræference (2026-06-04):** Brugeren kører lokalt fra
+PowerShell på Windows, hvor Python-launcheren hedder `python` (ikke
+`python3`). Når dokumentation eller `README`-filer i dette repo viser
+kommandoer beregnet til at blive kørt lokalt:
+
+- Brug `python scripts/.../foo.py` i eksempler, ikke `python3 …`.
+- Undgå bash-konstruktioner (`for s in …; do … done`,
+  `$VAR`-interpolation, `\`-linjefortsættelse) i lokale eksempler —
+  de fejler i PowerShell med fejl som `Missing opening '(' after
+  keyword 'for'`. Giv enten en eksplicit liste af kommandoer eller
+  en PowerShell-loop (`foreach ($s in 'a','b') { python … }`).
+- CI-eksempler (GitHub Actions YAML) må fortsat bruge `python` (ikke
+  `python3`) for konsistens med Linux-runneren, hvor `python` peger
+  på Python 3.
