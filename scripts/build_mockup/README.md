@@ -27,22 +27,34 @@ listing pages.
 ## One-time local build
 
 Run all five generators from the repo root after `data/normalized/`
-exists (Stage 1a of the CI workflow puts the CSVs there):
+exists (Stage 1a of the CI workflow puts the CSVs there). The
+commands below use `python` (the Windows / PowerShell launcher); on
+Linux/macOS substitute `python3` if your `python` still points at
+Python 2.
 
-```bash
+```powershell
 # Prereq: the normalised CSVs must exist first.
-python3 scripts/normalization/hca_xlsx_to_csv.py    # Stage 1a
-python3 scripts/build_web/parse_rejser_htm.py       # Stage 1b (geocodes)
+python scripts/normalization/hca_xlsx_to_csv.py    # Stage 1a
+python scripts/build_web/parse_rejser_htm.py       # Stage 1b (geocodes)
 
 # Then the five mockup builders, in any order:
-python3 scripts/build_mockup/build_diary_pages.py
-python3 scripts/build_mockup/build_diary_index.py
-python3 scripts/build_mockup/build_works_extra.py
-python3 scripts/build_mockup/build_persons_extra.py
-python3 scripts/build_mockup/build_places_extra.py
+python scripts/build_mockup/build_diary_pages.py
+python scripts/build_mockup/build_diary_index.py
+python scripts/build_mockup/build_works_extra.py
+python scripts/build_mockup/build_persons_extra.py
+python scripts/build_mockup/build_places_extra.py
 ```
 
-Or in one go:
+Or in one go — PowerShell:
+
+```powershell
+foreach ($s in 'build_diary_pages','build_diary_index',
+               'build_works_extra','build_persons_extra','build_places_extra') {
+  python "scripts/build_mockup/$s.py"
+}
+```
+
+Or in one go — bash / zsh:
 
 ```bash
 for s in build_diary_pages build_diary_index \
