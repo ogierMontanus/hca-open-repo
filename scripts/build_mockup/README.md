@@ -26,46 +26,33 @@ listing pages.
 
 ## One-time local build
 
-Run all five generators from the repo root after `data/normalized/`
-exists (Stage 1a of the CI workflow puts the CSVs there). The
-commands below use `python` (the Windows / PowerShell launcher); on
-Linux/macOS substitute `python3` if your `python` still points at
-Python 2.
+Run the wrapper from the repo root — it executes every stage in the
+right order with the same Python interpreter and prints `✓ stage N
+done` after each:
 
 ```powershell
-# Prereq: the normalised CSVs must exist first.
-python scripts/normalization/hca_xlsx_to_csv.py    # Stage 1a
-python scripts/build_web/parse_rejser_htm.py       # Stage 1b (geocodes)
-
-# Then the five mockup builders, in any order:
-python scripts/build_mockup/build_diary_pages.py
-python scripts/build_mockup/build_diary_index.py
-python scripts/build_mockup/build_works_extra.py
-python scripts/build_mockup/build_persons_extra.py
-python scripts/build_mockup/build_places_extra.py
+python scripts/build_all.py
 ```
 
-Or in one go — PowerShell:
+Useful flags:
 
 ```powershell
-foreach ($s in 'build_diary_pages','build_diary_index',
-               'build_works_extra','build_persons_extra','build_places_extra') {
-  python "scripts/build_mockup/$s.py"
-}
+python scripts/build_all.py --skip-pages   # skip the slow 4,500-file diary HTML stage
+python scripts/build_all.py --only 4b      # rebuild just persons-extra.js
 ```
 
-Or in one go — bash / zsh:
-
-```bash
-for s in build_diary_pages build_diary_index \
-         build_works_extra build_persons_extra build_places_extra; do
-  python3 scripts/build_mockup/$s.py
-done
-```
+The wrapper covers all eight stages — Stage 1a (xlsx → CSV), Stage 1b
+(rejser geocodes, optional), Stage 2 (web JSON), Stage 3a/3b (diary
+pages + index), Stage 4a/4b/4c (works/persons/places extras). Stage
+1b's failure is non-fatal, mirroring CI.
 
 Then open `mockup/diaries.html`, `mockup/work.html?reg=Reg001260`,
 `mockup/person.html?reg=Reg0052440`, `mockup/place.html?reg=Reg0017430`,
 etc. from disk.
+
+Need to run a single builder by hand? See the script paths in the
+table above — they're plain `python scripts/build_mockup/<name>.py`
+invocations from the repo root.
 
 ## How the data flows
 
