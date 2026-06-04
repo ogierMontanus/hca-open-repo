@@ -89,6 +89,11 @@
 
 <script src="js/nav.js"></script>
 <script src="data/works-extra.js"></script>
+<!-- Generated diary data (gitignored). Build with:
+     python3 scripts/build_mockup/build_diary_index.py -->
+<script src="data/diary-index.js" onerror="void 0"></script>
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/diary-wire.js"></script>
 <script>
 const WORKS = {
   // ── BILLEDKUNST ───────────────────────────────────────────────────────────
@@ -657,10 +662,16 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
       chipHtml += `<a href="${href}" class="${cls}">${c.label}</a>`;
       if (c.wd) chipHtml += `<a href="https://www.wikidata.org/wiki/${c.wd}" class="wd-badge" target="_blank" rel="noopener" title="${c.label} på Wikidata">${c.wd}</a>`;
     }
-    const diagHref = entry.pag ? `diary-pages/${entry.pag}.html` : 'entry.html';
+    // Curated pag handles are illustrative; only link to a real generated
+    // page when one exists, otherwise fall back to the diary index (no 404).
+    const hasPage = entry.pag && typeof DIARY_META !== 'undefined' && DIARY_META[entry.pag];
+    const diagHref = hasPage ? `diary-pages/${entry.pag}.html` : 'diaries.html';
     main += `<a href="${diagHref}" class="result-card" style="padding:var(--sp4)"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><div class="result-card__title" style="font-size:0.95rem">${entry.date}</div><div style="font-family:monospace;font-size:0.72rem;color:var(--color-text-muted)">${entry.pag}</div></div><div style="font-size:0.84rem;color:var(--color-text-muted);font-style:italic;margin-bottom:8px;line-height:1.5">${entry.text}</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">${chipHtml}</div></a>`;
   }
   main += `</div>`;
+
+  // Register-derived diary mentions (real generated pages from RefInDiaryPage)
+  main += `<div id="js-reg-diary" style="margin-top:var(--sp8)"></div>`;
 
   // Co-occurring works
   if (w.coWorks && w.coWorks.length) {
@@ -674,6 +685,23 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   }
 
   document.getElementById('js-main').innerHTML = main;
+
+  // Populate the register-derived diary list (links to real generated pages).
+  const regBox = document.getElementById('js-reg-diary');
+  if (regBox && typeof DiaryWire !== 'undefined' &&
+      typeof DIARY_REFS !== 'undefined' && DIARY_REFS[reg]) {
+    const total = DIARY_REFS[reg].n;
+    regBox.innerHTML =
+      `<h2 class="section-title">Dagbogsomtaler fra registret</h2>` +
+      `<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">` +
+      `<strong>${total}</strong> dagbogsside${total === 1 ? '' : 'r'} omtaler ${w.title} (fra RefInDiaryPage)</p>` +
+      `<div class="result-grid" id="js-reg-diary-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>` +
+      `<div style="text-align:center;margin-top:var(--sp5)"><button id="js-reg-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button></div>`;
+    DiaryWire.refs(
+      document.getElementById('js-reg-diary-grid'), reg,
+      { pageSize: 24, moreBtn: document.getElementById('js-reg-diary-more') }
+    );
+  }
 })();
 </script>
 </body>

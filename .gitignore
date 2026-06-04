@@ -9,3 +9,9 @@ web/data/
 
 # Local-only generated diary pages — too many to commit (4500+ files)
 mockup/diary-pages/
+
+# Local-only generated diary index data (~2 MB) — regenerate with
+# scripts/build_mockup/build_diary_index.py. Pages degrade gracefully
+# to their curated sample cards when these are absent.
+mockup/data/diary-index.js
+mockup/data/diary-refs.js

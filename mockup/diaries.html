@@ -117,7 +117,7 @@
 
         <div>
           <div class="results-header">
-            <span class="results-count"><strong>2.177</strong> dagbogssider</span>
+            <span class="results-count" id="diary-count"><strong>2.177</strong> dagbogssider</span>
             <div class="layout-switcher">
               <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
               <button class="layout-switcher__btn" data-layout="grid">Gitter</button>
@@ -125,7 +125,16 @@
             </div>
           </div>
 
-          <div class="result-grid">
+          <!-- Live filter toolbar (shown only when the generated index is loaded) -->
+          <div id="diary-toolbar" style="display:none;gap:10px;margin-bottom:var(--sp5);flex-wrap:wrap">
+            <input type="search" id="diary-filter" placeholder="Filtrér på sted, person, værk eller Pag-id…"
+                   style="flex:1;min-width:220px;padding:7px 12px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
+            <select id="diary-year" style="padding:7px 12px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
+              <option value="">Alle år</option>
+            </select>
+          </div>
+
+          <div class="result-grid" id="diary-results">
 
             <a href="entry.html" class="result-card">
               <div class="result-card__thumb">Pag100100 · Bind XII</div>
@@ -214,6 +223,10 @@
             </a>
 
           </div>
+
+          <div style="text-align:center;margin-top:var(--sp6)">
+            <button id="diary-more" class="layout-switcher__btn" style="display:none;padding:8px 22px">Vis flere</button>
+          </div>
         </div>
 
       </div>
@@ -228,6 +241,41 @@
   </div>
 </footer>
 
+<!-- Generated diary data (gitignored). Build with:
+     python3 scripts/build_mockup/build_diary_index.py -->
+<script src="data/diary-index.js" onerror="void 0"></script>
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/diary-wire.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var grid = document.getElementById('diary-results');
+  var ctrl = DiaryWire.list(grid, {
+    pageSize: 60,
+    moreBtn: document.getElementById('diary-more'),
+    onCount: function (shown, total) {
+      document.getElementById('diary-count').innerHTML =
+        '<strong>' + total.toLocaleString('da-DK') + '</strong> dagbogssider' +
+        (shown < total ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— viser ' + shown + '</span>' : '');
+    }
+  });
+  if (!ctrl) return;  // no generated data → keep the static sample cards
+
+  // Light up the live toolbar and populate the year facet.
+  var toolbar = document.getElementById('diary-toolbar');
+  toolbar.style.display = 'flex';
+  var filter = document.getElementById('diary-filter');
+  var yearSel = document.getElementById('diary-year');
+  var years = ctrl.years();
+  Object.keys(years).sort().forEach(function (y) {
+    var o = document.createElement('option');
+    o.value = y; o.textContent = y + ' (' + years[y] + ')';
+    yearSel.appendChild(o);
+  });
+  function apply() { ctrl.applyFilter(filter.value.trim(), yearSel.value); }
+  filter.addEventListener('input', apply);
+  yearSel.addEventListener('change', apply);
+});
+</script>
 <script src="js/nav.js"></script>
 </body>
 </html>

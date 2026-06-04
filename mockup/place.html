@@ -99,11 +99,11 @@
           <div>
             <h2 class="section-title">Dagbogsreferencer</h2>
             <div class="tabs">
-              <button class="tab-btn tab-btn--active">Alle (332)</button>
+              <button class="tab-btn tab-btn--active" id="place-diary-count">Alle (332)</button>
               <button class="tab-btn">Opholdsted (298)</button>
               <button class="tab-btn">Omtalt (34)</button>
             </div>
-            <div class="result-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+            <div class="result-grid" id="place-diary" data-reg="Reg0017430" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
 
               <a href="entry.html" class="result-card">
                 <div class="result-card__body">
@@ -125,6 +125,9 @@
                 </div>
               </a>
 
+            </div>
+            <div style="text-align:center;margin-top:var(--sp5)">
+              <button id="place-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
             </div>
           </div>
 
@@ -224,6 +227,24 @@
       .bindPopup('<b>' + label + '</b><br>' + lat + '° N, ' + lon + '° Ø')
       .openPopup();
   })();
+</script>
+<!-- Generated diary data (gitignored). Build with:
+     python3 scripts/build_mockup/build_diary_index.py -->
+<script src="data/diary-index.js" onerror="void 0"></script>
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/diary-wire.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var grid = document.getElementById('place-diary');
+  DiaryWire.refs(grid, grid.dataset.reg, {
+    pageSize: 24,
+    moreBtn: document.getElementById('place-diary-more'),
+    onCount: function (shown, total) {
+      var btn = document.getElementById('place-diary-count');
+      if (btn) btn.textContent = 'Alle (' + total + ')';
+    }
+  });
+});
 </script>
 </body>
 </html>
