@@ -3,77 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dickens, Charles — H.C. Andersen Dagbogsregister</title>
+  <title>Person — H.C. Andersen Dagbogsregister</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Works created by this person — "Skabt af" section */
-    .h3-works-group { margin-bottom: var(--sp5); }
-    .h3-works-group__label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-text-muted);
-      padding: var(--sp2) 0;
-      border-bottom: 1.5px solid var(--color-border);
-      margin-bottom: var(--sp2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .wd-badge {
+      display: inline-block; font-size: 0.63rem; font-family: monospace;
+      font-weight: 600; padding: 1px 5px; border-radius: 3px;
+      background: #edf4fb; border: 1px solid #93bcd9; color: #2a5e8a;
+      text-decoration: none; white-space: nowrap; vertical-align: middle; line-height: 1.7;
     }
-    .work-entry {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      padding: 7px 0;
-      border-bottom: 1px solid var(--color-border);
-      font-size: 0.88rem;
+    .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
+    .sidebar-box {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: var(--sp5); margin-bottom: var(--sp5);
     }
-    .work-entry:last-child { border-bottom: none; }
-    .work-entry__title { flex: 1; font-weight: 500; }
-    .work-entry__title a { color: var(--color-text); text-decoration: none; }
-    .work-entry__title a:hover { color: var(--color-accent); text-decoration: underline; }
-    .work-entry__badge {
-      font-size: 0.65rem;
-      font-weight: 600;
-      padding: 1px 5px;
-      border-radius: var(--radius);
-      background: var(--color-accent-light);
-      border: 1px solid var(--color-accent);
-      color: var(--color-accent);
-      white-space: nowrap;
+    .sidebar-box__title {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--color-text-muted); margin-bottom: var(--sp3);
     }
-    .work-entry__id {
-      font-size: 0.68rem;
-      color: var(--color-text-muted);
-      font-family: monospace;
-      white-space: nowrap;
+    .register-dl {
+      font-size: 0.83rem; display: grid;
+      grid-template-columns: auto 1fr; gap: 4px 12px;
     }
-    .work-entry__see-also {
-      font-size: 0.75rem;
-      color: var(--color-text-muted);
-      padding: 2px 0 6px 0;
-      margin-left: 0;
-    }
-    .work-entry__see-also a { color: var(--color-accent); text-decoration: none; }
-    .work-entry__see-also a:hover { text-decoration: underline; }
-    .skabt-af-summary {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 0.81rem;
-    }
-    .skabt-af-summary__row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 3px 0;
-      border-bottom: 1px solid var(--color-border);
-      color: var(--color-text-muted);
-    }
-    .skabt-af-summary__row:last-child { border-bottom: none; font-weight: 600; color: var(--color-text); }
-    .skabt-af-summary__row a { color: var(--color-accent); text-decoration: none; }
-    .skabt-af-summary__row a:hover { text-decoration: underline; }
+    .register-dl dt { color: var(--color-text-muted); font-weight: 600; }
+    .register-dl dd { margin: 0; }
   </style>
 </head>
 <body>
@@ -92,284 +45,18 @@
 
   <div class="page-hero page-hero--sm">
     <div class="container">
-      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
-        <a href="index.html">Forside</a>
-        <span class="breadcrumb__sep">›</span>
-        <a href="persons.html">Personregister</a>
-        <span class="breadcrumb__sep">›</span>
-        <span class="breadcrumb__current">Dickens, Charles</span>
-      </nav>
-      <h1>Dickens, Charles</h1>
-      <p>Person &nbsp;·&nbsp; PERSON-REGISTER &nbsp;·&nbsp; Reg0052440</p>
-      <div class="page-hero__meta">
-        <span>1812–1870</span>
-        <span>Engelsk</span>
-        <span>Forfatter (Boz)</span>
-        <span>30 poster i dagbøgerne</span>
-        <span>9 registrerede værker</span>
-      </div>
+      <nav id="js-breadcrumb" class="breadcrumb" style="opacity:0.72;margin-bottom:6px"></nav>
+      <h1 id="js-title"></h1>
+      <div id="js-chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+      <div id="js-meta" class="page-hero__meta"></div>
     </div>
   </div>
 
   <section class="section">
     <div class="container">
       <div class="entity-layout">
-
-        <div class="entity-main">
-
-          <!-- Biografi -->
-          <div>
-            <h2 class="section-title">Biografi</h2>
-            <p style="font-size:0.92rem;line-height:1.75;max-width:640px">
-              Charles John Huffam Dickens (1812–1870), engelsk romanforfatter, er en af det 19. århundredes
-              mest læste og oversatte forfattere. Andersen og Dickens lærte hinanden at kende i London i 1847,
-              da Andersen overværede en middag i Dickens' hjem i Devonshire Terrace. Andersen besøgte i sommeren
-              1857 Gad's Hill Place i Kent, hvor han opholdt sig i over fem uger — et besøg, som Dickens ifølge
-              overleveringen fandt noget udtrækkende. Andersen omtaler Dickens' romaner gentagne gange i sine
-              dagbøger og trækker ligninger til sine egne eventyr. Dickens er registreret i PERSON-REGISTER
-              med 30 poster i dagbøgerne og i VÆRK-REGISTER som skaber af 9 registrerede værker.
-            </p>
-          </div>
-
-          <!-- Tidslinje -->
-          <div>
-            <h2 class="section-title">Tidslinje</h2>
-            <div class="timeline-bar">
-              <div class="timeline-bar__title">Levetid og HCA-poster i dagbøgerne</div>
-              <div class="timeline-track">
-                <div class="timeline-track__span" style="left:0%;width:100%"></div>
-                <div class="timeline-track__dot" style="left:56%" title="1847 — London, middag hos Dickens"></div>
-                <div class="timeline-track__dot" style="left:76%" title="1857 — Besøg i Gad's Hill"></div>
-                <div class="timeline-track__dot" style="left:90%" title="1866 — Dickens' foredragsturné omtalt"></div>
-              </div>
-              <div class="timeline-labels">
-                <span>1812</span>
-                <span>1835</span>
-                <span>1858</span>
-                <span>1870</span>
-              </div>
-              <div class="timeline-events">
-                <div class="timeline-event">
-                  <span class="timeline-event__year">1847</span>
-                  <span class="timeline-event__text">Middag hos Dickens i Devonshire Terrace, London (Pag100400) — Andersen noterer samtale om eventyr; møder også Jenny Lind samme dag</span>
-                </div>
-                <div class="timeline-event">
-                  <span class="timeline-event__year">1857</span>
-                  <span class="timeline-event__text">Andersen besøger Gad's Hill Place, Kent (Pag103200) — over fem ugers ophold; Dickens' Bleak House og Little Dorrit omtales gentagne gange</span>
-                </div>
-                <div class="timeline-event">
-                  <span class="timeline-event__year">1866</span>
-                  <span class="timeline-event__text">Dickens' offentlige foredragsturné omtalt i dagbog (Pag106800) — Andersen reflekterer over Dickens' berømmelse</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Skabt af — VÆRK-REGISTER -->
-          <div id="skabt-af">
-            <h2 class="section-title">Skabt af — VÆRK-REGISTER</h2>
-            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp5)">
-              Registerposter i VÆRK-REGISTER hvortil Dickens er registreret som skaber (9 poster i alt)
-            </p>
-
-            <div class="h3-works-group">
-              <div class="h3-works-group__label">
-                <span>Romaner, Noveller, Eventyr</span>
-                <span style="font-weight:400">8 poster</span>
-              </div>
-              <div>
-                <div class="work-entry">
-                  <div class="work-entry__title"><a href="work.html">Bleak House</a></div>
-                  <span class="work-entry__id">Reg000365</span>
-                </div>
-                <div class="work-entry">
-                  <div class="work-entry__title"><a href="work.html">A Christmas Carol</a></div>
-                  <span class="work-entry__id">Reg000124</span>
-                </div>
-                <div class="work-entry">
-                  <div class="work-entry__title">
-                    <a href="work.html">The Cricket on the Hearth</a>
-                  </div>
-                  <span class="work-entry__id">Reg003206</span>
-                </div>
-                <div class="work-entry__see-also" style="padding-left:0;margin-top:-4px;margin-bottom:4px">
-                  Se ogsaa: <a href="work.html">Das Heimchen am Herde</a> (Reg000594)
-                </div>
-                <div class="work-entry">
-                  <div class="work-entry__title">
-                    <a href="work.html">Das Heimchen am Herde</a>
-                    <span class="work-entry__badge">de</span>
-                  </div>
-                  <span class="work-entry__id">Reg000594</span>
-                </div>
-                <div class="work-entry__see-also" style="padding-left:0;margin-top:-4px;margin-bottom:4px">
-                  Se ogsaa: <a href="work.html">The Cricket on the Hearth</a> (Reg003206)
-                </div>
-                <div class="work-entry">
-                  <div class="work-entry__title"><a href="work.html">Dombey &amp; Son</a></div>
-                  <span class="work-entry__id">Reg000960</span>
-                </div>
-                <div class="work-entry">
-                  <div class="work-entry__title"><a href="work.html">Little Dorrit</a></div>
-                  <span class="work-entry__id">Reg002161</span>
-                </div>
-                <div class="work-entry">
-                  <div class="work-entry__title">
-                    <a href="work.html">Master Humphreys Wanduhr</a>
-                    <span class="work-entry__badge">de</span>
-                  </div>
-                  <span class="work-entry__id">Reg002344</span>
-                </div>
-                <div class="work-entry">
-                  <div class="work-entry__title"><a href="work.html">Nicholas Nickleby</a></div>
-                  <span class="work-entry__id">Reg002505</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="h3-works-group">
-              <div class="h3-works-group__label">
-                <span>Tidsskrifter og Aarbøger (Periodica)</span>
-                <span style="font-weight:400">1 post</span>
-              </div>
-              <div>
-                <div class="work-entry">
-                  <div class="work-entry__title"><a href="work.html">Household Pages</a> <span style="font-size:0.78rem;color:var(--color-text-muted)">(udg. af Charles Dickens)</span></div>
-                  <span class="work-entry__id">Reg001630</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dagbogsreferencer -->
-          <div>
-            <h2 class="section-title">Dagbogsreferencer</h2>
-            <div class="tabs">
-              <button class="tab-btn tab-btn--active" id="person-diary-count">Alle (30)</button>
-              <button class="tab-btn">Omtaler (27)</button>
-              <button class="tab-btn">Møder (3)</button>
-            </div>
-            <div class="result-grid" id="person-diary" data-reg="Reg0052440" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
-
-              <a href="entry.html" class="result-card">
-                <div class="result-card__body">
-                  <div class="result-card__title">Dagbog: London, 30. juni 1847</div>
-                  <div class="result-card__meta">1847 · London, England · Pag100400</div>
-                  <div class="result-card__chips">
-                    <span class="chip chip--place" style="font-size:0.68rem">London</span>
-                    <span class="chip chip--person" style="font-size:0.68rem">Jenny Lind</span>
-                  </div>
-                </div>
-              </a>
-
-              <a href="entry.html" class="result-card">
-                <div class="result-card__body">
-                  <div class="result-card__title">Dagbog: Gad's Hill, august 1857</div>
-                  <div class="result-card__meta">1857 · Gad's Hill, Kent · Pag103200</div>
-                  <div class="result-card__chips">
-                    <span class="chip chip--place" style="font-size:0.68rem">England</span>
-                    <span class="chip" style="font-size:0.68rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">Bleak House</span>
-                  </div>
-                </div>
-              </a>
-
-            </div>
-            <div style="text-align:center;margin-top:var(--sp5)">
-              <button id="person-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
-            </div>
-          </div>
-
-          <!-- Netværksrelationer -->
-          <div>
-            <h2 class="section-title">Netværksrelationer</h2>
-            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Registerposter der forekommer samtidig med Dickens i dagbøgerne</p>
-            <div class="network-chips">
-              <a href="person.html" class="chip chip--person">H.C. Andersen</a>
-              <a href="person.html" class="chip chip--person">Jenny Lind</a>
-              <a href="person.html" class="chip chip--person">Wilkie Collins</a>
-              <a href="person.html" class="chip chip--person">John Forster</a>
-              <a href="place.html" class="chip chip--place">London</a>
-              <a href="place.html" class="chip chip--place">Gad's Hill (Kent)</a>
-              <a href="place.html" class="chip chip--place">Margate</a>
-              <a href="work.html" class="chip" style="background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">Bleak House</a>
-              <a href="work.html" class="chip" style="background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">A Christmas Carol</a>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Sidebar -->
-        <aside class="entity-sidebar">
-
-          <div class="info-block">
-            <div class="info-block__header">Registerdata</div>
-            <div class="info-block__body">
-              <table class="info-table">
-                <tr><td>ID</td><td>Reg0052440</td></tr>
-                <tr><td>Register</td><td>PERSON-REGISTER</td></tr>
-                <tr><td>Label</td><td>Dickens, Charles</td></tr>
-                <tr><td>Pseudonym</td><td>Boz</td></tr>
-                <tr><td>Født</td><td>1812, Portsmouth</td></tr>
-                <tr><td>Død</td><td>1870, Gad's Hill</td></tr>
-                <tr><td>Nationalitet</td><td>Engelsk</td></tr>
-                <tr><td>Rolle</td><td>Forfatter</td></tr>
-                <tr><td>Dagbogsrefs.</td><td>30 poster</td></tr>
-                <tr><td>Skabt af</td><td><a href="#skabt-af" style="color:var(--color-accent)">9 poster i VÆRK-REGISTER</a></td></tr>
-              </table>
-            </div>
-          </div>
-
-          <div class="info-block">
-            <div class="info-block__header">Skabt af (oversigt)</div>
-            <div class="info-block__body">
-              <div class="skabt-af-summary">
-                <div class="skabt-af-summary__row">
-                  <a href="#skabt-af">Romaner, Nov., Eventyr</a>
-                  <span>8</span>
-                </div>
-                <div class="skabt-af-summary__row">
-                  <a href="#skabt-af">Tidsskrifter</a>
-                  <span>1</span>
-                </div>
-                <div class="skabt-af-summary__row">
-                  <span>I alt</span>
-                  <span>9 poster</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="info-block">
-            <div class="info-block__header">Autoritetslinks</div>
-            <div class="info-block__body" style="display:flex;flex-direction:column;gap:6px;font-size:0.82rem">
-              <a href="#">VIAF 93762961</a>
-              <a href="#">Wikidata Q5686</a>
-              <a href="#">SNAC Ark 50010103</a>
-            </div>
-          </div>
-
-          <div class="info-block">
-            <div class="info-block__header">Geografiske relationer</div>
-            <div class="info-block__body">
-              <div style="display:flex;flex-wrap:wrap;gap:6px">
-                <a href="place.html" class="chip chip--place">London</a>
-                <a href="place.html" class="chip chip--place">Gad's Hill</a>
-                <a href="place.html" class="chip chip--place">Paris</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="info-block">
-            <div class="info-block__header">Samling</div>
-            <div class="info-block__body">
-              <div style="display:flex;flex-wrap:wrap;gap:6px">
-                <a href="diaries.html" class="chip">HCA Dagbøger</a>
-              </div>
-            </div>
-          </div>
-
-        </aside>
-
+        <div class="entity-main" id="js-main"></div>
+        <aside class="entity-sidebar" id="js-sidebar"></aside>
       </div>
     </div>
   </section>
@@ -382,24 +69,161 @@
   </div>
 </footer>
 
+<script src="js/nav.js"></script>
+<!-- Generated per-entity data (gitignored). Build with:
+     python3 scripts/build_mockup/build_persons_extra.py -->
+<script src="data/persons-extra.js" onerror="void 0"></script>
 <!-- Generated diary data (gitignored). Build with:
      python3 scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  var grid = document.getElementById('person-diary');
-  DiaryWire.refs(grid, grid.dataset.reg, {
+/* Hand-curated PERSONS — takes precedence over generated PERSONS_EXTRA.
+   Rich entries can override or extend any field; minimal entries just
+   add a bio paragraph or Wikidata Q-number. Mirrors the WORKS / WORKS_EXTRA
+   pattern in work.html. */
+const PERSONS = {
+  'Reg0052440': {
+    label: 'Dickens, Charles (1812–1870)',
+    born: '1812', died: '1870', era: '1800-tallet',
+    description: 'Engelsk Digter (Boz).',
+    nationality: 'Engelsk',
+    role: 'Forfatter',
+    wd: 'Q5686',
+    bio: "Charles John Huffam Dickens (1812–1870), engelsk romanforfatter, " +
+         "er en af det 19. århundredes mest læste og oversatte forfattere. " +
+         "Andersen og Dickens lærte hinanden at kende i London i 1847, " +
+         "da Andersen overværede en middag i Dickens' hjem i Devonshire Terrace. " +
+         "Andersen besøgte i sommeren 1857 Gad's Hill Place i Kent, hvor han " +
+         "opholdt sig i over fem uger."
+  }
+};
+
+const ALL_PERSONS = Object.assign(
+  {}, (typeof PERSONS_EXTRA !== 'undefined' ? PERSONS_EXTRA : {}), PERSONS
+);
+
+function escAttr(s) { return String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+(function () {
+  const params = new URLSearchParams(location.search);
+  const reg = params.get('reg') || 'Reg0052440';   // default to Dickens
+  const p = ALL_PERSONS[reg];
+
+  if (!p) {
+    document.getElementById('js-title').textContent = 'Ukendt person — ' + reg;
+    document.getElementById('js-breadcrumb').innerHTML =
+      '<a href="index.html">Forside</a><span class="breadcrumb__sep">›</span>' +
+      '<a href="persons.html">Personregister</a><span class="breadcrumb__sep">›</span>' +
+      '<span class="breadcrumb__current">' + escAttr(reg) + '</span>';
+    return;
+  }
+
+  document.title = p.label + ' — H.C. Andersen Dagbogsregister';
+
+  // Breadcrumb
+  document.getElementById('js-breadcrumb').innerHTML =
+    '<a href="index.html">Forside</a>' +
+    '<span class="breadcrumb__sep">›</span>' +
+    '<a href="persons.html">Personregister</a>' +
+    '<span class="breadcrumb__sep">›</span>' +
+    '<span class="breadcrumb__current">' + escAttr(p.label) + '</span>';
+
+  // Hero title + chips
+  document.getElementById('js-title').textContent = p.label;
+  let chips = '<span class="chip chip--person">PERSON-REGISTER</span>';
+  if (p.era) chips += '<span class="chip">' + escAttr(p.era) + '</span>';
+  chips += '<span class="chip" style="font-family:monospace">' + escAttr(reg) + '</span>';
+  if (p.wd) chips += '<a href="https://www.wikidata.org/wiki/' + escAttr(p.wd) +
+    '" class="wd-badge" target="_blank" rel="noopener" title="' + escAttr(p.label) +
+    ' på Wikidata">wd:' + escAttr(p.wd) + '</a>';
+  document.getElementById('js-chips').innerHTML = chips;
+
+  // Hero meta
+  const metaItems = [];
+  const lifespan = (p.born && p.died) ? p.born + '–' + p.died
+                  : p.born ? '* ' + p.born
+                  : p.died ? '† ' + p.died : null;
+  if (lifespan) metaItems.push(lifespan);
+  if (p.nationality) metaItems.push(p.nationality);
+  if (p.role) metaItems.push(p.role);
+  const total = (typeof DIARY_REFS !== 'undefined' && DIARY_REFS[reg])
+    ? DIARY_REFS[reg].n : (p.refs || 0);
+  metaItems.push(total + ' poster i dagbøgerne');
+  document.getElementById('js-meta').innerHTML =
+    metaItems.map(m => '<span>' + escAttr(m) + '</span>').join('');
+
+  // ── Sidebar ──────────────────────────────────────────────────────────────
+  let sb = '';
+  sb += '<div class="info-block"><div class="info-block__header">Registerdata</div><div class="info-block__body"><table class="info-table">';
+  sb += '<tr><td>ID</td><td style="font-family:monospace">' + escAttr(reg) + '</td></tr>';
+  sb += '<tr><td>Register</td><td>PERSON-REGISTER</td></tr>';
+  sb += '<tr><td>Label</td><td>' + escAttr(p.label) + '</td></tr>';
+  if (p.born) sb += '<tr><td>Født</td><td>' + escAttr(p.born) + '</td></tr>';
+  if (p.died) sb += '<tr><td>Død</td><td>' + escAttr(p.died) + '</td></tr>';
+  if (p.nationality) sb += '<tr><td>Nationalitet</td><td>' + escAttr(p.nationality) + '</td></tr>';
+  if (p.role) sb += '<tr><td>Rolle</td><td>' + escAttr(p.role) + '</td></tr>';
+  sb += '<tr><td>Dagbogsrefs.</td><td>' + total + '</td></tr>';
+  sb += '</table></div></div>';
+
+  if (p.wd) {
+    sb += '<div class="info-block"><div class="info-block__header">Autoritetslinks</div><div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
+    sb += '<a href="https://www.wikidata.org/wiki/' + escAttr(p.wd) +
+      '" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px">' +
+      '<span class="wd-badge">wd:' + escAttr(p.wd) + '</span>' +
+      '<span style="color:var(--color-text-muted)">Wikidata</span></a>';
+    sb += '</div></div>';
+  }
+  document.getElementById('js-sidebar').innerHTML = sb;
+
+  // ── Main content ─────────────────────────────────────────────────────────
+  let main = '';
+
+  if (p.description) {
+    main += '<div><h2 class="section-title">Beskrivelse</h2>' +
+      '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' +
+      escAttr(p.description) + '</p></div>';
+  }
+  if (p.bio) {
+    main += '<div><h2 class="section-title">Biografi</h2>' +
+      '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' +
+      escAttr(p.bio) + '</p></div>';
+  }
+
+  // Dagbogsreferencer — populated by DiaryWire below.
+  main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
+    '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)" id="person-diary-summary">' +
+    'Indlæser…</p>' +
+    '<div class="result-grid" id="person-diary" data-reg="' + escAttr(reg) +
+    '" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>' +
+    '<div style="text-align:center;margin-top:var(--sp5)">' +
+    '<button id="person-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
+    '</div></div>';
+
+  document.getElementById('js-main').innerHTML = main;
+
+  // Wire up the diary section
+  const grid = document.getElementById('person-diary');
+  const summary = document.getElementById('person-diary-summary');
+  const result = DiaryWire.refs(grid, reg, {
     pageSize: 24,
     moreBtn: document.getElementById('person-diary-more'),
     onCount: function (shown, total) {
-      var btn = document.getElementById('person-diary-count');
-      if (btn) btn.textContent = 'Alle (' + total + ')';
+      if (summary) {
+        summary.textContent = total === 0
+          ? 'Ingen dagbogsreferencer registreret.'
+          : 'Viser ' + shown + ' af ' + total + ' dagbogssider hvor ' +
+            p.label + ' optræder.';
+      }
     }
   });
-});
+  if (!result && summary) {
+    summary.textContent = 'Dagbogsdata ikke indlæst (kør build_diary_index.py).';
+  }
+})();
 </script>
-<script src="js/nav.js"></script>
 </body>
 </html>

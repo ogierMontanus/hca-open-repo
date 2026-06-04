@@ -52,6 +52,19 @@ jobs:
       - name: Stage 3b — generate diary index + reverse-index JS
         run: python scripts/build_mockup/build_diary_index.py
 
+      # Stage 4 — per-entity card data. These three feed the ?reg=…
+      # detail pages (work.html / person.html / place.html) for all
+      # 3,717 works · 10,228 persons · 2,508 places. Outputs are
+      # gitignored; CI regenerates them every build.
+      - name: Stage 4a — works-extra.js (all works)
+        run: python scripts/build_mockup/build_works_extra.py
+
+      - name: Stage 4b — persons-extra.js (all persons)
+        run: python scripts/build_mockup/build_persons_extra.py
+
+      - name: Stage 4c — places-extra.js (all places)
+        run: python scripts/build_mockup/build_places_extra.py
+
       - name: Bundle static site
         run: |
           mkdir -p _site

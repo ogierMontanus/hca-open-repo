@@ -1,0 +1,181 @@
+#!/usr/bin/env python3
+"""
+build_places_extra.py
+---------------------
+Generates mockup/data/places-extra.js — a `PLACES_EXTRA` JS object with
+one entry per row in data/normalized/entities.csv where
+entity_type == 'place'. Coordinates and Danish country names come from
+the hcax.dk Rejser add-on (data/normalized/rejser.tsv) when the place
+label matches. The hand-curated `PLACES` object inside mockup/place.html
+(if any) keeps precedence; PLACES_EXTRA fills every other gap so any
+?reg=… link to place.html resolves to real metadata instead of a blank
+page.
+
+Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py and
+scripts/build_web/parse_rejser_htm.py.
+"""
+
+import csv
+import json
+import os
+import re
+import sys
+from collections import Counter
+
+ROOT     = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
+REFS     = os.path.join(ROOT, "data", "normalized", "references.csv")
+REJSER   = os.path.join(ROOT, "data", "normalized", "rejser.tsv")
+CURATED  = os.path.join(ROOT, "mockup", "place.html")
+OUT      = os.path.join(ROOT, "mockup", "data", "places-extra.js")
+
+# Reuse the 33-country bounding-box gazetteer from build_web_data.py.
+# Each entry: (name_da, lat_min, lat_max, lon_min, lon_max). Designed to
+# cover the geocoded subset; ties broken by smaller area first.
+COUNTRIES = [
+    ("Danmark",       54.5, 57.8,   8.0, 15.2),
+    ("Tyskland",      47.3, 55.0,   5.9, 15.0),
+    ("Storbritannien",49.9, 60.9,  -8.7,  1.8),
+    ("Frankrig",      41.4, 51.1,  -5.2,  9.6),
+    ("Italien",       36.6, 47.1,   6.6, 18.5),
+    ("Schweiz",       45.8, 47.8,   5.9, 10.5),
+    ("Østrig",        46.4, 49.0,   9.5, 17.2),
+    ("Tjekkiet",      48.5, 51.1,  12.1, 18.9),
+    ("Ungarn",        45.7, 48.6,  16.1, 22.9),
+    ("Nederlandene",  50.7, 53.6,   3.3,  7.2),
+    ("Belgien",       49.5, 51.5,   2.5,  6.4),
+    ("Sverige",       55.3, 69.1,  10.9, 24.2),
+    ("Norge",         57.9, 71.2,   4.6, 31.1),
+    ("Spanien",       35.9, 43.8,  -9.3,  4.3),
+    ("Portugal",      36.9, 42.2,  -9.5, -6.2),
+    ("Polen",         49.0, 54.8,  14.1, 24.1),
+    ("Grækenland",    34.8, 41.7,  19.4, 28.2),
+    ("Tyrkiet",       35.8, 42.1,  26.0, 44.8),
+    ("Rusland",       41.2, 81.9,  19.6,179.0),
+    ("Vatikanstaten", 41.9, 41.91, 12.45,12.46),
+    ("Irland",        51.4, 55.4,  -10.5,-5.4),
+    ("Luxembourg",    49.4, 50.2,   5.7,  6.5),
+    ("Liechtenstein", 47.0, 47.3,   9.4,  9.7),
+    ("Monaco",        43.7, 43.8,   7.4,  7.5),
+    ("San Marino",    43.8, 44.0,  12.4, 12.5),
+    ("Slovakiet",     47.7, 49.6,  16.8, 22.6),
+    ("Slovenien",     45.4, 46.9,  13.4, 16.6),
+    ("Kroatien",      42.4, 46.6,  13.5, 19.4),
+    ("Serbien",       42.2, 46.2,  18.8, 23.0),
+    ("Rumænien",      43.6, 48.3,  20.3, 29.7),
+    ("Bulgarien",     41.2, 44.2,  22.4, 28.6),
+    ("Marokko",       21.3, 35.9, -17.0,  -1.0),
+    ("Israel",        29.5, 33.3,  34.3, 35.9),
+]
+
+
+def country_for(lat: float, lon: float) -> str | None:
+    candidates = [(n, (lat_max - lat_min) * (lon_max - lon_min))
+                  for (n, lat_min, lat_max, lon_min, lon_max) in COUNTRIES
+                  if lat_min <= lat <= lat_max and lon_min <= lon <= lon_max]
+    if not candidates:
+        return None
+    candidates.sort(key=lambda x: x[1])
+    return candidates[0][0]
+
+
+def existing_ids() -> set[str]:
+    ids = set()
+    if not os.path.exists(CURATED):
+        return ids
+    with open(CURATED, encoding="utf-8") as f:
+        for line in f:
+            m = re.search(r"['\"](Reg\d+)['\"]\s*:", line)
+            if m:
+                ids.add(m.group(1))
+    return ids
+
+
+def load_rejser_geocodes() -> dict[str, dict]:
+    """Returns {casefolded_label: {lat, lon, country_da, destination_en}}.
+    Indexed by both Destination_DA and Destination_EN so case-insensitive
+    lookups from STED-REGISTER labels resolve via either spelling."""
+    geo: dict[str, dict] = {}
+    if not os.path.exists(REJSER):
+        return geo
+    with open(REJSER, encoding="utf-8", newline="") as f:
+        rdr = csv.DictReader(f, delimiter="\t")
+        for row in rdr:
+            try:
+                lat = float(row.get("Latitude") or "")
+                lon = float(row.get("Longitude") or "")
+            except ValueError:
+                continue
+            entry = {
+                "lat":            round(lat, 5),
+                "lon":            round(lon, 5),
+                "country_da":     country_for(lat, lon),
+                "destination_en": (row.get("Destination_EN") or "").strip() or None,
+            }
+            for key_field in ("Destination_DA", "Destination_EN", "Destination_ORG"):
+                v = (row.get(key_field) or "").strip().casefold()
+                if v:
+                    geo.setdefault(v, entry)
+    return geo
+
+
+def main() -> None:
+    if not os.path.exists(ENTITIES):
+        sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
+
+    print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
+    places = []
+    with open(ENTITIES, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["entity_type"] == "place":
+                places.append(r)
+    print(f"  {len(places):,} places")
+
+    ref_count: Counter[str] = Counter()
+    if os.path.exists(REFS):
+        with open(REFS, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                ref_count[r["entity_id"]] += 1
+        print(f"  reference counts loaded for {len(ref_count):,} entities")
+
+    geo = load_rejser_geocodes()
+    print(f"  rejser gazetteer: {len(geo):,} place-name keys")
+
+    skip = existing_ids()
+    print(f"  hand-curated PLACES in place.html: {len(skip)} (will be preserved)")
+
+    generated: dict[str, dict] = {}
+    geo_hits = 0
+    for r in places:
+        rid = r["entity_id"]
+        if rid in skip:
+            continue
+        label = (r.get("label") or "").strip()
+        rec = {
+            "label":       label,
+            "description": (r.get("description") or "").strip() or None,
+            "refs":        ref_count.get(rid, 0),
+        }
+        g = geo.get(label.casefold())
+        if g:
+            rec.update(g)
+            geo_hits += 1
+        generated[rid] = rec
+
+    print(f"  generated {len(generated):,} entries ({geo_hits:,} with coordinates)")
+
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT, "w", encoding="utf-8") as f:
+        f.write("// Auto-generated by scripts/build_mockup/build_places_extra.py — do not hand-edit.\n")
+        f.write("// One entry per place in STED-REGISTER. Coordinates and country come from\n")
+        f.write("// data/normalized/rejser.tsv (hcax.dk Rejser add-on) when the label matches.\n")
+        f.write("// The hand-curated PLACES object in place.html takes precedence (ALL_PLACES merge).\n")
+        f.write("const PLACES_EXTRA = ")
+        f.write(json.dumps(generated, ensure_ascii=False, separators=(",", ":")))
+        f.write(";\n")
+    print(f"  wrote {os.path.relpath(OUT, ROOT)}  "
+          f"({os.path.getsize(OUT)/1024:.0f} KB)")
+
+
+if __name__ == "__main__":
+    main()

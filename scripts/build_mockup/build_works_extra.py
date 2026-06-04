@@ -3,11 +3,10 @@
 build_works_extra.py
 --------------------
 Generates mockup/data/works-extra.js — a `WORKS_EXTRA` JS object with
-~10 minimal entries per H3 sub-category, sourced from the real
-data/normalized/entities.csv. The hand-curated `WORKS` object inside
-mockup/work.html keeps precedence; WORKS_EXTRA only fills gaps so any
-?reg= link from the category pages resolves to real content instead of
-a blank page.
+one entry per work in data/normalized/entities.csv. The hand-curated
+`WORKS` object inside mockup/work.html keeps precedence; WORKS_EXTRA
+fills every other gap so any ?reg=… link resolves to real metadata
+instead of an "Ukendt værk" page.
 
 Run after `scripts/normalization/hca_xlsx_to_csv.py`. Stdlib only.
 """
@@ -25,7 +24,6 @@ REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
 EXISTING = os.path.join(ROOT, "mockup", "work.html")
 OUT = os.path.join(ROOT, "mockup", "data", "works-extra.js")
 
-PER_BUCKET = 10
 PUB_PAREN_RE = re.compile(r"\(([^()]+?)\)")
 YEAR_RE = re.compile(r"\b(1[5-9]\d{2})\b")
 
@@ -88,49 +86,31 @@ def main():
     skip = existing_ids()
     print(f"  hand-curated WORKS in work.html: {len(skip)} (will be preserved)")
 
-    buckets = defaultdict(list)
-    for r in rows:
-        h3 = (r.get("form_h3") or "").strip()
-        if not h3:
-            continue
-        buckets[h3].append(r)
-
-    print(f"  H3 sub-categories: {len(buckets)}")
-    for h3 in sorted(buckets):
-        print(f"    {h3}: {len(buckets[h3])} works")
-
     generated = {}
-    for h3, items in buckets.items():
-        items_sorted = sorted(items, key=lambda r: (-ref_count.get(r["entity_id"], 0),
-                                                     r["label"].lower()))
-        picked = 0
-        for r in items_sorted:
-            if picked >= PER_BUCKET:
-                break
-            rid = r["entity_id"]
-            if rid in skip or rid in generated:
-                continue
-            h2 = (r.get("genre_h2") or "").strip()
-            wing, wing_label = wing_for(h2, h3)
-            entry = {
-                "title": r["label"].strip(),
-                "h2": h2 or "ANDRE FORFATTERE",
-                "h3": h3,
-                "wing": wing,
-                "wingLabel": wing_label,
-                "author": author_from(h2, r.get("person_derived", "")),
-                "lang": None,
-                "refs": ref_count.get(rid, 0),
-                "year": parse_year(r["label"]),
-                "diary": [],
-                "related": [],
-                "coPlaces": [],
-                "coWorks": [],
-            }
-            generated[rid] = entry
-            picked += 1
+    for r in rows:
+        rid = r["entity_id"]
+        if rid in skip:
+            continue
+        h2 = (r.get("genre_h2") or "").strip()
+        h3 = (r.get("form_h3") or "").strip()
+        wing, wing_label = wing_for(h2, h3)
+        generated[rid] = {
+            "title": r["label"].strip(),
+            "h2": h2 or "ANDRE FORFATTERE",
+            "h3": h3 or "—",
+            "wing": wing,
+            "wingLabel": wing_label,
+            "author": author_from(h2, r.get("person_derived", "")),
+            "lang": None,
+            "refs": ref_count.get(rid, 0),
+            "year": parse_year(r["label"]),
+            "diary": [],
+            "related": [],
+            "coPlaces": [],
+            "coWorks": [],
+        }
 
-    print(f"  generated {len(generated)} entries across {len(buckets)} sub-categories")
+    print(f"  generated {len(generated)} entries across all {len(rows)} works")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
