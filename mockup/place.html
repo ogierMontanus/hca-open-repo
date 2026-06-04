@@ -3,13 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rom — H.C. Andersen Dagbogsregister</title>
+  <title>Sted — H.C. Andersen Dagbogsregister</title>
   <link rel="stylesheet" href="css/style.css">
-  <link
-    rel="stylesheet"
+  <!-- Leaflet — loaded eagerly; init runs only when the entity has coordinates. -->
+  <link rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin="">
+  <style>
+    .wd-badge {
+      display: inline-block; font-size: 0.63rem; font-family: monospace;
+      font-weight: 600; padding: 1px 5px; border-radius: 3px;
+      background: #edf4fb; border: 1px solid #93bcd9; color: #2a5e8a;
+      text-decoration: none; white-space: nowrap; vertical-align: middle; line-height: 1.7;
+    }
+    .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
+    .map-leaflet { height: 320px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); }
+    .map-meta { font-size: 0.78rem; color: var(--color-text-muted); margin-top: var(--sp2); }
+  </style>
 </head>
 <body>
 
@@ -27,166 +38,18 @@
 
   <div class="page-hero page-hero--sm">
     <div class="container">
-      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
-        <a href="index.html">Forside</a>
-        <span class="breadcrumb__sep">›</span>
-        <a href="places.html">Stedregister</a>
-        <span class="breadcrumb__sep">›</span>
-        <span class="breadcrumb__current">Rom</span>
-      </nav>
-      <h1>Rom</h1>
-      <p>Sted &nbsp;·&nbsp; STED-REGISTER &nbsp;·&nbsp; Reg0017430</p>
-      <div class="page-hero__meta">
-        <span>Italien · Lazio</span>
-        <span>41.9028° N, 12.4964° Ø</span>
-        <span>332 poster i dagbøgerne</span>
-      </div>
+      <nav id="js-breadcrumb" class="breadcrumb" style="opacity:0.72;margin-bottom:6px"></nav>
+      <h1 id="js-title"></h1>
+      <div id="js-chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+      <div id="js-meta" class="page-hero__meta"></div>
     </div>
   </div>
 
   <section class="section">
     <div class="container">
       <div class="entity-layout">
-
-        <div class="entity-main">
-
-          <!-- Geografisk kontekst: vises kun for entiteter med geokoder.
-               Skjules ved person-, værk- og dagbogssider, samt ved stednavne
-               i STED-REGISTER der endnu ikke har lat/lon. -->
-          <div data-has-coords="true">
-            <h2 class="section-title">Geografisk kontekst</h2>
-            <div id="place-map" class="map-leaflet" aria-label="Kort over Rom"></div>
-            <p class="map-meta">41.9028° N, 12.4964° Ø &nbsp;·&nbsp;
-              <a href="https://www.openstreetmap.org/?mlat=41.9028&amp;mlon=12.4964#map=11/41.9028/12.4964"
-                 target="_blank" rel="noopener">OpenStreetMap</a></p>
-          </div>
-
-          <!-- Timeline -->
-          <div>
-            <h2 class="section-title">Tidslinje for omtaler</h2>
-            <div class="timeline-bar">
-              <div class="timeline-bar__title">Dagbogsreferencer til Rom, 1825–1875</div>
-              <div class="timeline-track">
-                <div class="timeline-track__span" style="left:15%;width:30%"></div>
-                <div class="timeline-track__dot" style="left:15%" title="1833 — First Italian journey"></div>
-                <div class="timeline-track__dot" style="left:22%" title="1834 — Second Rome visit"></div>
-                <div class="timeline-track__dot" style="left:38%" title="1841 — Return journey"></div>
-              </div>
-              <div class="timeline-labels">
-                <span>1825</span>
-                <span>1840</span>
-                <span>1860</span>
-                <span>1875</span>
-              </div>
-              <div class="timeline-events">
-                <div class="timeline-event">
-                  <span class="timeline-event__year">1833</span>
-                  <span class="timeline-event__text">Primary location of diary entry Pag100100; visits with Thorvaldsen</span>
-                </div>
-                <div class="timeline-event">
-                  <span class="timeline-event__year">1833</span>
-                  <span class="timeline-event__text">Mentioned in Naples diary Pag100200 — Andersen compares the two cities</span>
-                </div>
-                <div class="timeline-event">
-                  <span class="timeline-event__year">1841</span>
-                  <span class="timeline-event__text">Return journey; 4 diary pages reference Rome</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Related diary entries -->
-          <div>
-            <h2 class="section-title">Dagbogsreferencer</h2>
-            <div class="tabs">
-              <button class="tab-btn tab-btn--active" id="place-diary-count">Alle (332)</button>
-              <button class="tab-btn">Opholdsted (298)</button>
-              <button class="tab-btn">Omtalt (34)</button>
-            </div>
-            <div class="result-grid" id="place-diary" data-reg="Reg0017430" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
-
-              <a href="entry.html" class="result-card">
-                <div class="result-card__body">
-                  <div class="result-card__title">Diary: Rome, Oct–Nov 1833</div>
-                  <div class="result-card__meta">1833 · Pag100100 · located_in</div>
-                  <div class="result-card__chips">
-                    <span class="chip chip--person" style="font-size:0.68rem">Thorvaldsen</span>
-                  </div>
-                </div>
-              </a>
-
-              <a href="entry.html" class="result-card">
-                <div class="result-card__body">
-                  <div class="result-card__title">Diary: Naples, Nov–Dec 1833</div>
-                  <div class="result-card__meta">1833 · Pag100200 · mentions</div>
-                  <div class="result-card__chips">
-                    <span class="chip chip--place" style="font-size:0.68rem">Naples</span>
-                  </div>
-                </div>
-              </a>
-
-            </div>
-            <div style="text-align:center;margin-top:var(--sp5)">
-              <button id="place-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
-            </div>
-          </div>
-
-          <!-- Persons associated -->
-          <div>
-            <h2 class="section-title">Samtidige personer</h2>
-            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Personer der optræder i dagbogsider, hvor Rom er omtalt</p>
-            <div class="network-chips">
-              <a href="person.html" class="chip chip--person">H.C. Andersen</a>
-              <a href="person.html" class="chip chip--person">Bertel Thorvaldsen</a>
-              <a href="person.html" class="chip chip--person">Wilhelm von Kaulbach</a>
-              <a href="person.html" class="chip chip--person">Louise Collin</a>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Sidebar -->
-        <aside class="entity-sidebar">
-
-          <div class="info-block">
-            <div class="info-block__header">Stedsdata</div>
-            <div class="info-block__body">
-              <table class="info-table">
-                <tr><td>ID</td><td>Reg0017430</td></tr>
-                <tr><td>Register</td><td>STED-REGISTER</td></tr>
-                <tr><td>Label (DA)</td><td>Rom</td></tr>
-                <tr><td>Label (EN)</td><td>Rome</td></tr>
-                <tr><td>Land</td><td>Italien</td></tr>
-                <tr><td>Region</td><td>Lazio</td></tr>
-                <tr><td>Breddegrad</td><td>41.9028° N</td></tr>
-                <tr><td>Længdegrad</td><td>12.4964° Ø</td></tr>
-                <tr><td>Dagbogsrefs.</td><td>332 poster</td></tr>
-              </table>
-            </div>
-          </div>
-
-          <div class="info-block">
-            <div class="info-block__header">Autoritetslinks</div>
-            <div class="info-block__body" style="display:flex;flex-direction:column;gap:6px;font-size:0.82rem">
-              <a href="#">Wikidata Q220</a>
-              <a href="#">GeoNames 3169070</a>
-            </div>
-          </div>
-
-          <div class="info-block">
-            <div class="info-block__header">Relaterede steder</div>
-            <div class="info-block__body">
-              <div style="display:flex;flex-wrap:wrap;gap:6px">
-                <a href="place.html" class="chip chip--place">Naples</a>
-                <a href="place.html" class="chip chip--place">Florence</a>
-                <a href="place.html" class="chip chip--place">Venice</a>
-                <a href="place.html" class="chip chip--place">Copenhagen</a>
-              </div>
-            </div>
-          </div>
-
-        </aside>
-
+        <div class="entity-main" id="js-main"></div>
+        <aside class="entity-sidebar" id="js-sidebar"></aside>
       </div>
     </div>
   </section>
@@ -200,51 +63,176 @@
 </footer>
 
 <script src="js/nav.js"></script>
+<!-- Generated per-entity data (gitignored). Build with:
+     python3 scripts/build_mockup/build_places_extra.py -->
+<script src="data/places-extra.js" onerror="void 0"></script>
+<!-- Generated diary data (gitignored). Build with:
+     python3 scripts/build_mockup/build_diary_index.py -->
+<script src="data/diary-index.js" onerror="void 0"></script>
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/diary-wire.js"></script>
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
   crossorigin=""></script>
 <script>
-  // Leaflet for STED-REGISTER detail page. Initialised only when the
-  // surrounding element exists — i.e. when the entity has geocodes.
-  (function () {
-    const el = document.getElementById('place-map');
-    if (!el) return;
-    const lat = 41.9028, lon = 12.4964, label = 'Rom';
-    const map = L.map(el).setView([lat, lon], 11);
-    // CARTO Voyager tiles — OSM data, but served via CARTO's CDN which does
-    // not require a Referer header. The osm.org volunteer tile servers
-    // block file:// and any request without a Referer (403r "Access blocked");
-    // CARTO is the standard low-friction fallback for prototypes and local
-    // viewing. referrerPolicy is set as belt-and-braces for non-file:// hosting.
+/* Hand-curated PLACES — takes precedence over generated PLACES_EXTRA.
+   Mirrors WORKS / PERSONS curation pattern. Use to override a
+   destination_en, supply a Wikidata Q-number, or replace the auto-
+   country-attribution from the bbox gazetteer with a better label. */
+const PLACES = {
+  'Reg0017430': {
+    label: 'Rom',
+    destination_en: 'Rome',
+    country_da: 'Italien',
+    lat: 41.90332, lon: 12.49565,
+    wd: 'Q220',
+    description: "Italiens hovedstad, et af Andersens vigtigste rejsemål; " +
+                 "han opholdt sig her i lange perioder, særligt 1833–34 og 1840–41."
+  }
+};
+
+const ALL_PLACES = Object.assign(
+  {}, (typeof PLACES_EXTRA !== 'undefined' ? PLACES_EXTRA : {}), PLACES
+);
+
+function escAttr(s) { return String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+(function () {
+  const params = new URLSearchParams(location.search);
+  const reg = params.get('reg') || 'Reg0017430';   // default to Rom
+  const pl = ALL_PLACES[reg];
+
+  if (!pl) {
+    document.getElementById('js-title').textContent = 'Ukendt sted — ' + reg;
+    document.getElementById('js-breadcrumb').innerHTML =
+      '<a href="index.html">Forside</a><span class="breadcrumb__sep">›</span>' +
+      '<a href="places.html">Stedregister</a><span class="breadcrumb__sep">›</span>' +
+      '<span class="breadcrumb__current">' + escAttr(reg) + '</span>';
+    return;
+  }
+
+  document.title = pl.label + ' — H.C. Andersen Dagbogsregister';
+
+  // Breadcrumb
+  document.getElementById('js-breadcrumb').innerHTML =
+    '<a href="index.html">Forside</a>' +
+    '<span class="breadcrumb__sep">›</span>' +
+    '<a href="places.html">Stedregister</a>' +
+    '<span class="breadcrumb__sep">›</span>' +
+    '<span class="breadcrumb__current">' + escAttr(pl.label) + '</span>';
+
+  document.getElementById('js-title').textContent = pl.label;
+
+  const hasCoords = pl.lat != null && pl.lon != null;
+  let chips = '<span class="chip chip--place">STED-REGISTER</span>';
+  if (pl.country_da) chips += '<span class="chip">' + escAttr(pl.country_da) + '</span>';
+  chips += '<span class="chip" style="font-family:monospace">' + escAttr(reg) + '</span>';
+  if (hasCoords) chips += '<span class="chip" title="Geokodet via hcax.dk Rejser">geokodet</span>';
+  if (pl.wd) chips += '<a href="https://www.wikidata.org/wiki/' + escAttr(pl.wd) +
+    '" class="wd-badge" target="_blank" rel="noopener" title="' + escAttr(pl.label) +
+    ' på Wikidata">wd:' + escAttr(pl.wd) + '</a>';
+  document.getElementById('js-chips').innerHTML = chips;
+
+  // Hero meta
+  const metaItems = [];
+  if (pl.country_da) metaItems.push(pl.country_da);
+  if (pl.destination_en && pl.destination_en !== pl.label) metaItems.push('a.k.a. ' + pl.destination_en);
+  if (hasCoords) metaItems.push(pl.lat.toFixed(4) + ', ' + pl.lon.toFixed(4));
+  const total = (typeof DIARY_REFS !== 'undefined' && DIARY_REFS[reg])
+    ? DIARY_REFS[reg].n : (pl.refs || 0);
+  metaItems.push(total + ' dagbogsreferencer');
+  document.getElementById('js-meta').innerHTML =
+    metaItems.map(m => '<span>' + escAttr(m) + '</span>').join('');
+
+  // ── Sidebar ──────────────────────────────────────────────────────────────
+  let sb = '';
+  sb += '<div class="info-block"><div class="info-block__header">Registerdata</div><div class="info-block__body"><table class="info-table">';
+  sb += '<tr><td>ID</td><td style="font-family:monospace">' + escAttr(reg) + '</td></tr>';
+  sb += '<tr><td>Register</td><td>STED-REGISTER</td></tr>';
+  sb += '<tr><td>Label</td><td>' + escAttr(pl.label) + '</td></tr>';
+  if (pl.destination_en && pl.destination_en !== pl.label)
+    sb += '<tr><td>English</td><td>' + escAttr(pl.destination_en) + '</td></tr>';
+  if (pl.country_da) sb += '<tr><td>Land</td><td>' + escAttr(pl.country_da) + '</td></tr>';
+  if (hasCoords)
+    sb += '<tr><td>Koordinater</td><td style="font-family:monospace">' +
+      pl.lat.toFixed(4) + ', ' + pl.lon.toFixed(4) + '</td></tr>';
+  sb += '<tr><td>Dagbogsrefs.</td><td>' + total + '</td></tr>';
+  sb += '</table></div></div>';
+
+  if (pl.wd) {
+    sb += '<div class="info-block"><div class="info-block__header">Autoritetslinks</div><div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
+    sb += '<a href="https://www.wikidata.org/wiki/' + escAttr(pl.wd) +
+      '" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px">' +
+      '<span class="wd-badge">wd:' + escAttr(pl.wd) + '</span>' +
+      '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
+  }
+  document.getElementById('js-sidebar').innerHTML = sb;
+
+  // ── Main content ─────────────────────────────────────────────────────────
+  let main = '';
+  if (hasCoords) {
+    main += '<div><h2 class="section-title">Kort</h2>' +
+      '<div id="place-map" class="map-leaflet" aria-label="Kort over ' + escAttr(pl.label) + '"></div>' +
+      '<p class="map-meta">Koordinater fra hcax.dk Rejser add-on · ' +
+      pl.lat.toFixed(4) + '° N, ' + pl.lon.toFixed(4) + '° Ø</p></div>';
+  } else {
+    main += '<div><p class="muted" style="font-style:italic">Ikke geokodet — dette sted findes ikke i hcax.dk Rejser-tabellen.</p></div>';
+  }
+
+  if (pl.description) {
+    main += '<div><h2 class="section-title">Beskrivelse</h2>' +
+      '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' +
+      escAttr(pl.description) + '</p></div>';
+  }
+
+  main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
+    '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)" id="place-diary-summary">' +
+    'Indlæser…</p>' +
+    '<div class="result-grid" id="place-diary" data-reg="' + escAttr(reg) +
+    '" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>' +
+    '<div style="text-align:center;margin-top:var(--sp5)">' +
+    '<button id="place-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
+    '</div></div>';
+
+  document.getElementById('js-main').innerHTML = main;
+
+  // Leaflet init when geocoded — CARTO Voyager tiles per CLAUDE.md.
+  if (hasCoords && typeof L !== 'undefined') {
+    const map = L.map('place-map').setView([pl.lat, pl.lon], 11);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19,
       referrerPolicy: 'strict-origin-when-cross-origin'
     }).addTo(map);
-    L.marker([lat, lon]).addTo(map)
-      .bindPopup('<b>' + label + '</b><br>' + lat + '° N, ' + lon + '° Ø')
+    L.marker([pl.lat, pl.lon]).addTo(map)
+      .bindPopup('<b>' + escAttr(pl.label) + '</b><br>' +
+        pl.lat.toFixed(4) + '° N, ' + pl.lon.toFixed(4) + '° Ø')
       .openPopup();
-  })();
-</script>
-<!-- Generated diary data (gitignored). Build with:
-     python3 scripts/build_mockup/build_diary_index.py -->
-<script src="data/diary-index.js" onerror="void 0"></script>
-<script src="data/diary-refs.js" onerror="void 0"></script>
-<script src="js/diary-wire.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var grid = document.getElementById('place-diary');
-  DiaryWire.refs(grid, grid.dataset.reg, {
+  }
+
+  // Wire up the diary section
+  const grid = document.getElementById('place-diary');
+  const summary = document.getElementById('place-diary-summary');
+  const result = DiaryWire.refs(grid, reg, {
     pageSize: 24,
     moreBtn: document.getElementById('place-diary-more'),
     onCount: function (shown, total) {
-      var btn = document.getElementById('place-diary-count');
-      if (btn) btn.textContent = 'Alle (' + total + ')';
+      if (summary) {
+        summary.textContent = total === 0
+          ? 'Ingen dagbogsreferencer registreret.'
+          : 'Viser ' + shown + ' af ' + total + ' dagbogssider der omtaler ' +
+            pl.label + '.';
+      }
     }
   });
-});
+  if (!result && summary) {
+    summary.textContent = 'Dagbogsdata ikke indlæst (kør build_diary_index.py).';
+  }
+})();
 </script>
 </body>
 </html>

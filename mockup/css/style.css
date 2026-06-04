@@ -369,7 +369,9 @@ main { flex: 1; }
 .entity-ref-item { display: flex; align-items: center; gap: var(--sp2); }
 .entity-ref-item__rel {
   font-size: 0.7rem; color: var(--color-text-muted); font-style: italic;
+  text-decoration: none; font-family: monospace;
 }
+.entity-ref-item__rel:hover { color: var(--color-accent); text-decoration: underline; }
 
 /* === Entity Page Layout === */
 .entity-layout {

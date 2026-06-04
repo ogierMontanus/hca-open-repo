@@ -48,9 +48,12 @@ H1_CHIP = {
 }
 
 H1_LINK = {
-    "PERSON-REGISTER": "../persons.html",
-    "STED-REGISTER":   "../places.html",
-    "VÆRK-REGISTER":   "../bibliotek.html",
+    # Per-entity detail pages — the label chip and the Reg ID below both
+    # become hyperlinks to ?reg={entity_id} on the appropriate template,
+    # mirroring the existing work.html?reg=… pattern.
+    "PERSON-REGISTER": "../person.html",
+    "STED-REGISTER":   "../place.html",
+    "VÆRK-REGISTER":   "../work.html",
 }
 
 
@@ -165,11 +168,13 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
         if not items:
             continue
         chip_cls = H1_CHIP.get(h1, "")
+        base = H1_LINK[h1]
         list_html = "\n".join(
             f'<div class="entity-ref-item">'
-            f'<a href="{html.escape(H1_LINK[h1])}" class="chip {chip_cls}">'
+            f'<a href="{html.escape(base)}?reg={html.escape(eid)}" class="chip {chip_cls}">'
             f'{html.escape(e["label"])}</a>'
-            f'<span class="entity-ref-item__rel">{html.escape(eid)}</span>'
+            f'<a href="{html.escape(base)}?reg={html.escape(eid)}" class="entity-ref-item__rel">'
+            f'{html.escape(eid)}</a>'
             f'</div>'
             for eid, e in items
         )
