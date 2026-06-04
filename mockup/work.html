@@ -657,7 +657,8 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
       chipHtml += `<a href="${href}" class="${cls}">${c.label}</a>`;
       if (c.wd) chipHtml += `<a href="https://www.wikidata.org/wiki/${c.wd}" class="wd-badge" target="_blank" rel="noopener" title="${c.label} på Wikidata">${c.wd}</a>`;
     }
-    main += `<a href="entry.html" class="result-card" style="padding:var(--sp4)"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><div class="result-card__title" style="font-size:0.95rem">${entry.date}</div><div style="font-family:monospace;font-size:0.72rem;color:var(--color-text-muted)">${entry.pag}</div></div><div style="font-size:0.84rem;color:var(--color-text-muted);font-style:italic;margin-bottom:8px;line-height:1.5">${entry.text}</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">${chipHtml}</div></a>`;
+    const diagHref = entry.pag ? `diary-pages/${entry.pag}.html` : 'entry.html';
+    main += `<a href="${diagHref}" class="result-card" style="padding:var(--sp4)"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><div class="result-card__title" style="font-size:0.95rem">${entry.date}</div><div style="font-family:monospace;font-size:0.72rem;color:var(--color-text-muted)">${entry.pag}</div></div><div style="font-size:0.84rem;color:var(--color-text-muted);font-style:italic;margin-bottom:8px;line-height:1.5">${entry.text}</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">${chipHtml}</div></a>`;
   }
   main += `</div>`;
 

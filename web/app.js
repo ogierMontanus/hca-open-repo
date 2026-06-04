@@ -221,6 +221,13 @@ function renderWorks(id) {
     .join("");
 }
 
+const VOL_NUM = { I:1, II:2, III:3, IV:4, V:5, VI:6, VII:7, VIII:8, IX:9, X:10, XI:11 };
+function diaryPageId(vol, page) {
+  const vn = (VOL_NUM[vol] ?? 0).toString().padStart(2, "0");
+  const pn = String(parseInt(page, 10) || 0).padStart(4, "0");
+  return `Pag${vn}${pn}`;
+}
+
 function renderVisits(id) {
   const visits = state.visits[id] || [];
   const ol = document.getElementById("visits-list");
@@ -230,13 +237,15 @@ function renderVisits(id) {
   }
   ol.innerHTML = visits
     .slice(0, 50)
-    .map(v =>
-      `<li>` +
-      `<span class="visit-date">${escape(v.date || v.year || "—")}</span>` +
-      `<span class="visit-ref">vol ${escape(v.vol)} p.${escape(v.page)}</span>` +
-      `<p class="visit-snippet">${escape(v.snippet)}</p>` +
-      `</li>`
-    )
+    .map(v => {
+      const pid = diaryPageId(v.vol, v.page);
+      const href = `../mockup/diary-pages/${pid}.html`;
+      return `<li>` +
+        `<a class="visit-date" href="${escape(href)}">${escape(v.date || v.year || "—")}</a>` +
+        `<span class="visit-ref">vol ${escape(v.vol)} p.${escape(v.page)}</span>` +
+        `<p class="visit-snippet">${escape(v.snippet)}</p>` +
+        `</li>`;
+    })
     .join("");
   if (visits.length > 50) {
     const more = document.createElement("li");
