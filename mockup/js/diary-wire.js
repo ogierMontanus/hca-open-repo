@@ -46,6 +46,12 @@ window.DiaryWire = (function () {
     var style = c.t === 'work'
       ? ' style="font-size:0.68rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)"'
       : ' style="font-size:0.68rem"';
+    if (c.r) {
+      var page = c.t === 'place' ? 'place.html'
+               : c.t === 'person' ? 'person.html' : 'work.html';
+      return '<a href="' + page + '?reg=' + esc(c.r) + '" class="' + cls +
+             ' result-card__chip-link"' + style + '>' + esc(c.l) + '</a>';
+    }
     return '<span class="' + cls + '"' + style + '>' + esc(c.l) + '</span>';
   }
 
@@ -54,20 +60,26 @@ window.DiaryWire = (function () {
     return 'Bind ' + esc(m.v || '?') + ', s. ' + esc(m.p || '?');
   }
 
-  /* Build one result-card <a> for a diary page handle. */
+  /* Build one result-card for a diary page handle.
+   * Uses a <div> wrapper with an absolutely-positioned link so that
+   * entity chips inside can also be proper <a> elements (nested <a>
+   * is invalid HTML). The stretched `.result-card__link` covers the
+   * whole card; chip links sit above it via z-index. */
   function cardFor(pag, chips) {
     var m = (hasMeta() && DIARY_META[pag]) || {};
     var sub = (m.pl ? esc(m.pl) + ' · ' : '') +
               'Bind ' + esc(m.v || '?') + ' · s. ' + esc(m.p || '?');
     var meta = (m.d || m.y || '—') + ' · ' + esc(pag);
     var chipMarkup = (chips || []).slice(0, 3).map(chipHtml).join('');
-    return '<a href="' + PAGES_DIR + esc(pag) + '.html" class="result-card">' +
+    var href = PAGES_DIR + esc(pag) + '.html';
+    return '<div class="result-card">' +
+      '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(pag) + '"></a>' +
       '<div class="result-card__body">' +
       '<div class="result-card__title">' + titleFor(m) + '</div>' +
       '<div class="result-card__meta">' + meta + '</div>' +
       '<div class="result-card__chips">' + chipMarkup +
       '<span style="font-size:0.68rem;color:var(--color-text-muted)">' + sub + '</span>' +
-      '</div></div></a>';
+      '</div></div></div>';
   }
 
   /* --- diary-reference section for one register entry -------------------- */
@@ -127,13 +139,15 @@ window.DiaryWire = (function () {
       var sub = (row.pl ? esc(row.pl) + ' · ' : '') +
                 'Bind ' + esc(row.v) + ' · s. ' + esc(row.p);
       var chipMarkup = (row.c || []).slice(0, 3).map(chipHtml).join('');
-      return '<a href="' + PAGES_DIR + esc(row.h) + '.html" class="result-card">' +
+      var href = PAGES_DIR + esc(row.h) + '.html';
+      return '<div class="result-card">' +
+        '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(row.h) + '"></a>' +
         '<div class="result-card__body">' +
         '<div class="result-card__title">' + titleFor(m) + '</div>' +
         '<div class="result-card__meta">' + (row.d || row.y || '—') + ' · ' + esc(row.h) + '</div>' +
         '<div class="result-card__chips">' + chipMarkup +
         '<span style="font-size:0.68rem;color:var(--color-text-muted)">' + sub + '</span>' +
-        '</div></div></a>';
+        '</div></div></div>';
     }
 
     function render(reset) {

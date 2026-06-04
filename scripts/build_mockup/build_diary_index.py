@@ -176,7 +176,7 @@ def main():
                 if place_done:
                     continue
                 place_done = True
-            chips.append({"t": TYPE_CHIP.get(t, "work"), "l": lab})
+            chips.append({"t": TYPE_CHIP.get(t, "work"), "l": lab, "r": eid})
             if len(chips) >= 3:
                 break
         row = dict(meta[p])

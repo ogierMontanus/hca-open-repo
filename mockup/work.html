@@ -89,8 +89,11 @@
 
 <script src="js/nav.js"></script>
 <script src="data/works-extra.js"></script>
+<!-- Generated per-entity extras for deep-link lookups (gitignored). Build with the build_*_extra.py scripts. -->
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
 <!-- Generated diary data (gitignored). Build with:
-     python3 scripts/build_mockup/build_diary_index.py -->
+     python scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
@@ -541,6 +544,33 @@ const WORKS = {
 const TITLE_TO_REG = {};
 for (const [reg, w] of Object.entries(WORKS)) TITLE_TO_REG[w.title] = reg;
 
+// Build label→reg reverse indexes for place and person deep-link chips.
+// Falls back gracefully when the *-extra.js files are not loaded (fresh clone).
+const _PLACE_LABEL_REG = {};
+const _PERSON_LABEL_REG = {};
+const _PERSON_PREFIX_REG = {};   // matches "Dickens, Charles" → "Dickens, Charles (1812–1870)"
+if (typeof PLACES_EXTRA !== 'undefined') {
+  for (const [rid, v] of Object.entries(PLACES_EXTRA)) {
+    if (v.label) _PLACE_LABEL_REG[v.label] = rid;
+  }
+}
+if (typeof PERSONS_EXTRA !== 'undefined') {
+  for (const [rid, v] of Object.entries(PERSONS_EXTRA)) {
+    if (!v.label) continue;
+    _PERSON_LABEL_REG[v.label] = rid;
+    const m = v.label.match(/^(.+?)\s*[\(\（]/);
+    if (m) _PERSON_PREFIX_REG[m[1].trim()] = rid;
+  }
+}
+function placeHref(label) {
+  const r = _PLACE_LABEL_REG[label];
+  return r ? 'place.html?reg=' + r : 'place.html';
+}
+function personHref(name) {
+  const r = _PERSON_LABEL_REG[name] || _PERSON_PREFIX_REG[name];
+  return r ? 'person.html?reg=' + r : 'person.html';
+}
+
 function wdBadge(q, label) {
   return `<a href="https://www.wikidata.org/wiki/${q}" class="wd-badge" target="_blank" rel="noopener" title="${label||q} på Wikidata">wd:${q}</a>`;
 }
@@ -595,7 +625,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   sb += `<dt>H2</dt><dd>${w.h2}</dd>`;
   sb += `<dt>H3</dt><dd>${w.h3}</dd>`;
   if (w.author) {
-    sb += `<dt>Forfatter</dt><dd><a href="person.html" style="color:var(--color-accent)">${w.author}</a>`;
+    sb += `<dt>Forfatter</dt><dd><a href="${personHref(w.author)}" style="color:var(--color-accent)">${w.author}</a>`;
     if (w.authorWd) sb += ` ${wdBadge(w.authorWd, w.author)}`;
     sb += `</dd>`;
   }
@@ -615,7 +645,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
       sb += `<a href="work.html?reg=${rw.reg}" class="chip" style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${rw.title}</a>`;
     }
     sb += `</div>`;
-    if (w.author) sb += `<div style="margin-top:var(--sp3);font-size:0.78rem"><a href="person.html" style="color:var(--color-accent)">← Alle værker af ${w.author}</a></div>`;
+    if (w.author) sb += `<div style="margin-top:var(--sp3);font-size:0.78rem"><a href="${personHref(w.author)}" style="color:var(--color-accent)">← Alle værker af ${w.author}</a></div>`;
     sb += `</div>`;
   }
 
@@ -632,7 +662,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     sb += `<div class="sidebar-box"><div class="sidebar-box__title">Hyppigst samtidige steder</div><div style="display:flex;flex-direction:column;gap:6px">`;
     for (const pl of w.coPlaces) {
       sb += `<div style="display:flex;justify-content:space-between;align-items:center">`;
-      sb += `<span style="display:inline-flex;align-items:center;gap:4px"><a href="place.html" class="chip chip--place">${pl.label}</a>`;
+      sb += `<span style="display:inline-flex;align-items:center;gap:4px"><a href="${placeHref(pl.label)}" class="chip chip--place">${pl.label}</a>`;
       if (pl.wd) sb += `<a href="https://www.wikidata.org/wiki/${pl.wd}" class="wd-badge" target="_blank" rel="noopener" title="${pl.label} på Wikidata">${pl.wd}</a>`;
       sb += `</span><span style="font-size:0.75rem;color:var(--color-text-muted)">${pl.count}</span></div>`;
     }
@@ -657,7 +687,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   for (const entry of w.diary) {
     let chipHtml = '';
     for (const c of entry.chips) {
-      const href = c.type === 'place' ? 'place.html' : 'person.html';
+      const href = c.type === 'place' ? placeHref(c.label) : personHref(c.label);
       const cls  = c.type === 'place' ? 'chip chip--place' : 'chip chip--person';
       chipHtml += `<a href="${href}" class="${cls}">${c.label}</a>`;
       if (c.wd) chipHtml += `<a href="https://www.wikidata.org/wiki/${c.wd}" class="wd-badge" target="_blank" rel="noopener" title="${c.label} på Wikidata">${c.wd}</a>`;
