@@ -21,6 +21,12 @@ import argparse
 import csv
 import os
 import sys
+import warnings
+
+# openpyxl emits UserWarnings about Slicer List and other unsupported xlsx
+# extensions that are present in the HCA workbook. They are harmless and
+# add noise to the build output, so suppress them here.
+warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
 XLSX_DEFAULT = os.path.join(
     os.path.dirname(__file__), "..", "..", "data", "raw", "HCA-Repository V0.82.xlsx"

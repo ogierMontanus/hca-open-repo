@@ -303,8 +303,20 @@ main { flex: 1; }
   text-decoration: none; color: var(--color-text);
   transition: border-color 0.15s, box-shadow 0.15s;
   display: flex; flex-direction: column;
+  position: relative; /* stretched-link anchor */
 }
 .result-card:hover { border-color: var(--color-accent); box-shadow: var(--shadow); text-decoration: none; }
+/* Full-card link that sits behind chip links (DiaryWire cards use <div> wrapper) */
+.result-card__link {
+  position: absolute; inset: 0; z-index: 0;
+  text-decoration: none; color: inherit;
+}
+/* Entity chips inside a card sit above the full-card link */
+.result-card__chip-link {
+  position: relative; z-index: 1;
+  text-decoration: none;
+}
+.result-card__chip-link:hover { text-decoration: underline; }
 .result-card__thumb {
   height: 110px; background: var(--color-surface-2);
   border-bottom: 1px solid var(--color-border);
