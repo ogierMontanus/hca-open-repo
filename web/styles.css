@@ -1,0 +1,167 @@
+:root {
+  --fg: #1a1a1a;
+  --muted: #6a6a6a;
+  --bg: #fafafa;
+  --panel: #ffffff;
+  --border: #e0e0e0;
+  --accent: #2a4d7a;
+  --accent-bg: #eaf0f8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+header h1 { margin: 0; font-size: 1.2rem; font-weight: 600; }
+.muted { color: var(--muted); font-size: 0.85em; }
+
+main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  height: calc(100vh - 64px);
+}
+
+#left {
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+}
+
+.left-controls {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+#search {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+#country-filter {
+  padding: 0.4rem 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+}
+.toggle {
+  font-size: 0.85em;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  user-select: none;
+  cursor: pointer;
+}
+.toggle input { margin: 0; }
+
+#place-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+#place-list li {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+#place-list li:hover { background: #f5f5f5; }
+#place-list li.selected { background: var(--accent-bg); color: var(--accent); }
+#place-list .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#place-list .count { color: var(--muted); font-variant-numeric: tabular-nums; }
+#place-list li.geocoded { background: #f8fbff; }
+#place-list li.geocoded:hover { background: #eef4ff; }
+#place-list li.geocoded.selected { background: var(--accent-bg); }
+#place-list li.geocoded .label { color: var(--accent); font-weight: 500; }
+#place-list .pin { color: var(--accent); font-size: 0.7rem; margin-right: 0.3rem; }
+#place-list .journey-tag {
+  font-size: 0.7rem;
+  background: var(--accent);
+  color: white;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-right: 0.4rem;
+}
+
+#right { padding: 1.25rem; overflow-y: auto; }
+#detail h2 { margin: 0 0 0.25rem 0; display: flex; align-items: baseline; gap: 0.6rem; }
+#detail h3 { margin: 1.5rem 0 0.5rem 0; font-size: 1rem; }
+.badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+#map-note.warn { color: #a05a00; }
+#journeys-list { list-style: none; margin: 0; padding: 0; }
+#journeys-list .journey {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.6rem;
+  background: #f8fbff;
+}
+#journeys-list .journey-title { font-weight: 600; }
+#journeys-list .journey-meta { font-size: 0.8em; }
+#journeys-list .journey-desc { font-size: 0.9em; margin: 0.25rem 0; }
+#journeys-list .leg-list {
+  list-style: disc inside;
+  margin: 0.25rem 0 0 0;
+  padding: 0;
+  font-size: 0.85em;
+  color: #444;
+}
+
+#map { height: 280px; border: 1px solid var(--border); border-radius: 6px; margin-top: 0.5rem; }
+
+#timeline {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 80px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 18px;
+  position: relative;
+}
+#timeline .bar { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; position: relative; }
+#timeline .fill { width: 100%; background: var(--accent); align-self: flex-end; min-height: 1px; }
+#timeline .year { position: absolute; bottom: -16px; font-size: 0.7rem; color: var(--muted); }
+
+#works-list, #visits-list { list-style: none; margin: 0; padding: 0; }
+#works-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+#visits-list li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.visit-date { font-weight: 600; margin-right: 0.5rem; }
+.visit-ref { color: var(--muted); font-size: 0.85em; }
+.visit-snippet { margin: 0.25rem 0 0 0; font-size: 0.9em; color: #333; }

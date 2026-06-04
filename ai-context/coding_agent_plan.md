@@ -2,7 +2,11 @@
 # Coding-Agent-Oriented Implementation Plan
 ## Cultural Entity Navigation Platform
 
-> **Related methodology docs:** see [`docs/data-model/`](../docs/data-model/) for the WEMI/FRBR rationale behind the entity schema and the printed-index conventions parsers must handle, and [`docs/pipeline/`](../docs/pipeline/) for the five-stage conversion pipeline from `raw/HCA-Repository V*.xlsx` to the normalised CSVs referenced in §4.
+> **Related methodology docs:** see [`docs/data-model/`](../docs/data-model/) for the WEMI/FRBR rationale behind the entity schema, the printed-index conventions parsers must handle, and the star-schema target (dimensions + facts) that supersedes the simple CSV layer described in §4. The conversion pipeline from `raw/HCA-Repository V*.xlsx` to the normalised CSVs and on to the Power Pivot MVP is in [`docs/pipeline/`](../docs/pipeline/).
+>
+> **Model evolution direction (per 2026-06-01 meeting):** CSV-first → **dimensions + facts (star schema)** → graph layer. The Power Query / Power Pivot model in Excel is the current MVP — embedded directly in the highest-versioned `raw/HCA-Repository V*.xlsx`. It validates the schema at full data scale before any web-stack investment. "Data quality before interface" — a smart frontend cannot rescue a weak grounding.
+>
+> **Web-facing target (per 2026-06-02 planning):** a very thin layer between data and presentation. The API exposes the star schema close to its physical shape; avoid heavy ORM / domain layers while the data model is still stabilising. First demo entity is **Places**.
 
 # 1. Primary Objective
 

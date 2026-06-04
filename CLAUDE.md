@@ -47,3 +47,33 @@ ud af 8 forsøg (fejlrate 75 %) ved ren hukommelsesbaseret gæt. Kun Q5686
 
 Udviklingsarbejde sker på branchen `claude/youthful-carson-XIZ5I`.
 Push aldrig direkte til `main` uden eksplicit godkendelse.
+
+---
+
+## Kortvisning — kortfliser via CARTO
+
+**Brugerpræference (2026-06-03):** Alle Leaflet-visninger (i `mockup/`,
+`web/` og senere implementeringer) bruger **CARTO Voyager** som
+flise-leverandør:
+
+```
+https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png
+```
+
+med `subdomains: 'abcd'`, `maxZoom: 19` og attribution
+
+```
+&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+contributors &copy; <a href="https://carto.com/attributions">CARTO</a>
+```
+
+**Begrundelse.** OpenStreetMap's frivilligt-drevne fliseservere
+(`tile.openstreetmap.org`) kræver en `Referer`-header per deres
+tile-usage-policy og blokerer requests uden en — også fra `file://`
+loads — med en 403r "Access blocked"-overlay (se `osm.wiki/Blocked`).
+CARTO's CDN leverer de samme OSM-data uden Referer-krav og fungerer
+derfor under både `file://` og senere HTTP-hosting.
+
+**Følg denne præference i kode:** brug ikke `tile.openstreetmap.org`
+direkte. Hvis en anden flise-leverandør overvejes (Stadia, MapTiler,
+Mapbox), bekræft med brugeren først.

@@ -8,7 +8,9 @@ The platform's data model is documented in [`docs/data-model/`](../data-model/).
 
 | File | Purpose |
 |---|---|
-| [`stages.md`](stages.md) | Five-stage pipeline: parse → TSV → OpenRefine → normalized CSV → optional Postgres load. Inputs, outputs, scripts, and constraints per stage |
+| [`stages.md`](stages.md) | Six-stage pipeline: slice → parse → OpenRefine → normalized CSV → star-schema model (Power Query / Power Pivot MVP) → optional Postgres warehouse. Inputs, outputs, scripts, and constraints per stage |
+
+The target data model that Stage 5 builds and Stage 6 promotes into a database is documented separately in [`docs/data-model/star-schema.md`](../data-model/star-schema.md).
 
 ## Where things live
 

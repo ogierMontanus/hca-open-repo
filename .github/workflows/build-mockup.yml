@@ -1,0 +1,73 @@
+name: Build HCA mockup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/raw/**'
+      - 'data/normalized/**'
+      - 'scripts/normalization/**'
+      - 'scripts/build_web/**'
+      - 'scripts/build_mockup/**'
+      - 'web/**'
+      - 'mockup/**'
+      - '.github/workflows/build-mockup.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f scripts/parsers/requirements.txt ]; then
+            pip install -r scripts/parsers/requirements.txt
+          fi
+          pip install openpyxl
+
+      - name: Stage 1a — xlsx to normalised CSVs
+        run: python scripts/normalization/hca_xlsx_to_csv.py
+
+      - name: Stage 1b — parse Rejser HTM add-on
+        run: python scripts/build_web/parse_rejser_htm.py
+        continue-on-error: true
+
+      - name: Stage 2 — CSVs to web JSON
+        run: python scripts/build_web/build_web_data.py
+
+      # Stage 3 — diary layer for the mockup. Both builders read the
+      # normalised CSVs from Stage 1a (references.csv, diary.csv,
+      # entities.csv). Their outputs are gitignored, so CI must regenerate
+      # them to ship the diary pages and index in the deployed site.
+      - name: Stage 3a — generate diary pages
+        run: python scripts/build_mockup/build_diary_pages.py
+
+      - name: Stage 3b — generate diary index + reverse-index JS
+        run: python scripts/build_mockup/build_diary_index.py
+
+      - name: Bundle static site
+        run: |
+          mkdir -p _site
+          cp -r web/* _site/
+          mkdir -p _site/mockup
+          cp -r mockup/* _site/mockup/
+          echo "Bundled $(find _site/mockup/diary-pages -name '*.html' | wc -l) diary pages"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hca-mockup
+          path: _site
+          retention-days: 30
+
+      # Deploy step is intentionally a stub — un-comment after the hosting
+      # choice is confirmed (see docs/data-model/october-pipeline.md §"Open
+      # items"). For GitHub Pages, replace the artifact upload above with
+      # actions/upload-pages-artifact and add an actions/deploy-pages step.

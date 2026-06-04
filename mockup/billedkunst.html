@@ -44,7 +44,7 @@
       <h2 class="section-title">Underkategorier (H3)</h2>
       <div class="subsection-grid" style="margin-bottom:var(--sp10)">
 
-        <a href="diaries.html?h2=BILLEDKUNST&h3=Malerier" class="subsection-card">
+        <a href="#h3-malerier" class="subsection-card">
           <h3>Malerier og Tegninger</h3>
           <p class="subsection-card__example">
             Sixtinske Madonna (Rafael) · Den hellige Nat (Correggio) ·
@@ -53,7 +53,7 @@
           <div class="subsection-card__stats">587 poster · 758 poster i dagbøgerne</div>
         </a>
 
-        <a href="diaries.html?h2=BILLEDKUNST&h3=Skulptur" class="subsection-card">
+        <a href="#h3-skulptur" class="subsection-card">
           <h3>Skulptur</h3>
           <p class="subsection-card__example">
             Den mediceiske Venus (Uffizi) · Laokoon-Gruppen (Vatikanet) ·
@@ -62,7 +62,7 @@
           <div class="subsection-card__stats">315 poster · 489 poster i dagbøgerne</div>
         </a>
 
-        <a href="diaries.html?h2=BILLEDKUNST&h3=Museer" class="subsection-card">
+        <a href="#h3-museer" class="subsection-card">
           <h3>Museer og Samlinger</h3>
           <p class="subsection-card__example">
             Louvre · Uffizi · Prado · Dresden Gemäldegalerie · Vatikanets Museer …
@@ -124,7 +124,7 @@
 
         <div>
           <div class="results-header">
-            <span class="results-count"><strong>941</strong> poster i Billedkunst</span>
+            <span class="results-count"><strong>941</strong> poster i Billedkunst &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— fedmarkerede kort = et eksempel pr. H3</span></span>
             <div class="layout-switcher">
               <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Gitter</button>
               <button class="layout-switcher__btn" data-layout="list">Liste</button>
@@ -133,59 +133,89 @@
 
           <div class="result-grid">
 
-            <a href="work.html" class="result-card">
-              <div class="result-card__thumb">Reg003004 · Maleri</div>
+            <!-- ★ Malerier og Tegninger — featured -->
+            <a id="h3-malerier" href="work.html?reg=Reg003004" class="result-card result-card--featured">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Raphael_-_The_Sistine_Madonna_-_Google_Art_Project.jpg" alt="Sixtinske Madonna" loading="lazy">
+              </div>
               <div class="result-card__body">
-                <div class="result-card__title">Sixtinske Madonna (Rafael, Dresden)</div>
-                <div class="result-card__meta">BILLEDKUNST · Malerier og Tegninger</div>
+                <div class="result-card__title">Sixtinske Madonna</div>
+                <div class="result-card__meta">Raffael · Malerier og Tegninger · Dresden</div>
                 <div class="result-card__chips">
                   <span class="chip chip--place">Dresden</span>
+                  <a href="https://www.wikidata.org/wiki/Q328079" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q328079</a>
                   <span style="font-size:0.7rem;color:var(--color-text-muted)">15 refs.</span>
                 </div>
               </div>
             </a>
 
-            <a href="work.html" class="result-card">
-              <div class="result-card__thumb">Reg000737 · Skulptur</div>
+            <!-- Malerier og Tegninger — secondary -->
+            <a href="work.html?reg=Reg000726" class="result-card">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Correggio_-_The_Holy_Night_-_Google_Art_Project.jpg" alt="Den hellige Nat" loading="lazy">
+              </div>
               <div class="result-card__body">
-                <div class="result-card__title">Den mediceiske Venus (Uffizi, Firenze)</div>
-                <div class="result-card__meta">BILLEDKUNST · Skulptur</div>
+                <div class="result-card__title">Den hellige Nat</div>
+                <div class="result-card__meta">Correggio · Malerier og Tegninger · Dresden</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Dresden</span>
+                  <a href="https://www.wikidata.org/wiki/Q1527541" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q1527541</a>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Malerier og Tegninger — secondary -->
+            <a href="work.html?reg=Reg002506" class="result-card">
+              <div class="result-card__thumb">Reg002506 · Maleri</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Niels Ebbesen og Grev Gert</div>
+                <div class="result-card__meta">Carl Bloch · Malerier og Tegninger</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--person">Carl Bloch</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- ★ Skulptur — featured -->
+            <a id="h3-skulptur" href="work.html?reg=Reg000737" class="result-card result-card--featured">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Venus_Uffizi.jpg" alt="Den mediceiske Venus" loading="lazy">
+              </div>
+              <div class="result-card__body">
+                <div class="result-card__title">Den mediceiske Venus</div>
+                <div class="result-card__meta">Kleomenes · Skulptur · Uffizi, Firenze</div>
                 <div class="result-card__chips">
                   <span class="chip chip--place">Firenze</span>
+                  <a href="https://www.wikidata.org/wiki/Q774967" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q774967</a>
                   <span style="font-size:0.7rem;color:var(--color-text-muted)">10 refs.</span>
                 </div>
               </div>
             </a>
 
-            <a href="work.html" class="result-card">
-              <div class="result-card__thumb">Reg002041 · Skulptur</div>
+            <!-- Skulptur — secondary -->
+            <a href="work.html?reg=Reg002041" class="result-card">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Laocoon_and_His_Sons.jpg" alt="Laokoon-Gruppen" loading="lazy">
+              </div>
               <div class="result-card__body">
-                <div class="result-card__title">Laokoon-Gruppen (Vatikanet, Rom)</div>
-                <div class="result-card__meta">BILLEDKUNST · Skulptur</div>
+                <div class="result-card__title">Laokoon-Gruppen</div>
+                <div class="result-card__meta">Skulptur · Vatikanet, Rom</div>
                 <div class="result-card__chips">
                   <span class="chip chip--place">Rom</span>
+                  <a href="https://www.wikidata.org/wiki/Q465762" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q465762</a>
                   <span style="font-size:0.7rem;color:var(--color-text-muted)">7 refs.</span>
                 </div>
               </div>
             </a>
 
-            <a href="work.html" class="result-card">
-              <div class="result-card__thumb">Reg000726 · Maleri</div>
-              <div class="result-card__body">
-                <div class="result-card__title">Den hellige Nat (Correggio, Dresden)</div>
-                <div class="result-card__meta">BILLEDKUNST · Malerier og Tegninger</div>
-                <div class="result-card__chips">
-                  <span class="chip chip--place">Dresden</span>
-                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
-                </div>
-              </div>
-            </a>
-
-            <a href="work.html" class="result-card">
+            <!-- Skulptur — secondary -->
+            <a href="work.html?reg=Reg000248" class="result-card">
               <div class="result-card__thumb">Reg000248 · Skulptur</div>
               <div class="result-card__body">
-                <div class="result-card__title">Apollo di Belvedere (Vatikanet, Rom)</div>
-                <div class="result-card__meta">BILLEDKUNST · Skulptur</div>
+                <div class="result-card__title">Apollo di Belvedere</div>
+                <div class="result-card__meta">Skulptur · Vatikanet, Rom</div>
                 <div class="result-card__chips">
                   <span class="chip chip--place">Rom</span>
                   <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
@@ -193,14 +223,39 @@
               </div>
             </a>
 
-            <a href="work.html" class="result-card">
-              <div class="result-card__thumb">Reg002506 · Maleri</div>
+            <!-- ★ Museer og Samlinger — featured -->
+            <a id="h3-museer" href="work.html?reg=Reg000924" class="result-card result-card--featured">
+              <div class="result-card__thumb">Reg000924 · Museum</div>
               <div class="result-card__body">
-                <div class="result-card__title">Niels Ebbesen og Grev Gert (Carl Bloch)</div>
-                <div class="result-card__meta">BILLEDKUNST · Malerier og Tegninger</div>
+                <div class="result-card__title">Gemäldegalerie Alte Meister</div>
+                <div class="result-card__meta">BILLEDKUNST · Museer og Samlinger · Dresden</div>
                 <div class="result-card__chips">
-                  <span class="chip chip--person">Carl Bloch</span>
-                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
+                  <span class="chip chip--place">Dresden</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">18 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="work.html?reg=Reg002024" class="result-card">
+              <div class="result-card__thumb">Reg002024 · Museum</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Louvre</div>
+                <div class="result-card__meta">BILLEDKUNST · Museer og Samlinger · Paris</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Paris</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">14 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="work.html?reg=Reg003454" class="result-card">
+              <div class="result-card__thumb">Reg003454 · Museum</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Uffizi</div>
+                <div class="result-card__meta">BILLEDKUNST · Museer og Samlinger · Firenze</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Firenze</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">11 refs.</span>
                 </div>
               </div>
             </a>

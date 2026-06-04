@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HCA — Places, Works, Persons</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>H. C. Andersen — index mockup</h1>
+    <nav id="tabs" role="tablist">
+      <button class="tab active" data-view="places" role="tab">Places</button>
+      <button class="tab" data-view="works" role="tab">Works</button>
+      <button class="tab disabled" data-view="persons" role="tab" disabled
+              title="Coming in step 2">Persons</button>
+    </nav>
+    <p id="manifest-line" class="muted">loading…</p>
+  </header>
+
+  <main>
+    <!-- ── Places view ─────────────────────────────────────────────── -->
+    <section id="view-places" class="view">
+      <aside class="left">
+        <div class="left-controls">
+          <input id="search-places" type="search" placeholder="Filter places…" autocomplete="off" />
+          <select id="country-filter">
+            <option value="">All countries</option>
+          </select>
+          <label class="toggle">
+            <input id="geocoded-only" type="checkbox" />
+            <span>Geocoded only</span>
+          </label>
+        </div>
+        <ol id="place-list" aria-label="Places, ranked by visit count"></ol>
+      </aside>
+
+      <article class="right">
+        <article id="place-detail" hidden>
+          <h2>
+            <span id="place-label-text"></span>
+            <span id="place-badge" class="badge" hidden>geocoded</span>
+          </h2>
+          <p id="place-meta" class="muted"></p>
+
+          <div id="map" aria-label="Map of selected place"></div>
+          <p id="map-note" class="muted"></p>
+
+          <section id="journeys-section" hidden>
+            <h3>Journeys passing through this place</h3>
+            <ol id="journeys-list"></ol>
+          </section>
+
+          <h3>Timeline of diary mentions</h3>
+          <div id="timeline" aria-label="Year histogram"></div>
+
+          <h3>Works co-occurring on the same diary pages</h3>
+          <p class="muted">
+            Placeholder for the Work↔Place edge from Sørens 2. register.
+            Currently computed from page-level co-occurrence.
+          </p>
+          <ol id="works-list-cooc"></ol>
+
+          <h3>Diary entries mentioning this place</h3>
+          <ol id="visits-list"></ol>
+        </article>
+
+        <p id="place-detail-empty" class="muted">Select a place to see its detail.</p>
+      </article>
+    </section>
+
+    <!-- ── Works view ──────────────────────────────────────────────── -->
+    <section id="view-works" class="view" hidden>
+      <aside class="left">
+        <div class="left-controls">
+          <input id="search-works" type="search" placeholder="Filter works…" autocomplete="off" />
+          <select id="form-filter">
+            <option value="">All forms</option>
+          </select>
+          <select id="language-filter">
+            <option value="">All languages</option>
+          </select>
+        </div>
+        <ol id="work-list" aria-label="Works"></ol>
+      </aside>
+
+      <article class="right">
+        <article id="work-detail" hidden>
+          <h2 id="work-label-text"></h2>
+          <p id="work-meta" class="muted"></p>
+
+          <section id="work-publication-section" hidden>
+            <h3>Publication</h3>
+            <p id="work-publication"></p>
+          </section>
+
+          <h3>Description</h3>
+          <p id="work-description" class="muted"></p>
+        </article>
+
+        <p id="work-detail-empty" class="muted">Select a work to see its detail.</p>
+      </article>
+    </section>
+  </main>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
