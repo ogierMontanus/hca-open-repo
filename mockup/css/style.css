@@ -586,3 +586,29 @@ main { flex: 1; }
 .mt-4 { margin-top: var(--sp4); }
 .mt-6 { margin-top: var(--sp6); }
 .mt-8 { margin-top: var(--sp8); }
+
+/* === Demo banner ============================================================
+ * Diagonal yellow ribbon in the upper-left corner, pinned to the viewport,
+ * applied via body::before so it appears on every page that loads this
+ * stylesheet — including the 4,500+ generated diary pages. Modelled on the
+ * "test-site" ribbon used on the hcandersen.dk test site.
+ * Remove this rule when the mockup goes live. */
+body::before {
+  content: "DEMO";
+  position: fixed;
+  top: 18px;
+  left: -48px;
+  width: 160px;
+  padding: 4px 0;
+  background: #ffd60a;
+  color: #1c1c28;
+  font: 700 0.78rem/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.22em;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  pointer-events: none;
+}

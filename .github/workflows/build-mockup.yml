@@ -14,9 +14,23 @@ on:
       - '.github/workflows/build-mockup.yml'
   workflow_dispatch:
 
+# GitHub Pages deployment permissions.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one in-flight Pages deployment at a time; queue new ones.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -71,16 +85,31 @@ jobs:
           cp -r web/* _site/
           mkdir -p _site/mockup
           cp -r mockup/* _site/mockup/
+          # Drop a small landing page at the root that points stakeholders
+          # straight at the demo mockup. Overrides any web/index.html so
+          # /hca-open-repo/ → mockup. The mockup also stays reachable at
+          # /hca-open-repo/mockup/ for direct links.
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <html lang="da">
+          <head>
+            <meta charset="utf-8">
+            <title>H.C. Andersen Dagbogsregister — DEMO</title>
+            <meta http-equiv="refresh" content="0; url=mockup/index.html">
+            <link rel="canonical" href="mockup/index.html">
+          </head>
+          <body style="font-family:system-ui,sans-serif;padding:2rem;max-width:38rem;margin:auto">
+            <p>Omdirigerer til <a href="mockup/index.html">demo-versionen af H.C. Andersen Dagbogsregister</a>…</p>
+          </body>
+          </html>
+          HTML
           echo "Bundled $(find _site/mockup/diary-pages -name '*.html' | wc -l) diary pages"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: hca-mockup
           path: _site
-          retention-days: 30
 
-      # Deploy step is intentionally a stub — un-comment after the hosting
-      # choice is confirmed (see docs/data-model/october-pipeline.md §"Open
-      # items"). For GitHub Pages, replace the artifact upload above with
-      # actions/upload-pages-artifact and add an actions/deploy-pages step.
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
