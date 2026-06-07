@@ -120,6 +120,80 @@
     }
     .landing-search-btn:hover { background: var(--color-accent-hover); }
 
+    /* Typeahead dropdown */
+    .landing-search-wrap {
+      position: relative;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+    .landing-search-wrap .landing-search-form { margin: 0; }
+    .typeahead {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg, 0 8px 24px rgba(0,0,0,0.12));
+      max-height: 60vh;
+      overflow-y: auto;
+      z-index: 30;
+      display: none;
+      text-align: left;
+    }
+    .typeahead--open { display: block; }
+    .typeahead__heading {
+      padding: 8px 14px 4px;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+    .typeahead__item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--color-text);
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.92rem;
+    }
+    .typeahead__item:last-child { border-bottom: none; }
+    .typeahead__item:hover,
+    .typeahead__item--active {
+      background: var(--color-accent-light);
+      text-decoration: none;
+    }
+    .typeahead__label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .typeahead__label mark { background: #fff3a8; color: inherit; padding: 0 1px; border-radius: 2px; }
+    .typeahead__type {
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .typeahead__type--p { background: #e7f0ff; color: #1d4ed8; }
+    .typeahead__type--s { background: #e8f7ec; color: #15803d; }
+    .typeahead__type--w { background: #fef0e3; color: #b45309; }
+    .typeahead__count {
+      font-size: 0.74rem;
+      color: var(--color-text-muted);
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+    .typeahead__empty {
+      padding: 16px 14px;
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
     /* Three-column section */
     .landing-three {
       padding: 0 0 var(--sp12);
@@ -273,13 +347,21 @@
     <div class="landing-hero__inner">
       <div class="landing-title">Andersen's</div>
       <div class="landing-subtitle">Hvem — hvad — hvor?</div>
-      <form class="landing-search-form" role="search" onsubmit="return false">
-        <input type="search"
-               class="landing-search-input"
-               placeholder="Jenny Lind · Rom · Improvisatoren · teater…"
-               aria-label="Søg på tværs af personer, steder, værker og emner">
-        <button type="submit" class="landing-search-btn">Søg</button>
-      </form>
+      <div class="landing-search-wrap">
+        <form class="landing-search-form" role="search" onsubmit="return false" autocomplete="off">
+          <input type="search"
+                 id="landing-search-input"
+                 class="landing-search-input"
+                 placeholder="Jenny Lind · Rom · Improvisatoren · teater…"
+                 aria-label="Søg på tværs af personer, steder, værker og emner"
+                 aria-autocomplete="list"
+                 aria-controls="landing-typeahead"
+                 autocomplete="off"
+                 spellcheck="false">
+          <button type="submit" class="landing-search-btn">Søg</button>
+        </form>
+        <div id="landing-typeahead" class="typeahead" role="listbox" aria-label="Forslag"></div>
+      </div>
     </div>
   </section>
 
@@ -367,6 +449,9 @@
     &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
+
+<script src="data/search-index.js" onerror="window.SEARCH_INDEX_MISSING=true"></script>
+<script src="js/landing-search.js"></script>
 
 </body>
 </html>

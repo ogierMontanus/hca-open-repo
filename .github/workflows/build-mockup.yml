@@ -79,6 +79,12 @@ jobs:
       - name: Stage 4c — places-extra.js (all places)
         run: python scripts/build_mockup/build_places_extra.py
 
+      # Stage 4d — slim search index for the landing-page typeahead.
+      # ~1.2 MB JS array over all 16,453 entities, sorted by ref count
+      # so the empty-state "popular" suggestions need no extra work.
+      - name: Stage 4d — search-index.js (landing typeahead)
+        run: python scripts/build_mockup/build_search_index.py
+
       - name: Bundle static site
         run: |
           mkdir -p _site
