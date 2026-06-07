@@ -23,3 +23,8 @@ mockup/data/diary-refs.js
 mockup/data/works-extra.js
 mockup/data/persons-extra.js
 mockup/data/places-extra.js
+
+# Local-only generated landing-page typeahead index (~1.2 MB) —
+# regenerate with scripts/build_mockup/build_search_index.py. The
+# search bar falls back to a plain text input when absent.
+mockup/data/search-index.js

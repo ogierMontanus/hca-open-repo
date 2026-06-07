@@ -38,6 +38,7 @@ tests/
 | `ai-context/project_memory_recap.md` | Origin, intellectual problem, conceptual evolution |
 | `docs/roadmap.md` | Phased roadmap from data encoding through frontend prototype |
 | `docs/inspiration/sampo-analysis.md` | UI/UX patterns drawn from the Finnish SAMPO portals |
+| `docs/inspiration/query-builder-survey.md` | Survey of open-source query-builder modules (GLAM/SAMPO, SPARQL/SQL GUIs, relational, library APIs) with ranked picks for Phase A and Phase B |
 | `docs/data-model/star-schema.md` | Star-schema target — dimensions, facts, the Power Pivot MVP, and the road to a Postgres warehouse |
 | `docs/data-model/wemi-and-relations.md` | Work / Expression boundary, alias vs. relation, hybrid relational + JSONB design |
 | `docs/data-model/source-data-characteristics.md` | Printed-index conventions a parser must handle (parens, names, `se:` / `Se ogsaa:`, special tokens) |

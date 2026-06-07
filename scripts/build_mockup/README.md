@@ -16,8 +16,9 @@ static HTML file or a `*.js` file that defines a global via a plain
 | `build_works_extra.py`   | `entities.csv`, `references.csv`                            | `mockup/data/works-extra.js`   (3,677 works)  | **no — gitignored** |
 | `build_persons_extra.py` | `entities.csv`, `references.csv`                            | `mockup/data/persons-extra.js` (10,228 persons) | **no — gitignored** |
 | `build_places_extra.py`  | `entities.csv`, `references.csv`, `rejser.tsv`              | `mockup/data/places-extra.js`  (2,508 places, ≈391 geocoded) | **no — gitignored** |
+| `build_search_index.py`  | `entities.csv`, `references.csv`                            | `mockup/data/search-index.js`  (~16,400 entities, ref-sorted) | **no — gitignored** |
 
-All five outputs are fully derived from the normalised CSVs, so they
+All six outputs are fully derived from the normalised CSVs, so they
 are excluded from git. The committed mockup pages **degrade
 gracefully**: when the generated data is absent they fall back to the
 hand-curated `WORKS` / `PERSONS` / `PLACES` dicts in
@@ -41,10 +42,11 @@ python scripts/build_all.py --skip-pages   # skip the slow 4,500-file diary HTML
 python scripts/build_all.py --only 4b      # rebuild just persons-extra.js
 ```
 
-The wrapper covers all eight stages — Stage 1a (xlsx → CSV), Stage 1b
+The wrapper covers all nine stages — Stage 1a (xlsx → CSV), Stage 1b
 (rejser geocodes, optional), Stage 2 (web JSON), Stage 3a/3b (diary
-pages + index), Stage 4a/4b/4c (works/persons/places extras). Stage
-1b's failure is non-fatal, mirroring CI.
+pages + index), Stage 4a/4b/4c (works/persons/places extras), Stage 4d
+(search index for the landing typeahead). Stage 1b's failure is
+non-fatal, mirroring CI.
 
 Then open `mockup/diaries.html`, `mockup/work.html?reg=Reg001260`,
 `mockup/person.html?reg=Reg0052440`, `mockup/place.html?reg=Reg0017430`,
@@ -64,7 +66,8 @@ data/normalized/*.csv
         ├── diary-refs.js               (build_diary_index.py)
         ├── works-extra.js              (build_works_extra.py)
         ├── persons-extra.js            (build_persons_extra.py)
-        └── places-extra.js             (build_places_extra.py)
+        ├── places-extra.js             (build_places_extra.py)
+        └── search-index.js             (build_search_index.py)
                 │
                 ▼
         ┌───────────────────────────────────────────────────────┐
@@ -73,6 +76,8 @@ data/normalized/*.csv
         │ Diary cards (DiaryWire) ← read DIARY_INDEX/DIARY_REFS │
         │   diaries.html + the sections embedded in work/person/place │
         │ Diary pages (static HTML) ← link to ?reg=… per entity │
+        │ Landing typeahead (js/landing-search.js) ← SEARCH_INDEX │
+        │   index.html — focus-on-load + live ?reg=… autocomplete │
         └───────────────────────────────────────────────────────┘
 ```
 
