@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var ys = document.getElementById('diary-year');
       var yearActive = ys && ys.value;
       var modeNote = yearActive
-        ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— omtaleår ' + ys.value + '</span>'
+        ? '<br><span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">omtaleår ' + ys.value + '</span>'
         : '';
       var showing = shown < total
         ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— viser ' + shown + '</span>'
