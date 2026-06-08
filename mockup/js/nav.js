@@ -1,4 +1,32 @@
-/* nav.js — layout switcher, facet toggles, facet group collapse */
+/* nav.js — layout switcher, facet toggles, facet group collapse,
+   and bootstrap of the shared header-search typeahead. */
+
+/* Load the search index + typeahead engine on every page that ships the
+   header search bar. nav.js is the one script included site-wide, so doing
+   it here lights up all inner pages (and the generated diary pages) without
+   editing each file. Paths are resolved from nav.js's own URL so it works
+   both at the mockup root and from the diary-pages/ subdirectory. */
+(function bootstrapSearch() {
+  if (!document.querySelector('.search-input')) return;  // no header bar here
+  var self = document.currentScript
+    || document.querySelector('script[src$="js/nav.js"]')
+    || document.querySelector('script[src*="nav.js"]');
+  var base = self ? self.src.replace(/js\/nav\.js.*$/, '') : '';
+
+  function addScript(src, onload) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.async = false;            // preserve execution order (index before engine)
+    if (onload) s.onload = onload;
+    s.onerror = onload || null; // engine still attaches (degrades) if index 404s
+    document.head.appendChild(s);
+  }
+
+  // Index first, then the engine — the engine reads the global at load time.
+  addScript(base + 'data/search-index.js', function () {
+    addScript(base + 'js/site-search.js');
+  });
+})();
 
 document.addEventListener('DOMContentLoaded', function () {
 

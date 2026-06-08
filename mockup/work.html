@@ -549,6 +549,35 @@ for (const [reg, w] of Object.entries(WORKS)) TITLE_TO_REG[w.title] = reg;
 const _PLACE_LABEL_REG = {};
 const _PERSON_LABEL_REG = {};
 const _PERSON_PREFIX_REG = {};   // matches "Dickens, Charles" → "Dickens, Charles (1812–1870)"
+const _PERSON_KEY_REG = {};      // surname+initials key → rid (for "Firstname Lastname" authors)
+const _PERSON_KEY_REFS = {};     // refs behind each key, so collisions pick the notable person
+
+// Canonical "surname|initials" key so an author written "Firstname Lastname"
+// (e.g. "Chr. E. F. Weyse", "H. C. ANDERSEN") matches a register label in
+// "Lastname, Firstname" order (e.g. "Weyse, C. E. F. (1774–1842)").
+function _nameKey(s) {
+  if (!s) return null;
+  s = s.split(/[\(\（\[]/)[0].trim();           // drop trailing dates / brackets
+  if (!s) return null;
+  let surname, given;
+  if (s.indexOf(',') !== -1) {
+    const parts = s.split(',');
+    surname = parts[0];
+    given = parts.slice(1).join(' ');
+  } else {
+    const toks = s.split(/\s+/).filter(Boolean);
+    if (!toks.length) return null;
+    surname = toks[toks.length - 1];
+    given = toks.slice(0, -1).join(' ');
+  }
+  const fold = x => x.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const sk = fold(surname).replace(/[^a-zæøå]/g, '');
+  if (!sk) return null;
+  const inits = fold(given).split(/[\s.]+/).filter(Boolean)
+    .map(t => t[0]).filter(Boolean).sort().join('');
+  return sk + '|' + inits;
+}
+
 if (typeof PLACES_EXTRA !== 'undefined') {
   for (const [rid, v] of Object.entries(PLACES_EXTRA)) {
     if (v.label) _PLACE_LABEL_REG[v.label] = rid;
@@ -560,6 +589,14 @@ if (typeof PERSONS_EXTRA !== 'undefined') {
     _PERSON_LABEL_REG[v.label] = rid;
     const m = v.label.match(/^(.+?)\s*[\(\（]/);
     if (m) _PERSON_PREFIX_REG[m[1].trim()] = rid;
+    const k = _nameKey(v.label);
+    if (k) {
+      const refs = v.refs || 0;
+      if (!(k in _PERSON_KEY_REG) || refs > _PERSON_KEY_REFS[k]) {
+        _PERSON_KEY_REG[k] = rid;
+        _PERSON_KEY_REFS[k] = refs;
+      }
+    }
   }
 }
 function placeHref(label) {
@@ -567,7 +604,11 @@ function placeHref(label) {
   return r ? 'place.html?reg=' + r : 'place.html';
 }
 function personHref(name) {
-  const r = _PERSON_LABEL_REG[name] || _PERSON_PREFIX_REG[name];
+  let r = _PERSON_LABEL_REG[name] || _PERSON_PREFIX_REG[name];
+  if (!r) {
+    const k = _nameKey(name);
+    if (k) r = _PERSON_KEY_REG[k];
+  }
   return r ? 'person.html?reg=' + r : 'person.html';
 }
 
