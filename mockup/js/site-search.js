@@ -132,6 +132,19 @@
     input.addEventListener('focus', function () { render(input.value.trim()); });
     input.addEventListener('input', function () { render(input.value.trim()); });
 
+    // Optional hover-to-preview: the landing hero opens its "Populære"
+    // curtain on mouseover instead of auto-opening on load, and retracts
+    // it when the pointer leaves — unless the field has been focused. Keeps
+    // the first-visit view uncluttered while the suggestions stay one
+    // hover (or click) away.
+    if (opts.hoverOpen) {
+      var hoverHost = input.form || input;
+      hoverHost.addEventListener('mouseenter', function () { render(input.value.trim()); });
+      hoverHost.addEventListener('mouseleave', function () {
+        if (document.activeElement !== input) close();
+      });
+    }
+
     input.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -195,7 +208,7 @@
     var landing = document.getElementById('landing-search-input');
     if (landing) {
       var ld = document.getElementById('landing-typeahead');
-      if (ld) attach(landing, ld, { autofocus: true, prefix: prefix });
+      if (ld) attach(landing, ld, { hoverOpen: true, prefix: prefix });
     }
 
     var inputs = document.querySelectorAll('.search-input');
