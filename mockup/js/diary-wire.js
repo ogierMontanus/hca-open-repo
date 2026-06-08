@@ -56,7 +56,6 @@ window.DiaryWire = (function () {
   }
 
   function titleFor(m) {
-    if (m.pl) return esc(m.pl) + (m.d ? ', ' + esc(m.d) : '');
     return 'Bind ' + esc(m.v || '?') + ', s. ' + esc(m.p || '?');
   }
 
