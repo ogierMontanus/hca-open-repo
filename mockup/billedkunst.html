@@ -80,6 +80,32 @@
             <button class="facet-panel__clear">Nulstil</button>
           </div>
 
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11.
+               "Omtaleår" slider = mention dates (1825–1875 diary period). "Begivenhedsdatoer"
+               = when the work was created or first exhibited — comes from year_derived but
+               not yet structured as entity_event; disabled. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention">
+            <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Årstal Andersen omtalte dette værk i dagbøgerne">Omtaledatoer</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Begivenhedsdatoer (skabt · udstillet) aktiveres, når entity_event-tabellen er udfyldt.">Begivenhedsdatoer</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                Årstal-filtret bruger <em>omtaledatoer</em> — hvornår Andersen nævnte værket i dagbøgerne. Begivenhedsdatoer (skabt, udstillet) aktiveres, når strukturerede entitetsdatoer er indlæst.
+              </div>
+            </div>
+          </div>
+
           <div class="facet-group">
             <div class="facet-group__header">Underkategori (H3) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
@@ -109,7 +135,7 @@
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
               <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
                 <span>1825</span>
