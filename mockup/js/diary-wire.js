@@ -66,8 +66,6 @@ window.DiaryWire = (function () {
    * whole card; chip links sit above it via z-index. */
   function cardFor(pag, chips) {
     var m = (hasMeta() && DIARY_META[pag]) || {};
-    var sub = (m.pl ? esc(m.pl) + ' · ' : '') +
-              'Bind ' + esc(m.v || '?') + ' · s. ' + esc(m.p || '?');
     var meta = (m.d || m.y || '—') + ' · ' + esc(pag);
     var chipMarkup = (chips || []).slice(0, 3).map(chipHtml).join('');
     var href = PAGES_DIR + esc(pag) + '.html';
@@ -76,9 +74,7 @@ window.DiaryWire = (function () {
       '<div class="result-card__body">' +
       '<div class="result-card__title">' + titleFor(m) + '</div>' +
       '<div class="result-card__meta">' + meta + '</div>' +
-      '<div class="result-card__chips">' + chipMarkup +
-      '<span style="font-size:0.68rem;color:var(--color-text-muted)">' + sub + '</span>' +
-      '</div></div></div>';
+      '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
   }
 
   /* --- diary-reference section for one register entry -------------------- */
@@ -135,8 +131,6 @@ window.DiaryWire = (function () {
 
     function rowCard(row) {
       var m = { v: row.v, p: row.p, d: row.d, y: row.y, pl: row.pl };
-      var sub = (row.pl ? esc(row.pl) + ' · ' : '') +
-                'Bind ' + esc(row.v) + ' · s. ' + esc(row.p);
       var chipMarkup = (row.c || []).slice(0, 3).map(chipHtml).join('');
       var href = PAGES_DIR + esc(row.h) + '.html';
       return '<div class="result-card">' +
@@ -144,9 +138,7 @@ window.DiaryWire = (function () {
         '<div class="result-card__body">' +
         '<div class="result-card__title">' + titleFor(m) + '</div>' +
         '<div class="result-card__meta">' + (row.d || row.y || '—') + ' · ' + esc(row.h) + '</div>' +
-        '<div class="result-card__chips">' + chipMarkup +
-        '<span style="font-size:0.68rem;color:var(--color-text-muted)">' + sub + '</span>' +
-        '</div></div></div>';
+        '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
     }
 
     function render(reset) {
