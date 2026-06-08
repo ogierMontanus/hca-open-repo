@@ -22,7 +22,6 @@ from collections import Counter
 ROOT     = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS     = os.path.join(ROOT, "data", "normalized", "references.csv")
-CURATED  = os.path.join(ROOT, "mockup", "person.html")
 OUT      = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
 
 # Life-dates parsed from labels like
@@ -58,21 +57,6 @@ def era_for(born: str | None, died: str | None) -> str | None:
     return "Efter 1900"
 
 
-def existing_ids() -> set[str]:
-    """Reg-IDs that already appear as keys in mockup/person.html's curated
-    `PERSONS` dict, so we don't override them from data."""
-    ids = set()
-    if not os.path.exists(CURATED):
-        return ids
-    with open(CURATED, encoding="utf-8") as f:
-        for line in f:
-            # Match either 'Reg…': or "Reg…":  — same shape as work.html
-            m = re.search(r"['\"](Reg\d+)['\"]\s*:", line)
-            if m:
-                ids.add(m.group(1))
-    return ids
-
-
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -92,14 +76,14 @@ def main() -> None:
                 ref_count[r["entity_id"]] += 1
         print(f"  reference counts loaded for {len(ref_count):,} entities")
 
-    skip = existing_ids()
-    print(f"  hand-curated PERSONS in person.html: {len(skip)} (will be preserved)")
-
+    # Emit one entry per person, INCLUDING IDs that mockup/person.html
+    # also curates. person.html's `ALL_PERSONS = Object.assign({},
+    # PERSONS_EXTRA, PERSONS)` still gives the hand-curated entries
+    # precedence; emitting the extras for them too lets EntityRefs
+    # (mockup/js/entity-refs.js) see the full register from any page.
     generated: dict[str, dict] = {}
     for r in persons:
         rid = r["entity_id"]
-        if rid in skip:
-            continue
         label = (r.get("label") or "").strip()
         born, died = parse_life(label)
         generated[rid] = {

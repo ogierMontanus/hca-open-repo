@@ -85,6 +85,13 @@ jobs:
       - name: Stage 4d — search-index.js (landing typeahead)
         run: python scripts/build_mockup/build_search_index.py
 
+      # Stage 4e — co-occurrence index for the reciprocal-link sections
+      # ("Hyppigste steder/personer") on person.html and place.html.
+      # Joins references.csv on (vol, page) and emits top-12 peers per
+      # entity, count >= 2.
+      - name: Stage 4e — cooccurrence.js (reciprocal links)
+        run: python scripts/build_mockup/build_cooccurrence.py
+
       - name: Bundle static site
         run: |
           mkdir -p _site

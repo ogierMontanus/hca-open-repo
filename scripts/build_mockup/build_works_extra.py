@@ -21,7 +21,6 @@ from collections import defaultdict
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
-EXISTING = os.path.join(ROOT, "mockup", "work.html")
 OUT = os.path.join(ROOT, "mockup", "data", "works-extra.js")
 
 PUB_PAREN_RE = re.compile(r"\(([^()]+?)\)")
@@ -55,18 +54,6 @@ def author_from(genre_h2, person_derived):
     return None
 
 
-def existing_ids():
-    ids = set()
-    if not os.path.exists(EXISTING):
-        return ids
-    with open(EXISTING, encoding="utf-8") as f:
-        for line in f:
-            m = re.search(r"'(Reg\d+)':", line)
-            if m:
-                ids.add(m.group(1))
-    return ids
-
-
 def main():
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -83,14 +70,15 @@ def main():
                 ref_count[r["entity_id"]] += 1
         print(f"  reference counts loaded for {len(ref_count):,} entities")
 
-    skip = existing_ids()
-    print(f"  hand-curated WORKS in work.html: {len(skip)} (will be preserved)")
-
+    # Generate one entry per work, INCLUDING IDs that mockup/work.html
+    # also curates. work.html's `ALL_WORKS = Object.assign({}, WORKS_EXTRA,
+    # WORKS)` still gives the hand-curated entries precedence; emitting the
+    # extras for them too makes EntityRefs (mockup/js/entity-refs.js) see
+    # the full catalogue from the other detail pages, where the curated
+    # `WORKS` object isn't in scope.
     generated = {}
     for r in rows:
         rid = r["entity_id"]
-        if rid in skip:
-            continue
         h2 = (r.get("genre_h2") or "").strip()
         h3 = (r.get("form_h3") or "").strip()
         wing, wing_label = wing_for(h2, h3)

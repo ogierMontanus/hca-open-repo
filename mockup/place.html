@@ -63,11 +63,18 @@
 </footer>
 
 <script src="js/nav.js"></script>
-<!-- Generated per-entity data (gitignored). Build with:
-     python3 scripts/build_mockup/build_places_extra.py -->
+<!-- Generated per-entity extras (gitignored). Build with the build_*_extra.py scripts.
+     places-extra.js powers the page itself; works-extra.js + persons-extra.js
+     are loaded so EntityRefs can render the "Værker" and "Personer" sections. -->
 <script src="data/places-extra.js" onerror="void 0"></script>
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
+<!-- Co-occurrence index for "Hyppigste …" sections (gitignored).
+     Build with: python scripts/build_mockup/build_cooccurrence.py -->
+<script src="data/cooccurrence.js" onerror="void 0"></script>
 <!-- Generated diary data (gitignored). Build with:
-     python3 scripts/build_mockup/build_diary_index.py -->
+     python scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
@@ -186,6 +193,69 @@ function escAttr(s) { return String(s == null ? '' : s)
     main += '<div><h2 class="section-title">Beskrivelse</h2>' +
       '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' +
       escAttr(pl.description) + '</p></div>';
+  }
+
+  // ── Værker knyttet til dette sted ───────────────────────────────────────
+  // Works whose title parenthetical names this place (e.g.
+  // "Den mediceiske Venus (Uffizi, Firenze)"). Section hides if empty.
+  const myWorks = (typeof EntityRefs !== 'undefined') ? EntityRefs.worksAtPlace(reg) : [];
+  if (myWorks.length) {
+    const byH3 = {};
+    for (const w of myWorks) {
+      const k = w.h3 || '—';
+      (byH3[k] = byH3[k] || []).push(w);
+    }
+    for (const k in byH3) byH3[k].sort((a, b) => (b.refs || 0) - (a.refs || 0));
+    const groups = Object.keys(byH3).sort((a, b) => {
+      const ra = byH3[a].reduce((s, w) => s + (w.refs || 0), 0);
+      const rb = byH3[b].reduce((s, w) => s + (w.refs || 0), 0);
+      return rb - ra;
+    });
+    let block = '<div><h2 class="section-title">Værker</h2>' +
+      '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+      myWorks.length + ' værk' + (myWorks.length === 1 ? '' : 'er') +
+      ' i registret er stedfæstet til ' + escAttr(pl.label) + '.</p>';
+    for (const h3 of groups) {
+      const items = byH3[h3];
+      block += '<div style="margin-bottom:var(--sp5)">' +
+        '<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;' +
+        'letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:8px">' +
+        escAttr(h3) + ' <span style="opacity:0.7">(' + items.length + ')</span></div>' +
+        '<ul style="list-style:none;padding:0;margin:0;display:grid;' +
+        'grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 16px;font-size:0.88rem">';
+      const visible = items.slice(0, 12);
+      for (const w of visible) {
+        block += '<li><a href="' + escAttr(EntityRefs.workHrefByRid(w.rid)) +
+          '" style="color:var(--color-text)">' + escAttr(w.title) + '</a>' +
+          (w.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' +
+            w.refs + ' ref.</span>' : '') + '</li>';
+      }
+      if (items.length > visible.length) {
+        block += '<li style="color:var(--color-text-muted);font-style:italic">' +
+          '+ ' + (items.length - visible.length) + ' yderligere</li>';
+      }
+      block += '</ul></div>';
+    }
+    block += '</div>';
+    main += block;
+  }
+
+  // ── Hyppigste personer ──────────────────────────────────────────────────
+  // Top persons that co-occur with this place on the same diary page.
+  const topPersons = (typeof PLACE_TOP_PERSONS !== 'undefined' && PLACE_TOP_PERSONS[reg]) || [];
+  if (topPersons.length) {
+    let block = '<div><h2 class="section-title">Hyppigste personer</h2>' +
+      '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+      'Personer der oftest nævnes på samme dagbogsside som ' + escAttr(pl.label) + '.</p>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:6px">';
+    for (const [prid, n] of topPersons) {
+      const lab = (typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[prid] && PERSONS_EXTRA[prid].label) || prid;
+      block += '<a href="' + escAttr(EntityRefs.personHrefByRid(prid)) +
+        '" class="chip chip--person" style="font-size:0.82rem">' +
+        escAttr(lab) + ' <span style="opacity:0.7;font-size:0.74rem">· ' + n + '</span></a>';
+    }
+    block += '</div></div>';
+    main += block;
   }
 
   main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +

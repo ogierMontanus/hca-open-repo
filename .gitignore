@@ -24,3 +24,9 @@ mockup/data/works-extra.js
 mockup/data/persons-extra.js
 mockup/data/places-extra.js
 
+# Local-only co-occurrence index (~770 KB) — regenerate with
+# scripts/build_mockup/build_cooccurrence.py. The "Hyppigste steder /
+# personer" sections on person.html and place.html hide silently when
+# this file is absent.
+mockup/data/cooccurrence.js
+

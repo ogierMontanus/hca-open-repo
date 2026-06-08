@@ -18,7 +18,6 @@ scripts/build_web/parse_rejser_htm.py.
 import csv
 import json
 import os
-import re
 import sys
 from collections import Counter
 
@@ -26,7 +25,6 @@ ROOT     = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS     = os.path.join(ROOT, "data", "normalized", "references.csv")
 REJSER   = os.path.join(ROOT, "data", "normalized", "rejser.tsv")
-CURATED  = os.path.join(ROOT, "mockup", "place.html")
 OUT      = os.path.join(ROOT, "mockup", "data", "places-extra.js")
 
 # Reuse the 33-country bounding-box gazetteer from build_web_data.py.
@@ -79,18 +77,6 @@ def country_for(lat: float, lon: float) -> str | None:
     return candidates[0][0]
 
 
-def existing_ids() -> set[str]:
-    ids = set()
-    if not os.path.exists(CURATED):
-        return ids
-    with open(CURATED, encoding="utf-8") as f:
-        for line in f:
-            m = re.search(r"['\"](Reg\d+)['\"]\s*:", line)
-            if m:
-                ids.add(m.group(1))
-    return ids
-
-
 def load_rejser_geocodes() -> dict[str, dict]:
     """Returns {casefolded_label: {lat, lon, country_da, destination_en}}.
     Indexed by both Destination_DA and Destination_EN so case-insensitive
@@ -141,15 +127,15 @@ def main() -> None:
     geo = load_rejser_geocodes()
     print(f"  rejser gazetteer: {len(geo):,} place-name keys")
 
-    skip = existing_ids()
-    print(f"  hand-curated PLACES in place.html: {len(skip)} (will be preserved)")
-
+    # Emit one entry per place, INCLUDING IDs that mockup/place.html
+    # also curates. place.html's `ALL_PLACES = Object.assign({},
+    # PLACES_EXTRA, PLACES)` still gives the hand-curated entries
+    # precedence; emitting the extras for them too lets EntityRefs
+    # (mockup/js/entity-refs.js) see the full register from any page.
     generated: dict[str, dict] = {}
     geo_hits = 0
     for r in places:
         rid = r["entity_id"]
-        if rid in skip:
-            continue
         label = (r.get("label") or "").strip()
         rec = {
             "label":       label,

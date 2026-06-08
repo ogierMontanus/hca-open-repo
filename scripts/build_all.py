@@ -36,6 +36,7 @@ STAGES = [
     ("4b", "persons-extra.js",             "scripts/build_mockup/build_persons_extra.py", False),
     ("4c", "places-extra.js",              "scripts/build_mockup/build_places_extra.py", False),
     ("4d", "search-index.js (typeahead)",  "scripts/build_mockup/build_search_index.py", False),
+    ("4e", "cooccurrence.js (reciprocal)", "scripts/build_mockup/build_cooccurrence.py", False),
 ]
 
 
