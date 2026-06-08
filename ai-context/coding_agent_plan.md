@@ -170,6 +170,32 @@ Optional temporal aggregation layer.
 
 ---
 
+### entity_event.csv
+Structured representation of dates that belong to an entity's own life
+cycle, replacing the flat `birth_year` / `death_year` / `date_start` /
+`date_end` columns once dual chronology (§11) is wired. See
+[`docs/data-model/temporal-modelling.md`](../docs/data-model/temporal-modelling.md)
+for the rationale and the mapping from today's `year_derived` /
+`date_derived` columns.
+
+Fields:
+- event_id
+- entity_id
+- event_type   (birth · death · publication · reprint · composition ·
+                premiere · performance · creation · exhibition ·
+                foundation · closure · …)
+- date_start   (ISO-8601; day / month / year precision)
+- date_end     (equals date_start for point events)
+- precision    (day · month · year · decade · century)
+- source       (short citation, optional)
+
+Mention dates (when Andersen referred to the entity) do **not** live in
+this table. They are already represented by joins between
+`references.csv` and a date-bearing source table (today `diary.csv`;
+future `almanac.csv`, `notebook.csv`, `letter.csv`).
+
+---
+
 # 5. Frontend Navigation Model
 
 ## Homepage
@@ -282,6 +308,78 @@ Support:
 
 Potential future:
 interactive timelines.
+
+## 11.1 Two date families
+
+Every temporal control operates on one of two top-level families. They
+are never silently merged. See
+[`docs/data-model/temporal-modelling.md`](../docs/data-model/temporal-modelling.md)
+for the conceptual model.
+
+- **Entity Dates** — events in the life cycle of the entity itself
+  (birth/death, publication/reprint, composition/premiere/performance,
+  creation/exhibition, foundation/closure). Subtype detail is preserved
+  internally but exposed under one grouped "Entity Dates" concept in the
+  primary UI.
+- **Mention Dates** — when Andersen referred to the entity (diary today;
+  almanacs, notebooks, letters in future). Independent of the entity's
+  own chronology; queryable as first-class data.
+
+A book published in 1820 may be mentioned in 1860; a person born in 1780
+may be mentioned in 1855. The two questions must be answered
+independently.
+
+## 11.2 Required UI behaviour
+
+1. **Temporal-mode selector.** Wherever a date filter, slider,
+   histogram, timeline, or facet appears, a control selects which
+   family is active. The active family is always visible to the reader.
+2. **Explicit default.** The default mode is stated, not implicit.
+   Switching mode updates URL/state so a shared link reproduces the
+   same view.
+3. **Entity-type-aware labels.** When `entity_dates` is active, labels
+   match the entity type:
+   - Person → Født · Død
+   - Book → Udgivet · Genoptryk
+   - Theatre / opera / ballet → Premiere · Opførelse
+   - Painting / sculpture → Skabt · Udstillet
+   - Institution → Stiftet · Lukket
+   - Place → optional historical dates
+   Mention-date labels stay constant ("Omtalt").
+4. **Grouped exposure, typed storage.** Internally preserve the
+   detailed `event_type`; group it under "Entity Dates" in the primary
+   UI. Advanced query (Sampo-style query builder) may still pivot on
+   typed events.
+5. **Entity cards and detail pages.** Show entity-specific dates
+   first (Født, Udgivet, Premiere …), then a separate mention
+   chronology block. Never mix them in the same line.
+6. **Timelines support independent layers.** Components are designed
+   from the outset for two layers: an entity timeline and a mention
+   timeline, switchable, with a future combined overlay.
+7. **Search facets disambiguate.** Date facets and search filters say
+   which category they are using (`Født: 1805`, `Mentioned: 1844–1848`).
+   A reader is never left uncertain whether a year refers to the entity
+   or to Andersen's reference to it.
+8. **Mention dates are first-class.** Treat them as queryable temporal
+   data, not annotations attached to entity events. Mention histograms,
+   density-by-year, and per-source breakdowns are valid analytics on
+   their own.
+
+## 11.3 Underlying architecture
+
+The schema must distinguish:
+
+- entity type (person, place, work)
+- entity subtype (book, theatre, painting, …) — drives event-label set
+- entity event dates → `entity_event` table (see §4 and
+  [`docs/data-model/temporal-modelling.md`](../docs/data-model/temporal-modelling.md))
+- mention dates → `references.csv ⋈ diary.csv` (and future
+  almanac/notebook/letter join tables)
+
+This is likely to become a core organising principle of the diary-index
+UI because it separates the chronology of the world being described
+from the chronology of Andersen's observation and recording of that
+world.
 
 ---
 
