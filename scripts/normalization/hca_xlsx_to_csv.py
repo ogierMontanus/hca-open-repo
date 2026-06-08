@@ -102,10 +102,21 @@ def write_csv(path, fieldnames, rows):
 def normalize_registry(rows):
     """Registry → entities.csv"""
     out = []
+    seen = set()
+    dropped = 0
     for r in rows:
         pk = r.get("PKRegistryTitelID") or r.get("PKRegistryTitelID ")
         if not pk:
             continue
+        # PKRegistryTitelID is the register primary key — it must be unique.
+        # The source sheet carries a handful of exact-duplicate rows (e.g.
+        # Reg003600, Reg003675, Reg001907 each appear 4×); keep the first and
+        # drop the rest so downstream counts reflect distinct register entries.
+        pk_key = str(pk).strip()
+        if pk_key in seen:
+            dropped += 1
+            continue
+        seen.add(pk_key)
         cat_raw = r.get("RegistryCategory (H1)", "") or ""
         entity_type = CATEGORY_MAP.get(cat_raw.strip(), "unknown")
         out.append({
@@ -123,6 +134,8 @@ def normalize_registry(rows):
             "date_derived": (r.get("DateDerived") or "").strip(),
             "person_derived": (r.get("PersonDerived") or "").strip(),
         })
+    if dropped:
+        print(f"  dropped {dropped} duplicate register row(s) (duplicate PKRegistryTitelID)")
     return out
 
 
