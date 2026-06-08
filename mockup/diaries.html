@@ -47,8 +47,36 @@
             <button class="facet-panel__clear">Nulstil</button>
           </div>
 
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md.
+               Diary pages are mentions by definition (a diary page IS Andersen
+               writing on that date), so only "Omtaledatoer" is applicable here.
+               The disabled "Begivenhedsdatoer" pill keeps the dual-family model
+               visible and prepares readers for person/work pages where it
+               becomes active. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention">
+            <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Datoen Andersen skrev dagbogssiden">Omtaledatoer</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Begivenhedsdatoer (født · udgivet · premiere …) hører til de omtalte enheder, ikke til dagbogssiderne. Vælges på person-, sted- og værksider.">Begivenhedsdatoer</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                Datoer på dagbogssider er pr. definition omtaledatoer — datoen Andersen skrev. Begivenhedsdatoer (født, død, udgivet, premiere …) tilhører de omtalte enheder og vælges på deres respektive sider.
+              </div>
+            </div>
+          </div>
+
           <div class="facet-group">
-            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
               <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
                 <span>1825</span>
@@ -57,7 +85,7 @@
                 <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
                 <span>1875</span>
               </div>
-              <div style="font-size:0.73rem;color:var(--color-text-muted);text-align:center;margin-top:6px">Alle år valgt</div>
+              <div style="font-size:0.73rem;color:var(--color-text-muted);text-align:center;margin-top:6px">Alle omtaleår valgt</div>
             </div>
           </div>
 
@@ -129,8 +157,11 @@
           <div id="diary-toolbar" style="display:none;gap:10px;margin-bottom:var(--sp5);flex-wrap:wrap">
             <input type="search" id="diary-filter" placeholder="Filtrér på sted, person, værk eller Pag-id…"
                    style="flex:1;min-width:220px;padding:7px 12px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
-            <select id="diary-year" style="padding:7px 12px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
-              <option value="">Alle år</option>
+            <select id="diary-year"
+                    aria-label="Filtrer på omtaleår (datoen Andersen skrev)"
+                    title="Omtaleår — datoen Andersen skrev dagbogssiden"
+                    style="padding:7px 12px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
+              <option value="">Alle omtaleår</option>
             </select>
           </div>
 
@@ -253,9 +284,19 @@ document.addEventListener('DOMContentLoaded', function () {
     pageSize: 60,
     moreBtn: document.getElementById('diary-more'),
     onCount: function (shown, total) {
+      // Surface the active temporal mode when a year filter is applied, so
+      // a reader always knows whether the result count is constrained on
+      // mention dates or entity dates (mention only on this page).
+      var ys = document.getElementById('diary-year');
+      var yearActive = ys && ys.value;
+      var modeNote = yearActive
+        ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— omtaleår ' + ys.value + '</span>'
+        : '';
+      var showing = shown < total
+        ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— viser ' + shown + '</span>'
+        : '';
       document.getElementById('diary-count').innerHTML =
-        '<strong>' + total.toLocaleString('da-DK') + '</strong> dagbogssider' +
-        (shown < total ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— viser ' + shown + '</span>' : '');
+        '<strong>' + total.toLocaleString('da-DK') + '</strong> dagbogssider' + modeNote + showing;
     }
   });
   if (!ctrl) return;  // no generated data → keep the static sample cards
