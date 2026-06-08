@@ -1,5 +1,7 @@
 # Cultural Entity Navigation Platform
 
+**Live mockup:** https://ogiermontanus.github.io/hca-open-repo/
+
 A modular web platform for exploring named entities across cultural collections — museums, libraries, archives, theaters, and film collections — through institutionally familiar navigation and semantically rich cross-linking.
 
 ## Vision
