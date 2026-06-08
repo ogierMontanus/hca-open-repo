@@ -3,12 +3,15 @@
 build_cooccurrence.py
 ---------------------
 Builds the co-occurrence index that powers the reciprocal-link sections
-on mockup/person.html and mockup/place.html:
+on mockup/person.html, mockup/place.html, and the data-driven coPlaces /
+coWorks fallback on mockup/work.html:
 
-  • PERSON_TOP_PLACES  : { person_rid: [[place_rid, count], …] }   (cap 12)
-  • PERSON_TOP_PERSONS : { person_rid: [[person_rid, count], …] }  (cap 12)
-  • PLACE_TOP_PERSONS  : { place_rid:  [[person_rid, count], …] }  (cap 12)
-  • PLACE_TOP_PLACES   : { place_rid:  [[place_rid, count], …] }   (cap 12)
+  • PERSON_TOP_PLACES  : { person_rid: [[place_rid,  count], …] }   (cap 12)
+  • PERSON_TOP_PERSONS : { person_rid: [[person_rid, count], …] }   (cap 12)
+  • PLACE_TOP_PERSONS  : { place_rid:  [[person_rid, count], …] }   (cap 12)
+  • PLACE_TOP_PLACES   : { place_rid:  [[place_rid,  count], …] }   (cap 12)
+  • WORK_TOP_PLACES    : { work_rid:   [[place_rid,  count], …] }   (cap 12)
+  • WORK_TOP_WORKS     : { work_rid:   [[work_rid,   count], …] }   (cap 12)
 
 Two entities co-occur once per diary page they both appear on (per
 references.csv). Counts are page-level, not occurrence-level: the same
@@ -47,12 +50,14 @@ def main() -> None:
                 etype[r["entity_id"]] = t
     print(f"  loaded {len(etype):,} entity types")
 
-    # (vol, page) → set of {person|place}_rids on that physical diary page.
-    # Note: references.csv's `page_id` column is a per-row primary key
-    # (one Pag* id per entity-on-page reference); the physical page is
-    # identified by (vol, page) — that's the join key for co-occurrence.
+    # (vol, page) → set of {person|place|work}_rids on that physical
+    # diary page. Note: references.csv's `page_id` column is a per-row
+    # primary key (one Pag* id per entity-on-page reference); the physical
+    # page is identified by (vol, page) — that's the join key for
+    # co-occurrence.
     persons_on_page: dict[tuple, set[str]] = defaultdict(set)
     places_on_page:  dict[tuple, set[str]] = defaultdict(set)
+    works_on_page:   dict[tuple, set[str]] = defaultdict(set)
     with open(REFS, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             rid = row.get("entity_id")
@@ -64,18 +69,24 @@ def main() -> None:
                 persons_on_page[key].add(rid)
             elif t == "place":
                 places_on_page[key].add(rid)
+            elif t == "work":
+                works_on_page[key].add(rid)
     print(f"  pages with persons: {len(persons_on_page):,}  "
-          f"pages with places: {len(places_on_page):,}")
+          f"pages with places: {len(places_on_page):,}  "
+          f"pages with works: {len(works_on_page):,}")
 
     person_place: dict[str, Counter] = defaultdict(Counter)
     person_person: dict[str, Counter] = defaultdict(Counter)
     place_person: dict[str, Counter] = defaultdict(Counter)
     place_place:  dict[str, Counter] = defaultdict(Counter)
+    work_place:   dict[str, Counter] = defaultdict(Counter)
+    work_work:    dict[str, Counter] = defaultdict(Counter)
 
-    pages = set(persons_on_page) | set(places_on_page)
+    pages = set(persons_on_page) | set(places_on_page) | set(works_on_page)
     for pid in pages:
         ppl = persons_on_page.get(pid) or set()
         pls = places_on_page.get(pid) or set()
+        wks = works_on_page.get(pid) or set()
 
         # person ↔ place
         for pr in ppl:
@@ -97,6 +108,18 @@ def main() -> None:
                 place_place[a][b] += 1
                 place_place[b][a] += 1
 
+        # work → place (one-way; works.html consumes WORK_TOP_PLACES)
+        for wk in wks:
+            for pl in pls:
+                work_place[wk][pl] += 1
+
+        # work ↔ work (skip self-pair)
+        wks_list = list(wks)
+        for i, a in enumerate(wks_list):
+            for b in wks_list[i + 1:]:
+                work_work[a][b] += 1
+                work_work[b][a] += 1
+
     def top(c: Counter) -> list[list]:
         return [[rid, n] for rid, n in c.most_common(CAP) if n >= MIN_COUNT]
 
@@ -110,6 +133,8 @@ def main() -> None:
         "PERSON_TOP_PERSONS": trim(person_person),
         "PLACE_TOP_PERSONS":  trim(place_person),
         "PLACE_TOP_PLACES":   trim(place_place),
+        "WORK_TOP_PLACES":    trim(work_place),
+        "WORK_TOP_WORKS":     trim(work_work),
     }
     counts = {k: len(v) for k, v in payload.items()}
 

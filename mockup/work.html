@@ -93,6 +93,9 @@
 <script src="data/persons-extra.js" onerror="void 0"></script>
 <script src="data/places-extra.js" onerror="void 0"></script>
 <script src="js/entity-refs.js"></script>
+<!-- Co-occurrence index — lights up coPlaces / coWorks on auto-generated
+     works. Curated WORKS entries still win. -->
+<script src="data/cooccurrence.js" onerror="void 0"></script>
 <!-- Generated diary data (gitignored). Build with:
      python scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
@@ -572,6 +575,28 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     return;
   }
 
+  // Derive co-place / co-work fallbacks from cooccurrence.js when the
+  // curated WORKS entry didn't supply them. Curated wins; this lights up
+  // the same render path for the ~3,700 auto-generated works too.
+  let coPlaces = (w.coPlaces && w.coPlaces.length) ? w.coPlaces : null;
+  if (!coPlaces && typeof WORK_TOP_PLACES !== 'undefined' && WORK_TOP_PLACES[reg]) {
+    coPlaces = WORK_TOP_PLACES[reg].map(([prid, n]) => {
+      const pe = (typeof PLACES_EXTRA !== 'undefined') ? PLACES_EXTRA[prid] : null;
+      return {
+        rid: prid,
+        label: (pe && pe.label) || prid,
+        count: n + ' gange'
+      };
+    });
+  }
+  let coWorks = (w.coWorks && w.coWorks.length) ? w.coWorks : null;
+  if (!coWorks && typeof WORK_TOP_WORKS !== 'undefined' && WORK_TOP_WORKS[reg]) {
+    coWorks = WORK_TOP_WORKS[reg].map(([wrid, n]) => {
+      const we = (typeof WORKS_EXTRA !== 'undefined') ? WORKS_EXTRA[wrid] : null;
+      return { rid: wrid, title: (we && we.title) || wrid, count: n };
+    });
+  }
+
   document.title = w.title + ' — H.C. Andersen Dagbogsregister';
 
   // Breadcrumb
@@ -638,11 +663,12 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   }
 
   // 5. Hyppigst samtidige steder
-  if (w.coPlaces && w.coPlaces.length) {
+  if (coPlaces && coPlaces.length) {
     sb += `<div class="sidebar-box"><div class="sidebar-box__title">Hyppigst samtidige steder</div><div style="display:flex;flex-direction:column;gap:6px">`;
-    for (const pl of w.coPlaces) {
+    for (const pl of coPlaces) {
+      const href = pl.rid ? EntityRefs.placeHrefByRid(pl.rid) : placeHref(pl.label);
       sb += `<div style="display:flex;justify-content:space-between;align-items:center">`;
-      sb += `<span style="display:inline-flex;align-items:center;gap:4px"><a href="${placeHref(pl.label)}" class="chip chip--place">${pl.label}</a>`;
+      sb += `<span style="display:inline-flex;align-items:center;gap:4px"><a href="${href}" class="chip chip--place">${pl.label}</a>`;
       if (pl.wd) sb += `<a href="https://www.wikidata.org/wiki/${pl.wd}" class="wd-badge" target="_blank" rel="noopener" title="${pl.label} på Wikidata">${pl.wd}</a>`;
       sb += `</span><span style="font-size:0.75rem;color:var(--color-text-muted)">${pl.count}</span></div>`;
     }
@@ -684,12 +710,15 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   main += `<div id="js-reg-diary" style="margin-top:var(--sp8)"></div>`;
 
   // Co-occurring works
-  if (w.coWorks && w.coWorks.length) {
+  if (coWorks && coWorks.length) {
     main += `<div style="margin-top:var(--sp8)"><h2 class="section-title">Samtidige værker</h2><p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Værker der optræder i de samme dagbogsider som ${w.title}</p><div class="network-chips">`;
-    for (const cw of w.coWorks) {
-      const cwReg = TITLE_TO_REG[cw];
-      const cwHref = cwReg ? `work.html?reg=${cwReg}` : 'work.html';
-      main += `<a href="${cwHref}" class="chip" style="background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${cw}</a>`;
+    for (const cw of coWorks) {
+      // Two shapes: curated coWorks = bare title string; derived = {rid, title, count}.
+      const title = (typeof cw === 'string') ? cw : cw.title;
+      const cwHref = (typeof cw === 'object' && cw.rid)
+        ? EntityRefs.workHrefByRid(cw.rid)
+        : (TITLE_TO_REG[title] ? `work.html?reg=${TITLE_TO_REG[title]}` : EntityRefs.workHref(title));
+      main += `<a href="${cwHref}" class="chip" style="background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${title}</a>`;
     }
     main += `</div></div>`;
   }
