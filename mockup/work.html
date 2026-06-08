@@ -415,6 +415,15 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     });
   }
 
+  // Source-derived fields (year_derived / date_derived / see / see_also) live
+  // on the generated WORKS_EXTRA entry. Curated WORKS rarely set them, so fall
+  // back to the extra record for the same reg.
+  const wx = (typeof WORKS_EXTRA !== 'undefined') ? WORKS_EXTRA[reg] : null;
+  const dispYear = w.year || (wx && wx.year) || null;
+  const dispDate = w.date || (wx && wx.date) || null;
+  const seeRefs = (w.see && w.see.length) ? w.see : (wx && wx.see) || [];
+  const seeAlsoRefs = (w.seeAlso && w.seeAlso.length) ? w.seeAlso : (wx && wx.seeAlso) || [];
+
   document.title = w.title + ' — H.C. Andersen Dagbogsregister';
 
   // Breadcrumb
@@ -453,6 +462,11 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     sb += `</dd>`;
   }
   if (w.lang) sb += `<dt>Originalsprog</dt><dd>${w.lang}</dd>`;
+  if (dispDate) {
+    sb += `<dt>Dateret</dt><dd>${dispDate}</dd>`;
+  } else if (dispYear) {
+    sb += `<dt>År</dt><dd>${dispYear}</dd>`;
+  }
   sb += `<dt>Antal refs.</dt><dd>${w.refs}</dd>`;
   sb += `</dl></div>`;
 
@@ -470,6 +484,20 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     sb += `</div>`;
     if (w.author) sb += `<div style="margin-top:var(--sp3);font-size:0.78rem"><a href="${personHref(w.author)}" style="color:var(--color-accent)">← Alle værker af ${w.author}</a></div>`;
     sb += `</div>`;
+  }
+
+  // 3b. Krydshenvisninger (see / see_also fra registret)
+  if ((seeRefs && seeRefs.length) || (seeAlsoRefs && seeAlsoRefs.length)) {
+    const refRow = (ref, verb) => {
+      const inner = ref.rid
+        ? `<a href="work.html?reg=${ref.rid}" class="chip" style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${ref.label}</a>`
+        : `<span class="chip" style="font-size:0.78rem" title="Ingen registerpost fundet">${ref.label}</span>`;
+      return `<div style="display:flex;gap:6px;align-items:center"><span style="font-size:0.72rem;color:var(--color-text-muted);min-width:3.6em">${verb}</span>${inner}</div>`;
+    };
+    sb += `<div class="sidebar-box"><div class="sidebar-box__title">Krydshenvisninger</div><div style="display:flex;flex-direction:column;gap:6px">`;
+    for (const r of (seeRefs || [])) sb += refRow(r, 'Se');
+    for (const r of (seeAlsoRefs || [])) sb += refRow(r, 'Se også');
+    sb += `</div></div>`;
   }
 
   // 4. Autoritetslinks

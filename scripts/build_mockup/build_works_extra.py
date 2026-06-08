@@ -26,6 +26,23 @@ OUT = os.path.join(ROOT, "mockup", "data", "works-extra.js")
 PUB_PAREN_RE = re.compile(r"\(([^()]+?)\)")
 YEAR_RE = re.compile(r"\b(1[5-9]\d{2})\b")
 
+# Strip a "se:" / "Se ogsaa:" redirect tail and surrounding punctuation so a
+# cross-reference target ("Krøblingen") can be matched against the head of a
+# fuller entry label ("Krøblingen (Eventyrbogen)").
+SEE_TAIL_RE = re.compile(r"[Ss]e\s+og[s]?aa\s*:|\bse\s*:")
+PUNCT_RE = re.compile(r"[*»«\"'.,!?;:\-()\[\]]")
+WS_RE = re.compile(r"\s+")
+
+
+def norm_label(s):
+    s = (s or "").replace("\n", " ").lower()
+    s = PUNCT_RE.sub(" ", s)
+    return WS_RE.sub(" ", s).strip()
+
+
+def head_label(label):
+    return norm_label(SEE_TAIL_RE.split((label or "").replace("\n", " "))[0])
+
 
 def wing_for(h2, h3):
     h2u = (h2 or "").upper()
@@ -70,6 +87,53 @@ def main():
                 ref_count[r["entity_id"]] += 1
         print(f"  reference counts loaded for {len(ref_count):,} entities")
 
+    # Index work labels for resolving `see` / `see_also` cross-references to
+    # real register IDs. Most targets are the head term of a fuller label
+    # (e.g. "Krøblingen" -> "Krøblingen (Eventyrbogen)"), so we keep an exact
+    # head-label map plus a (head, rid) list for whole-word prefix fallback.
+    head_exact = defaultdict(list)
+    head_list = []
+    for r in rows:
+        h = head_label(r["label"])
+        if h:
+            head_exact[h].append(r["entity_id"])
+            head_list.append((h, r["entity_id"]))
+
+    def resolve_ref(target, self_id):
+        t = norm_label(target)
+        if not t:
+            return None
+        cands = [rid for rid in head_exact.get(t, []) if rid != self_id]
+        if cands:
+            return cands[0]
+        # Whole-word prefix: shortest label that starts with the target wins,
+        # so "Foraarssang" picks the bare poem over a longer derived title.
+        prefixed = [(len(h), rid) for h, rid in head_list
+                    if rid != self_id and (h == t or h.startswith(t + " "))]
+        if prefixed:
+            return min(prefixed)[1]
+        return None
+
+    def refs_field(raw, self_id):
+        raw = (raw or "").strip()
+        if not raw:
+            return []
+        return [{"label": raw, "rid": resolve_ref(raw, self_id)}]
+
+    def best_year(r):
+        # Prefer the normalised derived fields over the label regex.
+        dd = (r.get("date_derived") or "").strip()
+        if dd:
+            ym = re.match(r"(1[5-9]\d{2})", dd)
+            if ym:
+                return ym.group(1)
+        yd = (r.get("year_derived") or "").strip()
+        if yd:
+            ym = YEAR_RE.search(yd)
+            if ym:
+                return ym.group(1)
+        return parse_year(r["label"])
+
     # Generate one entry per work, INCLUDING IDs that mockup/work.html
     # also curates. work.html's `ALL_WORKS = Object.assign({}, WORKS_EXTRA,
     # WORKS)` still gives the hand-curated entries precedence; emitting the
@@ -91,7 +155,10 @@ def main():
             "author": author_from(h2, r.get("person_derived", "")),
             "lang": None,
             "refs": ref_count.get(rid, 0),
-            "year": parse_year(r["label"]),
+            "year": best_year(r),
+            "date": (r.get("date_derived") or "").strip() or None,
+            "see": refs_field(r.get("see"), rid),
+            "seeAlso": refs_field(r.get("see_also"), rid),
             "diary": [],
             "related": [],
             "coPlaces": [],
