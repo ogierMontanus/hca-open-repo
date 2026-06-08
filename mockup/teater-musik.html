@@ -249,6 +249,22 @@
         </div>
       </div>
 
+        <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js) -->
+        <div style="margin-top:var(--sp10)">
+          <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
+          <div class="results-header">
+            <span class="results-count" id="js-cat-count"></span>
+          </div>
+          <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
+            <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
+          </div>
+          <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+          <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+            <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
+          </div>
+        </div>
+
+
     </div>
   </section>
 
@@ -260,6 +276,10 @@
   </div>
 </footer>
 
+<!-- Full work catalogue for this wing (gitignored data; CI regenerates). -->
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script>window.CATEGORY_WING='teater-musik.html';window.CATEGORY_LABEL='Teater & Musik';</script>
+<script src="js/category-catalogue.js"></script>
 <script src="js/nav.js"></script>
 </body>
 </html>
