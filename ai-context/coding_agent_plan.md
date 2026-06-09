@@ -282,6 +282,77 @@ Required facets:
 
 Filters must be combinable.
 
+## 9.1 ⚠ Attention point — creator as a top-level work filter (high priority)
+
+**Status today.** Works on `bibliotek.html`, `billedkunst.html` and
+`teater-musik.html` can be filtered live by **title genre (H2)** and
+**form (H3)** only — see §9 wiring landed in the previous pass.
+The **creator** (author · composer · painter · sculptor · illustrator)
+is *not* a filter. It is visible only as a passive text line on each
+work card and as a small "Komponist / Forfatter (top)" decorative
+chip group on `teater-musik.html`. The same is true on the other wing
+landing pages where a similar co-occurring-persons block appears.
+
+**Why this matters.** A reader exploring the register is more often
+asking *"what does Andersen reference by Shakespeare / Mozart /
+Thorvaldsen?"* than *"which other persons co-appear on the same diary
+page as this work?"* The co-occurrence facet (top persons that share
+a diary page with the work) is **markedly less relevant** for works
+than the structured creator. Promote creator; demote the
+co-occurrence sidebar group.
+
+**What we have in the data already.**
+
+- `entities.PersonDerived` (Excel `PersonDerived` column) — populated
+  for **1,391 / 3,708 work rows (37.4 %)** — but biased toward
+  *illustrators and editors* (V. Pedersen, Lorenz Frølich, Erik Dal),
+  not primary creators.
+- `WORKS_EXTRA.author` (parser output of
+  `scripts/build_mockup/build_works_extra.py`) — populated for
+  **2,889 / 3,708 (77.9 %)**, parsed from the title parenthetical.
+  Per H2 bucket:
+  - H. C. ANDERSEN — **100 %** (the author is HCA himself)
+  - ANDRE FORFATTERE — **100 %** *but* 880 fall through to the literal
+    H2 string "ANDRE FORFATTERE" because the parser couldn't extract
+    an individual author. Real distinct-author resolution is ≈ 43 %
+    of the bucket.
+  - MUSIK — **68 %** (Bournonville, Auber, Scribe, Heiberg …)
+  - BILLEDKUNST — **29 %** (Raphael, Thorvaldsen, Bissen are
+    extracted; the rest sit unparsed in the title)
+
+**What needs to happen, in sequence.**
+
+1. **Improve creator extraction in `build_works_extra.py`.** Lift
+   the 880 ANDRE FORFATTERE fallthroughs and the 71 % gap on
+   BILLEDKUNST by widening the parenthetical regex to handle
+   "(Painter)", "(Sculptor, 1820)", "(Komponeret af X)", "efter X",
+   "af X" and similar patterns. Cross-check the result against
+   `PersonDerived` where both exist — when they disagree, prefer the
+   parsed primary creator (PersonDerived is the illustrator/editor).
+2. **Add `creator_role`** alongside `author` so the data carries
+   *author · composer · painter · sculptor · illustrator* instead of
+   collapsing them. Drives the facet labels per H2 bucket
+   ("Komponist" on Musik, "Maler" on Billedkunst, "Forfatter" on
+   Bibliotek). This aligns with the §11 entity-type-aware-labels rule.
+3. **Promote creator to a top-level facet** in
+   `js/category-catalogue.js`. Add a "Creator" facet group above
+   "Form (H3)" on bibliotek, billedkunst and teater-musik —
+   populated dynamically from the distinct authors in the current
+   wing (top N by reference count, with a typeahead box for the
+   long tail). Same OR-within-group / AND-across-groups predicate
+   model the H2/H3 facets already use.
+4. **Demote the "Komponist / Forfatter (top)" / co-occurring-persons
+   facet** to a secondary "Mere kontekst" expander, or remove it
+   from the wing landing pages entirely. Co-occurrence remains
+   useful on per-place / per-person detail pages (mention-density
+   data); it just doesn't belong as a peer of the structured creator
+   filter on a *work* listing.
+5. **Match the H2/H3 wiring already in place.** Each new "Creator"
+   checkbox carries `data-author="<exact WORKS_EXTRA.author value>"`
+   (and optionally `data-creator-role="…"` once role is structured).
+   The catalogue reads it the same way as `data-h2` / `data-h3` via
+   `readFacetGroups()`.
+
 ---
 
 # 10. Search Requirements
