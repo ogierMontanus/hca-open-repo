@@ -29,12 +29,33 @@
 
   // First letter of the title, skipping leading punctuation/quotes/asterisks
   // common in the register ("*»Bring Hilsen …" → B). "Aa" folds to Å.
+  // Diacritics fold so accented forms file under the right bucket instead
+  // of falling into "#":
+  //   ä→æ, ö→ø, ü→y (Danish convention; ü is articulated as y in Danish)
+  //   ß→s; generic accents (é, à, ñ, ç, î …) collapse to their base letter
+  //   via NFD strip of combining marks. æ/ø/å have no decomposition and
+  //   pass through.
   function initialOf(label) {
-    var s = (label || '').replace(/^[^0-9A-Za-zÆØÅæøå]+/, '').trim();
+    var s = (label || '')
+      .replace(/ä/g, 'æ').replace(/Ä/g, 'Æ')
+      .replace(/ö/g, 'ø').replace(/Ö/g, 'Ø')
+      .replace(/ü/g, 'y').replace(/Ü/g, 'Y')
+      .replace(/ß/g, 's');
+    // Keep Latin-1 accented letters (À–ÿ) in the keep-set so the
+    // punctuation strip doesn't also eat a leading accented char like
+    // "*»École" → that would lose the É before the NFD fold below.
+    s = s.replace(/^[^0-9A-Za-zÆØÅæøåÀ-ÿ]+/, '').trim();
     if (!s) return '#';
     if (/^aa/i.test(s)) return 'Å';
     var c = s.charAt(0).toUpperCase();
-    return /[A-ZÆØÅ]/.test(c) ? c : '#';
+    if (/[A-ZÆØÅ]/.test(c)) return c;
+    // Generic accents fall through to NFD strip: é→E, ç→C, ñ→N, î→I, …
+    // Å/å are handled above — they NFD-decompose to A/a + combining ring.
+    if (c.normalize) {
+      var folded = c.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (/[A-Z]/.test(folded.charAt(0))) return folded.charAt(0);
+    }
+    return '#';
   }
 
   var ALL = Object.keys(WORKS_EXTRA).reduce(function (acc, rid) {
