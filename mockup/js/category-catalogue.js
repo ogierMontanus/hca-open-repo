@@ -64,10 +64,51 @@
     acc.push({
       rid: rid, title: w.title || rid,
       meta: [w.author, w.h3, w.year].filter(Boolean).join(' · '),
-      refs: w.refs || 0, init: initialOf(w.title)
+      refs: w.refs || 0, init: initialOf(w.title),
+      h2: w.h2 || '', h3: w.h3 || ''
     });
     return acc;
   }, []);
+
+  // Faceted filtering — read state from the sibling .facet-panel on every
+  // render. Each H2/H3 checkbox carries data-h2 and/or data-h3 naming the
+  // exact WORKS_EXTRA value it filters on. Within a .facet-group the
+  // predicates combine with OR; across groups with AND; an empty group
+  // (no boxes ticked) imposes no constraint. Static counts on facet items
+  // are left as starting totals — dynamic count updates are deferred.
+  function readFacetGroups() {
+    var groups = [];
+    document.querySelectorAll('.facet-panel .facet-group').forEach(function (g) {
+      var boxes = g.querySelectorAll('input[type=checkbox][data-h2], input[type=checkbox][data-h3]');
+      if (!boxes.length) return;
+      var preds = [];
+      for (var i = 0; i < boxes.length; i++) {
+        var b = boxes[i];
+        if (!b.checked) continue;
+        preds.push({
+          h2: b.getAttribute('data-h2') || null,
+          h3: b.getAttribute('data-h3') || null
+        });
+      }
+      if (preds.length) groups.push(preds);
+    });
+    return groups;
+  }
+
+  function passesFacets(w, groups) {
+    for (var i = 0; i < groups.length; i++) {
+      var preds = groups[i];
+      var ok = false;
+      for (var j = 0; j < preds.length; j++) {
+        var p = preds[j];
+        if ((p.h2 == null || w.h2 === p.h2) && (p.h3 == null || w.h3 === p.h3)) {
+          ok = true; break;
+        }
+      }
+      if (!ok) return false;
+    }
+    return true;
+  }
 
   var collator = (typeof Intl !== 'undefined' && Intl.Collator)
     ? new Intl.Collator('da') : null;
@@ -102,11 +143,18 @@
   }
 
   function apply() {
-    filtered = (letter ? ALL.filter(function (w) { return w.init === letter; }) : ALL.slice());
+    var groups = readFacetGroups();
+    filtered = ALL.filter(function (w) {
+      if (letter && w.init !== letter) return false;
+      return passesFacets(w, groups);
+    });
     filtered.sort(letter ? byTitle : byRefs);
+    var activeFacets = groups.reduce(function (n, g) { return n + g.length; }, 0);
     if (countEl) {
-      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> poster i ' + esc(label) +
-        (letter ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>' : '');
+      var note = '';
+      if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>';
+      if (activeFacets) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' + activeFacets + ' facet' + (activeFacets === 1 ? '' : 'ter') + '</span>';
+      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> poster i ' + esc(label) + note;
     }
     grid.innerHTML = '';
     shown = 0;
@@ -138,5 +186,28 @@
   }
 
   moreBtn.addEventListener('click', renderMore);
+
+  // Wire facet checkboxes for live filtering.
+  var facetBoxes = document.querySelectorAll(
+    '.facet-panel input[type=checkbox][data-h2], .facet-panel input[type=checkbox][data-h3]'
+  );
+  facetBoxes.forEach(function (cb) { cb.addEventListener('change', apply); });
+
+  // Wire the Nulstil button to clear all facet checkboxes + reset to "Alle".
+  var clearBtn = document.querySelector('.facet-panel__clear');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      facetBoxes.forEach(function (cb) { cb.checked = false; });
+      letter = null;
+      if (bar) {
+        bar.querySelectorAll('a.chip').forEach(function (x, i) {
+          x.style.background = i === 0 ? 'var(--color-accent)' : '';
+          x.style.color = i === 0 ? '#fff' : '';
+        });
+      }
+      apply();
+    });
+  }
+
   apply();
 })();
