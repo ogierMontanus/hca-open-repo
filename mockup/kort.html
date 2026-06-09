@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kort — H.C. Andersen Dagbogsregister</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Leaflet 1.9.4 (same version as place.html) -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin="">
+  <!-- Leaflet.markercluster 1.5.3 — bundles cluster CSS + default theme + JS. -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <style>
+    /* The map should fill the viewport below the header, minus a small footer.
+       320 px on the per-place card is fine for context, but the all-places
+       map wants the screen. */
+    .kort-shell { padding: 0; }
+    #kort-map {
+      height: calc(100vh - 220px);
+      min-height: 480px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    .kort-meta {
+      display: flex; flex-wrap: wrap; gap: var(--sp4); align-items: baseline;
+      font-size: 0.82rem; color: var(--color-text-muted);
+      margin: var(--sp3) 0 var(--sp4);
+    }
+    .kort-meta strong { color: var(--color-text); }
+    /* Slightly tighter popup so the link doesn't wrap. */
+    .leaflet-popup-content { margin: 8px 12px; font-size: 0.86rem; line-height: 1.5; }
+    .leaflet-popup-content a { color: var(--color-accent); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Kort</span>
+      </nav>
+      <h1>Kort</h1>
+      <p>Alle geokodede steder fra dagbogsregistret samlet på ét kort.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container kort-shell">
+      <div class="kort-meta" id="kort-meta">
+        <span><strong id="kort-count">…</strong> steder med koordinater</span>
+        <span>·</span>
+        <span>Klyngerne brydes op, når du zoomer ind</span>
+        <span style="margin-left:auto">
+          <a href="places.html" style="color:var(--color-accent)">Tilbage til stedregistret</a>
+        </span>
+      </div>
+
+      <div id="kort-map" aria-label="Kort over geokodede steder i dagbogsregistret"></div>
+
+      <!-- No-data fallback shown when places-extra.js is missing or carries
+           no coordinates (fresh clone before CI build). -->
+      <div id="kort-empty" style="display:none;padding:var(--sp6);text-align:center;color:var(--color-text-muted);font-style:italic">
+        Ingen geokodede steder fundet. Kør CI-pipelinen for at generere
+        <code>data/places-extra.js</code>.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+  </div>
+</footer>
+
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+(function () {
+  'use strict';
+  var mapEl = document.getElementById('kort-map');
+  var emptyEl = document.getElementById('kort-empty');
+  var countEl = document.getElementById('kort-count');
+
+  if (typeof PLACES_EXTRA === 'undefined' || typeof L === 'undefined') {
+    mapEl.style.display = 'none';
+    emptyEl.style.display = '';
+    countEl.textContent = '0';
+    return;
+  }
+
+  // Build the geocoded subset once.
+  var geocoded = [];
+  for (var rid in PLACES_EXTRA) {
+    var p = PLACES_EXTRA[rid];
+    if (p && typeof p.lat === 'number' && typeof p.lon === 'number') {
+      geocoded.push({
+        rid: rid,
+        label: p.label || rid,
+        lat: p.lat,
+        lon: p.lon,
+        country: p.country_da || '',
+        refs: p.refs || 0
+      });
+    }
+  }
+  countEl.textContent = geocoded.length.toLocaleString('da-DK');
+
+  if (!geocoded.length) {
+    mapEl.style.display = 'none';
+    emptyEl.style.display = '';
+    return;
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // CARTO Voyager tiles per CLAUDE.md (osm tile policy blocks file:// loads).
+  var map = L.map('kort-map', { worldCopyJump: true });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
+    referrerPolicy: 'strict-origin-when-cross-origin'
+  }).addTo(map);
+
+  // Cluster group with default Leaflet.markercluster behaviour: numerals
+  // indicate the count, and clicking a cluster zooms in until its members
+  // separate. We also lower the spiderfy distance threshold so coincident
+  // points (same coordinate on two registers) don't collapse together.
+  var cluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    maxClusterRadius: 50
+  });
+
+  // Keep marker references so a #reg=… hash can pan/open the right popup.
+  var markersByRid = Object.create(null);
+
+  geocoded.forEach(function (p) {
+    var m = L.marker([p.lat, p.lon], { title: p.label });
+    var html = '<strong>' + esc(p.label) + '</strong>' +
+      (p.country ? '<br><span style="color:var(--color-text-muted)">' + esc(p.country) + '</span>' : '') +
+      '<br><a href="place.html?reg=' + esc(p.rid) + '">Åbn stedside →</a>' +
+      (p.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' + p.refs + ' refs.</span>' : '');
+    m.bindPopup(html);
+    cluster.addLayer(m);
+    markersByRid[p.rid] = m;
+  });
+  map.addLayer(cluster);
+
+  // Fit to all markers, with a small padding so border points aren't clipped.
+  map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
+
+  // Deep-link via #reg=Reg0000100 → pan, zoom in enough to break the cluster
+  // open, then open the popup. Used by the link from per-place pages.
+  function focusFromHash() {
+    var h = (location.hash || '').replace(/^#/, '');
+    var m = /(?:^|&)reg=([A-Za-z0-9]+)/.exec(h);
+    if (!m) return;
+    var marker = markersByRid[m[1]];
+    if (!marker) return;
+    // zoomToShowLayer reveals the marker even if it's currently in a cluster.
+    cluster.zoomToShowLayer(marker, function () {
+      marker.openPopup();
+    });
+  }
+  focusFromHash();
+  window.addEventListener('hashchange', focusFromHash);
+})();
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

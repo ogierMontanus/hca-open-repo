@@ -184,7 +184,9 @@ function escAttr(s) { return String(s == null ? '' : s)
     main += '<div><h2 class="section-title">Kort</h2>' +
       '<div id="place-map" class="map-leaflet" aria-label="Kort over ' + escAttr(pl.label) + '"></div>' +
       '<p class="map-meta">Koordinater fra hcax.dk Rejser add-on · ' +
-      pl.lat.toFixed(4) + '° N, ' + pl.lon.toFixed(4) + '° Ø</p></div>';
+      pl.lat.toFixed(4) + '° N, ' + pl.lon.toFixed(4) + '° Ø &nbsp;·&nbsp; ' +
+      '<a href="kort.html#reg=' + escAttr(reg) + '" style="color:var(--color-accent)">' +
+      'Vis på samlet kort →</a></p></div>';
   } else {
     main += '<div><p class="muted" style="font-style:italic">Ikke geokodet — dette sted findes ikke i hcax.dk Rejser-tabellen.</p></div>';
   }
