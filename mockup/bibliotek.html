@@ -176,7 +176,7 @@
                "Omtaleår" slider = mention dates (1825–1875 diary period). "Begivenhedsdatoer"
                = publication year / reprint — comes from year_derived but not yet structured
                as entity_event; disabled. -->
-          <div class="facet-group" id="temporal-mode" data-active="mention">
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
             <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:10px 12px 12px">
               <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -233,13 +233,16 @@
           <div class="facet-group">
             <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
-              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
-                <span>1825</span>
-                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
-                <span>—</span>
-                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
-                <span>1875</span>
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Fra årstal">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Til årstal">
               </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
             </div>
           </div>
         </aside>

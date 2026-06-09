@@ -65,21 +65,25 @@
       rid: rid, title: w.title || rid,
       meta: [w.author, w.h3, w.year].filter(Boolean).join(' · '),
       refs: w.refs || 0, init: initialOf(w.title),
-      h2: w.h2 || '', h3: w.h3 || ''
+      h2: w.h2 || '', h3: w.h3 || '', author: w.author || ''
     });
     return acc;
   }, []);
 
   // Faceted filtering — read state from the sibling .facet-panel on every
-  // render. Each H2/H3 checkbox carries data-h2 and/or data-h3 naming the
-  // exact WORKS_EXTRA value it filters on. Within a .facet-group the
-  // predicates combine with OR; across groups with AND; an empty group
-  // (no boxes ticked) imposes no constraint. Static counts on facet items
-  // are left as starting totals — dynamic count updates are deferred.
+  // render. Each H2/H3/author/rid checkbox carries the matching data-*
+  // attribute naming the exact WORKS_EXTRA value it filters on. Within a
+  // .facet-group the predicates combine with OR; across groups with AND;
+  // an empty group (no boxes ticked) imposes no constraint. Static counts
+  // on facet items are left as starting totals — dynamic count updates are
+  // deferred.
   function readFacetGroups() {
     var groups = [];
     document.querySelectorAll('.facet-panel .facet-group').forEach(function (g) {
-      var boxes = g.querySelectorAll('input[type=checkbox][data-h2], input[type=checkbox][data-h3]');
+      var boxes = g.querySelectorAll(
+        'input[type=checkbox][data-h2], input[type=checkbox][data-h3], ' +
+        'input[type=checkbox][data-author], input[type=checkbox][data-rid]'
+      );
       if (!boxes.length) return;
       var preds = [];
       for (var i = 0; i < boxes.length; i++) {
@@ -87,7 +91,9 @@
         if (!b.checked) continue;
         preds.push({
           h2: b.getAttribute('data-h2') || null,
-          h3: b.getAttribute('data-h3') || null
+          h3: b.getAttribute('data-h3') || null,
+          author: b.getAttribute('data-author') || null,
+          rid: b.getAttribute('data-rid') || null
         });
       }
       if (preds.length) groups.push(preds);
@@ -101,7 +107,10 @@
       var ok = false;
       for (var j = 0; j < preds.length; j++) {
         var p = preds[j];
-        if ((p.h2 == null || w.h2 === p.h2) && (p.h3 == null || w.h3 === p.h3)) {
+        if ((p.h2 == null || w.h2 === p.h2) &&
+            (p.h3 == null || w.h3 === p.h3) &&
+            (p.author == null || w.author === p.author) &&
+            (p.rid == null || w.rid === p.rid)) {
           ok = true; break;
         }
       }
@@ -202,7 +211,10 @@
 
   // Wire facet checkboxes for live filtering.
   var facetBoxes = document.querySelectorAll(
-    '.facet-panel input[type=checkbox][data-h2], .facet-panel input[type=checkbox][data-h3]'
+    '.facet-panel input[type=checkbox][data-h2], ' +
+    '.facet-panel input[type=checkbox][data-h3], ' +
+    '.facet-panel input[type=checkbox][data-author], ' +
+    '.facet-panel input[type=checkbox][data-rid]'
   );
   facetBoxes.forEach(function (cb) { cb.addEventListener('change', apply); });
 

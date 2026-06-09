@@ -452,6 +452,19 @@ UI because it separates the chronology of the world being described
 from the chronology of Andersen's observation and recording of that
 world.
 
+## 11.4 Deferred — "Datokategori" UI toggle (printed works first)
+
+The "Datokategori" facet group (Omtaledatoer · Begivenhedsdatoer) is
+**hidden site-wide** until the `entity_event` table is populated.
+First implementation target is the **printed-works wing** (`bibliotek.html`):
+each book has structured `publication` / `reprint` events derivable from
+`year_derived` / `date_derived` and the parenthetical of `entities.label`,
+so it is the cheapest place to bring the second family online. The
+hidden UI elements in `places.html`, `billedkunst.html`,
+`teater-musik.html`, `diaries.html`, `romaner.html` and on `bibliotek.html`
+itself stay in the HTML (style `display:none`) so re-enabling on each page
+is a one-line change once its event source is ready.
+
 ---
 
 # 12. Geographic Features
