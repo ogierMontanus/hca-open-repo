@@ -151,7 +151,7 @@
     filtered.sort(letter ? byTitle : byRefs);
     var activeFacets = groups.reduce(function (n, g) { return n + g.length; }, 0);
     var anyActive = activeFacets > 0 || letter !== null;
-    if (showcaseEl) showcaseEl.style.display = anyActive ? 'none' : '';
+    showcaseEls.forEach(function (el) { el.style.display = anyActive ? 'none' : ''; });
     if (countEl) {
       var note = '';
       if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>';
@@ -189,12 +189,16 @@
 
   moreBtn.addEventListener('click', renderMore);
 
-  // The curated showcase block sits between the facet panel and the catalogue
-  // on bibliotek / billedkunst / teater-musik. When the reader narrows by H2/H3
-  // or by letter, the showcase becomes noise (it doesn't react to facets) and
-  // pushes the filtered list below the fold. Collapse it whenever any filter
-  // is active so the catalogue rises into view; restore it when filters clear.
-  var showcaseEl = document.querySelector('.browse-layout > div:not(.facet-panel)');
+  // The curated showcase sits directly inside the browse-layout main column,
+  // above the catalogue block. When the reader narrows by H2/H3 or by letter,
+  // the showcase becomes noise (it doesn't react to facets) and pushes the
+  // filtered list below the fold. Hide the showcase header + grid (direct
+  // children of the main column) whenever any filter is active; the
+  // catalogue's own .cat-block wrapper stays visible alongside the sticky
+  // facet-panel.
+  var showcaseEls = document.querySelectorAll(
+    '.browse-layout > div > .results-header, .browse-layout > div > .result-grid'
+  );
 
   // Wire facet checkboxes for live filtering.
   var facetBoxes = document.querySelectorAll(
