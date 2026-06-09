@@ -96,3 +96,33 @@ kommandoer beregnet til at blive kørt lokalt:
 - CI-eksempler (GitHub Actions YAML) må fortsat bruge `python` (ikke
   `python3`) for konsistens med Linux-runneren, hvor `python` peger
   på Python 3.
+
+---
+
+## Alfabetisering — sortér personer efter efternavn
+
+**Brugerpræference (2026-06-09):** Hvor som helst en liste af personer
+sorteres alfabetisk (filterfacetter, A–Å-bjælker, droplists, autocomplete-
+forslag), skal **efternavnet** være den primære alfabetiske nøgle.
+
+Praktiske regler i kode:
+
+- **Register-etiketter** (`entities.label` for `entity_type='person'`)
+  har allerede formen `"Efternavn, Fornavn(e) (årstal)"` for 91 % af
+  posterne, så `collator.compare(a.label, b.label)` med dansk collation
+  giver automatisk efternavn-først. Ingen ekstra logik nødvendig.
+- **WORKS_EXTRA.author** har den løsere form `"Fornavn Efternavn"` /
+  `"X. Efternavn"` (V. Pedersen, Lorenz Frølich). Brug en hjælper —
+  fx `surnameKey()` i `mockup/js/category-catalogue.js` — der returnerer
+  delen før første komma, eller det sidste hvidrum-separerede token,
+  før der sorteres.
+- **Når en facet sorterer efter optællingstal først** (komponist/forfatter-
+  facet på teater-musik, persons co-occurrence), brug efternavnet som
+  sekundær nøgle ved uafgjort, ikke hele etiketten.
+- **Intl.Collator('da')** bruges som collator overalt — den håndterer
+  æ/ø/å og folder `Aa`→`Å` korrekt.
+
+Forskellen er især synlig på `teater-musik.html`s "Komponist /
+Forfatter"-facet (~70 navne med flere værker; sekundærsortering på
+efternavn), og på den fremtidige "Kunstner"-facet på `billedkunst.html`
+samt på `bibliotek.html`s "Forfatter"-facet når den ankommer.

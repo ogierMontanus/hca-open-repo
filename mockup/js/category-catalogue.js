@@ -198,6 +198,22 @@
 
   moreBtn.addEventListener('click', renderMore);
 
+  // Extract a person's surname for alphabetic sorting. The register's
+  // person labels are already "Surname, Given names" (Collin, Edvard),
+  // so the part before the first comma IS the surname. WORKS_EXTRA.author
+  // is the looser "Given Surname" / "X. Surname" form (Lorenz Frølich,
+  // V. Pedersen) — fall back to the last whitespace-separated token in
+  // that case. Project preference: sort persons by surname wherever the
+  // label format permits (see CLAUDE.md).
+  function surnameKey(label) {
+    var s = (label || '').trim();
+    if (!s) return '';
+    var c = s.indexOf(',');
+    if (c >= 0) return s.slice(0, c).trim();
+    var parts = s.split(/\s+/);
+    return parts[parts.length - 1];
+  }
+
   // Populate dynamic facet bodies before wiring change listeners. A
   // wing page declares e.g. <div class="facet-group__body"
   // data-facet-source="author"> and this fills it with one row per
@@ -214,8 +230,11 @@
       counts[w.author] = (counts[w.author] || 0) + 1;
     });
     var rows = Object.keys(counts)
-      .map(function (a) { return [a, counts[a]]; })
-      .sort(function (a, b) { return b[1] - a[1] || a[0].localeCompare(b[0], 'da'); });
+      .map(function (a) { return [a, counts[a], surnameKey(a)]; })
+      .sort(function (a, b) {
+        // Primary: works descending. Secondary: surname collation (da).
+        return b[1] - a[1] || a[2].localeCompare(b[2], 'da');
+      });
     host.innerHTML = rows.map(function (r) {
       var a = esc(r[0]);
       return '<label class="facet-item"><input type="checkbox" data-author="' + a +
