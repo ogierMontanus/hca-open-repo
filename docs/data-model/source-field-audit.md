@@ -29,7 +29,7 @@ why this is 16,444 and not 16,453.
 | `subform_h4` | 3.9% | 10 | ○ | parsed into the web JSON (`build_web_data.py`) but **not shown in the mockup** |
 | `label` | 100.0% | 16,315 | ● | the title/name on every card and heading |
 | `description` | 57.6% | 8,718 | ● | the meta line on person/place/work cards |
-| `see` | 0.7% | 113 | ● | **Krydshenvisninger** "Se" link (work.html) — surfaced in Step 4 |
+| `see` | 0.7% | 113 | ● | **Krydshenvisninger** "Se" link (work.html) — surfaced in Step 4. ⚠ Excel `SeeTitle` is populated for works only; 385 persons + 76 places carry the cross-reference *inline* inside `label` ("L, Frue, se: Læssøe, Signe.") and are not lifted into this column — see [Inline `se:` cross-references](#inline-see-cross-references) |
 | `see_also` | 0.5% | 75 | ● | **Krydshenvisninger** "Se også" link (work.html) — surfaced in Step 4 |
 | `year_derived` | 2.9% | 96 | ● | sidebar **År** on work.html — surfaced in Step 4 |
 | `date_derived` | 1.4% | 206 | ● | sidebar **Dateret** on work.html — surfaced in Step 4 |
@@ -79,6 +79,53 @@ register-derived diary lists.
   are effectively complete.
 - **1,388 entries** (16,444 − 15,056) are never mentioned in the diaries, so
   their detail pages show "Ingen dagbogsomtaler".
+
+## Inline `se:` cross-references
+
+The Excel master file (`raw/HCA-Repository V*.xlsx`) carries two dedicated
+columns for cross-references — `SeeTitle` and `SeeAlsoTittle` — which the
+normalizer copies verbatim into `entities.see` and `entities.see_also`.
+
+For **works** this works as intended: 117 of 118 inline `se:` markers have a
+matching `SeeTitle` value, so the structured link is recoverable.
+
+For **persons (385 entries) and places (76 entries) — 461 total** — the
+`SeeTitle` column is empty and the cross-reference exists only as a substring
+of `RegistryTitle`:
+
+```
+Reg0081650    label = "L, Frue, se: Læssøe, Signe."   see = ""
+Reg0030060    label = "Aage, se: Drewsen, Aage."       see = ""
+Reg0024320    label = "Able, se: Æble."                see = ""
+Reg0024360    label = "Apenrade, se: Aabenraa."        see = ""
+```
+
+These are pure aliases — short stub entries whose only purpose is to redirect
+a reader from the alternative form (older spelling, exonym, short form, married
+name) to the canonical entry. They should appear in search and on a thin alias
+page that bounces straight to the canonical card.
+
+### Recommended parser pass (deferred)
+
+Extend `normalize_registry()` in
+`scripts/normalization/hca_xlsx_to_csv.py` so that when `SeeTitle` is empty
+and `RegistryTitle` matches the inline pattern
+
+```
+^(?P<alias>.+?),\s*\n?\s*se:\s*(?P<target>.+?)\.?\s*$
+```
+
+the parser splits `alias` (kept as the entry's `label`) and `target` (lifted
+into `see`). Resolution of `target` to a target `entity_id` reuses the
+`resolve_ref()` head-label + whole-word-prefix matcher from
+`scripts/build_mockup/build_works_extra.py` — the same logic that already
+resolves the 113 work-side `see` strings to register IDs.
+
+This sits alongside the planned `place_alias` work in
+[`place-toponymy.md`](place-toponymy.md): the toponymy doc covers *modern*
+spelling aliases that are not in the register (USA, Sverige, København),
+while this section covers *existing* register aliases whose link is just
+stored in the wrong column.
 
 ## Re-deriving these numbers
 

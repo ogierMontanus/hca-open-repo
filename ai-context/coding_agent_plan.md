@@ -462,6 +462,37 @@ CSV/Excel
 
 Editorial work remains external to production database.
 
+## 15.1 Attention point — inline `se:` cross-references (deferred)
+
+The Excel master sheet (`raw/HCA-Repository V*.xlsx`) has dedicated
+`SeeTitle` / `SeeAlsoTittle` columns. The normalizer copies these
+verbatim into `entities.see` / `entities.see_also`.
+
+The coverage split is uneven:
+
+- **Works (118 inline `se:` markers):** 117 also have `SeeTitle`
+  populated — the parser already captures the link. ✓
+- **Persons (385) and places (76) — 461 entries:** `SeeTitle` is
+  empty in Excel. The cross-reference exists *only* inside the
+  `RegistryTitle` string (e.g. Reg0081650 *"L, Frue, se: Læssøe,
+  Signe."*). The Python script does not yet recover it. ✗
+
+Implementation sketch: when `SeeTitle` is empty, match
+`RegistryTitle` against `^(?P<alias>.+?),\s*\n?\s*se:\s*(?P<target>.+?)\.?\s*$`
+and lift `target` into `see`; the alias becomes the entry's `label`.
+Resolve `target` to an `entity_id` with the head-label + whole-word
+prefix matcher already used by `scripts/build_mockup/
+build_works_extra.py:resolve_ref()`. See
+[`docs/data-model/source-field-audit.md`](../docs/data-model/source-field-audit.md#inline-se-cross-references)
+for the full proposal.
+
+This sits next to but is **separate from** the planned `place_alias`
+work (§12.1 / [`place-toponymy.md`](../docs/data-model/place-toponymy.md)):
+that one captures *new* modern-spelling aliases (USA, Sverige,
+København) that the register does not already record. This section
+covers *existing* register aliases whose link is just stored in the
+wrong column.
+
 ---
 
 # 16. Long-Term Evolution
