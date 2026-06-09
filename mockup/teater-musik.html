@@ -135,15 +135,15 @@
             </div>
           </div>
 
+          <!-- Komponist / Forfatter — populated at load time by
+               category-catalogue.js from every distinct WORKS_EXTRA.author
+               in this wing, ranked by works descending. The body's own
+               max-height keeps the long list from pushing the rest of
+               the panel below the viewport — see .facet-group__body in
+               css/style.css. -->
           <div class="facet-group">
             <div class="facet-group__header">Komponist / Forfatter <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Bournonville, A.</span><span class="facet-item__count">4</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Hartmann, J. P. E.</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Heiberg, J. L.</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Holberg, L.</span><span class="facet-item__count">2</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Gounod, C.</span><span class="facet-item__count">2</span></label>
-            </div>
+            <div class="facet-group__body" data-facet-source="author"></div>
           </div>
 
           <div class="facet-group">

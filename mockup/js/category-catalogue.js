@@ -198,6 +198,32 @@
 
   moreBtn.addEventListener('click', renderMore);
 
+  // Populate dynamic facet bodies before wiring change listeners. A
+  // wing page declares e.g. <div class="facet-group__body"
+  // data-facet-source="author"> and this fills it with one row per
+  // distinct author in the wing (data-author=…), sorted by works
+  // descending. Same pattern can later carry data-facet-source="h3" /
+  // "rid" if a page wants every value enumerated automatically.
+  document.querySelectorAll('.facet-panel [data-facet-source="author"]').forEach(function (host) {
+    var counts = {};
+    ALL.forEach(function (w) {
+      if (!w.author) return;
+      // Skip wing fallthroughs — the literal H2 strings the parser
+      // leaves behind when no individual author can be extracted.
+      if (w.author === w.h2) return;
+      counts[w.author] = (counts[w.author] || 0) + 1;
+    });
+    var rows = Object.keys(counts)
+      .map(function (a) { return [a, counts[a]]; })
+      .sort(function (a, b) { return b[1] - a[1] || a[0].localeCompare(b[0], 'da'); });
+    host.innerHTML = rows.map(function (r) {
+      var a = esc(r[0]);
+      return '<label class="facet-item"><input type="checkbox" data-author="' + a +
+        '"><span class="facet-item__label">' + a +
+        '</span><span class="facet-item__count">' + r[1] + '</span></label>';
+    }).join('');
+  });
+
   // The curated showcase sits directly inside the browse-layout main column,
   // above the catalogue block. When the reader narrows by H2/H3 or by letter,
   // the showcase becomes noise (it doesn't react to facets) and pushes the
