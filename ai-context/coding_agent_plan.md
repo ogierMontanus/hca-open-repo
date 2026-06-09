@@ -428,6 +428,27 @@ The system should feel:
 - visually institutional;
 - semantically interconnected.
 
+## 13.1 Deferred — grid (Gitter) layout (illustrations dependency)
+
+The result-page layout switcher previously offered **Liste** (list) and
+**Gitter** (grid) views. The Gitter button has been removed: a grid view
+of mostly-textual register entries adds visual noise without adding
+information. Grid layout becomes useful only when cards carry
+illustrations — works that have a thumbnail (painting, sculpture, book
+cover, set photo), persons with a portrait, places with a representative
+image.
+
+Reinstating Gitter is therefore gated on an editorial image pipeline:
+sourcing, rights-clearing, and attaching one illustration per
+register entry, across ~16,000 entries. The effort is comparable to
+the planned geocoordinate pass for places (§12) — both are large
+editorial+reconciliation passes against external sources (Wikidata
+P18 for images, Wikidata P625 / GeoNames for coordinates).
+
+When images do land, the switcher returns with three states:
+**Liste · Gitter · Tidslinje** (the Tidslinje option is already
+present on `diaries.html` as a placeholder).
+
 ---
 
 # 14. Recommended Technical Stack
