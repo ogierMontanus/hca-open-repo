@@ -394,6 +394,25 @@ Geographic layers should support:
 
 Future compatibility with GIS layers is desirable.
 
+## 12.1 Alternative place forms (planned)
+
+The place register inherits nineteenth-century Danish orthography. A reader
+searching for the modern form (*Sverige*, *USA*, *København*) must still find
+the entry whose canonical label is the historical form (*Sverrig*, *Amerika
+(de forenede Stater)*, *Kjøbenhavn*).
+
+A `place_alias` table — modelled on the `alias` table in
+[`docs/data-model/wemi-and-relations.md`](../docs/data-model/wemi-and-relations.md)
+— captures `alias_label → canonical place_id` mappings tagged by
+`alias_type` (historical spelling · modern abbreviation · modern name ·
+exonym · translation). The canonical register label is never overwritten;
+the modern form is surfaced as a secondary line on the place card and
+unioned into the search index.
+
+Schema, UI rules, and data sources (curated CSV first, Wikidata `altLabel`
+second) are in
+[`docs/data-model/place-toponymy.md`](../docs/data-model/place-toponymy.md).
+
 ---
 
 # 13. UI/UX Philosophy
