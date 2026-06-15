@@ -115,6 +115,7 @@ window.DiaryWire = (function () {
     var step = opts.pageSize || 60;
     var filtered = DIARY_INDEX;
     var shown = 0;
+    var filterYear = '';  // tracks the active year selection for card highlighting
 
     function matches(row, q, year) {
       if (year && row.y !== year) return false;
@@ -133,7 +134,10 @@ window.DiaryWire = (function () {
       var m = { v: row.v, p: row.p, d: row.d, y: row.y, pl: row.pl };
       var chipMarkup = (row.c || []).slice(0, 3).map(chipHtml).join('');
       var href = PAGES_DIR + esc(row.h) + '.html';
-      return '<div class="result-card">' +
+      var highlight = filterYear
+        ? ' style="outline:2px solid var(--color-accent);outline-offset:-2px"'
+        : '';
+      return '<div class="result-card"' + highlight + '>' +
         '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(row.h) + '"></a>' +
         '<div class="result-card__body">' +
         '<div class="result-card__title">' + titleFor(m) + '</div>' +
@@ -153,6 +157,7 @@ window.DiaryWire = (function () {
     }
 
     function applyFilter(q, year) {
+      filterYear = year || '';
       filtered = DIARY_INDEX.filter(function (r) { return matches(r, q, year); });
       render(true);
     }

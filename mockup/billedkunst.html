@@ -62,14 +62,6 @@
           <div class="subsection-card__stats">315 poster · 489 poster i dagbøgerne</div>
         </a>
 
-        <a href="#h3-museer" class="subsection-card">
-          <h3>Museer og Samlinger</h3>
-          <p class="subsection-card__example">
-            Louvre · Uffizi · Prado · Dresden Gemäldegalerie · Vatikanets Museer …
-          </p>
-          <div class="subsection-card__stats">39 poster · 189 poster i dagbøgerne</div>
-        </a>
-
       </div>
 
       <!-- Browse layout -->
@@ -80,44 +72,90 @@
             <button class="facet-panel__clear">Nulstil</button>
           </div>
 
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11.
+               "Omtaleår" slider = mention dates (1825–1875 diary period). "Begivenhedsdatoer"
+               = when the work was created or first exhibited — comes from year_derived but
+               not yet structured as entity_event; disabled. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
+            <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Årstal Andersen omtalte dette værk i dagbøgerne">Omtaledatoer</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Begivenhedsdatoer (skabt · udstillet) aktiveres, når entity_event-tabellen er udfyldt.">Begivenhedsdatoer</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                Årstal-filtret bruger <em>omtaledatoer</em> — hvornår Andersen nævnte værket i dagbøgerne. Begivenhedsdatoer (skabt, udstillet) aktiveres, når strukturerede entitetsdatoer er indlæst.
+              </div>
+            </div>
+          </div>
+
           <div class="facet-group">
             <div class="facet-group__header">Underkategori (H3) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Malerier og Tegninger</span><span class="facet-item__count">587</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Skulptur</span><span class="facet-item__count">315</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Museer og Samlinger</span><span class="facet-item__count">39</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Malerier og Tegninger"><span class="facet-item__label">Malerier og Tegninger</span><span class="facet-item__count">587</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Skulptur"><span class="facet-item__label">Skulptur</span><span class="facet-item__count">315</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Museer og Samlinger"><span class="facet-item__label">Museer og Samlinger</span><span class="facet-item__count">39</span></label>
             </div>
           </div>
 
+          <!-- Kunstner — data-driven from WORKS_EXTRA.author for this wing.
+               Top 8 by number of works, excluding the BILLEDKUNST fallthrough.
+               Each box filters the catalogue to that artist's works (data-author). -->
           <div class="facet-group">
-            <div class="facet-group__header">Omtalte personer <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Kunstner <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Edvard</span><span class="facet-item__count">34</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Thorvaldsen, Bertel</span><span class="facet-item__count">28</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Henriques, Martin R.</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="H. V. Bissen"><span class="facet-item__label">H. V. Bissen</span><span class="facet-item__count">14</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="J. N. Byström"><span class="facet-item__label">J. N. Byström</span><span class="facet-item__count">6</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="L. Bartolini"><span class="facet-item__label">L. Bartolini</span><span class="facet-item__count">6</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="P. Veronese"><span class="facet-item__label">P. Veronese</span><span class="facet-item__count">5</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="W. W. Story"><span class="facet-item__label">W. W. Story</span><span class="facet-item__count">5</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="D. C. Blunck"><span class="facet-item__label">D. C. Blunck</span><span class="facet-item__count">4</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="W. Marstrand"><span class="facet-item__label">W. Marstrand</span><span class="facet-item__count">3</span></label>
+              <label class="facet-item"><input type="checkbox" data-author="H. K. A. Mücke"><span class="facet-item__label">H. K. A. Mücke</span><span class="facet-item__count">3</span></label>
             </div>
           </div>
 
+          <!-- Gallerier — replaces the static "Omtalte steder" facet.
+               Each box filters the catalogue to one gallery entry (data-rid)
+               taken from the H3 "Museer og Samlinger" register, ranked by refs.
+               Parser cleanup of these labels is tracked in plan §9.1. -->
           <div class="facet-group">
-            <div class="facet-group__header">Omtalte steder <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Gallerier <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rom</span><span class="facet-item__count">89</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Dresden</span><span class="facet-item__count">71</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Firenze</span><span class="facet-item__count">58</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">44</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg000992"><span class="facet-item__label">Dresden Gemäldegalerie</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg002475"><span class="facet-item__label">Napoli — Museo Borbonico</span><span class="facet-item__count">16</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg002452"><span class="facet-item__label">München — Glyptoteket</span><span class="facet-item__count">15</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg002834"><span class="facet-item__label">Rom — Capitol &amp; Vatikan-Museerne</span><span class="facet-item__count">15</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg001961"><span class="facet-item__label">København — Thorvaldsens Museum</span><span class="facet-item__count">14</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg001294"><span class="facet-item__label">Firenze — Galleria degli Uffizi</span><span class="facet-item__count">9</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg001293"><span class="facet-item__label">Firenze — Galleria Pitti</span><span class="facet-item__count">8</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg002653"><span class="facet-item__label">Paris — Louvre</span><span class="facet-item__count">8</span></label>
+              <label class="facet-item"><input type="checkbox" data-rid="Reg003500"><span class="facet-item__label">Wien — Belvedere-Samlingen</span><span class="facet-item__count">5</span></label>
             </div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
-              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
-                <span>1825</span>
-                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
-                <span>—</span>
-                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
-                <span>1875</span>
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Fra årstal">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Til årstal">
               </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
             </div>
           </div>
         </aside>
@@ -125,10 +163,6 @@
         <div>
           <div class="results-header">
             <span class="results-count"><strong>941</strong> poster i Billedkunst &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— fedmarkerede kort = et eksempel pr. H3</span></span>
-            <div class="layout-switcher">
-              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Gitter</button>
-              <button class="layout-switcher__btn" data-layout="list">Liste</button>
-            </div>
           </div>
 
           <div class="result-grid">
@@ -223,61 +257,26 @@
               </div>
             </a>
 
-            <!-- ★ Museer og Samlinger — featured -->
-            <a id="h3-museer" href="work.html?reg=Reg000924" class="result-card result-card--featured">
-              <div class="result-card__thumb">Reg000924 · Museum</div>
-              <div class="result-card__body">
-                <div class="result-card__title">Gemäldegalerie Alte Meister</div>
-                <div class="result-card__meta">BILLEDKUNST · Museer og Samlinger · Dresden</div>
-                <div class="result-card__chips">
-                  <span class="chip chip--place">Dresden</span>
-                  <span style="font-size:0.7rem;color:var(--color-text-muted)">18 refs.</span>
-                </div>
-              </div>
-            </a>
+          </div>
 
-            <a href="work.html?reg=Reg002024" class="result-card">
-              <div class="result-card__thumb">Reg002024 · Museum</div>
-              <div class="result-card__body">
-                <div class="result-card__title">Louvre</div>
-                <div class="result-card__meta">BILLEDKUNST · Museer og Samlinger · Paris</div>
-                <div class="result-card__chips">
-                  <span class="chip chip--place">Paris</span>
-                  <span style="font-size:0.7rem;color:var(--color-text-muted)">14 refs.</span>
-                </div>
-              </div>
-            </a>
-
-            <a href="work.html?reg=Reg003454" class="result-card">
-              <div class="result-card__thumb">Reg003454 · Museum</div>
-              <div class="result-card__body">
-                <div class="result-card__title">Uffizi</div>
-                <div class="result-card__meta">BILLEDKUNST · Museer og Samlinger · Firenze</div>
-                <div class="result-card__chips">
-                  <span class="chip chip--place">Firenze</span>
-                  <span style="font-size:0.7rem;color:var(--color-text-muted)">11 refs.</span>
-                </div>
-              </div>
-            </a>
-
+          <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js).
+               Sits inside the browse-layout main column so the sticky facet-panel
+               stays aligned with the catalogue when scrolling. -->
+          <div class="cat-block" style="margin-top:var(--sp10)">
+            <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
+            <div class="results-header">
+              <span class="results-count" id="js-cat-count"></span>
+            </div>
+            <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
+              <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
+            </div>
+            <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+            <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+              <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
+            </div>
           </div>
         </div>
       </div>
-
-        <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js) -->
-        <div style="margin-top:var(--sp10)">
-          <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
-          <div class="results-header">
-            <span class="results-count" id="js-cat-count"></span>
-          </div>
-          <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
-            <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
-          </div>
-          <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
-          <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
-            <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
-          </div>
-        </div>
 
 
     </div>
@@ -287,7 +286,9 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+    Udarbejdet af citizen scientists i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
 

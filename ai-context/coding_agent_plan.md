@@ -282,6 +282,77 @@ Required facets:
 
 Filters must be combinable.
 
+## 9.1 ⚠ Attention point — creator as a top-level work filter (high priority)
+
+**Status today.** Works on `bibliotek.html`, `billedkunst.html` and
+`teater-musik.html` can be filtered live by **title genre (H2)** and
+**form (H3)** only — see §9 wiring landed in the previous pass.
+The **creator** (author · composer · painter · sculptor · illustrator)
+is *not* a filter. It is visible only as a passive text line on each
+work card and as a small "Komponist / Forfatter (top)" decorative
+chip group on `teater-musik.html`. The same is true on the other wing
+landing pages where a similar co-occurring-persons block appears.
+
+**Why this matters.** A reader exploring the register is more often
+asking *"what does Andersen reference by Shakespeare / Mozart /
+Thorvaldsen?"* than *"which other persons co-appear on the same diary
+page as this work?"* The co-occurrence facet (top persons that share
+a diary page with the work) is **markedly less relevant** for works
+than the structured creator. Promote creator; demote the
+co-occurrence sidebar group.
+
+**What we have in the data already.**
+
+- `entities.PersonDerived` (Excel `PersonDerived` column) — populated
+  for **1,391 / 3,708 work rows (37.4 %)** — but biased toward
+  *illustrators and editors* (V. Pedersen, Lorenz Frølich, Erik Dal),
+  not primary creators.
+- `WORKS_EXTRA.author` (parser output of
+  `scripts/build_mockup/build_works_extra.py`) — populated for
+  **2,889 / 3,708 (77.9 %)**, parsed from the title parenthetical.
+  Per H2 bucket:
+  - H. C. ANDERSEN — **100 %** (the author is HCA himself)
+  - ANDRE FORFATTERE — **100 %** *but* 880 fall through to the literal
+    H2 string "ANDRE FORFATTERE" because the parser couldn't extract
+    an individual author. Real distinct-author resolution is ≈ 43 %
+    of the bucket.
+  - MUSIK — **68 %** (Bournonville, Auber, Scribe, Heiberg …)
+  - BILLEDKUNST — **29 %** (Raphael, Thorvaldsen, Bissen are
+    extracted; the rest sit unparsed in the title)
+
+**What needs to happen, in sequence.**
+
+1. **Improve creator extraction in `build_works_extra.py`.** Lift
+   the 880 ANDRE FORFATTERE fallthroughs and the 71 % gap on
+   BILLEDKUNST by widening the parenthetical regex to handle
+   "(Painter)", "(Sculptor, 1820)", "(Komponeret af X)", "efter X",
+   "af X" and similar patterns. Cross-check the result against
+   `PersonDerived` where both exist — when they disagree, prefer the
+   parsed primary creator (PersonDerived is the illustrator/editor).
+2. **Add `creator_role`** alongside `author` so the data carries
+   *author · composer · painter · sculptor · illustrator* instead of
+   collapsing them. Drives the facet labels per H2 bucket
+   ("Komponist" on Musik, "Maler" on Billedkunst, "Forfatter" on
+   Bibliotek). This aligns with the §11 entity-type-aware-labels rule.
+3. **Promote creator to a top-level facet** in
+   `js/category-catalogue.js`. Add a "Creator" facet group above
+   "Form (H3)" on bibliotek, billedkunst and teater-musik —
+   populated dynamically from the distinct authors in the current
+   wing (top N by reference count, with a typeahead box for the
+   long tail). Same OR-within-group / AND-across-groups predicate
+   model the H2/H3 facets already use.
+4. **Demote the "Komponist / Forfatter (top)" / co-occurring-persons
+   facet** to a secondary "Mere kontekst" expander, or remove it
+   from the wing landing pages entirely. Co-occurrence remains
+   useful on per-place / per-person detail pages (mention-density
+   data); it just doesn't belong as a peer of the structured creator
+   filter on a *work* listing.
+5. **Match the H2/H3 wiring already in place.** Each new "Creator"
+   checkbox carries `data-author="<exact WORKS_EXTRA.author value>"`
+   (and optionally `data-creator-role="…"` once role is structured).
+   The catalogue reads it the same way as `data-h2` / `data-h3` via
+   `readFacetGroups()`.
+
 ---
 
 # 10. Search Requirements
@@ -381,6 +452,19 @@ UI because it separates the chronology of the world being described
 from the chronology of Andersen's observation and recording of that
 world.
 
+## 11.4 Deferred — "Datokategori" UI toggle (printed works first)
+
+The "Datokategori" facet group (Omtaledatoer · Begivenhedsdatoer) is
+**hidden site-wide** until the `entity_event` table is populated.
+First implementation target is the **printed-works wing** (`bibliotek.html`):
+each book has structured `publication` / `reprint` events derivable from
+`year_derived` / `date_derived` and the parenthetical of `entities.label`,
+so it is the cheapest place to bring the second family online. The
+hidden UI elements in `places.html`, `billedkunst.html`,
+`teater-musik.html`, `diaries.html`, `romaner.html` and on `bibliotek.html`
+itself stay in the HTML (style `display:none`) so re-enabling on each page
+is a one-line change once its event source is ready.
+
 ---
 
 # 12. Geographic Features
@@ -393,6 +477,25 @@ Geographic layers should support:
 - depiction locations.
 
 Future compatibility with GIS layers is desirable.
+
+## 12.1 Alternative place forms (planned)
+
+The place register inherits nineteenth-century Danish orthography. A reader
+searching for the modern form (*Sverige*, *USA*, *København*) must still find
+the entry whose canonical label is the historical form (*Sverrig*, *Amerika
+(de forenede Stater)*, *Kjøbenhavn*).
+
+A `place_alias` table — modelled on the `alias` table in
+[`docs/data-model/wemi-and-relations.md`](../docs/data-model/wemi-and-relations.md)
+— captures `alias_label → canonical place_id` mappings tagged by
+`alias_type` (historical spelling · modern abbreviation · modern name ·
+exonym · translation). The canonical register label is never overwritten;
+the modern form is surfaced as a secondary line on the place card and
+unioned into the search index.
+
+Schema, UI rules, and data sources (curated CSV first, Wikidata `altLabel`
+second) are in
+[`docs/data-model/place-toponymy.md`](../docs/data-model/place-toponymy.md).
 
 ---
 
@@ -408,6 +511,27 @@ The interface should prioritize:
 The system should feel:
 - visually institutional;
 - semantically interconnected.
+
+## 13.1 Deferred — grid (Gitter) layout (illustrations dependency)
+
+The result-page layout switcher previously offered **Liste** (list) and
+**Gitter** (grid) views. The Gitter button has been removed: a grid view
+of mostly-textual register entries adds visual noise without adding
+information. Grid layout becomes useful only when cards carry
+illustrations — works that have a thumbnail (painting, sculpture, book
+cover, set photo), persons with a portrait, places with a representative
+image.
+
+Reinstating Gitter is therefore gated on an editorial image pipeline:
+sourcing, rights-clearing, and attaching one illustration per
+register entry, across ~16,000 entries. The effort is comparable to
+the planned geocoordinate pass for places (§12) — both are large
+editorial+reconciliation passes against external sources (Wikidata
+P18 for images, Wikidata P625 / GeoNames for coordinates).
+
+When images do land, the switcher returns with three states:
+**Liste · Gitter · Tidslinje** (the Tidslinje option is already
+present on `diaries.html` as a placeholder).
 
 ---
 
@@ -462,10 +586,9 @@ Highest-priority follow-ups:
    register ships in V0.9x: persons + places + diaries from V0.92,
    works still from V0.82.
 2. **`scripts/normalization/hca_xlsx_to_csv.py` is single-file
-   V0.82-shaped.** Either add a `--source` flag or fork a
-   `hca_v092_to_csv.py` that consumes the nine workbooks and emits
-   the same `entities.csv` / `diary.csv` / `references.csv` shapes
-   downstream consumers expect.
+   V0.82-shaped.** A V0.92 sibling `hca_v092_to_csv.py` now exists
+   and emits `data/normalized_v092/{entities,diary,references}.csv`
+   — see `data/normalized_v092/README.md` for the schema map.
 3. **`FactDiaLocPerPag` (92,307 rows)** is the authoritative
    person × place × diary-page co-occurrence grain. Replaces
    `scripts/build_mockup/build_cooccurrence.py` for the V0.92 slice.
@@ -474,6 +597,37 @@ Highest-priority follow-ups:
    `RegistryTitle` — partially closes the §15.1 gap for places. The
    §15.1 attention point should be re-scoped to *persons* once a
    person-side `Raw.See-Also` ships.
+
+## 15.1 Attention point — inline `se:` cross-references (deferred)
+
+The Excel master sheet (`raw/HCA-Repository V*.xlsx`) has dedicated
+`SeeTitle` / `SeeAlsoTittle` columns. The normalizer copies these
+verbatim into `entities.see` / `entities.see_also`.
+
+The coverage split is uneven:
+
+- **Works (118 inline `se:` markers):** 117 also have `SeeTitle`
+  populated — the parser already captures the link. ✓
+- **Persons (385) and places (76) — 461 entries:** `SeeTitle` is
+  empty in Excel. The cross-reference exists *only* inside the
+  `RegistryTitle` string (e.g. Reg0081650 *"L, Frue, se: Læssøe,
+  Signe."*). The Python script does not yet recover it. ✗
+
+Implementation sketch: when `SeeTitle` is empty, match
+`RegistryTitle` against `^(?P<alias>.+?),\s*\n?\s*se:\s*(?P<target>.+?)\.?\s*$`
+and lift `target` into `see`; the alias becomes the entry's `label`.
+Resolve `target` to an `entity_id` with the head-label + whole-word
+prefix matcher already used by `scripts/build_mockup/
+build_works_extra.py:resolve_ref()`. See
+[`docs/data-model/source-field-audit.md`](../docs/data-model/source-field-audit.md#inline-se-cross-references)
+for the full proposal.
+
+This sits next to but is **separate from** the planned `place_alias`
+work (§12.1 / [`place-toponymy.md`](../docs/data-model/place-toponymy.md)):
+that one captures *new* modern-spelling aliases (USA, Sverige,
+København) that the register does not already record. This section
+covers *existing* register aliases whose link is just stored in the
+wrong column.
 
 ---
 

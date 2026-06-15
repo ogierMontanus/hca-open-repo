@@ -184,6 +184,29 @@
               <button class="facet-panel__clear">Nulstil</button>
             </div>
 
+            <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11. -->
+            <div class="facet-group" id="temporal-mode-hca" data-active="mention" style="display:none">
+              <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body" style="padding:10px 12px 12px">
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button type="button" class="chip"
+                          data-mode="mention"
+                          aria-pressed="true"
+                          style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                          title="Årstal Andersen omtalte dette værk i dagbøgerne">Omtaledatoer</button>
+                  <button type="button" class="chip"
+                          data-mode="entity"
+                          aria-pressed="false"
+                          disabled
+                          style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                          title="Begivenhedsdatoer (udgivet · genoptryk) aktiveres, når entity_event-tabellen er udfyldt.">Begivenhedsdatoer</button>
+                </div>
+                <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                  Dagbogsrefs.-filtret bruger <em>omtaledatoer</em>. Begivenhedsdatoer (udgivet, genoptryk) aktiveres, når strukturerede entitetsdatoer er indlæst.
+                </div>
+              </div>
+            </div>
+
             <div class="facet-group">
               <div class="facet-group__header">Posttype <span class="facet-group__toggle">▲</span></div>
               <div class="facet-group__body">
@@ -205,13 +228,16 @@
             <div class="facet-group">
               <div class="facet-group__header">Dagbogsrefs. (interval) <span class="facet-group__toggle">▲</span></div>
               <div class="facet-group__body" style="padding:8px 16px 14px">
-                <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
-                  <span>1825</span>
-                  <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
-                  <span>—</span>
-                  <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
-                  <span>1875</span>
-                </div>
+                <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Fra årstal">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Til årstal">
+              </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
               </div>
             </div>
           </aside>
@@ -442,6 +468,29 @@
               <button class="facet-panel__clear">Nulstil</button>
             </div>
 
+            <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11. -->
+            <div class="facet-group" id="temporal-mode-andre" data-active="mention" style="display:none">
+              <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__body" style="padding:10px 12px 12px">
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button type="button" class="chip"
+                          data-mode="mention"
+                          aria-pressed="true"
+                          style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                          title="Årstal Andersen omtalte dette værk i dagbøgerne">Omtaledatoer</button>
+                  <button type="button" class="chip"
+                          data-mode="entity"
+                          aria-pressed="false"
+                          disabled
+                          style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                          title="Begivenhedsdatoer (udgivet · genoptryk) aktiveres, når entity_event-tabellen er udfyldt.">Begivenhedsdatoer</button>
+                </div>
+                <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                  Årstal-filtret bruger <em>omtaledatoer</em>. Begivenhedsdatoer (udgivet, genoptryk) aktiveres, når strukturerede entitetsdatoer er indlæst.
+                </div>
+              </div>
+            </div>
+
             <div class="facet-group">
               <div class="facet-group__header">Posttype <span class="facet-group__toggle">▲</span></div>
               <div class="facet-group__body">
@@ -490,15 +539,18 @@
             </div>
 
             <div class="facet-group">
-              <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+              <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
               <div class="facet-group__body" style="padding:8px 16px 14px">
-                <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
-                  <span>1825</span>
-                  <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
-                  <span>—</span>
-                  <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
-                  <span>1875</span>
-                </div>
+                <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Fra årstal">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Til årstal">
+              </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
               </div>
             </div>
           </aside>
@@ -978,7 +1030,9 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+    Udarbejdet af citizen scientists i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
 

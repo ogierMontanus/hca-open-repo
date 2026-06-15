@@ -297,8 +297,14 @@ main { flex: 1; }
 /* === Facet Panel === */
 .facet-panel {
   background: var(--color-surface); border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg); overflow: hidden;
+  border-radius: var(--radius-lg);
   position: sticky; top: calc(var(--header-height) + 16px);
+  /* The panel sticks to the viewport while the catalogue scrolls past
+     beside it. When the panel's content (long author lists, many
+     facets) exceeds the visible space, scroll inside the panel
+     rather than letting it run off-screen. */
+  max-height: calc(100vh - var(--header-height) - 32px);
+  overflow-y: auto;
 }
 .facet-panel__header {
   padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border);
@@ -322,6 +328,12 @@ main { flex: 1; }
 .facet-group__header:hover { background: var(--color-bg); }
 .facet-group__toggle { font-size: 0.65rem; color: var(--color-text-muted); }
 .facet-group__body { padding: var(--sp1) 0 var(--sp3); }
+/* Dynamically-populated facet bodies (e.g. data-facet-source="author")
+   can carry hundreds of entries — cap height so they scroll inside the
+   group instead of pushing every facet below them off-screen. */
+.facet-group__body[data-facet-source] {
+  max-height: 260px; overflow-y: auto;
+}
 .facet-item {
   display: flex; align-items: center; gap: var(--sp3);
   padding: 4px var(--sp5); font-size: 0.82rem; cursor: pointer;

@@ -172,47 +172,77 @@
             <button class="facet-panel__clear">Nulstil</button>
           </div>
 
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11.
+               "Omtaleår" slider = mention dates (1825–1875 diary period). "Begivenhedsdatoer"
+               = publication year / reprint — comes from year_derived but not yet structured
+               as entity_event; disabled. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
+            <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Årstal Andersen omtalte dette værk i dagbøgerne">Omtaledatoer</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Begivenhedsdatoer (udgivet · genoptryk) aktiveres, når entity_event-tabellen er udfyldt.">Begivenhedsdatoer</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                Årstal-filtret bruger <em>omtaledatoer</em> — hvornår Andersen nævnte værket i dagbøgerne. Begivenhedsdatoer (udgivet, genoptryk) aktiveres, når strukturerede entitetsdatoer er indlæst.
+              </div>
+            </div>
+          </div>
+
           <!-- H2 -->
           <div class="facet-group">
             <div class="facet-group__header">Forfattergruppe (H2) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">H. C. Andersen</span><span class="facet-item__count">775</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Andre Forfattere</span><span class="facet-item__count">741</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN"><span class="facet-item__label">H. C. Andersen</span><span class="facet-item__count">712</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE"><span class="facet-item__label">Andre Forfattere</span><span class="facet-item__count">798</span></label>
             </div>
           </div>
 
-          <!-- H3 — full list, split by H2 -->
+          <!-- H3 — full list, split by H2. Each checkbox carries data-h2 +
+               data-h3 so e.g. "Digte" under HCA filters to (HCA, Digte) only. -->
           <div class="facet-group">
             <div class="facet-group__header">Form (H3) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
               <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-muted);padding:4px 0 2px">H.C. Andersen</div>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Eventyr</span><span class="facet-item__count">288</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte</span><span class="facet-item__count">342</span></label>
-              <label class="facet-item"><input type="checkbox" id="facet-romaner-hca"><span class="facet-item__label">Romaner og Noveller</span><span class="facet-item__count">33</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rejseskildringer</span><span class="facet-item__count">21</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Afhandlinger, Artikler m.m.</span><span class="facet-item__count">19</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Selvbiografier</span><span class="facet-item__count">10</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">5</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Eventyr"><span class="facet-item__label">Eventyr</span><span class="facet-item__count">284</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Digte"><span class="facet-item__label">Digte</span><span class="facet-item__count">340</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Romaner og Noveller" id="facet-romaner-hca"><span class="facet-item__label">Romaner og Noveller</span><span class="facet-item__count">33</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Rejseskildringer"><span class="facet-item__label">Rejseskildringer</span><span class="facet-item__count">21</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Afhandlinger, Artikler m.m."><span class="facet-item__label">Afhandlinger, Artikler m.m.</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Selvbiografier"><span class="facet-item__label">Selvbiografier</span><span class="facet-item__count">10</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">5</span></label>
               <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-muted);padding:8px 0 2px">Andre Forfattere</div>
-              <label class="facet-item"><input type="checkbox" id="facet-romaner-andre"><span class="facet-item__label">Romaner, Noveller, Eventyr</span><span class="facet-item__count">229</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte</span><span class="facet-item__count">250</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Faglitteratur</span><span class="facet-item__count">216</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Tidsskrifter og Aarbøger</span><span class="facet-item__count">84</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Romaner, Noveller, Eventyr" id="facet-romaner-andre"><span class="facet-item__label">Romaner, Noveller, Eventyr</span><span class="facet-item__count">229</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Digte"><span class="facet-item__label">Digte</span><span class="facet-item__count">250</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Faglitteratur"><span class="facet-item__label">Faglitteratur</span><span class="facet-item__count">216</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Tidsskrifter og aarbøger, ugeblade, vittighedsblade (Periodica)"><span class="facet-item__label">Tidsskrifter og Aarbøger</span><span class="facet-item__count">84</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">19</span></label>
             </div>
           </div>
 
-          <!-- Årstal -->
+          <!-- Omtaleår -->
           <div class="facet-group">
-            <div class="facet-group__header">Årstal <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
-              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
-                <span>1825</span>
-                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
-                <span>—</span>
-                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
-                <span>1875</span>
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Fra årstal">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="Til årstal">
               </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
             </div>
           </div>
         </aside>
@@ -221,10 +251,6 @@
         <div>
           <div class="results-header">
             <span class="results-count"><strong>1.510</strong> poster i Bibliotek &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— fedmarkerede kort = et eksempel pr. H3</span></span>
-            <div class="layout-switcher">
-              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Gitter</button>
-              <button class="layout-switcher__btn" data-layout="list">Liste</button>
-            </div>
           </div>
 
           <div class="result-grid">
@@ -387,23 +413,25 @@
             &ensp;(33 HCA + 219 Andre Forfattere)
           </div>
 
+          <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js).
+               Sits inside the browse-layout main column so the sticky facet-panel
+               stays aligned with the catalogue when scrolling. -->
+          <div class="cat-block" style="margin-top:var(--sp10)">
+            <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
+            <div class="results-header">
+              <span class="results-count" id="js-cat-count"></span>
+            </div>
+            <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
+              <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
+            </div>
+            <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+            <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+              <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
+            </div>
+          </div>
+
         </div>
       </div>
-
-        <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js) -->
-        <div style="margin-top:var(--sp10)">
-          <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
-          <div class="results-header">
-            <span class="results-count" id="js-cat-count"></span>
-          </div>
-          <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
-            <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
-          </div>
-          <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
-          <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
-            <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
-          </div>
-        </div>
 
 
     </div>
@@ -413,7 +441,9 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+    Udarbejdet af citizen scientists i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
 

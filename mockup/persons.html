@@ -93,27 +93,16 @@
             </div>
           </div>
 
-          <div class="facet-group">
-            <div class="facet-group__header">Årstal for omtale <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body" style="padding:8px 16px 14px">
-              <div style="display:flex;gap:6px;align-items:center;font-size:0.76rem;color:var(--color-text-muted)">
-                <span>1825</span>
-                <input type="range" min="1825" max="1875" value="1825" style="flex:1;accent-color:var(--color-accent)">
-                <span>—</span>
-                <input type="range" min="1825" max="1875" value="1875" style="flex:1;accent-color:var(--color-accent)">
-                <span>1875</span>
-              </div>
-            </div>
-          </div>
+          <!-- Year-by-mention slider deliberately omitted on persons.html: a person's
+               life-cycle dates (born/died) are an ontologically distinct register from
+               diary-mention dates, and the two should not share a single year filter.
+               Mention-year filtering remains available on diaries.html; entity-date
+               filtering (born/died) will return here once entity_event is populated. -->
         </aside>
 
         <div>
           <div class="results-header">
             <span class="results-count"><strong>10.228</strong> personer i Personregister</span>
-            <div class="layout-switcher">
-              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
-              <button class="layout-switcher__btn" data-layout="grid">Gitter</button>
-            </div>
           </div>
 
           <!-- Persons list — data-driven from PERSONS_EXTRA (js/persons-extra.js) -->
@@ -131,7 +120,9 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+    Udarbejdet af citizen scientists i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
 
@@ -152,12 +143,30 @@
 
   // Danish surname initial. Fold "Aa" → "Å" (Danish treats them as one letter)
   // so "Aaberg" files under Å next to "Åberg". Non-letters bucket to "#".
+  // Diacritics fold so accented forms file under the right bucket:
+  //   ä→æ, ö→ø, ü→y (Danish convention; ü is articulated as y in Danish)
+  //   ß→s; generic accents (é, à, ñ, ç, î …) collapse to their base letter
+  //   via NFD strip of combining marks. æ/ø/å have no decomposition and
+  //   pass through.
   function initialOf(label) {
-    var s = (label || '').trim();
+    var s = (label || '')
+      .replace(/ä/g, 'æ').replace(/Ä/g, 'Æ')
+      .replace(/ö/g, 'ø').replace(/Ö/g, 'Ø')
+      .replace(/ü/g, 'y').replace(/Ü/g, 'Y')
+      .replace(/ß/g, 's')
+      .trim();
     if (!s) return '#';
     if (/^aa/i.test(s)) return 'Å';
     var c = s.charAt(0).toUpperCase();
-    return /[A-ZÆØÅ]/.test(c) ? c : '#';
+    if (/[A-ZÆØÅ]/.test(c)) return c;
+    // Generic accents fall through to NFD strip: é→E, ç→C, ñ→N, î→I, …
+    // Å/å are handled above — they NFD-decompose to A/a + combining ring,
+    // which would otherwise be stripped.
+    if (c.normalize) {
+      var folded = c.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (/[A-Z]/.test(folded.charAt(0))) return folded.charAt(0);
+    }
+    return '#';
   }
 
   var ALL = Object.keys(PERSONS_EXTRA).map(function (rid) {

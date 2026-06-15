@@ -98,26 +98,52 @@
             <button class="facet-panel__clear">Nulstil</button>
           </div>
 
-          <div class="facet-group">
-            <div class="facet-group__header">Underkategori (H3) <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Operaer og Syngestykker</span><span class="facet-item__count">241</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Skuespil — Andre Forfattere</span><span class="facet-item__count">747</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Skuespil og Operatekster — HCA</span><span class="facet-item__count">57</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Balletter</span><span class="facet-item__count">80</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Vokal- og Instrumentalmusik</span><span class="facet-item__count">135</span></label>
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11.
+               "Begivenhedsdatoer" = premiere / opførelse — comes from year_derived but
+               not yet structured as entity_event; disabled. No year slider is wired
+               on this page yet; both modes are informational for now. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
+            <div class="facet-group__header">Datokategori <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Årstal Andersen omtalte dette værk i dagbøgerne">Omtaledatoer</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Begivenhedsdatoer (premiere · opførelse) aktiveres, når entity_event-tabellen er udfyldt.">Begivenhedsdatoer</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                Søgning og browsing bruger <em>omtaledatoer</em> — hvornår Andersen nævnte værket i dagbøgerne. Begivenhedsdatoer (premiere, opførelse) aktiveres, når strukturerede entitetsdatoer er indlæst.
+              </div>
             </div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Komponist / Forfatter <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Underkategori (H3) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Bournonville, A.</span><span class="facet-item__count">4</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Hartmann, J. P. E.</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Heiberg, J. L.</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Holberg, L.</span><span class="facet-item__count">2</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Gounod, C.</span><span class="facet-item__count">2</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Operaer og Syngestykker, Skuespil med Musik"><span class="facet-item__label">Operaer og Syngestykker</span><span class="facet-item__count">240</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Skuespil"><span class="facet-item__label">Skuespil — Andre Forfattere</span><span class="facet-item__count">747</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Skuespil og Operatekster"><span class="facet-item__label">Skuespil og Operatekster — HCA</span><span class="facet-item__count">55</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Balletter"><span class="facet-item__label">Balletter</span><span class="facet-item__count">80</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Vokal- og Instrumentalmusik"><span class="facet-item__label">Vokal- og Instrumentalmusik</span><span class="facet-item__count">135</span></label>
             </div>
+          </div>
+
+          <!-- Komponist / Forfatter — populated at load time by
+               category-catalogue.js from every distinct WORKS_EXTRA.author
+               in this wing, ranked by works descending. The body's own
+               max-height keeps the long list from pushing the rest of
+               the panel below the viewport — see .facet-group__body in
+               css/style.css. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Komponist / Forfatter <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="author"></div>
           </div>
 
           <div class="facet-group">
@@ -133,10 +159,6 @@
         <div>
           <div class="results-header">
             <span class="results-count"><strong>1.257</strong> poster i Teater &amp; Musik &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— fedmarkerede kort = et eksempel pr. H3</span></span>
-            <div class="layout-switcher">
-              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="grid">Gitter</button>
-              <button class="layout-switcher__btn" data-layout="list">Liste</button>
-            </div>
           </div>
 
           <div class="result-grid">
@@ -246,23 +268,25 @@
             </a>
 
           </div>
+
+          <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js).
+               Sits inside the browse-layout main column so the sticky facet-panel
+               stays aligned with the catalogue when scrolling. -->
+          <div class="cat-block" style="margin-top:var(--sp10)">
+            <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
+            <div class="results-header">
+              <span class="results-count" id="js-cat-count"></span>
+            </div>
+            <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
+              <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
+            </div>
+            <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+            <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+              <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
+            </div>
+          </div>
         </div>
       </div>
-
-        <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js) -->
-        <div style="margin-top:var(--sp10)">
-          <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
-          <div class="results-header">
-            <span class="results-count" id="js-cat-count"></span>
-          </div>
-          <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
-            <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
-          </div>
-          <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
-          <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
-            <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
-          </div>
-        </div>
 
 
     </div>
@@ -272,7 +296,9 @@
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+    Udarbejdet af citizen scientists i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
 

@@ -29,12 +29,33 @@
 
   // First letter of the title, skipping leading punctuation/quotes/asterisks
   // common in the register ("*»Bring Hilsen …" → B). "Aa" folds to Å.
+  // Diacritics fold so accented forms file under the right bucket instead
+  // of falling into "#":
+  //   ä→æ, ö→ø, ü→y (Danish convention; ü is articulated as y in Danish)
+  //   ß→s; generic accents (é, à, ñ, ç, î …) collapse to their base letter
+  //   via NFD strip of combining marks. æ/ø/å have no decomposition and
+  //   pass through.
   function initialOf(label) {
-    var s = (label || '').replace(/^[^0-9A-Za-zÆØÅæøå]+/, '').trim();
+    var s = (label || '')
+      .replace(/ä/g, 'æ').replace(/Ä/g, 'Æ')
+      .replace(/ö/g, 'ø').replace(/Ö/g, 'Ø')
+      .replace(/ü/g, 'y').replace(/Ü/g, 'Y')
+      .replace(/ß/g, 's');
+    // Keep Latin-1 accented letters (À–ÿ) in the keep-set so the
+    // punctuation strip doesn't also eat a leading accented char like
+    // "*»École" → that would lose the É before the NFD fold below.
+    s = s.replace(/^[^0-9A-Za-zÆØÅæøåÀ-ÿ]+/, '').trim();
     if (!s) return '#';
     if (/^aa/i.test(s)) return 'Å';
     var c = s.charAt(0).toUpperCase();
-    return /[A-ZÆØÅ]/.test(c) ? c : '#';
+    if (/[A-ZÆØÅ]/.test(c)) return c;
+    // Generic accents fall through to NFD strip: é→E, ç→C, ñ→N, î→I, …
+    // Å/å are handled above — they NFD-decompose to A/a + combining ring.
+    if (c.normalize) {
+      var folded = c.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (/[A-Z]/.test(folded.charAt(0))) return folded.charAt(0);
+    }
+    return '#';
   }
 
   var ALL = Object.keys(WORKS_EXTRA).reduce(function (acc, rid) {
@@ -43,10 +64,60 @@
     acc.push({
       rid: rid, title: w.title || rid,
       meta: [w.author, w.h3, w.year].filter(Boolean).join(' · '),
-      refs: w.refs || 0, init: initialOf(w.title)
+      refs: w.refs || 0, init: initialOf(w.title),
+      h2: w.h2 || '', h3: w.h3 || '', author: w.author || ''
     });
     return acc;
   }, []);
+
+  // Faceted filtering — read state from the sibling .facet-panel on every
+  // render. Each H2/H3/author/rid checkbox carries the matching data-*
+  // attribute naming the exact WORKS_EXTRA value it filters on. Within a
+  // .facet-group the predicates combine with OR; across groups with AND;
+  // an empty group (no boxes ticked) imposes no constraint. Static counts
+  // on facet items are left as starting totals — dynamic count updates are
+  // deferred.
+  function readFacetGroups() {
+    var groups = [];
+    document.querySelectorAll('.facet-panel .facet-group').forEach(function (g) {
+      var boxes = g.querySelectorAll(
+        'input[type=checkbox][data-h2], input[type=checkbox][data-h3], ' +
+        'input[type=checkbox][data-author], input[type=checkbox][data-rid]'
+      );
+      if (!boxes.length) return;
+      var preds = [];
+      for (var i = 0; i < boxes.length; i++) {
+        var b = boxes[i];
+        if (!b.checked) continue;
+        preds.push({
+          h2: b.getAttribute('data-h2') || null,
+          h3: b.getAttribute('data-h3') || null,
+          author: b.getAttribute('data-author') || null,
+          rid: b.getAttribute('data-rid') || null
+        });
+      }
+      if (preds.length) groups.push(preds);
+    });
+    return groups;
+  }
+
+  function passesFacets(w, groups) {
+    for (var i = 0; i < groups.length; i++) {
+      var preds = groups[i];
+      var ok = false;
+      for (var j = 0; j < preds.length; j++) {
+        var p = preds[j];
+        if ((p.h2 == null || w.h2 === p.h2) &&
+            (p.h3 == null || w.h3 === p.h3) &&
+            (p.author == null || w.author === p.author) &&
+            (p.rid == null || w.rid === p.rid)) {
+          ok = true; break;
+        }
+      }
+      if (!ok) return false;
+    }
+    return true;
+  }
 
   var collator = (typeof Intl !== 'undefined' && Intl.Collator)
     ? new Intl.Collator('da') : null;
@@ -81,11 +152,20 @@
   }
 
   function apply() {
-    filtered = (letter ? ALL.filter(function (w) { return w.init === letter; }) : ALL.slice());
+    var groups = readFacetGroups();
+    filtered = ALL.filter(function (w) {
+      if (letter && w.init !== letter) return false;
+      return passesFacets(w, groups);
+    });
     filtered.sort(letter ? byTitle : byRefs);
+    var activeFacets = groups.reduce(function (n, g) { return n + g.length; }, 0);
+    var anyActive = activeFacets > 0 || letter !== null;
+    showcaseEls.forEach(function (el) { el.style.display = anyActive ? 'none' : ''; });
     if (countEl) {
-      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> poster i ' + esc(label) +
-        (letter ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>' : '');
+      var note = '';
+      if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>';
+      if (activeFacets) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' + activeFacets + ' facet' + (activeFacets === 1 ? '' : 'ter') + '</span>';
+      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> poster i ' + esc(label) + note;
     }
     grid.innerHTML = '';
     shown = 0;
@@ -117,5 +197,87 @@
   }
 
   moreBtn.addEventListener('click', renderMore);
+
+  // Extract a person's surname for alphabetic sorting. The register's
+  // person labels are already "Surname, Given names" (Collin, Edvard),
+  // so the part before the first comma IS the surname. WORKS_EXTRA.author
+  // is the looser "Given Surname" / "X. Surname" form (Lorenz Frølich,
+  // V. Pedersen) — fall back to the last whitespace-separated token in
+  // that case. Project preference: sort persons by surname wherever the
+  // label format permits (see CLAUDE.md).
+  function surnameKey(label) {
+    var s = (label || '').trim();
+    if (!s) return '';
+    var c = s.indexOf(',');
+    if (c >= 0) return s.slice(0, c).trim();
+    var parts = s.split(/\s+/);
+    return parts[parts.length - 1];
+  }
+
+  // Populate dynamic facet bodies before wiring change listeners. A
+  // wing page declares e.g. <div class="facet-group__body"
+  // data-facet-source="author"> and this fills it with one row per
+  // distinct author in the wing (data-author=…), sorted by works
+  // descending. Same pattern can later carry data-facet-source="h3" /
+  // "rid" if a page wants every value enumerated automatically.
+  document.querySelectorAll('.facet-panel [data-facet-source="author"]').forEach(function (host) {
+    var counts = {};
+    ALL.forEach(function (w) {
+      if (!w.author) return;
+      // Skip wing fallthroughs — the literal H2 strings the parser
+      // leaves behind when no individual author can be extracted.
+      if (w.author === w.h2) return;
+      counts[w.author] = (counts[w.author] || 0) + 1;
+    });
+    var rows = Object.keys(counts)
+      .map(function (a) { return [a, counts[a], surnameKey(a)]; })
+      .sort(function (a, b) {
+        // Primary: works descending. Secondary: surname collation (da).
+        return b[1] - a[1] || a[2].localeCompare(b[2], 'da');
+      });
+    host.innerHTML = rows.map(function (r) {
+      var a = esc(r[0]);
+      return '<label class="facet-item"><input type="checkbox" data-author="' + a +
+        '"><span class="facet-item__label">' + a +
+        '</span><span class="facet-item__count">' + r[1] + '</span></label>';
+    }).join('');
+  });
+
+  // The curated showcase sits directly inside the browse-layout main column,
+  // above the catalogue block. When the reader narrows by H2/H3 or by letter,
+  // the showcase becomes noise (it doesn't react to facets) and pushes the
+  // filtered list below the fold. Hide the showcase header + grid (direct
+  // children of the main column) whenever any filter is active; the
+  // catalogue's own .cat-block wrapper stays visible alongside the sticky
+  // facet-panel.
+  var showcaseEls = document.querySelectorAll(
+    '.browse-layout > div > .results-header, .browse-layout > div > .result-grid'
+  );
+
+  // Wire facet checkboxes for live filtering.
+  var facetBoxes = document.querySelectorAll(
+    '.facet-panel input[type=checkbox][data-h2], ' +
+    '.facet-panel input[type=checkbox][data-h3], ' +
+    '.facet-panel input[type=checkbox][data-author], ' +
+    '.facet-panel input[type=checkbox][data-rid]'
+  );
+  facetBoxes.forEach(function (cb) { cb.addEventListener('change', apply); });
+
+  // Wire the Nulstil button to clear all facet checkboxes + reset to "Alle".
+  var clearBtn = document.querySelector('.facet-panel__clear');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      facetBoxes.forEach(function (cb) { cb.checked = false; });
+      letter = null;
+      if (bar) {
+        bar.querySelectorAll('a.chip').forEach(function (x, i) {
+          x.style.background = i === 0 ? 'var(--color-accent)' : '';
+          x.style.color = i === 0 ? '#fff' : '';
+        });
+      }
+      apply();
+    });
+  }
+
   apply();
 })();
