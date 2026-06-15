@@ -29,9 +29,27 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
 XLSX_DEFAULT = os.path.join(
-    os.path.dirname(__file__), "..", "..", "data", "raw", "HCA-Repository V0.82.xlsx"
+    os.path.dirname(__file__), "..", "..", "data", "raw",
+    "HCA REPOSITORY V0.82", "HCA-Repository V0.82.xlsx",
 )
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "normalized")
+
+
+def resolve_input(inp):
+    """If --input points at a folder, pick the single .xlsx inside it.
+    Makes build_all.py able to hand the ingester a 'highest-version folder'
+    path uniformly without each script knowing the file name inside."""
+    if os.path.isdir(inp):
+        xlsxes = [f for f in os.listdir(inp) if f.lower().endswith(".xlsx")]
+        if len(xlsxes) == 1:
+            return os.path.join(inp, xlsxes[0])
+        if len(xlsxes) > 1:
+            sys.exit(
+                f"Input folder has multiple .xlsx files; specify one explicitly: "
+                f"{', '.join(xlsxes)}"
+            )
+        # Fall through to caller — might still be a CSV directory.
+    return inp
 
 # ── Sheet / column mappings ──────────────────────────────────────────────────
 
@@ -193,6 +211,7 @@ def main():
     if not os.path.exists(inp):
         sys.exit(f"Input not found: {inp}")
 
+    inp = resolve_input(inp)
     print(f"Reading: {inp}")
     if inp.endswith(".xlsx"):
         sheets = load_xlsx(inp)

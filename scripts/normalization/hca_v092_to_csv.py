@@ -21,6 +21,7 @@ Usage (PowerShell on Windows):
   python scripts/normalization/hca_v092_to_csv.py
 """
 
+import argparse
 import csv
 import os
 import re
@@ -37,15 +38,33 @@ except ImportError:
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SRC_DIR = ROOT / "data" / "raw" / "HCA REPOSITORY V0.92"
-OUT_DIR = ROOT / "data" / "normalized_v092"
+DEFAULT_SRC = ROOT / "data" / "raw" / "HCA REPOSITORY V0.92"
+DEFAULT_OUT = ROOT / "data" / "normalized_v092"
 
-FILES = {
-    "person":   SRC_DIR / "PersonData-PQ-V0.92.xlsx",
-    "location": SRC_DIR / "LocationData-PQ-V0.92.xlsx",
-    "diary":    SRC_DIR / "DiaryData-PQ-V0.92.xlsx",
-    "factdim":  SRC_DIR / "DiaryFactDim-PQ-V0.92.xlsx",
-}
+# Populated by main() once the --source folder is known.
+SRC_DIR: Path
+OUT_DIR: Path
+FILES: dict
+
+
+def _discover_files(src_dir: Path) -> dict:
+    """Locate the four V0.92 workbooks inside src_dir by their distinctive
+    name prefixes. Works for any version label (V0.92, V1.04, …) so a
+    future V1.x drop with the same naming convention is picked up
+    automatically."""
+    needed = {
+        "person":   "PersonData-PQ",
+        "location": "LocationData-PQ",
+        "diary":    "DiaryData-PQ",
+        "factdim":  "DiaryFactDim-PQ",
+    }
+    found = {}
+    for key, prefix in needed.items():
+        matches = sorted(src_dir.glob(f"{prefix}-V*.xlsx"))
+        if not matches:
+            sys.exit(f"Missing {prefix}-V*.xlsx in {src_dir}")
+        found[key] = matches[-1]  # if multiple versions present, take the highest
+    return found
 
 ENTITY_FIELDS = [
     "entity_id", "entity_type", "category_h1", "genre_h2",
@@ -312,11 +331,28 @@ def write_csv(path, fields, rows):
 
 
 def main():
-    for kind, p in FILES.items():
-        if not p.exists():
-            sys.exit(f"V0.92 source missing: {p}")
+    global SRC_DIR, OUT_DIR, FILES
 
-    print(f"Ingesting V0.92 from {SRC_DIR.relative_to(ROOT)}")
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
+    ap.add_argument("--source", type=Path, default=DEFAULT_SRC,
+                    help="folder containing the V0.92-style workbooks "
+                         f"(default: {DEFAULT_SRC.relative_to(ROOT)})")
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT,
+                    help="output directory for the normalized CSVs "
+                         f"(default: {DEFAULT_OUT.relative_to(ROOT)})")
+    args = ap.parse_args()
+
+    SRC_DIR = args.source.resolve()
+    OUT_DIR = args.out.resolve()
+    if not SRC_DIR.is_dir():
+        sys.exit(f"--source is not a directory: {SRC_DIR}")
+    FILES = _discover_files(SRC_DIR)
+
+    try:
+        src_label = SRC_DIR.relative_to(ROOT)
+    except ValueError:
+        src_label = SRC_DIR
+    print(f"Ingesting V0.92-style source from {src_label}")
 
     ents = build_entities()
     persons = sum(1 for r in ents if r["entity_type"] == "person")
@@ -332,7 +368,11 @@ def main():
     write_csv(OUT_DIR / "references.csv", REF_FIELDS, refs)
     print(f"  references.csv: {len(refs):>6} rows")
 
-    print(f"Done. Output -> {OUT_DIR.relative_to(ROOT)}")
+    try:
+        out_label = OUT_DIR.relative_to(ROOT)
+    except ValueError:
+        out_label = OUT_DIR
+    print(f"Done. Output -> {out_label}")
 
 
 if __name__ == "__main__":
