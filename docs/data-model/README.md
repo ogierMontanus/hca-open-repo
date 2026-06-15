@@ -14,6 +14,8 @@ The current core schema (tables, fields, relationship vocabulary) lives in [`ai-
 | [`source-data-characteristics.md`](source-data-characteristics.md) | How a printed-index entry is structured — parentheses as primary separator, name conventions, multilingual titles, special tokens (`Ͻ:`, `[...]`, guillemets) — with worked examples |
 | [`source-field-audit.md`](source-field-audit.md) | Column-by-column fill rates and surfacing status for every field in the three normalized CSVs — spots data that is collected but never shown |
 | [`temporal-modelling.md`](temporal-modelling.md) | Entity dates vs. mention dates — why the two date families must be kept separate, and how that distinction flows through filtering, timelines, search, and entity pages |
+| [`place-toponymy.md`](place-toponymy.md) | Planned: historical place spellings (e.g. *Sverrig*, *Kjøbenhavn*) and modern Danish aliases (e.g. *USA* for *Amerika (de forenede Stater)*) — schema, UI behaviour, and data sources for the `place_alias` table |
+| [`v0.92-structural-diff.md`](v0.92-structural-diff.md) | Structural diff V0.82 → V0.92 — what changed when the source moved from one workbook to nine (Power Query · FactDim · StarSchema), per-file sheet inventory, and what the pipeline needs in response |
 
 ## Audience
 

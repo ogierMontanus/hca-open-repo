@@ -443,6 +443,38 @@ CSV/Excel
 
 Editorial work remains external to production database.
 
+## 15.0 ⚠ Attention point — V0.92 source structure shift
+
+The source has moved from a single `HCA-Repository V0.82.xlsx`
+workbook to a **nine-file folder** at
+`data/raw/HCA REPOSITORY V0.92/`, organised by domain (Calendar,
+Person, Location, Diary) and by processing stage (`-PQ-`
+semi-raw · `DiaryFactDim-PQ-` fact+dim extract · `-PP-`
+StarSchema Power Pivot model). Star-schema modelling that was
+target-state in `docs/data-model/star-schema.md` is now *shipped*
+state. Full per-file sheet inventory and the V0.82 → V0.92 diff are
+in [`docs/data-model/v0.92-structural-diff.md`](../docs/data-model/v0.92-structural-diff.md).
+
+Highest-priority follow-ups:
+
+1. **V0.92 covers Persons / Places / Calendar / Diaries only** —
+   not Works. The pipeline must run dual-source until the works
+   register ships in V0.9x: persons + places + diaries from V0.92,
+   works still from V0.82.
+2. **`scripts/normalization/hca_xlsx_to_csv.py` is single-file
+   V0.82-shaped.** Either add a `--source` flag or fork a
+   `hca_v092_to_csv.py` that consumes the nine workbooks and emits
+   the same `entities.csv` / `diary.csv` / `references.csv` shapes
+   downstream consumers expect.
+3. **`FactDiaLocPerPag` (92,307 rows)** is the authoritative
+   person × place × diary-page co-occurrence grain. Replaces
+   `scripts/build_mockup/build_cooccurrence.py` for the V0.92 slice.
+4. **`Raw.See-Also` in `LocationData-PQ-V0.92.xlsx` (85 rows)**
+   structures the cross-references that V0.82 left inline in
+   `RegistryTitle` — partially closes the §15.1 gap for places. The
+   §15.1 attention point should be re-scoped to *persons* once a
+   person-side `Raw.See-Also` ships.
+
 ---
 
 # 16. Long-Term Evolution
