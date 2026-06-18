@@ -12,21 +12,21 @@ const HCA = {
    * PERSON-REGISTER — 10,228 entities · 39,361 diary refs
    * ------------------------------------------------------------------ */
   persons: [
-    { id: "Reg0048570", label: "Collin, Edvard",         refs: 767,  link: "person.html" },
-    { id: "Reg0069470", label: "Henriques, Martin R.",   refs: 462,  link: "person.html" },
-    { id: "Reg0090690", label: "Melchior, Moritz G.",    refs: 457,  link: "person.html" },
-    { id: "Reg0046040", label: "Collin, Henriette Oline",refs: 438,  link: "person.html" },
-    { id: "Reg0082540", label: "Koch, Ida f. Wulff",     refs: 419,  link: "person.html" },
-    { id: "Reg0046030", label: "Collin, Jonas",          refs: 412,  link: "person.html" },
-    { id: "Reg0161110", label: "Melchior, Dorothea",     refs: 398,  link: "person.html" },
-    { id: "Reg0169560", label: "Ørsted, Hans Christian", refs: 387,  link: "person.html" },
-    { id: "Reg0097310", label: "Lind, Jenny",            refs: 318,  link: "person.html" },
-    { id: "Reg0061810", label: "Hartmann, Johan Peter Emilius", refs: 312, link: "person.html" },
-    { id: "Reg0022240", label: "Bournonville, August",   refs: 298,  link: "person.html" },
-    { id: "Reg0030760", label: "Collin, Louise f. Lind", refs: 276,  link: "person.html" },
-    { id: "Reg0049710", label: "Dickens, Charles",       refs: 189,  link: "person.html" },
-    { id: "Reg0189100", label: "Thorvaldsen, Bertel",    refs: 176,  link: "person.html" },
-    { id: "Reg0159800", label: "Liszt, Franz",           refs: 142,  link: "person.html" }
+    { id: "Reg0048570", label: "Collin, Edvard",         refs: 767,  link: "persons.html" },
+    { id: "Reg0069470", label: "Henriques, Martin R.",   refs: 462,  link: "persons.html" },
+    { id: "Reg0090690", label: "Melchior, Moritz G.",    refs: 457,  link: "persons.html" },
+    { id: "Reg0046040", label: "Collin, Henriette Oline",refs: 438,  link: "persons.html" },
+    { id: "Reg0082540", label: "Koch, Ida f. Wulff",     refs: 419,  link: "persons.html" },
+    { id: "Reg0046030", label: "Collin, Jonas",          refs: 412,  link: "persons.html" },
+    { id: "Reg0161110", label: "Melchior, Dorothea",     refs: 398,  link: "persons.html" },
+    { id: "Reg0169560", label: "Ørsted, Hans Christian", refs: 387,  link: "persons.html" },
+    { id: "Reg0097310", label: "Lind, Jenny",            refs: 318,  link: "persons.html" },
+    { id: "Reg0061810", label: "Hartmann, Johan Peter Emilius", refs: 312, link: "persons.html" },
+    { id: "Reg0022240", label: "Bournonville, August",   refs: 298,  link: "persons.html" },
+    { id: "Reg0030760", label: "Collin, Louise f. Lind", refs: 276,  link: "persons.html" },
+    { id: "Reg0049710", label: "Dickens, Charles",       refs: 189,  link: "persons.html" },
+    { id: "Reg0189100", label: "Thorvaldsen, Bertel",    refs: 176,  link: "persons.html" },
+    { id: "Reg0159800", label: "Liszt, Franz",           refs: 142,  link: "persons.html" }
   ],
 
   /* ------------------------------------------------------------------ *

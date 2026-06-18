@@ -51,7 +51,7 @@ H1_LINK = {
     # Per-entity detail pages — the label chip and the Reg ID below both
     # become hyperlinks to ?reg={entity_id} on the appropriate template,
     # mirroring the existing work.html?reg=… pattern.
-    "PERSON-REGISTER": "../person.html",
+    "PERSON-REGISTER": "../persons.html",
     "STED-REGISTER":   "../place.html",
     "VÆRK-REGISTER":   "../work.html",
 }

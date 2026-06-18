@@ -92,6 +92,9 @@ jobs:
       - name: Stage 4e — cooccurrence.js (reciprocal links)
         run: python scripts/build_mockup/build_cooccurrence.py
 
+      - name: Lint — no stale person.html link targets
+        run: python tests/test_no_stale_person_refs.py
+
       - name: Bundle static site
         run: |
           mkdir -p _site

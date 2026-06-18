@@ -459,7 +459,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   sb += `<dt>H2</dt><dd>${w.h2}</dd>`;
   sb += `<dt>H3</dt><dd>${w.h3}</dd>`;
   if (w.author) {
-    sb += `<dt>Forfatter</dt><dd><a href="${personHref(w.author)}" style="color:var(--color-accent)">${w.author}</a>`;
+    sb += `<dt>person</dt><dd><a href="${personHref(w.author)}" style="color:var(--color-accent)">${w.author}</a>`;
     if (w.authorWd) sb += ` ${wdBadge(w.authorWd, w.author)}`;
     sb += `</dd>`;
   }
