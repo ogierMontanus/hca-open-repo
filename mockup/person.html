@@ -268,10 +268,13 @@ function escAttr(s) { return String(s == null ? '' : s)
 
   // Dagbogsreferencer — populated by DiaryWire below.
   main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
-    '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)" id="person-diary-summary">' +
-    'Indlæser…</p>' +
-    '<div class="result-grid" id="person-diary" data-reg="' + escAttr(reg) +
-    '" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>' +
+    '<div class="results-header">' +
+    '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
+    '<div class="layout-switcher" id="person-diary-switcher">' +
+    '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>' +
+    '<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>' +
+    '</div></div>' +
+    '<div class="result-grid" id="person-diary"></div>' +
     '<div style="text-align:center;margin-top:var(--sp5)">' +
     '<button id="person-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
     '</div></div>';
@@ -281,8 +284,11 @@ function escAttr(s) { return String(s == null ? '' : s)
   // Wire up the diary section
   const grid = document.getElementById('person-diary');
   const summary = document.getElementById('person-diary-summary');
+  const switcher = document.getElementById('person-diary-switcher');
+  const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'list'; } catch(e) { return 'list'; } })();
   const result = DiaryWire.refs(grid, reg, {
     pageSize: 24,
+    layout: savedLayout,
     moreBtn: document.getElementById('person-diary-more'),
     onCount: function (shown, total) {
       if (summary) {
@@ -295,6 +301,21 @@ function escAttr(s) { return String(s == null ? '' : s)
   });
   if (!result && summary) {
     summary.textContent = 'Dagbogsdata ikke indlæst (kør build_diary_index.py).';
+  }
+  if (result && switcher) {
+    switcher.querySelectorAll('[data-layout]').forEach(b => {
+      b.classList.toggle('layout-switcher__btn--active', b.dataset.layout === savedLayout);
+    });
+    switcher.addEventListener('click', ev => {
+      const btn = ev.target.closest('[data-layout]');
+      if (!btn) return;
+      const nl = btn.dataset.layout;
+      result.setLayout(nl);
+      try { localStorage.setItem('diary-layout', nl); } catch(e) {}
+      switcher.querySelectorAll('[data-layout]').forEach(b => {
+        b.classList.toggle('layout-switcher__btn--active', b === btn);
+      });
+    });
   }
 })();
 </script>

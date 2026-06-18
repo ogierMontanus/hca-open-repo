@@ -451,6 +451,20 @@ body[data-section="hvor"] .page-hero {
 }
 .result-grid--list .result-card__body { padding: var(--sp3) var(--sp4); }
 
+/* Compact card for diary grid view — date on top, place name below, no chips. */
+.result-card--compact .result-card__body {
+  padding: var(--sp3);
+  gap: var(--sp1);
+}
+.result-card--compact .result-card__meta {
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+}
+.result-card--compact .result-card__title {
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
 /* Featured (one representative per H3) */
 .result-card--featured {
   border-color: var(--color-accent);
