@@ -223,6 +223,32 @@
       transform: translateX(3px);
     }
 
+    /* Per-section colour cue — Hvem / Hvad / Hvor each carry the
+       palette token already used by their entity chips throughout the
+       site, so the colour cascades naturally to inner pages via
+       .chip--person / .chip--place / etc. Easy to adjust by tweaking
+       the three palette tokens in css/style.css. */
+    .landing-card--hvem .landing-card__heading,
+    .landing-card--hvem .landing-card__list li::before,
+    .landing-card--hvem .landing-card__arrow {
+      color: var(--color-person);
+    }
+    .landing-card--hvem:hover { background: var(--color-person-bg); }
+
+    .landing-card--hvad .landing-card__heading,
+    .landing-card--hvad .landing-card__list li::before,
+    .landing-card--hvad .landing-card__arrow {
+      color: var(--color-work);
+    }
+    .landing-card--hvad:hover { background: var(--color-work-bg); }
+
+    .landing-card--hvor .landing-card__heading,
+    .landing-card--hvor .landing-card__list li::before,
+    .landing-card--hvor .landing-card__arrow {
+      color: var(--color-place);
+    }
+    .landing-card--hvor:hover { background: var(--color-place-bg); }
+
     /* Bottom nav strip */
     .landing-nav {
       border-top: 1.5px solid var(--color-border);
@@ -304,7 +330,7 @@
       <div class="landing-grid">
 
         <!-- 1. Hvem -->
-        <a href="persons.html" class="landing-card">
+        <a href="persons.html" class="landing-card landing-card--hvem">
           <div class="landing-card__heading">Hvem</div>
           <div class="landing-card__count">10.228 personer · 39.361 poster i dagbøgerne</div>
           <ul class="landing-card__list">
@@ -319,7 +345,7 @@
         </a>
 
         <!-- 2. Hvad -->
-        <a href="index_detailed.html" class="landing-card">
+        <a href="index_detailed.html" class="landing-card landing-card--hvad">
           <div class="landing-card__heading">Hvad</div>
           <div class="landing-card__count">3.708 registerposter · 11.195 poster i dagbøgerne</div>
           <ul class="landing-card__list">
@@ -334,7 +360,7 @@
         </a>
 
         <!-- 3. Hvor -->
-        <a href="places.html" class="landing-card">
+        <a href="places.html" class="landing-card landing-card--hvor">
           <div class="landing-card__heading">Hvor</div>
           <div class="landing-card__count">2.508 steder · 18.849 poster i dagbøgerne</div>
           <ul class="landing-card__list">

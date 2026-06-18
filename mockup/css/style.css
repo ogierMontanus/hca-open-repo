@@ -294,6 +294,39 @@ main { flex: 1; }
   gap: var(--sp8); align-items: start;
 }
 
+/* === Per-section colour cascade (Hvem / Hvad / Hvor) ===
+   Each top-level section carries an entity color that matches the
+   three Hvem/Hvad/Hvor landing cards. Pages opt in by setting
+   data-section="hvem" / "hvad" / "hvor" on <body>; the colour shows
+   on the page-hero h1, the active breadcrumb, and a thin top accent
+   bar above the section block. The body chip styles
+   (.chip--person etc.) already use the same palette tokens, so the
+   colour reads consistently between the page header and the chips
+   used inside list rows. */
+body[data-section="hvem"] .page-hero h1,
+body[data-section="hvem"] .breadcrumb__current {
+  color: var(--color-person);
+}
+body[data-section="hvem"] .page-hero {
+  border-top: 4px solid var(--color-person);
+}
+
+body[data-section="hvad"] .page-hero h1,
+body[data-section="hvad"] .breadcrumb__current {
+  color: var(--color-work);
+}
+body[data-section="hvad"] .page-hero {
+  border-top: 4px solid var(--color-work);
+}
+
+body[data-section="hvor"] .page-hero h1,
+body[data-section="hvor"] .breadcrumb__current {
+  color: var(--color-place);
+}
+body[data-section="hvor"] .page-hero {
+  border-top: 4px solid var(--color-place);
+}
+
 /* === Facet Panel === */
 .facet-panel {
   background: var(--color-surface); border: 1px solid var(--color-border);
