@@ -559,13 +559,34 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     if (hasData) {
       const total = DIARY_REFS[reg].n;
       regBox.innerHTML =
-        `<div class="results-header"><span class="results-count"><strong>${total}</strong> dagbogsside${total === 1 ? '' : 'r'} omtaler ${w.title}</span></div>` +
-        `<div class="result-grid" id="js-reg-diary-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>` +
+        `<div class="results-header"><span class="results-count" style="flex:1"><strong>${total}</strong> dagbogsside${total === 1 ? '' : 'r'} omtaler ${escAttr(w.title)}</span>` +
+        `<div class="layout-switcher" id="js-reg-diary-switcher">` +
+        `<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>` +
+        `<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>` +
+        `</div></div>` +
+        `<div class="result-grid" id="js-reg-diary-grid"></div>` +
         `<div style="text-align:center;margin-top:var(--sp5)"><button id="js-reg-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button></div>`;
-      DiaryWire.refs(
+      const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'list'; } catch(e) { return 'list'; } })();
+      const diaryResult = DiaryWire.refs(
         document.getElementById('js-reg-diary-grid'), reg,
-        { pageSize: 24, moreBtn: document.getElementById('js-reg-diary-more') }
+        { pageSize: 24, layout: savedLayout, moreBtn: document.getElementById('js-reg-diary-more') }
       );
+      const sw = document.getElementById('js-reg-diary-switcher');
+      if (diaryResult && sw) {
+        sw.querySelectorAll('[data-layout]').forEach(b => {
+          b.classList.toggle('layout-switcher__btn--active', b.dataset.layout === savedLayout);
+        });
+        sw.addEventListener('click', ev => {
+          const btn = ev.target.closest('[data-layout]');
+          if (!btn) return;
+          const nl = btn.dataset.layout;
+          diaryResult.setLayout(nl);
+          try { localStorage.setItem('diary-layout', nl); } catch(e) {}
+          sw.querySelectorAll('[data-layout]').forEach(b => {
+            b.classList.toggle('layout-switcher__btn--active', b === btn);
+          });
+        });
+      }
     } else {
       regBox.innerHTML =
         `<div class="results-header"><span class="results-count">Ingen dagbogsomtaler fundet for ${w.title}</span></div>`;

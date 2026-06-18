@@ -59,24 +59,6 @@ window.DiaryWire = (function () {
     return 'Bind ' + esc(m.v || '?') + ', s. ' + esc(m.p || '?');
   }
 
-  /* Build one result-card for a diary page handle.
-   * Uses a <div> wrapper with an absolutely-positioned link so that
-   * entity chips inside can also be proper <a> elements (nested <a>
-   * is invalid HTML). The stretched `.result-card__link` covers the
-   * whole card; chip links sit above it via z-index. */
-  function cardFor(pag, chips) {
-    var m = (hasMeta() && DIARY_META[pag]) || {};
-    var meta = (m.d || m.y || '—') + ' · ' + esc(pag);
-    var chipMarkup = (chips || []).slice(0, 3).map(chipHtml).join('');
-    var href = PAGES_DIR + esc(pag) + '.html';
-    return '<div class="result-card">' +
-      '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(pag) + '"></a>' +
-      '<div class="result-card__body">' +
-      '<div class="result-card__title">' + titleFor(m) + '</div>' +
-      '<div class="result-card__meta">' + meta + '</div>' +
-      '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
-  }
-
   /* --- diary-reference section for one register entry -------------------- */
   function refs(container, regId, opts) {
     opts = opts || {};
@@ -86,25 +68,78 @@ window.DiaryWire = (function () {
     var rec = DIARY_REFS[regId];
     var shown = 0;
     var step = opts.pageSize || 24;
+    var layout = opts.layout || 'list';  // 'list' | 'grid'
+
+    /* "Rom, 18. oktober 1833" — the heading a reader sees in the diary. */
+    function headingFor(m) {
+      if (m.pl && m.d) return esc(m.pl) + ', ' + esc(m.d);
+      if (m.pl) return esc(m.pl);
+      return titleFor(m);
+    }
+
+    /* List card: heading + bibliographic sub-line + entity chips. */
+    function cardList(pag, chips) {
+      var m = (hasMeta() && DIARY_META[pag]) || {};
+      var heading = headingFor(m);
+      var sub = titleFor(m) + ' &nbsp;·&nbsp; ' + esc(pag);
+      var chipMarkup = (chips || []).slice(0, 3).map(chipHtml).join('');
+      var href = PAGES_DIR + esc(pag) + '.html';
+      return '<div class="result-card">' +
+        '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(pag) + '"></a>' +
+        '<div class="result-card__body">' +
+        '<div class="result-card__title">' + heading + '</div>' +
+        '<div class="result-card__meta">' + sub + '</div>' +
+        '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
+    }
+
+    /* Grid card: compact — date on top, place name below. No chips. */
+    function cardGrid(pag) {
+      var m = (hasMeta() && DIARY_META[pag]) || {};
+      var place = m.pl ? esc(m.pl) : titleFor(m);
+      var date = esc(m.d || m.y || '—');
+      var href = PAGES_DIR + esc(pag) + '.html';
+      return '<div class="result-card result-card--compact">' +
+        '<a href="' + href + '" class="result-card__link" title="' + esc(m.d || pag) + '"></a>' +
+        '<div class="result-card__body">' +
+        '<div class="result-card__meta">' + date + '</div>' +
+        '<div class="result-card__title">' + place + '</div>' +
+        '</div></div>';
+    }
+
+    function applyContainerStyle() {
+      container.style.gridTemplateColumns = layout === 'grid'
+        ? 'repeat(auto-fill,minmax(150px,1fr))'
+        : '1fr';
+    }
 
     function render(limit) {
+      applyContainerStyle();
       var html = rec.e.slice(0, limit).map(function (p) {
-        return cardFor(p, chipsFor(p));
+        return layout === 'grid' ? cardGrid(p) : cardList(p, chipsFor(p));
       }).join('');
       container.innerHTML = html;
       shown = Math.min(limit, rec.e.length);
       if (opts.onCount) opts.onCount(shown, rec.n, rec.e.length);
+      if (opts.moreBtn) {
+        opts.moreBtn.style.display = shown < rec.e.length ? '' : 'none';
+      }
     }
+
     render(Math.min(step, rec.e.length));
 
     if (opts.moreBtn) {
       opts.moreBtn.addEventListener('click', function () {
         render(Math.min(shown + step, rec.e.length));
-        if (shown >= rec.e.length) opts.moreBtn.style.display = 'none';
       });
-      if (rec.e.length <= shown) opts.moreBtn.style.display = 'none';
     }
-    return rec;
+
+    return {
+      n: rec.n,
+      setLayout: function (newLayout) {
+        layout = newLayout;
+        render(shown || step);
+      }
+    };
   }
 
   /* --- paginated full listing for diaries.html -------------------------- */
