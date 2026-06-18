@@ -7,7 +7,7 @@
  *   personRid(name)          → 'RegNNNN' | null
  *   placeRid(label)          → 'RegNNNN' | null
  *   workRid(title)           → 'RegNNNN' | null
- *   personHref(name)         → 'person.html?reg=…' | 'person.html'
+ *   personHref(name)         → 'persons.html?reg=…' | 'persons.html'
  *   placeHref(label)         → 'place.html?reg=…'  | 'place.html'
  *   workHref(title)          → 'work.html?reg=…'   | 'work.html'
  *   personHrefByRid(rid)     → trivial wrapper for callers that already know the rid
@@ -110,10 +110,10 @@ window.EntityRefs = (function () {
   function placeRid(label) { return label ? (_PLACE_LABEL_REG[label] || null) : null; }
   function workRid(title)  { return title ? (_WORK_TITLE_REG[title]   || null) : null; }
 
-  function personHref(name)  { var r = personRid(name);  return r ? 'person.html?reg=' + r : 'person.html'; }
+  function personHref(name)  { var r = personRid(name);  return r ? 'persons.html?reg=' + r : 'persons.html'; }
   function placeHref(label)  { var r = placeRid(label);  return r ? 'place.html?reg='  + r : 'place.html';  }
   function workHref(title)   { var r = workRid(title);   return r ? 'work.html?reg='   + r : 'work.html';   }
-  function personHrefByRid(r){ return r ? 'person.html?reg=' + r : 'person.html'; }
+  function personHrefByRid(r){ return r ? 'persons.html?reg=' + r : 'persons.html'; }
   function placeHrefByRid(r) { return r ? 'place.html?reg='  + r : 'place.html';  }
   function workHrefByRid(r)  { return r ? 'work.html?reg='   + r : 'work.html';   }
 

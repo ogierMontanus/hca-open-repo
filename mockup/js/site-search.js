@@ -26,7 +26,7 @@
   var INDEX = (typeof SEARCH_INDEX !== 'undefined' && Array.isArray(SEARCH_INDEX))
     ? SEARCH_INDEX : [];
 
-  var TYPE_HREF  = { p: 'person.html', s: 'place.html', w: 'work.html' };
+  var TYPE_HREF  = { p: 'persons.html', s: 'place.html', w: 'work.html' };
   var TYPE_LABEL = { p: 'Person', s: 'Sted', w: 'Værk' };
   var POPULAR_N = 8;
   var RESULT_N  = 20;
@@ -182,7 +182,7 @@
 
   /* Resolve the path prefix back to the mockup root from the current
    * document, so a header bar on diary-pages/Pag*.html links to
-   * ../person.html rather than person.html. site-search.js is loaded from
+   * ../persons.html rather than persons.html. site-search.js is loaded from
    * "<root>/js/site-search.js"; derive <root> from this script's own URL. */
   function rootPrefix() {
     var s = document.currentScript
