@@ -130,15 +130,16 @@
     }
     .landing-search-wrap .landing-search-form { margin: 0; }
 
-    /* Three-column section */
+    /* Four-panel accordion — Hvem / Hvad / Hvor / Hvornår */
     .landing-three {
       padding: 0 0 var(--sp12);
       background: var(--color-bg);
     }
-    .landing-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0;
+
+    /* Accordion container */
+    .acc {
+      display: flex;
+      height: 340px;
       border: 1.5px solid var(--color-border);
       border-radius: var(--radius-lg);
       overflow: hidden;
@@ -146,23 +147,93 @@
       box-shadow: var(--shadow);
     }
 
-    /* Individual cards */
-    .landing-card {
+    /* Each panel: starts slim, expands on hover via max-width transition */
+    .acc__panel {
+      flex: 1;
+      max-width: 52px;         /* slim default for Hvem/Hvad/Hvor */
+      overflow: hidden;
+      position: relative;
       display: flex;
-      flex-direction: column;
-      padding: var(--sp8);
+      align-items: stretch;
+      border-right: 1.5px solid var(--color-border);
       text-decoration: none;
       color: var(--color-text);
-      border-right: 1.5px solid var(--color-border);
-      transition: background 0.15s;
-      position: relative;
+      background: var(--color-surface);
+      transition: max-width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  background 0.2s;
+      cursor: pointer;
     }
-    .landing-card:last-child { border-right: none; }
-    .landing-card:hover {
-      background: var(--color-accent-light);
-      text-decoration: none;
+    .acc__panel:last-child { border-right: none; }
+
+    /* Hvornår stays horizontal in slim state → needs more width */
+    .acc__panel--hvornaar { max-width: 78px; }
+
+    /* Expand the hovered panel; siblings stay at their slim max-width */
+    .acc__panel:hover {
+      max-width: 900px;   /* large enough to never be the real constraint */
     }
-    .landing-card__heading {
+
+    /* ── Slim tab label (visible when panel is narrow) ────────────── */
+    .acc__tab {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      color: var(--color-text-muted);
+      transition: opacity 0.18s, color 0.18s;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Hvem/Hvad/Hvor: rotate text to vertical (reads bottom → top) */
+    .acc__panel--hvem  .acc__tab,
+    .acc__panel--hvad  .acc__tab,
+    .acc__panel--hvor  .acc__tab {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+    }
+
+    /* Hvornår: always horizontal — wrap inside the slim column */
+    .acc__panel--hvornaar .acc__tab {
+      writing-mode: horizontal-tb;
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 0 var(--sp3);
+      line-height: 1.3;
+      white-space: normal;
+    }
+
+    /* Fade out the tab as the panel opens */
+    .acc__panel:hover .acc__tab {
+      opacity: 0;
+    }
+
+    /* ── Full body content (hidden until hover) ───────────────────── */
+    .acc__body {
+      flex: 1;
+      min-width: 260px;
+      padding: var(--sp8);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: opacity 0.22s 0.18s, transform 0.22s 0.18s;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .acc__panel:hover .acc__body {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .acc__heading {
       font-family: var(--font-serif);
       font-size: 2rem;
       font-weight: 400;
@@ -170,14 +241,14 @@
       margin-bottom: var(--sp2);
       letter-spacing: -0.01em;
     }
-    .landing-card__count {
+    .acc__count {
       font-size: 0.78rem;
       color: var(--color-text-muted);
       margin-bottom: var(--sp5);
       font-weight: 500;
       letter-spacing: 0.01em;
     }
-    .landing-card__list {
+    .acc__list {
       list-style: none;
       display: flex;
       flex-direction: column;
@@ -185,7 +256,7 @@
       margin-bottom: var(--sp6);
       flex: 1;
     }
-    .landing-card__list li {
+    .acc__list li {
       font-size: 0.93rem;
       color: var(--color-text);
       padding: 5px 0;
@@ -194,13 +265,13 @@
       align-items: center;
       gap: var(--sp2);
     }
-    .landing-card__list li::before {
+    .acc__list li::before {
       content: '›';
       color: var(--color-accent);
       font-size: 0.9rem;
     }
-    .landing-card__list li:last-child { border-bottom: none; }
-    .landing-card__examples {
+    .acc__list li:last-child { border-bottom: none; }
+    .acc__examples {
       font-size: 0.77rem;
       color: var(--color-text-muted);
       font-style: italic;
@@ -209,45 +280,44 @@
       padding-top: var(--sp4);
       margin-top: auto;
     }
-    .landing-card__arrow {
+    .acc__arrow {
       position: absolute;
       bottom: var(--sp5);
       right: var(--sp5);
       font-size: 1.1rem;
       color: var(--color-accent);
       opacity: 0;
-      transition: opacity 0.15s, transform 0.15s;
+      transition: opacity 0.15s 0.25s, transform 0.15s 0.25s;
     }
-    .landing-card:hover .landing-card__arrow {
+    .acc__panel:hover .acc__arrow {
       opacity: 1;
       transform: translateX(3px);
     }
 
-    /* Per-section colour cue — Hvem / Hvad / Hvor each carry the
-       palette token already used by their entity chips throughout the
-       site, so the colour cascades naturally to inner pages via
-       .chip--person / .chip--place / etc. Easy to adjust by tweaking
-       the three palette tokens in css/style.css. */
-    .landing-card--hvem .landing-card__heading,
-    .landing-card--hvem .landing-card__list li::before,
-    .landing-card--hvem .landing-card__arrow {
-      color: var(--color-person);
-    }
-    .landing-card--hvem:hover { background: var(--color-person-bg); }
+    /* ── Per-panel colour tokens ──────────────────────────────────── */
+    .acc__panel--hvem  .acc__tab              { color: var(--color-person); }
+    .acc__panel--hvem  .acc__heading,
+    .acc__panel--hvem  .acc__list li::before,
+    .acc__panel--hvem  .acc__arrow            { color: var(--color-person); }
+    .acc__panel--hvem:hover                   { background: var(--color-person-bg); }
 
-    .landing-card--hvad .landing-card__heading,
-    .landing-card--hvad .landing-card__list li::before,
-    .landing-card--hvad .landing-card__arrow {
-      color: var(--color-work);
-    }
-    .landing-card--hvad:hover { background: var(--color-work-bg); }
+    .acc__panel--hvad  .acc__tab              { color: var(--color-work); }
+    .acc__panel--hvad  .acc__heading,
+    .acc__panel--hvad  .acc__list li::before,
+    .acc__panel--hvad  .acc__arrow            { color: var(--color-work); }
+    .acc__panel--hvad:hover                   { background: var(--color-work-bg); }
 
-    .landing-card--hvor .landing-card__heading,
-    .landing-card--hvor .landing-card__list li::before,
-    .landing-card--hvor .landing-card__arrow {
-      color: var(--color-place);
-    }
-    .landing-card--hvor:hover { background: var(--color-place-bg); }
+    .acc__panel--hvor  .acc__tab              { color: var(--color-place); }
+    .acc__panel--hvor  .acc__heading,
+    .acc__panel--hvor  .acc__list li::before,
+    .acc__panel--hvor  .acc__arrow            { color: var(--color-place); }
+    .acc__panel--hvor:hover                   { background: var(--color-place-bg); }
+
+    .acc__panel--hvornaar .acc__tab           { color: var(--color-event); }
+    .acc__panel--hvornaar .acc__heading,
+    .acc__panel--hvornaar .acc__list li::before,
+    .acc__panel--hvornaar .acc__arrow         { color: var(--color-event); }
+    .acc__panel--hvornaar:hover               { background: var(--color-event-bg); }
 
     /* Bottom nav strip */
     .landing-nav {
@@ -324,54 +394,73 @@
     </div>
   </section>
 
-  <!-- Three columns -->
+  <!-- Four-panel accordion: Hvem · Hvad · Hvor · Hvornår -->
   <section class="landing-three">
     <div class="container">
-      <div class="landing-grid">
+      <div class="acc">
 
         <!-- 1. Hvem -->
-        <a href="persons.html" class="landing-card landing-card--hvem">
-          <div class="landing-card__heading">Hvem</div>
-          <div class="landing-card__count">10.228 personer · 39.361 poster i dagbøgerne</div>
-          <ul class="landing-card__list">
-            <li>Kunstnere</li>
-            <li>Kvinder</li>
-            <li>Kongelige &amp; adelige</li>
-          </ul>
-          <div class="landing-card__examples">
-            Collin, Edvard · Lind, Jenny
+        <a href="persons.html" class="acc__panel acc__panel--hvem">
+          <div class="acc__tab">Hvem</div>
+          <div class="acc__body">
+            <div class="acc__heading">Hvem</div>
+            <div class="acc__count">10.228 personer · 39.361 poster i dagbøgerne</div>
+            <ul class="acc__list">
+              <li>Kunstnere</li>
+              <li>Kvinder</li>
+              <li>Kongelige &amp; adelige</li>
+            </ul>
+            <div class="acc__examples">Collin, Edvard · Lind, Jenny</div>
           </div>
-          <span class="landing-card__arrow">→</span>
+          <span class="acc__arrow">→</span>
         </a>
 
         <!-- 2. Hvad -->
-        <a href="index_detailed.html" class="landing-card landing-card--hvad">
-          <div class="landing-card__heading">Hvad</div>
-          <div class="landing-card__count">3.708 registerposter · 11.195 poster i dagbøgerne</div>
-          <ul class="landing-card__list">
-            <li>Teater &amp; Musik</li>
-            <li>Malerier &amp; Billedkunst</li>
-            <li>Bøger &amp; Digte</li>
-          </ul>
-          <div class="landing-card__examples">
-            Billedkunst · Teater &amp; Musik · Bibliotek — Eventyr, Balletter, Operaer, Skulpturer …
+        <a href="index_detailed.html" class="acc__panel acc__panel--hvad">
+          <div class="acc__tab">Hvad</div>
+          <div class="acc__body">
+            <div class="acc__heading">Hvad</div>
+            <div class="acc__count">3.708 registerposter · 11.195 poster i dagbøgerne</div>
+            <ul class="acc__list">
+              <li>Teater &amp; Musik</li>
+              <li>Malerier &amp; Billedkunst</li>
+              <li>Bøger &amp; Digte</li>
+            </ul>
+            <div class="acc__examples">Billedkunst · Teater &amp; Musik · Bibliotek — Eventyr, Balletter, Operaer, Skulpturer …</div>
           </div>
-          <span class="landing-card__arrow">→</span>
+          <span class="acc__arrow">→</span>
         </a>
 
         <!-- 3. Hvor -->
-        <a href="places.html" class="landing-card landing-card--hvor">
-          <div class="landing-card__heading">Hvor</div>
-          <div class="landing-card__count">2.508 steder · 18.849 poster i dagbøgerne</div>
-          <ul class="landing-card__list">
-            <li>Byer</li>
-            <li>Lande</li>
-            <li>Floder</li>
-          </ul>
-          <div class="landing-card__examples">
-            Berlin · Paris · Rom · Dresden · Stockholm · Weimar · Nizza …
+        <a href="places.html" class="acc__panel acc__panel--hvor">
+          <div class="acc__tab">Hvor</div>
+          <div class="acc__body">
+            <div class="acc__heading">Hvor</div>
+            <div class="acc__count">2.508 steder · 18.849 poster i dagbøgerne</div>
+            <ul class="acc__list">
+              <li>Byer</li>
+              <li>Lande</li>
+              <li>Floder</li>
+            </ul>
+            <div class="acc__examples">Berlin · Paris · Rom · Dresden · Stockholm · Weimar · Nizza …</div>
           </div>
-          <span class="landing-card__arrow">→</span>
+          <span class="acc__arrow">→</span>
+        </a>
+
+        <!-- 4. Hvornår — replaces "Tidslinje" -->
+        <a href="#" class="acc__panel acc__panel--hvornaar">
+          <div class="acc__tab">Hvornår</div>
+          <div class="acc__body">
+            <div class="acc__heading">Hvornår</div>
+            <div class="acc__count">1825–1875 · 50 år med dagbøger</div>
+            <ul class="acc__list">
+              <li>Tidslinje over rejser</li>
+              <li>Årstal for omtaler</li>
+              <li>Periodeafgrænsning</li>
+            </ul>
+            <div class="acc__examples">Tidslinje-funktionen er under udarbejdelse.</div>
+          </div>
+          <span class="acc__arrow">→</span>
         </a>
 
       </div>
@@ -385,8 +474,6 @@
         Dagbøger
         <span style="font-size:0.72rem;color:var(--color-text-muted)">(2.177 sider)</span>
       </a>
-      <span class="landing-nav__sep">·</span>
-      <a href="#" class="landing-nav__item">Tidslinje</a>
       <span class="landing-nav__sep">·</span>
       <a href="kort.html" class="landing-nav__item">
         Kort
