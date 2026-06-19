@@ -775,7 +775,8 @@ body::before {
   cursor: pointer;
 }
 .side-acc__panel:last-child { border-right: none; }
-.side-acc__panel:hover { max-width: 900px; }
+.side-acc:hover .side-acc__panel { max-width: 0; border-right-width: 0; }
+.side-acc:hover .side-acc__panel:hover { max-width: 100%; border-right-width: 0; }
 
 .side-acc__tab {
   position: absolute;
