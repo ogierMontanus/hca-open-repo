@@ -889,10 +889,17 @@ body::before {
 .side-acc__panel--hvornaar .side-acc__list li::before { color: var(--color-event); }
 .side-acc__panel--hvornaar:hover { background: var(--color-event-bg); }
 
-/* Active (current page) panel: tab label uses section accent colour */
-.side-acc__panel--hvem.side-acc__panel--active .side-acc__tab { color: var(--color-person); }
-.side-acc__panel--hvad.side-acc__panel--active .side-acc__tab { color: var(--color-work); }
-.side-acc__panel--hvor.side-acc__panel--active .side-acc__tab { color: var(--color-place); }
+/* Active (current page) panel: solid section colour so the user sees at a
+   glance which register they are in. Tab text inverts to white. */
+.side-acc__panel--active .side-acc__tab { color: #fff; font-weight: 500; }
+.side-acc__panel--hvem.side-acc__panel--active { background: var(--color-person); }
+.side-acc__panel--hvad.side-acc__panel--active { background: var(--color-work); }
+.side-acc__panel--hvor.side-acc__panel--active { background: var(--color-place); }
+.side-acc__panel--hvornaar.side-acc__panel--active { background: var(--color-event); }
+.side-acc__panel--hvem.side-acc__panel--active:hover { background: var(--color-person); }
+.side-acc__panel--hvad.side-acc__panel--active:hover { background: var(--color-work); }
+.side-acc__panel--hvor.side-acc__panel--active:hover { background: var(--color-place); }
+.side-acc__panel--hvornaar.side-acc__panel--active:hover { background: var(--color-event); }
 
 /* Narrow viewports: drop side-acc below main content rather than squeeze it. */
 @media (max-width: 1100px) {
