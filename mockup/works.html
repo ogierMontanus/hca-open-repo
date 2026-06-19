@@ -33,6 +33,8 @@
   <!-- Row 1: Three wings (VÆRK-REGISTER sub-divisions) -->
   <section class="section">
     <div class="container">
+      <div class="detail-with-sideacc">
+       <div>
       <h2 class="section-title">Værk-Register</h2>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
 
@@ -75,6 +77,50 @@
           <div class="wing-card__stats">1.510 poster · 6.048 poster i dagbøgerne</div>
         </a>
 
+      </div>
+       </div>
+
+       <!-- Right-margin accordion: the three inactive sections (Hvem / Hvor / Hvornår) -->
+       <aside class="side-acc" aria-label="Andre indgange">
+         <a href="persons.html" class="side-acc__panel side-acc__panel--hvem">
+           <div class="side-acc__tab">Hvem</div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading">Hvem</div>
+             <div class="side-acc__count">10.228 personer · 39.361 poster</div>
+             <ul class="side-acc__list">
+               <li>Kunstnere</li>
+               <li>Kvinder</li>
+               <li>Kongelige &amp; adelige</li>
+             </ul>
+             <div class="side-acc__examples">Collin, Edvard · Lind, Jenny</div>
+           </div>
+         </a>
+         <a href="places.html" class="side-acc__panel side-acc__panel--hvor">
+           <div class="side-acc__tab">Hvor</div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading">Hvor</div>
+             <div class="side-acc__count">2.508 steder · 18.849 poster</div>
+             <ul class="side-acc__list">
+               <li>Byer</li>
+               <li>Lande</li>
+               <li>Floder</li>
+             </ul>
+             <div class="side-acc__examples">Berlin · Rom · Paris · Weimar …</div>
+           </div>
+         </a>
+         <a href="#" class="side-acc__panel side-acc__panel--hvornaar">
+           <div class="side-acc__tab">Hvornår</div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading">Hvornår</div>
+             <div class="side-acc__count">1825–1875 · 50 år med dagbøger</div>
+             <ul class="side-acc__list">
+               <li>Årstal for omtaler</li>
+               <li>Periodeafgrænsning</li>
+             </ul>
+             <div class="side-acc__examples">Tidslinje-funktionen er under udarbejdelse.</div>
+           </div>
+         </a>
+       </aside>
       </div>
     </div>
   </section>
