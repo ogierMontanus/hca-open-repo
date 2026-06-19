@@ -775,8 +775,7 @@ body::before {
   cursor: pointer;
 }
 .side-acc__panel:last-child { border-right: none; }
-.side-acc__panel--hvornaar { max-width: 78px; }
-.side-acc__panel:hover { max-width: 320px; }
+.side-acc__panel:hover { max-width: 900px; }
 
 .side-acc__tab {
   position: absolute;
@@ -800,11 +799,10 @@ body::before {
   transform: rotate(180deg);
 }
 .side-acc__panel--hvornaar .side-acc__tab {
-  writing-mode: horizontal-tb;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
   font-size: 0.82rem;
-  text-align: center;
-  padding: 0 var(--sp2);
-  line-height: 1.3;
 }
 .side-acc__panel:hover .side-acc__tab { opacity: 0; }
 
