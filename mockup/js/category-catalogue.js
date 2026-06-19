@@ -74,31 +74,55 @@
   // render. Each H2/H3/author/rid checkbox carries the matching data-*
   // attribute naming the exact WORKS_EXTRA value it filters on. Within a
   // .facet-group the predicates combine with OR; across groups with AND;
-  // an empty group (no boxes ticked) imposes no constraint. Static counts
-  // on facet items are left as starting totals — dynamic count updates are
-  // deferred.
+  // an empty group (no boxes ticked) imposes no constraint.
+  var FACET_SEL =
+    'input[type=checkbox][data-h2], input[type=checkbox][data-h3], ' +
+    'input[type=checkbox][data-author], input[type=checkbox][data-rid]';
+
+  function predOf(b) {
+    return {
+      h2: b.getAttribute('data-h2') || null,
+      h3: b.getAttribute('data-h3') || null,
+      author: b.getAttribute('data-author') || null,
+      rid: b.getAttribute('data-rid') || null
+    };
+  }
+
+  function matchesPred(w, p) {
+    return (p.h2 == null || w.h2 === p.h2) &&
+           (p.h3 == null || w.h3 === p.h3) &&
+           (p.author == null || w.author === p.author) &&
+           (p.rid == null || w.rid === p.rid);
+  }
+
   function readFacetGroups() {
     var groups = [];
     document.querySelectorAll('.facet-panel .facet-group').forEach(function (g) {
-      var boxes = g.querySelectorAll(
-        'input[type=checkbox][data-h2], input[type=checkbox][data-h3], ' +
-        'input[type=checkbox][data-author], input[type=checkbox][data-rid]'
-      );
+      var boxes = g.querySelectorAll(FACET_SEL);
       if (!boxes.length) return;
       var preds = [];
       for (var i = 0; i < boxes.length; i++) {
-        var b = boxes[i];
-        if (!b.checked) continue;
-        preds.push({
-          h2: b.getAttribute('data-h2') || null,
-          h3: b.getAttribute('data-h3') || null,
-          author: b.getAttribute('data-author') || null,
-          rid: b.getAttribute('data-rid') || null
-        });
+        if (boxes[i].checked) preds.push(predOf(boxes[i]));
       }
       if (preds.length) groups.push(preds);
     });
     return groups;
+  }
+
+  // Per-group active predicates indexed by group element — needed by
+  // updateFacetAvailability() which counts under "all OTHER groups" for
+  // each option (the standard adaptive-facet pattern).
+  function readGroupsByEl() {
+    var els = Array.prototype.slice.call(
+      document.querySelectorAll('.facet-panel .facet-group'));
+    return els.map(function (g) {
+      var boxes = g.querySelectorAll(FACET_SEL);
+      var preds = [];
+      for (var i = 0; i < boxes.length; i++) {
+        if (boxes[i].checked) preds.push(predOf(boxes[i]));
+      }
+      return { el: g, preds: preds };
+    });
   }
 
   function passesFacets(w, groups) {
@@ -106,13 +130,7 @@
       var preds = groups[i];
       var ok = false;
       for (var j = 0; j < preds.length; j++) {
-        var p = preds[j];
-        if ((p.h2 == null || w.h2 === p.h2) &&
-            (p.h3 == null || w.h3 === p.h3) &&
-            (p.author == null || w.author === p.author) &&
-            (p.rid == null || w.rid === p.rid)) {
-          ok = true; break;
-        }
+        if (matchesPred(w, preds[j])) { ok = true; break; }
       }
       if (!ok) return false;
     }
@@ -151,6 +169,79 @@
     moreBtn.style.display = shown < filtered.length ? '' : 'none';
   }
 
+  // Empty-state markup shown inside #js-cat-results when filtered.length === 0.
+  // The "Nulstil filter" button delegates to the panel's own Nulstil control
+  // so we don't duplicate reset logic. See clearBtn wiring below.
+  function emptyStateHtml() {
+    return '<div class="empty-state" style="padding:var(--sp7) var(--sp5);text-align:center;' +
+      'background:var(--color-surface-2);border:1px dashed var(--color-border);border-radius:var(--radius)">' +
+      '<div style="font-size:1.05rem;font-weight:500;margin-bottom:var(--sp3)">Ingen resultater matcher de valgte filtre.</div>' +
+      '<div style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+      'Prøv at fjerne et af filtrene — eller nulstil for at se hele ' + esc(label) + '-registret.</div>' +
+      '<button type="button" class="chip" id="js-empty-reset" ' +
+      'style="cursor:pointer;background:var(--color-accent);color:#fff;border-color:var(--color-accent);padding:6px 14px">' +
+      'Nulstil alle filtre</button></div>';
+  }
+
+  // For each facet checkbox: count items that pass the letter filter AND all
+  // OTHER groups' active preds AND this option's pred. Options with 0 reach
+  // get disabled + dimmed; their .facet-item__count is also updated so the
+  // sidebar mirrors the live state. Checked boxes are never disabled — they
+  // are contributing to the current set and unticking them is the way out.
+  function updateFacetAvailability() {
+    var byEl = readGroupsByEl();
+    byEl.forEach(function (entry, gi) {
+      var otherGroups = [];
+      for (var k = 0; k < byEl.length; k++) {
+        if (k === gi || !byEl[k].preds.length) continue;
+        otherGroups.push(byEl[k].preds);
+      }
+      var boxes = entry.el.querySelectorAll(FACET_SEL);
+      boxes.forEach(function (b) {
+        var optPred = predOf(b);
+        var count = 0;
+        for (var i = 0; i < ALL.length; i++) {
+          var w = ALL[i];
+          if (letter && w.init !== letter) continue;
+          if (!passesFacets(w, otherGroups)) continue;
+          if (!matchesPred(w, optPred)) continue;
+          count++;
+        }
+        var item = b.closest ? b.closest('.facet-item') : null;
+        var countEl2 = item ? item.querySelector('.facet-item__count') : null;
+        if (countEl2) countEl2.textContent = count;
+        var dim = count === 0 && !b.checked;
+        b.disabled = dim;
+        if (item) {
+          item.style.opacity = dim ? '0.4' : '';
+          item.style.cursor = dim ? 'not-allowed' : '';
+          item.title = dim ? 'Ingen resultater under de øvrige filtre' : '';
+        }
+      });
+    });
+  }
+
+  // Dim alphabet chips whose letter has 0 hits under the current facet
+  // selection. The "Alle" chip (no data-letter) is left alone.
+  function updateLetterAvailability() {
+    if (!bar) return;
+    var groups = readFacetGroups();
+    var counts = {};
+    for (var i = 0; i < ALL.length; i++) {
+      var w = ALL[i];
+      if (!passesFacets(w, groups)) continue;
+      counts[w.init] = (counts[w.init] || 0) + 1;
+    }
+    bar.querySelectorAll('a.chip').forEach(function (chip) {
+      var l = chip.getAttribute('data-letter');
+      if (!l) return;
+      var has = !!counts[l];
+      chip.style.opacity = has ? '' : '0.35';
+      chip.style.pointerEvents = has ? '' : 'none';
+      chip.title = has ? '' : 'Ingen resultater under de valgte facetter';
+    });
+  }
+
   function apply() {
     var groups = readFacetGroups();
     filtered = ALL.filter(function (w) {
@@ -169,7 +260,21 @@
     }
     grid.innerHTML = '';
     shown = 0;
-    renderMore();
+    if (filtered.length === 0) {
+      grid.innerHTML = emptyStateHtml();
+      moreBtn.style.display = 'none';
+      var resetBtn = document.getElementById('js-empty-reset');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          var cb = document.querySelector('.facet-panel__clear');
+          if (cb) cb.click();
+        });
+      }
+    } else {
+      renderMore();
+    }
+    updateFacetAvailability();
+    updateLetterAvailability();
   }
 
   var bar = document.getElementById('js-cat-alpha-bar');
@@ -183,6 +288,7 @@
       a.href = '#';
       a.className = 'chip';
       a.textContent = ch.t;
+      if (ch.l) a.setAttribute('data-letter', ch.l);
       a.addEventListener('click', function (ev) {
         ev.preventDefault();
         letter = ch.l;

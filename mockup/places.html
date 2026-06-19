@@ -279,6 +279,17 @@
     moreBtn.style.display = shown < filtered.length ? '' : 'none';
   }
 
+  function emptyStateHtml() {
+    return '<div class="empty-state" style="padding:var(--sp7) var(--sp5);text-align:center;' +
+      'background:var(--color-surface-2);border:1px dashed var(--color-border);border-radius:var(--radius)">' +
+      '<div style="font-size:1.05rem;font-weight:500;margin-bottom:var(--sp3)">Ingen steder matcher dit valg.</div>' +
+      '<div style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+      'Nulstil for at se hele Stedregistret igen.</div>' +
+      '<button type="button" class="chip" id="js-empty-reset" ' +
+      'style="cursor:pointer;background:var(--color-accent);color:#fff;border-color:var(--color-accent);padding:6px 14px">' +
+      'Nulstil filter</button></div>';
+  }
+
   function apply() {
     filtered = (letter ? ALL.filter(function (p) { return p.init === letter; }) : ALL.slice());
     filtered.sort(letter ? byLabel : byRefs);
@@ -288,6 +299,24 @@
     }
     grid.innerHTML = '';
     shown = 0;
+    if (filtered.length === 0) {
+      grid.innerHTML = emptyStateHtml();
+      moreBtn.style.display = 'none';
+      var resetBtn = document.getElementById('js-empty-reset');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          letter = null;
+          if (bar) {
+            bar.querySelectorAll('a.chip').forEach(function (x, i) {
+              x.style.background = i === 0 ? 'var(--color-accent)' : '';
+              x.style.color = i === 0 ? '#fff' : '';
+            });
+          }
+          apply();
+        });
+      }
+      return;
+    }
     renderMore();
   }
 
