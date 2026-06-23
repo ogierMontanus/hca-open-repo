@@ -251,7 +251,7 @@
 
   function card(p) {
     var meta = 'PERSON-REGISTER' + (p.desc ? ' · ' + esc(p.desc) : '');
-    return '<a href="person.html?reg=' + esc(p.rid) + '" class="result-card result-card--list" ' +
+    return '<a href="persons.html?reg=' + esc(p.rid) + '" class="result-card result-card--list" ' +
       'style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">' +
       '<div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">' + esc(p.rid) + '</div>' +
       '<div style="flex:1"><div class="result-card__title" style="font-size:0.95rem">' + esc(p.label) + '</div>' +
