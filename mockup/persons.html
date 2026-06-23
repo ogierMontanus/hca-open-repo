@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Personregister — H.C. Andersen Dagbogsregister</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .wd-badge {
+      display: inline-block; font-size: 0.63rem; font-family: monospace;
+      font-weight: 600; padding: 1px 5px; border-radius: 3px;
+      background: #edf4fb; border: 1px solid #93bcd9; color: #2a5e8a;
+      text-decoration: none; white-space: nowrap; vertical-align: middle; line-height: 1.7;
+    }
+    .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
+  </style>
 </head>
 <body data-section="hvem">
 
@@ -22,21 +31,22 @@
 
   <div class="page-hero page-hero--sm">
     <div class="container">
-      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+      <nav id="js-breadcrumb" class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
         <a href="index.html">Forside</a>
         <span class="breadcrumb__sep">›</span>
         <span class="breadcrumb__current">Personregister</span>
       </nav>
-      <h1>Personregister</h1>
-      <p>H1 = PERSON-REGISTER — navne omtalt i H.C. Andersens dagbøger</p>
-      <div class="page-hero__meta">
+      <h1 id="js-h1">Personregister</h1>
+      <p id="js-hero-sub">H1 = PERSON-REGISTER — navne omtalt i H.C. Andersens dagbøger</p>
+      <div id="js-hero-chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+      <div id="js-hero-meta" class="page-hero__meta">
         <span>10.228 registerposter</span>
         <span>39.361 poster i dagbøgerne</span>
       </div>
     </div>
   </div>
 
-  <section class="section">
+  <section id="js-list-section" class="section">
     <div class="container">
       <div class="detail-with-sideacc">
        <div>
@@ -177,6 +187,15 @@
 
 </main>
 
+  <section id="js-detail-section" class="section" style="display:none">
+    <div class="container">
+      <div class="entity-layout">
+        <div class="entity-main" id="js-detail-main"></div>
+        <aside class="entity-sidebar" id="js-detail-sidebar"></aside>
+      </div>
+    </div>
+  </section>
+
 <footer class="site-footer">
   <div class="container">
     Udarbejdet af citizen scientists i samarbejde med
@@ -185,28 +204,221 @@
   </div>
 </footer>
 
-<!-- Generated person catalogue (gitignored; CI regenerates it). Build with:
-     python scripts/build_mockup/build_persons_extra.py -->
+<!-- Person data + supporting data for the detail view (generated; gitignored). -->
 <script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
+<script src="data/cooccurrence.js" onerror="void 0"></script>
+<script src="data/diary-index.js" onerror="void 0"></script>
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/diary-wire.js"></script>
 <script>
 (function () {
   'use strict';
-  var grid = document.getElementById('js-person-results');
-  if (!grid || typeof PERSONS_EXTRA === 'undefined') return;  // keep empty list if no data
 
   function esc(s) {
-    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
 
-  // Danish surname initial. Fold "Aa" → "Å" (Danish treats them as one letter)
-  // so "Aaberg" files under Å next to "Åberg". Non-letters bucket to "#".
-  // Diacritics fold so accented forms file under the right bucket:
-  //   ä→æ, ö→ø, ü→y (Danish convention; ü is articulated as y in Danish)
-  //   ß→s; generic accents (é, à, ñ, ç, î …) collapse to their base letter
-  //   via NFD strip of combining marks. æ/ø/å have no decomposition and
-  //   pass through.
+  var urlReg = new URLSearchParams(location.search).get('reg');
+
+  // ── DETAIL VIEW (?reg=…) ───────────────────────────────────────────────────
+  if (urlReg) {
+    var p = (typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[urlReg]) || null;
+
+    document.title = (p ? p.label : urlReg) + ' — H.C. Andersen Dagbogsregister';
+
+    var bc = document.getElementById('js-breadcrumb');
+    if (bc) bc.innerHTML =
+      '<a href="index.html">Forside</a><span class="breadcrumb__sep">›</span>' +
+      '<a href="persons.html">Personregister</a><span class="breadcrumb__sep">›</span>' +
+      '<span class="breadcrumb__current">' + esc(p ? p.label : urlReg) + '</span>';
+
+    var h1El = document.getElementById('js-h1');
+    if (h1El) h1El.textContent = p ? p.label : urlReg;
+
+    var subEl = document.getElementById('js-hero-sub');
+    if (subEl) subEl.style.display = 'none';
+
+    var chEl = document.getElementById('js-hero-chips');
+    if (chEl && p) {
+      var chips = '<span class="chip chip--person">PERSON-REGISTER</span>';
+      if (p.era) chips += '<span class="chip">' + esc(p.era) + '</span>';
+      chips += '<span class="chip" style="font-family:monospace">' + esc(urlReg) + '</span>';
+      if (p.wd) chips += '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) +
+        '" class="wd-badge" target="_blank" rel="noopener">wd:' + esc(p.wd) + '</a>';
+      chEl.innerHTML = chips;
+    }
+
+    var total = (typeof DIARY_REFS !== 'undefined' && DIARY_REFS[urlReg])
+      ? DIARY_REFS[urlReg].n : (p && p.refs || 0);
+    var metaEl = document.getElementById('js-hero-meta');
+    if (metaEl) {
+      var mItems = [];
+      if (p) {
+        if (p.born && p.died) mItems.push(p.born + '–' + p.died);
+        else if (p.born) mItems.push('* ' + p.born);
+        else if (p.died) mItems.push('† ' + p.died);
+        if (p.description) mItems.push(p.description);
+      }
+      mItems.push(total + ' poster i dagbøgerne');
+      metaEl.innerHTML = mItems.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('');
+    }
+
+    var listSec = document.getElementById('js-list-section');
+    if (listSec) listSec.style.display = 'none';
+    var detSec = document.getElementById('js-detail-section');
+    if (detSec) detSec.style.display = '';
+
+    var mn = document.getElementById('js-detail-main');
+    if (!mn) return;
+
+    if (!p) {
+      mn.innerHTML = '<p style="color:var(--color-text-muted)">Ukendt person: ' + esc(urlReg) + '</p>';
+      return;
+    }
+
+    // Sidebar
+    var sb = document.getElementById('js-detail-sidebar');
+    if (sb) {
+      var sbH = '<div class="info-block"><div class="info-block__header">Registerdata</div>' +
+        '<div class="info-block__body"><table class="info-table">' +
+        '<tr><td>ID</td><td style="font-family:monospace">' + esc(urlReg) + '</td></tr>' +
+        '<tr><td>Register</td><td>PERSON-REGISTER</td></tr>' +
+        '<tr><td>Label</td><td>' + esc(p.label) + '</td></tr>';
+      if (p.born) sbH += '<tr><td>Født</td><td>' + esc(p.born) + '</td></tr>';
+      if (p.died) sbH += '<tr><td>Død</td><td>' + esc(p.died) + '</td></tr>';
+      if (p.description) sbH += '<tr><td>Rolle</td><td>' + esc(p.description) + '</td></tr>';
+      sbH += '<tr><td>Dagbogsrefs.</td><td>' + total + '</td></tr></table></div></div>';
+      if (p.wd) {
+        sbH += '<div class="info-block"><div class="info-block__header">Autoritetslinks</div>' +
+          '<div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">' +
+          '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) + '" target="_blank" rel="noopener" ' +
+          'style="display:flex;align-items:center;gap:6px"><span class="wd-badge">wd:' + esc(p.wd) + '</span>' +
+          '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
+      }
+      sb.innerHTML = sbH;
+    }
+
+    // Main content
+    var mainH = '';
+
+    if (p.description) {
+      mainH += '<div><h2 class="section-title">Beskrivelse</h2>' +
+        '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' + esc(p.description) + '</p></div>';
+    }
+
+    // Works by this person
+    var myWorks = (typeof EntityRefs !== 'undefined') ? EntityRefs.worksByAuthor(urlReg) : [];
+    if (myWorks.length) {
+      var byH3 = {};
+      myWorks.forEach(function (w) {
+        var k = w.h3 || '—';
+        (byH3[k] = byH3[k] || []).push(w);
+      });
+      Object.keys(byH3).forEach(function (k) {
+        byH3[k].sort(function (a, b) { return (b.refs || 0) - (a.refs || 0); });
+      });
+      var groups = Object.keys(byH3).sort(function (a, b) {
+        var ra = byH3[a].reduce(function (s, w) { return s + (w.refs || 0); }, 0);
+        var rb = byH3[b].reduce(function (s, w) { return s + (w.refs || 0); }, 0);
+        return rb - ra;
+      });
+      var wBlock = '<div><h2 class="section-title">Værker</h2>' +
+        '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+        myWorks.length + ' værk' + (myWorks.length === 1 ? '' : 'er') +
+        ' tilskrevet ' + esc(p.label) + ' i registret.</p>';
+      groups.forEach(function (h3) {
+        var items = byH3[h3];
+        wBlock += '<div style="margin-bottom:var(--sp5)">' +
+          '<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;' +
+          'letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:8px">' +
+          esc(h3) + ' <span style="opacity:0.7">(' + items.length + ')</span></div>' +
+          '<ul style="list-style:none;padding:0;margin:0;display:grid;' +
+          'grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 16px;font-size:0.88rem">';
+        items.slice(0, 12).forEach(function (w) {
+          wBlock += '<li><a href="' + esc(EntityRefs.workHrefByRid(w.rid)) +
+            '" style="color:var(--color-text)">' + esc(w.title) + '</a>' +
+            (w.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' + w.refs + ' ref.</span>' : '') + '</li>';
+        });
+        if (items.length > 12) wBlock += '<li style="color:var(--color-text-muted);font-style:italic">+ ' + (items.length - 12) + ' yderligere</li>';
+        wBlock += '</ul></div>';
+      });
+      mainH += wBlock + '</div>';
+    }
+
+    // Top co-occurring places
+    var topPlaces = (typeof PERSON_TOP_PLACES !== 'undefined' && PERSON_TOP_PLACES[urlReg]) || [];
+    if (topPlaces.length) {
+      var plH = '<div><h2 class="section-title">Hyppigste steder</h2>' +
+        '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+        'Steder der oftest nævnes på samme dagbogsside som ' + esc(p.label) + '.</p>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px">';
+      topPlaces.forEach(function (pair) {
+        var prid = pair[0], n = pair[1];
+        var lab = (typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[prid] && PLACES_EXTRA[prid].label) || prid;
+        plH += '<a href="' + esc(EntityRefs.placeHrefByRid(prid)) +
+          '" class="chip chip--place" style="font-size:0.82rem">' +
+          esc(lab) + ' <span style="opacity:0.7;font-size:0.74rem">· ' + n + '</span></a>';
+      });
+      mainH += plH + '</div></div>';
+    }
+
+    // Diary references
+    mainH += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
+      '<div class="results-header">' +
+      '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
+      '<div class="layout-switcher" id="person-diary-switcher">' +
+      '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>' +
+      '<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>' +
+      '</div></div>' +
+      '<div class="result-grid" id="person-diary"></div>' +
+      '<div style="text-align:center;margin-top:var(--sp5)">' +
+      '<button id="person-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
+      '</div></div>';
+
+    mn.innerHTML = mainH;
+
+    // Wire diary references
+    var dGrid = document.getElementById('person-diary');
+    var dSummary = document.getElementById('person-diary-summary');
+    var dSwitcher = document.getElementById('person-diary-switcher');
+    var savedLayout = (function () { try { return localStorage.getItem('diary-layout') || 'list'; } catch (e) { return 'list'; } })();
+    var diaryResult = (typeof DiaryWire !== 'undefined') ? DiaryWire.refs(dGrid, urlReg, {
+      pageSize: 24, layout: savedLayout,
+      moreBtn: document.getElementById('person-diary-more'),
+      onCount: function (shown, tot) {
+        if (dSummary) dSummary.textContent = tot === 0
+          ? 'Ingen dagbogsreferencer registreret.'
+          : 'Viser ' + shown + ' af ' + tot + ' dagbogssider hvor ' + p.label + ' optræder.';
+      }
+    }) : null;
+    if (!diaryResult && dSummary) dSummary.textContent = 'Dagbogsdata ikke indlæst (kør build_diary_index.py).';
+    if (diaryResult && dSwitcher) {
+      dSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+        b.classList.toggle('layout-switcher__btn--active', b.dataset.layout === savedLayout);
+      });
+      dSwitcher.addEventListener('click', function (ev) {
+        var btn = ev.target.closest('[data-layout]');
+        if (!btn) return;
+        var nl = btn.dataset.layout;
+        diaryResult.setLayout(nl);
+        try { localStorage.setItem('diary-layout', nl); } catch (e) {}
+        dSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+          b.classList.toggle('layout-switcher__btn--active', b === btn);
+        });
+      });
+    }
+    return;  // skip list rendering
+  }
+
+  // ── LIST VIEW (no ?reg=) ──────────────────────────────────────────────────
+  var grid = document.getElementById('js-person-results');
+  if (!grid || typeof PERSONS_EXTRA === 'undefined') return;
+
   function initialOf(label) {
     var s = (label || '')
       .replace(/ä/g, 'æ').replace(/Ä/g, 'Æ')
