@@ -48,7 +48,7 @@ window.DiaryWire = (function () {
       : ' style="font-size:0.68rem"';
     if (c.r) {
       var page = c.t === 'place' ? 'place.html'
-               : c.t === 'person' ? 'persons.html' : 'work.html';
+               : c.t === 'person' ? 'person.html' : 'work.html';
       return '<a href="' + page + '?reg=' + esc(c.r) + '" class="' + cls +
              ' result-card__chip-link"' + style + '>' + esc(c.l) + '</a>';
     }

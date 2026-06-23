@@ -207,25 +207,23 @@
             </div>
           </div>
 
-          <!-- H3 — full list, split by H2. Each checkbox carries data-h2 +
-               data-h3 so e.g. "Digte" under HCA filters to (HCA, Digte) only. -->
+          <!-- H3 — combined list; data-h2 + data-h3 on each checkbox means
+               selecting a form here AND an author group above narrows correctly. -->
           <div class="facet-group">
             <div class="facet-group__header">Form (H3) <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
-              <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-muted);padding:4px 0 2px">H.C. Andersen</div>
-              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Eventyr"><span class="facet-item__label">Eventyr</span><span class="facet-item__count">284</span></label>
-              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Digte"><span class="facet-item__label">Digte</span><span class="facet-item__count">340</span></label>
-              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Romaner og Noveller" id="facet-romaner-hca"><span class="facet-item__label">Romaner og Noveller</span><span class="facet-item__count">33</span></label>
-              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Rejseskildringer"><span class="facet-item__label">Rejseskildringer</span><span class="facet-item__count">21</span></label>
               <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Afhandlinger, Artikler m.m."><span class="facet-item__label">Afhandlinger, Artikler m.m.</span><span class="facet-item__count">19</span></label>
-              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Selvbiografier"><span class="facet-item__label">Selvbiografier</span><span class="facet-item__count">10</span></label>
-              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">5</span></label>
-              <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-muted);padding:8px 0 2px">Andre Forfattere</div>
-              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Romaner, Noveller, Eventyr" id="facet-romaner-andre"><span class="facet-item__label">Romaner, Noveller, Eventyr</span><span class="facet-item__count">229</span></label>
-              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Digte"><span class="facet-item__label">Digte</span><span class="facet-item__count">250</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Digte"><span class="facet-item__label">Digte (HCA)</span><span class="facet-item__count">340</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Digte"><span class="facet-item__label">Digte (Andre)</span><span class="facet-item__count">250</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Eventyr"><span class="facet-item__label">Eventyr</span><span class="facet-item__count">284</span></label>
               <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Faglitteratur"><span class="facet-item__label">Faglitteratur</span><span class="facet-item__count">216</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Rejseskildringer"><span class="facet-item__label">Rejseskildringer</span><span class="facet-item__count">21</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Romaner, Noveller, Eventyr" id="facet-romaner-andre"><span class="facet-item__label">Romaner, Noveller, Eventyr (Andre)</span><span class="facet-item__count">229</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Romaner og Noveller" id="facet-romaner-hca"><span class="facet-item__label">Romaner og Noveller (HCA)</span><span class="facet-item__count">33</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Samlede og blandede Skrifter (HCA)</span><span class="facet-item__count">5</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Samlede og blandede Skrifter (Andre)</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Selvbiografier"><span class="facet-item__label">Selvbiografier</span><span class="facet-item__count">10</span></label>
               <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Tidsskrifter og aarbøger, ugeblade, vittighedsblade (Periodica)"><span class="facet-item__label">Tidsskrifter og Aarbøger</span><span class="facet-item__count">84</span></label>
-              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Samlede og blandede Skrifter</span><span class="facet-item__count">19</span></label>
             </div>
           </div>
 

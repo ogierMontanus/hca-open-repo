@@ -368,6 +368,12 @@ const WORKS = {
 const TITLE_TO_REG = {};
 for (const [reg, w] of Object.entries(WORKS)) TITLE_TO_REG[w.title] = reg;
 
+function escAttr(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 // Cross-entity lookups (personHref / placeHref / nameKey / worksByAuthor …)
 // live in mockup/js/entity-refs.js — loaded above. Aliased here so the
 // existing template literals stay terse.
