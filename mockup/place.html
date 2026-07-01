@@ -159,7 +159,7 @@ function escAttr(s) { return String(s == null ? '' : s)
   // ── Sidebar ──────────────────────────────────────────────────────────────
   let sb = '';
   sb += '<div class="info-block"><div class="info-block__header">Registerdata</div><div class="info-block__body"><table class="info-table">';
-  sb += '<tr><td>ID</td><td style="font-family:monospace">' + escAttr(reg) + '</td></tr>';
+  sb += '<tr><td>Internt ID-nr.</td><td style="font-family:monospace">' + escAttr(reg) + '</td></tr>';
   sb += '<tr><td>Register</td><td>STED-REGISTER</td></tr>';
   sb += '<tr><td>Label</td><td>' + escAttr(pl.label) + '</td></tr>';
   if (pl.destination_en && pl.destination_en !== pl.label)
@@ -168,7 +168,7 @@ function escAttr(s) { return String(s == null ? '' : s)
   if (hasCoords)
     sb += '<tr><td>Koordinater</td><td style="font-family:monospace">' +
       pl.lat.toFixed(4) + ', ' + pl.lon.toFixed(4) + '</td></tr>';
-  sb += '<tr><td>Dagbogsrefs.</td><td>' + total + '</td></tr>';
+  sb += '<tr><td>Træffere</td><td>' + total + '</td></tr>';
   sb += '</table></div></div>';
 
   if (pl.wd) {

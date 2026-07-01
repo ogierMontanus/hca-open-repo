@@ -1,0 +1,84 @@
+<!-- @dsCard group="Chips & Tags" -->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Chips & Tags</title>
+<style>
+:root {
+  --color-bg: #f5f3ef; --color-surface: #ffffff; --color-surface-2: #f0ede8;
+  --color-border: #d8d4cc; --color-text: #1c1c28; --color-text-muted: #5c5c72;
+  --color-accent: #1e5f8c; --color-accent-light: #deedf5;
+  --color-person: #1d4ed8; --color-person-bg: #dbeafe;
+  --color-place: #047857;  --color-place-bg: #d1fae5;
+  --color-work: #b45309;   --color-work-bg: #fef3c7;
+  --color-event: #6d28d9;  --color-event-bg: #ede9fe;
+  --color-theme: #be185d;  --color-theme-bg: #fce7f3;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius: 4px; --radius-lg: 8px;
+  --sp2: 8px; --sp3: 12px; --sp4: 16px; --sp6: 24px; --sp8: 32px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); padding: 32px; line-height: 1.6; }
+h2 { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--sp3); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--sp6); }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 9px; border-radius: 12px; font-size: 0.73rem;
+  font-weight: 500; text-decoration: none; white-space: nowrap;
+  transition: opacity 0.1s; cursor: pointer;
+}
+.chip:hover { opacity: 0.78; }
+.chip--person { background: var(--color-person-bg); color: var(--color-person); }
+.chip--place  { background: var(--color-place-bg);  color: var(--color-place); }
+.chip--work   { background: var(--color-work-bg);   color: var(--color-work); }
+.chip--event  { background: var(--color-event-bg);  color: var(--color-event); }
+.chip--theme  { background: var(--color-theme-bg);  color: var(--color-theme); }
+.chip--inst   { background: var(--color-accent-light); color: var(--color-accent); }
+
+/* typeahead type pills */
+.pill { font-size: 0.68rem; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+.pill--p { background: #e7f0ff; color: #1d4ed8; }
+.pill--s { background: #e8f7ec; color: #15803d; }
+.pill--w { background: #fef0e3; color: #b45309; }
+
+section { margin-bottom: var(--sp8); }
+</style>
+</head>
+<body>
+<section>
+  <h2>Entity chips — in diary-reference cards</h2>
+  <div class="row">
+    <a class="chip chip--person" href="#">Collin, Jonas (1776–1861)</a>
+    <a class="chip chip--person" href="#">Ørsted, H. C. (1777–1851)</a>
+    <a class="chip chip--place"  href="#">København</a>
+    <a class="chip chip--place"  href="#">Rom</a>
+    <a class="chip chip--work"   href="#">Eventyrene (HCA)</a>
+    <a class="chip chip--event"  href="#">Hofbal 1845</a>
+    <a class="chip chip--theme"  href="#">Melankoli</a>
+    <a class="chip chip--inst"   href="#">Det Kongelige Bibliotek</a>
+  </div>
+</section>
+
+<section>
+  <h2>Typeahead type pills — in search dropdown</h2>
+  <div class="row">
+    <span class="pill pill--p">Person</span>
+    <span class="pill pill--s">Sted</span>
+    <span class="pill pill--w">Værk</span>
+  </div>
+</section>
+
+<section>
+  <h2>All chip colours at a glance</h2>
+  <div class="row">
+    <span class="chip chip--person">Person</span>
+    <span class="chip chip--place">Sted</span>
+    <span class="chip chip--work">Værk</span>
+    <span class="chip chip--event">Begivenhed</span>
+    <span class="chip chip--theme">Tema</span>
+    <span class="chip chip--inst">Institution</span>
+  </div>
+</section>
+</body>
+</html>

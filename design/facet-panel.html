@@ -1,0 +1,114 @@
+<!-- @dsCard group="Facet Panel" -->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Facet Panel</title>
+<style>
+:root {
+  --color-bg: #f5f3ef; --color-surface: #ffffff; --color-surface-2: #f0ede8;
+  --color-border: #d8d4cc; --color-text: #1c1c28; --color-text-muted: #5c5c72;
+  --color-accent: #1e5f8c; --color-accent-light: #deedf5;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius: 4px; --radius-lg: 8px;
+  --sp1: 4px; --sp2: 8px; --sp3: 12px; --sp4: 16px; --sp5: 20px; --sp6: 24px; --sp8: 32px;
+  --header-height: 60px; --sidebar-width: 260px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); padding: 32px; line-height: 1.6; }
+
+.facet-panel {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); width: var(--sidebar-width);
+}
+.facet-panel__header {
+  padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.facet-panel__title {
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--color-text-muted);
+}
+.facet-panel__clear { font-size: 0.76rem; color: var(--color-accent); cursor: pointer; background: none; border: none; font-family: var(--font-sans); }
+.facet-group { border-bottom: 1px solid var(--color-border); }
+.facet-group:last-child { border-bottom: none; }
+.facet-group__header {
+  padding: var(--sp3) var(--sp5); font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  user-select: none;
+}
+.facet-group__header:hover { background: var(--color-bg); }
+.facet-group__toggle { font-size: 0.65rem; color: var(--color-text-muted); }
+.facet-group__body { padding: var(--sp1) 0 var(--sp3); }
+.facet-item {
+  display: flex; align-items: center; gap: var(--sp3);
+  padding: 4px var(--sp5); font-size: 0.82rem; cursor: pointer;
+  transition: background 0.1s;
+}
+.facet-item:hover { background: var(--color-bg); }
+.facet-item input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--color-accent); flex-shrink: 0; }
+.facet-item__label { flex: 1; color: var(--color-text); }
+.facet-item__count { font-size: 0.73rem; color: var(--color-text-muted); background: var(--color-surface-2); padding: 1px 6px; border-radius: 10px; }
+.facet-item--active .facet-item__label { color: var(--color-accent); font-weight: 500; }
+</style>
+</head>
+<body>
+<div style="display:flex;gap:32px;flex-wrap:wrap">
+
+  <div>
+    <p style="font-size:0.74rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#5c5c72;margin-bottom:12px">Default — ingen valg</p>
+    <div class="facet-panel">
+      <div class="facet-panel__header">
+        <span class="facet-panel__title">Filtrer</span>
+        <button class="facet-panel__clear">Ryd</button>
+      </div>
+      <div class="facet-group">
+        <div class="facet-group__header">Forfatter (H2) <span class="facet-group__toggle">▲</span></div>
+        <div class="facet-group__body">
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">H. C. Andersen</span><span class="facet-item__count">713</span></label>
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Andre forfattere</span><span class="facet-item__count">798</span></label>
+        </div>
+      </div>
+      <div class="facet-group">
+        <div class="facet-group__header">Form (H3) <span class="facet-group__toggle">▲</span></div>
+        <div class="facet-group__body">
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Eventyr (HCA)</span><span class="facet-item__count">284</span></label>
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte</span><span class="facet-item__count">340</span></label>
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte (Andre)</span><span class="facet-item__count">250</span></label>
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Romaner og Noveller (HCA)</span><span class="facet-item__count">33</span></label>
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Faglitteratur</span><span class="facet-item__count">216</span></label>
+        </div>
+      </div>
+      <div class="facet-group">
+        <div class="facet-group__header">Forfatter / Komponist <span class="facet-group__toggle">▼</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p style="font-size:0.74rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:#5c5c72;margin-bottom:12px">Med aktiv markering</p>
+    <div class="facet-panel">
+      <div class="facet-panel__header">
+        <span class="facet-panel__title">Filtrer</span>
+        <button class="facet-panel__clear">Ryd</button>
+      </div>
+      <div class="facet-group">
+        <div class="facet-group__header">Forfatter (H2) <span class="facet-group__toggle">▲</span></div>
+        <div class="facet-group__body">
+          <label class="facet-item facet-item--active"><input type="checkbox" checked><span class="facet-item__label">H. C. Andersen</span><span class="facet-item__count">713</span></label>
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Andre forfattere</span><span class="facet-item__count">798</span></label>
+        </div>
+      </div>
+      <div class="facet-group">
+        <div class="facet-group__header">Form (H3) <span class="facet-group__toggle">▲</span></div>
+        <div class="facet-group__body">
+          <label class="facet-item facet-item--active"><input type="checkbox" checked><span class="facet-item__label">Eventyr (HCA)</span><span class="facet-item__count">284</span></label>
+          <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Digte</span><span class="facet-item__count">340</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -286,13 +286,13 @@
     if (sb) {
       var sbH = '<div class="info-block"><div class="info-block__header">Registerdata</div>' +
         '<div class="info-block__body"><table class="info-table">' +
-        '<tr><td>ID</td><td style="font-family:monospace">' + esc(urlReg) + '</td></tr>' +
+        '<tr><td>Internt ID-nr.</td><td style="font-family:monospace">' + esc(urlReg) + '</td></tr>' +
         '<tr><td>Register</td><td>PERSON-REGISTER</td></tr>' +
         '<tr><td>Label</td><td>' + esc(p.label) + '</td></tr>';
       if (p.born) sbH += '<tr><td>Født</td><td>' + esc(p.born) + '</td></tr>';
       if (p.died) sbH += '<tr><td>Død</td><td>' + esc(p.died) + '</td></tr>';
       if (p.description) sbH += '<tr><td>Rolle</td><td>' + esc(p.description) + '</td></tr>';
-      sbH += '<tr><td>Dagbogsrefs.</td><td>' + total + '</td></tr></table></div></div>';
+      sbH += '<tr><td>Træffere</td><td>' + total + '</td></tr></table></div></div>';
       if (p.wd) {
         sbH += '<div class="info-block"><div class="info-block__header">Autoritetslinks</div>' +
           '<div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">' +

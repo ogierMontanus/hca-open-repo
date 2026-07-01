@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="da"><head>
+<meta charset="utf-8">
+<title>Info Block</title>
+
+<style>
+:root {
+  --color-bg: #f5f3ef; --color-surface: #ffffff; --color-surface-2: #f0ede8;
+  --color-border: #d8d4cc; --color-text: #1c1c28; --color-text-muted: #5c5c72;
+  --color-accent: #1e5f8c; --color-accent-light: #deedf5;
+  --color-person: #1d4ed8; --color-person-bg: #dbeafe;
+  --color-place: #047857; --color-place-bg: #d1fae5;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius: 4px; --radius-lg: 8px;
+  --sp1: 4px; --sp2: 8px; --sp3: 12px; --sp4: 16px; --sp5: 20px; --sp6: 24px; --sp8: 32px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); padding: 32px; line-height: 1.6; }
+
+.info-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+.info-block__header { padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-text-muted); }
+.info-block__body { padding: var(--sp4) var(--sp5); }
+.info-table { width: 100%; font-size: 0.84rem; border-collapse: collapse; }
+.info-table tr + tr td { padding-top: var(--sp3); }
+.info-table td:first-child { color: var(--color-text-muted); white-space: nowrap; padding-right: var(--sp4); width: 42%; vertical-align: top; }
+
+/* Wikidata badge */
+.wd-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; background: #f0f0f0; color: #555; text-decoration: none; font-weight: 500; }
+.wd-badge:hover { background: #e0e0e0; }
+
+/* chips */
+.chip { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 12px; font-size: 0.73rem; font-weight: 500; white-space: nowrap; text-decoration: none; }
+.chip--person { background: var(--color-person-bg); color: var(--color-person); }
+.chip--place { background: var(--color-place-bg); color: var(--color-place); }
+
+.sidebar { display: flex; flex-direction: column; gap: var(--sp4); width: 290px; }
+h2 { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--sp3); margin-top: var(--sp8); }
+h2:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+<h2>Sidebar — person-detaljeside</h2>
+<div class="sidebar">
+
+  <div class="info-block">
+    <div class="info-block__header">Registerdata</div>
+    <div class="info-block__body">
+      <table class="info-table">
+        <tbody><tr><td>Internt ID-nr.</td><td>Reg0093160</td></tr>
+        <tr><td>Træffere</td><td><strong>312</strong></td></tr>
+        <tr><td>Leveår</td><td>1776–1861</td></tr>
+        <tr><td>Nationalitet</td><td>dansk</td></tr>
+        <tr><td>Wikidata</td><td><a class="wd-badge" href="#">Q5686 ↗</a></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="info-block">
+    <div class="info-block__header">Hyppigste steder</div>
+    <div class="info-block__body" style="display:flex;flex-wrap:wrap;gap:6px">
+      <a href="#" class="chip chip--place">København</a>
+      <a href="#" class="chip chip--place">Rom</a>
+      <a href="#" class="chip chip--place">Paris</a>
+      <a href="#" class="chip chip--place">Odense</a>
+    </div>
+  </div>
+
+  <div class="info-block">
+    <div class="info-block__header">Hyppigste personer</div>
+    <div class="info-block__body" style="display:flex;flex-wrap:wrap;gap:6px">
+      <a href="#" class="chip chip--person">Andersen, H. C.</a>
+      <a href="#" class="chip chip--person">Collin, Edvard</a>
+      <a href="#" class="chip chip--person">Ørsted, H. C.</a>
+    </div>
+  </div>
+
+</div>
+
+<h2>Sted-variant</h2>
+<div class="sidebar">
+  <div class="info-block">
+    <div class="info-block__header">Registerdata</div>
+    <div class="info-block__body">
+      <table class="info-table">
+        <tbody><tr><td>Reg-ID</td><td>Reg0001234</td></tr>
+        <tr><td>Træffere</td><td><strong>418</strong></td></tr>
+        <tr><td>Land</td><td>Italien</td></tr>
+        <tr><td>Koordinater</td><td>41.9°N 12.5°Ø</td></tr>
+        <tr><td>Wikidata</td><td><a class="wd-badge" href="#">Q220 ↗</a></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+</body></html>

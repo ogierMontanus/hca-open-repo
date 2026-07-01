@@ -1,0 +1,94 @@
+<!-- @dsCard group="Page Hero" -->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Page Hero</title>
+<style>
+:root {
+  --color-bg: #f5f3ef; --color-surface: #ffffff; --color-surface-2: #f0ede8;
+  --color-border: #d8d4cc; --color-text: #1c1c28; --color-text-muted: #5c5c72;
+  --color-accent: #1e5f8c; --color-accent-light: #deedf5;
+  --color-person: #1d4ed8; --color-place: #047857; --color-work: #b45309;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius-lg: 8px;
+  --sp2: 8px; --sp3: 12px; --sp4: 16px; --sp5: 20px; --sp6: 24px; --sp8: 32px; --sp12: 48px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+.container { max-width: 900px; margin: 0 auto; padding: 0 var(--sp6); }
+.gap { height: 32px; }
+
+.page-hero { background: linear-gradient(135deg, #162e42 0%, var(--color-accent) 100%); color: white; padding: var(--sp12) 0; }
+.page-hero h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: var(--sp3); }
+.page-hero p { font-size: 1rem; opacity: 0.85; max-width: 620px; }
+.page-hero--sm { padding: var(--sp8) 0; }
+.page-hero--sm h1 { font-size: 1.55rem; }
+.page-hero__meta { display: flex; gap: var(--sp2); flex-wrap: wrap; margin-top: var(--sp4); font-size: 0.82rem; opacity: 0.72; }
+.page-hero__meta span + span::before { content: '·'; margin-right: var(--sp2); }
+
+.breadcrumb { display: flex; align-items: center; gap: var(--sp2); font-size: 0.83rem; color: var(--color-text-muted); padding: var(--sp4) 0; }
+.breadcrumb a { color: var(--color-text-muted); }
+.breadcrumb__sep { opacity: 0.45; }
+.breadcrumb__current { color: var(--color-text); font-weight: 500; }
+.page-hero .breadcrumb, .page-hero .breadcrumb a, .page-hero .breadcrumb__current { color: rgba(255,255,255,0.82); }
+.page-hero .breadcrumb a:hover { color: #fff; }
+.page-hero .breadcrumb__sep { color: rgba(255,255,255,0.55); opacity: 1; }
+
+/* section colour overrides */
+.hero--person { border-top: 4px solid var(--color-person); }
+.hero--person h1 { color: #93c5fd; }
+.hero--place  { border-top: 4px solid var(--color-place); }
+.hero--place h1  { color: #6ee7b7; }
+.hero--work   { border-top: 4px solid var(--color-work); }
+.hero--work h1   { color: #fcd34d; }
+
+p.label { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-text-muted); padding: 24px 24px 8px; }
+</style>
+</head>
+<body>
+<p class="label">Standard — oversigtsside (persons.html, works.html)</p>
+<div class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb"><a href="#">Hjem</a><span class="breadcrumb__sep">›</span><span class="breadcrumb__current">Hvem</span></nav>
+    <h1>Hvem — personer</h1>
+    <p>10.228 personer nævnt i H.C. Andersens dagbøger</p>
+  </div>
+</div>
+
+<div class="gap"></div>
+<p class="label">Small — detaljeside (entity ?reg= view)</p>
+<div class="page-hero page-hero--sm hero--person">
+  <div class="container">
+    <nav class="breadcrumb"><a href="#">Hjem</a><span class="breadcrumb__sep">›</span><a href="#">Hvem</a><span class="breadcrumb__sep">›</span><span class="breadcrumb__current">Collin, Jonas</span></nav>
+    <h1>Collin, Jonas (1776–1861)</h1>
+    <p>Dansk embedsmand og velgører; HCA's vigtigste støtte</p>
+    <div class="page-hero__meta">
+      <span>Refs: 312</span><span>Livsdatoer: 1776–1861</span><span>Nationalitet: dansk</span>
+    </div>
+  </div>
+</div>
+
+<div class="gap"></div>
+<p class="label">Sted-variant (data-section="hvor")</p>
+<div class="page-hero page-hero--sm hero--place">
+  <div class="container">
+    <nav class="breadcrumb"><a href="#">Hjem</a><span class="breadcrumb__sep">›</span><a href="#">Hvor</a><span class="breadcrumb__sep">›</span><span class="breadcrumb__current">Rom</span></nav>
+    <h1>Rom</h1>
+    <p>Italien · 2.872.800 indb.</p>
+    <div class="page-hero__meta"><span>Refs: 418</span><span>Land: Italien</span></div>
+  </div>
+</div>
+
+<div class="gap"></div>
+<p class="label">Værk-variant (data-section="hvad")</p>
+<div class="page-hero page-hero--sm hero--work">
+  <div class="container">
+    <nav class="breadcrumb"><a href="#">Hjem</a><span class="breadcrumb__sep">›</span><a href="#">Hvad</a><span class="breadcrumb__sep">›</span><span class="breadcrumb__current">Eventyrene</span></nav>
+    <h1>Eventyrene</h1>
+    <p>H. C. Andersen · Eventyr (HCA)</p>
+    <div class="page-hero__meta"><span>Refs: 284</span><span>År: 1835–1872</span></div>
+  </div>
+</div>
+</body>
+</html>

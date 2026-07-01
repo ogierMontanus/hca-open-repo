@@ -1,0 +1,157 @@
+<!-- @dsCard group="Cards" -->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Result Card</title>
+<style>
+:root {
+  --color-bg: #f5f3ef; --color-surface: #ffffff; --color-surface-2: #f0ede8;
+  --color-border: #d8d4cc; --color-text: #1c1c28; --color-text-muted: #5c5c72;
+  --color-accent: #1e5f8c; --color-accent-light: #deedf5; --color-accent-hover: #174e75;
+  --color-person: #1d4ed8; --color-person-bg: #dbeafe;
+  --color-place: #047857;  --color-place-bg: #d1fae5;
+  --color-work: #b45309;   --color-work-bg: #fef3c7;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius: 4px; --radius-lg: 8px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08); --shadow: 0 2px 8px rgba(0,0,0,0.12);
+  --sp1: 4px; --sp2: 8px; --sp3: 12px; --sp4: 16px; --sp5: 20px; --sp6: 24px; --sp8: 32px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); padding: 32px; line-height: 1.6; }
+h2 { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--sp3); margin-top: var(--sp8); }
+h2:first-child { margin-top: 0; }
+
+.result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp4); }
+.result-grid--list { grid-template-columns: 1fr; }
+
+.result-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); overflow: hidden;
+  text-decoration: none; color: var(--color-text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex; flex-direction: column; position: relative;
+}
+.result-card:hover { border-color: var(--color-accent); box-shadow: var(--shadow); }
+.result-card__link { position: absolute; inset: 0; z-index: 0; text-decoration: none; color: inherit; }
+.result-card__chip-link { position: relative; z-index: 1; text-decoration: none; }
+.result-card__chip-link:hover { text-decoration: underline; }
+.result-card__thumb {
+  height: 110px; background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; color: var(--color-text-muted); font-style: italic;
+}
+.result-card__body { padding: var(--sp4); flex: 1; display: flex; flex-direction: column; gap: var(--sp2); }
+.result-card__title { font-size: 0.88rem; font-weight: 600; line-height: 1.35; }
+.result-card__meta { font-size: 0.76rem; color: var(--color-text-muted); }
+.result-card__chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: var(--sp2); }
+
+/* list variant */
+.result-grid--list .result-card { flex-direction: row; }
+.result-grid--list .result-card__thumb { width: 80px; height: auto; min-height: 70px; flex-shrink: 0; border-bottom: none; border-right: 1px solid var(--color-border); }
+.result-grid--list .result-card__body { padding: var(--sp3) var(--sp4); }
+
+/* compact (diary grid) */
+.result-card--compact .result-card__body { padding: var(--sp3); gap: var(--sp1); }
+.result-card--compact .result-card__meta { font-size: 0.68rem; }
+.result-card--compact .result-card__title { font-size: 0.82rem; line-height: 1.3; }
+
+/* featured */
+.result-card--featured { border-color: var(--color-accent); border-width: 2px; }
+.result-card--featured .result-card__title { font-weight: 700; }
+.result-card--featured .result-card__thumb { position: relative; }
+.result-card--featured .result-card__thumb::after {
+  content: 'eksempel'; position: absolute; top: 6px; right: 6px;
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+  background: var(--color-accent); color: #fff; padding: 1px 5px; border-radius: 2px; font-style: normal;
+}
+
+.chip { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 12px; font-size: 0.73rem; font-weight: 500; white-space: nowrap; }
+.chip--person { background: var(--color-person-bg); color: var(--color-person); }
+.chip--place  { background: var(--color-place-bg);  color: var(--color-place); }
+.chip--work   { background: var(--color-work-bg);   color: var(--color-work); }
+</style>
+</head>
+<body>
+<h2>Grid (default) — dagbogsopslag</h2>
+<div class="result-grid" style="max-width:700px">
+  <div class="result-card">
+    <a href="#" class="result-card__link"></a>
+    <div class="result-card__thumb">ingen billede</div>
+    <div class="result-card__body">
+      <div class="result-card__title">Rom, 18. oktober 1833</div>
+      <div class="result-card__meta">Bind 1, s. 87 &nbsp;·&nbsp; DA1833_p087</div>
+      <div class="result-card__chips">
+        <a href="#" class="chip chip--person result-card__chip-link" style="font-size:0.68rem">Collin, Jonas</a>
+        <a href="#" class="chip chip--place result-card__chip-link" style="font-size:0.68rem">Rom</a>
+      </div>
+    </div>
+  </div>
+  <div class="result-card result-card--featured">
+    <a href="#" class="result-card__link"></a>
+    <div class="result-card__thumb">ingen billede</div>
+    <div class="result-card__body">
+      <div class="result-card__title">Paris, 15. august 1834</div>
+      <div class="result-card__meta">Bind 1, s. 134 &nbsp;·&nbsp; DA1834_p134</div>
+      <div class="result-card__chips">
+        <a href="#" class="chip chip--place result-card__chip-link" style="font-size:0.68rem">Paris</a>
+        <a href="#" class="chip chip--work result-card__chip-link" style="font-size:0.68rem">Eventyrene</a>
+      </div>
+    </div>
+  </div>
+  <div class="result-card">
+    <a href="#" class="result-card__link"></a>
+    <div class="result-card__thumb">ingen billede</div>
+    <div class="result-card__body">
+      <div class="result-card__title">København, 3. maj 1867</div>
+      <div class="result-card__meta">Bind 5, s. 12 &nbsp;·&nbsp; DA1867_p012</div>
+      <div class="result-card__chips">
+        <a href="#" class="chip chip--place result-card__chip-link" style="font-size:0.68rem">København</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>List variant</h2>
+<div class="result-grid result-grid--list" style="max-width:700px">
+  <div class="result-card">
+    <a href="#" class="result-card__link"></a>
+    <div class="result-card__thumb">ingen billede</div>
+    <div class="result-card__body">
+      <div class="result-card__title">Rom, 18. oktober 1833</div>
+      <div class="result-card__meta">Bind 1, s. 87 &nbsp;·&nbsp; DA1833_p087</div>
+      <div class="result-card__chips">
+        <a href="#" class="chip chip--person result-card__chip-link" style="font-size:0.68rem">Collin, Jonas</a>
+        <a href="#" class="chip chip--place result-card__chip-link" style="font-size:0.68rem">Rom</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>Compact grid — dagbogsindeks</h2>
+<div class="result-grid" style="max-width:700px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr))">
+  <div class="result-card result-card--compact">
+    <a href="#" class="result-card__link"></a>
+    <div class="result-card__body">
+      <div class="result-card__meta">18. okt. 1833</div>
+      <div class="result-card__title">Rom</div>
+    </div>
+  </div>
+  <div class="result-card result-card--compact">
+    <a href="#" class="result-card__link"></a>
+    <div class="result-card__body">
+      <div class="result-card__meta">15. aug. 1834</div>
+      <div class="result-card__title">Paris</div>
+    </div>
+  </div>
+  <div class="result-card result-card--compact">
+    <a href="#" class="result-card__link"></a>
+    <div class="result-card__body">
+      <div class="result-card__meta">3. maj 1867</div>
+      <div class="result-card__title">København</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!-- @dsCard group="Entity Layout" -->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Entity Layout</title>
+<style>
+:root {
+  --color-bg: #f5f3ef; --color-surface: #ffffff; --color-surface-2: #f0ede8;
+  --color-border: #d8d4cc; --color-text: #1c1c28; --color-text-muted: #5c5c72;
+  --color-accent: #1e5f8c; --color-accent-light: #deedf5;
+  --color-person: #1d4ed8; --color-person-bg: #dbeafe;
+  --color-place: #047857; --color-place-bg: #d1fae5;
+  --color-work: #b45309; --color-work-bg: #fef3c7;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', Times, serif;
+  --radius: 4px; --radius-lg: 8px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08); --shadow: 0 2px 8px rgba(0,0,0,0.12);
+  --sp1: 4px; --sp2: 8px; --sp3: 12px; --sp4: 16px; --sp5: 20px; --sp6: 24px; --sp8: 32px; --sp12: 48px;
+  --header-height: 60px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); padding: 32px; line-height: 1.6; }
+
+/* entity layout */
+.entity-layout { display: grid; grid-template-columns: 1fr 290px; gap: var(--sp8); align-items: start; }
+.entity-main { display: flex; flex-direction: column; gap: var(--sp8); }
+.entity-sidebar { display: flex; flex-direction: column; gap: var(--sp4); }
+
+/* section within main */
+.section-title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: var(--sp6); }
+
+/* result cards */
+.result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp4); }
+.result-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); overflow: hidden;
+  display: flex; flex-direction: column; position: relative;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.result-card:hover { border-color: var(--color-accent); box-shadow: var(--shadow); }
+.result-card__link { position: absolute; inset: 0; z-index: 0; }
+.result-card__body { padding: var(--sp4); flex: 1; display: flex; flex-direction: column; gap: var(--sp2); }
+.result-card__title { font-size: 0.88rem; font-weight: 600; line-height: 1.35; }
+.result-card__meta { font-size: 0.76rem; color: var(--color-text-muted); }
+.result-card__chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: var(--sp2); }
+
+/* entry text */
+.entry-text {
+  font-family: var(--font-serif); font-size: 0.98rem; line-height: 1.85;
+  color: var(--color-text); background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-accent);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  padding: var(--sp6);
+}
+
+/* info block */
+.info-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+.info-block__header { padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--color-text-muted); }
+.info-block__body { padding: var(--sp4) var(--sp5); }
+.info-table { width: 100%; font-size: 0.84rem; border-collapse: collapse; }
+.info-table tr + tr td { padding-top: var(--sp3); }
+.info-table td:first-child { color: var(--color-text-muted); white-space: nowrap; padding-right: var(--sp4); width: 42%; vertical-align: top; }
+
+/* chips */
+.chip { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 12px; font-size: 0.73rem; font-weight: 500; white-space: nowrap; text-decoration: none; }
+.chip--person { background: var(--color-person-bg); color: var(--color-person); }
+.chip--place { background: var(--color-place-bg); color: var(--color-place); }
+.chip--work { background: var(--color-work-bg); color: var(--color-work); }
+.wd-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; background: #f0f0f0; color: #555; text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="entity-layout">
+
+  <div class="entity-main">
+
+    <div>
+      <div class="section-title">Dagbogsreferencer (312)</div>
+      <div class="result-grid">
+        <div class="result-card">
+          <a href="#" class="result-card__link"></a>
+          <div class="result-card__body">
+            <div class="result-card__title">Rom, 18. oktober 1833</div>
+            <div class="result-card__meta">Bind 1, s. 87 · DA1833_p087</div>
+            <div class="result-card__chips">
+              <a href="#" class="chip chip--place" style="font-size:0.68rem;position:relative;z-index:1">Rom</a>
+            </div>
+          </div>
+        </div>
+        <div class="result-card">
+          <a href="#" class="result-card__link"></a>
+          <div class="result-card__body">
+            <div class="result-card__title">Paris, 15. august 1834</div>
+            <div class="result-card__meta">Bind 1, s. 134 · DA1834_p134</div>
+            <div class="result-card__chips">
+              <a href="#" class="chip chip--place" style="font-size:0.68rem;position:relative;z-index:1">Paris</a>
+            </div>
+          </div>
+        </div>
+        <div class="result-card">
+          <a href="#" class="result-card__link"></a>
+          <div class="result-card__body">
+            <div class="result-card__title">København, 3. maj 1867</div>
+            <div class="result-card__meta">Bind 5, s. 12 · DA1867_p012</div>
+            <div class="result-card__chips">
+              <a href="#" class="chip chip--person" style="font-size:0.68rem;position:relative;z-index:1">Andersen, H. C.</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Beskrivelse</div>
+      <div class="entry-text">
+        Jonas Collin (1776–1861) var dansk embedsmand og filantrop. Han var direktør for Det Kongelige Teater og en af H.C. Andersens vigtigste støtter og velgørere. Andersen betragtede ham som en faderlig ven og hans hjem som sit eget.
+      </div>
+    </div>
+
+  </div>
+
+  <aside class="entity-sidebar">
+    <div class="info-block">
+      <div class="info-block__header">Registerdata</div>
+      <div class="info-block__body">
+        <table class="info-table">
+          <tr><td>Reg-ID</td><td>Reg0093160</td></tr>
+          <tr><td>Refs</td><td><strong>312</strong></td></tr>
+          <tr><td>Leveår</td><td>1776–1861</td></tr>
+          <tr><td>Wikidata</td><td><a class="wd-badge" href="#">Q5686 ↗</a></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="info-block">
+      <div class="info-block__header">Hyppigste steder</div>
+      <div class="info-block__body" style="display:flex;flex-wrap:wrap;gap:6px">
+        <a href="#" class="chip chip--place">København</a>
+        <a href="#" class="chip chip--place">Rom</a>
+        <a href="#" class="chip chip--place">Paris</a>
+      </div>
+    </div>
+    <div class="info-block">
+      <div class="info-block__header">Hyppigste medfølgende</div>
+      <div class="info-block__body" style="display:flex;flex-wrap:wrap;gap:6px">
+        <a href="#" class="chip chip--person">Andersen, H. C.</a>
+        <a href="#" class="chip chip--person">Collin, Edvard</a>
+      </div>
+    </div>
+  </aside>
+
+</div>
+</body>
+</html>
