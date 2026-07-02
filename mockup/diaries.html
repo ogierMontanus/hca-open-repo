@@ -261,6 +261,9 @@
           <div style="text-align:center;margin-top:var(--sp6)">
             <button id="diary-more" class="layout-switcher__btn" style="display:none;padding:8px 22px">Vis flere</button>
           </div>
+
+          <!-- Timeline view (Tidslinje) — populated by timeline-wire.js when data is present -->
+          <div id="timeline-results" style="display:none"></div>
         </div>
 
       </div>
@@ -316,7 +319,7 @@
                <li>Årstal for omtaler</li>
                <li>Periodeafgrænsning</li>
              </ul>
-             <div class="side-acc__examples">Tidslinje-funktionen er under udarbejdelse.</div>
+             <div class="side-acc__examples">1805–1875 · 1.446 begivenheder</div>
            </div>
          </a>
        </aside>
@@ -335,46 +338,79 @@
 </footer>
 
 <!-- Generated diary data (gitignored). Build with:
-     python3 scripts/build_mockup/build_diary_index.py -->
+     python scripts/build_mockup/build_diary_index.py
+     python scripts/build_mockup/build_timeline_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="data/timeline-index.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
+<script src="js/timeline-wire.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var grid = document.getElementById('diary-results');
-  var ctrl = DiaryWire.list(grid, {
+  var grid     = document.getElementById('diary-results');
+  var tlPane   = document.getElementById('timeline-results');
+  var moreBtn  = document.getElementById('diary-more');
+  var countEl  = document.getElementById('diary-count');
+  var toolbar  = document.getElementById('diary-toolbar');
+  var filter   = document.getElementById('diary-filter');
+  var yearSel  = document.getElementById('diary-year');
+
+  /* ── Layout switcher ──────────────────────────────────────────────── */
+  var tlRendered = false;
+  document.querySelectorAll('.layout-switcher__btn[data-layout]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.layout-switcher__btn[data-layout]').forEach(function (b) {
+        b.classList.remove('layout-switcher__btn--active');
+      });
+      btn.classList.add('layout-switcher__btn--active');
+
+      var layout = btn.dataset.layout;
+      if (layout === 'timeline') {
+        grid.style.display    = 'none';
+        moreBtn.style.display = 'none';
+        toolbar.style.display = 'none';
+        tlPane.style.display  = '';
+        countEl.innerHTML = '<strong>' + (typeof TIMELINE_INDEX !== 'undefined'
+          ? TIMELINE_INDEX.length.toLocaleString('da-DK') : '0') +
+          '</strong> begivenheder · 1805–1875';
+        if (!tlRendered) {
+          TimelineWire.render(tlPane);
+          tlRendered = true;
+        }
+      } else {
+        tlPane.style.display  = 'none';
+        grid.style.display    = '';
+        if (diaryCtrl) toolbar.style.display = 'flex';
+      }
+    });
+  });
+
+  /* ── Diary list ───────────────────────────────────────────────────── */
+  var diaryCtrl = DiaryWire.list(grid, {
     pageSize: 60,
-    moreBtn: document.getElementById('diary-more'),
+    moreBtn: moreBtn,
     onCount: function (shown, total) {
-      // Surface the active temporal mode when a year filter is applied, so
-      // a reader always knows whether the result count is constrained on
-      // mention dates or entity dates (mention only on this page).
-      var ys = document.getElementById('diary-year');
-      var yearActive = ys && ys.value;
+      var yearActive = yearSel && yearSel.value;
       var modeNote = yearActive
-        ? '<br><span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">omtaleår ' + ys.value + '</span>'
+        ? '<br><span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">omtaleår ' + yearSel.value + '</span>'
         : '';
       var showing = shown < total
         ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— viser ' + shown + '</span>'
         : '';
-      document.getElementById('diary-count').innerHTML =
+      countEl.innerHTML =
         '<strong>' + total.toLocaleString('da-DK') + '</strong> dagbogssider' + modeNote + showing;
     }
   });
-  if (!ctrl) return;  // no generated data → keep the static sample cards
+  if (!diaryCtrl) return;  // no generated data → keep the static sample cards
 
-  // Light up the live toolbar and populate the year facet.
-  var toolbar = document.getElementById('diary-toolbar');
   toolbar.style.display = 'flex';
-  var filter = document.getElementById('diary-filter');
-  var yearSel = document.getElementById('diary-year');
-  var years = ctrl.years();
+  var years = diaryCtrl.years();
   Object.keys(years).sort().forEach(function (y) {
     var o = document.createElement('option');
     o.value = y; o.textContent = y + ' (' + years[y] + ')';
     yearSel.appendChild(o);
   });
-  function apply() { ctrl.applyFilter(filter.value.trim(), yearSel.value); }
+  function apply() { diaryCtrl.applyFilter(filter.value.trim(), yearSel.value); }
   filter.addEventListener('input', apply);
   yearSel.addEventListener('change', apply);
 });

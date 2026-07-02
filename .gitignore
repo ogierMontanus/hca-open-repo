@@ -15,6 +15,7 @@ mockup/diary-pages/
 # to their curated sample cards when these are absent.
 mockup/data/diary-index.js
 mockup/data/diary-refs.js
+mockup/data/timeline-index.js
 
 # Local-only generated per-entity card data — regenerate with the
 # build_*_extra.py scripts. work.html / person.html / place.html fall
