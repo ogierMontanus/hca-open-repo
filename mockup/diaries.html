@@ -5,6 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dagbøger — H.C. Andersen Dagbogsregister</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    #calendar-results {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp6);
+    }
+
+    #calendar-results > div:first-child {
+      background: var(--color-surface-2);
+      padding: var(--sp4);
+      border-radius: var(--radius);
+      margin-bottom: var(--sp4);
+    }
+
+    #calendar-results select {
+      font-weight: 500;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #calendar-results select:hover {
+      border-color: var(--color-accent);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #calendar-grid {
+      max-width: 520px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    #calendar-grid > button {
+      transition: all 0.15s ease;
+      font-weight: 500;
+    }
+
+    #calendar-grid > button:hover {
+      background: var(--color-surface-2) !important;
+      transform: scale(1.02);
+    }
+
+    #calendar-grid > button:active {
+      transform: scale(0.98);
+    }
+
+    #calendar-grid > button[style*="color-accent"] {
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+
+    #calendar-entries {
+      margin-top: var(--sp8);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
@@ -412,6 +475,23 @@ document.addEventListener('DOMContentLoaded', function () {
     return year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
   }
 
+  // Build a map of dates with diary entries
+  function buildDateMap() {
+    var dateMap = {};
+    if (typeof DIARY_INDEX !== 'undefined') {
+      DIARY_INDEX.forEach(function (entry) {
+        if (entry.y) {  // year exists
+          var dateKey = entry.y;
+          if (!dateMap[dateKey]) dateMap[dateKey] = [];
+          dateMap[dateKey].push(entry);
+        }
+      });
+    }
+    return dateMap;
+  }
+
+  var diaryDateMap = buildDateMap();
+
   function renderCalendar(year, month) {
     calendarGrid.innerHTML = '';
     var daysInMonth = getDaysInMonth(year, month);
@@ -439,22 +519,28 @@ document.addEventListener('DOMContentLoaded', function () {
     for (var day = 1; day <= daysInMonth; day++) {
       var dayCell = document.createElement('button');
       var dateKey = formatDateKey(year, month, day);
-      var hasDiary = typeof DIARY_REFS !== 'undefined' && Object.keys(DIARY_REFS).some(function (k) {
-        var refs = DIARY_REFS[k];
-        return refs && refs.dates && refs.dates.includes(dateKey);
-      });
+      var dayEntries = (typeof DIARY_INDEX !== 'undefined')
+        ? DIARY_INDEX.filter(function (entry) {
+            // Simple month/year check based on year value
+            return entry.y === String(year);
+          })
+        : [];
 
       dayCell.type = 'button';
-      dayCell.style.cssText = 'padding:8px;text-align:center;font-size:0.85rem;border:1px solid var(--color-border);background:var(--color-surface);cursor:pointer;position:relative';
+      dayCell.style.cssText = 'padding:8px;text-align:center;font-size:0.85rem;border:1px solid var(--color-border);background:var(--color-surface);cursor:pointer;position:relative;min-height:40px;display:flex;align-items:center;justify-content:center';
       dayCell.textContent = day;
       dayCell.dataset.date = dateKey;
       dayCell.dataset.day = day;
 
-      if (hasDiary) {
+      if (dayEntries.length > 0) {
         dayCell.style.background = 'var(--color-accent)';
         dayCell.style.color = '#fff';
         dayCell.style.fontWeight = '600';
         dayCell.style.borderColor = 'var(--color-accent)';
+        var countBadge = document.createElement('span');
+        countBadge.style.cssText = 'position:absolute;top:2px;right:2px;background:#fff;color:var(--color-accent);font-size:0.65rem;font-weight:700;padding:1px 4px;border-radius:3px;min-width:16px;text-align:center';
+        countBadge.textContent = dayEntries.length;
+        dayCell.appendChild(countBadge);
       }
 
       if (selectedDate === dateKey) {
@@ -465,51 +551,63 @@ document.addEventListener('DOMContentLoaded', function () {
       dayCell.addEventListener('click', function () {
         selectedDate = dateKey;
         renderCalendar(year, month);
-        showCalendarEntries(dateKey);
+        showCalendarEntriesForYear(year);
       });
 
       calendarGrid.appendChild(dayCell);
     }
   }
 
-  function showCalendarEntries(dateKey) {
+  function showCalendarEntriesForYear(year) {
     calendarEntries.innerHTML = '';
-    var parts = dateKey.split('-');
-    var displayDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-    var dateStr = displayDate.toLocaleDateString('da-DK', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
     var title = document.createElement('h3');
     title.style.cssText = 'font-size:0.95rem;font-weight:600;margin-bottom:var(--sp3)';
-    title.textContent = dateStr;
+    title.textContent = 'År ' + year;
     calendarEntries.appendChild(title);
 
-    // Find diary entries for this date
-    if (diaryCtrl && typeof DIARY_INDEX !== 'undefined') {
+    // Find diary entries for this year
+    if (typeof DIARY_INDEX !== 'undefined') {
       var entries = DIARY_INDEX.filter(function (entry) {
-        return entry.date === dateKey;
+        return entry.y === String(year);
       });
 
       if (entries.length === 0) {
         var noEntries = document.createElement('p');
         noEntries.style.cssText = 'color:var(--color-text-muted);font-size:0.85rem';
-        noEntries.textContent = 'Ingen dagbogsindtastninger for denne dato.';
+        noEntries.textContent = 'Ingen dagbogsindtastninger for år ' + year + '.';
         calendarEntries.appendChild(noEntries);
       } else {
+        var info = document.createElement('p');
+        info.style.cssText = 'color:var(--color-text-muted);font-size:0.83rem;margin-bottom:var(--sp4)';
+        info.textContent = entries.length + ' dagbogssider fra ' + year;
+        calendarEntries.appendChild(info);
+
         var resultsDiv = document.createElement('div');
         resultsDiv.className = 'result-grid';
         resultsDiv.style.gridTemplateColumns = 'repeat(auto-fill,minmax(280px,1fr))';
 
-        entries.slice(0, 12).forEach(function (entry) {
-          var card = document.createElement('a');
-          card.href = 'entry.html';
+        entries.forEach(function (entry) {
+          var m = { v: entry.v, p: entry.p, d: entry.d, y: entry.y, pl: entry.pl };
+          var chipMarkup = (entry.c || []).map(function (c) {
+            var cls = c.t === 'place' ? 'chip chip--place'
+                    : c.t === 'person' ? 'chip chip--person' : 'chip';
+            if (c.r) {
+              var page = c.t === 'place' ? 'place.html'
+                       : c.t === 'person' ? 'persons.html' : 'work.html';
+              return '<a href="' + page + '?reg=' + c.r + '" class="' + cls + '" style="font-size:0.68rem">' + c.l + '</a>';
+            }
+            return '<span class="' + cls + '" style="font-size:0.68rem">' + c.l + '</span>';
+          }).join('');
+
+          var card = document.createElement('div');
           card.className = 'result-card';
           card.innerHTML =
-            '<div class="result-card__thumb">' + (entry.id || '') + ' · ' + (entry.volume || '') + '</div>' +
+            '<a href="diary-pages/' + entry.h + '.html" class="result-card__link" title="Gå til ' + entry.h + '"></a>' +
             '<div class="result-card__body">' +
-            '<div class="result-card__title">' + (entry.title || dateStr) + '</div>' +
-            '<div class="result-card__meta">' + (entry.year || '') + ' · ' + (entry.location || '') + '</div>' +
-            (entry.chips ? '<div class="result-card__chips">' + entry.chips + '</div>' : '') +
-            '</div>';
+            '<div class="result-card__title">' + (entry.pl || 'Bind ' + entry.v) + ', ' + (entry.d || entry.y) + '</div>' +
+            '<div class="result-card__meta">Bind ' + entry.v + ', s. ' + entry.p + ' · ' + entry.h + '</div>' +
+            '<div class="result-card__chips">' + chipMarkup + '</div></div>';
           resultsDiv.appendChild(card);
         });
 
@@ -548,10 +646,10 @@ document.addEventListener('DOMContentLoaded', function () {
         countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
           ? DIARY_INDEX.length.toLocaleString('da-DK') : '0') +
           '</strong> dagbogssider';
-        var now = new Date();
-        calYearSel.value = now.getFullYear();
-        calMonthSel.value = now.getMonth();
-        renderCalendar(now.getFullYear(), now.getMonth());
+        var defaultYear = calYearSel.value || (typeof DIARY_INDEX !== 'undefined' && DIARY_INDEX.length > 0 ? DIARY_INDEX[0].y : new Date().getFullYear());
+        var defaultMonth = parseInt(calMonthSel.value) || 0;
+        renderCalendar(parseInt(defaultYear), defaultMonth);
+        showCalendarEntriesForYear(parseInt(defaultYear));
       } else {
         tlPane.style.display  = 'none';
         calendarPane.style.display = 'none';
@@ -581,11 +679,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
   toolbar.style.display = 'flex';
   var years = diaryCtrl.years();
-  Object.keys(years).sort().forEach(function (y) {
+  var yearList = Object.keys(years).sort();
+
+  // Populate toolbar year selector
+  yearList.forEach(function (y) {
     var o = document.createElement('option');
     o.value = y; o.textContent = y + ' (' + years[y] + ')';
     yearSel.appendChild(o);
   });
+
+  // Populate calendar year selector
+  yearList.forEach(function (y) {
+    var o = document.createElement('option');
+    o.value = y;
+    o.textContent = y;
+    calYearSel.appendChild(o);
+  });
+
+  // Calendar month/year change handlers
+  calYearSel.addEventListener('change', function () {
+    var year = parseInt(calYearSel.value);
+    var month = parseInt(calMonthSel.value);
+    renderCalendar(year, month);
+    showCalendarEntriesForYear(year);
+    selectedDate = null;
+  });
+
+  calMonthSel.addEventListener('change', function () {
+    var year = parseInt(calYearSel.value);
+    var month = parseInt(calMonthSel.value);
+    renderCalendar(year, month);
+    showCalendarEntriesForYear(year);
+    selectedDate = null;
+  });
+
   function apply() { diaryCtrl.applyFilter(filter.value.trim(), yearSel.value); }
   filter.addEventListener('input', apply);
   yearSel.addEventListener('change', apply);
