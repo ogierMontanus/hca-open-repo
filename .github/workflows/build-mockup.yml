@@ -53,6 +53,10 @@ jobs:
         run: python scripts/build_web/parse_rejser_htm.py
         continue-on-error: true
 
+      - name: Stage 1c — reconcile SV14 place geocodes
+        run: python scripts/build_mockup/reconcile_sv14_geo.py
+        continue-on-error: true
+
       - name: Stage 2 — CSVs to web JSON
         run: python scripts/build_web/build_web_data.py
 
