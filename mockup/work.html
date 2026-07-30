@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Værk — H.C. Andersen Dagbogsregister</title>
+  <title>Værk — HCA Open Repository</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     .wd-badge {
@@ -51,7 +51,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <a href="index.html" class="site-logo">HCA Open Repository</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
@@ -432,7 +432,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   const seeRefs = (w.see && w.see.length) ? w.see : (wx && wx.see) || [];
   const seeAlsoRefs = (w.seeAlso && w.seeAlso.length) ? w.seeAlso : (wx && wx.seeAlso) || [];
 
-  document.title = w.title + ' — H.C. Andersen Dagbogsregister';
+  document.title = w.title + ' — HCA Open Repository';
 
   // Breadcrumb
   document.getElementById('js-breadcrumb').innerHTML =
