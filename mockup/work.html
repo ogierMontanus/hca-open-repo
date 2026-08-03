@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Værk — H.C. Andersen Dagbogsregister</title>
+  <title>Værk — HCA Open Repository</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     .wd-badge {
@@ -51,7 +51,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <a href="index.html" class="site-logo">HCA Open Repository</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
@@ -432,7 +432,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   const seeRefs = (w.see && w.see.length) ? w.see : (wx && wx.see) || [];
   const seeAlsoRefs = (w.seeAlso && w.seeAlso.length) ? w.seeAlso : (wx && wx.seeAlso) || [];
 
-  document.title = w.title + ' — H.C. Andersen Dagbogsregister';
+  document.title = w.title + ' — HCA Open Repository';
 
   // Breadcrumb
   document.getElementById('js-breadcrumb').innerHTML =
@@ -539,12 +539,13 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     main += `<div class="lod-callout"><strong>Linked Open Data (LOD)</strong> — Enhederne på denne side er beriget med autoritetsidentifikatorer, der forbinder registret til det globale vidensgraf-netværk.<div class="lod-bridge"><span class="lod-node lod-node--local">${reg}</span><span class="lod-node lod-node--owl">→ owl:sameAs →</span><a href="https://www.wikidata.org/wiki/${w.wd}" class="lod-node lod-node--wd" target="_blank" rel="noopener">wikidata:${w.wd}</a><span class="lod-node lod-node--owl">→ sameAs →</span><span class="lod-node lod-node--local" style="color:var(--color-text-muted)">VIAF · BnF · GND · …</span></div></div>`;
   }
 
-  // Diary mentions — data-driven from DIARY_REFS, links to real generated pages.
-  main += `<div id="js-reg-diary"></div>`;
-
-  // Co-occurring works
+  // Co-occurring works. Sits above the diary-mention list: it is a short,
+  // scannable block, whereas the mention list is long and paginated and would
+  // otherwise push it far below the fold.
+  let hasCoWorks = false;
   if (coWorks && coWorks.length) {
-    main += `<div style="margin-top:var(--sp8)"><h2 class="section-title">Samtidige værker</h2><p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Værker der optræder i de samme dagbogsider som ${w.title}</p><div class="network-chips">`;
+    hasCoWorks = true;
+    main += `<div><h2 class="section-title">Samtidige værker</h2><p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">Værker der optræder i de samme dagbogsider som ${w.title}</p><div class="network-chips">`;
     for (const cw of coWorks) {
       // Two shapes: curated coWorks = bare title string; derived = {rid, title, count}.
       const title = (typeof cw === 'string') ? cw : cw.title;
@@ -555,6 +556,9 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     }
     main += `</div></div>`;
   }
+
+  // Diary mentions — data-driven from DIARY_REFS, links to real generated pages.
+  main += `<div id="js-reg-diary"${hasCoWorks ? ' style="margin-top:var(--sp8)"' : ''}></div>`;
 
   document.getElementById('js-main').innerHTML = main;
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personregister — H.C. Andersen Dagbogsregister</title>
+  <title>Personregister — HCA Open Repository</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     .wd-badge {
@@ -19,7 +19,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <a href="index.html" class="site-logo">HCA Open Repository</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
@@ -224,7 +224,7 @@
   if (urlReg) {
     var p = (typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[urlReg]) || null;
 
-    document.title = (p ? p.label : urlReg) + ' — H.C. Andersen Dagbogsregister';
+    document.title = (p ? p.label : urlReg) + ' — HCA Open Repository';
 
     var bc = document.getElementById('js-breadcrumb');
     if (bc) bc.innerHTML =

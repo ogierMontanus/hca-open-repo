@@ -59,6 +59,48 @@ window.DiaryWire = (function () {
     return 'Bind ' + esc(m.v || '?') + ', s. ' + esc(m.p || '?');
   }
 
+  var MONTHS_DA = ['januar', 'februar', 'marts', 'april', 'maj', 'juni',
+                   'juli', 'august', 'september', 'oktober', 'november', 'december'];
+
+  /* DIARY_META.d as written by build_diary_index.py's short_date():
+   *   "24-01-1864"  full date      → "24. januar 1864"
+   *   "01-1864"     day unknown    → "januar 1864"
+   *   "1864"        month unknown  → "1864"
+   * Anything unrecognised is passed through untouched rather than guessed at.
+   */
+  function formatDate(d) {
+    if (!d) return '';
+    var full = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(d);
+    if (full) {
+      var mo = MONTHS_DA[parseInt(full[2], 10) - 1];
+      if (mo) return parseInt(full[1], 10) + '. ' + mo + ' ' + full[3];
+    }
+    var my = /^(\d{1,2})-(\d{4})$/.exec(d);
+    if (my) {
+      var mo2 = MONTHS_DA[parseInt(my[1], 10) - 1];
+      if (mo2) return mo2 + ' ' + my[2];
+    }
+    return d;
+  }
+
+  /* The heading a reader sees on a diary card.
+   *
+   * The date of the entry is the most useful label, so it wins whenever the
+   * page has one. Only vols VI–VII are dated today (751 of 4.544 pages); the
+   * remaining volumes fall back to the bibliographic "Bind III, s. 124".
+   * Dates for those volumes are to be supplied later in the same structured
+   * form, at which point they start appearing here with no code change.
+   *
+   * The place name is deliberately not used as the heading: it is not what
+   * identifies the entry, and it is already shown as a place chip on the card.
+   */
+  function headingFor(m) {
+    m = m || {};
+    if (m.d) return esc(formatDate(m.d));
+    if (m.y) return esc(m.y);
+    return titleFor(m);
+  }
+
   /* --- diary-reference section for one register entry -------------------- */
   function refs(container, regId, opts) {
     opts = opts || {};
@@ -70,18 +112,14 @@ window.DiaryWire = (function () {
     var step = opts.pageSize || 24;
     var layout = opts.layout || 'list';  // 'list' | 'grid'
 
-    /* "Rom, 18. oktober 1833" — the heading a reader sees in the diary. */
-    function headingFor(m) {
-      if (m.pl && m.d) return esc(m.pl) + ', ' + esc(m.d);
-      if (m.pl) return esc(m.pl);
-      return titleFor(m);
-    }
-
-    /* List card: heading + bibliographic sub-line + entity chips. */
+    /* List card: heading + bibliographic sub-line + entity chips.
+     * When the page is undated the heading already *is* the volume/page
+     * reference, so the sub-line drops the repeat and shows only the Pag id. */
     function cardList(pag, chips) {
       var m = (hasMeta() && DIARY_META[pag]) || {};
       var heading = headingFor(m);
-      var sub = titleFor(m) + ' &nbsp;·&nbsp; ' + esc(pag);
+      var vp = titleFor(m);
+      var sub = (heading === vp) ? esc(pag) : vp + ' &nbsp;·&nbsp; ' + esc(pag);
       var chipMarkup = (chips || []).slice(0, 3).map(chipHtml).join('');
       var href = PAGES_DIR + esc(pag) + '.html';
       return '<div class="result-card">' +
@@ -92,17 +130,19 @@ window.DiaryWire = (function () {
         '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
     }
 
-    /* Grid card: compact — date on top, place name below. No chips. */
+    /* Grid card: compact — heading on top, place below. No chips, so the
+     * place name is kept here; in the list layout it arrives as a chip. */
     function cardGrid(pag) {
       var m = (hasMeta() && DIARY_META[pag]) || {};
-      var place = m.pl ? esc(m.pl) : titleFor(m);
-      var date = esc(m.d || m.y || '—');
+      var heading = headingFor(m);
+      var vp = titleFor(m);
+      var sub = m.pl ? esc(m.pl) : (heading === vp ? '' : vp);
       var href = PAGES_DIR + esc(pag) + '.html';
       return '<div class="result-card result-card--compact">' +
-        '<a href="' + href + '" class="result-card__link" title="' + esc(m.d || pag) + '"></a>' +
+        '<a href="' + href + '" class="result-card__link" title="' + esc(m.d ? formatDate(m.d) : pag) + '"></a>' +
         '<div class="result-card__body">' +
-        '<div class="result-card__meta">' + date + '</div>' +
-        '<div class="result-card__title">' + place + '</div>' +
+        '<div class="result-card__title">' + heading + '</div>' +
+        '<div class="result-card__meta">' + sub + '</div>' +
         '</div></div>';
     }
 
@@ -172,11 +212,14 @@ window.DiaryWire = (function () {
       var highlight = filterYear
         ? ' style="outline:2px solid var(--color-accent);outline-offset:-2px"'
         : '';
+      var heading = headingFor(m);
+      var vp = titleFor(m);
+      var sub = (heading === vp) ? esc(row.h) : vp + ' &nbsp;·&nbsp; ' + esc(row.h);
       return '<div class="result-card"' + highlight + '>' +
         '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(row.h) + '"></a>' +
         '<div class="result-card__body">' +
-        '<div class="result-card__title">' + titleFor(m) + '</div>' +
-        '<div class="result-card__meta">' + (row.d || row.y || '—') + ' · ' + esc(row.h) + '</div>' +
+        '<div class="result-card__title">' + heading + '</div>' +
+        '<div class="result-card__meta">' + sub + '</div>' +
         '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
     }
 
@@ -210,5 +253,8 @@ window.DiaryWire = (function () {
     } };
   }
 
-  return { refs: refs, list: list };
+  // heading/formatDate are exported so pages rendering their own diary cards
+  // (diaries.html's calendar view) label them identically instead of
+  // re-deriving the rule and drifting from it.
+  return { refs: refs, list: list, heading: headingFor, formatDate: formatDate };
 })();

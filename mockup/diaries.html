@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dagbøger — H.C. Andersen Dagbogsregister</title>
+  <title>Dagbøger — HCA Open Repository</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     #calendar-results {
@@ -73,7 +73,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <a href="index.html" class="site-logo">HCA Open Repository</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
@@ -600,13 +600,19 @@ document.addEventListener('DOMContentLoaded', function () {
             return '<span class="' + cls + '" style="font-size:0.68rem">' + c.l + '</span>';
           }).join('');
 
+          // Same heading rule as every other diary card — date when the page
+          // has one, otherwise the volume/page reference (DiaryWire.heading).
+          var vp = 'Bind ' + entry.v + ', s. ' + entry.p;
+          var heading = DiaryWire.heading(entry);
+          var sub = (heading === vp) ? entry.h : vp + ' · ' + entry.h;
+
           var card = document.createElement('div');
           card.className = 'result-card';
           card.innerHTML =
             '<a href="diary-pages/' + entry.h + '.html" class="result-card__link" title="Gå til ' + entry.h + '"></a>' +
             '<div class="result-card__body">' +
-            '<div class="result-card__title">' + (entry.pl || 'Bind ' + entry.v) + ', ' + (entry.d || entry.y) + '</div>' +
-            '<div class="result-card__meta">Bind ' + entry.v + ', s. ' + entry.p + ' · ' + entry.h + '</div>' +
+            '<div class="result-card__title">' + heading + '</div>' +
+            '<div class="result-card__meta">' + sub + '</div>' +
             '<div class="result-card__chips">' + chipMarkup + '</div></div>';
           resultsDiv.appendChild(card);
         });

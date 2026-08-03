@@ -43,6 +43,14 @@ ud af 8 forsøg (fejlrate 75 %) ved ren hukommelsesbaseret gæt. Kun Q5686
 
 ---
 
+## Projektnavn
+
+**Officielt projektnavn:** HCA Open Repository
+
+Projektet blev tidligere kendt som "H.C. Andersen Dagbogsregister". Fra 2026 refereres til det som **HCA Open Repository** på engelsk og **HCA Åbent Arkiv** på dansk i formelle dokumenter.
+
+---
+
 ## Arbejdsbranch
 
 Udviklingsarbejde sker på branchen `claude/youthful-carson-XIZ5I`.

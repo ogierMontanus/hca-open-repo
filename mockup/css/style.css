@@ -383,6 +383,19 @@ body[data-section="hvor"] .page-hero {
 }
 .facet-item--active .facet-item__label { color: var(--color-accent); font-weight: 500; }
 
+/* Facets awaiting data. The group stays visible so the reader can see what
+   the register will offer, but FacetEngine skips it entirely — it contributes
+   no predicate and so cannot silently narrow the result set. Same visual
+   language as the disabled "Begivenhedsdatoer" pills. Activating a facet is
+   removing the data-facet-pending attribute once the build supplies values. */
+.facet-group[data-facet-pending] .facet-group__header { opacity: 0.55; }
+.facet-group[data-facet-pending] .facet-group__toggle { visibility: hidden; }
+.facet-note {
+  padding: 2px var(--sp5) var(--sp2);
+  font-size: 0.72rem; line-height: 1.45; color: var(--color-text-muted);
+  margin: 0;
+}
+
 /* === Results Header === */
 .results-header {
   display: flex; align-items: center; gap: var(--sp4); margin-bottom: var(--sp5);

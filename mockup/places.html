@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stedregister — H.C. Andersen Dagbogsregister</title>
+  <title>Stedregister — HCA Open Repository</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-section="hvor">
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <a href="index.html" class="site-logo">HCA Open Repository</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
@@ -74,41 +74,64 @@
             </div>
           </div>
 
+          <!-- Land — live off PLACES_EXTRA.country_da. Only 453 of 2.508 places
+               carry a country today (the value comes from rejser.tsv / the
+               SV14 reconciliation, which cover the travel itineraries rather
+               than the whole register), so the generated "Uoplyst" bucket
+               makes the gap selectable instead of silently dropping those
+               rows. Rows and counts are rendered by FacetEngine — do not
+               hand-write them here. -->
           <div class="facet-group">
             <div class="facet-group__header">Land <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Danmark</span><span class="facet-item__count">612</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Tyskland</span><span class="facet-item__count">487</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Italien</span><span class="facet-item__count">341</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Frankrig</span><span class="facet-item__count">218</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Sverige</span><span class="facet-item__count">187</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Øvrige lande</span><span class="facet-item__count">663</span></label>
-            </div>
+            <div class="facet-group__body"
+                 data-facet-source="country"
+                 data-facet-limit="12"
+                 data-facet-empty-label="Uoplyst"></div>
           </div>
 
-          <div class="facet-group">
-            <!-- Stedstype skjult: vises i en senere fase efter menneskevalideret
-                 reconciliation mod Wikidata / GeoNames. -->
+          <!-- Stedstype skjult: vises i en senere fase efter menneskevalideret
+               reconciliation mod Wikidata / GeoNames. -->
+
+          <!-- Samtidige personer — live off PLACE_TOP_PERSONS (cooccurrence.js),
+               labelled from PERSONS_EXTRA. Note the semantics: that index keeps
+               the top 12 co-occurring persons per place, so ticking a name
+               finds the places where they are among the most frequent
+               companions — not every place they were ever mentioned beside.
+               The note below says so; without it the filter would look
+               exhaustive. Marked pending at runtime if either dataset is
+               missing (fresh clone, no build). -->
+          <div class="facet-group" id="js-facet-persons">
             <div class="facet-group__header">Samtidige personer <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Edvard</span><span class="facet-item__count">412</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Lind, Jenny</span><span class="facet-item__count">198</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Henriques, Martin R.</span><span class="facet-item__count">187</span></label>
-            </div>
+            <p class="facet-note">Personer der oftest omtales sammen med stedet.</p>
+            <div class="facet-group__body"
+                 data-facet-source="person"
+                 data-facet-limit="20"></div>
           </div>
 
-          <div class="facet-group">
+          <!-- Omtaleår — afventer data. Omtaleår udledes af dagbogssidernes
+               datoer, og de findes i dag kun for bind VI–VII (751 af 4.544
+               sider). Datoerne for de øvrige bind leveres senere i samme
+               præcise format; de må ikke udledes af overskrifter eller
+               bindnumre. Indtil da står intervallet 1825–1875 urørt, og
+               gruppen er markeret pending, så FacetEngine springer den over
+               og den derfor ikke kan bortfiltrere sider i det skjulte.
+               Aktivering = fjern data-facet-pending og genopbyg. -->
+          <div class="facet-group" data-facet-pending>
             <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" style="padding:8px 16px 14px">
-              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
-                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
-                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem;opacity:0.45">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825" disabled
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem;cursor:not-allowed"
                        aria-label="Fra årstal">
                 <span style="color:var(--color-text-muted)">—</span>
-                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
-                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875" disabled
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem;cursor:not-allowed"
                        aria-label="Til årstal">
               </div>
+              <p class="facet-note" style="padding-left:0">
+                Aktiveres når dagbogsdatoer for alle bind er indlæst. I dag er
+                bind VI–VII daterede.
+              </p>
               <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
             </div>
           </div>
@@ -205,6 +228,15 @@
 <!-- Generated place catalogue (gitignored; CI regenerates it). Build with:
      python scripts/build_mockup/build_places_extra.py -->
 <script src="data/places-extra.js" onerror="void 0"></script>
+<!-- cooccurrence.js supplies PLACE_TOP_PERSONS for the "Samtidige personer"
+     facet; persons-extra.js supplies the labels for the person ids it returns.
+     Both are generated and gitignored, so each is optional — the facet marks
+     itself pending if either is absent rather than rendering bare Reg-ids.
+       python scripts/build_mockup/build_cooccurrence.py
+       python scripts/build_mockup/build_persons_extra.py -->
+<script src="data/cooccurrence.js" onerror="void 0"></script>
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="js/facet-engine.js"></script>
 <script>
 (function () {
   'use strict';
@@ -241,10 +273,29 @@
     return '#';
   }
 
+  // Surname is the primary alphabetic key for people everywhere in this
+  // register (CLAUDE.md); person labels are already "Efternavn, Fornavn",
+  // so the part before the first comma is the surname. Used only as the
+  // tiebreak when two names have the same co-occurrence count.
+  function surnameKey(label) {
+    var s = (label || '').trim();
+    if (!s) return '';
+    var c = s.indexOf(',');
+    if (c >= 0) return s.slice(0, c).trim();
+    var parts = s.split(/\s+/);
+    return parts[parts.length - 1];
+  }
+
+  var hasPersons = typeof PLACE_TOP_PERSONS !== 'undefined' &&
+                   typeof PERSONS_EXTRA !== 'undefined';
+
   var ALL = Object.keys(PLACES_EXTRA).map(function (rid) {
     var p = PLACES_EXTRA[rid];
+    var top = hasPersons ? (PLACE_TOP_PERSONS[rid] || []) : [];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
-             refs: p.refs || 0, init: initialOf(p.label) };
+             refs: p.refs || 0, init: initialOf(p.label),
+             country: p.country_da || null,
+             persons: top.map(function (t) { return t[0]; }) };
   });
 
   var collator = (typeof Intl !== 'undefined' && Intl.Collator)
@@ -290,12 +341,18 @@
       'Nulstil filter</button></div>';
   }
 
-  function apply() {
-    filtered = (letter ? ALL.filter(function (p) { return p.init === letter; }) : ALL.slice());
-    filtered.sort(letter ? byLabel : byRefs);
+  // Render one page of results. Called by FacetEngine on every change, and
+  // by the alphabet bar through setPrefilter — the two compose rather than
+  // overwrite each other, so "K" + "Tyskland" narrows to both.
+  function render(rows, st) {
+    filtered = rows.slice().sort(letter ? byLabel : byRefs);
     if (countEl) {
-      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> steder i Stedregister' +
-        (letter ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>' : '');
+      var note = '';
+      if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>';
+      if (st && st.active) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' +
+        st.active + ' facet' + (st.active === 1 ? '' : 'ter') + '</span>';
+      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') +
+        '</strong> steder i Stedregister' + note;
     }
     grid.innerHTML = '';
     shown = 0;
@@ -303,21 +360,53 @@
       grid.innerHTML = emptyStateHtml();
       moreBtn.style.display = 'none';
       var resetBtn = document.getElementById('js-empty-reset');
-      if (resetBtn) {
-        resetBtn.addEventListener('click', function () {
-          letter = null;
-          if (bar) {
-            bar.querySelectorAll('a.chip').forEach(function (x, i) {
-              x.style.background = i === 0 ? 'var(--color-accent)' : '';
-              x.style.color = i === 0 ? '#fff' : '';
-            });
-          }
-          apply();
-        });
-      }
+      if (resetBtn) resetBtn.addEventListener('click', resetAll);
       return;
     }
     renderMore();
+    updateLetterAvailability();
+  }
+
+  // Dim alphabet chips that have no hits under the current facet selection.
+  // Uses the engine's facet-only matcher, not its output: the output is
+  // already narrowed by the letter prefilter and so cannot say which *other*
+  // letters are still reachable.
+  function updateLetterAvailability() {
+    if (!bar || !facets) return;
+    var passesFacets = facets.matcher();
+    var counts = {};
+    for (var i = 0; i < ALL.length; i++) {
+      if (passesFacets(ALL[i])) counts[ALL[i].init] = 1;
+    }
+    bar.querySelectorAll('a.chip').forEach(function (chip) {
+      var l = chip.getAttribute('data-letter');
+      if (!l) return;
+      var has = !!counts[l];
+      chip.style.opacity = has ? '' : '0.35';
+      chip.style.pointerEvents = has ? '' : 'none';
+      chip.title = has ? '' : 'Ingen steder under de valgte facetter';
+    });
+  }
+
+  // Drop the page's own filter state (active letter + the prefilter the
+  // engine is holding) without rendering. The caller renders once afterwards.
+  function clearLocalState() {
+    letter = null;
+    if (bar) {
+      bar.querySelectorAll('a.chip').forEach(function (x, i) {
+        x.style.background = i === 0 ? 'var(--color-accent)' : '';
+        x.style.color = i === 0 ? '#fff' : '';
+      });
+    }
+    if (facets) facets.setPrefilter(null, true);
+  }
+
+  // Full reset from the empty-state button: facets, letter, everything.
+  function resetAll() {
+    if (!facets) return;
+    facets.reset(true);
+    clearLocalState();
+    facets.apply();
   }
 
   var bar = document.getElementById('js-alpha-bar');
@@ -331,13 +420,14 @@
       a.href = '#';
       a.className = 'chip';
       a.textContent = ch.t;
+      if (ch.l) a.setAttribute('data-letter', ch.l);
       a.addEventListener('click', function (ev) {
         ev.preventDefault();
         letter = ch.l;
         bar.querySelectorAll('a.chip').forEach(function (x) { x.style.background = ''; x.style.color = ''; });
         a.style.background = 'var(--color-accent)';
         a.style.color = '#fff';
-        apply();
+        facets.setPrefilter(letter ? function (p) { return p.init === letter; } : null);
       });
       if (ch.l === null) { a.style.background = 'var(--color-accent)'; a.style.color = '#fff'; }
       bar.appendChild(a);
@@ -345,7 +435,44 @@
   }
 
   moreBtn.addEventListener('click', renderMore);
-  apply();
+
+  // "Samtidige personer" needs both the co-occurrence index and the person
+  // labels. Without them the group would render bare Reg-ids, so mark it
+  // pending instead — the engine then skips it entirely.
+  if (!hasPersons) {
+    var pg = document.getElementById('js-facet-persons');
+    if (pg) {
+      pg.setAttribute('data-facet-pending', '');
+      var body = pg.querySelector('.facet-group__body');
+      if (body) body.innerHTML =
+        '<p class="facet-note">Aktiveres når cooccurrence.js og persons-extra.js er bygget.</p>';
+    }
+  }
+
+  var facets = FacetEngine.create({
+    panel: document.querySelector('.facet-panel'),
+    items: ALL,
+    accessors: {
+      country: function (p) { return p.country; },
+      person:  function (p) { return p.persons; }
+    },
+    labels: {
+      person: function (rid) {
+        var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
+        return p ? p.label : rid;
+      }
+    },
+    sortKeys: {
+      person: function (rid) {
+        var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
+        return surnameKey(p ? p.label : rid);
+      }
+    },
+    onReset: clearLocalState,
+    onChange: render
+  });
+
+  facets.apply();
 })();
 </script>
 <script src="js/nav.js"></script>
