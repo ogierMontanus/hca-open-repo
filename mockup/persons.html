@@ -121,6 +121,11 @@
             <span class="results-count"><strong>10.228</strong> personer i Personregister</span>
           </div>
 
+          <!-- Nation cross-link — filled by js/nation-link.js when the
+               Nationalitet facet is narrowed to exactly one value. Empty
+               otherwise. -->
+          <div id="js-nation-link"></div>
+
           <!-- Persons list — data-driven from PERSONS_EXTRA (js/persons-extra.js) -->
           <div class="result-list" id="js-person-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
           <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
@@ -217,7 +222,9 @@
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
+<script src="data/nation-index.js" onerror="void 0"></script>
 <script src="js/facet-engine.js"></script>
+<script src="js/nation-link.js"></script>
 <script>
 (function () {
   'use strict';
@@ -314,6 +321,22 @@
     if (p.description) {
       mainH += '<div><h2 class="section-title">Beskrivelse</h2>' +
         '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' + esc(p.description) + '</p></div>';
+    }
+
+    // ── Nation-krydslink ───────────────────────────────────────────────────
+    // Second block from the top, above Værker / Hyppigste steder: from a
+    // German person, offer every German person *and* place in one view. A
+    // person can carry two nationalities (czekisk-dansk) — show one link per
+    // nationality rather than picking a winner. Emits nothing when the person
+    // has none, or when nation-index.js is absent.
+    if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
+      p.nationalities.forEach(function (key) {
+        var info = NationLink.byKey(key);
+        if (info) {
+          mainH += NationLink.html(info, esc(p.label) + ' er registreret som ' +
+            info.label.toLowerCase());
+        }
+      });
     }
 
     // Works by this person
@@ -509,6 +532,7 @@
       countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') +
         '</strong> personer i Personregister' + note;
     }
+    updateNationLink();
     grid.innerHTML = '';
     shown = 0;
     if (filtered.length === 0) {
@@ -520,6 +544,22 @@
     }
     renderMore();
     updateLetterAvailability();
+  }
+
+  // Offer the nation.html mashup once the reader has narrowed Nationalitet
+  // to a single value — "Tysk" ticked here lists German *persons*, while
+  // nation.html additionally shows German places and the Tyskland entry
+  // itself. Only for a single ticked nationality: with two or more there is
+  // no one nation to link to, and "Uoplyst" names no nation at all.
+  function updateNationLink() {
+    var host = document.getElementById('js-nation-link');
+    if (!host || typeof NationLink === 'undefined') return;
+    var checked = document.querySelectorAll(
+      '.facet-panel input[data-facet="nationality"]:checked:not([data-facet-empty])');
+    if (checked.length !== 1) { host.innerHTML = ''; return; }
+    var key = checked[0].getAttribute('data-match');
+    NationLink.mount(host, NationLink.byKey(key),
+      'Du filtrerer på ' + (natLabels[key] || key));
   }
 
   // Dim alphabet chips that have no hits under the current facet selection.

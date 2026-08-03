@@ -396,6 +396,39 @@ body[data-section="hvor"] .page-hero {
   margin: 0;
 }
 
+/* === Nation cross-link ===
+   Offers the nation.html mashup (all persons + places of one nationality in
+   one view) from wherever the reader is already looking at a single nation:
+   a German place's card, a German person's card, or a list narrowed to one
+   nationality. Rendered by js/nation-link.js, which emits nothing at all when
+   data/nation-index.js is absent — so the link can never point at an empty
+   page on a fresh clone. */
+.nation-link {
+  display: flex; align-items: center; gap: var(--sp3);
+  padding: var(--sp3) var(--sp4);
+  margin-bottom: var(--sp5);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: var(--color-surface-2);
+  text-decoration: none; color: var(--color-text);
+  transition: background 0.15s, border-color 0.15s;
+}
+.nation-link:hover {
+  background: var(--color-accent-light); border-color: var(--color-accent);
+  text-decoration: none;
+}
+.nation-link__body { flex: 1; min-width: 0; }
+.nation-link__title { font-size: 0.9rem; font-weight: 600; }
+.nation-link__meta {
+  font-size: 0.76rem; color: var(--color-text-muted); margin-top: 1px;
+}
+.nation-link__arrow {
+  color: var(--color-accent); font-size: 1rem; flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.nation-link:hover .nation-link__arrow { transform: translateX(3px); }
+
 /* === Results Header === */
 .results-header {
   display: flex; align-items: center; gap: var(--sp4); margin-bottom: var(--sp5);

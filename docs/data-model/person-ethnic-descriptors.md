@@ -210,12 +210,95 @@ the largest bucket by design: most embedded mentions are ordinary prose
 ("*1858 Legationssekretær ved det tyske Gesandtskab i Madrid, senere
 spansk …*") that a simple keyword window can't safely disambiguate.
 
-## Not yet wired into the mockup
+## Wired into the mockup
 
-`persons.html`'s "Nationalitet" facet currently shows static sample
-counts (Dansk 4.218, Tysk 1.847, …) — placeholder data, not derived from
-this parser. Wiring `person_ethnic_descriptors.csv` into
-`build_persons_extra.py` (one or more `nationality_key` values per
-person, defaulting the facet to `leading`-position, `subject`-referent
-matches only) is a natural next step but is out of scope for this pass,
-which is about the extraction itself.
+`persons.html`'s "Nationalitet" facet runs off this data.
+`build_persons_extra.py` attaches a `nationalities` array to each
+`PERSONS_EXTRA` entry — **leading-position matches only**, so a person
+is never claimed as German on the strength of a mention that may
+describe their German spouse — plus a `NATIONALITY_LABELS` companion
+const. The facet itself is rendered by the shared `js/facet-engine.js`
+(`data-facet-source="nationality"`), with an "Uoplyst" bucket for the
+8,259 persons carrying no leading match.
+
+`build_nation_index.py` joins the same data to the place register and
+emits `mockup/data/nation-index.js`, which powers `nation.html` — one
+nation's persons, places, and the nation's own register entry in a
+single view.
+
+## Nation cross-links
+
+`js/nation-link.js` offers `nation.html` from wherever the reader is
+already looking at exactly one nation. It reads `NATION_INDEX` and
+returns nothing when that global is absent, so on a fresh clone the
+link simply doesn't appear rather than pointing at an empty page. It
+also suppresses itself for a nation with no persons *and* no places.
+
+Placement is the **second block from the top** in all four cases, which
+puts it above the "Hyppigste …" sections on the detail pages:
+
+| Page | Trigger | Link |
+|---|---|---|
+| `place.html` (detail) | place has `country_da` — "Altona ligger i Tyskland" | after the map block |
+| `persons.html` (detail) | person has `nationalities` | after Beskrivelse, above Værker / Hyppigste steder |
+| `places.html` (list) | reader ticks **one** Land facet value | after the results header, above the list |
+| `persons.html` (list) | reader ticks **one** Nationalitet facet value | after the results header, above the list |
+
+Two deliberate restrictions:
+
+- **Single value only.** With two Land or Nationalitet values ticked
+  there is no one nation to link to, and `nation.html` shows one at a
+  time — so the banner hides rather than picking a winner. The
+  "Uoplyst" bucket names no nation and never triggers it.
+- **A person may get two links.** A dual nationality
+  (`czekisk-dansk`, `tysk-engelsk`) yields one banner per nationality
+  rather than a silent choice between them.
+
+Where several nationality keys share one country entry — `hollandsk`
+and `nederlandsk` both point at Holland, `finsk` and `finlandssvensk`
+both at Finland, and the Danish regional keys sit inside Danmark — the
+Land facet only knows the country label, so `byCountry()` prefers a
+plain `national` demonym over a regional or minority one, and breaks
+ties on person count.
+
+The banner's person count is the `persons_certain` figure only;
+`nation.html` additionally shows the `persons_possible` group. The
+teaser therefore undercounts slightly, which is the safe direction.
+
+### Scan: where else would a nation link help?
+
+Grepping the mockup for `Tyskland` / `tysk` (outside generated data and
+the 4,500 diary pages) turns up five more sites. Only the first two
+were worth wiring; the reasoning for the rest:
+
+- **`kort.html`** — marker popups print `country_da`. A link there is
+  technically possible but low value: popups are transient, the country
+  is already one line of a two-line popup, and the map is itself the
+  "see everything geographically" view. *Not wired.*
+- **`person.html`** — carries the same "Hyppigste steder" structure and
+  would qualify, but it is orphaned: nothing in the mockup links to it
+  any more (`persons.html` superseded it, and
+  `tests/test_no_stale_person_refs.py` enforces that). Wiring a dead
+  page would be misleading maintenance. *Not wired.*
+- **`romaner.html` and `work.html`** — both carry a **Sprog** facet
+  (`data-facet="lang"`, values `de` / `Tysk`). This is the works-side
+  extension point `nation.html` already flags as open, and it stays
+  open for two independent reasons. First, **data**: `WORKS_EXTRA.lang`
+  is `None` for all 3,717 generated works — only the ~31 hand-curated
+  `WORKS` in `work.html` carry a language, and `romaner.html`'s chips
+  are hand-written mockup markup. Second, and more important,
+  **semantics**: a work's language is not its author's nationality. A
+  German-language book by a Danish author is not "German" in the sense
+  this register's person descriptors mean, and conflating the two would
+  quietly mis-attribute works. If a works-language link is added later
+  it should be its own relation, not a reuse of `nationality_key`.
+- **`diaries.html`** — one hardcoded sample card reading
+  "Weimar, Tyskland" in static mockup markup, not data-driven. *Not
+  wired.*
+
+One direction remains unbuilt in the other sense: `nation.html`'s person
+and place cards deep-link to the individual `?reg=…` pages, but there is
+no "open this as a filtered list" link back to
+`persons.html` / `places.html` with the corresponding facet pre-ticked.
+That would need the list pages to accept a facet pre-selection from the
+query string, which neither does today.

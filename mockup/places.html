@@ -142,6 +142,10 @@
             <span class="results-count"><strong>2.508</strong> steder i Stedregister</span>
           </div>
 
+          <!-- Nation cross-link — filled by js/nation-link.js when the Land
+               facet is narrowed to exactly one country. Empty otherwise. -->
+          <div id="js-nation-link"></div>
+
           <!-- Alphabet navigation — chips generated from PLACES_EXTRA initials -->
           <div id="js-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:var(--sp6)">
             <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
@@ -236,7 +240,9 @@
        python scripts/build_mockup/build_persons_extra.py -->
 <script src="data/cooccurrence.js" onerror="void 0"></script>
 <script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/nation-index.js" onerror="void 0"></script>
 <script src="js/facet-engine.js"></script>
+<script src="js/nation-link.js"></script>
 <script>
 (function () {
   'use strict';
@@ -354,6 +360,7 @@
       countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') +
         '</strong> steder i Stedregister' + note;
     }
+    updateNationLink();
     grid.innerHTML = '';
     shown = 0;
     if (filtered.length === 0) {
@@ -365,6 +372,22 @@
     }
     renderMore();
     updateLetterAvailability();
+  }
+
+  // Offer the nation.html mashup once the reader has narrowed Land to a
+  // single country — "Tyskland" ticked here is exactly the question
+  // nation.html answers in full (German persons *and* German places at
+  // once). Deliberately only for a single ticked country: with two or more
+  // there is no one nation to link to, and nation.html shows one at a time.
+  function updateNationLink() {
+    var host = document.getElementById('js-nation-link');
+    if (!host || typeof NationLink === 'undefined') return;
+    var checked = document.querySelectorAll(
+      '.facet-panel input[data-facet="country"]:checked:not([data-facet-empty])');
+    if (checked.length !== 1) { host.innerHTML = ''; return; }
+    var country = checked[0].getAttribute('data-match');
+    NationLink.mount(host, NationLink.byCountry(country),
+      'Du filtrerer på ' + country);
   }
 
   // Dim alphabet chips that have no hits under the current facet selection.

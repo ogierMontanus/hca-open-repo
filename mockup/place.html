@@ -80,6 +80,8 @@
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
+<script src="data/nation-index.js" onerror="void 0"></script>
+<script src="js/nation-link.js"></script>
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -191,6 +193,15 @@ function escAttr(s) { return String(s == null ? '' : s)
       'Vis på samlet kort →</a></p></div>';
   } else {
     main += '<div><p class="muted" style="font-style:italic">Ikke geokodet — dette sted findes ikke i hcax.dk Rejser-tabellen.</p></div>';
+  }
+
+  // ── Nation-krydslink ────────────────────────────────────────────────────
+  // Second block from the top, above Beskrivelse / Værker / Hyppigste: from
+  // a German place, offer every German place *and* person in one view.
+  // Emits nothing when the place has no country or nation-index.js is absent.
+  if (typeof NationLink !== 'undefined' && pl.country_da) {
+    main += NationLink.html(NationLink.byCountry(pl.country_da),
+      escAttr(pl.label) + ' ligger i ' + escAttr(pl.country_da));
   }
 
   if (pl.description) {
