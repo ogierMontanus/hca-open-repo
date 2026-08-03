@@ -242,6 +242,16 @@
     return;
   }
 
+  // Nations with very few hits (mostly the singleton keys nothing else
+  // clustered into) clutter the picker without giving the reader much to
+  // look at. Below MIN_HITS the option is disabled rather than removed —
+  // the data is real and a direct ?nat= link still works — so a thin
+  // category doesn't quietly disappear, it's just not offered by default.
+  var MIN_HITS = 5;
+  function nationTotal(n) {
+    return n.persons_certain.length + n.persons_possible.length + n.places_in_country.length;
+  }
+
   var keys = Object.keys(NI).sort(function (a, b) {
     return NI[a].label_da.localeCompare(NI[b].label_da, 'da');
   });
@@ -249,8 +259,12 @@
     var opt = document.createElement('option');
     opt.value = k;
     var n = NI[k];
-    var total = n.persons_certain.length + n.persons_possible.length + n.places_in_country.length;
+    var total = nationTotal(n);
     opt.textContent = n.label_da + ' (' + total + ')';
+    if (total < MIN_HITS) {
+      opt.disabled = true;
+      opt.textContent += ' — for få træf';
+    }
     select.appendChild(opt);
   });
 
@@ -431,7 +445,12 @@
 
   var params = new URLSearchParams(window.location.search);
   var initial = params.get('nat');
-  if (!initial || !NI[initial]) initial = NI['fransk'] ? 'fransk' : keys[0];
+  // An explicit ?nat= link always works, even for a below-threshold nation —
+  // the picker hides thin categories from casual browsing, it doesn't revoke
+  // a direct link to one. Only the no-param fallback avoids landing on one.
+  if (!initial || !NI[initial]) {
+    initial = NI['fransk'] ? 'fransk' : keys.filter(function (k) { return nationTotal(NI[k]) >= MIN_HITS; })[0] || keys[0];
+  }
   if (initial) render(initial);
 })();
 </script>

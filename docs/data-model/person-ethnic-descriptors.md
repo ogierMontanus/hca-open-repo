@@ -21,12 +21,12 @@ Outputs:
 | `data/normalized/person_ethnic_descriptors.csv` | Every match: entity, matched word, nationality, category, position, referent hint |
 | `data/normalized/person_ethnic_descriptors_review.csv` | Every unmatched `-sk`/`-iske`-shaped word, ranked by frequency, with one example each — the ongoing edge-case queue |
 
-Current run: **2,708 matches on 2,519 of 10,228 rows (24.6 %)**.
+Current run: **2,705 matches on 2,517 of 10,228 rows (24.6 %)**.
 
 ## The adjective table
 
-`data/curated/ethnic_adjectives_da.csv` is the compiled list — 94
-nationality/ethnicity keys, 221 surface-form spellings, one row per key
+`data/curated/ethnic_adjectives_da.csv` is the compiled list — 93
+nationality/ethnicity keys, 217 surface-form spellings, one row per key
 with a `category`. It is **hand-curated but corpus-grounded**: every
 entry was checked against an actual frequency scan of the register
 before being added (see "Method" below), not assembled from memory
@@ -45,7 +45,7 @@ Categories:
 | `regional_foreign` | a foreign sub-national region/identity | flamsk (Flemish), provencalsk, tyrolsk, katalansk |
 | `ethnolinguistic` | defined by language/dialect rather than a state | plattysk (Low German), germansk, slavisk, frisisk |
 | `religious_ethnic` | ethnic *and* religious, not tied to one state | jødisk (Jewish) |
-| `supranational` | broader than one nation | nordisk, skandinavisk, østerlandsk/orientalsk ("Oriental", archaic catch-all) |
+| `supranational` | broader than one nation | nordisk, skandinavisk |
 | `minority` | a named minority identity within another nation | finlandssvensk (Swedish-speaking Finland) |
 
 Each key carries every spelling variant seen (or plausible) as a
@@ -98,7 +98,13 @@ job):
   diplomatisk, …* ("*romansk* Filolog" = a *Romance*-philology
   professor, "*nyeuropæisk* Lingvistik" = *modern-European*
   linguistics — neither says anything about the *person's* own
-  nationality).
+  nationality). `østerlandsk`/`orientalsk` was originally kept as a
+  `supranational` key but turned out to be entirely this pattern in
+  practice — its only three matches were "*Professor i orientalske
+  Sprog*" and "*germansk Filologi*", all embedded, all academic
+  subjects rather than anyone's own ethnicity — so it was removed from
+  the table outright rather than kept as a near-empty, low-value
+  category.
 - **Religious, not ethnic** — *katolsk/katolske* ("den katolske Liga",
   "Isabella *den Katolske*" — a royal epithet), *luthersk/lutherske*,
   *evangelisk*, *mosaisk* (distinct from `jødisk`, which **is** kept —
@@ -403,8 +409,8 @@ is left alone for now — the person↔person case has no equivalent
 
 ## Nation umbrellas
 
-`data/curated/nation_umbrellas_da.csv` clusters the 91 nationality keys
-that reach the index into **36 pickable groups** for `nation.html`. The
+`data/curated/nation_umbrellas_da.csv` clusters the 90 nationality keys
+that reach the index into **34 pickable groups** for `nation.html`. The
 register distinguishes identities a reader usually does not — it names
 the individual pre-1871 German polity far more often than "tysk" — so
 the raw key list makes a poor menu.
@@ -418,9 +424,16 @@ Keys that no umbrella claims stay top-level as their own single-member
 group, and a group with only one contributing member renders flat, with
 no heading noise.
 
+Below a floor of **5 combined hits** (certain + possible persons +
+places), the picker `<option>` is disabled rather than removed — the
+data is real and a direct `?nat=` link still resolves it, the entry is
+just not offered by default. 10 of the 34 groups sit below that floor
+today (Rumænsk, Bulgarsk, Argentinsk, Kinesisk, Japansk, Indisk,
+Persisk, Maltesisk, Slavisk, Jødisk).
+
 | Umbrella | Covers |
 |---|---|
-| **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, thüringsk, badisk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
+| **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, thüringsk, badisk), tysk_romersk, frankisk, plattysk, germansk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
 | **Britisk** | engelsk, skotsk, irsk, angelsaksisk |
 | **Græsk** | græsk, nygræsk + the ancient polities (attisk, atheniensisk, makedonisk) and østromersk |
 | **Dansk** | dansk + regional (jysk, sjællandsk, fynsk, københavnsk), the duchies, and the crown territories (islandsk, grønlandsk, dansk_vestindisk) |
@@ -467,5 +480,21 @@ both memberships.
   source never labelled that way.
 - **Romersk sits under Italiensk.** It means Ancient Rome, and the
   register's own country label for it is "Rom".
-- **Germansk and slavisk are left unclustered.** They name language
-  families spanning many nations, not nations.
+- **Germansk is folded into Tysk**, on the practical grounds that its
+  single occurrence in the register ("Professor … i germansk
+  Filologi") is an academic-subject mention rather than a claim about
+  anyone's own ethnicity anyway, and keeping a near-empty
+  `ethnolinguistic` bucket around it added a picker entry for one
+  ambiguous data point. The name is broader than German in the
+  linguistic sense (it covers English, Dutch and Scandinavian too), so
+  this is a simplification, not a claim that "Germanic" means "German".
+- **Slavisk is left unclustered.** It names a language family spanning
+  many nations, not one nation, and unlike germansk there is no
+  single-umbrella best fit for it here.
+- **Østerlandsk/orientalsk was removed from the adjective table
+  entirely** rather than clustered — see "False-positive families" above.
+  All three of its matches were "Professor i orientalske/østerlandske
+  Sprog", the same academic-subject pattern excluded everywhere else in
+  this register (`romansk Filolog`, `nyeuropæisk Lingvistik`); keeping
+  it around as a `supranational` catch-all was giving a false-positive
+  family its own category instead of excluding it like its siblings.
