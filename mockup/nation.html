@@ -51,6 +51,28 @@
     }
     .lang-src--register { background: #dcfce7; border: 1px solid #86bf9f; color: #166534; }
     .lang-src--derived  { background: #f1f0ec; border: 1px solid var(--color-border); color: var(--color-text-muted); }
+
+    /* Sub-identity heading inside an umbrella section — "Preussisk (30)"
+       under Tysk. Only rendered when more than one member contributes, so a
+       single-identity nation stays uncluttered. */
+    .nation-sub {
+      display: flex; align-items: baseline; gap: var(--sp2);
+      margin: var(--sp4) 0 var(--sp2);
+      font-size: 0.8rem; font-weight: 600; color: var(--color-text);
+    }
+    .nation-sub:first-child { margin-top: 0; }
+    .nation-sub__count { font-weight: 400; font-size: 0.75rem; color: var(--color-text-muted); }
+    .nation-sub__also {
+      font-weight: 400; font-size: 0.72rem; color: var(--color-text-muted); font-style: italic;
+    }
+    .nation-members {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-top: var(--sp3);
+    }
+    .nation-members__chip {
+      font-size: 0.72rem; padding: 2px 8px; border-radius: 999px;
+      background: var(--color-surface-2); border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+    }
   </style>
 </head>
 <body>
@@ -80,6 +102,10 @@
         <label for="js-nation-select" style="font-size:0.82rem;opacity:0.85">Nation / etnicitet:</label>
         <select id="js-nation-select"></select>
       </div>
+      <!-- Which sub-identities this umbrella covers, so the grouping is
+           never a black box: the reader sees up front that Tysk includes
+           Preussisk, Sachsisk, Holstensk … -->
+      <div id="js-nation-members" class="nation-members"></div>
     </div>
   </div>
 
@@ -104,7 +130,7 @@
           <code>docs/data-model/person-ethnic-descriptors.md</code>
           for hvordan disse er udtrukket.
         </p>
-        <div id="js-persons-certain" class="nation-grid"></div>
+        <div id="js-persons-certain"></div>
 
         <div id="js-persons-possible-wrap">
           <div class="nation-subgroup__label">Muligvis — nævnt længere inde i beskrivelsen</div>
@@ -115,7 +141,7 @@
             Premierløjtnant« — beskriver ægtefællen). Vist til manuel
             vurdering, ikke slået sammen med listen ovenfor.
           </p>
-          <div id="js-persons-possible" class="nation-grid"></div>
+          <div id="js-persons-possible"></div>
         </div>
       </div>
 
@@ -130,7 +156,7 @@
           <code>mockup/data/places-extra.js</code>) — kun ca. 18 % af
           Stedregistret har koordinater endnu, så listen er ufuldstændig.
         </p>
-        <div id="js-places" class="nation-grid"></div>
+        <div id="js-places"></div>
       </div>
 
       <div class="nation-section">
@@ -153,7 +179,7 @@
           maskinbestemt — se
           <code>scripts/build_mockup/detect_work_language.py</code>.
         </p>
-        <div id="js-works-by-lang" class="nation-grid"></div>
+        <div id="js-works-by-lang"></div>
 
         <div class="nation-subgroup__label">Af kunstnere fra denne nation</div>
         <div id="js-works-by-author" class="nation-grid"></div>
@@ -267,14 +293,60 @@
       '</div></a>';
   }
 
+  /* Render a section grouped by contributing sub-identity, so clustering the
+     picker never hides WHICH identity an entry actually carries. With only
+     one contributing member the headings would be noise, so it falls back to
+     a flat list. `field` names the member array to read; `cardFn` builds one
+     card. A member that also sits under other umbrellas says so inline —
+     that is the multiple-membership case made visible rather than implied. */
+  function renderByMember(host, n, field, cardFn, emptyText) {
+    var contributing = (n.members || []).filter(function (m) { return m[field].length; });
+    if (!contributing.length) {
+      host.innerHTML = '<div class="nation-empty">' + esc(emptyText) + '</div>';
+      return 0;
+    }
+    var total = n[field].length;
+    if (contributing.length === 1) {
+      host.innerHTML = '<div class="nation-grid">' +
+        contributing[0][field].map(cardFn).join('') + '</div>';
+      return total;
+    }
+    // Biggest sub-identity first — the reader meets the main body of the
+    // nation before its historical and regional tributaries.
+    contributing.sort(function (a, b) { return b[field].length - a[field].length; });
+    host.innerHTML = contributing.map(function (m) {
+      var also = (typeof NATION_MEMBER_OF !== 'undefined' && NATION_MEMBER_OF[m.key] || [])
+        .filter(function (u) { return u !== key_current && NI[u]; })
+        .map(function (u) { return NI[u].label_da; });
+      return '<div class="nation-sub"><span>' + esc(m.label) + '</span>' +
+        '<span class="nation-sub__count">' + m[field].length + '</span>' +
+        (also.length ? '<span class="nation-sub__also">også under ' +
+          esc(also.join(', ')) + '</span>' : '') + '</div>' +
+        '<div class="nation-grid">' + m[field].map(cardFn).join('') + '</div>';
+    }).join('');
+    return total;
+  }
+
+  var key_current = null;
+
   function render(key) {
     var n = NI[key];
     if (!n) return;
     select.value = key;
+    key_current = key;
 
     document.getElementById('js-h1').textContent = n.label_da;
     document.getElementById('js-sub').textContent =
       'Personer, steder og værker forbundet med "' + n.label_da + '" (' + n.category + ').';
+
+    var memEl = document.getElementById('js-nation-members');
+    var mem = (n.members || []).filter(function (m) { return m.key !== key; });
+    memEl.innerHTML = mem.length
+      ? '<span style="font-size:0.72rem;opacity:0.7;align-self:center">Samler:</span>' +
+        mem.map(function (m) {
+          return '<span class="nation-members__chip">' + esc(m.label) + '</span>';
+        }).join('')
+      : '';
 
     var countrySection = document.getElementById('js-country-section');
     var countryCard = document.getElementById('js-country-card');
@@ -287,44 +359,34 @@
 
     document.getElementById('js-persons-count').textContent =
       n.persons_certain.length + ' sikre · ' + n.persons_possible.length + ' mulige';
-    var certainEl = document.getElementById('js-persons-certain');
-    certainEl.innerHTML = n.persons_certain.length
-      ? n.persons_certain.map(personCard).join('')
-      : '<div class="nation-empty">Ingen personer fundet med denne beskrivelse som første ord.</div>';
+    renderByMember(document.getElementById('js-persons-certain'), n, 'persons_certain',
+      personCard, 'Ingen personer fundet med denne beskrivelse som første ord.');
 
     var possibleWrap = document.getElementById('js-persons-possible-wrap');
-    var possibleEl = document.getElementById('js-persons-possible');
     if (n.persons_possible.length) {
       possibleWrap.style.display = '';
-      possibleEl.innerHTML = n.persons_possible.map(personCard).join('');
+      renderByMember(document.getElementById('js-persons-possible'), n, 'persons_possible',
+        personCard, '');
     } else {
       possibleWrap.style.display = 'none';
     }
 
     document.getElementById('js-places-count').textContent = n.places_in_country.length + ' steder';
-    var placesEl = document.getElementById('js-places');
-    placesEl.innerHTML = n.places_in_country.length
-      ? n.places_in_country.map(placeCard).join('')
-      : '<div class="nation-empty">Ingen andre geokodede steder fundet i denne nation endnu.</div>';
+    renderByMember(document.getElementById('js-places'), n, 'places_in_country',
+      placeCard, 'Ingen andre geokodede steder fundet i denne nation endnu.');
 
     // Works — best-effort client-side hooks via EntityRefs (see the
     // "Åbent for udvidelse" note above for what these do and don't cover).
     // Works whose language is this nation's — an independent claim from
     // authorship, so it gets its own list and never merges with the others.
     var byLangEl = document.getElementById('js-works-by-lang');
-    var langRids = n.works_in_language || [];
     var byLangCount = 0;
-    if (typeof WORKS_EXTRA !== 'undefined' && langRids.length) {
-      var langCards = langRids.filter(function (rid) { return WORKS_EXTRA[rid]; });
-      byLangCount = langCards.length;
-      byLangEl.innerHTML = langCards.length
-        ? langCards.map(function (rid) { return workCard(rid, WORKS_EXTRA[rid], true); }).join('')
-        : '<div class="nation-empty">Ingen værker med sprogbestemmelse for denne nation.</div>';
+    if (typeof WORKS_EXTRA !== 'undefined') {
+      byLangCount = renderByMember(byLangEl, n, 'works_in_language', function (rid) {
+        return WORKS_EXTRA[rid] ? workCard(rid, WORKS_EXTRA[rid], true) : '';
+      }, 'Ingen værker er sprogbestemt til denne nation.');
     } else {
-      byLangEl.innerHTML = '<div class="nation-empty">' +
-        (typeof WORKS_EXTRA === 'undefined'
-          ? 'Kræver works-extra.js.'
-          : 'Ingen værker er sprogbestemt til denne nation.') + '</div>';
+      byLangEl.innerHTML = '<div class="nation-empty">Kræver works-extra.js.</div>';
     }
 
     var byAuthorEl = document.getElementById('js-works-by-author');

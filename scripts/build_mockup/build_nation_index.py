@@ -51,6 +51,7 @@ import sys
 ROOT           = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ADJECTIVES     = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
 NATION_LABELS  = os.path.join(ROOT, "data", "curated", "nation_place_labels_da.csv")
+UMBRELLAS      = os.path.join(ROOT, "data", "curated", "nation_umbrellas_da.csv")
 ENTITIES       = os.path.join(ROOT, "data", "normalized", "entities.csv")
 PERSON_MATCHES = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
 WORK_LANGS     = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
@@ -117,6 +118,28 @@ def load_places_extra(path):
         return {}
     data = json.loads(m.group(1))
     return {rid: rec.get("country_da") for rid, rec in data.items() if rec.get("country_da")}
+
+
+def load_umbrellas(path):
+    """[(umbrella_key, label, place_label, [member_key, …]), …].
+
+    An umbrella groups several nationality keys the register distinguishes
+    but a reader usually does not — the pre-1871 German polities under
+    Tyskland, England/Skotland/Irland under Britisk, ancient and modern
+    Greece under Græsk. Membership is deliberately many-to-many: Kurland
+    is German-speaking *and* Russian-annexed, the Schleswig-Holstein keys
+    are Danish *and* German, finlandssvensk is Swedish *and* Finnish.
+    Forcing any of those into a single parent would take a side the
+    register itself does not take."""
+    if not os.path.exists(path):
+        return []
+    out = []
+    with open(path, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            members = [m.strip() for m in row["members"].split(";") if m.strip()]
+            out.append((row["umbrella_key"], row["umbrella_label"],
+                        row["place_label_da"].strip() or None, members))
+    return out
 
 
 def load_works_by_language(path):
@@ -225,17 +248,104 @@ def main():
     no_country = sorted(set(adjectives) - set(nation_labels))
     print(f"  {len(no_country):,} keys have no curated nation label at all "
           f"(regional/historical/supranational categories mostly) — see the CSV notes column.")
-    print(f"\n  {len(index):,} keys have at least one linked person/place and are in the index")
+    print(f"\n  {len(index):,} nationality keys have at least one linked entity")
+
+    # ── Umbrella roll-up ────────────────────────────────────────────────────
+    # Each umbrella keeps its members' contributions SEPARATE (so the page can
+    # show which sub-identity every entry came from) as well as a deduplicated
+    # union (for the picker's counts and the summary line). A member may sit
+    # under several umbrellas — Kurland under both Tyskland and Rusland — so
+    # the two are built independently rather than by partitioning.
+    umbrellas = load_umbrellas(UMBRELLAS)
+    print(f"\nLoading {os.path.relpath(UMBRELLAS, ROOT)}…")
+    print(f"  {len(umbrellas):,} umbrellas defined")
+
+    grouped, member_of = {}, {}
+    clustered = set()
+    for ukey, ulabel, uplace, members in umbrellas:
+        present = [m for m in members if m in index]
+        if not present:
+            continue
+        clustered.update(present)
+        for m in present:
+            member_of.setdefault(m, []).append(ukey)
+
+        country_label = uplace or next(
+            (index[m]["country_label"] for m in present if index[m]["country_label"]), None)
+        country_entity_id = place_label_to_id.get(country_label) if country_label else None
+
+        union = {"persons_certain": [], "persons_possible": [], "places_in_country": [],
+                 "works_in_language": []}
+        seen = {k: set() for k in union}
+        member_blocks = []
+        for m in present:
+            src = index[m]
+            member_blocks.append({
+                "key": m, "label": src["label_da"], "category": src["category"],
+                "persons_certain": src["persons_certain"],
+                "persons_possible": src["persons_possible"],
+                "places_in_country": src["places_in_country"],
+                "works_in_language": src["works_in_language"],
+                "country_entity_id": src["country_entity_id"],
+            })
+            for field in union:
+                for rid in src[field]:
+                    if rid not in seen[field]:
+                        seen[field].add(rid)
+                        union[field].append(rid)
+        # A person listed as certain under one member and only possible under
+        # another is certain for the umbrella — don't report them twice.
+        union["persons_possible"] = [r for r in union["persons_possible"]
+                                     if r not in seen["persons_certain"]]
+        # The umbrella's own country entry is a place in its own right; don't
+        # also list it among "other places inside this nation".
+        union["places_in_country"] = [r for r in union["places_in_country"]
+                                      if r != country_entity_id]
+
+        grouped[ukey] = {
+            "label_da": ulabel, "category": "umbrella",
+            "country_label": country_label, "country_entity_id": country_entity_id,
+            "members": member_blocks, **union,
+        }
+
+    # Keys no umbrella claims stay top-level, as their own single-member group,
+    # so nothing is lost by clustering.
+    for key, entry in index.items():
+        if key in clustered:
+            continue
+        grouped[key] = {**entry, "members": [{
+            "key": key, "label": entry["label_da"], "category": entry["category"],
+            "persons_certain": entry["persons_certain"],
+            "persons_possible": entry["persons_possible"],
+            "places_in_country": entry["places_in_country"],
+            "works_in_language": entry["works_in_language"],
+            "country_entity_id": entry["country_entity_id"],
+        }]}
+        member_of.setdefault(key, []).append(key)
+
+    multi = {k: v for k, v in member_of.items() if len(v) > 1}
+    print(f"  {len(clustered):,} keys clustered into {sum(1 for g in grouped.values() if g['category'] == 'umbrella'):,} umbrellas")
+    print(f"  {len(grouped) - sum(1 for g in grouped.values() if g['category'] == 'umbrella'):,} keys left standalone")
+    print(f"  {len(multi):,} keys with multiple memberships: " +
+          ", ".join(f"{k}→{'+'.join(v)}" for k, v in sorted(multi.items())))
+    print(f"\n  picker goes from {len(index):,} entries to {len(grouped):,}")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         f.write("// Auto-generated by scripts/build_mockup/build_nation_index.py — do not hand-edit.\n")
-        f.write("// Links each ethnic/national adjective (data/curated/ethnic_adjectives_da.csv) to\n")
-        f.write("// its nation's own place-register entry and to every other place geocoded inside\n")
-        f.write("// it, plus the persons whose description carries that adjective. Consumed by\n")
-        f.write("// mockup/nation.html. See docs/data-model/person-ethnic-descriptors.md.\n")
+        f.write("// NATION_INDEX is keyed by UMBRELLA (data/curated/nation_umbrellas_da.csv):\n")
+        f.write("// the pre-1871 German polities roll up under 'tysk', England/Skotland/Irland\n")
+        f.write("// under 'britisk', ancient + modern Greece under 'græsk'. Each entry carries a\n")
+        f.write("// deduplicated union for counts AND a `members` array keeping every contributing\n")
+        f.write("// nationality key separate, so nation.html can show the sub-identity each entry\n")
+        f.write("// came from. Membership is many-to-many — NATION_MEMBER_OF maps a nationality\n")
+        f.write("// key to every umbrella that claims it.\n")
+        f.write("// See docs/data-model/person-ethnic-descriptors.md.\n")
         f.write("const NATION_INDEX = ")
-        f.write(json.dumps(index, ensure_ascii=False, separators=(",", ":")))
+        f.write(json.dumps(grouped, ensure_ascii=False, separators=(",", ":")))
+        f.write(";\n")
+        f.write("const NATION_MEMBER_OF = ")
+        f.write(json.dumps(member_of, ensure_ascii=False, separators=(",", ":")))
         f.write(";\n")
     print(f"  wrote {os.path.relpath(OUT, ROOT)}  ({os.path.getsize(OUT)/1024:.0f} KB)")
 

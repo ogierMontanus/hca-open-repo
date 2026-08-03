@@ -400,3 +400,72 @@ sammen med" so the stronger top-12 above is not diluted. København's
 The same asymmetry exists in `PERSON_TOP_PERSONS` (70.9 % one-way) and
 is left alone for now — the person↔person case has no equivalent
 "Hyppigste" section rendering it, so no link is currently orphaned by it.
+
+## Nation umbrellas
+
+`data/curated/nation_umbrellas_da.csv` clusters the 91 nationality keys
+that reach the index into **36 pickable groups** for `nation.html`. The
+register distinguishes identities a reader usually does not — it names
+the individual pre-1871 German polity far more often than "tysk" — so
+the raw key list makes a poor menu.
+
+Clustering never discards the distinction: each umbrella carries a
+`members` array keeping every contributing key's entities separate, and
+`nation.html` renders each section grouped under its sub-identity
+heading with a count ("Preussisk 30"). A chip row under the page title
+lists what the umbrella covers, so the grouping is never a black box.
+Keys that no umbrella claims stay top-level as their own single-member
+group, and a group with only one contributing member renders flat, with
+no heading noise.
+
+| Umbrella | Covers |
+|---|---|
+| **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, thüringsk, badisk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
+| **Britisk** | engelsk, skotsk, irsk, angelsaksisk |
+| **Græsk** | græsk, nygræsk + the ancient polities (attisk, atheniensisk, makedonisk) and østromersk |
+| **Dansk** | dansk + regional (jysk, sjællandsk, fynsk, københavnsk), the duchies, and the crown territories (islandsk, grønlandsk, dansk_vestindisk) |
+| **Italiensk** | italiensk, romersk, neapolitansk, genovesisk, veneziansk, østgotisk |
+| … | 13 more — see the CSV, whose `notes` column carries the reasoning per row |
+
+### Multiple membership is the point, not an edge case
+
+12 keys sit under more than one umbrella, and the page says so inline
+("Holstensk 17 — også under Dansk"):
+
+| Key | Umbrellas | Why |
+|---|---|---|
+| holstensk, slesvigsk, slesvigholstensk, holstenlauenborgsk | Dansk + Tysk | The duchies were the contested ground of the 1848–51 and 1864 wars. Forcing them into one nation would take a side the register does not take. |
+| kurlandsk | Tysk + Russisk | Baltic-German ruling class and German-speaking elite; annexed by Russia in 1795. |
+| finlandssvensk | Svensk + Finsk | That duality is precisely the identity the word names. |
+| østromersk | Græsk + Tyrkisk | Greek-speaking Byzantium, on territory that became Ottoman. |
+| frisisk | Tysk + Hollandsk | The Frisian coast spans both (and Denmark). |
+| frankisk | Tysk + Fransk | The Frankish realm straddled both later nations. |
+| bøhmisk | Østrigsk + Czekisk | Bohemia under the Habsburgs. |
+| valakisk | Tyrkisk + Rumænsk | Wallachia was an Ottoman vassal and became part of Romania in 1859. |
+| maurisk | Spansk + Nordafrikansk | Moorish al-Andalus. |
+
+Where a key resolves through `NationLink.byKey()` — the cross-link
+banner on a person or place card — a dual key lands on whichever
+umbrella the CSV lists first. That ordering is an editorial choice
+rather than a fact, and nothing is hidden by it: the nation page shows
+both memberships.
+
+### Judgement calls worth knowing about
+
+- **Østrig is not folded into Tysk.** Austria sat in the German
+  Confederation until 1866, so the case could be made, but it is its own
+  nation with a substantial entry (82 persons) and swallowing it would
+  over-claim. It heads its own umbrella instead, with tyrolsk and
+  bøhmisk under it.
+- **Irland is inside Britisk**, because Ireland was part of the United
+  Kingdom for the whole diary period (1801–1922). That is a fact about
+  the era, not a claim about Irish identity.
+- **Nordisk stays small** — just nordisk and skandinavisk. The
+  individual Nordic nations are deliberately *not* rolled up into it:
+  nobody in this register is described as "nordisk" merely by being
+  Danish, and folding them in would inflate the umbrella with people the
+  source never labelled that way.
+- **Romersk sits under Italiensk.** It means Ancient Rome, and the
+  register's own country label for it is "Rom".
+- **Germansk and slavisk are left unclustered.** They name language
+  families spanning many nations, not nations.

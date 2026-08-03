@@ -54,8 +54,25 @@ window.NationLink = (function () {
     };
   }
 
+  /* NATION_INDEX is keyed by umbrella, so a member key ('preussisk') has no
+     entry of its own — resolve it through NATION_MEMBER_OF. A key claimed by
+     several umbrellas (kurlandsk → tysk + russisk, holstensk → dansk + tysk)
+     resolves to whichever umbrella is listed first, i.e. row order in
+     data/curated/nation_umbrellas_da.csv. For genuinely dual identities that
+     ordering is an editorial choice, not a fact about the place — the nation
+     page itself shows both memberships ("også under Tysk"), so nothing is
+     hidden by the banner landing on one of them. */
   function byKey(key) {
-    return key ? infoFor(key) : null;
+    if (!key) return null;
+    var direct = infoFor(key);
+    if (direct) return direct;
+    if (typeof NATION_MEMBER_OF === 'undefined' || !NATION_MEMBER_OF[key]) return null;
+    var parents = NATION_MEMBER_OF[key];
+    for (var i = 0; i < parents.length; i++) {
+      var info = infoFor(parents[i]);
+      if (info) return info;
+    }
+    return null;
   }
 
   /* Several nationality keys can share one country entry — hollandsk and
