@@ -31,3 +31,8 @@ mockup/data/places-extra.js
 # this file is absent.
 mockup/data/cooccurrence.js
 
+# Local-only nation index — regenerate with
+# scripts/build_mockup/build_nation_index.py. nation.html shows a
+# "data not built yet" message when this file is absent.
+mockup/data/nation-index.js
+

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nation — H.C. Andersen Dagbogsregister</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .nation-picker {
+      display: flex; align-items: center; gap: var(--sp3); flex-wrap: wrap;
+      margin-top: var(--sp4);
+    }
+    .nation-picker select {
+      padding: 6px 10px; border: 1px solid var(--color-border); border-radius: var(--radius);
+      font: inherit; font-size: 0.88rem; background: var(--color-surface); color: var(--color-text);
+    }
+    .nation-section { margin-top: var(--sp10); }
+    .nation-section:first-of-type { margin-top: var(--sp8); }
+    .nation-section__header {
+      display: flex; align-items: baseline; gap: var(--sp3); margin-bottom: var(--sp4);
+    }
+    .nation-section__title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; }
+    .nation-section__count { font-size: 0.8rem; color: var(--color-text-muted); }
+    .nation-section__note {
+      font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: var(--sp4);
+      max-width: 62ch; line-height: 1.55;
+    }
+    .nation-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--sp3);
+    }
+    .nation-empty {
+      font-size: 0.85rem; color: var(--color-text-muted); font-style: italic;
+      padding: var(--sp4) 0;
+    }
+    .nation-subgroup__label {
+      font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--color-text-muted); margin: var(--sp5) 0 var(--sp2);
+    }
+    .nation-todo {
+      border: 1.5px dashed var(--color-border); border-radius: var(--radius-lg);
+      padding: var(--sp5); font-size: 0.84rem; color: var(--color-text-muted); line-height: 1.6;
+    }
+    .nation-todo strong { color: var(--color-text); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Nation</span>
+      </nav>
+      <h1 id="js-h1">Vælg en nation</h1>
+      <p id="js-sub">Personer, steder — og efterhånden værker — der matcher en given etnisk/national beskrivelse.</p>
+      <div class="nation-picker">
+        <label for="js-nation-select" style="font-size:0.82rem;opacity:0.85">Nation / etnicitet:</label>
+        <select id="js-nation-select"></select>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <div id="js-country-section" class="nation-section" style="display:none">
+        <div class="nation-section__header">
+          <span class="nation-section__title">Nationen selv</span>
+        </div>
+        <div id="js-country-card" class="nation-grid"></div>
+      </div>
+
+      <div class="nation-section">
+        <div class="nation-section__header">
+          <span class="nation-section__title">Personer</span>
+          <span id="js-persons-count" class="nation-section__count"></span>
+        </div>
+        <p class="nation-section__note">
+          Personer hvis registeropslag indledes med denne beskrivelse
+          (fx »<em>Svensk</em> rejsende, Italien 1834.«) — se
+          <code>docs/data-model/person-ethnic-descriptors.md</code>
+          for hvordan disse er udtrukket.
+        </p>
+        <div id="js-persons-certain" class="nation-grid"></div>
+
+        <div id="js-persons-possible-wrap">
+          <div class="nation-subgroup__label">Muligvis — nævnt længere inde i beskrivelsen</div>
+          <p class="nation-section__note">
+            Her optræder beskrivelsen ikke som opslagets første ord, og kan
+            i stedet beskrive en ægtefælle, slægtning eller institution
+            frem for personen selv (fx »g. m. <em>svensk</em>
+            Premierløjtnant« — beskriver ægtefællen). Vist til manuel
+            vurdering, ikke slået sammen med listen ovenfor.
+          </p>
+          <div id="js-persons-possible" class="nation-grid"></div>
+        </div>
+      </div>
+
+      <div class="nation-section">
+        <div class="nation-section__header">
+          <span class="nation-section__title">Steder</span>
+          <span id="js-places-count" class="nation-section__count"></span>
+        </div>
+        <p class="nation-section__note">
+          Andre stedregisterposter hvis koordinater falder inden for
+          denne nation (se <code>country_da</code> i
+          <code>mockup/data/places-extra.js</code>) — kun ca. 18 % af
+          Stedregistret har koordinater endnu, så listen er ufuldstændig.
+        </p>
+        <div id="js-places" class="nation-grid"></div>
+      </div>
+
+      <div class="nation-section">
+        <div class="nation-section__header">
+          <span class="nation-section__title">Værker</span>
+          <span id="js-works-count" class="nation-section__count"></span>
+        </div>
+
+        <div class="nation-subgroup__label">Af kunstnere fra denne nation</div>
+        <div id="js-works-by-author" class="nation-grid"></div>
+
+        <div class="nation-subgroup__label">Med handling i denne nation</div>
+        <div id="js-works-at-place" class="nation-grid"></div>
+
+        <div class="nation-todo" style="margin-top:var(--sp5)">
+          <strong>Åbent for udvidelse.</strong> De to lister ovenfor er
+          bedste-forsøg, afledt af eksisterende data uden ny udtrækning:
+          "Af kunstnere" matcher værkets <code>author</code>-felt mod
+          personer i denne nations liste ovenfor (samme navne-opløsning
+          som <code>work.html</code> bruger); "Med handling i" matcher
+          kun værker hvis titel har en parentetisk stedangivelse, der
+          selv findes i Stedregistret (fx »Den mediceiske Venus
+          (Uffizi, Firenze)«). Værkets <em>sprog</em> — som ville fange
+          fransksprogede værker uafhængigt af hvor de foregår — er ikke
+          et felt i <code>WORKS_EXTRA</code> i dag og kræver en ny
+          udtrækningsscript, analogt med
+          <code>parse_person_ethnic_descriptors.py</code>, men kørt mod
+          <code>data/normalized/entities.csv</code>'s værk-beskrivelser.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Udarbejdet af citizen scientists i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+  </div>
+</footer>
+
+<!-- Generated data — gitignored; CI regenerates. Pages degrade gracefully when absent. -->
+<script src="data/nation-index.js" onerror="void 0"></script>
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  var NI = (typeof NATION_INDEX !== 'undefined') ? NATION_INDEX : null;
+  var select = document.getElementById('js-nation-select');
+
+  if (!NI) {
+    document.getElementById('js-h1').textContent = 'Data ikke bygget endnu';
+    document.getElementById('js-sub').textContent =
+      'mockup/data/nation-index.js mangler. Kør scripts/build_mockup/build_nation_index.py.';
+    return;
+  }
+
+  var keys = Object.keys(NI).sort(function (a, b) {
+    return NI[a].label_da.localeCompare(NI[b].label_da, 'da');
+  });
+  keys.forEach(function (k) {
+    var opt = document.createElement('option');
+    opt.value = k;
+    var n = NI[k];
+    var total = n.persons_certain.length + n.persons_possible.length + n.places_in_country.length;
+    opt.textContent = n.label_da + ' (' + total + ')';
+    select.appendChild(opt);
+  });
+
+  function personCard(rid) {
+    var p = (typeof PERSONS_EXTRA !== 'undefined') ? PERSONS_EXTRA[rid] : null;
+    var label = p ? p.label : rid;
+    var meta = p && p.description ? esc(p.description) : 'PERSON-REGISTER';
+    return '<a href="persons.html?reg=' + esc(rid) + '" class="result-card">' +
+      '<div class="result-card__body">' +
+      '<div class="result-card__title">' + esc(label) + '</div>' +
+      '<div class="result-card__meta">' + meta + '</div>' +
+      '</div></a>';
+  }
+
+  function placeCard(rid) {
+    var p = (typeof PLACES_EXTRA !== 'undefined') ? PLACES_EXTRA[rid] : null;
+    var label = p ? p.label : rid;
+    var meta = p && p.description ? esc(p.description) : 'STED-REGISTER';
+    return '<a href="place.html?reg=' + esc(rid) + '" class="result-card">' +
+      '<div class="result-card__body">' +
+      '<div class="result-card__title">' + esc(label) + '</div>' +
+      '<div class="result-card__meta">' + meta + '</div>' +
+      '</div></a>';
+  }
+
+  function workCard(rid, w) {
+    return '<a href="work.html?reg=' + esc(rid) + '" class="result-card">' +
+      '<div class="result-card__body">' +
+      '<div class="result-card__title">' + esc(w.title) + '</div>' +
+      '<div class="result-card__meta">' + esc(w.h3 || w.h2 || '') +
+      (w.author ? ' · ' + esc(w.author) : '') + '</div>' +
+      '</div></a>';
+  }
+
+  function render(key) {
+    var n = NI[key];
+    if (!n) return;
+    select.value = key;
+
+    document.getElementById('js-h1').textContent = n.label_da;
+    document.getElementById('js-sub').textContent =
+      'Personer, steder og værker forbundet med "' + n.label_da + '" (' + n.category + ').';
+
+    var countrySection = document.getElementById('js-country-section');
+    var countryCard = document.getElementById('js-country-card');
+    if (n.country_entity_id) {
+      countrySection.style.display = '';
+      countryCard.innerHTML = placeCard(n.country_entity_id);
+    } else {
+      countrySection.style.display = 'none';
+    }
+
+    document.getElementById('js-persons-count').textContent =
+      n.persons_certain.length + ' sikre · ' + n.persons_possible.length + ' mulige';
+    var certainEl = document.getElementById('js-persons-certain');
+    certainEl.innerHTML = n.persons_certain.length
+      ? n.persons_certain.map(personCard).join('')
+      : '<div class="nation-empty">Ingen personer fundet med denne beskrivelse som første ord.</div>';
+
+    var possibleWrap = document.getElementById('js-persons-possible-wrap');
+    var possibleEl = document.getElementById('js-persons-possible');
+    if (n.persons_possible.length) {
+      possibleWrap.style.display = '';
+      possibleEl.innerHTML = n.persons_possible.map(personCard).join('');
+    } else {
+      possibleWrap.style.display = 'none';
+    }
+
+    document.getElementById('js-places-count').textContent = n.places_in_country.length + ' steder';
+    var placesEl = document.getElementById('js-places');
+    placesEl.innerHTML = n.places_in_country.length
+      ? n.places_in_country.map(placeCard).join('')
+      : '<div class="nation-empty">Ingen andre geokodede steder fundet i denne nation endnu.</div>';
+
+    // Works — best-effort client-side hooks via EntityRefs (see the
+    // "Åbent for udvidelse" note above for what these do and don't cover).
+    var byAuthorEl = document.getElementById('js-works-by-author');
+    var atPlaceEl = document.getElementById('js-works-at-place');
+    var byAuthorCount = 0, atPlaceCount = 0;
+    if (typeof EntityRefs !== 'undefined' && typeof WORKS_EXTRA !== 'undefined') {
+      var byAuthor = {};
+      n.persons_certain.forEach(function (pid) {
+        EntityRefs.worksByAuthor(pid).forEach(function (w) { byAuthor[w.rid] = w; });
+      });
+      var byAuthorRids = Object.keys(byAuthor);
+      byAuthorCount = byAuthorRids.length;
+      byAuthorEl.innerHTML = byAuthorRids.length
+        ? byAuthorRids.map(function (rid) { return workCard(rid, byAuthor[rid]); }).join('')
+        : '<div class="nation-empty">Ingen værker fundet med en forfatter fra denne nations personliste.</div>';
+
+      var atPlace = {};
+      var placeIds = n.places_in_country.slice();
+      if (n.country_entity_id) placeIds.push(n.country_entity_id);
+      placeIds.forEach(function (pid) {
+        EntityRefs.worksAtPlace(pid).forEach(function (w) { atPlace[w.rid] = w; });
+      });
+      var atPlaceRids = Object.keys(atPlace);
+      atPlaceCount = atPlaceRids.length;
+      atPlaceEl.innerHTML = atPlaceRids.length
+        ? atPlaceRids.map(function (rid) { return workCard(rid, atPlace[rid]); }).join('')
+        : '<div class="nation-empty">Ingen værker fundet med en stedangivelse i titlen, der matcher denne nation.</div>';
+    } else {
+      byAuthorEl.innerHTML = '<div class="nation-empty">Kræver entity-refs.js og works-extra.js.</div>';
+      atPlaceEl.innerHTML = '';
+    }
+    document.getElementById('js-works-count').textContent =
+      byAuthorCount + ' af kunstnere · ' + atPlaceCount + ' med handling';
+
+    var url = new URL(window.location);
+    url.searchParams.set('nat', key);
+    window.history.replaceState({}, '', url);
+  }
+
+  select.addEventListener('change', function () { render(select.value); });
+
+  var params = new URLSearchParams(window.location.search);
+  var initial = params.get('nat');
+  if (!initial || !NI[initial]) initial = NI['fransk'] ? 'fransk' : keys[0];
+  if (initial) render(initial);
+})();
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

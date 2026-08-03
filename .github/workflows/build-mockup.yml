@@ -96,6 +96,18 @@ jobs:
       - name: Stage 4e — cooccurrence.js (reciprocal links)
         run: python scripts/build_mockup/build_cooccurrence.py
 
+      # Stage 4f — nation.html mashup index. Links data/curated/
+      # ethnic_adjectives_da.csv to each nation's place-register entry
+      # and to the persons/places already committed under
+      # data/normalized/. Depends on Stage 4c's places-extra.js and on
+      # data/normalized/person_ethnic_descriptors.csv, which is produced
+      # by the standalone scripts/parsers/parse_person_ethnic_descriptors.py
+      # (not part of this pipeline) and committed to the repo — so this
+      # stage never needs to re-run that parser itself.
+      - name: Stage 4f — nation-index.js (nation mashup)
+        run: python scripts/build_mockup/build_nation_index.py
+        continue-on-error: true
+
       - name: Lint — no stale person.html link targets
         run: python tests/test_no_stale_person_refs.py
 

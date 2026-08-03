@@ -26,8 +26,11 @@ Usage (from repo root):
     python scripts/build_all.py --list-sources   # show what source folders exist
 
 Exit code is non-zero on the first failing stage, except Stages 1b
-(rejser geocodes) and 1c (SV14 place reconciliation), which are treated
-as optional — mirrors CI's continue-on-error on the same steps.
+(rejser geocodes), 1c (SV14 place reconciliation) and 4f (nation index —
+depends on data/normalized/person_ethnic_descriptors.csv, produced by
+the standalone scripts/parsers/parse_person_ethnic_descriptors.py, not
+by this pipeline), which are treated as optional — mirrors CI's
+continue-on-error on the same steps.
 """
 
 import argparse
@@ -55,6 +58,7 @@ STAGES_AFTER_INGEST = [
     ("4c", "places-extra.js",              "scripts/build_mockup/build_places_extra.py", False),
     ("4d", "search-index.js (typeahead)",  "scripts/build_mockup/build_search_index.py", False),
     ("4e", "cooccurrence.js (reciprocal)", "scripts/build_mockup/build_cooccurrence.py", False),
+    ("4f", "nation-index.js (nation mashup)", "scripts/build_mockup/build_nation_index.py", True),
 ]
 
 V082_INGESTER = "scripts/normalization/hca_xlsx_to_csv.py"
