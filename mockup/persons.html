@@ -63,11 +63,20 @@
             <button class="facet-panel__clear">Nulstil</button>
           </div>
 
+          <!-- Nationalitet — live off PERSONS_EXTRA.nationalities (leading-position
+               ethnic-adjective matches only; see build_persons_extra.py and
+               docs/data-model/person-ethnic-descriptors.md). Only 1.969 of
+               10.228 persons carry one today, so the generated "Uoplyst"
+               bucket makes that gap selectable instead of silently dropping
+               those rows — same convention as places.html's Land facet.
+               Rows and counts are rendered by FacetEngine — do not
+               hand-write them here. -->
           <div class="facet-group">
             <div class="facet-group__header">Nationalitet <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body" id="js-nationalitet-body">
-              <span style="font-size:0.78rem;color:var(--color-text-muted);padding:6px 12px;display:block">Indlæser…</span>
-            </div>
+            <div class="facet-group__body"
+                 data-facet-source="nationality"
+                 data-facet-limit="12"
+                 data-facet-empty-label="Uoplyst"></div>
           </div>
 
           <div class="facet-group">
@@ -208,6 +217,7 @@
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
+<script src="js/facet-engine.js"></script>
 <script>
 (function () {
   'use strict';
@@ -438,8 +448,10 @@
   var ALL = Object.keys(PERSONS_EXTRA).map(function (rid) {
     var p = PERSONS_EXTRA[rid];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
-             refs: p.refs || 0, init: initialOf(p.label), nat: p.nationalities || [] };
+             refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [] };
   });
+
+  var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
 
   var collator = (typeof Intl !== 'undefined' && Intl.Collator)
     ? new Intl.Collator('da') : null;
@@ -448,94 +460,6 @@
                     : (a.label < b.label ? -1 : a.label > b.label ? 1 : 0);
   }
   function byRefs(a, b) { return b.refs - a.refs || byLabel(a, b); }
-
-  // ── Nationalitet facet — real data from PERSONS_EXTRA[rid].nationalities
-  // (leading-position ethnic-adjective matches only; see
-  // scripts/build_mockup/build_persons_extra.py and
-  // docs/data-model/person-ethnic-descriptors.md). Shows the top-N
-  // individual nationalities by person count plus an "Øvrige" bucket for
-  // every other nationality key — same shape as the original static
-  // mockup, now with real counts and real filtering.
-  var NAT_TOP_N = 5;
-  var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
-  var natTopKeys = [];   // populated by buildNationalitetFacet()
-  var natChecked = {};   // key (or '__other__') -> true
-
-  function natCounts(items) {
-    var counts = {};
-    items.forEach(function (p) {
-      p.nat.forEach(function (k) { counts[k] = (counts[k] || 0) + 1; });
-    });
-    return counts;
-  }
-
-  function matchesNat(p) {
-    var anyChecked = Object.keys(natChecked).some(function (k) { return natChecked[k]; });
-    if (!anyChecked) return true;
-    for (var i = 0; i < p.nat.length; i++) {
-      var k = p.nat[i];
-      if (natChecked[k]) return true;
-      if (natChecked.__other__ && natTopKeys.indexOf(k) === -1) return true;
-    }
-    return false;
-  }
-
-  function buildNationalitetFacet() {
-    var host = document.getElementById('js-nationalitet-body');
-    if (!host) return;
-    var counts = natCounts(ALL);
-    var ranked = Object.keys(counts)
-      .sort(function (a, b) { return counts[b] - counts[a]; });
-    natTopKeys = ranked.slice(0, NAT_TOP_N);
-    var otherCount = ranked.slice(NAT_TOP_N)
-      .reduce(function (s, k) { return s + counts[k]; }, 0);
-
-    var rows = natTopKeys.map(function (k) {
-      return { key: k, label: natLabels[k] || k, count: counts[k] };
-    });
-    if (otherCount > 0) rows.push({ key: '__other__', label: 'Øvrige', count: otherCount });
-
-    host.innerHTML = rows.map(function (r) {
-      return '<label class="facet-item"><input type="checkbox" data-nat="' + esc(r.key) +
-        '"><span class="facet-item__label">' + esc(r.label) +
-        '</span><span class="facet-item__count">' + r.count + '</span></label>';
-    }).join('');
-
-    host.querySelectorAll('input[data-nat]').forEach(function (cb) {
-      cb.addEventListener('change', function () {
-        natChecked[cb.getAttribute('data-nat')] = cb.checked;
-        apply(true);
-      });
-    });
-  }
-
-  // Recompute each checkbox's count under the current letter filter, and
-  // dim/disable options that would return zero results (unless already
-  // checked — same adaptive-facet convention as category-catalogue.js).
-  function updateNationalitetAvailability() {
-    var host = document.getElementById('js-nationalitet-body');
-    if (!host) return;
-    var underLetter = letter ? ALL.filter(function (p) { return p.init === letter; }) : ALL;
-    var counts = natCounts(underLetter);
-    var otherCount = 0;
-    underLetter.forEach(function (p) {
-      if (p.nat.some(function (k) { return natTopKeys.indexOf(k) === -1; })) otherCount++;
-    });
-    host.querySelectorAll('input[data-nat]').forEach(function (cb) {
-      var k = cb.getAttribute('data-nat');
-      var count = k === '__other__' ? otherCount : (counts[k] || 0);
-      var item = cb.closest('.facet-item');
-      var countEl2 = item ? item.querySelector('.facet-item__count') : null;
-      if (countEl2) countEl2.textContent = count;
-      var dim = count === 0 && !cb.checked;
-      cb.disabled = dim;
-      if (item) {
-        item.style.opacity = dim ? '0.4' : '';
-        item.style.cursor = dim ? 'not-allowed' : '';
-        item.title = dim ? 'Ingen personer under det valgte bogstav' : '';
-      }
-    });
-  }
 
   var PAGE = 60;
   var letter = null;          // null = "Alle"
@@ -572,45 +496,72 @@
       'Nulstil filter</button></div>';
   }
 
-  function resetAllFilters() {
+  // Render one page of results. Called by FacetEngine on every change, and
+  // by the alphabet bar through setPrefilter — the two compose rather than
+  // overwrite each other, so "K" + "Fransk" narrows to both.
+  function render(rows, st) {
+    filtered = rows.slice().sort(letter ? byLabel : byRefs);
+    if (countEl) {
+      var note = '';
+      if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>';
+      if (st && st.active) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' +
+        st.active + ' facet' + (st.active === 1 ? '' : 'ter') + '</span>';
+      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') +
+        '</strong> personer i Personregister' + note;
+    }
+    grid.innerHTML = '';
+    shown = 0;
+    if (filtered.length === 0) {
+      grid.innerHTML = emptyStateHtml();
+      moreBtn.style.display = 'none';
+      var resetBtn = document.getElementById('js-empty-reset');
+      if (resetBtn) resetBtn.addEventListener('click', resetAll);
+      return;
+    }
+    renderMore();
+    updateLetterAvailability();
+  }
+
+  // Dim alphabet chips that have no hits under the current facet selection.
+  // Uses the engine's facet-only matcher, not its output: the output is
+  // already narrowed by the letter prefilter and so cannot say which *other*
+  // letters are still reachable.
+  function updateLetterAvailability() {
+    if (!bar || !facets) return;
+    var passesFacets = facets.matcher();
+    var counts = {};
+    for (var i = 0; i < ALL.length; i++) {
+      if (passesFacets(ALL[i])) counts[ALL[i].init] = 1;
+    }
+    bar.querySelectorAll('a.chip').forEach(function (chip) {
+      var l = chip.getAttribute('data-letter');
+      if (!l) return;
+      var has = !!counts[l];
+      chip.style.opacity = has ? '' : '0.35';
+      chip.style.pointerEvents = has ? '' : 'none';
+      chip.title = has ? '' : 'Ingen personer under de valgte facetter';
+    });
+  }
+
+  // Drop the page's own filter state (active letter + the prefilter the
+  // engine is holding) without rendering. The caller renders once afterwards.
+  function clearLocalState() {
     letter = null;
-    natChecked = {};
     if (bar) {
       bar.querySelectorAll('a.chip').forEach(function (x, i) {
         x.style.background = i === 0 ? 'var(--color-accent)' : '';
         x.style.color = i === 0 ? '#fff' : '';
       });
     }
-    var host = document.getElementById('js-nationalitet-body');
-    if (host) host.querySelectorAll('input[data-nat]').forEach(function (cb) { cb.checked = false; });
-    apply(true);
+    if (facets) facets.setPrefilter(null, true);
   }
 
-  function apply(reset) {
-    if (reset) { grid.innerHTML = ''; shown = 0; }
-    filtered = ALL.filter(function (p) {
-      if (letter && p.init !== letter) return false;
-      return matchesNat(p);
-    });
-    // No letter → most-referenced first; a letter → alphabetical within it.
-    filtered.sort(letter ? byLabel : byRefs);
-    var natActive = Object.keys(natChecked).some(function (k) { return natChecked[k]; });
-    if (countEl) {
-      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> personer i Personregister' +
-        (letter ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>' : '') +
-        (natActive ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— nationalitetsfilter aktivt</span>' : '');
-    }
-    grid.innerHTML = '';
-    shown = 0;
-    updateNationalitetAvailability();
-    if (filtered.length === 0) {
-      grid.innerHTML = emptyStateHtml();
-      moreBtn.style.display = 'none';
-      var resetBtn = document.getElementById('js-empty-reset');
-      if (resetBtn) resetBtn.addEventListener('click', resetAllFilters);
-      return;
-    }
-    renderMore();
+  // Full reset from the empty-state button: facets, letter, everything.
+  function resetAll() {
+    if (!facets) return;
+    facets.reset(true);
+    clearLocalState();
+    facets.apply();
   }
 
   // Build the alphabet bar from the initials that actually occur.
@@ -625,15 +576,14 @@
       a.href = '#';
       a.className = 'chip';
       a.textContent = ch.t;
+      if (ch.l) a.setAttribute('data-letter', ch.l);
       a.addEventListener('click', function (ev) {
         ev.preventDefault();
         letter = ch.l;
-        bar.querySelectorAll('a.chip').forEach(function (x) {
-          x.style.background = ''; x.style.color = '';
-        });
+        bar.querySelectorAll('a.chip').forEach(function (x) { x.style.background = ''; x.style.color = ''; });
         a.style.background = 'var(--color-accent)';
         a.style.color = '#fff';
-        apply(true);
+        facets.setPrefilter(letter ? function (p) { return p.init === letter; } : null);
       });
       if (ch.l === null) { a.style.background = 'var(--color-accent)'; a.style.color = '#fff'; }
       bar.appendChild(a);
@@ -642,11 +592,23 @@
 
   moreBtn.addEventListener('click', renderMore);
 
-  var clearBtn = document.querySelector('.facet-panel__clear');
-  if (clearBtn) clearBtn.addEventListener('click', resetAllFilters);
+  var facets = FacetEngine.create({
+    panel: document.querySelector('.facet-panel'),
+    items: ALL,
+    accessors: {
+      nationality: function (p) { return p.nationality; }
+    },
+    labels: {
+      nationality: function (k) { return natLabels[k] || k; }
+    },
+    sortKeys: {
+      nationality: function (k) { return natLabels[k] || k; }
+    },
+    onReset: clearLocalState,
+    onChange: render
+  });
 
-  buildNationalitetFacet();
-  apply(true);
+  facets.apply();
 })();
 </script>
 <script src="js/nav.js"></script>
