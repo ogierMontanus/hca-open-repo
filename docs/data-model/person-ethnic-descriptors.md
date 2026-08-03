@@ -210,12 +210,262 @@ the largest bucket by design: most embedded mentions are ordinary prose
 ("*1858 Legationssekretær ved det tyske Gesandtskab i Madrid, senere
 spansk …*") that a simple keyword window can't safely disambiguate.
 
-## Not yet wired into the mockup
+## Wired into the mockup
 
-`persons.html`'s "Nationalitet" facet currently shows static sample
-counts (Dansk 4.218, Tysk 1.847, …) — placeholder data, not derived from
-this parser. Wiring `person_ethnic_descriptors.csv` into
-`build_persons_extra.py` (one or more `nationality_key` values per
-person, defaulting the facet to `leading`-position, `subject`-referent
-matches only) is a natural next step but is out of scope for this pass,
-which is about the extraction itself.
+`persons.html`'s "Nationalitet" facet runs off this data.
+`build_persons_extra.py` attaches a `nationalities` array to each
+`PERSONS_EXTRA` entry — **leading-position matches only**, so a person
+is never claimed as German on the strength of a mention that may
+describe their German spouse — plus a `NATIONALITY_LABELS` companion
+const. The facet itself is rendered by the shared `js/facet-engine.js`
+(`data-facet-source="nationality"`), with an "Uoplyst" bucket for the
+8,259 persons carrying no leading match.
+
+`build_nation_index.py` joins the same data to the place register and
+emits `mockup/data/nation-index.js`, which powers `nation.html` — one
+nation's persons, places, and the nation's own register entry in a
+single view.
+
+## Nation cross-links
+
+`js/nation-link.js` offers `nation.html` from wherever the reader is
+already looking at exactly one nation. It reads `NATION_INDEX` and
+returns nothing when that global is absent, so on a fresh clone the
+link simply doesn't appear rather than pointing at an empty page. It
+also suppresses itself for a nation with no persons *and* no places.
+
+Placement is the **second block from the top** in all four cases, which
+puts it above the "Hyppigste …" sections on the detail pages:
+
+| Page | Trigger | Link |
+|---|---|---|
+| `place.html` (detail) | place has `country_da` — "Altona ligger i Tyskland" | after the map block |
+| `persons.html` (detail) | person has `nationalities` | after Beskrivelse, above Værker / Hyppigste steder |
+| `places.html` (list) | reader ticks **one** Land facet value | after the results header, above the list |
+| `persons.html` (list) | reader ticks **one** Nationalitet facet value | after the results header, above the list |
+
+Two deliberate restrictions:
+
+- **Single value only.** With two Land or Nationalitet values ticked
+  there is no one nation to link to, and `nation.html` shows one at a
+  time — so the banner hides rather than picking a winner. The
+  "Uoplyst" bucket names no nation and never triggers it.
+- **A person may get two links.** A dual nationality
+  (`czekisk-dansk`, `tysk-engelsk`) yields one banner per nationality
+  rather than a silent choice between them.
+
+Where several nationality keys share one country entry — `hollandsk`
+and `nederlandsk` both point at Holland, `finsk` and `finlandssvensk`
+both at Finland, and the Danish regional keys sit inside Danmark — the
+Land facet only knows the country label, so `byCountry()` prefers a
+plain `national` demonym over a regional or minority one, and breaks
+ties on person count.
+
+The banner's person count is the `persons_certain` figure only;
+`nation.html` additionally shows the `persons_possible` group. The
+teaser therefore undercounts slightly, which is the safe direction.
+
+### Scan: where else would a nation link help?
+
+Grepping the mockup for `Tyskland` / `tysk` (outside generated data and
+the 4,500 diary pages) turns up five more sites. Only the first two
+were worth wiring; the reasoning for the rest:
+
+- **`kort.html`** — marker popups print `country_da`. A link there is
+  technically possible but low value: popups are transient, the country
+  is already one line of a two-line popup, and the map is itself the
+  "see everything geographically" view. *Not wired.*
+- **`person.html`** — carries the same "Hyppigste steder" structure and
+  would qualify, but it is orphaned: nothing in the mockup links to it
+  any more (`persons.html` superseded it, and
+  `tests/test_no_stale_person_refs.py` enforces that). Wiring a dead
+  page would be misleading maintenance. *Not wired.*
+- **`romaner.html` and `work.html`** — both carry a **Sprog** facet
+  (`data-facet="lang"`, values `de` / `Tysk`). The **semantic** caution
+  here still stands and is now built into the design rather than used
+  as a reason to decline: a work's language is not its author's
+  nationality, so works-by-language live in their own field
+  (`works_in_language`) and their own `nation.html` section, never
+  merged with works by artists of that nation. The **data** gap has
+  since been closed — see "Work language" below.
+- **`diaries.html`** — one hardcoded sample card reading
+  "Weimar, Tyskland" in static mockup markup, not data-driven. *Not
+  wired.*
+
+One direction remains unbuilt in the other sense: `nation.html`'s person
+and place cards deep-link to the individual `?reg=…` pages, but there is
+no "open this as a filtered list" link back to
+`persons.html` / `places.html` with the corresponding facet pre-ticked.
+That would need the list pages to accept a facet pre-selection from the
+query string, which neither does today.
+
+## Work language
+
+`scripts/build_mockup/detect_work_language.py` derives a probable
+language per VÆRK-REGISTER title into
+`data/normalized/work_languages.csv`, which `build_works_extra.py`
+surfaces as `WORKS_EXTRA[rid].lang` / `.langMethod` and
+`build_nation_index.py` groups into `works_in_language`.
+
+**Language is not nationality.** The two answer different questions and
+are deliberately kept apart end to end: separate derivation, separate
+index field, separate section on `nation.html` under its own heading
+("På dette sprog"), with an in-page note saying a German-language work
+may well have a Danish author. A work can legitimately appear in more
+than one of the page's three works lists — that is the point of not
+merging them.
+
+### Two sources, in precedence order
+
+| `method` | Count | What it means |
+|---|---|---|
+| `register` | 42 | The register said so itself — entries filed under an explicit translation prefix ("Tyske - Sämmtliche Märchen …"). Authoritative; never overridden by a guess. |
+| `detector` | 768 | lingua's top guess at confidence ≥ 0.65 |
+| `detector_cue` | 274 | lingua leaning toward a language (≥ 0.15) *and* a function word unique to it |
+
+1,084 of 3,708 works (29 %) end up labelled; German is the largest
+non-Danish group at 285. The remaining 71 % are left unlabelled on
+purpose, in three named buckets — `too_short` (735), `unsure` (1,234)
+and `bare_name` (655).
+
+### Why the detector is timid
+
+Register titles are short, and short strings are where language
+detection breaks. Measured on this corpus, the bare top-1 guess files
+*Der Improvisator* as Italian (0.16) and *Improvisatoren* as Dutch
+(0.23), so `detect()` alone is unusable. Three guards, each tuned
+against observed failures rather than assumed:
+
+- **Confidence floor + minimum length.** Below either, the entry stays
+  unlabelled. An empty facet row is recoverable; a wrong language label
+  teaches the reader something false.
+- **Cue rescue.** A lower-confidence lean is accepted when a function
+  word unique to that language is present — this recovers real cases the
+  floor misses, e.g. *Kabale und Liebe* (0.23) and *Naomi und Christian,
+  oder: Der arme Geiger* (0.21). The German cue list deliberately omits
+  *der/den/de/man/for/vil*, which are ordinary Danish words: an earlier
+  draft included them and swept in Danish titles like *Den standhaftige
+  Tinsoldat*. It also omits *von*, which reaches Danish entries through
+  German name particles ("Digte af H. von X").
+- **Bare-name guard.** A short title made only of capitalised words is a
+  name, and a name has no language. The BILLEDKUNST wing files portraits
+  and busts under their sitter — *Albrecht Dürer*, *Franz Lachner* — which
+  the detector read as German. Name-shaped titles now need a cue to pass.
+  This costs some recall (*Schöner Brunnen* is genuinely German and gets
+  dropped) in exchange for precision, which is the right trade for a
+  label the reader sees as fact.
+
+Sampled precision on the German output was 20/20 and then 18/18 on
+random draws (Goethe's *Wilhelm Meisters Lehrjahre*, Schiller's *An die
+Freude*, Humboldt's *Ansichten der Natur*). The known residue is
+mixed-language labels — about 3 of 285 German entries, e.g. *Sophie af
+Sachsen-Weimar-Eisenach* (Danish *af*, German name) and *Den hellige
+Aands Sendelse (Die Ausgiessung des heiligen Geistes)*, where the
+register's own label is half Danish and half German.
+
+`nation.html` badges each entry `register` or `udledt` so the reader can
+tell an editorial statement from a machine inference at a glance.
+
+### lingua is optional
+
+`lingua` lives in `scripts/parsers/requirements.txt`. When it is absent
+the script still runs, still emits all 42 `register` rows, and says how
+many entries it skipped — so Stage 1d never hard-fails a build on a
+missing ML package, and `WORKS_EXTRA.lang` simply stays `null` as before.
+
+## Reciprocal person ↔ place links
+
+`PERSON_TOP_PLACES` and `PLACE_TOP_PERSONS` count the same symmetric
+relation — one shared diary page, counted identically in both directions
+— but `CAP = 12` is not symmetric. A hub like København shares a page
+with thousands of people, so its own top-12 keeps only the twelve
+strongest, while for a minor person København easily ranks among *their*
+top twelve. The measured result: **84 % of the person→place links
+rendered under "Hyppigste steder" had no return path.** Clicking through
+to the place left the reader stranded, with no way back to the person
+they came from.
+
+`build_cooccurrence.py` now also emits `PLACE_PERSON_INBOUND`: for each
+place, exactly those persons who carry it among their own top-12 while
+being absent from the place's top-12 — precisely the orphaned edges and
+nothing else, so the two lists are disjoint by construction. 9,745
+edges across 191 places. After the closure, **0 %** of person→place
+links are one-way.
+
+It is deliberately **uncapped**, because capping is what caused the
+problem; `place.html` paginates instead, under its own heading "Nævnt
+sammen med" so the stronger top-12 above is not diluted. København's
+1,737 inbound persons page 40 at a time.
+
+The same asymmetry exists in `PERSON_TOP_PERSONS` (70.9 % one-way) and
+is left alone for now — the person↔person case has no equivalent
+"Hyppigste" section rendering it, so no link is currently orphaned by it.
+
+## Nation umbrellas
+
+`data/curated/nation_umbrellas_da.csv` clusters the 91 nationality keys
+that reach the index into **36 pickable groups** for `nation.html`. The
+register distinguishes identities a reader usually does not — it names
+the individual pre-1871 German polity far more often than "tysk" — so
+the raw key list makes a poor menu.
+
+Clustering never discards the distinction: each umbrella carries a
+`members` array keeping every contributing key's entities separate, and
+`nation.html` renders each section grouped under its sub-identity
+heading with a count ("Preussisk 30"). A chip row under the page title
+lists what the umbrella covers, so the grouping is never a black box.
+Keys that no umbrella claims stay top-level as their own single-member
+group, and a group with only one contributing member renders flat, with
+no heading noise.
+
+| Umbrella | Covers |
+|---|---|
+| **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, thüringsk, badisk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
+| **Britisk** | engelsk, skotsk, irsk, angelsaksisk |
+| **Græsk** | græsk, nygræsk + the ancient polities (attisk, atheniensisk, makedonisk) and østromersk |
+| **Dansk** | dansk + regional (jysk, sjællandsk, fynsk, københavnsk), the duchies, and the crown territories (islandsk, grønlandsk, dansk_vestindisk) |
+| **Italiensk** | italiensk, romersk, neapolitansk, genovesisk, veneziansk, østgotisk |
+| … | 13 more — see the CSV, whose `notes` column carries the reasoning per row |
+
+### Multiple membership is the point, not an edge case
+
+12 keys sit under more than one umbrella, and the page says so inline
+("Holstensk 17 — også under Dansk"):
+
+| Key | Umbrellas | Why |
+|---|---|---|
+| holstensk, slesvigsk, slesvigholstensk, holstenlauenborgsk | Dansk + Tysk | The duchies were the contested ground of the 1848–51 and 1864 wars. Forcing them into one nation would take a side the register does not take. |
+| kurlandsk | Tysk + Russisk | Baltic-German ruling class and German-speaking elite; annexed by Russia in 1795. |
+| finlandssvensk | Svensk + Finsk | That duality is precisely the identity the word names. |
+| østromersk | Græsk + Tyrkisk | Greek-speaking Byzantium, on territory that became Ottoman. |
+| frisisk | Tysk + Hollandsk | The Frisian coast spans both (and Denmark). |
+| frankisk | Tysk + Fransk | The Frankish realm straddled both later nations. |
+| bøhmisk | Østrigsk + Czekisk | Bohemia under the Habsburgs. |
+| valakisk | Tyrkisk + Rumænsk | Wallachia was an Ottoman vassal and became part of Romania in 1859. |
+| maurisk | Spansk + Nordafrikansk | Moorish al-Andalus. |
+
+Where a key resolves through `NationLink.byKey()` — the cross-link
+banner on a person or place card — a dual key lands on whichever
+umbrella the CSV lists first. That ordering is an editorial choice
+rather than a fact, and nothing is hidden by it: the nation page shows
+both memberships.
+
+### Judgement calls worth knowing about
+
+- **Østrig is not folded into Tysk.** Austria sat in the German
+  Confederation until 1866, so the case could be made, but it is its own
+  nation with a substantial entry (82 persons) and swallowing it would
+  over-claim. It heads its own umbrella instead, with tyrolsk and
+  bøhmisk under it.
+- **Irland is inside Britisk**, because Ireland was part of the United
+  Kingdom for the whole diary period (1801–1922). That is a fact about
+  the era, not a claim about Irish identity.
+- **Nordisk stays small** — just nordisk and skandinavisk. The
+  individual Nordic nations are deliberately *not* rolled up into it:
+  nobody in this register is described as "nordisk" merely by being
+  Danish, and folding them in would inflate the umbrella with people the
+  source never labelled that way.
+- **Romersk sits under Italiensk.** It means Ancient Rome, and the
+  register's own country label for it is "Rom".
+- **Germansk and slavisk are left unclustered.** They name language
+  families spanning many nations, not nations.

@@ -41,6 +41,38 @@
       padding: var(--sp5); font-size: 0.84rem; color: var(--color-text-muted); line-height: 1.6;
     }
     .nation-todo strong { color: var(--color-text); }
+
+    /* Provenance badge on a language-matched work: the reader can tell a
+       language the register itself stated from one this project inferred. */
+    .lang-src {
+      display: inline-block; font-size: 0.63rem; font-weight: 600;
+      padding: 1px 5px; border-radius: 3px; white-space: nowrap;
+      vertical-align: middle; letter-spacing: 0.02em;
+    }
+    .lang-src--register { background: #dcfce7; border: 1px solid #86bf9f; color: #166534; }
+    .lang-src--derived  { background: #f1f0ec; border: 1px solid var(--color-border); color: var(--color-text-muted); }
+
+    /* Sub-identity heading inside an umbrella section — "Preussisk (30)"
+       under Tysk. Only rendered when more than one member contributes, so a
+       single-identity nation stays uncluttered. */
+    .nation-sub {
+      display: flex; align-items: baseline; gap: var(--sp2);
+      margin: var(--sp4) 0 var(--sp2);
+      font-size: 0.8rem; font-weight: 600; color: var(--color-text);
+    }
+    .nation-sub:first-child { margin-top: 0; }
+    .nation-sub__count { font-weight: 400; font-size: 0.75rem; color: var(--color-text-muted); }
+    .nation-sub__also {
+      font-weight: 400; font-size: 0.72rem; color: var(--color-text-muted); font-style: italic;
+    }
+    .nation-members {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-top: var(--sp3);
+    }
+    .nation-members__chip {
+      font-size: 0.72rem; padding: 2px 8px; border-radius: 999px;
+      background: var(--color-surface-2); border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+    }
   </style>
 </head>
 <body>
@@ -70,6 +102,10 @@
         <label for="js-nation-select" style="font-size:0.82rem;opacity:0.85">Nation / etnicitet:</label>
         <select id="js-nation-select"></select>
       </div>
+      <!-- Which sub-identities this umbrella covers, so the grouping is
+           never a black box: the reader sees up front that Tysk includes
+           Preussisk, Sachsisk, Holstensk … -->
+      <div id="js-nation-members" class="nation-members"></div>
     </div>
   </div>
 
@@ -94,7 +130,7 @@
           <code>docs/data-model/person-ethnic-descriptors.md</code>
           for hvordan disse er udtrukket.
         </p>
-        <div id="js-persons-certain" class="nation-grid"></div>
+        <div id="js-persons-certain"></div>
 
         <div id="js-persons-possible-wrap">
           <div class="nation-subgroup__label">Muligvis — nævnt længere inde i beskrivelsen</div>
@@ -105,7 +141,7 @@
             Premierløjtnant« — beskriver ægtefællen). Vist til manuel
             vurdering, ikke slået sammen med listen ovenfor.
           </p>
-          <div id="js-persons-possible" class="nation-grid"></div>
+          <div id="js-persons-possible"></div>
         </div>
       </div>
 
@@ -120,7 +156,7 @@
           <code>mockup/data/places-extra.js</code>) — kun ca. 18 % af
           Stedregistret har koordinater endnu, så listen er ufuldstændig.
         </p>
-        <div id="js-places" class="nation-grid"></div>
+        <div id="js-places"></div>
       </div>
 
       <div class="nation-section">
@@ -129,6 +165,22 @@
           <span id="js-works-count" class="nation-section__count"></span>
         </div>
 
+        <div class="nation-subgroup__label">På dette sprog</div>
+        <p class="nation-section__note">
+          Værker hvis <em>titel er skrevet på sproget</em> — en anden
+          oplysning end de to lister nedenfor. Et tysksproget værk kan
+          udmærket have en dansk forfatter (og omvendt), så disse er
+          bevidst holdt adskilt fra »af kunstnere fra denne nation« og
+          aldrig lagt sammen med dem. Sproget er <strong>udledt</strong>
+          af titlen, ikke registreret af redaktørerne: værker mærket
+          <span class="lang-src lang-src--register">register</span> er
+          dem registret selv angav som oversættelser, mens
+          <span class="lang-src lang-src--derived">udledt</span> er
+          maskinbestemt — se
+          <code>scripts/build_mockup/detect_work_language.py</code>.
+        </p>
+        <div id="js-works-by-lang"></div>
+
         <div class="nation-subgroup__label">Af kunstnere fra denne nation</div>
         <div id="js-works-by-author" class="nation-grid"></div>
 
@@ -136,19 +188,18 @@
         <div id="js-works-at-place" class="nation-grid"></div>
 
         <div class="nation-todo" style="margin-top:var(--sp5)">
-          <strong>Åbent for udvidelse.</strong> De to lister ovenfor er
-          bedste-forsøg, afledt af eksisterende data uden ny udtrækning:
-          "Af kunstnere" matcher værkets <code>author</code>-felt mod
-          personer i denne nations liste ovenfor (samme navne-opløsning
-          som <code>work.html</code> bruger); "Med handling i" matcher
-          kun værker hvis titel har en parentetisk stedangivelse, der
-          selv findes i Stedregistret (fx »Den mediceiske Venus
-          (Uffizi, Firenze)«). Værkets <em>sprog</em> — som ville fange
-          fransksprogede værker uafhængigt af hvor de foregår — er ikke
-          et felt i <code>WORKS_EXTRA</code> i dag og kræver en ny
-          udtrækningsscript, analogt med
-          <code>parse_person_ethnic_descriptors.py</code>, men kørt mod
-          <code>data/normalized/entities.csv</code>'s værk-beskrivelser.
+          <strong>Sådan er de tre lister fundet.</strong> »På dette sprog«
+          kommer fra <code>detect_work_language.py</code>, som kun mærker
+          en titel når den er lang nok og bestemmelsen er sikker nok —
+          1.250 af 3.708 værker er mærket, resten står bevidst umærkede
+          frem for at blive gættet forkert. »Af kunstnere« matcher
+          værkets <code>author</code>-felt mod personerne ovenfor (samme
+          navne-opløsning som <code>work.html</code> bruger). »Med
+          handling i« matcher kun værker hvis titel har en parentetisk
+          stedangivelse, der selv findes i Stedregistret (fx »Den
+          mediceiske Venus (Uffizi, Firenze)«). Et værk kan optræde i
+          flere af listerne — det er netop pointen med at holde dem
+          adskilt.
         </div>
       </div>
 
@@ -225,23 +276,77 @@
       '</div></a>';
   }
 
-  function workCard(rid, w) {
+  function workCard(rid, w, showLangSrc) {
+    // On the language list, badge how the language was established so a
+    // register-stated translation is visibly firmer than a machine guess.
+    var badge = '';
+    if (showLangSrc && w.langMethod) {
+      var isReg = w.langMethod === 'register';
+      badge = ' <span class="lang-src lang-src--' + (isReg ? 'register' : 'derived') + '">' +
+        (isReg ? 'register' : 'udledt') + '</span>';
+    }
     return '<a href="work.html?reg=' + esc(rid) + '" class="result-card">' +
       '<div class="result-card__body">' +
-      '<div class="result-card__title">' + esc(w.title) + '</div>' +
+      '<div class="result-card__title">' + esc(w.title) + badge + '</div>' +
       '<div class="result-card__meta">' + esc(w.h3 || w.h2 || '') +
       (w.author ? ' · ' + esc(w.author) : '') + '</div>' +
       '</div></a>';
   }
 
+  /* Render a section grouped by contributing sub-identity, so clustering the
+     picker never hides WHICH identity an entry actually carries. With only
+     one contributing member the headings would be noise, so it falls back to
+     a flat list. `field` names the member array to read; `cardFn` builds one
+     card. A member that also sits under other umbrellas says so inline —
+     that is the multiple-membership case made visible rather than implied. */
+  function renderByMember(host, n, field, cardFn, emptyText) {
+    var contributing = (n.members || []).filter(function (m) { return m[field].length; });
+    if (!contributing.length) {
+      host.innerHTML = '<div class="nation-empty">' + esc(emptyText) + '</div>';
+      return 0;
+    }
+    var total = n[field].length;
+    if (contributing.length === 1) {
+      host.innerHTML = '<div class="nation-grid">' +
+        contributing[0][field].map(cardFn).join('') + '</div>';
+      return total;
+    }
+    // Biggest sub-identity first — the reader meets the main body of the
+    // nation before its historical and regional tributaries.
+    contributing.sort(function (a, b) { return b[field].length - a[field].length; });
+    host.innerHTML = contributing.map(function (m) {
+      var also = (typeof NATION_MEMBER_OF !== 'undefined' && NATION_MEMBER_OF[m.key] || [])
+        .filter(function (u) { return u !== key_current && NI[u]; })
+        .map(function (u) { return NI[u].label_da; });
+      return '<div class="nation-sub"><span>' + esc(m.label) + '</span>' +
+        '<span class="nation-sub__count">' + m[field].length + '</span>' +
+        (also.length ? '<span class="nation-sub__also">også under ' +
+          esc(also.join(', ')) + '</span>' : '') + '</div>' +
+        '<div class="nation-grid">' + m[field].map(cardFn).join('') + '</div>';
+    }).join('');
+    return total;
+  }
+
+  var key_current = null;
+
   function render(key) {
     var n = NI[key];
     if (!n) return;
     select.value = key;
+    key_current = key;
 
     document.getElementById('js-h1').textContent = n.label_da;
     document.getElementById('js-sub').textContent =
       'Personer, steder og værker forbundet med "' + n.label_da + '" (' + n.category + ').';
+
+    var memEl = document.getElementById('js-nation-members');
+    var mem = (n.members || []).filter(function (m) { return m.key !== key; });
+    memEl.innerHTML = mem.length
+      ? '<span style="font-size:0.72rem;opacity:0.7;align-self:center">Samler:</span>' +
+        mem.map(function (m) {
+          return '<span class="nation-members__chip">' + esc(m.label) + '</span>';
+        }).join('')
+      : '';
 
     var countrySection = document.getElementById('js-country-section');
     var countryCard = document.getElementById('js-country-card');
@@ -254,28 +359,36 @@
 
     document.getElementById('js-persons-count').textContent =
       n.persons_certain.length + ' sikre · ' + n.persons_possible.length + ' mulige';
-    var certainEl = document.getElementById('js-persons-certain');
-    certainEl.innerHTML = n.persons_certain.length
-      ? n.persons_certain.map(personCard).join('')
-      : '<div class="nation-empty">Ingen personer fundet med denne beskrivelse som første ord.</div>';
+    renderByMember(document.getElementById('js-persons-certain'), n, 'persons_certain',
+      personCard, 'Ingen personer fundet med denne beskrivelse som første ord.');
 
     var possibleWrap = document.getElementById('js-persons-possible-wrap');
-    var possibleEl = document.getElementById('js-persons-possible');
     if (n.persons_possible.length) {
       possibleWrap.style.display = '';
-      possibleEl.innerHTML = n.persons_possible.map(personCard).join('');
+      renderByMember(document.getElementById('js-persons-possible'), n, 'persons_possible',
+        personCard, '');
     } else {
       possibleWrap.style.display = 'none';
     }
 
     document.getElementById('js-places-count').textContent = n.places_in_country.length + ' steder';
-    var placesEl = document.getElementById('js-places');
-    placesEl.innerHTML = n.places_in_country.length
-      ? n.places_in_country.map(placeCard).join('')
-      : '<div class="nation-empty">Ingen andre geokodede steder fundet i denne nation endnu.</div>';
+    renderByMember(document.getElementById('js-places'), n, 'places_in_country',
+      placeCard, 'Ingen andre geokodede steder fundet i denne nation endnu.');
 
     // Works — best-effort client-side hooks via EntityRefs (see the
     // "Åbent for udvidelse" note above for what these do and don't cover).
+    // Works whose language is this nation's — an independent claim from
+    // authorship, so it gets its own list and never merges with the others.
+    var byLangEl = document.getElementById('js-works-by-lang');
+    var byLangCount = 0;
+    if (typeof WORKS_EXTRA !== 'undefined') {
+      byLangCount = renderByMember(byLangEl, n, 'works_in_language', function (rid) {
+        return WORKS_EXTRA[rid] ? workCard(rid, WORKS_EXTRA[rid], true) : '';
+      }, 'Ingen værker er sprogbestemt til denne nation.');
+    } else {
+      byLangEl.innerHTML = '<div class="nation-empty">Kræver works-extra.js.</div>';
+    }
+
     var byAuthorEl = document.getElementById('js-works-by-author');
     var atPlaceEl = document.getElementById('js-works-at-place');
     var byAuthorCount = 0, atPlaceCount = 0;
@@ -306,7 +419,8 @@
       atPlaceEl.innerHTML = '';
     }
     document.getElementById('js-works-count').textContent =
-      byAuthorCount + ' af kunstnere · ' + atPlaceCount + ' med handling';
+      byLangCount + ' på sproget · ' + byAuthorCount + ' af kunstnere · ' +
+      atPlaceCount + ' med handling';
 
     var url = new URL(window.location);
     url.searchParams.set('nat', key);

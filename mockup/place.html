@@ -80,6 +80,8 @@
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
+<script src="data/nation-index.js" onerror="void 0"></script>
+<script src="js/nation-link.js"></script>
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -193,6 +195,15 @@ function escAttr(s) { return String(s == null ? '' : s)
     main += '<div><p class="muted" style="font-style:italic">Ikke geokodet — dette sted findes ikke i hcax.dk Rejser-tabellen.</p></div>';
   }
 
+  // ── Nation-krydslink ────────────────────────────────────────────────────
+  // Second block from the top, above Beskrivelse / Værker / Hyppigste: from
+  // a German place, offer every German place *and* person in one view.
+  // Emits nothing when the place has no country or nation-index.js is absent.
+  if (typeof NationLink !== 'undefined' && pl.country_da) {
+    main += NationLink.html(NationLink.byCountry(pl.country_da),
+      escAttr(pl.label) + ' ligger i ' + escAttr(pl.country_da));
+  }
+
   if (pl.description) {
     main += '<div><h2 class="section-title">Beskrivelse</h2>' +
       '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' +
@@ -262,6 +273,27 @@ function escAttr(s) { return String(s == null ? '' : s)
     main += block;
   }
 
+  // ── Nævnt sammen med (indgående) ────────────────────────────────────────
+  // The return path for the person→place links rendered under "Hyppigste
+  // steder" on a person's card. The relation is symmetric, but the top-12
+  // cap is not: a hub like København crowds every minor companion out of
+  // its own list, so 84 % of those links used to be one-way. These are
+  // exactly the persons who carry THIS place among their own most frequent
+  // places while not making this place's top-12 — kept as a separate,
+  // separately-labelled group so the stronger top-12 above is not diluted.
+  const inbound = (typeof PLACE_PERSON_INBOUND !== 'undefined' && PLACE_PERSON_INBOUND[reg]) || [];
+  if (inbound.length) {
+    main += '<div><h2 class="section-title">Nævnt sammen med</h2>' +
+      '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+      'Yderligere <strong>' + inbound.length.toLocaleString('da-DK') + '</strong> personer har ' +
+      escAttr(pl.label) + ' blandt deres hyppigste steder, uden selv at nå ' +
+      'top-listen ovenfor.</p>' +
+      '<div id="place-inbound" style="display:flex;flex-wrap:wrap;gap:6px"></div>' +
+      '<div style="text-align:center;margin-top:var(--sp4)">' +
+      '<button id="place-inbound-more" class="layout-switcher__btn" style="padding:7px 20px">Vis flere</button>' +
+      '</div></div>';
+  }
+
   main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
     '<div class="results-header">' +
     '<p id="place-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
@@ -275,6 +307,30 @@ function escAttr(s) { return String(s == null ? '' : s)
     '</div></div>';
 
   document.getElementById('js-main').innerHTML = main;
+
+  // Paginate the inbound group rather than capping it in the data: the cap
+  // is what orphaned these links in the first place, so truncating here
+  // would just move the problem into the UI.
+  if (inbound.length) {
+    const inGrid = document.getElementById('place-inbound');
+    const inMore = document.getElementById('place-inbound-more');
+    const IN_PAGE = 40;
+    let inShown = 0;
+    const renderInbound = () => {
+      const next = inbound.slice(inShown, inShown + IN_PAGE);
+      inGrid.insertAdjacentHTML('beforeend', next.map(([prid, n]) => {
+        const lab = (typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[prid] && PERSONS_EXTRA[prid].label) || prid;
+        return '<a href="' + escAttr(EntityRefs.personHrefByRid(prid)) +
+          '" class="chip chip--person" style="font-size:0.82rem">' +
+          escAttr(lab) + ' <span style="opacity:0.7;font-size:0.74rem">· ' + n + '</span></a>';
+      }).join(''));
+      inShown += next.length;
+      inMore.style.display = inShown < inbound.length ? '' : 'none';
+      inMore.textContent = 'Vis flere (' + (inbound.length - inShown).toLocaleString('da-DK') + ' tilbage)';
+    };
+    inMore.addEventListener('click', renderInbound);
+    renderInbound();
+  }
 
   // Leaflet init when geocoded — CARTO Voyager tiles per CLAUDE.md.
   if (hasCoords && typeof L !== 'undefined') {
