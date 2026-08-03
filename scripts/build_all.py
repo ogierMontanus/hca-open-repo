@@ -25,13 +25,25 @@ Usage (from repo root):
     python scripts/build_all.py --only 4a        # only run that one stage (by id)
     python scripts/build_all.py --list-sources   # show what source folders exist
 
-Exit code is non-zero on the first failing stage, except Stages 1b
-(rejser geocodes), 1c (SV14 place reconciliation), 1d (work-language
-detection — needs the optional `lingua` package) and 4f (nation index —
-depends on data/normalized/person_ethnic_descriptors.csv, produced by
-the standalone scripts/parsers/parse_person_ethnic_descriptors.py, not
-by this pipeline), which are treated as optional — mirrors CI's
-continue-on-error on the same steps.
+Exit code is non-zero on the first failing stage, except the enrichment
+stages, which are treated as optional and mirror CI's continue-on-error
+on the same steps:
+
+  1b  rejser geocodes
+  1c  SV14 place reconciliation
+  1d  work-language detection      — needs the optional `lingua` package
+  1e  person ethnic descriptors    — reads the V0.82 workbook directly
+  4f  nation index / umbrellas
+
+Each of these writes a CSV under data/normalized/ that IS committed to
+the repo, and every consumer degrades gracefully when it is missing. So
+a machine without `lingua`, or with only the V0.92 source folder, still
+produces a complete mockup from the committed enrichment data — it just
+does not refresh it.
+
+Stage order matters: 1d and 1e must precede 4a/4b (which fold their
+output into works-extra.js / persons-extra.js) and 4f (which builds the
+nation umbrellas from both).
 """
 
 import argparse
@@ -52,6 +64,7 @@ STAGES_AFTER_INGEST = [
     ("1b", "parse Rejser HTM (geocodes)",  "scripts/build_web/parse_rejser_htm.py",     True),
     ("1c", "reconcile SV14 places (geocodes)", "scripts/build_mockup/reconcile_sv14_geo.py", True),
     ("1d", "detect work languages",         "scripts/build_mockup/detect_work_language.py", True),
+    ("1e", "person ethnic descriptors",     "scripts/parsers/parse_person_ethnic_descriptors.py", True),
     ("2",  "CSVs -> web JSON",             "scripts/build_web/build_web_data.py",       False),
     ("3a", "diary pages (~4,500 HTML)",    "scripts/build_mockup/build_diary_pages.py", False),
     ("3b", "diary index + reverse-index",  "scripts/build_mockup/build_diary_index.py", False),
