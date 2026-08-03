@@ -9,7 +9,22 @@ mockup/person.html (if any) keeps precedence; PERSONS_EXTRA fills every
 other gap so any ?reg=… link to person.html resolves to real metadata
 instead of a blank page.
 
-Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py.
+Also emits `NATIONALITY_LABELS` — a companion const (same pattern as
+build_cooccurrence.py's multiple exports) mapping each nationality key
+that occurs among persons to its Danish display label. Feeds the
+"Nationalitet" facet on persons.html.
+
+Each person's `nationalities` array is populated only from LEADING
+matches in data/normalized/person_ethnic_descriptors.csv (the adjective
+was the description's first word) — i.e. the same persons_certain
+selection used by build_nation_index.py. Embedded matches are left out
+here on purpose: they may describe a relative or institution rather than
+the person themself (see docs/data-model/person-ethnic-descriptors.md),
+which is too uncertain to drive a filter a reader trusts at face value.
+
+Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py. Degrades
+gracefully — nationalities stay empty and NATIONALITY_LABELS stays empty
+if parse_person_ethnic_descriptors.py hasn't been run.
 """
 
 import csv
@@ -19,10 +34,12 @@ import re
 import sys
 from collections import Counter
 
-ROOT     = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
-REFS     = os.path.join(ROOT, "data", "normalized", "references.csv")
-OUT      = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
+ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
+REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
+ETHNIC     = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
+ADJECTIVES = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
+OUT        = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
 
 # Life-dates parsed from labels like
 #   "Aabye, Johan Peter (1818–1880)"
@@ -57,6 +74,33 @@ def era_for(born: str | None, died: str | None) -> str | None:
     return "Efter 1900"
 
 
+def load_nationalities():
+    """Returns {entity_id: [nationality_key, ...]} from LEADING matches
+    only (see module docstring), plus {key: label_da} for every key that
+    actually occurs. Degrades to ({}, {}) if either input is absent."""
+    if not os.path.exists(ETHNIC) or not os.path.exists(ADJECTIVES):
+        return {}, {}
+
+    labels = {}
+    with open(ADJECTIVES, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            labels[row["key"]] = row["label_da"]
+
+    by_person: dict[str, list] = {}
+    used_keys = set()
+    with open(ETHNIC, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            if row["position_type"] != "leading":
+                continue
+            key = row["nationality_key"]
+            keys = by_person.setdefault(row["entity_id"], [])
+            if key not in keys:
+                keys.append(key)
+            used_keys.add(key)
+
+    return by_person, {k: labels[k] for k in used_keys if k in labels}
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -76,6 +120,11 @@ def main() -> None:
                 ref_count[r["entity_id"]] += 1
         print(f"  reference counts loaded for {len(ref_count):,} entities")
 
+    print(f"Loading {os.path.relpath(ETHNIC, ROOT)} + {os.path.relpath(ADJECTIVES, ROOT)}…")
+    nationalities_by_person, nationality_labels = load_nationalities()
+    print(f"  {len(nationalities_by_person):,} persons with a leading nationality match, "
+          f"{len(nationality_labels):,} distinct nationality keys")
+
     # Emit one entry per person, INCLUDING IDs that mockup/person.html
     # also curates. person.html's `ALL_PERSONS = Object.assign({},
     # PERSONS_EXTRA, PERSONS)` still gives the hand-curated entries
@@ -87,12 +136,13 @@ def main() -> None:
         label = (r.get("label") or "").strip()
         born, died = parse_life(label)
         generated[rid] = {
-            "label":       label,
-            "description": (r.get("description") or "").strip() or None,
-            "born":        born,
-            "died":        died,
-            "era":         era_for(born, died),
-            "refs":        ref_count.get(rid, 0),
+            "label":         label,
+            "description":   (r.get("description") or "").strip() or None,
+            "born":          born,
+            "died":          died,
+            "era":           era_for(born, died),
+            "refs":          ref_count.get(rid, 0),
+            "nationalities": nationalities_by_person.get(rid, []),
         }
 
     print(f"  generated {len(generated):,} entries")
@@ -102,8 +152,14 @@ def main() -> None:
         f.write("// Auto-generated by scripts/build_mockup/build_persons_extra.py — do not hand-edit.\n")
         f.write("// One entry per person in PERSON-REGISTER. The hand-curated\n")
         f.write("// PERSONS object in person.html takes precedence (see ALL_PERSONS merge).\n")
+        f.write("// `nationalities` — see data/curated/ethnic_adjectives_da.csv and\n")
+        f.write("// docs/data-model/person-ethnic-descriptors.md — is leading-match-only;\n")
+        f.write("// NATIONALITY_LABELS below gives each key's Danish display label.\n")
         f.write("const PERSONS_EXTRA = ")
         f.write(json.dumps(generated, ensure_ascii=False, separators=(",", ":")))
+        f.write(";\n")
+        f.write("const NATIONALITY_LABELS = ")
+        f.write(json.dumps(nationality_labels, ensure_ascii=False, separators=(",", ":")))
         f.write(";\n")
     print(f"  wrote {os.path.relpath(OUT, ROOT)}  "
           f"({os.path.getsize(OUT)/1024:.0f} KB)")

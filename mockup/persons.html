@@ -65,13 +65,8 @@
 
           <div class="facet-group">
             <div class="facet-group__header">Nationalitet <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Dansk</span><span class="facet-item__count">4.218</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Tysk</span><span class="facet-item__count">1.847</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Engelsk</span><span class="facet-item__count">987</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Fransk</span><span class="facet-item__count">743</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Svensk</span><span class="facet-item__count">512</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Øvrige</span><span class="facet-item__count">1.921</span></label>
+            <div class="facet-group__body" id="js-nationalitet-body">
+              <span style="font-size:0.78rem;color:var(--color-text-muted);padding:6px 12px;display:block">Indlæser…</span>
             </div>
           </div>
 
@@ -443,7 +438,7 @@
   var ALL = Object.keys(PERSONS_EXTRA).map(function (rid) {
     var p = PERSONS_EXTRA[rid];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
-             refs: p.refs || 0, init: initialOf(p.label) };
+             refs: p.refs || 0, init: initialOf(p.label), nat: p.nationalities || [] };
   });
 
   var collator = (typeof Intl !== 'undefined' && Intl.Collator)
@@ -453,6 +448,94 @@
                     : (a.label < b.label ? -1 : a.label > b.label ? 1 : 0);
   }
   function byRefs(a, b) { return b.refs - a.refs || byLabel(a, b); }
+
+  // ── Nationalitet facet — real data from PERSONS_EXTRA[rid].nationalities
+  // (leading-position ethnic-adjective matches only; see
+  // scripts/build_mockup/build_persons_extra.py and
+  // docs/data-model/person-ethnic-descriptors.md). Shows the top-N
+  // individual nationalities by person count plus an "Øvrige" bucket for
+  // every other nationality key — same shape as the original static
+  // mockup, now with real counts and real filtering.
+  var NAT_TOP_N = 5;
+  var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
+  var natTopKeys = [];   // populated by buildNationalitetFacet()
+  var natChecked = {};   // key (or '__other__') -> true
+
+  function natCounts(items) {
+    var counts = {};
+    items.forEach(function (p) {
+      p.nat.forEach(function (k) { counts[k] = (counts[k] || 0) + 1; });
+    });
+    return counts;
+  }
+
+  function matchesNat(p) {
+    var anyChecked = Object.keys(natChecked).some(function (k) { return natChecked[k]; });
+    if (!anyChecked) return true;
+    for (var i = 0; i < p.nat.length; i++) {
+      var k = p.nat[i];
+      if (natChecked[k]) return true;
+      if (natChecked.__other__ && natTopKeys.indexOf(k) === -1) return true;
+    }
+    return false;
+  }
+
+  function buildNationalitetFacet() {
+    var host = document.getElementById('js-nationalitet-body');
+    if (!host) return;
+    var counts = natCounts(ALL);
+    var ranked = Object.keys(counts)
+      .sort(function (a, b) { return counts[b] - counts[a]; });
+    natTopKeys = ranked.slice(0, NAT_TOP_N);
+    var otherCount = ranked.slice(NAT_TOP_N)
+      .reduce(function (s, k) { return s + counts[k]; }, 0);
+
+    var rows = natTopKeys.map(function (k) {
+      return { key: k, label: natLabels[k] || k, count: counts[k] };
+    });
+    if (otherCount > 0) rows.push({ key: '__other__', label: 'Øvrige', count: otherCount });
+
+    host.innerHTML = rows.map(function (r) {
+      return '<label class="facet-item"><input type="checkbox" data-nat="' + esc(r.key) +
+        '"><span class="facet-item__label">' + esc(r.label) +
+        '</span><span class="facet-item__count">' + r.count + '</span></label>';
+    }).join('');
+
+    host.querySelectorAll('input[data-nat]').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        natChecked[cb.getAttribute('data-nat')] = cb.checked;
+        apply(true);
+      });
+    });
+  }
+
+  // Recompute each checkbox's count under the current letter filter, and
+  // dim/disable options that would return zero results (unless already
+  // checked — same adaptive-facet convention as category-catalogue.js).
+  function updateNationalitetAvailability() {
+    var host = document.getElementById('js-nationalitet-body');
+    if (!host) return;
+    var underLetter = letter ? ALL.filter(function (p) { return p.init === letter; }) : ALL;
+    var counts = natCounts(underLetter);
+    var otherCount = 0;
+    underLetter.forEach(function (p) {
+      if (p.nat.some(function (k) { return natTopKeys.indexOf(k) === -1; })) otherCount++;
+    });
+    host.querySelectorAll('input[data-nat]').forEach(function (cb) {
+      var k = cb.getAttribute('data-nat');
+      var count = k === '__other__' ? otherCount : (counts[k] || 0);
+      var item = cb.closest('.facet-item');
+      var countEl2 = item ? item.querySelector('.facet-item__count') : null;
+      if (countEl2) countEl2.textContent = count;
+      var dim = count === 0 && !cb.checked;
+      cb.disabled = dim;
+      if (item) {
+        item.style.opacity = dim ? '0.4' : '';
+        item.style.cursor = dim ? 'not-allowed' : '';
+        item.title = dim ? 'Ingen personer under det valgte bogstav' : '';
+      }
+    });
+  }
 
   var PAGE = 60;
   var letter = null;          // null = "Alle"
@@ -489,33 +572,42 @@
       'Nulstil filter</button></div>';
   }
 
+  function resetAllFilters() {
+    letter = null;
+    natChecked = {};
+    if (bar) {
+      bar.querySelectorAll('a.chip').forEach(function (x, i) {
+        x.style.background = i === 0 ? 'var(--color-accent)' : '';
+        x.style.color = i === 0 ? '#fff' : '';
+      });
+    }
+    var host = document.getElementById('js-nationalitet-body');
+    if (host) host.querySelectorAll('input[data-nat]').forEach(function (cb) { cb.checked = false; });
+    apply(true);
+  }
+
   function apply(reset) {
     if (reset) { grid.innerHTML = ''; shown = 0; }
-    filtered = (letter ? ALL.filter(function (p) { return p.init === letter; }) : ALL.slice());
+    filtered = ALL.filter(function (p) {
+      if (letter && p.init !== letter) return false;
+      return matchesNat(p);
+    });
     // No letter → most-referenced first; a letter → alphabetical within it.
     filtered.sort(letter ? byLabel : byRefs);
+    var natActive = Object.keys(natChecked).some(function (k) { return natChecked[k]; });
     if (countEl) {
       countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> personer i Personregister' +
-        (letter ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>' : '');
+        (letter ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>' : '') +
+        (natActive ? ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— nationalitetsfilter aktivt</span>' : '');
     }
     grid.innerHTML = '';
     shown = 0;
+    updateNationalitetAvailability();
     if (filtered.length === 0) {
       grid.innerHTML = emptyStateHtml();
       moreBtn.style.display = 'none';
       var resetBtn = document.getElementById('js-empty-reset');
-      if (resetBtn) {
-        resetBtn.addEventListener('click', function () {
-          letter = null;
-          if (bar) {
-            bar.querySelectorAll('a.chip').forEach(function (x, i) {
-              x.style.background = i === 0 ? 'var(--color-accent)' : '';
-              x.style.color = i === 0 ? '#fff' : '';
-            });
-          }
-          apply(true);
-        });
-      }
+      if (resetBtn) resetBtn.addEventListener('click', resetAllFilters);
       return;
     }
     renderMore();
@@ -549,6 +641,11 @@
   }
 
   moreBtn.addEventListener('click', renderMore);
+
+  var clearBtn = document.querySelector('.facet-panel__clear');
+  if (clearBtn) clearBtn.addEventListener('click', resetAllFilters);
+
+  buildNationalitetFacet();
   apply(true);
 })();
 </script>
