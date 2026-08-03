@@ -281,17 +281,13 @@ were worth wiring; the reasoning for the rest:
   `tests/test_no_stale_person_refs.py` enforces that). Wiring a dead
   page would be misleading maintenance. *Not wired.*
 - **`romaner.html` and `work.html`** — both carry a **Sprog** facet
-  (`data-facet="lang"`, values `de` / `Tysk`). This is the works-side
-  extension point `nation.html` already flags as open, and it stays
-  open for two independent reasons. First, **data**: `WORKS_EXTRA.lang`
-  is `None` for all 3,717 generated works — only the ~31 hand-curated
-  `WORKS` in `work.html` carry a language, and `romaner.html`'s chips
-  are hand-written mockup markup. Second, and more important,
-  **semantics**: a work's language is not its author's nationality. A
-  German-language book by a Danish author is not "German" in the sense
-  this register's person descriptors mean, and conflating the two would
-  quietly mis-attribute works. If a works-language link is added later
-  it should be its own relation, not a reuse of `nationality_key`.
+  (`data-facet="lang"`, values `de` / `Tysk`). The **semantic** caution
+  here still stands and is now built into the design rather than used
+  as a reason to decline: a work's language is not its author's
+  nationality, so works-by-language live in their own field
+  (`works_in_language`) and their own `nation.html` section, never
+  merged with works by artists of that nation. The **data** gap has
+  since been closed — see "Work language" below.
 - **`diaries.html`** — one hardcoded sample card reading
   "Weimar, Tyskland" in static mockup markup, not data-driven. *Not
   wired.*
@@ -302,3 +298,105 @@ no "open this as a filtered list" link back to
 `persons.html` / `places.html` with the corresponding facet pre-ticked.
 That would need the list pages to accept a facet pre-selection from the
 query string, which neither does today.
+
+## Work language
+
+`scripts/build_mockup/detect_work_language.py` derives a probable
+language per VÆRK-REGISTER title into
+`data/normalized/work_languages.csv`, which `build_works_extra.py`
+surfaces as `WORKS_EXTRA[rid].lang` / `.langMethod` and
+`build_nation_index.py` groups into `works_in_language`.
+
+**Language is not nationality.** The two answer different questions and
+are deliberately kept apart end to end: separate derivation, separate
+index field, separate section on `nation.html` under its own heading
+("På dette sprog"), with an in-page note saying a German-language work
+may well have a Danish author. A work can legitimately appear in more
+than one of the page's three works lists — that is the point of not
+merging them.
+
+### Two sources, in precedence order
+
+| `method` | Count | What it means |
+|---|---|---|
+| `register` | 42 | The register said so itself — entries filed under an explicit translation prefix ("Tyske - Sämmtliche Märchen …"). Authoritative; never overridden by a guess. |
+| `detector` | 768 | lingua's top guess at confidence ≥ 0.65 |
+| `detector_cue` | 274 | lingua leaning toward a language (≥ 0.15) *and* a function word unique to it |
+
+1,084 of 3,708 works (29 %) end up labelled; German is the largest
+non-Danish group at 285. The remaining 71 % are left unlabelled on
+purpose, in three named buckets — `too_short` (735), `unsure` (1,234)
+and `bare_name` (655).
+
+### Why the detector is timid
+
+Register titles are short, and short strings are where language
+detection breaks. Measured on this corpus, the bare top-1 guess files
+*Der Improvisator* as Italian (0.16) and *Improvisatoren* as Dutch
+(0.23), so `detect()` alone is unusable. Three guards, each tuned
+against observed failures rather than assumed:
+
+- **Confidence floor + minimum length.** Below either, the entry stays
+  unlabelled. An empty facet row is recoverable; a wrong language label
+  teaches the reader something false.
+- **Cue rescue.** A lower-confidence lean is accepted when a function
+  word unique to that language is present — this recovers real cases the
+  floor misses, e.g. *Kabale und Liebe* (0.23) and *Naomi und Christian,
+  oder: Der arme Geiger* (0.21). The German cue list deliberately omits
+  *der/den/de/man/for/vil*, which are ordinary Danish words: an earlier
+  draft included them and swept in Danish titles like *Den standhaftige
+  Tinsoldat*. It also omits *von*, which reaches Danish entries through
+  German name particles ("Digte af H. von X").
+- **Bare-name guard.** A short title made only of capitalised words is a
+  name, and a name has no language. The BILLEDKUNST wing files portraits
+  and busts under their sitter — *Albrecht Dürer*, *Franz Lachner* — which
+  the detector read as German. Name-shaped titles now need a cue to pass.
+  This costs some recall (*Schöner Brunnen* is genuinely German and gets
+  dropped) in exchange for precision, which is the right trade for a
+  label the reader sees as fact.
+
+Sampled precision on the German output was 20/20 and then 18/18 on
+random draws (Goethe's *Wilhelm Meisters Lehrjahre*, Schiller's *An die
+Freude*, Humboldt's *Ansichten der Natur*). The known residue is
+mixed-language labels — about 3 of 285 German entries, e.g. *Sophie af
+Sachsen-Weimar-Eisenach* (Danish *af*, German name) and *Den hellige
+Aands Sendelse (Die Ausgiessung des heiligen Geistes)*, where the
+register's own label is half Danish and half German.
+
+`nation.html` badges each entry `register` or `udledt` so the reader can
+tell an editorial statement from a machine inference at a glance.
+
+### lingua is optional
+
+`lingua` lives in `scripts/parsers/requirements.txt`. When it is absent
+the script still runs, still emits all 42 `register` rows, and says how
+many entries it skipped — so Stage 1d never hard-fails a build on a
+missing ML package, and `WORKS_EXTRA.lang` simply stays `null` as before.
+
+## Reciprocal person ↔ place links
+
+`PERSON_TOP_PLACES` and `PLACE_TOP_PERSONS` count the same symmetric
+relation — one shared diary page, counted identically in both directions
+— but `CAP = 12` is not symmetric. A hub like København shares a page
+with thousands of people, so its own top-12 keeps only the twelve
+strongest, while for a minor person København easily ranks among *their*
+top twelve. The measured result: **84 % of the person→place links
+rendered under "Hyppigste steder" had no return path.** Clicking through
+to the place left the reader stranded, with no way back to the person
+they came from.
+
+`build_cooccurrence.py` now also emits `PLACE_PERSON_INBOUND`: for each
+place, exactly those persons who carry it among their own top-12 while
+being absent from the place's top-12 — precisely the orphaned edges and
+nothing else, so the two lists are disjoint by construction. 9,745
+edges across 191 places. After the closure, **0 %** of person→place
+links are one-way.
+
+It is deliberately **uncapped**, because capping is what caused the
+problem; `place.html` paginates instead, under its own heading "Nævnt
+sammen med" so the stronger top-12 above is not diluted. København's
+1,737 inbound persons page 40 at a time.
+
+The same asymmetry exists in `PERSON_TOP_PERSONS` (70.9 % one-way) and
+is left alone for now — the person↔person case has no equivalent
+"Hyppigste" section rendering it, so no link is currently orphaned by it.

@@ -41,6 +41,16 @@
       padding: var(--sp5); font-size: 0.84rem; color: var(--color-text-muted); line-height: 1.6;
     }
     .nation-todo strong { color: var(--color-text); }
+
+    /* Provenance badge on a language-matched work: the reader can tell a
+       language the register itself stated from one this project inferred. */
+    .lang-src {
+      display: inline-block; font-size: 0.63rem; font-weight: 600;
+      padding: 1px 5px; border-radius: 3px; white-space: nowrap;
+      vertical-align: middle; letter-spacing: 0.02em;
+    }
+    .lang-src--register { background: #dcfce7; border: 1px solid #86bf9f; color: #166534; }
+    .lang-src--derived  { background: #f1f0ec; border: 1px solid var(--color-border); color: var(--color-text-muted); }
   </style>
 </head>
 <body>
@@ -129,6 +139,22 @@
           <span id="js-works-count" class="nation-section__count"></span>
         </div>
 
+        <div class="nation-subgroup__label">På dette sprog</div>
+        <p class="nation-section__note">
+          Værker hvis <em>titel er skrevet på sproget</em> — en anden
+          oplysning end de to lister nedenfor. Et tysksproget værk kan
+          udmærket have en dansk forfatter (og omvendt), så disse er
+          bevidst holdt adskilt fra »af kunstnere fra denne nation« og
+          aldrig lagt sammen med dem. Sproget er <strong>udledt</strong>
+          af titlen, ikke registreret af redaktørerne: værker mærket
+          <span class="lang-src lang-src--register">register</span> er
+          dem registret selv angav som oversættelser, mens
+          <span class="lang-src lang-src--derived">udledt</span> er
+          maskinbestemt — se
+          <code>scripts/build_mockup/detect_work_language.py</code>.
+        </p>
+        <div id="js-works-by-lang" class="nation-grid"></div>
+
         <div class="nation-subgroup__label">Af kunstnere fra denne nation</div>
         <div id="js-works-by-author" class="nation-grid"></div>
 
@@ -136,19 +162,18 @@
         <div id="js-works-at-place" class="nation-grid"></div>
 
         <div class="nation-todo" style="margin-top:var(--sp5)">
-          <strong>Åbent for udvidelse.</strong> De to lister ovenfor er
-          bedste-forsøg, afledt af eksisterende data uden ny udtrækning:
-          "Af kunstnere" matcher værkets <code>author</code>-felt mod
-          personer i denne nations liste ovenfor (samme navne-opløsning
-          som <code>work.html</code> bruger); "Med handling i" matcher
-          kun værker hvis titel har en parentetisk stedangivelse, der
-          selv findes i Stedregistret (fx »Den mediceiske Venus
-          (Uffizi, Firenze)«). Værkets <em>sprog</em> — som ville fange
-          fransksprogede værker uafhængigt af hvor de foregår — er ikke
-          et felt i <code>WORKS_EXTRA</code> i dag og kræver en ny
-          udtrækningsscript, analogt med
-          <code>parse_person_ethnic_descriptors.py</code>, men kørt mod
-          <code>data/normalized/entities.csv</code>'s værk-beskrivelser.
+          <strong>Sådan er de tre lister fundet.</strong> »På dette sprog«
+          kommer fra <code>detect_work_language.py</code>, som kun mærker
+          en titel når den er lang nok og bestemmelsen er sikker nok —
+          1.250 af 3.708 værker er mærket, resten står bevidst umærkede
+          frem for at blive gættet forkert. »Af kunstnere« matcher
+          værkets <code>author</code>-felt mod personerne ovenfor (samme
+          navne-opløsning som <code>work.html</code> bruger). »Med
+          handling i« matcher kun værker hvis titel har en parentetisk
+          stedangivelse, der selv findes i Stedregistret (fx »Den
+          mediceiske Venus (Uffizi, Firenze)«). Et værk kan optræde i
+          flere af listerne — det er netop pointen med at holde dem
+          adskilt.
         </div>
       </div>
 
@@ -225,10 +250,18 @@
       '</div></a>';
   }
 
-  function workCard(rid, w) {
+  function workCard(rid, w, showLangSrc) {
+    // On the language list, badge how the language was established so a
+    // register-stated translation is visibly firmer than a machine guess.
+    var badge = '';
+    if (showLangSrc && w.langMethod) {
+      var isReg = w.langMethod === 'register';
+      badge = ' <span class="lang-src lang-src--' + (isReg ? 'register' : 'derived') + '">' +
+        (isReg ? 'register' : 'udledt') + '</span>';
+    }
     return '<a href="work.html?reg=' + esc(rid) + '" class="result-card">' +
       '<div class="result-card__body">' +
-      '<div class="result-card__title">' + esc(w.title) + '</div>' +
+      '<div class="result-card__title">' + esc(w.title) + badge + '</div>' +
       '<div class="result-card__meta">' + esc(w.h3 || w.h2 || '') +
       (w.author ? ' · ' + esc(w.author) : '') + '</div>' +
       '</div></a>';
@@ -276,6 +309,24 @@
 
     // Works — best-effort client-side hooks via EntityRefs (see the
     // "Åbent for udvidelse" note above for what these do and don't cover).
+    // Works whose language is this nation's — an independent claim from
+    // authorship, so it gets its own list and never merges with the others.
+    var byLangEl = document.getElementById('js-works-by-lang');
+    var langRids = n.works_in_language || [];
+    var byLangCount = 0;
+    if (typeof WORKS_EXTRA !== 'undefined' && langRids.length) {
+      var langCards = langRids.filter(function (rid) { return WORKS_EXTRA[rid]; });
+      byLangCount = langCards.length;
+      byLangEl.innerHTML = langCards.length
+        ? langCards.map(function (rid) { return workCard(rid, WORKS_EXTRA[rid], true); }).join('')
+        : '<div class="nation-empty">Ingen værker med sprogbestemmelse for denne nation.</div>';
+    } else {
+      byLangEl.innerHTML = '<div class="nation-empty">' +
+        (typeof WORKS_EXTRA === 'undefined'
+          ? 'Kræver works-extra.js.'
+          : 'Ingen værker er sprogbestemt til denne nation.') + '</div>';
+    }
+
     var byAuthorEl = document.getElementById('js-works-by-author');
     var atPlaceEl = document.getElementById('js-works-at-place');
     var byAuthorCount = 0, atPlaceCount = 0;
@@ -306,7 +357,8 @@
       atPlaceEl.innerHTML = '';
     }
     document.getElementById('js-works-count').textContent =
-      byAuthorCount + ' af kunstnere · ' + atPlaceCount + ' med handling';
+      byLangCount + ' på sproget · ' + byAuthorCount + ' af kunstnere · ' +
+      atPlaceCount + ' med handling';
 
     var url = new URL(window.location);
     url.searchParams.set('nat', key);

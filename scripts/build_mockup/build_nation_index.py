@@ -53,8 +53,21 @@ ADJECTIVES     = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv
 NATION_LABELS  = os.path.join(ROOT, "data", "curated", "nation_place_labels_da.csv")
 ENTITIES       = os.path.join(ROOT, "data", "normalized", "entities.csv")
 PERSON_MATCHES = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
+WORK_LANGS     = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
 PLACES_EXTRA   = os.path.join(ROOT, "mockup", "data", "places-extra.js")
 OUT            = os.path.join(ROOT, "mockup", "data", "nation-index.js")
+
+# Which nationality key a work's LANGUAGE routes to. This is a language →
+# nation mapping, and it is not the same claim as the person descriptors:
+# a German-language book by a Danish author is German *in language only*.
+# nation.html therefore renders these in their own section with their own
+# heading, never merged into the "by artists from this nation" list.
+# Latin is deliberately absent — it maps to no nation in this register.
+LANG_TO_NATION = {
+    "de": "tysk",     "fr": "fransk",  "en": "engelsk", "it": "italiensk",
+    "sv": "svensk",   "da": "dansk",   "nl": "hollandsk", "es": "spansk",
+    "pt": "portugisisk", "ru": "russisk", "hu": "ungarsk", "el": "græsk",
+}
 
 
 def load_adjectives(path):
@@ -106,6 +119,22 @@ def load_places_extra(path):
     return {rid: rec.get("country_da") for rid, rec in data.items() if rec.get("country_da")}
 
 
+def load_works_by_language(path):
+    """{nationality_key: [entity_id, …]} from detect_work_language.py, via
+    LANG_TO_NATION. Empty when that stage hasn't run."""
+    out = {}
+    if not os.path.exists(path):
+        print(f"  [!] {os.path.relpath(path, ROOT)} not found — run "
+              f"detect_work_language.py first. Continuing with no works-by-language data.")
+        return out
+    with open(path, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            key = LANG_TO_NATION.get(r["lang"])
+            if key:
+                out.setdefault(key, []).append(r["entity_id"])
+    return out
+
+
 def load_person_matches(path):
     if not os.path.exists(path):
         print(f"  [!] {os.path.relpath(path, ROOT)} not found — run "
@@ -136,6 +165,11 @@ def main():
     person_matches = load_person_matches(PERSON_MATCHES)
     print(f"  {len(person_matches):,} person matches")
 
+    print(f"Loading {os.path.relpath(WORK_LANGS, ROOT)}…")
+    works_by_lang = load_works_by_language(WORK_LANGS)
+    print(f"  works by language mapped to {len(works_by_lang):,} nationality keys "
+          f"({sum(len(v) for v in works_by_lang.values()):,} works)")
+
     # nation label -> every OTHER place register entry geocoded inside it
     places_by_country = {}
     for rid, country in place_country.items():
@@ -164,8 +198,9 @@ def main():
 
         p_certain = sorted(persons_certain.get(key, set()))
         p_possible = sorted(persons_possible.get(key, set()) - persons_certain.get(key, set()))
+        w_lang = sorted(works_by_lang.get(key, []))
 
-        if not (country_entity_id or place_ids or p_certain or p_possible):
+        if not (country_entity_id or place_ids or p_certain or p_possible or w_lang):
             continue  # nothing to show for this key — skip it from the index
 
         index[key] = {
@@ -176,6 +211,9 @@ def main():
             "places_in_country": place_ids,
             "persons_certain":  p_certain,
             "persons_possible": p_possible,
+            # Works whose LANGUAGE is this nation's — a different claim from
+            # authorship; kept in its own field and its own UI section.
+            "works_in_language": w_lang,
         }
 
     print(f"\n  {len(resolved):,} keys resolved to a place-register entity")

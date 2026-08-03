@@ -57,6 +57,14 @@ jobs:
         run: python scripts/build_mockup/reconcile_sv14_geo.py
         continue-on-error: true
 
+      # Stage 1d — probable language per work title, for nation.html's
+      # "På dette sprog" list. Needs `lingua` from
+      # scripts/parsers/requirements.txt; without it the script still emits
+      # the register-stated languages, so this step is non-fatal either way.
+      - name: Stage 1d — detect work languages
+        run: python scripts/build_mockup/detect_work_language.py
+        continue-on-error: true
+
       - name: Stage 2 — CSVs to web JSON
         run: python scripts/build_web/build_web_data.py
 

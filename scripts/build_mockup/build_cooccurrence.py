@@ -12,10 +12,30 @@ coWorks fallback on mockup/work.html:
   • PLACE_TOP_PLACES   : { place_rid:  [[place_rid,  count], …] }   (cap 12)
   • WORK_TOP_PLACES    : { work_rid:   [[place_rid,  count], …] }   (cap 12)
   • WORK_TOP_WORKS     : { work_rid:   [[work_rid,   count], …] }   (cap 12)
+  • PLACE_PERSON_INBOUND : { place_rid: [[person_rid, count], …] }  (uncapped)
 
 Two entities co-occur once per diary page they both appear on (per
 references.csv). Counts are page-level, not occurrence-level: the same
 page mentioning Edvard Collin twice still counts once.
+
+Why PLACE_PERSON_INBOUND exists — the one-way-link problem
+-----------------------------------------------------------
+The underlying relation is symmetric: person↔place is counted once per
+shared page, identically in both directions. The CAP is what breaks
+symmetry. A hub place like København shares a page with thousands of
+people, so its own top-12 keeps only the twelve strongest; but for a
+minor person, København easily ranks among *their* top twelve. The
+result was that 84 % of the person→place links rendered under
+"Hyppigste steder" had no return path: you could click from the person
+to the place, and the place's card gave no way back.
+
+PLACE_PERSON_INBOUND closes that loop. For each place it lists exactly
+the persons who carry this place in their own top-12 but who are absent
+from the place's top-12 — i.e. precisely the previously orphaned edges,
+and nothing else (the two lists are disjoint by construction). It is
+deliberately uncapped: capping it would recreate the very problem it
+exists to solve. place.html paginates it instead, so a hub like
+København (1,737 inbound persons) stays navigable without truncating.
 
 Stdlib only. Reads data/normalized/{entities,references}.csv. Writes
 mockup/data/cooccurrence.js. Wire as Stage 4e in scripts/build_all.py
@@ -128,13 +148,37 @@ def main() -> None:
     def trim(d):
         return {k: lst for k, lst in ((k, top(v)) for k, v in d.items()) if lst}
 
+    person_top_places = trim(person_place)
+    place_top_persons = trim(place_person)
+
+    # Reciprocal closure for person→place (see module docstring). Every edge
+    # a person shows under "Hyppigste steder" must be walkable back from the
+    # place. Anything already in the place's own top-12 is skipped, so the
+    # two lists never repeat each other.
+    place_own: dict[str, set[str]] = {
+        pl: {rid for rid, _ in lst} for pl, lst in place_top_persons.items()
+    }
+    inbound: dict[str, list] = defaultdict(list)
+    for per, lst in person_top_places.items():
+        for pl, n in lst:
+            if per not in place_own.get(pl, ()):
+                inbound[pl].append([per, n])
+    # Strongest shared-page count first, so the first page of the paginated
+    # UI is the most substantial companions rather than an arbitrary slice.
+    for pl in inbound:
+        inbound[pl].sort(key=lambda x: (-x[1], x[0]))
+    print(f"  reciprocal closure: {sum(len(v) for v in inbound.values()):,} inbound "
+          f"person→place edges across {len(inbound):,} places "
+          f"(previously one-way)")
+
     payload = {
-        "PERSON_TOP_PLACES":  trim(person_place),
+        "PERSON_TOP_PLACES":  person_top_places,
         "PERSON_TOP_PERSONS": trim(person_person),
-        "PLACE_TOP_PERSONS":  trim(place_person),
+        "PLACE_TOP_PERSONS":  place_top_persons,
         "PLACE_TOP_PLACES":   trim(place_place),
         "WORK_TOP_PLACES":    trim(work_place),
         "WORK_TOP_WORKS":     trim(work_work),
+        "PLACE_PERSON_INBOUND": dict(inbound),
     }
     counts = {k: len(v) for k, v in payload.items()}
 

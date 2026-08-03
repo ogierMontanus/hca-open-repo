@@ -26,7 +26,8 @@ Usage (from repo root):
     python scripts/build_all.py --list-sources   # show what source folders exist
 
 Exit code is non-zero on the first failing stage, except Stages 1b
-(rejser geocodes), 1c (SV14 place reconciliation) and 4f (nation index —
+(rejser geocodes), 1c (SV14 place reconciliation), 1d (work-language
+detection — needs the optional `lingua` package) and 4f (nation index —
 depends on data/normalized/person_ethnic_descriptors.csv, produced by
 the standalone scripts/parsers/parse_person_ethnic_descriptors.py, not
 by this pipeline), which are treated as optional — mirrors CI's
@@ -50,6 +51,7 @@ STAGES_AFTER_INGEST = [
     # (id, label, path-relative-to-repo-root, optional?)
     ("1b", "parse Rejser HTM (geocodes)",  "scripts/build_web/parse_rejser_htm.py",     True),
     ("1c", "reconcile SV14 places (geocodes)", "scripts/build_mockup/reconcile_sv14_geo.py", True),
+    ("1d", "detect work languages",         "scripts/build_mockup/detect_work_language.py", True),
     ("2",  "CSVs -> web JSON",             "scripts/build_web/build_web_data.py",       False),
     ("3a", "diary pages (~4,500 HTML)",    "scripts/build_mockup/build_diary_pages.py", False),
     ("3b", "diary index + reverse-index",  "scripts/build_mockup/build_diary_index.py", False),

@@ -21,6 +21,7 @@ from collections import defaultdict
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
+LANGS = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
 OUT = os.path.join(ROOT, "mockup", "data", "works-extra.js")
 
 PUB_PAREN_RE = re.compile(r"\(([^()]+?)\)")
@@ -71,6 +72,18 @@ def author_from(genre_h2, person_derived):
     return None
 
 
+def load_languages():
+    """{entity_id: (lang, method)} from detect_work_language.py. Empty when
+    that stage hasn't run — `lang` then stays None exactly as before."""
+    out = {}
+    if not os.path.exists(LANGS):
+        return out
+    with open(LANGS, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            out[r["entity_id"]] = (r["lang"], r["method"])
+    return out
+
+
 def main():
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -86,6 +99,13 @@ def main():
             for r in csv.DictReader(f):
                 ref_count[r["entity_id"]] += 1
         print(f"  reference counts loaded for {len(ref_count):,} entities")
+
+    work_langs = load_languages()
+    if work_langs:
+        print(f"  languages loaded for {len(work_langs):,} works")
+    else:
+        print("  no work_languages.csv — lang stays null "
+              "(run scripts/build_mockup/detect_work_language.py)")
 
     # Index work labels for resolving `see` / `see_also` cross-references to
     # real register IDs. Most targets are the head term of a fuller label
@@ -153,7 +173,10 @@ def main():
             "wing": wing,
             "wingLabel": wing_label,
             "author": author_from(h2, r.get("person_derived", "")),
-            "lang": None,
+            # Derived, not curated — langMethod carries the provenance so the
+            # UI can say so. See detect_work_language.py.
+            "lang": work_langs.get(rid, (None, None))[0],
+            "langMethod": work_langs.get(rid, (None, None))[1],
             "refs": ref_count.get(rid, 0),
             "year": best_year(r),
             "date": (r.get("date_derived") or "").strip() or None,
