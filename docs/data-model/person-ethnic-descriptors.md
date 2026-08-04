@@ -21,12 +21,12 @@ Outputs:
 | `data/normalized/person_ethnic_descriptors.csv` | Every match: entity, matched word, nationality, category, position, referent hint |
 | `data/normalized/person_ethnic_descriptors_review.csv` | Every unmatched `-sk`/`-iske`-shaped word, ranked by frequency, with one example each — the ongoing edge-case queue |
 
-Current run: **2,705 matches on 2,517 of 10,228 rows (24.6 %)**.
+Current run: **2,703 matches on 2,517 of 10,228 rows (24.4 %)**.
 
 ## The adjective table
 
-`data/curated/ethnic_adjectives_da.csv` is the compiled list — 93
-nationality/ethnicity keys, 217 surface-form spellings, one row per key
+`data/curated/ethnic_adjectives_da.csv` is the compiled list — 91
+nationality/ethnicity keys, 213 surface-form spellings, one row per key
 with a `category`. It is **hand-curated but corpus-grounded**: every
 entry was checked against an actual frequency scan of the register
 before being added (see "Method" below), not assembled from memory
@@ -98,13 +98,15 @@ job):
   diplomatisk, …* ("*romansk* Filolog" = a *Romance*-philology
   professor, "*nyeuropæisk* Lingvistik" = *modern-European*
   linguistics — neither says anything about the *person's* own
-  nationality). `østerlandsk`/`orientalsk` was originally kept as a
-  `supranational` key but turned out to be entirely this pattern in
-  practice — its only three matches were "*Professor i orientalske
-  Sprog*" and "*germansk Filologi*", all embedded, all academic
-  subjects rather than anyone's own ethnicity — so it was removed from
-  the table outright rather than kept as a near-empty, low-value
-  category.
+  nationality). Three `supranational`/`ethnolinguistic` keys turned out
+  to be entirely this pattern in practice and were removed from the
+  table outright rather than kept as near-empty, low-value categories:
+  `østerlandsk`/`orientalsk` ("*Professor i orientalske/østerlandske
+  Sprog*"), `germansk` ("*Professor … i germansk Filologi*"), and
+  `slavisk` ("*Professor … i slaviske Sprog og Litteraturer*" — the
+  person, Friedrich Bodenstedt, is already correctly tagged *tysk* by
+  the leading word of his own description; *slaviske* describes what he
+  taught, not who he was). All were embedded matches, never leading.
 - **Religious, not ethnic** — *katolsk/katolske* ("den katolske Liga",
   "Isabella *den Katolske*" — a royal epithet), *luthersk/lutherske*,
   *evangelisk*, *mosaisk* (distinct from `jødisk`, which **is** kept —
@@ -409,8 +411,10 @@ is left alone for now — the person↔person case has no equivalent
 
 ## Nation umbrellas
 
-`data/curated/nation_umbrellas_da.csv` clusters the 90 nationality keys
-that reach the index into **34 pickable groups** for `nation.html`. The
+`data/curated/nation_umbrellas_da.csv` clusters the 88 nationality keys
+that reach the index (of 91 in the table — `badisk`, `hessisk` and
+`kroatisk` are defined but have zero matching persons/places/works in
+this register) into **33 pickable groups** for `nation.html`. The
 register distinguishes identities a reader usually does not — it names
 the individual pre-1871 German polity far more often than "tysk" — so
 the raw key list makes a poor menu.
@@ -424,12 +428,19 @@ Keys that no umbrella claims stay top-level as their own single-member
 group, and a group with only one contributing member renders flat, with
 no heading noise.
 
-Below a floor of **5 combined hits** (certain + possible persons +
+Below a floor of **3 combined hits** (certain + possible persons +
 places), the picker `<option>` is disabled rather than removed — the
 data is real and a direct `?nat=` link still resolves it, the entry is
-just not offered by default. 10 of the 34 groups sit below that floor
-today (Rumænsk, Bulgarsk, Argentinsk, Kinesisk, Japansk, Indisk,
-Persisk, Maltesisk, Slavisk, Jødisk).
+just not offered by default. 6 of the 33 groups sit below that floor
+today: Rumænsk (1), Bulgarsk (1), Argentinsk (1), Maltesisk (1),
+Kinesisk (0), Japansk (0) — the last two have a place-register entry
+for the country but no person or place match at all.
+
+**The narrow (enabled) list is 27 nations, covering 82 of the 91
+ethnic-adjective keys** (badisk, hessisk and kroatisk are defined but
+never reach the index at all — 0 matching persons, places or works;
+argentinsk, bulgarsk, japansk, kinesisk, maltesisk and rumænsk sit only
+in the 6 disabled entries, below the 3-hit floor).
 
 | Umbrella | Covers |
 |---|---|
@@ -480,21 +491,20 @@ both memberships.
   source never labelled that way.
 - **Romersk sits under Italiensk.** It means Ancient Rome, and the
   register's own country label for it is "Rom".
-- **Germansk is folded into Tysk**, on the practical grounds that its
-  single occurrence in the register ("Professor … i germansk
-  Filologi") is an academic-subject mention rather than a claim about
-  anyone's own ethnicity anyway, and keeping a near-empty
-  `ethnolinguistic` bucket around it added a picker entry for one
-  ambiguous data point. The name is broader than German in the
-  linguistic sense (it covers English, Dutch and Scandinavian too), so
-  this is a simplification, not a claim that "Germanic" means "German".
-- **Slavisk is left unclustered.** It names a language family spanning
-  many nations, not one nation, and unlike germansk there is no
-  single-umbrella best fit for it here.
-- **Østerlandsk/orientalsk was removed from the adjective table
-  entirely** rather than clustered — see "False-positive families" above.
-  All three of its matches were "Professor i orientalske/østerlandske
-  Sprog", the same academic-subject pattern excluded everywhere else in
-  this register (`romansk Filolog`, `nyeuropæisk Lingvistik`); keeping
-  it around as a `supranational` catch-all was giving a false-positive
-  family its own category instead of excluding it like its siblings.
+- **Østerlandsk/orientalsk, germansk and slavisk were removed from the
+  adjective table entirely** rather than clustered anywhere — an
+  earlier draft folded germansk into Tysk on the theory that its one
+  occurrence ("Professor … i germansk Filologi") was close enough to
+  German, but checking slavisk while reviewing that decision turned up
+  the same pattern with a clearer tell: its one match ("Professor … i
+  slaviske Sprog og Litteraturer", Friedrich Bodenstedt) belongs to a
+  person the parser had *already* correctly tagged **tysk** from the
+  leading word of his own description — *slaviske* describes the
+  subject he taught, not who he was. All three keys' entire matched
+  set is this pattern (see "False-positive families" above): academic
+  discipline names that happen to be nationality adjectives, never
+  actually describing the person's own ethnicity. Keeping any of them
+  around as a `supranational`/`ethnolinguistic` catch-all — even
+  folded into a bigger umbrella — was giving a false-positive family
+  its own picker presence instead of excluding it like its siblings
+  (`romansk Filolog`, `nyeuropæisk Lingvistik`).
