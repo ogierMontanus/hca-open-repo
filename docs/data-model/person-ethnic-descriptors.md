@@ -458,6 +458,18 @@ kinesisk, maltesisk and rumænsk sit only in the 6 disabled entries,
 below the 3-hit floor; kroatisk is the sole key that never reaches the
 picker at all.
 
+### Folding within a nation
+
+Clustering solves the picker being too long; a populous nation's own
+card grids can still be too long once you're on its page — Fransk has
+223 certain persons, 121 language-matched works. Every card grid over
+`FOLD_LIMIT` (10) folds behind a "Vis N flere" toggle, collapsed by
+default, so the page reads as an overview first and a full list only on
+request. Folding is per-grid, not per-section: under Fransk's Personer
+heading, the `fransk` member's own 223 fold to 10 while `provencalsk`
+and `frankisk` (1 each) render in full right next to it, since each
+sub-identity's grid is judged on its own count.
+
 | Umbrella | Covers |
 |---|---|
 | **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, badisk, thüringsk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |

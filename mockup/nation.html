@@ -73,6 +73,23 @@
       background: var(--color-surface-2); border: 1px solid var(--color-border);
       color: var(--color-text-muted);
     }
+
+    /* Fold/expand toggle for any card grid over FOLD_LIMIT — a nation with
+       hundreds of hits (fransk: 223 certain persons) would otherwise push
+       every section below it off screen. Folded by default; the button
+       reveals the rest in place rather than navigating away. */
+    .nation-fold-toggle {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: var(--sp3) 0 var(--sp2);
+      padding: 5px 12px;
+      font: inherit; font-size: 0.78rem; font-weight: 600;
+      color: var(--color-accent);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    .nation-fold-toggle:hover { background: var(--color-accent-light); border-color: var(--color-accent); }
   </style>
 </head>
 <body>
@@ -182,10 +199,10 @@
         <div id="js-works-by-lang"></div>
 
         <div class="nation-subgroup__label">Af kunstnere fra denne nation</div>
-        <div id="js-works-by-author" class="nation-grid"></div>
+        <div id="js-works-by-author"></div>
 
         <div class="nation-subgroup__label">Med handling i denne nation</div>
-        <div id="js-works-at-place" class="nation-grid"></div>
+        <div id="js-works-at-place"></div>
 
         <div class="nation-todo" style="margin-top:var(--sp5)">
           <strong>Sådan er de tre lister fundet.</strong> »På dette sprog«
@@ -307,12 +324,43 @@
       '</div></a>';
   }
 
+  // Any card grid over FOLD_LIMIT folds behind a "Vis N flere" toggle rather
+  // than rendering in full — the goal is overview: a person scanning Fransk
+  // should see ten certain persons and a clear "there's more", not 223 cards
+  // pushing Steder and Værker off the bottom of the screen. Folded by
+  // default; expand/collapse toggles the hidden attribute in place, wired
+  // once via delegation below rather than per render() call.
+  var FOLD_LIMIT = 10;
+  var foldSeq = 0;
+  function foldableGrid(items, cardFn) {
+    if (items.length <= FOLD_LIMIT) {
+      return '<div class="nation-grid">' + items.map(cardFn).join('') + '</div>';
+    }
+    var id = 'nf' + (foldSeq++);
+    var moreLabel = 'Vis ' + (items.length - FOLD_LIMIT) + ' flere';
+    return '<div class="nation-grid">' + items.slice(0, FOLD_LIMIT).map(cardFn).join('') + '</div>' +
+      '<div class="nation-grid" id="' + id + '" hidden>' +
+      items.slice(FOLD_LIMIT).map(cardFn).join('') + '</div>' +
+      '<button type="button" class="nation-fold-toggle" data-target="' + id + '" ' +
+      'data-more="' + esc(moreLabel) + '" data-less="Vis færre">' + esc(moreLabel) + '</button>';
+  }
+  document.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.nation-fold-toggle');
+    if (!btn) return;
+    var target = document.getElementById(btn.getAttribute('data-target'));
+    if (!target) return;
+    var willShow = target.hidden;
+    target.hidden = !willShow;
+    btn.textContent = willShow ? btn.getAttribute('data-less') : btn.getAttribute('data-more');
+  });
+
   /* Render a section grouped by contributing sub-identity, so clustering the
      picker never hides WHICH identity an entry actually carries. With only
      one contributing member the headings would be noise, so it falls back to
      a flat list. `field` names the member array to read; `cardFn` builds one
      card. A member that also sits under other umbrellas says so inline —
-     that is the multiple-membership case made visible rather than implied. */
+     that is the multiple-membership case made visible rather than implied.
+     Each member's own grid folds independently past FOLD_LIMIT. */
   function renderByMember(host, n, field, cardFn, emptyText) {
     var contributing = (n.members || []).filter(function (m) { return m[field].length; });
     if (!contributing.length) {
@@ -321,8 +369,7 @@
     }
     var total = n[field].length;
     if (contributing.length === 1) {
-      host.innerHTML = '<div class="nation-grid">' +
-        contributing[0][field].map(cardFn).join('') + '</div>';
+      host.innerHTML = foldableGrid(contributing[0][field], cardFn);
       return total;
     }
     // Biggest sub-identity first — the reader meets the main body of the
@@ -336,7 +383,7 @@
         '<span class="nation-sub__count">' + m[field].length + '</span>' +
         (also.length ? '<span class="nation-sub__also">også under ' +
           esc(also.join(', ')) + '</span>' : '') + '</div>' +
-        '<div class="nation-grid">' + m[field].map(cardFn).join('') + '</div>';
+        foldableGrid(m[field], cardFn);
     }).join('');
     return total;
   }
@@ -414,7 +461,7 @@
       var byAuthorRids = Object.keys(byAuthor);
       byAuthorCount = byAuthorRids.length;
       byAuthorEl.innerHTML = byAuthorRids.length
-        ? byAuthorRids.map(function (rid) { return workCard(rid, byAuthor[rid]); }).join('')
+        ? foldableGrid(byAuthorRids, function (rid) { return workCard(rid, byAuthor[rid]); })
         : '<div class="nation-empty">Ingen værker fundet med en forfatter fra denne nations personliste.</div>';
 
       var atPlace = {};
@@ -426,7 +473,7 @@
       var atPlaceRids = Object.keys(atPlace);
       atPlaceCount = atPlaceRids.length;
       atPlaceEl.innerHTML = atPlaceRids.length
-        ? atPlaceRids.map(function (rid) { return workCard(rid, atPlace[rid]); }).join('')
+        ? foldableGrid(atPlaceRids, function (rid) { return workCard(rid, atPlace[rid]); })
         : '<div class="nation-empty">Ingen værker fundet med en stedangivelse i titlen, der matcher denne nation.</div>';
     } else {
       byAuthorEl.innerHTML = '<div class="nation-empty">Kræver entity-refs.js og works-extra.js.</div>';
