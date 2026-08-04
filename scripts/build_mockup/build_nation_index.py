@@ -223,9 +223,13 @@ def main():
         p_possible = sorted(persons_possible.get(key, set()) - persons_certain.get(key, set()))
         w_lang = sorted(works_by_lang.get(key, []))
 
-        if not (country_entity_id or place_ids or p_certain or p_possible or w_lang):
-            continue  # nothing to show for this key — skip it from the index
-
+        # Every declared key is indexed, even an empty one (badisk, hessisk —
+        # attested nowhere in this register but still legitimate members of
+        # the Tysk umbrella). Dropping empty keys HERE would run "does this
+        # key have data" before umbrella enrollment even gets a chance to
+        # pool them together; that check belongs after clustering instead
+        # (see the standalone-key loop below), so it only judges a key on
+        # its own once nothing has claimed it.
         index[key] = {
             "label_da":         meta["label_da"],
             "category":         meta["category"],
@@ -248,7 +252,13 @@ def main():
     no_country = sorted(set(adjectives) - set(nation_labels))
     print(f"  {len(no_country):,} keys have no curated nation label at all "
           f"(regional/historical/supranational categories mostly) — see the CSV notes column.")
-    print(f"\n  {len(index):,} nationality keys have at least one linked entity")
+    empty_keys = sorted(
+        k for k, v in index.items()
+        if not (v["country_entity_id"] or v["places_in_country"] or v["persons_certain"]
+                or v["persons_possible"] or v["works_in_language"])
+    )
+    print(f"\n  {len(index):,} keys indexed ({len(empty_keys):,} empty — no entity of their own): "
+          f"{', '.join(empty_keys)}")
 
     # ── Umbrella roll-up ────────────────────────────────────────────────────
     # Each umbrella keeps its members' contributions SEPARATE (so the page can
@@ -308,10 +318,18 @@ def main():
             "members": member_blocks, **union,
         }
 
-    # Keys no umbrella claims stay top-level, as their own single-member group,
-    # so nothing is lost by clustering.
+    # Keys no umbrella claims stay top-level, as their own single-member
+    # group, so nothing is lost by clustering. This is where "does this key
+    # have any data at all" is judged — deliberately AFTER enrollment, and
+    # only for keys enrollment left behind. A key that's empty but claimed by
+    # an umbrella (badisk, hessisk under tysk) already got its chance above;
+    # an empty, unclaimed key (kroatisk) would only ever produce a lonely,
+    # permanently-disabled picker entry, so it's dropped here instead.
     for key, entry in index.items():
         if key in clustered:
+            continue
+        if not (entry["country_entity_id"] or entry["places_in_country"] or entry["persons_certain"]
+                or entry["persons_possible"] or entry["works_in_language"]):
             continue
         grouped[key] = {**entry, "members": [{
             "key": key, "label": entry["label_da"], "category": entry["category"],
@@ -328,7 +346,9 @@ def main():
     print(f"  {len(grouped) - sum(1 for g in grouped.values() if g['category'] == 'umbrella'):,} keys left standalone")
     print(f"  {len(multi):,} keys with multiple memberships: " +
           ", ".join(f"{k}→{'+'.join(v)}" for k, v in sorted(multi.items())))
-    print(f"\n  picker goes from {len(index):,} entries to {len(grouped):,}")
+    dropped_empty = sum(1 for k in empty_keys if k not in clustered)
+    print(f"\n  picker goes from {len(adjectives):,} adjective keys to {len(grouped):,} entries "
+          f"({dropped_empty:,} dropped as empty and unclaimed by any umbrella)")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
