@@ -43,7 +43,7 @@ Categories:
 | `colonial` | Danish colonial-era territorial demonym | dansk-vestindisk (Danish West Indies), grønlandsk |
 | `historical_polity` | a historical (often ancient) polity, not a modern nation | romersk, østromersk, angelsaksisk, attisk/atheniensisk, bøhmisk, veneziansk, neapolitansk |
 | `regional_foreign` | a foreign sub-national region/identity | flamsk (Flemish), provencalsk, tyrolsk, katalansk |
-| `ethnolinguistic` | defined by language/dialect rather than a state | plattysk (Low German), germansk, slavisk, frisisk |
+| `ethnolinguistic` | defined by language/dialect rather than a state | plattysk (Low German), frisisk |
 | `religious_ethnic` | ethnic *and* religious, not tied to one state | jødisk (Jewish) |
 | `supranational` | broader than one nation | nordisk, skandinavisk |
 | `minority` | a named minority identity within another nation | finlandssvensk (Swedish-speaking Finland) |
@@ -411,40 +411,56 @@ is left alone for now — the person↔person case has no equivalent
 
 ## Nation umbrellas
 
-`data/curated/nation_umbrellas_da.csv` clusters the 88 nationality keys
-that reach the index (of 91 in the table — `badisk`, `hessisk` and
-`kroatisk` are defined but have zero matching persons/places/works in
-this register) into **33 pickable groups** for `nation.html`. The
-register distinguishes identities a reader usually does not — it names
-the individual pre-1871 German polity far more often than "tysk" — so
-the raw key list makes a poor menu.
+`data/curated/nation_umbrellas_da.csv` clusters the 91 nationality keys
+in the table into **33 pickable groups** for `nation.html`. The register
+distinguishes identities a reader usually does not — it names the
+individual pre-1871 German polity far more often than "tysk" — so the
+raw key list makes a poor menu.
 
 Clustering never discards the distinction: each umbrella carries a
 `members` array keeping every contributing key's entities separate, and
 `nation.html` renders each section grouped under its sub-identity
 heading with a count ("Preussisk 30"). A chip row under the page title
-lists what the umbrella covers, so the grouping is never a black box.
-Keys that no umbrella claims stay top-level as their own single-member
-group, and a group with only one contributing member renders flat, with
-no heading noise.
+lists what the umbrella covers, so the grouping is never a black box —
+including a member with zero entities of its own, like `badisk` and
+`hessisk` under Tysk (attested nowhere in this particular register, but
+still legitimately part of the umbrella; the chip says so honestly by
+carrying no count).
+
+**Enrollment into an umbrella happens before anything gets judged on its
+own data.** A key that is a declared member of an umbrella (badisk,
+hessisk → Tysk) is enrolled and shown as a member regardless of whether
+it has any entities of its own — it contributes nothing to the totals,
+but it isn't silently dropped either. Only a key that ends up claimed by
+*no* umbrella is then judged on its own: if it has zero persons, places
+and works, it is dropped rather than given a lonely, permanently-empty
+picker entry. `kroatisk` is the one key this applies to today — defined
+in the adjective table, claimed by no umbrella, and empty, so it never
+reaches the picker at all. Keys that no umbrella claims but that *do*
+have data stay top-level as their own single-member group, and a group
+with only one contributing member renders flat, with no heading noise.
 
 Below a floor of **3 combined hits** (certain + possible persons +
 places), the picker `<option>` is disabled rather than removed — the
 data is real and a direct `?nat=` link still resolves it, the entry is
-just not offered by default. 6 of the 33 groups sit below that floor
-today: Rumænsk (1), Bulgarsk (1), Argentinsk (1), Maltesisk (1),
-Kinesisk (0), Japansk (0) — the last two have a place-register entry
-for the country but no person or place match at all.
+just not offered by default. This floor is checked only AFTER
+clustering, against each umbrella's pooled total — never against an
+individual member's own count, which is exactly what lets badisk and
+hessisk ride along inside Tysk (total 862) without needing any hits of
+their own. 6 of the 33 groups sit below the floor today: Rumænsk (1),
+Bulgarsk (1), Argentinsk (1), Maltesisk (1), Kinesisk (0), Japansk (0) —
+the last two have a place-register entry for the country but no person
+or place match at all.
 
-**The narrow (enabled) list is 27 nations, covering 82 of the 91
-ethnic-adjective keys** (badisk, hessisk and kroatisk are defined but
-never reach the index at all — 0 matching persons, places or works;
-argentinsk, bulgarsk, japansk, kinesisk, maltesisk and rumænsk sit only
-in the 6 disabled entries, below the 3-hit floor).
+**The narrow (enabled) list is 27 nations, covering 84 of the 91
+ethnic-adjective keys.** The other 7: argentinsk, bulgarsk, japansk,
+kinesisk, maltesisk and rumænsk sit only in the 6 disabled entries,
+below the 3-hit floor; kroatisk is the sole key that never reaches the
+picker at all.
 
 | Umbrella | Covers |
 |---|---|
-| **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, thüringsk, badisk), tysk_romersk, frankisk, plattysk, germansk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
+| **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, badisk, thüringsk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
 | **Britisk** | engelsk, skotsk, irsk, angelsaksisk |
 | **Græsk** | græsk, nygræsk + the ancient polities (attisk, atheniensisk, makedonisk) and østromersk |
 | **Dansk** | dansk + regional (jysk, sjællandsk, fynsk, københavnsk), the duchies, and the crown territories (islandsk, grønlandsk, dansk_vestindisk) |
