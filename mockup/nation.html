@@ -28,6 +28,13 @@
     .nation-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--sp3);
     }
+    /* Without this, [hidden] does nothing on a .nation-grid: a normal author
+       rule (display: grid, right above) always wins over the UA stylesheet's
+       [hidden] { display: none }, regardless of specificity — the hidden
+       attribute is a lower-priority ORIGIN, not a losing specificity match.
+       The fold toggle below relies on the hidden attribute actually hiding
+       content, so this attribute-selector rule has to win that fight back. */
+    .nation-grid[hidden] { display: none; }
     .nation-empty {
       font-size: 0.85rem; color: var(--color-text-muted); font-style: italic;
       padding: var(--sp4) 0;
