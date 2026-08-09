@@ -115,7 +115,7 @@
             Digte
             <span class="h2h3-row__counts"><strong>342</strong> poster · 770 refs.</span>
           </a>
-          <a href="romaner.html" class="h2h3-row">
+          <a href="#" class="h2h3-row js-facet-jump" data-facet-ids="facet-romaner-hca">
             Romaner og Noveller
             <span class="h2h3-row__counts"><strong>33</strong> poster · 417 refs.</span>
           </a>
@@ -142,7 +142,7 @@
             Andre Forfattere
             <span class="h2h3-group__total">741 poster · 1.376 refs.</span>
           </div>
-          <a href="romaner.html" class="h2h3-row">
+          <a href="#" class="h2h3-row js-facet-jump" data-facet-ids="facet-romaner-andre">
             Romaner, Noveller, Eventyr
             <span class="h2h3-row__counts"><strong>229</strong> poster · 338 refs.</span>
           </a>
@@ -227,6 +227,27 @@
               <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Selvbiografier"><span class="facet-item__label">Selvbiografier</span><span class="facet-item__count">10</span></label>
               <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Tidsskrifter og aarbøger, ugeblade, vittighedsblade (Periodica)"><span class="facet-item__label">Tidsskrifter og Aarbøger</span><span class="facet-item__count">84</span></label>
             </div>
+          </div>
+
+          <!-- Forfatter — populated at load time by category-catalogue.js from
+               every distinct WORKS_EXTRA.author in this wing, ranked by works
+               descending, surname as the tiebreak (CLAUDE.md). Same mechanism
+               as teater-musik.html's "Komponist / Forfatter" facet; the body's
+               own max-height keeps the long list scrollable rather than pushing
+               the rest of the panel off-screen.
+
+               Coverage is partial and that is a property of the source, not a
+               bug here: only 455 of this wing's 1.510 works (30 %) name an
+               individual author. The other 1.055 carry author == the H2 group
+               itself ("H. C. ANDERSEN"), which the module deliberately skips —
+               HCA's own works are already reachable through the Forfattergruppe
+               facet above, so listing him here too would just duplicate it.
+               Consequence worth knowing: the HCA "Romaner og Noveller" H3 is
+               almost entirely invisible to this facet (2 of 33 works), while
+               "Romaner, Noveller, Eventyr" (Andre) is well covered (93 of 229). -->
+          <div class="facet-group">
+            <div class="facet-group__header">Forfatter <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="author"></div>
           </div>
 
           <!-- Omtaleår -->
@@ -406,11 +427,15 @@
 
           </div>
 
-          <!-- "Vis alle romaner" shortcut when romaner facet would be active -->
+          <!-- Was a link to romaner.html, a hand-authored static page with no
+               connection to WORKS_EXTRA (moved to mockup/irrelevant/, see that
+               folder's README). Now ticks both Romaner facets on the live
+               catalogue below instead — same entries, real data, cart-enabled. -->
           <div style="margin-top:var(--sp5);font-size:0.82rem;color:var(--color-text-muted)">
             For fuldt gennemse af Romaner og Noveller:
-            <a href="romaner.html" style="color:var(--color-accent)">Åbn Romaner-register →</a>
-            &ensp;(33 HCA + 219 Andre Forfattere)
+            <a href="#" class="js-facet-jump" data-facet-ids="facet-romaner-hca facet-romaner-andre"
+               style="color:var(--color-accent)">Vis alle romaner i registret →</a>
+            &ensp;(33 HCA + 229 Andre Forfattere)
           </div>
 
           <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js).
@@ -455,6 +480,38 @@
 <script>window.CATEGORY_WING='bibliotek.html';window.CATEGORY_LABEL='Bibliotek';</script>
 <script src="js/cart.js"></script>
 <script src="js/category-catalogue.js"></script>
+<script>
+// Makes the Romaner rows in the H2/H3 overview (and the "Vis alle romaner"
+// shortcut) tick their corresponding facet and scroll to the live catalogue.
+// These three used to link to romaner.html — a hand-authored static page with
+// no connection to WORKS_EXTRA, now retired to mockup/irrelevant/. Dispatching
+// a real 'change' event rather than only setting .checked is what makes
+// category-catalogue.js re-filter: it listens for change, and assigning the
+// property alone fires nothing.
+//
+// Note the other rows in that overview still carry inert href="#" data-h3="…"
+// attributes with no handler — a pre-existing gap, deliberately left alone
+// here rather than silently widened into an unrelated change.
+(function () {
+  'use strict';
+  document.addEventListener('click', function (ev) {
+    var link = ev.target.closest('.js-facet-jump');
+    if (!link) return;
+    ev.preventDefault();
+    var ids = (link.getAttribute('data-facet-ids') || '').split(/\s+/).filter(Boolean);
+    var clear = document.querySelector('.facet-panel__clear');
+    if (clear) clear.click();            // start from a clean slate
+    ids.forEach(function (id) {
+      var cb = document.getElementById(id);
+      if (!cb) return;
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    var target = document.getElementById('js-cat-results');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
 <script src="js/nav.js"></script>
 </body>
 </html>

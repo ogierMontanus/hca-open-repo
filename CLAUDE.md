@@ -51,6 +51,32 @@ Projektet blev tidligere kendt som "H.C. Andersen Dagbogsregister". Fra 2026 ref
 
 ---
 
+## Udelukkede mapper — `mockup/irrelevant/`
+
+**Alt i `mockup/irrelevant/` skal udelades fra al videre behandling.**
+
+Mappen indeholder pensionerede filer, som bevidst ikke er en del af det
+levende mockup. De er beholdt i git for at bevare designarbejdet og
+begrundelsen, ikke for at blive vedligeholdt.
+
+Konkret betyder det:
+
+- **Byggescripts** (`scripts/build_mockup/*`, `scripts/build_all.py`) og
+  alt andet, der globber `mockup/**`, skal springe mappen over.
+- **Lint og tests** i `tests/` skal ekskludere den — se `_SKIP_DIRS` i
+  `tests/test_no_stale_person_refs.py`, som allerede gør det.
+- **Linkcheck og audits**: filerne er med vilje aflinket. En ikke-refereret
+  fil her er den forventede tilstand, ikke et fund.
+- **Design- og dokumentationsgennemgange**: propagér ikke CSS-, markup-,
+  label- eller rebranding-ændringer ind i mappen. Den er frosset.
+- **Fremtidige AI-assisterede redigeringer**: behandl mappen som skrivebeskyttet
+  historik. Hvis en fil bliver relevant igen, så flyt den ud først og
+  genkobl den bevidst — rediger den ikke på plads.
+
+Se `mockup/irrelevant/README.md` for indholdet og begrundelsen pr. fil.
+
+---
+
 ## Arbejdsbranch
 
 Udviklingsarbejde sker på branchen `claude/youthful-carson-XIZ5I`.
