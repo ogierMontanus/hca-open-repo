@@ -1,0 +1,8 @@
+rid,wd,image_filename,verified_via,notes
+Reg000711,Q11694421,BuenPastorMurillo1660.jpg,WebSearch wikidata.org 2026-08-09,"""Den gode Hyrde"" = El Buen Pastor, Prado — location in title matches Wikidata P195 collection"
+Reg000721,Q16627776,"Bartolomé_Esteban_Perez_Murillo_-_The_Holy_Family_with_a_Bird_-_WGA16356.jpg",WebSearch wikidata.org 2026-08-09,"""Den hellige Familie med Fuglen"" = La Sagrada Familia del pajarito, Prado"
+Reg000765,Q22120723,Inmaculada_Concepcion_(La_Colosal).jpg,WebSearch wikidata.org 2026-08-09,"""Den ubesmittede Undfangelse"", Academia/Museo de Bellas Artes de Sevilla — Murillo painted 10+ Immaculate Conceptions; only used this one because the Sevilla-Academia collection is confirmed via Wikidata P195, not guessed from the title alone"
+Reg001801,Q5659824,"Bartolomé_Esteban_Perez_Murillo_-_The_Young_Beggar_-_WGA16348.jpg",WebSearch wikidata.org 2026-08-09,"""Jeune mendiant"" = The Young Beggar, Louvre INV 933"
+Reg002011,Q2880218,"Virgen_de_la_servilleta,_Bartolomé_Esteban_Murillo.jpg",WebSearch wikidata.org 2026-08-09,"""La Virgen de la Servilleta"" — title is an exact string match, no ambiguity"
+Reg002435,Q109535214,Murillo_moises.jpg,WebSearch wikidata.org 2026-08-09,"""Moses slaar Vand af Klippen (La Sed)"" = Moses at the Rock of Horeb, Hospital de la Caridad Sevilla"
+Reg002911,Q6120755,"Bartolomé_Esteban_Murillo_-_St._Justa_and_St._Rufina_-_Google_Art_Project.jpg",WebSearch wikidata.org 2026-08-09,"""S. S. Justa y Rufina"" — a second, unrelated Wikidata item (Q38466228, ""Saint Justa"" alone) also turned up in search; rejected because its title doesn't include Rufina"

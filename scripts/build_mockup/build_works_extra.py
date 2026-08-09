@@ -16,12 +16,14 @@ import json
 import os
 import re
 import sys
+import urllib.parse
 from collections import defaultdict
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
 LANGS = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
+WD_OVERLAY = os.path.join(ROOT, "data", "curated", "works_wikidata.csv")
 OUT = os.path.join(ROOT, "mockup", "data", "works-extra.js")
 
 PUB_PAREN_RE = re.compile(r"\(([^()]+?)\)")
@@ -234,6 +236,30 @@ def load_languages():
     return out
 
 
+def load_wikidata_overlay():
+    """{entity_id: (wd, image_url)} from data/curated/works_wikidata.csv —
+    hand-verified rows only (see scripts/parsers/wikidata_lookup.py, which
+    proposes candidates but never writes here itself). image_filename is
+    the bare Commons filename as it appears in the "File:" page title;
+    percent-encoding it here means the CSV can stay copy-pasteable from a
+    Commons URL without the person adding a row needing to think about
+    escaping unicode/parens/commas in the filename themselves."""
+    out = {}
+    if not os.path.exists(WD_OVERLAY):
+        return out
+    with open(WD_OVERLAY, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            rid = r["rid"].strip()
+            wd = r.get("wd", "").strip() or None
+            filename = r.get("image_filename", "").strip()
+            image = (
+                "https://commons.wikimedia.org/wiki/Special:FilePath/" + urllib.parse.quote(filename)
+                if filename else None
+            )
+            out[rid] = (wd, image)
+    return out
+
+
 def main():
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -267,6 +293,11 @@ def main():
     else:
         print("  no work_languages.csv — lang stays null "
               "(run scripts/build_mockup/detect_work_language.py)")
+
+    wd_overlay = load_wikidata_overlay()
+    if wd_overlay:
+        print(f"  {len(wd_overlay):,} hand-verified Wikidata entries loaded from "
+              f"{os.path.relpath(WD_OVERLAY, ROOT)}")
 
     # Index work labels for resolving `see` / `see_also` cross-references to
     # real register IDs. Most targets are the head term of a fuller label
@@ -327,6 +358,7 @@ def main():
         h2 = (r.get("genre_h2") or "").strip()
         h3 = (r.get("form_h3") or "").strip()
         wing, wing_label = wing_for(h2, h3)
+        wd, image = wd_overlay.get(rid, (None, None))
         generated[rid] = {
             "title": r["label"].strip(),
             "h2": h2 or "ANDRE FORFATTERE",
@@ -343,6 +375,11 @@ def main():
             "date": (r.get("date_derived") or "").strip() or None,
             "see": refs_field(r.get("see"), rid),
             "seeAlso": refs_field(r.get("see_also"), rid),
+            # Hand-verified only — see data/curated/works_wikidata.csv and
+            # scripts/parsers/wikidata_lookup.py. null for every work not in
+            # that file, same as every other unresolved field here.
+            "wd": wd,
+            "image": image,
             "diary": [],
             "related": [],
             "coPlaces": [],
