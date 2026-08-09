@@ -240,3 +240,30 @@ than trusting that "no console errors" meant "it worked."
   `TYPE_LABEL`/`TYPE_HREF` maps, which an unlisted type survives missing
   (renders grouped under its raw type string rather than being silently
   dropped).
+
+## Known failure mode: one bad entry must not blank the whole list
+
+Reported symptom: after "Vælg alle" on the 229-item Romaner facet, the
+cart badge/toolbar kept showing "229 poster valgt" but `cart.html`'s item
+list was empty. A clean Playwright reproduction of the exact steps against
+the current `works-extra.js` did **not** reproduce it — but `render()` in
+`cart.html` had a real latent bug that fits the symptom exactly, whatever
+its actual trigger turns out to be: `document.getElementById('js-cart-count').textContent`
+is painted *before* `body.innerHTML = order.map(...).join('')` runs. If
+building any single row throws — `itemHtml()`'s `encodeURIComponent(item.rid)`
+throws `URIError` on an unpaired UTF-16 surrogate, for instance — the
+exception aborts the script after the count is already painted but before
+`body.innerHTML` is ever assigned. Confirmed via Playwright: injecting one
+item with a lone-surrogate `rid` into `sessionStorage['hca-cart-v1']`
+reproduced "229 poster valgt" over a completely empty list, matching the
+report.
+
+Fixed with two nested safety nets in `cart.html`, not by trying to sanitize
+upstream data (a bad record can always reach this page some other way):
+`itemHtml()` now catches per-item and renders that one row as a plain,
+unlinked fallback ("… — kunne ikke vises korrekt") instead of throwing; the
+body-build call is also wrapped so any *other* future exception there shows
+a visible error under the accurate count rather than a silent blank list.
+Verified both paths with Playwright: 229 items incl. one malformed rid all
+render (228 normal + 1 fallback row), and normal all-valid-data rendering
+is unchanged.

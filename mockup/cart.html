@@ -169,13 +169,28 @@
   var TYPE_HREF = { person: 'persons.html?reg=', place: 'place.html?reg=', work: 'work.html?reg=' };
 
   function itemHtml(item) {
-    var href = (TYPE_HREF[item.type] || '#') + encodeURIComponent(item.rid);
-    return '<div class="cart-item">' +
-      '<div class="cart-item__label"><a href="' + esc(href) + '">' + esc(item.label) + '</a> ' +
-      '<span class="cart-item__rid">' + esc(item.rid) + '</span></div>' +
-      '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
-      '" data-rid="' + esc(item.rid) + '">Fjern</button>' +
-      '</div>';
+    // One malformed rid (e.g. an unpaired surrogate reaching encodeURIComponent
+    // as a URIError) must not blank the whole list — render this row as a
+    // plain, unlinked fallback instead of letting the exception escape and
+    // abort the body.innerHTML assignment below (the toolbar count is set
+    // first, so a mid-loop throw used to leave a "229 poster valgt" count
+    // sitting above an empty list with no visible reason why).
+    try {
+      var href = (TYPE_HREF[item.type] || '#') + encodeURIComponent(item.rid);
+      return '<div class="cart-item">' +
+        '<div class="cart-item__label"><a href="' + esc(href) + '">' + esc(item.label) + '</a> ' +
+        '<span class="cart-item__rid">' + esc(item.rid) + '</span></div>' +
+        '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
+        '" data-rid="' + esc(item.rid) + '">Fjern</button>' +
+        '</div>';
+    } catch (e) {
+      return '<div class="cart-item">' +
+        '<div class="cart-item__label">' + esc(item.label || item.rid || '?') +
+        ' <span class="cart-item__rid">' + esc(item.rid) + ' — kunne ikke vises korrekt</span></div>' +
+        '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
+        '" data-rid="' + esc(item.rid) + '">Fjern</button>' +
+        '</div>';
+    }
   }
 
   function render() {
@@ -210,12 +225,21 @@
     // grouped under its raw type string, rather than being silently dropped.
     Object.keys(groups).forEach(function (t) { if (order.indexOf(t) === -1) order.push(t); });
 
-    body.innerHTML = order.map(function (type) {
-      var list = groups[type];
-      return '<div class="cart-group"><div class="cart-group__title">' +
-        esc(TYPE_LABEL[type] || type) + ' <span style="font-weight:400;color:var(--color-text-muted);font-size:0.8rem">(' +
-        list.length + ')</span></div>' + list.map(itemHtml).join('') + '</div>';
-    }).join('');
+    // itemHtml() already guards per-item, but wrap the whole build as a second
+    // net: better a visible error under an accurate count than a silent blank
+    // list — the toolbar/count text above is already painted by this point.
+    try {
+      body.innerHTML = order.map(function (type) {
+        var list = groups[type];
+        return '<div class="cart-group"><div class="cart-group__title">' +
+          esc(TYPE_LABEL[type] || type) + ' <span style="font-weight:400;color:var(--color-text-muted);font-size:0.8rem">(' +
+          list.length + ')</span></div>' + list.map(itemHtml).join('') + '</div>';
+      }).join('');
+    } catch (e) {
+      body.innerHTML = '<div class="cart-empty">Kurven indeholder ' + items.length +
+        ' post(er), men de kunne ikke vises (' + esc(String(e && e.message || e)) +
+        '). Prøv »Ryd kurv« og vælg posterne igen, eller rapportér fejlen.</div>';
+    }
   }
 
   document.getElementById('js-cart-body').addEventListener('click', function (ev) {
