@@ -64,10 +64,160 @@ def parse_year(label):
     return None
 
 
-def author_from(genre_h2, person_derived):
+PAREN_ALL_RE = re.compile(r"\(([^()]+)\)")
+
+# BILLEDKUNST titles that carry no person_derived attribution are usually
+# still attributed *in the label itself*: "Abe... (Annibale Carracci, Uffizi,
+# Firenze)" — artist, collection, city, comma-separated inside the first
+# parenthetical. Empirically (data/normalized/entities.csv, the 672 BILLEDKUNST
+# works with no person_derived): 291 titles carry 3 pieces, 160 carry 2, 173
+# carry just 1 — always in that same Artist[, Collection][, City] order.
+#
+# The one place position-alone isn't reliable is exactly where an artist is
+# genuinely absent: some titles instead read "(Collection, City)" with no
+# artist at all (27x 'M. borbonico, Napoli', 12x 'Capitol, Rom', ...), and a
+# bare single-piece parenthetical can be either a lone artist name
+# ("Aristokrati og Fattigfolk (Siegwald Dahl)") or a bare place/institution
+# ("Alexander-Slaget (Pompeji)") — indistinguishable by position, so both
+# get the same name-shape + stoplist screening below regardless of how many
+# comma-pieces the group has.
+_ARTIST_STOPLIST = {
+    # Recurring institution/collection abbreviations that showed up as the
+    # FIRST piece — i.e. titles with no artist, just "(Collection, City)".
+    "m. borbonico", "m. bonbornico",  # latter is an OCR letter-transposition
+    "capitol", "vatikanet", "uffizi", "glyptoteket", "fesch",
+    "libreria piccolomini", "palazzo della ragione", "raadhuspladsen",
+    "domkirken",
+    # Medium/technique descriptors, not names.
+    "tegning", "kopi", "selvportræt", "kultegning", "udstillingsmedaljen",
+    "arvesynden", "fresko", "karton", "malet buste",
+    # Mythological sculpture subjects (the artwork's subject, not its maker).
+    "pallas", "hermes", "satyren", "hera farnese", "ilioneus",
+    # Room/monument names inside a museum or city, not the maker.
+    "aegineter-salen", "arco clementino", "apollo-salen",
+    # Places absent from entities.csv's place register under this exact label
+    # (place_labels below catches the rest, e.g. Berlin/München/Firenze/Rom).
+    "pompeji", "mariekirken", "bregentved park",
+}
+# Single institution words that also show up buried inside a longer compound
+# phrase — "Mercato Nuovo og Uffizi" isn't itself stoplisted, but it contains
+# "Uffizi" — so every word of the candidate is checked against this set too,
+# not just the whole string.
+_INSTITUTION_WORDS = {"uffizi", "capitol", "vatikanet", "glyptoteket", "fesch"}
+_FOREIGN_ARTICLES = {"il", "la", "le", "lo", "los", "las", "das", "die", "der", "el"}
+
+
+def _looks_like_artist(candidate, place_labels):
+    c = candidate.strip()
+    if not c or c[0].islower() or any(ch.isdigit() for ch in c) or "?" in c or ":" in c:
+        return False
+    cf = c.casefold()
+    if cf in _ARTIST_STOPLIST or cf in place_labels:
+        return False
+    # A leading segment before a "." also needs the stoplist check — OCR/
+    # source punctuation sometimes joins an institution and its city with a
+    # period instead of the usual comma ("Glyptoteket. München").
+    if cf.split(".", 1)[0].strip() in _ARTIST_STOPLIST:
+        return False
+    words = re.findall(r"[a-zæøåA-ZÆØÅ]+", cf)
+    if any(w in _INSTITUTION_WORDS for w in words):
+        return False
+    low = c.lower()
+    if low.startswith(("den ", "det ", "de ", "palazzo ", "kopi ")):
+        return False
+    if low.split(" ", 1)[0].strip(".,") in _FOREIGN_ARTICLES:
+        return False
+    if " fra " in low or low.endswith(("kirke", "kirken")):
+        return False
+    if len(c.split()) > 5:
+        return False
+    return True
+
+
+def artist_from_billedkunst_title(title, place_labels):
+    """Recover an artist name from a BILLEDKUNST title's parenthetical(s), or
+    None when nothing looks like one — never a guess dressed up as data.
+
+    Some titles carry more than one parenthetical group, and the first one
+    isn't always the attribution: "Tre Helgener (Benedikt, Flavia og
+    Placidus) (Perugino, Vatikanet, Rom)" lists the depicted saints first,
+    the real artist second. A group ending in a real place name is the
+    strongest signal that IT is the "Artist[, Collection], City" group, so
+    that's tried across every group before falling back to first-group-that-
+    looks-plausible order."""
+    groups = [[p.strip() for p in g.split(",")] for g in PAREN_ALL_RE.findall(title)]
+    groups = [g for g in groups if g and g[0]]
+    if not groups:
+        return None
+
+    for g in groups:
+        if g[-1].casefold() in place_labels and _looks_like_artist(g[0], place_labels):
+            return g[0]
+
+    for g in groups:
+        if _looks_like_artist(g[0], place_labels):
+            return g[0]
+    return None
+
+
+def _person_derived_is_title_subject(person_derived, title):
+    """True when person_derived just repeats the work's own subject rather
+    than naming who made it — e.g. person_derived='S. Cecilia' on a title
+    'S. Cecilia (Carlo Dolci, Manfrin, Venezia)' (the saint depicted, not
+    the painter), or 'H. V. Bissen' on 'H. V. Bissen (Carl Peters)' (the
+    portrait's sitter, who happens to *also* be a real sculptor elsewhere
+    in this register — so this can't be screened by name-shape alone).
+    Checked per newline-joined segment (see the multi-value note below) —
+    one bad segment is enough to mark the whole value suspect."""
+    title = title.strip()
+    return any(title.startswith(seg) for seg in (s.strip() for s in person_derived.split("\n")) if seg)
+
+
+def author_from(genre_h2, h3, title, person_derived, place_labels):
+    h2u = (genre_h2 or "").strip().upper()
     if person_derived and person_derived.strip():
-        return person_derived.strip()
-    if genre_h2 and genre_h2.strip() and genre_h2.upper() not in ("BILLEDKUNST", "MUSIK"):
+        # For BILLEDKUNST specifically: 65 works have a person_derived value
+        # that is a prefix of their own title — i.e. the upstream step
+        # copied the depicted subject into the attribution field instead of
+        # (or in addition to) naming the actual maker. Every one of the 65
+        # checked by hand recovers a clean, plausible artist name from the
+        # title's own parenthetical instead (see artist_from_billedkunst_title
+        # docstring) — e.g. "S. Cecilia" → "Carlo Dolci" for the title above.
+        # Only override when that recovery actually succeeds; a title whose
+        # subject-echo can't be resolved to anything better keeps the
+        # original value rather than losing it for nothing.
+        #
+        # Known remaining gap: the prefix check only catches the subject
+        # when it leads the title ("S. Cecilia (Carlo Dolci, …)"). A subject
+        # named mid-title ("...Ruinerne af Byen Nymfa (Harald Jerichau)",
+        # person_derived "Byen Nymfa") isn't a title prefix and slips
+        # through — 5 known BILLEDKUNST works as of this writing. Widening
+        # the check to "title contains person_derived anywhere" was tried
+        # and rejected: a CORRECT person_derived is, by construction, also
+        # a substring of its own title (it usually came from the same
+        # parenthetical), so that version flagged nearly everything as
+        # suspect instead of just the handful of real bugs.
+        if h2u == "BILLEDKUNST" and _person_derived_is_title_subject(person_derived, title):
+            recovered = artist_from_billedkunst_title(title, place_labels)
+            if recovered:
+                return recovered
+        # 158 works across every wing carry a person_derived value with an
+        # embedded newline joining two names/values from the upstream
+        # normalization step (e.g. "A. W. Moltke\nH. V. Bissen" — a portrait
+        # bust's subject and its sculptor both landed in the one field).
+        # Which segment is "the" author isn't reliably position-dependent —
+        # it's the first name in some rows, the last in others — so this
+        # doesn't try to pick a winner; it just makes the value readable
+        # (comma-joined) instead of a raw newline, without dropping either
+        # name or guessing. Fixing which name is correct is a normalization-
+        # pipeline question, not something this script can resolve.
+        return re.sub(r"\s*\n\s*", ", ", person_derived.strip())
+    if h2u == "BILLEDKUNST":
+        h3l = (h3 or "").lower()
+        if "museer" in h3l or "samlinger" in h3l:
+            return None  # institution/collection entries, not authored works
+        return artist_from_billedkunst_title(title, place_labels)
+    if h2u and h2u != "MUSIK":
         return genre_h2.strip()
     return None
 
@@ -90,8 +240,19 @@ def main():
 
     print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
     with open(ENTITIES, encoding="utf-8") as f:
-        rows = [r for r in csv.DictReader(f) if r["entity_type"] == "work"]
+        all_rows = list(csv.DictReader(f))
+    rows = [r for r in all_rows if r["entity_type"] == "work"]
     print(f"  {len(rows):,} works")
+
+    # Negative filter for artist_from_billedkunst_title(): a bare place name
+    # inside a title's parenthetical ("Alexander-Slaget (Pompeji)") must not
+    # be mistaken for an artist with no comma-separated collection/city to
+    # disambiguate it from one.
+    place_labels = {
+        r["label"].strip().casefold()
+        for r in all_rows if r["entity_type"] == "place" and r["label"]
+    }
+    print(f"  {len(place_labels):,} place labels loaded for artist-extraction filtering")
 
     ref_count = defaultdict(int)
     if os.path.exists(REFS):
@@ -172,7 +333,7 @@ def main():
             "h3": h3 or "—",
             "wing": wing,
             "wingLabel": wing_label,
-            "author": author_from(h2, r.get("person_derived", "")),
+            "author": author_from(h2, h3, r["label"], r.get("person_derived", ""), place_labels),
             # Derived, not curated — langMethod carries the provenance so the
             # UI can say so. See detect_work_language.py.
             "lang": work_langs.get(rid, (None, None))[0],
@@ -189,6 +350,12 @@ def main():
         }
 
     print(f"  generated {len(generated)} entries across all {len(rows)} works")
+
+    billedkunst = [w for w in generated.values() if w["h2"].upper() == "BILLEDKUNST"]
+    if billedkunst:
+        with_author = sum(1 for w in billedkunst if w["author"])
+        print(f"  BILLEDKUNST author coverage: {with_author}/{len(billedkunst)} "
+              f"({with_author / len(billedkunst):.0%})")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:

@@ -158,8 +158,11 @@ Praktiske regler i kode:
 
 Forskellen er især synlig på `teater-musik.html`s "Komponist /
 Forfatter"-facet (~70 navne med flere værker; sekundærsortering på
-efternavn), og på den fremtidige "Kunstner"-facet på `billedkunst.html`
-samt på `bibliotek.html`s "Forfatter"-facet når den ankommer.
+efternavn), på `bibliotek.html`s "Forfatter"-facet, og på
+`billedkunst.html`s "Kunstner"-facet (355 kunstnere; se
+`docs/data-model/billedkunst-artist-extraction.md` for hvordan
+kunstnernavnet udledes af værktitlens parentes, når `person_derived`
+mangler).
 
 ---
 
