@@ -90,6 +90,71 @@ leave it unillustrated than guess. `wikidata_lookup.py` run with a lower
 `--min-score` will resurface these as low-confidence candidates for a
 future pass, same as it did for the 7 that made it in.
 
+23 of 37 works credited to Rafael (Raphael) — see "A third path: outsourcing
+the lookup, still verifying the answer" below for how these were found.
+
+## A third path: outsourcing the lookup, still verifying the answer
+
+For a whole artist's catalogue at once, a plain-text export + a copy-paste
+prompt for a chatbot with live web access (Copilot, ChatGPT, …) is a
+practical third path alongside `wikidata_lookup.py` and manual WebSearch —
+*as long as the answer is still independently re-verified before it's
+trusted*, not imported as-is. The Rafael batch is the worked example:
+
+1. A **works export** was generated from `WORKS_EXTRA` (id, title, a local
+   link for cross-referencing, and hand-added notes flagging known traps —
+   duplicate titles resolving to different paintings, a copy mislabeled
+   under the original's title, an OCR'd title) and handed to Copilot with
+   an explicit prompt: verify live, don't guess from memory, cross-check
+   the collection named in the title, and return the answer in the same
+   `id | title | link | notes` shape so it could be matched back up.
+2. **Copilot did not follow the "keep the id exactly as given" instruction**
+   — it returned a full 37-row table with a completely different, invented
+   set of ids. The row *order* matched the input exactly, though, so the
+   correct `rid` for every row was recovered by position/title match rather
+   than trusted from Copilot's own id column. This is exactly the class of
+   error the verify-before-import discipline exists to catch — a
+   plausible-looking, internally-consistent answer that's simply wrong in
+   a way that isn't obvious from reading it.
+3. **Every one of Copilot's "Confirmed" Q-numbers was independently
+   re-checked** via WebSearch domain-filtered to wikidata.org (fanned out
+   across four parallel research agents — 25 Q-numbers total) before any of
+   them were added here. That pass caught three more real problems Copilot
+   itself had missed or mis-stated:
+   - **Reg002447 ("Mysterierne")** — Copilot reused the Oddi Altarpiece's
+     main-panel Q-number (Q2344357, correct for Reg001819) for the
+     *predella* scenes too. Wikidata models each predella panel as its own
+     item (one confirmed: Q116286717 for the Annunciation panel) — reusing
+     the parent item for the predella would have been wrong. Left
+     unconfirmed rather than guess which predella item(s) apply.
+   - **Reg002248 ("Madonna della Tenda")** — the register's title says
+     "Madama, Torino," but Wikidata Q2269330 (and the museum record behind
+     it) puts the actual Madonna della Tenda in the Alte Pinakothek,
+     Munich, since 1819. Collection mismatch — same rule as the Murillo
+     "Visión de San Francisco" case: leave it unconfirmed rather than force
+     a title-only match onto the wrong location.
+   - **Reg000662 ("De tre theologiske Dyder")** — two Wikidata items
+     (Q131557878, Q2568776) both describe what looks like the same Vatican
+     fresco under near-identical labels; which one is canonical (or
+     whether they're genuinely different sub-elements) couldn't be
+     resolved from search snippets alone. Left unconfirmed pending a
+     manual side-by-side page comparison.
+
+   The other 11 works Copilot itself marked unconfirmed (a Sistine Madonna
+   copy, an S. Cecilia copy after Guido Reni, an Uffizi "La Fornarina" that
+   turned out to be a *different, unrelated* painting historically
+   misattributed under the same nickname, etc.) were left that way — no Q-
+   number was proposed for them, so there was nothing to verify or add.
+
+**Caveat carried into the CSV itself:** the re-verification pass confirmed
+each accepted row's Wikidata *subject and collection* — it did not
+independently re-check every Commons **image filename** Copilot supplied
+(that would have meant opening each Commons file page directly, which this
+project's sandbox can't do — see below). Those filenames are recorded as
+Copilot-sourced, not independently re-verified, in each row's `notes`. Two
+rows (Reg002880, Reg002900) have unusually long filenames worth a visual
+spot-check on `work.html` before treating the image as final.
+
 ## Rebuilding
 
 ```
@@ -99,5 +164,5 @@ python scripts/build_mockup/build_works_extra.py
 prints how many overlay rows it loaded:
 
 ```
-7 hand-verified Wikidata entries loaded from data/curated/works_wikidata.csv
+30 hand-verified Wikidata entries loaded from data/curated/works_wikidata.csv
 ```
