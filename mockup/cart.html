@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kurv — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .cart-group { margin-top: var(--sp8); }
+    .cart-group:first-of-type { margin-top: var(--sp6); }
+    .cart-group__title {
+      font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em;
+      margin-bottom: var(--sp4);
+    }
+    .cart-item {
+      display: flex; align-items: center; gap: var(--sp4);
+      padding: var(--sp3) var(--sp4);
+      border: 1px solid var(--color-border); border-radius: var(--radius);
+      background: var(--color-surface);
+      margin-bottom: var(--sp2);
+    }
+    .cart-item__label { flex: 1; font-size: 0.9rem; }
+    .cart-item__label a { color: var(--color-text); font-weight: 600; }
+    .cart-item__rid { font-family: monospace; font-size: 0.72rem; color: var(--color-text-muted); }
+    .cart-item__remove {
+      background: none; border: 1px solid var(--color-border); border-radius: var(--radius);
+      color: var(--color-text-muted); font-size: 0.78rem; padding: 4px 10px; cursor: pointer;
+    }
+    .cart-item__remove:hover { border-color: #c0392b; color: #c0392b; }
+    .cart-toolbar {
+      display: flex; align-items: center; gap: var(--sp3); flex-wrap: wrap;
+      padding: var(--sp4); margin-bottom: var(--sp5);
+      background: var(--color-surface-2); border-radius: var(--radius-lg);
+    }
+    .cart-toolbar__count { flex: 1; font-size: 0.92rem; }
+    .cart-toolbar button {
+      font: inherit; font-size: 0.85rem; font-weight: 600; padding: 8px 16px;
+      border-radius: var(--radius); cursor: pointer; border: 1px solid var(--color-border);
+    }
+    #js-cart-download {
+      background: var(--color-accent); color: #fff; border-color: var(--color-accent);
+    }
+    #js-cart-download:hover { background: var(--color-accent-hover); }
+    #js-cart-download:disabled { background: var(--color-border); border-color: var(--color-border); cursor: not-allowed; }
+    #js-cart-clear { background: var(--color-surface); color: var(--color-text-muted); }
+    #js-cart-clear:hover { border-color: #c0392b; color: #c0392b; }
+    .cart-note {
+      font-size: 0.78rem; color: var(--color-text-muted); margin-top: var(--sp2);
+      max-width: 62ch; line-height: 1.5;
+    }
+    .cart-empty {
+      text-align: center; padding: var(--sp10) var(--sp5);
+      color: var(--color-text-muted); font-style: italic;
+    }
+
+    /* "Save as PDF" happens via the browser's own print dialog — see
+       docs/data-model/cart-and-export.md for why (real text, correct
+       æøå rendering, zero new dependencies, vs. a client-side PDF library
+       needing a custom embedded font for anything outside ASCII). This
+       stylesheet is what the print dialog / "Save as PDF" actually sees:
+       chrome, buttons and the remove-affordance all disappear, and a
+       printed-only header/date takes their place. */
+    .print-only { display: none; }
+    @media print {
+      .site-header, .cart-toolbar, .cart-item__remove, .site-footer,
+      .nation-picker, .cart-note { display: none !important; }
+      .print-only { display: block; }
+      .cart-item { border: none; border-bottom: 1px solid #ccc; border-radius: 0; padding: 8px 0; break-inside: avoid; }
+      .cart-group { break-before: page; }
+      .cart-group:first-of-type { break-before: auto; }
+      body { color: #000; }
+      /* The dark gradient hero reads fine on screen but wastes toner and
+         fights with black text on paper — flatten it to plain text. The
+         breadcrumb has its own dedicated white-on-dark rule in style.css
+         (readability against the gradient); needs its own override here
+         too, or it stays near-white against this now-light background. */
+      .page-hero {
+        background: none !important; color: #000 !important;
+        padding: 0 0 var(--sp5); box-shadow: none;
+      }
+      .page-hero p { opacity: 1; }
+      .page-hero .breadcrumb,
+      .page-hero .breadcrumb a,
+      .page-hero .breadcrumb__current { color: #555 !important; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Kurv</span>
+      </nav>
+      <h1>Kurv</h1>
+      <p>Poster valgt fra Personregister og Stedregister, klar til udskrift eller PDF.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <p class="print-only" style="margin-bottom:var(--sp6);font-size:0.85rem;color:#555">
+        H.C. Andersen Dagbogsregister — udvalgte poster — <span id="js-print-date"></span>
+      </p>
+
+      <div id="js-cart-toolbar" class="cart-toolbar" style="display:none">
+        <span class="cart-toolbar__count" id="js-cart-count"></span>
+        <button type="button" id="js-cart-download">Download som PDF</button>
+        <button type="button" id="js-cart-clear">Ryd kurv</button>
+      </div>
+      <p class="cart-note" id="js-cart-pdf-note" style="display:none">
+        »Download som PDF« åbner browserens udskriftsdialog — vælg
+        <strong>»Gem som PDF«</strong> som destination. Det giver en rigtig
+        tekst-PDF med korrekt æ/ø/å (en indlejret PDF-skrifttype ville kræve
+        en separat skrifttype-fil for danske tegn — se
+        <code>docs/data-model/cart-and-export.md</code>).
+      </p>
+
+      <div id="js-cart-body"></div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Udarbejdet af citizen scientists i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+  </div>
+</footer>
+
+<script src="js/cart.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  if (typeof Cart === 'undefined') {
+    document.getElementById('js-cart-body').innerHTML =
+      '<div class="cart-empty">js/cart.js kunne ikke indlæses.</div>';
+    return;
+  }
+  Cart.mountBadge(document.getElementById('js-cart-badge'));
+
+  var TYPE_LABEL = { person: 'Personer', place: 'Steder', work: 'Værker' };
+  var TYPE_HREF = { person: 'persons.html?reg=', place: 'place.html?reg=', work: 'work.html?reg=' };
+
+  function itemHtml(item) {
+    var href = (TYPE_HREF[item.type] || '#') + encodeURIComponent(item.rid);
+    return '<div class="cart-item">' +
+      '<div class="cart-item__label"><a href="' + esc(href) + '">' + esc(item.label) + '</a> ' +
+      '<span class="cart-item__rid">' + esc(item.rid) + '</span></div>' +
+      '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
+      '" data-rid="' + esc(item.rid) + '">Fjern</button>' +
+      '</div>';
+  }
+
+  function render() {
+    var items = Cart.all();
+    var toolbar = document.getElementById('js-cart-toolbar');
+    var body = document.getElementById('js-cart-body');
+    var pdfNote = document.getElementById('js-cart-pdf-note');
+    var downloadBtn = document.getElementById('js-cart-download');
+
+    if (!items.length) {
+      toolbar.style.display = 'none';
+      pdfNote.style.display = 'none';
+      body.innerHTML = '<div class="cart-empty">Kurven er tom. Afkryds poster på ' +
+        '<a href="persons.html">Personregister</a> eller <a href="places.html">Stedregister</a> for at tilføje dem.</div>';
+      return;
+    }
+
+    toolbar.style.display = '';
+    pdfNote.style.display = '';
+    document.getElementById('js-cart-count').textContent =
+      items.length.toLocaleString('da-DK') + (items.length === 1 ? ' post valgt' : ' poster valgt');
+    downloadBtn.disabled = false;
+
+    // Group by type, in a fixed order, so the printed page reads as
+    // "Personer" then "Steder" regardless of selection order.
+    var groups = {};
+    items.forEach(function (it) { (groups[it.type] = groups[it.type] || []).push(it); });
+    // Hvem · Hvad · Hvor — same fixed order the rest of the site uses
+    // (the side-acc accordion, nation.html) for the three entity types.
+    var order = ['person', 'work', 'place'].filter(function (t) { return groups[t]; });
+    // Any future type (works, diary pages, …) not in TYPE_LABEL still renders,
+    // grouped under its raw type string, rather than being silently dropped.
+    Object.keys(groups).forEach(function (t) { if (order.indexOf(t) === -1) order.push(t); });
+
+    body.innerHTML = order.map(function (type) {
+      var list = groups[type];
+      return '<div class="cart-group"><div class="cart-group__title">' +
+        esc(TYPE_LABEL[type] || type) + ' <span style="font-weight:400;color:var(--color-text-muted);font-size:0.8rem">(' +
+        list.length + ')</span></div>' + list.map(itemHtml).join('') + '</div>';
+    }).join('');
+  }
+
+  document.getElementById('js-cart-body').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.cart-item__remove');
+    if (!btn) return;
+    Cart.remove(btn.getAttribute('data-type'), btn.getAttribute('data-rid'));
+  });
+
+  document.getElementById('js-cart-clear').addEventListener('click', function () {
+    if (Cart.count() && confirm('Ryd hele kurven (' + Cart.count() + ' poster)?')) Cart.clear();
+  });
+
+  document.getElementById('js-cart-download').addEventListener('click', function () {
+    var d = new Date();
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    document.getElementById('js-print-date').textContent =
+      pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + d.getFullYear();
+    window.print();
+  });
+
+  Cart.subscribe(render);
+  render();
+})();
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

@@ -41,10 +41,12 @@ _SKIP = {
     Path(__file__),
 }
 
-# Directories to skip entirely (generated output)
+# Directories to skip entirely (generated output, or retired files)
 _SKIP_DIRS = {
     REPO / 'mockup' / 'diary-pages',
-    REPO / 'mockup' / 'data',      # generated JS blobs
+    REPO / 'mockup' / 'data',        # generated JS blobs
+    REPO / 'mockup' / 'irrelevant',  # retired pages, frozen — see that
+                                     # folder's README.md
 }
 
 # Source trees and extensions to check

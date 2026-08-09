@@ -17,6 +17,11 @@
  */
 (function () {
   'use strict';
+  // Mount the cart badge before the early-return guards below — it should
+  // reflect the cart even on a page whose own catalogue can't render, since
+  // the cart may already hold items added from a different page.
+  if (typeof Cart !== 'undefined') Cart.mountBadge(document.getElementById('js-cart-badge'));
+
   var grid = document.getElementById('js-cat-results');
   var wing = window.CATEGORY_WING;
   if (!grid || !wing || typeof WORKS_EXTRA === 'undefined') return;
@@ -154,12 +159,16 @@
   var moreBtn = document.getElementById('js-cat-more');
 
   function card(w) {
-    return '<a href="work.html?reg=' + esc(w.rid) + '" class="result-card result-card--list" ' +
+    return '<div class="result-row">' +
+      '<label class="result-card__select"><input type="checkbox" ' +
+      'data-cart-type="work" data-cart-rid="' + esc(w.rid) + '" data-cart-label="' + esc(w.title) + '"></label>' +
+      '<a href="work.html?reg=' + esc(w.rid) + '" class="result-card result-card--list" ' +
       'style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">' +
       '<div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">' + esc(w.rid) + '</div>' +
       '<div style="flex:1"><div class="result-card__title" style="font-size:0.95rem">' + esc(w.title) + '</div>' +
       (w.meta ? '<div class="result-card__meta">' + esc(w.meta) + '</div>' : '') + '</div>' +
-      '<div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">' + w.refs + ' refs.</div></a>';
+      '<div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">' + w.refs + ' refs.</div></a>' +
+      '</div>';
   }
 
   function renderMore() {
@@ -167,7 +176,37 @@
     grid.insertAdjacentHTML('beforeend', next.map(card).join(''));
     shown += next.length;
     moreBtn.style.display = shown < filtered.length ? '' : 'none';
+    if (typeof Cart !== 'undefined') Cart.syncCheckboxes(grid);
   }
+
+  // The "Vælg alle" checkbox means every currently FILTERED work, not just
+  // the ones paginated onto the screen — same convention as persons.html /
+  // places.html's cart wiring (see docs/data-model/cart-and-export.md).
+  var selectAllCb = document.getElementById('js-cat-select-all');
+  function updateSelectAll() {
+    if (!selectAllCb || typeof Cart === 'undefined') return;
+    if (!filtered.length) { selectAllCb.checked = false; selectAllCb.indeterminate = false; return; }
+    var inCount = 0;
+    for (var i = 0; i < filtered.length; i++) if (Cart.has('work', filtered[i].rid)) inCount++;
+    selectAllCb.checked = inCount === filtered.length;
+    selectAllCb.indeterminate = inCount > 0 && inCount < filtered.length;
+  }
+  if (selectAllCb) {
+    selectAllCb.addEventListener('change', function () {
+      if (selectAllCb.checked) {
+        if (filtered.length > 100 &&
+            !confirm('Tilføj alle ' + filtered.length.toLocaleString('da-DK') + ' værker til kurven?')) {
+          selectAllCb.checked = false;
+          return;
+        }
+        Cart.addMany(filtered.map(function (w) { return { type: 'work', rid: w.rid, label: w.title }; }));
+      } else {
+        Cart.removeMany(filtered.map(function (w) { return { type: 'work', rid: w.rid }; }));
+      }
+      Cart.syncCheckboxes(grid);
+    });
+  }
+  if (typeof Cart !== 'undefined') { Cart.wireCheckboxes(); Cart.subscribe(updateSelectAll); }
 
   // Empty-state markup shown inside #js-cat-results when filtered.length === 0.
   // The "Nulstil filter" button delegates to the panel's own Nulstil control
@@ -275,6 +314,7 @@
     }
     updateFacetAvailability();
     updateLetterAvailability();
+    updateSelectAll();
   }
 
   var bar = document.getElementById('js-cat-alpha-bar');

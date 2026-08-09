@@ -489,6 +489,51 @@ body[data-section="hvor"] .page-hero {
 .result-card__meta { font-size: 0.76rem; color: var(--color-text-muted); }
 .result-card__chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: var(--sp2); }
 
+/* === Cart selection (mockup/js/cart.js) ===
+   The checkbox is a SIBLING of .result-card, never nested inside its <a> —
+   see cart.js's module docstring for why (a checkbox nested in a link needs
+   its click cancelled to stop the link from also firing; a sibling avoids
+   the problem outright instead of working around it). */
+.result-row { display: flex; align-items: stretch; gap: var(--sp2); }
+.result-row > .result-card,
+.result-row > a { flex: 1; min-width: 0; }
+.result-card__select {
+  display: flex; align-items: center; flex-shrink: 0;
+  padding: 0 2px; cursor: pointer;
+}
+.result-card__select input {
+  width: 17px; height: 17px; cursor: pointer; accent-color: var(--color-accent);
+}
+.result-row--in-cart > .result-card,
+.result-row--in-cart > a {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.results-header__select-all {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.82rem; color: var(--color-text-muted); cursor: pointer;
+  white-space: nowrap;
+}
+.results-header__select-all input {
+  width: 15px; height: 15px; cursor: pointer; accent-color: var(--color-accent);
+}
+
+.cart-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.84rem; color: var(--color-text-muted);
+  padding: 5px 10px; border-radius: var(--radius);
+  white-space: nowrap;
+}
+.cart-badge:hover { color: var(--color-accent); text-decoration: none; background: var(--color-accent-light); }
+.cart-badge--active { color: var(--color-accent); font-weight: 600; }
+.cart-badge__count {
+  background: var(--color-accent); color: #fff;
+  font-size: 0.7rem; font-weight: 700; line-height: 1;
+  padding: 3px 6px; border-radius: 999px;
+}
+
 .result-grid--list { grid-template-columns: 1fr; }
 .result-grid--list .result-card { flex-direction: row; }
 .result-grid--list .result-card__thumb {
