@@ -5,8 +5,13 @@ and collect them into a cart, reviewed and downloaded from `mockup/cart.html`.
 Wired into `persons.html`, `places.html`, and — via the shared
 `js/category-catalogue.js` — `bibliotek.html`, `billedkunst.html` and
 `teater-musik.html` (works, including every H2/H3 genre subform: novels,
-paintings, operas, and the rest). See "Not wired in yet" below for what
-remains.
+paintings, operas, and the rest); and, via the shared `js/diary-wire.js`,
+`diaries.html` and the "Dagbogsreferencer" sections embedded on every
+person/place/work detail page (diary pages, as a fourth cart type). Every
+`?reg=…` entity detail page (`persons.html?reg=…`, `place.html`, `work.html`)
+and the generated `diary-pages/*.html` also carry a single-item
+"+ Tilføj til kurv" toggle, via `Cart.mountToggle()` — see "Detail pages: one
+item, no list" below. See "Not wired in yet" below for what remains.
 
 ## What was actually asked for, and the two decisions made to answer it
 
@@ -181,6 +186,17 @@ from any source (including a checkbox ticked individually).
   points at the right detail page (`work.html?reg=…` for a work).
 - Empty-cart state renders correctly with links back to the two list
   pages.
+- Detail-page toggles (`persons.html?reg=…`, `place.html`, `work.html`)
+  add/remove the single entity and repaint "+ Tilføj til kurv" ⇄ "✓ I
+  kurven" live. `diaries.html`'s "Vælg alle" adds all 4,544 generated
+  diary pages (>100 confirm accepted) with correct tri-state/indeterminate
+  behaviour on a single manual check, and unchecking it removes all of
+  them again. Diary-reference checkboxes embedded on a person detail page
+  (`persons.html?reg=…`) actually toggle the cart — the pre-fix version
+  would have rendered inert (see `Cart.wireCheckboxes()` note above).
+  `cart.html` renders all 4,544 diary items grouped under "Dagbogssider",
+  each `.cart-item__rid` a real `<a href="diary-pages/<rid>.html">`
+  (confirmed as an `<a>` element, not the plain-text title next to it).
 
 ## Works: one shared file covers three pages and every genre subform
 
@@ -230,16 +246,88 @@ than trusting that "no console errors" meant "it worked."
   Bringing `romaner.html` onto real data (or retiring it in favour of the
   `bibliotek.html` filter) is a separate, larger job than adding a
   checkbox to markup that doesn't correspond to `WORKS_EXTRA` entities.
-- **`diaries.html` / `entry.html` / `search.html`** — also render
-  `.result-card` grids (diary pages, free-text search hits) but are a
-  different kind of "hit" (a diary page, not a register entity with its
-  own `?reg=` page) and were out of scope for this pass, which was about
-  the three register types. `Cart`'s `type` field is a free string, not
-  hardcoded to `person`/`place`/`work`, so wiring a fourth type later is
-  the same six-step pattern — plus adding its label/href to `cart.html`'s
-  `TYPE_LABEL`/`TYPE_HREF` maps, which an unlisted type survives missing
-  (renders grouped under its raw type string rather than being silently
-  dropped).
+- **`entry.html` / `search.html`** — `entry.html` is a hand-authored static
+  design mockup for a diary-entry page (no data file loaded, same
+  situation `romaner.html` was in before it was retired — see below), and
+  is superseded by the real generated `diary-pages/*.html` template, which
+  now has cart wiring (see "Diary pages" below). `search.html` (free-text
+  search hits) remains out of scope. `Cart`'s `type` field is a free
+  string, not hardcoded to a fixed list, so wiring a further type later is
+  the same pattern used for `diary` below.
+
+## Diary pages (fourth cart type)
+
+`diaries.html`'s own listing, the "Dagbogsreferencer" cards embedded on
+every person/place/work detail page, and the generated
+`diary-pages/*.html` detail template are all rendered by the single shared
+`mockup/js/diary-wire.js` — the same "one shared module, several call
+sites" shape `category-catalogue.js` already used for works. Wiring cart
+support there once covers all of it:
+
+- `cardList()` / `cardGrid()` (used by `refs()`, the embedded
+  "Dagbogsreferencer" sections) and `rowCard()` (used by `list()`,
+  `diaries.html`'s own listing) each gained a `.result-row` +
+  `.result-card__select` checkbox, `type: 'diary'`, `rid` = the Pag id
+  (e.g. `Pag100400`). `.result-card` here is already a `<div>` with an
+  absolute-positioned overlay `<a class="result-card__link">`, not an
+  `<a>` itself (the CSS comment above `.result-row` already anticipated
+  this: "DiaryWire cards use `<div>` wrapper") — the checkbox-as-sibling
+  contract works the same either way.
+- `list()` gained an opt-in `opts.selectAll` (a checkbox element) with the
+  same tri-state / >100-confirm "Vælg alle" logic as
+  `category-catalogue.js` and `persons.html`, wired from `diaries.html`.
+  The embedded `refs()` lists don't take a select-all — they're a
+  secondary view of an already-filtered set (one entity's mentions), not a
+  primary "browse everything" list.
+- `persons.html`'s `Cart.wireCheckboxes()` call had to move: it lived
+  inside the list-view branch only, so it never ran on a `?reg=…` detail
+  view load — meaning the embedded diary-reference checkboxes there would
+  have rendered but done nothing on click. Moved to run unconditionally,
+  right after `Cart.mountBadge()`, before the list/detail branch split.
+  `place.html` and `work.html` didn't load `cart.js` at all before this
+  pass; both needed the include added from scratch.
+- `cart.html`'s `TYPE_LABEL`/`TYPE_HREF` gained a `diary` entry and the
+  group order gained a fourth slot (`person, work, place, diary` — "Hvem ·
+  Hvad · Hvor · Hvornår", the site's existing four-way ordering
+  convention). `TYPE_HREF` had to become a map of functions rather than
+  flat prefix strings once `diary` joined it: the three register types are
+  `…?reg=<rid>` query-param views, but diary pages are static files at
+  `diary-pages/<rid>.html` — one prefix-string shape couldn't express both.
+
+## Detail pages: one item, no list
+
+The original wiring only put checkboxes on *list* pages. A reader on a
+single entity's own page (`persons.html?reg=…`, `place.html`, `work.html`,
+`diary-pages/*.html`) had no way to add just that one item short of
+navigating back to a list and finding it again. `Cart.mountToggle(el,
+type, rid, label)` (`js/cart.js`) mirrors `mountBadge`'s self-painting
+pattern: fills `el` with a "+ Tilføj til kurv" / "✓ I kurven" button that
+calls `Cart.toggle()` and repaints itself on every cart change. Mounted
+into a `#js-cart-toggle` div sitting under the hero chips on all four
+detail-page shapes; styled once as `.cart-toggle-btn` in `style.css`
+rather than per-page, since it's the same button everywhere.
+
+The generated `diary-pages/*.html` template
+(`scripts/build_mockup/build_diary_pages.py`) needed the same
+`Cart.mountBadge()` / `Cart.mountToggle()` call baked into its Python
+f-string output. Values are embedded via `json.dumps()` rather than direct
+f-string interpolation — it produces a correctly quoted-and-escaped JS
+string literal (handles quotes, backslashes, non-ASCII) with no risk of a
+diary heading like `3. januar 1864` — or a future one containing an
+apostrophe or backslash — breaking out of the string it's embedded in.
+
+## Reg number as the printed/PDF citation link
+
+`cart.html`'s rows used to link the *title* and show the Reg/Pag id as
+plain unlinked text next to it. Registry citations reference an entry by
+its id, not its title, so that was backwards for a printed/PDF list meant
+to be cited from: `itemHtml()` now renders the title as plain text
+(`.cart-item__title`, a `<span>`) and the id as the link
+(`.cart-item__rid`, now an `<a>`). No `@media print` change was needed for
+the link to survive into a saved PDF — Chrome's print-to-PDF already
+preserves any `<a href>` present in the printed DOM as a clickable link;
+the only change needed was making sure the *id* was the element carrying
+the `href`.
 
 ## Known failure mode: one bad entry must not blank the whole list
 

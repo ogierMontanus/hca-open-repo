@@ -78,6 +78,7 @@
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
+    <span id="js-cart-badge"></span>
   </div>
 </header>
 
@@ -213,6 +214,12 @@
         <div>
           <div class="results-header">
             <span class="results-count" id="diary-count"><strong>2.177</strong> dagbogssider</span>
+            <!-- Selects/deselects every currently FILTERED diary page (not just
+                 the rendered page) — see js/cart.js and js/diary-wire.js's
+                 list() opts.selectAll wiring. -->
+            <label class="results-header__select-all">
+              <input type="checkbox" id="js-diary-select-all"> Vælg alle
+            </label>
             <div class="layout-switcher">
               <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
               <button class="layout-switcher__btn" data-layout="calendar">Kalender</button>
@@ -441,10 +448,15 @@
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="data/timeline-index.js" onerror="void 0"></script>
+<script src="js/cart.js"></script>
 <script src="js/diary-wire.js"></script>
 <script src="js/timeline-wire.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Cart !== 'undefined') {
+    Cart.mountBadge(document.getElementById('js-cart-badge'));
+    Cart.wireCheckboxes();
+  }
   var grid     = document.getElementById('diary-results');
   var tlPane   = document.getElementById('timeline-results');
   var moreBtn  = document.getElementById('diary-more');
@@ -606,18 +618,22 @@ document.addEventListener('DOMContentLoaded', function () {
           var heading = DiaryWire.heading(entry);
           var sub = (heading === vp) ? entry.h : vp + ' · ' + entry.h;
 
-          var card = document.createElement('div');
-          card.className = 'result-card';
-          card.innerHTML =
+          var row = document.createElement('div');
+          row.className = 'result-row';
+          row.innerHTML =
+            '<label class="result-card__select"><input type="checkbox" ' +
+            'data-cart-type="diary" data-cart-rid="' + entry.h + '" data-cart-label="' + heading + '"></label>' +
+            '<div class="result-card">' +
             '<a href="diary-pages/' + entry.h + '.html" class="result-card__link" title="Gå til ' + entry.h + '"></a>' +
             '<div class="result-card__body">' +
             '<div class="result-card__title">' + heading + '</div>' +
             '<div class="result-card__meta">' + sub + '</div>' +
-            '<div class="result-card__chips">' + chipMarkup + '</div></div>';
-          resultsDiv.appendChild(card);
+            '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
+          resultsDiv.appendChild(row);
         });
 
         calendarEntries.appendChild(resultsDiv);
+        if (typeof Cart !== 'undefined') Cart.syncCheckboxes(resultsDiv);
       }
     }
   }
@@ -669,6 +685,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var diaryCtrl = DiaryWire.list(grid, {
     pageSize: 60,
     moreBtn: moreBtn,
+    selectAll: document.getElementById('js-diary-select-all'),
     onCount: function (shown, total) {
       var yearActive = yearSel && yearSel.value;
       var modeNote = yearActive
