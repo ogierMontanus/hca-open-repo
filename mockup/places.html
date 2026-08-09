@@ -15,6 +15,9 @@
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
+    <!-- Filled by Cart.mountBadge() — js/cart.js. Empty (hidden) markup here
+         degrades to nothing if cart.js fails to load. -->
+    <span id="js-cart-badge"></span>
   </div>
 </header>
 
@@ -140,6 +143,11 @@
         <div>
           <div class="results-header">
             <span class="results-count"><strong>2.508</strong> steder i Stedregister</span>
+            <!-- Selects/deselects every currently FILTERED place (not just
+                 the rendered page) — see js/cart.js and the wiring below. -->
+            <label class="results-header__select-all">
+              <input type="checkbox" id="js-select-all"> Vælg alle
+            </label>
           </div>
 
           <!-- Nation cross-link — filled by js/nation-link.js when the Land
@@ -243,9 +251,12 @@
 <script src="data/nation-index.js" onerror="void 0"></script>
 <script src="js/facet-engine.js"></script>
 <script src="js/nation-link.js"></script>
+<script src="js/cart.js"></script>
 <script>
 (function () {
   'use strict';
+  if (typeof Cart !== 'undefined') Cart.mountBadge(document.getElementById('js-cart-badge'));
+
   var grid = document.getElementById('js-place-results');
   if (!grid || typeof PLACES_EXTRA === 'undefined') return;
 
@@ -321,12 +332,16 @@
 
   function card(p) {
     var meta = 'STED-REGISTER' + (p.desc ? ' · ' + esc(p.desc) : '');
-    return '<a href="place.html?reg=' + esc(p.rid) + '" class="result-card" ' +
+    return '<div class="result-row">' +
+      '<label class="result-card__select"><input type="checkbox" ' +
+      'data-cart-type="place" data-cart-rid="' + esc(p.rid) + '" data-cart-label="' + esc(p.label) + '"></label>' +
+      '<a href="place.html?reg=' + esc(p.rid) + '" class="result-card" ' +
       'style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">' +
       '<div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">' + esc(p.rid) + '</div>' +
       '<div style="flex:1"><div class="result-card__title" style="font-size:0.95rem">' + esc(p.label) + '</div>' +
       '<div class="result-card__meta">' + meta + '</div></div>' +
-      '<div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">' + p.refs + ' refs.</div></a>';
+      '<div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">' + p.refs + ' refs.</div></a>' +
+      '</div>';
   }
 
   function renderMore() {
@@ -334,7 +349,37 @@
     grid.insertAdjacentHTML('beforeend', next.map(card).join(''));
     shown += next.length;
     moreBtn.style.display = shown < filtered.length ? '' : 'none';
+    if (typeof Cart !== 'undefined') Cart.syncCheckboxes(grid);
   }
+
+  // The "Vælg alle" checkbox always means "every currently FILTERED place",
+  // not just the ones rendered so far. Its own tri-state (checked / unchecked
+  // / indeterminate) reflects how much of that filtered set is in the cart.
+  var selectAllCb = document.getElementById('js-select-all');
+  function updateSelectAll() {
+    if (!selectAllCb || typeof Cart === 'undefined') return;
+    if (!filtered.length) { selectAllCb.checked = false; selectAllCb.indeterminate = false; return; }
+    var inCount = 0;
+    for (var i = 0; i < filtered.length; i++) if (Cart.has('place', filtered[i].rid)) inCount++;
+    selectAllCb.checked = inCount === filtered.length;
+    selectAllCb.indeterminate = inCount > 0 && inCount < filtered.length;
+  }
+  if (selectAllCb) {
+    selectAllCb.addEventListener('change', function () {
+      if (selectAllCb.checked) {
+        if (filtered.length > 100 &&
+            !confirm('Tilføj alle ' + filtered.length.toLocaleString('da-DK') + ' steder til kurven?')) {
+          selectAllCb.checked = false;
+          return;
+        }
+        Cart.addMany(filtered.map(function (p) { return { type: 'place', rid: p.rid, label: p.label }; }));
+      } else {
+        Cart.removeMany(filtered.map(function (p) { return { type: 'place', rid: p.rid }; }));
+      }
+      Cart.syncCheckboxes(grid);
+    });
+  }
+  if (typeof Cart !== 'undefined') { Cart.wireCheckboxes(); Cart.subscribe(updateSelectAll); }
 
   function emptyStateHtml() {
     return '<div class="empty-state" style="padding:var(--sp7) var(--sp5);text-align:center;' +
@@ -368,10 +413,12 @@
       moreBtn.style.display = 'none';
       var resetBtn = document.getElementById('js-empty-reset');
       if (resetBtn) resetBtn.addEventListener('click', resetAll);
+      updateSelectAll();
       return;
     }
     renderMore();
     updateLetterAvailability();
+    updateSelectAll();
   }
 
   // Offer the nation.html mashup once the reader has narrowed Land to a
