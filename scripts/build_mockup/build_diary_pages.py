@@ -18,6 +18,7 @@ Run from the repo root:
 
 import csv
 import html
+import json
 import os
 import re
 import sys
@@ -149,6 +150,10 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
     pid = page_id(vol, page)
     date_str = date_range(diary_rows)
     has_text = bool(diary_rows)
+    # Same heading rule as js/diary-wire.js's headingFor(): the date wins
+    # when there is one, otherwise the volume/page reference. Used as the
+    # cart label — see Cart.mountToggle() call near the closing </body>.
+    heading_str = date_str if date_str != "—" else f"Bind {vol}, s. {page}"
 
     # Group entities by h1 category, deduplicate preserving order
     by_h1 = defaultdict(list)
@@ -218,6 +223,13 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 
     title_str = f"Bind {html.escape(vol)}, side {html.escape(page)} — {html.escape(date_str)}"
 
+    # json.dumps rather than an f-string interpolation here: it produces a
+    # properly quoted-and-escaped JS string literal (backslashes, quotes,
+    # non-ASCII) with no risk of the value breaking out of the '...' it's
+    # embedded in below, unlike hand-escaping pid/heading_str ourselves.
+    pid_js = json.dumps(pid)
+    heading_js = json.dumps(heading_str)
+
     return f'''<!DOCTYPE html>
 <html lang="da">
 <head>
@@ -235,6 +247,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
+    <span id="js-cart-badge"></span>
   </div>
 </header>
 
@@ -251,6 +264,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
       </nav>
       <h1>Bind {html.escape(vol)}, side {html.escape(page)}</h1>
       <p>Dagbogsside · Det Kongelige Bibliotek</p>
+      <div id="js-cart-toggle" style="margin-top:8px"></div>
       <div class="page-hero__meta">
         <span>{html.escape(date_str)}</span>
         <span>Bind {html.escape(vol)} · Side {html.escape(page)}</span>
@@ -318,6 +332,13 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
   </div>
 </footer>
 
+<script src="../js/cart.js"></script>
+<script>
+if (typeof Cart !== 'undefined') {{
+  Cart.mountBadge(document.getElementById('js-cart-badge'));
+  Cart.mountToggle(document.getElementById('js-cart-toggle'), 'diary', {pid_js}, {heading_js});
+}}
+</script>
 <script src="../js/nav.js"></script>
 </body>
 </html>

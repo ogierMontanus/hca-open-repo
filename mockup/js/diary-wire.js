@@ -40,6 +40,16 @@ window.DiaryWire = (function () {
     return _chips[pag] || [];
   }
 
+  // Checkbox markup for a diary card, added as a sibling of .result-card
+  // (never nested inside its link) — same .result-row / .result-card__select
+  // contract as every other cart-able list on the site. Always emitted; if
+  // js/cart.js hasn't loaded on this page the box is just inert markup, the
+  // same degrade-to-nothing the rest of the cart wiring already relies on.
+  function selectBox(rid, labelHtml) {
+    return '<label class="result-card__select"><input type="checkbox" ' +
+      'data-cart-type="diary" data-cart-rid="' + esc(rid) + '" data-cart-label="' + labelHtml + '"></label>';
+  }
+
   function chipHtml(c) {
     var cls = c.t === 'place' ? 'chip chip--place'
             : c.t === 'person' ? 'chip chip--person' : 'chip';
@@ -122,12 +132,14 @@ window.DiaryWire = (function () {
       var sub = (heading === vp) ? esc(pag) : vp + ' &nbsp;·&nbsp; ' + esc(pag);
       var chipMarkup = (chips || []).slice(0, 3).map(chipHtml).join('');
       var href = PAGES_DIR + esc(pag) + '.html';
-      return '<div class="result-card">' +
+      return '<div class="result-row">' + selectBox(pag, heading) +
+        '<div class="result-card">' +
         '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(pag) + '"></a>' +
         '<div class="result-card__body">' +
         '<div class="result-card__title">' + heading + '</div>' +
         '<div class="result-card__meta">' + sub + '</div>' +
-        '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
+        '<div class="result-card__chips">' + chipMarkup + '</div></div></div>' +
+        '</div>';
     }
 
     /* Grid card: compact — heading on top, place below. No chips, so the
@@ -138,12 +150,14 @@ window.DiaryWire = (function () {
       var vp = titleFor(m);
       var sub = m.pl ? esc(m.pl) : (heading === vp ? '' : vp);
       var href = PAGES_DIR + esc(pag) + '.html';
-      return '<div class="result-card result-card--compact">' +
+      return '<div class="result-row">' + selectBox(pag, heading) +
+        '<div class="result-card result-card--compact">' +
         '<a href="' + href + '" class="result-card__link" title="' + esc(m.d ? formatDate(m.d) : pag) + '"></a>' +
         '<div class="result-card__body">' +
         '<div class="result-card__title">' + heading + '</div>' +
         '<div class="result-card__meta">' + sub + '</div>' +
-        '</div></div>';
+        '</div></div>' +
+        '</div>';
     }
 
     function applyContainerStyle() {
@@ -159,6 +173,7 @@ window.DiaryWire = (function () {
       }).join('');
       container.innerHTML = html;
       shown = Math.min(limit, rec.e.length);
+      if (typeof Cart !== 'undefined') Cart.syncCheckboxes(container);
       if (opts.onCount) opts.onCount(shown, rec.n, rec.e.length);
       if (opts.moreBtn) {
         opts.moreBtn.style.display = shown < rec.e.length ? '' : 'none';
@@ -215,12 +230,44 @@ window.DiaryWire = (function () {
       var heading = headingFor(m);
       var vp = titleFor(m);
       var sub = (heading === vp) ? esc(row.h) : vp + ' &nbsp;·&nbsp; ' + esc(row.h);
-      return '<div class="result-card"' + highlight + '>' +
+      return '<div class="result-row">' + selectBox(row.h, heading) +
+        '<div class="result-card"' + highlight + '>' +
         '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(row.h) + '"></a>' +
         '<div class="result-card__body">' +
         '<div class="result-card__title">' + heading + '</div>' +
         '<div class="result-card__meta">' + sub + '</div>' +
-        '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
+        '<div class="result-card__chips">' + chipMarkup + '</div></div></div>' +
+        '</div>';
+    }
+
+    // "Vælg alle" means every currently FILTERED page, not just the ones
+    // paginated onto the screen — same convention as every other cart-able
+    // list (persons.html, category-catalogue.js). Opt-in via opts.selectAll
+    // so pages that don't render the checkbox (the embedded refs() lists)
+    // don't pay for wiring they don't use.
+    function updateSelectAll() {
+      if (!opts.selectAll || typeof Cart === 'undefined') return;
+      if (!filtered.length) { opts.selectAll.checked = false; opts.selectAll.indeterminate = false; return; }
+      var inCount = 0;
+      for (var i = 0; i < filtered.length; i++) if (Cart.has('diary', filtered[i].h)) inCount++;
+      opts.selectAll.checked = inCount === filtered.length;
+      opts.selectAll.indeterminate = inCount > 0 && inCount < filtered.length;
+    }
+    if (opts.selectAll) {
+      opts.selectAll.addEventListener('change', function () {
+        if (opts.selectAll.checked) {
+          if (filtered.length > 100 &&
+              !confirm('Tilføj alle ' + filtered.length.toLocaleString('da-DK') + ' dagbogssider til kurven?')) {
+            opts.selectAll.checked = false;
+            return;
+          }
+          Cart.addMany(filtered.map(function (r) { return { type: 'diary', rid: r.h, label: headingFor(r) }; }));
+        } else {
+          Cart.removeMany(filtered.map(function (r) { return { type: 'diary', rid: r.h }; }));
+        }
+        Cart.syncCheckboxes(container);
+      });
+      if (typeof Cart !== 'undefined') Cart.subscribe(updateSelectAll);
     }
 
     function render(reset) {
@@ -228,10 +275,12 @@ window.DiaryWire = (function () {
       var next = filtered.slice(shown, shown + step);
       container.insertAdjacentHTML('beforeend', next.map(rowCard).join(''));
       shown += next.length;
+      if (typeof Cart !== 'undefined') Cart.syncCheckboxes(container);
       if (opts.onCount) opts.onCount(shown, filtered.length, DIARY_INDEX.length);
       if (opts.moreBtn) {
         opts.moreBtn.style.display = shown < filtered.length ? '' : 'none';
       }
+      updateSelectAll();
     }
 
     function applyFilter(q, year) {

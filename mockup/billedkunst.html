@@ -109,21 +109,26 @@
             </div>
           </div>
 
-          <!-- Kunstner — data-driven from WORKS_EXTRA.author for this wing.
-               Top 8 by number of works, excluding the BILLEDKUNST fallthrough.
-               Each box filters the catalogue to that artist's works (data-author). -->
+          <!-- Kunstner — data-driven from WORKS_EXTRA.author for this wing,
+               same data-facet-source="author" mechanism as bibliotek.html's
+               Forfatter facet and teater-musik.html's Komponist/Forfatter
+               facet (populated by category-catalogue.js, ranked by works
+               descending with surname as tiebreak — see CLAUDE.md's
+               efternavn-sorting rule).
+
+               Coverage: build_works_extra.py's author_from() recovers an
+               attribution from the title's own "(Artist, Collection, City)"
+               parenthetical for BILLEDKUNST works with no curated
+               person_derived — 791 of 941 works (84%), up from 269 (29%)
+               before that extraction existed. The remaining 16% is titles
+               with no parseable attribution at all (bare collection/
+               institution entries under "Museer og Samlinger", or a
+               parenthetical this heuristic can't confidently resolve to a
+               name — see the extraction function's docstring for exactly
+               what it does and doesn't attempt). -->
           <div class="facet-group">
             <div class="facet-group__header">Kunstner <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" data-author="H. V. Bissen"><span class="facet-item__label">H. V. Bissen</span><span class="facet-item__count">14</span></label>
-              <label class="facet-item"><input type="checkbox" data-author="J. N. Byström"><span class="facet-item__label">J. N. Byström</span><span class="facet-item__count">6</span></label>
-              <label class="facet-item"><input type="checkbox" data-author="L. Bartolini"><span class="facet-item__label">L. Bartolini</span><span class="facet-item__count">6</span></label>
-              <label class="facet-item"><input type="checkbox" data-author="P. Veronese"><span class="facet-item__label">P. Veronese</span><span class="facet-item__count">5</span></label>
-              <label class="facet-item"><input type="checkbox" data-author="W. W. Story"><span class="facet-item__label">W. W. Story</span><span class="facet-item__count">5</span></label>
-              <label class="facet-item"><input type="checkbox" data-author="D. C. Blunck"><span class="facet-item__label">D. C. Blunck</span><span class="facet-item__count">4</span></label>
-              <label class="facet-item"><input type="checkbox" data-author="W. Marstrand"><span class="facet-item__label">W. Marstrand</span><span class="facet-item__count">3</span></label>
-              <label class="facet-item"><input type="checkbox" data-author="H. K. A. Mücke"><span class="facet-item__label">H. K. A. Mücke</span><span class="facet-item__count">3</span></label>
-            </div>
+            <div class="facet-group__body" data-facet-source="author"></div>
           </div>
 
           <!-- Gallerier — replaces the static "Omtalte steder" facet.

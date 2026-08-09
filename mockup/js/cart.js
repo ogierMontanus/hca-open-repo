@@ -48,6 +48,9 @@
  *                                  from current cart state — call after any
  *                                  render that inserts fresh cards
  *   mountBadge(el)                fills el with a live "Kurv (N)" link
+ *   mountToggle(el, type, rid,    fills el with a live "+ Tilføj til kurv" /
+ *               label)             "✓ I kurven" button — for detail pages
+ *                                   with one entity and no result list
  *
  * ── Markup contract ─────────────────────────────────────────────────────
  *   <div class="result-row">
@@ -198,10 +201,30 @@ window.Cart = (function () {
     paint();
   }
 
+  // A single-entity "add to cart" affordance for detail pages that show one
+  // item, not a list — persons.html?reg=…, place.html, work.html, and the
+  // generated diary-pages/*.html — where there is no row of results to put a
+  // checkbox next to. Mirrors mountBadge's self-painting pattern.
+  function mountToggle(el, type, rid, label) {
+    if (!el) return;
+    function paint() {
+      var inCart = has(type, rid);
+      el.innerHTML = '<button type="button" class="cart-toggle-btn' +
+        (inCart ? ' cart-toggle-btn--active' : '') + '">' +
+        (inCart ? '✓ I kurven' : '+ Tilføj til kurv') + '</button>';
+      el.querySelector('button').addEventListener('click', function () {
+        toggle(type, rid, label);
+      });
+    }
+    subscribe(paint);
+    paint();
+  }
+
   return {
     add: add, remove: remove, toggle: toggle, has: has, all: all, count: count, clear: clear,
     addMany: addMany, removeMany: removeMany, subscribe: subscribe,
     wireCheckboxes: wireCheckboxes, syncCheckboxes: syncCheckboxes, mountBadge: mountBadge,
+    mountToggle: mountToggle,
     storageAvailable: !!storage
   };
 })();

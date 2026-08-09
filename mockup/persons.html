@@ -42,6 +42,9 @@
       <h1 id="js-h1">Personregister</h1>
       <p id="js-hero-sub">H1 = PERSON-REGISTER — navne omtalt i H.C. Andersens dagbøger</p>
       <div id="js-hero-chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+      <!-- Detail view only (?reg=…) — filled by Cart.mountToggle(), stays
+           empty on the list view. -->
+      <div id="js-cart-toggle" style="margin-top:8px"></div>
       <div id="js-hero-meta" class="page-hero__meta">
         <span>10.228 registerposter</span>
         <span>39.361 poster i dagbøgerne</span>
@@ -244,7 +247,16 @@
     });
   }
 
-  if (typeof Cart !== 'undefined') Cart.mountBadge(document.getElementById('js-cart-badge'));
+  // wireCheckboxes() registers one delegated document-level listener — it
+  // must run exactly once per page load regardless of which branch below
+  // renders (list view's own .result-card__select boxes, or the detail
+  // view's embedded Dagbogsreferencer cards from diary-wire.js), so it's
+  // called here rather than inside the list-view branch where it used to
+  // live: that left the detail view's diary checkboxes completely unwired.
+  if (typeof Cart !== 'undefined') {
+    Cart.mountBadge(document.getElementById('js-cart-badge'));
+    Cart.wireCheckboxes();
+  }
 
   var urlReg = new URLSearchParams(location.search).get('reg');
 
@@ -302,6 +314,10 @@
     if (!p) {
       mn.innerHTML = '<p style="color:var(--color-text-muted)">Ukendt person: ' + esc(urlReg) + '</p>';
       return;
+    }
+
+    if (typeof Cart !== 'undefined') {
+      Cart.mountToggle(document.getElementById('js-cart-toggle'), 'person', urlReg, p.label);
     }
 
     // Sidebar
@@ -553,7 +569,9 @@
       Cart.syncCheckboxes(grid);
     });
   }
-  if (typeof Cart !== 'undefined') { Cart.wireCheckboxes(); Cart.subscribe(updateSelectAll); }
+  // wireCheckboxes() already ran once, above — only the subscription is
+  // list-view-specific here.
+  if (typeof Cart !== 'undefined') Cart.subscribe(updateSelectAll);
 
   function emptyStateHtml() {
     return '<div class="empty-state" style="padding:var(--sp7) var(--sp5);text-align:center;' +

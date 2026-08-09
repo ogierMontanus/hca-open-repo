@@ -19,9 +19,13 @@
       background: var(--color-surface);
       margin-bottom: var(--sp2);
     }
-    .cart-item__label { flex: 1; font-size: 0.9rem; }
-    .cart-item__label a { color: var(--color-text); font-weight: 600; }
-    .cart-item__rid { font-family: monospace; font-size: 0.72rem; color: var(--color-text-muted); }
+    .cart-item__label { flex: 1; }
+    .cart-item__title { font-size: 0.9rem; font-weight: 600; }
+    .cart-item__rid {
+      font-family: monospace; font-size: 0.72rem; color: var(--color-text-muted);
+      text-decoration: none; border-bottom: 1px dotted var(--color-text-muted);
+    }
+    .cart-item__rid:hover { color: var(--color-accent); border-bottom-color: var(--color-accent); }
     .cart-item__remove {
       background: none; border: 1px solid var(--color-border); border-radius: var(--radius);
       color: var(--color-text-muted); font-size: 0.78rem; padding: 4px 10px; cursor: pointer;
@@ -108,7 +112,7 @@
         <span class="breadcrumb__current">Kurv</span>
       </nav>
       <h1>Kurv</h1>
-      <p>Poster valgt fra Personregister og Stedregister, klar til udskrift eller PDF.</p>
+      <p>Poster valgt fra Person-, Værk-, Sted- og Dagbogsregistret, klar til udskrift eller PDF.</p>
     </div>
   </div>
 
@@ -165,17 +169,46 @@
   }
   Cart.mountBadge(document.getElementById('js-cart-badge'));
 
-  var TYPE_LABEL = { person: 'Personer', place: 'Steder', work: 'Værker' };
-  var TYPE_HREF = { person: 'persons.html?reg=', place: 'place.html?reg=', work: 'work.html?reg=' };
+  var TYPE_LABEL = { person: 'Personer', work: 'Værker', place: 'Steder', diary: 'Dagbogssider' };
+  // Per-type href builders, not a flat prefix: diary pages are static files
+  // (diary-pages/<rid>.html) while the register types are query-param
+  // detail views (…?reg=<rid>) — one prefix string couldn't express both.
+  var TYPE_HREF = {
+    person: function (rid) { return 'persons.html?reg=' + encodeURIComponent(rid); },
+    place:  function (rid) { return 'place.html?reg=' + encodeURIComponent(rid); },
+    work:   function (rid) { return 'work.html?reg=' + encodeURIComponent(rid); },
+    diary:  function (rid) { return 'diary-pages/' + encodeURIComponent(rid) + '.html'; }
+  };
 
   function itemHtml(item) {
-    var href = (TYPE_HREF[item.type] || '#') + encodeURIComponent(item.rid);
-    return '<div class="cart-item">' +
-      '<div class="cart-item__label"><a href="' + esc(href) + '">' + esc(item.label) + '</a> ' +
-      '<span class="cart-item__rid">' + esc(item.rid) + '</span></div>' +
-      '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
-      '" data-rid="' + esc(item.rid) + '">Fjern</button>' +
-      '</div>';
+    // One malformed rid (e.g. an unpaired surrogate reaching encodeURIComponent
+    // as a URIError) must not blank the whole list — render this row as a
+    // plain, unlinked fallback instead of letting the exception escape and
+    // abort the body.innerHTML assignment below (the toolbar count is set
+    // first, so a mid-loop throw used to leave a "229 poster valgt" count
+    // sitting above an empty list with no visible reason why).
+    try {
+      var hrefFn = TYPE_HREF[item.type];
+      var href = hrefFn ? hrefFn(item.rid) : ('#' + encodeURIComponent(item.rid));
+      // The title is plain text; the Reg/Pag number is the clickable
+      // reference — printed/PDF citations of a register entry cite it by
+      // that id, so the id is what needs to survive as a live link.
+      return '<div class="cart-item">' +
+        '<div class="cart-item__label">' +
+        '<span class="cart-item__title">' + esc(item.label) + '</span> ' +
+        '<a class="cart-item__rid" href="' + esc(href) + '">' + esc(item.rid) + '</a>' +
+        '</div>' +
+        '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
+        '" data-rid="' + esc(item.rid) + '">Fjern</button>' +
+        '</div>';
+    } catch (e) {
+      return '<div class="cart-item">' +
+        '<div class="cart-item__label">' + esc(item.label || item.rid || '?') +
+        ' <span class="cart-item__rid">' + esc(item.rid) + ' — kunne ikke vises korrekt</span></div>' +
+        '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
+        '" data-rid="' + esc(item.rid) + '">Fjern</button>' +
+        '</div>';
+    }
   }
 
   function render() {
@@ -189,7 +222,8 @@
       toolbar.style.display = 'none';
       pdfNote.style.display = 'none';
       body.innerHTML = '<div class="cart-empty">Kurven er tom. Afkryds poster på ' +
-        '<a href="persons.html">Personregister</a> eller <a href="places.html">Stedregister</a> for at tilføje dem.</div>';
+        '<a href="persons.html">Personregister</a>, <a href="bibliotek.html">Værkregister</a>, ' +
+        '<a href="places.html">Stedregister</a> eller <a href="diaries.html">Dagbogsregister</a> for at tilføje dem.</div>';
       return;
     }
 
@@ -203,19 +237,28 @@
     // "Personer" then "Steder" regardless of selection order.
     var groups = {};
     items.forEach(function (it) { (groups[it.type] = groups[it.type] || []).push(it); });
-    // Hvem · Hvad · Hvor — same fixed order the rest of the site uses
-    // (the side-acc accordion, nation.html) for the three entity types.
-    var order = ['person', 'work', 'place'].filter(function (t) { return groups[t]; });
+    // Hvem · Hvad · Hvor · Hvornår — same fixed order the rest of the site
+    // uses (the side-acc accordion, nation.html) for the four entity types.
+    var order = ['person', 'work', 'place', 'diary'].filter(function (t) { return groups[t]; });
     // Any future type (works, diary pages, …) not in TYPE_LABEL still renders,
     // grouped under its raw type string, rather than being silently dropped.
     Object.keys(groups).forEach(function (t) { if (order.indexOf(t) === -1) order.push(t); });
 
-    body.innerHTML = order.map(function (type) {
-      var list = groups[type];
-      return '<div class="cart-group"><div class="cart-group__title">' +
-        esc(TYPE_LABEL[type] || type) + ' <span style="font-weight:400;color:var(--color-text-muted);font-size:0.8rem">(' +
-        list.length + ')</span></div>' + list.map(itemHtml).join('') + '</div>';
-    }).join('');
+    // itemHtml() already guards per-item, but wrap the whole build as a second
+    // net: better a visible error under an accurate count than a silent blank
+    // list — the toolbar/count text above is already painted by this point.
+    try {
+      body.innerHTML = order.map(function (type) {
+        var list = groups[type];
+        return '<div class="cart-group"><div class="cart-group__title">' +
+          esc(TYPE_LABEL[type] || type) + ' <span style="font-weight:400;color:var(--color-text-muted);font-size:0.8rem">(' +
+          list.length + ')</span></div>' + list.map(itemHtml).join('') + '</div>';
+      }).join('');
+    } catch (e) {
+      body.innerHTML = '<div class="cart-empty">Kurven indeholder ' + items.length +
+        ' post(er), men de kunne ikke vises (' + esc(String(e && e.message || e)) +
+        '). Prøv »Ryd kurv« og vælg posterne igen, eller rapportér fejlen.</div>';
+    }
   }
 
   document.getElementById('js-cart-body').addEventListener('click', function (ev) {
