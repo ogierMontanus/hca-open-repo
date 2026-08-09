@@ -165,8 +165,8 @@
   }
   Cart.mountBadge(document.getElementById('js-cart-badge'));
 
-  var TYPE_LABEL = { person: 'Personer', place: 'Steder' };
-  var TYPE_HREF = { person: 'persons.html?reg=', place: 'place.html?reg=' };
+  var TYPE_LABEL = { person: 'Personer', place: 'Steder', work: 'Værker' };
+  var TYPE_HREF = { person: 'persons.html?reg=', place: 'place.html?reg=', work: 'work.html?reg=' };
 
   function itemHtml(item) {
     var href = (TYPE_HREF[item.type] || '#') + encodeURIComponent(item.rid);
@@ -203,7 +203,9 @@
     // "Personer" then "Steder" regardless of selection order.
     var groups = {};
     items.forEach(function (it) { (groups[it.type] = groups[it.type] || []).push(it); });
-    var order = ['person', 'place'].filter(function (t) { return groups[t]; });
+    // Hvem · Hvad · Hvor — same fixed order the rest of the site uses
+    // (the side-acc accordion, nation.html) for the three entity types.
+    var order = ['person', 'work', 'place'].filter(function (t) { return groups[t]; });
     // Any future type (works, diary pages, …) not in TYPE_LABEL still renders,
     // grouped under its raw type string, rather than being silently dropped.
     Object.keys(groups).forEach(function (t) { if (order.indexOf(t) === -1) order.push(t); });

@@ -2,8 +2,11 @@
 
 `mockup/js/cart.js` lets a reader tick individual entries on a list page
 and collect them into a cart, reviewed and downloaded from `mockup/cart.html`.
-Wired into `persons.html` and `places.html` today; see "Extending to more
-pages" below for the rest of the mockup.
+Wired into `persons.html`, `places.html`, and — via the shared
+`js/category-catalogue.js` — `bibliotek.html`, `billedkunst.html` and
+`teater-musik.html` (works, including every H2/H3 genre subform: novels,
+paintings, operas, and the rest). See "Not wired in yet" below for what
+remains.
 
 ## What was actually asked for, and the two decisions made to answer it
 
@@ -163,22 +166,77 @@ from any source (including a checkbox ticked individually).
   cart.html in one tab; a **second tab** starts with an empty cart
   (expected `sessionStorage` tab-scoping, not a bug).
 - "Vælg alle" adds every filtered entry (not just the rendered page);
-  the >100 confirmation, when declined, leaves everything unchanged.
+  the >100 confirmation, when declined, leaves everything unchanged —
+  re-verified specifically on billedkunst.html with an H3 facet active
+  (587 works, real accept/decline dialog handling, not just the
+  single-page-of-persons case).
+- Cart accumulates correctly across all five wired pages in one tab —
+  checked entries on bibliotek.html, billedkunst.html and
+  teater-musik.html in sequence and watched the badge climb 2 → 4 → 6.
 - `cart.html` groups by type, lets individual items be removed, and its
   "Download som PDF" button calls `window.print()` (verified by
-  stubbing `window.print` and asserting it was invoked).
+  stubbing `window.print` and asserting it was invoked). With one of
+  each type in the cart, groups render in the correct fixed order
+  ("Personer (1)", "Værker (587)", "Steder (1)") and each item's href
+  points at the right detail page (`work.html?reg=…` for a work).
 - Empty-cart state renders correctly with links back to the two list
   pages.
 
-## Extending to more pages
+## Works: one shared file covers three pages and every genre subform
 
-`Cart` is generic — `type` is a free string, not hardcoded to
-`person`/`place`. Wiring a third page (works.html, diaries.html, the
-category-catalogue.js–driven wing pages) is the same six steps as
-above, plus adding that type's label/href to `cart.html`'s
-`TYPE_LABEL`/`TYPE_HREF` maps (an unlisted type still renders, grouped
-under its raw type string, rather than being silently dropped — so
-forgetting this step degrades gracefully instead of breaking). Not
-done yet, matching the request's own "at first" scoping to a first
-working pair of pages rather than a mechanical sweep of every list view
-in the mockup.
+`bibliotek.html`, `billedkunst.html` and `teater-musik.html` don't each
+build their own card-rendering logic the way `persons.html`/`places.html`
+do — they share `mockup/js/category-catalogue.js`, one module reading
+`WORKS_EXTRA` and filtering by the H2/H3 facets each page declares.
+Wiring the cart into that ONE file (checkbox in `card()`, `Vælg alle`
+against the page's own `filtered` array, `Cart.mountBadge()`) put it on
+all three at once, which is exactly what "works incl. its genre
+subitems" needs: `bibliotek.html`'s H3 facets are the individual genres
+(Eventyr, Digte, *Romaner og Noveller*, Skuespiltekster, Faglitteratur,
+…), `billedkunst.html`'s are *Malerier og Tegninger*, Skulptur, Museer,
+and `teater-musik.html`'s are Operaer, Skuespil, Balletter,
+Vokal-/Instrumentalmusik — the checkbox and `Vælg alle` work identically
+across every one of them, filtered or not, because they're all the same
+`filtered` array underneath.
+
+`cart.html` groups a `work` entry under **Værker**, in the same
+Hvem·Hvad·Hvor order the rest of the site uses for the three entity
+types (side-acc accordion, `nation.html`).
+
+One real bug this surfaced: `Cart.mountBadge()` is called from inside
+`category-catalogue.js` itself (unlike `persons.html`/`places.html`,
+where the equivalent call sits in the page's *own* inline script,
+already after every `<script src>` tag). `cart.js` has to be loaded
+**before** `category-catalogue.js` for that call to see `window.Cart`
+as anything but `undefined` — got the include order backwards on the
+first pass, and the failure was silent (the `typeof Cart !== 'undefined'`
+guard just skipped the mount, no error, badge quietly stayed empty).
+Caught by checking the badge's actual `outerHTML` after load rather
+than trusting that "no console errors" meant "it worked."
+
+## Not wired in yet
+
+- **`romaner.html`** — looked like an obvious fourth target (it's
+  linked from `bibliotek.html` as "Åbn Romaner-register →" for the full
+  Romaner og Noveller listing) but turned out not to be one: it loads no
+  `WORKS_EXTRA` or other data file at all — no `<script src="data/…">`
+  anywhere in it. Its author-tabbed sections (H.C. Andersen / Andre
+  Forfattere) and every entry in them are hand-authored static HTML, not
+  generated from the register. Adding checkboxes would mean hand-adding
+  correct `data-cart-rid` values to a page that isn't a real "list of
+  hits" in the sense the other pages are — it's a design mockup for a
+  page concept, and the actual Romaner og Noveller data already has a
+  wired, real, data-driven listing: `bibliotek.html` filtered to that H3.
+  Bringing `romaner.html` onto real data (or retiring it in favour of the
+  `bibliotek.html` filter) is a separate, larger job than adding a
+  checkbox to markup that doesn't correspond to `WORKS_EXTRA` entities.
+- **`diaries.html` / `entry.html` / `search.html`** — also render
+  `.result-card` grids (diary pages, free-text search hits) but are a
+  different kind of "hit" (a diary page, not a register entity with its
+  own `?reg=` page) and were out of scope for this pass, which was about
+  the three register types. `Cart`'s `type` field is a free string, not
+  hardcoded to `person`/`place`/`work`, so wiring a fourth type later is
+  the same six-step pattern — plus adding its label/href to `cart.html`'s
+  `TYPE_LABEL`/`TYPE_HREF` maps, which an unlisted type survives missing
+  (renders grouped under its raw type string rather than being silently
+  dropped).

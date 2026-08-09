@@ -15,6 +15,8 @@
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
+    <!-- Filled by Cart.mountBadge() — js/cart.js. -->
+    <span id="js-cart-badge"></span>
   </div>
 </header>
 
@@ -266,6 +268,9 @@
             <h2 class="section-title" style="margin-bottom:var(--sp3)">Hele registret</h2>
             <div class="results-header">
               <span class="results-count" id="js-cat-count"></span>
+              <label class="results-header__select-all">
+                <input type="checkbox" id="js-cat-select-all"> Vælg alle
+              </label>
             </div>
             <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
               <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
@@ -295,6 +300,7 @@
 <!-- Full work catalogue for this wing (gitignored data; CI regenerates). -->
 <script src="data/works-extra.js" onerror="void 0"></script>
 <script>window.CATEGORY_WING='billedkunst.html';window.CATEGORY_LABEL='Billedkunst';</script>
+<script src="js/cart.js"></script>
 <script src="js/category-catalogue.js"></script>
 <script src="js/nav.js"></script>
 </body>
