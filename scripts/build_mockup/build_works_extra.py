@@ -237,13 +237,23 @@ def load_languages():
 
 
 def load_wikidata_overlay():
-    """{entity_id: (wd, image_url)} from data/curated/works_wikidata.csv —
-    hand-verified rows only (see scripts/parsers/wikidata_lookup.py, which
-    proposes candidates but never writes here itself). image_filename is
-    the bare Commons filename as it appears in the "File:" page title;
-    percent-encoding it here means the CSV can stay copy-pasteable from a
-    Commons URL without the person adding a row needing to think about
-    escaping unicode/parens/commas in the filename themselves."""
+    """{entity_id: (wd, image_url, attribution_note)} from
+    data/curated/works_wikidata.csv — hand-verified rows only (see
+    scripts/parsers/wikidata_lookup.py, which proposes candidates but never
+    writes here itself). image_filename is the bare Commons filename as it
+    appears in the "File:" page title; percent-encoding it here means the
+    CSV can stay copy-pasteable from a Commons URL without the person
+    adding a row needing to think about escaping unicode/parens/commas in
+    the filename themselves.
+
+    attribution_note is the ONLY column from this CSV meant for readers —
+    e.g. "Tilskrives i dag ikke længere Rafael — Sebastiano del Piombo…"
+    when the register's historical attribution no longer matches current
+    scholarship (see docs/data-model/wikidata-hero-images.md's "diary
+    register isn't a catalogue raisonné" policy). The `notes` column is
+    editorial/verification commentary for whoever maintains this CSV — how
+    a match was confirmed, what was ruled out — and is deliberately NOT
+    loaded here, so it can never leak onto the site."""
     out = {}
     if not os.path.exists(WD_OVERLAY):
         return out
@@ -256,7 +266,8 @@ def load_wikidata_overlay():
                 "https://commons.wikimedia.org/wiki/Special:FilePath/" + urllib.parse.quote(filename)
                 if filename else None
             )
-            out[rid] = (wd, image)
+            attribution_note = r.get("attribution_note", "").strip() or None
+            out[rid] = (wd, image, attribution_note)
     return out
 
 
@@ -358,7 +369,7 @@ def main():
         h2 = (r.get("genre_h2") or "").strip()
         h3 = (r.get("form_h3") or "").strip()
         wing, wing_label = wing_for(h2, h3)
-        wd, image = wd_overlay.get(rid, (None, None))
+        wd, image, attribution_note = wd_overlay.get(rid, (None, None, None))
         generated[rid] = {
             "title": r["label"].strip(),
             "h2": h2 or "ANDRE FORFATTERE",
@@ -380,6 +391,13 @@ def main():
             # that file, same as every other unresolved field here.
             "wd": wd,
             "image": image,
+            # Reader-facing caveat (e.g. a historical Raphael attribution
+            # scholarship no longer accepts) — work.html's detail view shows
+            # this; list/facet/card views never read this field, by design,
+            # so it can't surface as noise while browsing. See
+            # load_wikidata_overlay()'s docstring for why this is a
+            # separate field from the CSV's internal `notes` column.
+            "attributionNote": attribution_note,
             "diary": [],
             "related": [],
             "coPlaces": [],

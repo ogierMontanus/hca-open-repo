@@ -171,12 +171,12 @@ who actually painted something.
 collection/city named in the register title matches where the painting is
 or was actually held, and (b) the register's "Rafael" attribution matches
 what the painting used to be — or is still popularly — called. Current
-scholarly opinion is then recorded as a `notes` flag rather than treated as
-a reason to exclude the row, using this exact phrasing when the current
-attribution differs from Raphael:
+scholarly opinion is then recorded in the CSV's `attribution_note` column
+rather than treated as a reason to exclude the row, using this exact
+phrasing when the current attribution differs from Raphael:
 
 ```
-tilskrives i dag ikke længere Rafael — [current attribution], [one-line reasoning/source]
+Tilskrives i dag ikke længere Rafael — [current attribution], [one-line reasoning/source]
 ```
 
 **What still isn't relaxed:** a genuine *location* mismatch remains
@@ -184,6 +184,33 @@ disqualifying — see `Reg002248` ("Madonna della Tenda," register says
 Turin, the actual painting has been in Munich since 1819). That's a
 different painting or a transcription error, not a case of attribution
 drifting since the 19th century, and the relaxed rule doesn't cover it.
+
+### `attribution_note` is reader-facing; `notes` never is
+
+The CSV has two free-text columns that look similar but go to different
+places:
+
+| Column | Audience | Where it ends up |
+|---|---|---|
+| `attribution_note` | readers of the site | `WORKS_EXTRA[rid].attributionNote`, rendered on `work.html?reg=…`'s detail view |
+| `notes` | whoever maintains this CSV | nowhere — `load_wikidata_overlay()` in `build_works_extra.py` never reads it into the generated JS at all |
+
+`work.html` shows `attributionNote` (when set) as a distinct callout — styled
+as a caveat, not folded into the upbeat "Linked Open Data" framing — above
+the LOD callout, before the reader gets to the "connected to the global
+knowledge graph" pitch. **Nowhere else renders it.** List/facet/card views
+(`category-catalogue.js`'s cards on `billedkunst.html` etc.), the diary-
+reference chips, `entity-refs.js`'s cross-links, `cart.html`, and the search
+index all read `title`/`author`/`refs` off `WORKS_EXTRA` without ever
+touching `attributionNote` — so there's no explicit suppression logic to
+maintain in each of those; the field is simply absent from every template
+except the one detail view. Verified directly (Playwright): injecting a
+test `attribution_note` and loading `billedkunst.html` confirmed neither
+the CSS class nor the note text appear anywhere on that page.
+
+If a future change adds a new work-listing surface, this is the rule to
+carry forward: read `attributionNote` only in the single-entity detail
+template, never in anything that renders a work as one row among many.
 
 Applying this retroactively to the 14 Rafael rows still without a Wikidata
 entry — including two more misattribution cases in the same shape as the
