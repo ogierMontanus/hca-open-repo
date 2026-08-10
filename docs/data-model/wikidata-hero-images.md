@@ -155,6 +155,42 @@ Copilot-sourced, not independently re-verified, in each row's `notes`. Two
 rows (Reg002880, Reg002900) have unusually long filenames worth a visual
 spot-check on `work.html` before treating the image as final.
 
+## Policy: a diary register isn't a catalogue raisonné (2026-08-09)
+
+The first Rafael pass excluded every work no longer credited to Raphael by
+current scholarship — e.g. the Uffizi "La Fornarina" (`Reg001987`), long
+catalogued as an autograph Raphael, now recognized as a Sebastiano del
+Piombo portrait that happens to share the same traditional nickname as
+Raphael's real, autograph "La Fornarina" (Palazzo Barberini — a different
+painting, `Reg001986`, unaffected by this). That exclusion was too strict:
+the register transcribes what a 19th-century diary said, which is itself a
+historical fact worth recording, not a claim this project is making about
+who actually painted something.
+
+**Relaxed rule:** a work stays eligible for an entry as long as (a) the
+collection/city named in the register title matches where the painting is
+or was actually held, and (b) the register's "Rafael" attribution matches
+what the painting used to be — or is still popularly — called. Current
+scholarly opinion is then recorded as a `notes` flag rather than treated as
+a reason to exclude the row, using this exact phrasing when the current
+attribution differs from Raphael:
+
+```
+tilskrives i dag ikke længere Rafael — [current attribution], [one-line reasoning/source]
+```
+
+**What still isn't relaxed:** a genuine *location* mismatch remains
+disqualifying — see `Reg002248` ("Madonna della Tenda," register says
+Turin, the actual painting has been in Munich since 1819). That's a
+different painting or a transcription error, not a case of attribution
+drifting since the 19th century, and the relaxed rule doesn't cover it.
+
+Applying this retroactively to the 14 Rafael rows still without a Wikidata
+entry — including two more misattribution cases in the same shape as the
+Fornarina (`Reg002518` "Noah og Arken," `Reg003462` "Violinspilleren," both
+demoted away from Raphael per RCT/Getty records) — is tracked as a round-2
+export, same outsource-then-reverify workflow as the first pass.
+
 ## Rebuilding
 
 ```
