@@ -57,6 +57,28 @@
       color: var(--color-text-muted); font-style: italic;
     }
 
+    /* Tabel-visning — sortérbar via klik på kolonneoverskrift. Bruges også
+       som print-layoutet for "Download som PDF" uanset hvilken visning der
+       er aktiv på skærmen — se #js-cart-download's click handler. */
+    .cart-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .cart-table th, .cart-table td {
+      text-align: left; padding: var(--sp3) var(--sp4);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .cart-table th {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+    .cart-table th[data-sort] { cursor: pointer; user-select: none; }
+    .cart-table th[data-sort]:hover { color: var(--color-text); }
+    .cart-table__sort-arrow { display: inline-block; width: 1em; opacity: 0.5; }
+    .cart-table th[aria-sort="ascending"] .cart-table__sort-arrow,
+    .cart-table th[aria-sort="descending"] .cart-table__sort-arrow { opacity: 1; }
+    .cart-table td.cart-table__type { color: var(--color-text-muted); white-space: nowrap; }
+    .cart-table td.cart-table__remove { text-align: right; }
+    .cart-table tbody tr:hover { background: var(--color-surface-2); }
+
     /* "Save as PDF" happens via the browser's own print dialog — see
        docs/data-model/cart-and-export.md for why (real text, correct
        æøå rendering, zero new dependencies, vs. a client-side PDF library
@@ -73,6 +95,16 @@
       .cart-group { break-before: page; }
       .cart-group:first-of-type { break-before: auto; }
       body { color: #000; }
+      /* The table is what "Download som PDF" actually prints, regardless of
+         which view is selected on screen — see #js-cart-download's click
+         handler, which switches to this layout before calling window.print()
+         and switches back afterwards. thead as table-header-group repeats
+         the column headers on every printed page; the Fjern column only
+         makes sense as an on-screen action, not on paper. */
+      .cart-table th, .cart-table td { border-bottom: 1px solid #ccc; color: #000; }
+      .cart-table thead { display: table-header-group; }
+      .cart-table tr { break-inside: avoid; }
+      .cart-table th.cart-table__remove, .cart-table td.cart-table__remove { display: none; }
       /* The dark gradient hero reads fine on screen but wastes toner and
          fights with black text on paper — flatten it to plain text. The
          breadcrumb has its own dedicated white-on-dark rule in style.css
@@ -125,6 +157,10 @@
 
       <div id="js-cart-toolbar" class="cart-toolbar" style="display:none">
         <span class="cart-toolbar__count" id="js-cart-count"></span>
+        <div class="layout-switcher" id="js-cart-layout-switcher">
+          <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
+          <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+        </div>
         <button type="button" id="js-cart-download">Download som PDF</button>
         <button type="button" id="js-cart-clear">Ryd kurv</button>
       </div>
@@ -211,12 +247,87 @@
     }
   }
 
+  // "Liste" (grouped cards, the original view) and "Tabel" (sortable, flat
+  // across all types — added so the PDF export has something denser and
+  // easier to scan for a large cart than a card per item). Persisted like
+  // the diary-card list/grid toggle elsewhere on the site; falls back to
+  // 'list' rather than throwing when storage is unavailable.
+  var layout = (function () {
+    try { return localStorage.getItem('cart-layout') || 'list'; } catch (e) { return 'list'; }
+  })();
+  var sortKey = 'type';
+  var sortDir = 'asc';
+  var collator = (typeof Intl !== 'undefined' && Intl.Collator) ? new Intl.Collator('da') : null;
+  function cmp(a, b) { return collator ? collator.compare(a, b) : (a < b ? -1 : a > b ? 1 : 0); }
+
+  function renderListBody(items) {
+    // Group by type, in a fixed order, so the page reads as "Personer" then
+    // "Steder" regardless of selection order.
+    var groups = {};
+    items.forEach(function (it) { (groups[it.type] = groups[it.type] || []).push(it); });
+    // Hvem · Hvad · Hvor · Hvornår — same fixed order the rest of the site
+    // uses (the side-acc accordion, nation.html) for the four entity types.
+    var order = ['person', 'work', 'place', 'diary'].filter(function (t) { return groups[t]; });
+    // Any future type not in TYPE_LABEL still renders, grouped under its
+    // raw type string, rather than being silently dropped.
+    Object.keys(groups).forEach(function (t) { if (order.indexOf(t) === -1) order.push(t); });
+
+    return order.map(function (type) {
+      var list = groups[type];
+      return '<div class="cart-group"><div class="cart-group__title">' +
+        esc(TYPE_LABEL[type] || type) + ' <span style="font-weight:400;color:var(--color-text-muted);font-size:0.8rem">(' +
+        list.length + ')</span></div>' + list.map(itemHtml).join('') + '</div>';
+    }).join('');
+  }
+
+  function sortArrow(col) {
+    if (sortKey !== col) return '<span class="cart-table__sort-arrow">↕</span>';
+    return '<span class="cart-table__sort-arrow">' + (sortDir === 'asc' ? '↑' : '↓') + '</span>';
+  }
+
+  function tableRowHtml(item) {
+    try {
+      var hrefFn = TYPE_HREF[item.type];
+      var href = hrefFn ? hrefFn(item.rid) : ('#' + encodeURIComponent(item.rid));
+      return '<tr>' +
+        '<td class="cart-table__type">' + esc(TYPE_LABEL[item.type] || item.type) + '</td>' +
+        '<td><a class="cart-item__rid" href="' + esc(href) + '">' + esc(item.rid) + '</a></td>' +
+        '<td>' + esc(item.label) + '</td>' +
+        '<td class="cart-table__remove"><button type="button" class="cart-item__remove" data-type="' +
+        esc(item.type) + '" data-rid="' + esc(item.rid) + '">Fjern</button></td>' +
+        '</tr>';
+    } catch (e) {
+      return '<tr><td class="cart-table__type">' + esc(item.type || '') + '</td>' +
+        '<td>' + esc(item.rid) + '</td>' +
+        '<td>' + esc(item.label || '?') + ' — kunne ikke vises korrekt</td>' +
+        '<td class="cart-table__remove"><button type="button" class="cart-item__remove" data-type="' +
+        esc(item.type) + '" data-rid="' + esc(item.rid) + '">Fjern</button></td></tr>';
+    }
+  }
+
+  function renderTableBody(items) {
+    var sorted = items.slice().sort(function (a, b) {
+      var av = sortKey === 'type' ? (TYPE_LABEL[a.type] || a.type) : a[sortKey];
+      var bv = sortKey === 'type' ? (TYPE_LABEL[b.type] || b.type) : b[sortKey];
+      var r = cmp(String(av == null ? '' : av), String(bv == null ? '' : bv));
+      return sortDir === 'asc' ? r : -r;
+    });
+    return '<table class="cart-table">' +
+      '<thead><tr>' +
+      '<th data-sort="type" aria-sort="' + (sortKey === 'type' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') + '">Type ' + sortArrow('type') + '</th>' +
+      '<th data-sort="rid" aria-sort="' + (sortKey === 'rid' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') + '">ID ' + sortArrow('rid') + '</th>' +
+      '<th data-sort="label" aria-sort="' + (sortKey === 'label' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') + '">Titel ' + sortArrow('label') + '</th>' +
+      '<th class="cart-table__remove"></th>' +
+      '</tr></thead><tbody>' + sorted.map(tableRowHtml).join('') + '</tbody></table>';
+  }
+
   function render() {
     var items = Cart.all();
     var toolbar = document.getElementById('js-cart-toolbar');
     var body = document.getElementById('js-cart-body');
     var pdfNote = document.getElementById('js-cart-pdf-note');
     var downloadBtn = document.getElementById('js-cart-download');
+    var switcher = document.getElementById('js-cart-layout-switcher');
 
     if (!items.length) {
       toolbar.style.display = 'none';
@@ -232,28 +343,15 @@
     document.getElementById('js-cart-count').textContent =
       items.length.toLocaleString('da-DK') + (items.length === 1 ? ' post valgt' : ' poster valgt');
     downloadBtn.disabled = false;
+    switcher.querySelectorAll('[data-layout]').forEach(function (b) {
+      b.classList.toggle('layout-switcher__btn--active', b.getAttribute('data-layout') === layout);
+    });
 
-    // Group by type, in a fixed order, so the printed page reads as
-    // "Personer" then "Steder" regardless of selection order.
-    var groups = {};
-    items.forEach(function (it) { (groups[it.type] = groups[it.type] || []).push(it); });
-    // Hvem · Hvad · Hvor · Hvornår — same fixed order the rest of the site
-    // uses (the side-acc accordion, nation.html) for the four entity types.
-    var order = ['person', 'work', 'place', 'diary'].filter(function (t) { return groups[t]; });
-    // Any future type (works, diary pages, …) not in TYPE_LABEL still renders,
-    // grouped under its raw type string, rather than being silently dropped.
-    Object.keys(groups).forEach(function (t) { if (order.indexOf(t) === -1) order.push(t); });
-
-    // itemHtml() already guards per-item, but wrap the whole build as a second
-    // net: better a visible error under an accurate count than a silent blank
-    // list — the toolbar/count text above is already painted by this point.
+    // Both render paths already guard per-item; wrap the whole build as a
+    // second net: better a visible error under an accurate count than a
+    // silent blank body — the toolbar/count text above is already painted.
     try {
-      body.innerHTML = order.map(function (type) {
-        var list = groups[type];
-        return '<div class="cart-group"><div class="cart-group__title">' +
-          esc(TYPE_LABEL[type] || type) + ' <span style="font-weight:400;color:var(--color-text-muted);font-size:0.8rem">(' +
-          list.length + ')</span></div>' + list.map(itemHtml).join('') + '</div>';
-      }).join('');
+      body.innerHTML = layout === 'table' ? renderTableBody(items) : renderListBody(items);
     } catch (e) {
       body.innerHTML = '<div class="cart-empty">Kurven indeholder ' + items.length +
         ' post(er), men de kunne ikke vises (' + esc(String(e && e.message || e)) +
@@ -267,6 +365,26 @@
     Cart.remove(btn.getAttribute('data-type'), btn.getAttribute('data-rid'));
   });
 
+  // Clicking a sortable column header re-sorts the table in place — toggles
+  // direction on a second click of the same column, defaults to ascending
+  // on a new one. Delegated because the <thead> is rebuilt on every render.
+  document.getElementById('js-cart-body').addEventListener('click', function (ev) {
+    var th = ev.target.closest('th[data-sort]');
+    if (!th) return;
+    var col = th.getAttribute('data-sort');
+    if (sortKey === col) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; }
+    else { sortKey = col; sortDir = 'asc'; }
+    render();
+  });
+
+  document.getElementById('js-cart-layout-switcher').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('[data-layout]');
+    if (!btn) return;
+    layout = btn.getAttribute('data-layout');
+    try { localStorage.setItem('cart-layout', layout); } catch (e) {}
+    render();
+  });
+
   document.getElementById('js-cart-clear').addEventListener('click', function () {
     if (Cart.count() && confirm('Ryd hele kurven (' + Cart.count() + ' poster)?')) Cart.clear();
   });
@@ -276,6 +394,27 @@
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
     document.getElementById('js-print-date').textContent =
       pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + d.getFullYear();
+
+    // The table is the default view for the exported PDF regardless of
+    // what's selected on screen — denser and easier to scan for a large
+    // cart than a card per item. Only switches for the print itself; the
+    // reader's on-screen choice (and its localStorage preference) is
+    // restored afterwards, untouched by this temporary switch. The
+    // afterprint listener is registered BEFORE calling window.print() —
+    // not after — since print() can resolve synchronously enough in some
+    // browsers that an afterwards-registered listener would miss the event
+    // entirely and leave the reader stuck looking at the table.
+    var screenLayout = layout;
+    if (screenLayout !== 'table') {
+      var restore = function () {
+        layout = screenLayout;
+        render();
+        window.removeEventListener('afterprint', restore);
+      };
+      window.addEventListener('afterprint', restore);
+      layout = 'table';
+      render();
+    }
     window.print();
   });
 
