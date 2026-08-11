@@ -402,6 +402,37 @@ kun 12 poster i SV14-registret, men en selvstændig og redaktionelt meningsfuld
 type. Placeres i GeoNames-klasse L. Adskilt fra både kategori 4 (Landskabsformer,
 som er vild natur) og kategori 5 (Bygninger, som ikke er parker).
 
+### Undtagelse: Kanal → Kategori 3 (Vandområder), ikke Kategori 5
+
+**Regel:** Poster af typen *kanal* (menneskeskabt vandvej — sejlkanal,
+kanalanlæg, kunstig å) klassificeres som **Kategori 3, Vandområder**, selvom
+kanaler er menneskeskabte anlæg og derfor umiddelbart kunne forventes at
+høre under Kategori 5 (Bygninger, anlæg og fortidsminder) sammen med andre
+konstruktioner (broer, mure, fæstningsværker).
+
+**Begrundelse:** En kanal er funktionelt og fysisk et vandområde — vand
+strømmer eller står i den, og den optræder i teksten på linje med floder og
+sunde, ikke bygningsværker. GeoNames placerer da også kanaler i
+hydrografi-klassen **H**, ikke struktur-klassen **S**, hvilket bekræfter
+denne placering. Undtagelsen skal skrives eksplicit, fordi kanalens
+menneskeskabte oprindelse ellers er en oplagt fejlkilde for en automatisk
+klassifikator, der bruger "menneskeskabt = Kategori 5" som tommelfingerregel
+(jf. samme problemstilling for havne, afsnit E).
+
+**Autoritetskoder til automatisk indplacering af høstede poster:**
+
+| Autoritet | Kode | Term | Verificeret |
+|---|---|---|---|
+| GeoNames Feature Code | `H.CNL` | "canal" — an artificial watercourse | ✓ søgning (download.geonames.org/featureCodes_en.txt) |
+| Wikidata | **Q12284** | canal | ✓ søgning — bekræftet af to uafhængige kilder: OpenStreetMap-wikiens `waterway=canal`-tag peger på Q12284, og AGROVOC-konceptet for kanal refererer samme Q-nummer. *Bemærk:* søgning på "canal wikidata" giver også Q8261440 som falsk positiv — dette er et forgrenet Wikidata-item i en sekvens af TV-kanal-numre (Canal 19/28/29/30) og skal **ikke** bruges |
+
+**Praktisk konsekvens for høstningspipelinen:** en høstet post kan
+autoklassificeres til Kategori 3, hvis dens kildetype matcher `H.CNL`
+(GeoNames) eller er en instans af (P31) Q12284 (Wikidata) — uden manuel
+gennemgang, medmindre navnet samtidig indeholder en administrativ markør
+(jf. undtagelsesreglen for Kategori 2 vs. 4 ovenfor, som ikke er relevant
+for kanaler, men nævnes for konsistens i den automatiske pipeline).
+
 ### GeoNames-mapping
 
 | Kategori | Primær GeoNames Feature Class | Typiske Feature Codes | Bemærkning |
