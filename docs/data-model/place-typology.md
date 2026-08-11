@@ -936,3 +936,160 @@ niveau. Når/hvis det godkendes, kan det tilføjes ikke-destruktivt til
 `places.xml` i samme arbejdsgang som `@subtype` — de deler samme
 klassificeringskilde (GeoNames-koden + de navngivne enkelttilfælde) og kan
 udledes i én scriptkørsel.
+
+---
+
+## I. Estimeret forekomst af finkategorierne i STED-REGISTER (2508 poster)
+
+Samme spørgsmål som afsnit E stillede for de 6 hovedkategorier — "hvordan
+generaliserer dette til det store register?" — stillet igen for de 33
+finkategorier fra afsnit H. Metoden er identisk med afsnit E: zero-shot
+navnemønster-matchning mod `data/normalized/entities.csv`
+(`entity_type='place'`, `category_h1='STED-REGISTER'`), fordi filen hverken
+har et `<note>`-felt eller en eksisterende GeoNames-`type`-kode. 77 poster
+er rene krydshenvisninger ("X, se: Y") og udelades, som i afsnit E —
+**2431 klassificerbare poster** herefter.
+
+### Top-niveau (6 kategorier) — genberegnet
+
+| Kategori | n | Andel |
+|---|---:|---:|
+| Bebyggede områder (default) | 2230 | 91,7 % |
+| Landskabsformer og naturfænomener | 76 | 3,1 % |
+| Vandområder | 58 | 2,4 % |
+| Lande, administrative enheder og regioner | 41 | 1,7 % |
+| Bygninger, anlæg og fortidsminder | 26 | 1,1 % |
+| Parker, haver og naturområder | *(indgår i landskab/anlæg-tal ovenfor, se finkategori-tabel)* | — |
+
+Tallene ligger i samme størrelsesorden som afsnit E's oprindelige test
+(93,7 % default dengang mod 91,7 % nu) — forskellen skyldes finere
+mønstre i denne omgang, ikke en ændret metode.
+
+### Finkategori-fordeling (33 undergrupper)
+
+| Finkategori | Hovedkategori | n | Andel af 2431 |
+|---|---|---:|---:|
+| *(uspecificeret — intet mønster matchede)* | bebygget | 2230 | 91,73 % |
+| `oe` | landskab | 32 | 1,32 % |
+| `suveraen_stat` | admreg | 26 | 1,07 % |
+| `soe` | vand | 24 | 0,99 % |
+| `vandloeb` | vand | 18 | 0,74 % |
+| `slot_borg` | anlaeg | 16 | 0,66 % |
+| `bjerg` | landskab | 15 | 0,62 % |
+| `kloeft_dal` | landskab | 12 | 0,49 % |
+| `landskabsregion` | admreg | 11 | 0,45 % |
+| `hav` | vand | 6 | 0,25 % |
+| `grotte` | landskab | 6 | 0,25 % |
+| `infrastruktur` | anlaeg | 6 | 0,25 % |
+| `straede_sund` | vand | 5 | 0,21 % |
+| `bugt_havn` | vand | 5 | 0,21 % |
+| `kontinent` | landskab | 4 | 0,16 % |
+| `religioes_bygning` | anlaeg | 3 | 0,12 % |
+| `forbjerg` | landskab | 3 | 0,12 % |
+| `vulkan` | landskab | 3 | 0,12 % |
+| `pas` | landskab | 2 | 0,08 % |
+| `vandfald` | landskab | 2 | 0,08 % |
+| `klippe` | landskab | 1 | 0,04 % |
+| `fortidsminde` | anlaeg | 1 | 0,04 % |
+
+`bypark`, `skov`, `naturreservat`, `bolig_erhverv`, `kulturinstitution`,
+`bydel`, `hovedstad`, `regionssaede`, `by_landsby`, `historisk_bebyggelse`
+og `provins` fik 0 zero-shot-matches — ikke fordi disse typer ikke
+findes i STED-REGISTER, men fordi de kræver enten lukkede navnelister
+(hovedstæder, provinser) eller slet ikke er navnebårne (den administrative
+tier af en bebyggelse fremgår ikke af selve stednavnet — se afsnit H's
+bemærkning om `regionssaede`).
+
+### Stikprøvekontrol — tillidsniveau pr. finkategori
+
+I modsætning til afsnit E's aggregerede tal er hele indholdet af 12 af de
+21 ikke-tomme finkategori-bøtter gennemgået manuelt her (ikke kun en
+stikprøve), fordi de fleste bøtter er små nok til det. Resultatet varierer
+kraftigt:
+
+**Høj pålidelighed (~95–100 % korrekt ved fuld gennemgang):**
+`bjerg` (15/15), `slot_borg` (16/16), `vulkan` (3/3), `straede_sund` (5/5),
+`bugt_havn` (5/5), `grotte` (6/6), `suveraen_stat` (26/26, lukket liste),
+`kontinent` (4/4, lukket liste). Navnemønstrene "Monte/Mont X", "X Slot/
+Schloss/Castle/Palace" og de eksplicitte vandnavne er lavtvetydige nok til,
+at zero-shot fungerer godt her — i tråd med afsnit E's tilsvarende fund for
+den brede Vandområder-kategori (~98 %).
+
+**Middel pålidelighed (~80–90 %):**
+- `vandloeb` (16/18 ≈ 89 %): **Grenaa** og **Aabenraa** er begge byer, ikke
+  floder — deres navne ender på den historiske å-stavemåde "-aa" (samme
+  stavemåde som floden, de er opkaldt efter), men selve registerposten
+  refererer til byen. Samme fejltype som afsnit E's -wald/-kirchen-fund,
+  blot på dansk.
+- `hav` (5/6 ≈ 83 %): **Vietri sul mare** er en italiensk by (på
+  Amalfikysten), ikke et hav — "mare" (hav) indgår i bynavnet.
+- `landskabsregion` (9/11 ≈ 82 %): **Slesvig (By)** er eksplicit markeret
+  som by i selve parentesen, men den lukkede regionliste matcher stadig
+  "Slesvig", fordi opslaget fjerner parenteser før sammenligning — en
+  konkret implementeringsfejl, ikke kun en navnetvetydighed (se nedenfor).
+  **Moldau** er sandsynligvis flodnavnet (Vltava, kendt fra Smetanas
+  symfoniske digt), ikke landsdelen Moldavien — uafklaret uden opslag.
+
+**Lav pålidelighed (~40–55 % — bør ikke bruges ukritisk):**
+- `oe` (≈16/32 ≈ 50 %): Ægte øer (Agersø, Fanø, Samsø, Sprogø, Ærø, Æbelø,
+  Omø, Thurø, Bogø, Gavnø, Glænø, Møen) blandet med **søer** (Tissø,
+  Silkeborg Langsø, Bielersøen, Bodensøen, Peblingesøen — alle ender på
+  "sø"/"søen" uden mellemrum eller stort S, som ellers var det signal,
+  der adskilte `soe`-bøtten), **have** (Nordsøen, Østersøen, Zuidersøen —
+  "havet" forkortet/sammensat til blot "-søen") og **byer/herregårde**
+  (Sorø, Præstø, Vallø, Vedersø — historisk afledt af "ø", men fungerer i
+  dag som bebygget stednavn). Dette er en **reel, uløselig tvetydighed i
+  dansk navnemorfologi** — "sø" kan være selve ordet for "lake" for enden
+  af et sammensat navn, eller det kan være en tilfældig bogstavrække,
+  hvor et bindeled-s møder en ø-endelse. Kun opslag mod en autoritetsfil
+  kan skelne dem.
+- `kloeft_dal` (≈5/12 ≈ 42 %): Ægte dale (Elbdalen, Etsch-Dalen,
+  Inn-Dalen, Isar-Dalen, Rhônedalen) blandet med danske **herregårdsnavne**
+  på mønsteret [Fornavn]+"dal" (Charlottendal, Christiansdal, Frijsendal,
+  Fuirendal, Kongsdal, Lilliendal) — en ekstremt almindelig dansk
+  herregårdsnavne-konvention (parallelt til "-lund", "-gaard", "-borg"),
+  helt uafhængig af terrænets faktiske form. **Ulriksdal** er formentlig
+  det svenske kongeslot ved Stockholm, ikke en dal. Denne fejlkilde er
+  potentielt alvorligere end de øvrige, fordi den ikke kun rammer forkert
+  finkategori, men kan ramme **forkert hovedkategori** (`landskab` i
+  stedet for `anlaeg`/`slot_borg`).
+- `soe` (ikke udtømmende gennemgået, men stikprøven ser ren ud: Agnano-,
+  Albaner-, Averner-, Bolsena-, Brienzer-, Como-, Garda-, Luganer-,
+  Lungern-, Nemi-, Neuchâteller-, Neusiedler-, Sarner-, Thuner-,
+  Trasimener-, Vierwaldstätter-, Züricher-Søen samt Bavelse/Esrom/Sorø/
+  Søbygaards/Søllerod/Ulse Sø — alle genkendelige søer). Mønsteret, der
+  kræver mellemrum/bindestreg + stort "S" foran "Sø", virker præcist for
+  netop de tilfælde, hvor det matcher — problemet er ikke falske
+  positiver her, men falske **negativer**, der i stedet havner forkert i
+  `oe` (se ovenfor).
+
+**Ikke individuelt stikprøvekontrolleret** (lille n, mindre vægt i det
+samlede billede, men behandl med samme forbehold): `infrastruktur`,
+`religioes_bygning`, `forbjerg` (hvor "Capo di Monte, Napoli" muligvis er
+Capodimonte-slottet/parken i Napoli, ikke et forbjerg), `pas`, `vandfald`,
+`klippe`, `fortidsminde`.
+
+### Konklusion
+
+Finkategori-lagets zero-shot-estimat mod STED-REGISTER bekræfter og
+skærper afsnit E's konklusion snarere end at modsige den: den **samlede**
+vægtede nøjagtighed ændrer sig ikke meget (default-bøtten på 91,7 % arver
+stadig ~68 % nøjagtighed fra afsnit E's manuelle kontrol, og dominerer det
+samlede tal), men finkategori-laget viser, at selv blandt de poster, der
+**får** et positivt navnemønster-match — dem, man skulle tro var de sikre
+— svinger nøjagtigheden fra ~100 % (bjerge, slotte) til ~42 % (dale,
+forvekslet med herregårdsnavne). To nye, konkrete fejlkilder er fundet og
+bør føjes til den kuraterede undtagelsesliste, afsnit E allerede
+efterlyser:
+
+1. **Danske "-ø"/"-sø"-endelser** er strukturelt tvetydige mellem ø, sø,
+   hav og bebygget stednavn uden ekstra kontekst.
+2. **Danske herregårdsnavne på "-dal"** (og formentlig også "-lund",
+   "-gaard", "-borg" — ikke testet her) kan fejlagtigt læses som
+   landskabsformer.
+
+**Finkategori-laget bør ikke skrives til STED-REGISTER ud fra dette
+estimat alene** — konklusionen fra afsnit E ("ren zero-shot
+navnemønster-klassifikation bør ikke skrives direkte til registret uden
+verifikation") gælder mindst lige så stærkt her, og for `oe` og
+`kloeft_dal` decideret stærkere, end for hovedkategori-niveauet.
