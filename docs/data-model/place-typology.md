@@ -1,12 +1,15 @@
 # Stedtypologi for SV-udgavens stedregister — forslag til godkendelse
 
-> **Status: Afsnit J er den gældende taksonomi (5 kategorier).** Afsnit
-> A–I dokumenterer den analytiske vej dertil — 11 kategorier (§A–D), en
+> **Status: Afsnit K er den gældende taksonomi (5 kategorier, revideret
+> GeoNames-bogstavbaseret struktur med underkategorier).** Afsnit A–J
+> dokumenterer den analytiske vej dertil — 11 kategorier (§A–D), en
 > mellemliggende 6-kategori-variant med GeoNames/Wikidata-mapping,
-> markup-instruktion og finkategori-forslag (§F–I) — og er bevaret som
-> baggrund og begrundelse, **ikke** som gældende specifikation. §G's
-> markup-instruktion, §H's finkategori-lag og §I's STED-REGISTER-estimat
-> er alle skrevet mod den nu erstattede 6-kategori-inddeling og skal
+> markup-instruktion og finkategori-forslag (§F–I), samt en før-K
+> 5-kategori-variant med vand foldet ind i landområder (§J, nu selv
+> erstattet) — og er bevaret som baggrund og begrundelse, **ikke** som
+> gældende specifikation. §G's markup-instruktion, §H's finkategori-lag
+> og §I's STED-REGISTER-estimat er alle skrevet mod den nu erstattede
+> 6-kategori-inddeling og skal
 > revideres, før de kan bruges sammen med §J's 5-kategori-nummerering —
 > se forbeholdet i slutningen af §J.
 
@@ -1306,3 +1309,171 @@ og have — 15 tidligere finkategorier — inden for kun 3 nye.
 Ingen underkategorier er defineret endnu. Dette afsnit er en
 pladsholder-registrering af rammen, til brug når underkategorierne
 specificeres.
+
+**Opdateret 2026-08-11: pladsholderen ovenfor er nu indfriet af afsnit K
+nedenfor**, som leverer 5 hovedkategorier + underkategorier (op til 3 pr.
+kategori, som varslet) i én omgang — men med en anden hovedkategori-
+struktur end afsnit J (vand er igen sin egen kategori; se afsnit K's
+indledning for hvorfor).
+
+---
+
+## K. Reviderede kategorier med eksplicit GeoNames-bogstavmapping (gældende)
+
+> **Status: GÆLDENDE.** Erstatter afsnit J's kategori-1-5-liste og
+> indfrier samtidig varslingen om underkategorier fra afsnittet ovenfor.
+> Bogstaverne refererer til [GeoNames Feature
+> Codes](https://www.geonames.org/export/codes.html)s hovedklasser
+> (A/H/L/P/R/S/T/U/V).
+
+### Hvad der ændrer sig fra afsnit J
+
+Afsnit J samlede vand og land i én naturkategori ("Landområder og
+naturfænomener", H+T). Denne redaktionelle instruks vender det om igen:
+**vand er nu sin egen kategori (1)**, adskilt fra land (2) — en tilbage-
+vending til strukturen fra afsnit F, men med ny rækkefølge, nye
+bogstavgrænser og nu med underkategorier fra start. Dette er tredje gang,
+hovedkategori-antallet og vand-placeringen justeres (§F: 6 kat., vand
+selvstændig → §J: 5 kat., vand foldet ind → §K: 5 kat., vand selvstændig
+igen) — hver version er bevaret ovenfor som dokumenteret baggrund.
+
+### De 5 hovedkategorier
+
+| Nr | Navn | GeoNames-klasse(r) |
+|---|---|---|
+| 1 | Vandområder | **H** |
+| 2 | Landområder | **L + T** |
+| 3 | Bygninger, veje og anlæg | **S + R** + de dele af **H**, der er menneskeskabte vandanlæg (se nedenfor) |
+| 4 | Byer og tæt bebyggede zoner | **P** |
+| 5 | Alle administrative enheder — fra sogne til regioner, stater og kontinenter | **A** + **L.CONT** |
+
+**Kategori 3's H-andel:** instruktionen angiver `S + R + H` for kategori 3,
+samtidig med at kategori 1 fuldt ud er `H`. Læst sammen med
+underkategori 3.3's navn ("Anlæg, veje og **øvrigt under åben himmel**")
+er dette tolket som: **naturlige** H-koder (floder, søer, hav, strædet,
+bugter) → kategori 1; **menneskeskabte** H-koder, der er anlæg snarere end
+vandforekomster (kanaler `H.CNL*`, dokker `H.DCK`, bassiner) → kategori
+3.3. Dette er en tolkning af en kompakt instruktion, ikke en ordret givet
+regel — se "Fortolkningsvalg, der bør bekræftes" nedenfor. Bemærk at dette
+**vender kanal-undtagelsen fra afsnit F/G om**: der blev kanaler
+eksplicit placeret under Vandområder ("selvom kanaler er menneskeskabte");
+her er den mest nærliggende læsning det modsatte.
+
+### Underkategorier (op til 3 pr. hovedkategori, som varslet ovenfor)
+
+**1. Vandområder**
+- 1.1 Ferskvand
+- 1.2 Saltvand
+
+**2. Landområder**
+- 2.1 Forhøjninger og dale
+- 2.2 Øer
+- 2.3 Øvrige terræner
+
+**3. Bygninger, veje og anlæg**
+- 3.1 Verdslige bygninger
+- 3.2 Religiøse bygninger
+- 3.3 Anlæg, veje og øvrigt under åben himmel
+
+**4. Byer og tæt bebyggede zoner** — endnu ikke underinddelt.
+> Brugerens egen vurdering: "Geonames inddeler især efter størrelse og
+> øvrige ret tilfældige kategorier" — dvs. GeoNames' eget skel mellem
+> `P.PPLC`/`P.PPLA`/`P.PPLA2-5` (hovedstad vs. administrative sæder på
+> faldende niveau) er ikke i sig selv redaktionelt meningsfuldt nok til at
+> bære en underkategori-inddeling. (Til sammenligning foreslog afsnit H's
+> nu forældede finkategori-lag netop denne opdeling — `hovedstad`,
+> `regionssaede`, `by_landsby`, `bydel` — hvilket denne nye vurdering
+> altså tilsidesætter.)
+
+**5. Alle administrative enheder** — endnu ikke underinddelt.
+> Brugerens egen vurdering: "Geonames inddeler især efter størrelse og
+> historisk status (fortidig vs. nutidigt). Disse kategorier er svære at
+> benytte" — dvs. GeoNames' `A.ADM1-5`/`A.PCL*`-hierarki plus de historiske
+> varianter (`A.ADM1H`, `A.PCLH` osv.) egner sig heller ikke direkte til
+> underkategorisering her.
+
+### Fortolkningsvalg, der bør bekræftes
+
+Ved test af taksonomien mod SV14-registrets faktiske 481 poster (se
+valideringsafsnittet nedenfor) viste følgende punkter sig at kræve en
+fortolkning, fordi instruktionen ikke eksplicit afgør dem. De er
+implementeret efter bedste bud nedenfor, men bør bekræftes eller rettes:
+
+1. **Havne** (`H.HBR`, 3 poster i SV14: Grand Harbour/Il-Port il-Kbir,
+   Salamis-bugten, Kanari-havnen) — rutet til **1.2 Saltvand** her, som en
+   naturlig vandforekomst. Kunne lige så rimeligt argumenteres til
+   **3.3** som menneskeskabt havneanlæg — samme grænsetilfælde, afsnit F
+   allerede identificerede for "Grand Harbour, Valletta".
+2. **Parker vs. haver splittes nu ad** — de udgjorde én samlet kategori i
+   afsnit F/H ("Parker, haver og naturområder"). Med bogstavmappingen
+   læst bogstaveligt lander de forskelligt: `L.PRK` (park — Tiergarten,
+   Munke-Mose, Villa Borghese, Volksgarten, Stromovka, 6 poster i SV14) er
+   **L**-klasse → kategori **2.3** (Øvrige terræner); `S.GDN` (have — Den
+   Botaniske Have, Villa Comunale, 2 poster i SV14) er **S**-klasse →
+   kategori **3.3**. En "have" havner dermed sammen med bygninger/anlæg,
+   mens en "park" havner sammen med landskabsformer — konceptuelt en
+   markant anden gruppering end tidligere, og værd at bekræfte er
+   tilsigtet.
+3. **`L.RGN`/`L.RGNH`** (landskabsregioner: Tyrol, Peloponnes, Böhmen,
+   Lüneburger Heide — 6 poster i SV14) — kun **`L.CONT`** (kontinent) er
+   eksplicit nævnt som undtagelse til kategori 5 i instruktionen; `L.RGN`
+   er derfor **ikke** løftet ud af kategori 2 her, og lander i **2.3**
+   sammen med de øvrige "øvrige terræner". Dette afgør definitivt den
+   uafklarede grænsetilfælde-diskussion fra afsnit F/C om, hvorvidt
+   naturgeografiske regioner hører til "administrative enheder" eller
+   "landskabsformer" — til fordel for landskabsformer.
+4. **Grotter** (`S.CAVE`, 6 poster) — videreført som undtagelse fra
+   afsnit F/G (S-klasse, men rutet til **2.3** som naturfænomen, ikke til
+   kategori 3) — ikke eksplicit nævnt i den nye instruktion, men
+   forudsat uændret, da intet tyder på, at denne undtagelse skal bortfalde.
+5. **Vandfald** — kræver **ikke længere** en undtagelse. Med vand
+   genoprettet som egen kategori (1) falder `H.FLLS` naturligt i **1.1**
+   uden behov for den T-override, afsnit F/G/H måtte indføre, da vand var
+   foldet ind i landskab.
+
+### GeoNames-mapping (fuld kodetabel, udledt af SV14-registrets 481 poster)
+
+| Ny kategori | GeoNames-koder observeret i SV14 |
+|---|---|
+| 1.1 Ferskvand | `H.STM`, `H.LK`, `H.FLLS` (+ finkategori-niveau: vandløb, søer, vandfald) |
+| 1.2 Saltvand | `H.SEA`, `H.STRT`, `H.BAY`, `H.SD`, `H.HBR` (se fortolkningsvalg 1) |
+| 2.1 Forhøjninger og dale | `T.HLL`, `T.MT`, `T.MTS`, `T.PK`, `T.VLC`, `T.CLF`, `T.GRGE`, `T.VAL`, `T.PASS` |
+| 2.2 Øer | `T.ISL`, `T.ISLS` |
+| 2.3 Øvrige terræner | `T.CAPE`, `T.PROM`, `S.CAVE` (undtagelse), `L.PRK` (se fortolkningsvalg 2), `L.RGN`, `L.RGNH` (se fortolkningsvalg 3), `L.RESN` |
+| 3.1 Verdslige bygninger | `S.CSTL`, `S.PAL`, `S.MUS`, `S.THTR`, `S.OPRA`, `S.BLDG`, `S.EST`, `S.FRM`, `S.HSE`, `S.HTL`, `S.RSRT` |
+| 3.2 Religiøse bygninger | `S.CH`, `S.MSTY`, `S.MSQE`, `S.TMPL` |
+| 3.3 Anlæg, veje og øvrigt under åben himmel | `S.ANS`, `S.MNMT`, `S.RUIN`, `S.SQR`, `S.BDG`, `S.GATE`, `S.ARCH`, `S.WALLA`, `S.AMTH`, `S.CMTY`, `S.GDN` (se fortolkningsvalg 2), `R.RD`, `R.ST`, `R.TNL` |
+| 4 | `P.PPL`, `P.PPLA`–`P.PPLA5`, `P.PPLC`, `P.PPLH`, `A.ADM3`–`A.ADM5` (småbyer, jf. afsnit F) |
+| 5 | `A.ADM1`, `A.ADM2`, `A.PCLI` |
+
+### Validering mod SV14-registret (481 poster)
+
+Beregnet ved at genbruge den eksisterende post-for-post-klassifikation fra
+afsnit G/H (så ingen enkeltpost er vurderet forfra) og remappe hver post
+til den nye struktur — se `scripts/place_typology/kategori_k_mapping.py`
+(`python scripts/place_typology/kategori_k_mapping.py`, kræver svNames
+checket ud som søsterkatalog eller miljøvariablen `SVNAMES_PLACES_XML`).
+
+| Kategori | n | Andel |
+|---|---:|---:|
+| 1.1 Ferskvand | 22 | 4,6 % |
+| 1.2 Saltvand | 10 | 2,1 % |
+| **Kategori 1 i alt** | **32** | **6,7 %** |
+| 2.1 Forhøjninger og dale | 37 | 7,7 % |
+| 2.2 Øer | 22 | 4,6 % |
+| 2.3 Øvrige terræner | 29 | 6,0 % |
+| **Kategori 2 i alt** | **88** | **18,3 %** |
+| 3.1 Verdslige bygninger | 58 | 12,1 % |
+| 3.2 Religiøse bygninger | 38 | 7,9 % |
+| 3.3 Anlæg, veje og øvrigt under åben himmel | 45 | 9,4 % |
+| **Kategori 3 i alt** | **141** | **29,3 %** |
+| 4. Byer og tæt bebyggede zoner | 209 | 43,5 % |
+| 5. Administrative enheder | 9 | 1,9 % |
+| USIKKER | 2 | 0,4 % |
+
+**Sammenligning med afsnit J:** kategori 5 (Administrative enheder)
+falder fra 15 poster (afsnit J, som inkluderede landskabsregioner) til 9
+poster her, fordi `L.RGN`/`L.RGNH` nu er landområder, ikke administrative
+enheder (fortolkningsvalg 3). Kategori 2 (Landområder) er tilsvarende
+mindre end afsnit J's fusionerede natur-kategori (88 mod 104), fordi vand
+er trukket ud igen.

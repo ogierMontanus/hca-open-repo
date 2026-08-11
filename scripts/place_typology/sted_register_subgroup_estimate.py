@@ -86,8 +86,11 @@ def classify_sted(label: str):
 
 
 def main():
+    import os
+    here = os.path.dirname(os.path.abspath(__file__))
+    entities_csv = os.path.join(here, '..', '..', 'data', 'normalized', 'entities.csv')
     rows = []
-    with open('/home/user/hca-open-repo/data/normalized/entities.csv', encoding='utf-8') as f:
+    with open(entities_csv, encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for r in reader:
             if r['entity_type'] == 'place' and r['category_h1'] == 'STED-REGISTER':
@@ -126,5 +129,7 @@ def main():
 if __name__ == '__main__':
     results = main()
     import pickle
-    with open('/tmp/claude-0/-home-user/c02147cb-9631-5a1d-aedf-18b3ad7b991e/scratchpad/sted_register_results.pkl', 'wb') as f:
+    import os
+    here = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(here, 'sted_register_results.pkl'), 'wb') as f:
         pickle.dump(results, f)
