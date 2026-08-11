@@ -65,6 +65,40 @@
 - **Lüneburger Heide/Leipziger Tieflandsbucht:** Disse er naturgeografiske landskaber (hede, lavland), ikke administrativt afgrænsede, men GeoNames koder dem som L.RGN. Klassificer som REGION — de er større naturgeografiske enheder.
 - **Tyskland/Østrig/Italien som helhed:** Hvis omtalt som lande, klassificer som LAND.
 
+**Ekstra regel — Kategori 2 vs. Kategori 4 (øer, halvøer, naturgeografiske enheder):**
+
+Når et stednavn kan betegne *både* et geografisk område (→ Kategori 4) og en
+administrativ enhed (→ Kategori 2), afgøres valget udelukkende af, om
+stednavnet eller konteksten indeholder en **eksplicit administrativ
+betegnelse**.
+
+**Tommelfingerregel:**
+- Navnet **alene** (ø, halvø, hede, bjergkæde eller anden naturgeografisk
+  enhed, uden administrativt suffiks) → **Kategori 4**.
+- Navnet **med** et administrativt/kirkeligt suffiks — *stift, sogn, amt,
+  herred, kommune, län, provins, bispedømme, region* eller tilsvarende
+  markør — → **Kategori 2**.
+
+Denne regel gælder specifikt for de tilfælde, hvor samme grundnavn optræder
+i begge former i registret, og reducerer tvivlstilfælde ved at gøre
+grænsen navnebåren i stedet for skønsbaseret.
+
+| Stednavn | Kategori | Begrundelse |
+|---|:---:|---|
+| Fyn | 4 | Ø (landskabsform) |
+| Fyns Stift | 2 | "Stift" angiver en administrativ/kirkelig enhed |
+| Bogø | 4 | Ø (landskabsform) |
+| Bogø Sogn | 2 | "Sogn" angiver en administrativ/kirkelig enhed |
+| Lolland | 4 | Ø (landskabsform) |
+| Lolland Kommune | 2 | "Kommune" angiver administrativ enhed |
+| Falster | 4 | Ø (landskabsform) |
+| Falsters Herred | 2 | "Herred" angiver administrativ enhed |
+
+Bemærk konsekvensen for tabellen ovenfor: **Lolland** og **Bornholm**
+(nr. 9–10 i stedlisten) er korrekt klassificeret som Kategori 4, netop
+fordi de optræder *uden* administrativt suffiks — reglen bekræfter den
+eksisterende klassifikation, den ændrer den ikke.
+
 ---
 
 ### 3. VANDOMRÅDER
