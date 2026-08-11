@@ -343,19 +343,22 @@ den fagkyndige bruger tage stilling til:
 
 **Trin 5 (GeoNames-mapping af de godkendte kategorier til Feature
 Classes/Codes) igangsættes først, når denne liste er godkendt.** — se dog
-afsnit E for en foreløbig mapping af den komprimerede 6-kategori-variant,
-udført efter direkte redaktionel anmodning.
+afsnit E for en foreløbig mapping af den komprimerede 5-kategori-variant,
+udført efter direkte redaktionel anmodning, samt en afprøvning mod det
+store STED-REGISTER.
 
 ---
 
-## E. Komprimeret variant (6 kategorier) med GeoNames-mapping
+## E. Komprimeret variant (5 kategorier) med GeoNames-mapping og test mod STED-REGISTER
 
-Redaktionelt ønske: slå de 11 kategorier sammen til færre, samle *alle*
-bygninger — inklusive kulturinstitutioner og fortidsminder — i én
-kategori, holde bygninger adskilt fra bebyggede områder, og droppe "Øer"
-som selvstændig kategori. Nedenfor er resultatet af den sammenlægning,
-afprøvet mod de samme 480 klassificerede poster som afsnit A–D (+ 1
-tvivlstilfælde, *Falleberthor*, uændret fra afsnit C).
+Redaktionelt ønske, i to omgange: (1) slå de 11 kategorier sammen til
+færre — samle *alle* bygninger, inklusive kulturinstitutioner og
+fortidsminder, i én kategori, holde bygninger adskilt fra bebyggede
+områder, droppe "Øer" som selvstændig kategori; (2) lægge "Parker, haver
+og naturområder" ind under bygningskategorien også, så resultatet er
+**5** kategorier, ikke 6. Afprøvet først mod de 480 klassificerede poster
+fra afsnit A–D, derefter — for at teste generaliserbarheden — mod det
+langt større STED-REGISTER i `data/normalized/entities.csv` (2508 poster).
 
 ### Sammenlægningen
 
@@ -365,59 +368,114 @@ tvivlstilfælde, *Falleberthor*, uændret fra afsnit C).
 | Lande, regioner og landsdele | (uændret) |
 | Vandområder | (uændret) |
 | Landskabsformer og naturfænomener | Landskabsformer og naturfænomener + Øer |
-| Parker, haver og naturområder | (uændret) |
-| Bygninger, anlæg og fortidsminder | Kirker og religiøse bygninger + Slotte/borge/paladser/herregårde + Teatre/museer/kulturinstitutioner + Fortidsminder/monumenter/gravsteder + Gader/pladser/bebygget infrastruktur |
+| Bygninger, anlæg, fortidsminder og parker | Kirker og religiøse bygninger + Slotte/borge/paladser/herregårde + Teatre/museer/kulturinstitutioner + Fortidsminder/monumenter/gravsteder + Gader/pladser/bebygget infrastruktur + Parker/haver/naturområder |
 
-Bemærk: at lægge "Øer" ind under landskabsformer viser sig at matche
-GeoNames' egen klassestruktur — `T.ISL` (island) hører allerede til
-Feature Class **T** ("mountain, hill, rock, area"), samme klasse som
-bjerge, høje og klipper. Sammenlægningen er altså ikke kun redaktionelt
-bekvem, den er også geografisk-taksonomisk konsistent.
+Bemærk: at lægge "Øer" ind under landskabsformer matcher GeoNames' egen
+klassestruktur — `T.ISL` (island) hører allerede til Feature Class **T**
+("mountain, hill, rock, area"). At lægge "Parker, haver og naturområder"
+ind under bygningskategorien er derimod en ren redaktionel beslutning
+uden tilsvarende GeoNames-begrundelse: parker/haver er GeoNames-klasse
+**L**, ikke **S** — sammenlægningen samler altså to forskellige
+GeoNames-klasser i én af vores kategorier, mens den efterlader
+"Landskabsformer" som den eneste kategori, der stadig falder pænt inden
+for én enkelt GeoNames-klasse (bortset fra Vandområder).
 
-### Kategoristørrelser (n=480 klassificerede poster)
+### Kategoristørrelser (n=480 klassificerede poster, SV14-registret)
 
 | Kategori | Antal poster | Andel |
 |---|---:|---:|
 | Bebyggede områder | 209 | 44 % |
-| Bygninger, anlæg og fortidsminder | 141 | 29 % |
+| Bygninger, anlæg, fortidsminder og parker | 153 | 32 % |
 | Landskabsformer og naturfænomener (inkl. øer) | 72 | 15 % |
 | Vandområder | 31 | 6 % |
 | Lande, regioner og landsdele | 15 | 3 % |
-| Parker, haver og naturområder | 12 | 3 % |
-
-Konsekvens af kompressionen: kategori 6 dominerer med 29 % af registret og
-spænder fra Colosseum til gadenavnet Via del Corso — betydeligt mere
-heterogen end nogen af de 11 oprindelige kategorier. Det er en direkte
-følge af den ønskede sammenlægning, ikke en fejl i afprøvningen, men værd
-at have med i beslutningen.
 
 ### GeoNames-mapping
 
 | Vores kategori | GeoNames Feature Class | GeoNames Feature Code | GeoNames-term | Bemærkning |
 |---|---|---|---|---|
 | Bebyggede områder | **P** | `P.PPL` | populated place | Inkluderer de tyske `A.ADM3`–`A.ADM5`-poster (Elben, Uelzen, Thale m.fl.), der reelt er landsbyer, selvom GeoNames koder dem administrativt |
-| Lande, regioner og landsdele | **A** | `A.ADM1` | first-order administrative division | Spænder reelt hele A-klassen (`A.PCLI` for suveræne stater som Kongeriget Danmark, `A.ADM2` for provinser som Napoli) samt to L-klasse "region"-koder (`L.RGN`, `L.RGNH`: Tyrol, Wallakiet, Lüneburger Heide), der ikke er administrative i streng forstand. Ingen enkelt kode dækker kategorien præcist |
+| Lande, regioner og landsdele | **A** | `A.ADM1` | first-order administrative division | Spænder reelt hele A-klassen (`A.PCLI` for suveræne stater som Kongeriget Danmark, `A.ADM2` for provinser som Napoli) samt to L-klasse "region"-koder (`L.RGN`, `L.RGNH`: Tyrol, Wallakiet, Lüneburger Heide). Ingen enkelt kode dækker kategorien præcist |
 | Vandområder | **H** | `H.STM` | stream | Hyppigste enkeltkode (floder/åer, 16 af 31). Klassen dækker desuden søer (`H.LK`), have (`H.SEA`), strædet (`H.STRT`), bugter/havne (`H.BAY`/`H.HBR`), kanaler (`H.CNL`) |
-| Landskabsformer og naturfænomener (inkl. øer) | **T** | `T.HLL` | hill | `T.ISL` (island, 22 poster) er faktisk den hyppigste enkeltkode i denne kategori, foran `T.HLL` (hill, 9). `T.HLL` er valgt som sprogligt mest generisk term for "landskabsform" bredt, men `T.ISL` bør overvejes som alternativ, hvis øer skal kunne genfindes som egen facet trods sammenlægningen |
-| Parker, haver og naturområder | **L** | `L.PRK` | park | Ren L-klasse-kategori, ingen krydsklasse-problemer |
-| Bygninger, anlæg og fortidsminder | **S** | `S.BLDG` | building(s) | Samlekategori for kirker (`S.CH`), slotte/borge/paladser (`S.CSTL`, `S.PAL`), teatre/museer (`S.THTR`, `S.MUS`), fortidsminder (`S.ANS`, `S.MNMT`, `S.RUIN`) og gader/pladser/broer (`S.SQR`, `S.BDG`, samt et par R-klasse-veje: `R.RD`, `R.ST`) |
+| Landskabsformer og naturfænomener (inkl. øer) | **T** | `T.HLL` | hill | `T.ISL` (island, 22 poster) er faktisk den hyppigste enkeltkode i denne kategori, foran `T.HLL` (hill, 9). `T.HLL` er valgt som sprogligt mest generisk term, men `T.ISL` bør overvejes som alternativ, hvis øer skal kunne genfindes som egen facet |
+| Bygninger, anlæg, fortidsminder og parker | **S** (+ **L** for parker) | `S.BLDG` | building(s) | Samlekategori for kirker (`S.CH`), slotte/borge/paladser (`S.CSTL`, `S.PAL`), teatre/museer (`S.THTR`, `S.MUS`), fortidsminder (`S.ANS`, `S.MNMT`, `S.RUIN`), gader/pladser/broer (`S.SQR`, `S.BDG`, samt R-klasse-veje: `R.RD`, `R.ST`) **og** parker/haver (`L.PRK`, klasse L). Denne kategori er nu den eneste, der spænder over to GeoNames-hovedklasser |
 
 **Implementeringsanbefaling, ikke en indvending mod kompressionen:**
-`S.BLDG` som repræsentativ kode for "Bygninger, anlæg og fortidsminder"
-er nødvendigvis upræcis, fordi kategorien dækker fem tidligere
-delkategorier. 480 af 481 poster har allerede en mere præcis undertype i
-registrets eget `type`-felt (`S.CH`, `S.CSTL`, `S.RUIN` osv.). Hvis
-kategorifeltet indarbejdes i registret, anbefales det at gemme denne
-undertype som en finere valgfri "subtype"-kolonne ved siden af den brede
-kategori, så oplysningen ikke går tabt — men det er en implementerings-
-beslutning, som ligger uden for selve kategoriseringsopgaven.
+`S.BLDG` som repræsentativ kode er nødvendigvis upræcis, fordi kategorien
+nu dækker seks tidligere delkategorier. 480 af 481 poster har allerede en
+mere præcis undertype i registrets eget `type`-felt. Anbefaling uændret
+fra tidligere: gem undertypen som en finere valgfri "subtype"-kolonne ved
+siden af den brede kategori.
 
-**Afprøvet endnu ikke mod:** det langt større STED-REGISTER i
-`data/normalized/entities.csv` (2508 poster, hele SV-udgavens printregister
-på tværs af alle værktyper, ikke kun rejseskildringerne). Den fil har
-ingen `<note>`/`description`-felt og intet eksisterende GeoNames-`type`-
-felt at støtte sig til, så en afprøvning der vil teste, hvor godt
-navnemønster-baseret klassifikation alene generaliserer til et fire gange
-større og genremæssigt bredere korpus (herunder muligvis fiktive,
-mytologiske eller ikke-geografiske "stednavne" fra eventyr og digte, som
-slet ikke optræder i rejseregistret).
+### Test mod STED-REGISTER (2508 poster) — zero-shot navnemønster
+
+`data/normalized/entities.csv` (`entity_type='place'`, `category_h1=
+'STED-REGISTER'`) er hele SV-udgavens printregister på tværs af *alle*
+værktyper (eventyr, digte, romaner, skuespil, selvbiografier — ikke kun
+rejseskildringerne) — 2508 poster, ca. 5× SV14-registret. Filen har
+**ingen** `<note>`/`description` og **intet** eksisterende GeoNames-
+`type`-felt. Klassifikationen kan derfor kun ske zero-shot: minimale
+navnemønstre (endelser/led som "-kirke", "-slot", "-sø", "-bjerge",
+"-rige") ekstraheret fra de samme mønstre, der virkede på SV14-registret.
+76 poster er rene krydshenvisninger ("X, se: Y") og indgår ikke i testen.
+
+**Dækning (positivt matchede navnemønstre):**
+
+| Kategori | n | Andel af 2432 |
+|---|---:|---:|
+| Bebyggede områder *(default — intet mønster matchede)* | 2278 | 93,7 % |
+| Vandområder | 67 | 2,8 % |
+| Bygninger, anlæg, fortidsminder og parker | 44 | 1,8 % |
+| Landskabsformer og naturfænomener | 35 | 1,4 % |
+| Lande, regioner og landsdele | 8 | 0,3 % |
+
+**Stikprøvekontrol (håndkontrolleret, ikke automatisk facit):**
+
+- **Vandområder (67):** ~98 % korrekte. Danske/tyske vandords-endelser
+  (sø/fjord/kanal/bugt/strædet/flod/elv) er et rent og lavtvetydigt signal.
+- **Lande, regioner og landsdele (8):** 100 % korrekte, men meget lille n.
+- **Landskabsformer (35):** ~90 % korrekte. Fejlkilde: "Berg, Slot" (et
+  slot, ikke et bjerg) og lignende navne, hvor et landskabsord indgår i
+  et bygningsnavn.
+- **Bygninger m.v. (44):** kun ~70–75 % korrekte. Systematisk fejlkilde:
+  tyske/østrigske stednavne, hvor et landskabsord er *frosset ind i selve
+  navnet* uden længere at beskrive stedet — **Grindelwald** og
+  **Mittenwald** er byer, ikke skove; **Waldheim** er en by (kendt for
+  sit fængsel), ikke "hjemme-skoven"; **Saarbrücken** er en storby, ikke
+  "en bro"; **Partenkirchen** og **Sieghartskirchen** er byer, ikke
+  kirker; **Neumünster** er en by, ikke en domkirke. Et navnemønster kan
+  ikke skelne "stedet ER en bro/skov/kirke" fra "stedets navn *indeholder
+  ordet for* bro/skov/kirke".
+- **Bebyggede områder (default-bucket, 2278 poster, stikprøve n=50):**
+  **kun ~68 % vurderet korrekte.** ~28 % er reelt fejlplacerede — slotte
+  (Schönbrunn, Wesenstein), bjerge (Pilatus, Halleberg), en flod (Brenta),
+  en sø (Kochelsee), øer (Ægina), et fort (Trekroner), et fortidsminde
+  (Pompei), en vulkansk lokalitet (Solfatara), lande (Brasilien,
+  Connecticut) og en å i førreform-1948-retskrivning (**Storaaen** —
+  matcher ikke "å"-mønsteret, fordi det er stavet med dobbelt-a; jf.
+  `place-toponymy.md`s pointe om historisk retskrivning) — alle uden et
+  matchende navnemønster, fordi de er egennavne uden et generisk
+  stedords-led. Resten (~4 %) er usikre/uidentificerbare.
+
+**Samlet akkurathedsestimat:** vægtet efter kategoristørrelse ≈
+0,937 × 68 % (default-bucket) + 0,063 × ~88 % (blandet på tværs af de
+fire positivt matchede kategorier) ≈ **69–70 % korrekt klassificering af
+hele STED-REGISTER**, hvis zero-shot navnemønster-metoden anvendes
+ukritisk. Det svarer til, at **omkring 700–750 af de 2432 poster**
+sandsynligvis ville få tildelt en forkert kategori.
+
+**Konklusion:** metoden, der fungerede rimeligt på SV14-registret (fordi
+et eksisterende GeoNames-`type`-felt kunne bære det meste af arbejdet),
+generaliserer **ikke** godt til STED-REGISTER alene ud fra navnet.
+Hovedårsagen er strukturel, ikke en løsere regeludformning: kendte
+egennavne (Schönbrunn, Pilatus, Ægina) bærer ingen generisk stedords-
+markør, og stednavne, der historisk *stammer fra* et landskabsord
+(-wald, -kirchen, -brücken), er ikke længere beskrivende for stedets
+aktuelle type. En brugbar klassifikation af STED-REGISTER kræver enten
+(a) et opslag mod en ekstern autoritetsfil (GeoNames/GND-stil, som for
+SV14-registret) for i det mindste de mest befolkningstunge/kendte
+poster, eller (b) en kurateret undtagelsesliste over kendte fejlkilder
+(tyske -wald/-kirchen/-brücken-stednavne, historiske å/aa-stavemåder),
+før feltet kan bruges redaktionelt. Ren zero-shot navnemønster-
+klassifikation bør ikke skrives direkte til registret uden denne
+verifikation.
