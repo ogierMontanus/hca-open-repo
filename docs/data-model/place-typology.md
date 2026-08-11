@@ -3,9 +3,12 @@
 > **Status: UDKAST — afventer faglig/redaktionel godkendelse.**
 > Dette dokument dækker Trin 1–4 af opgaven "Klassifikation af stednavne i
 > H.C. Andersens stedregister": grundlag, kategoriforslag, test mod
-> registret og en foreløbig endelig liste. Trin 5 (GeoNames-mapping)
-> er bevidst **ikke** udført endnu — det kræver først godkendelse af
-> kategorilisten i afsnit D.
+> registret og en foreløbig endelig liste (11 kategorier, afsnit A–D).
+>
+> Afsnit E nedenfor er en **redaktionelt anmodet komprimering** af de 11
+> kategorier til 6, med foreløbig GeoNames-mapping. Den fulde 11-kategori-
+> analyse i afsnit A–D er bevaret som den detaljerede baggrund — de to
+> lister lever side om side, indtil den ene er endeligt godkendt.
 
 ## Kilde
 
@@ -339,4 +342,82 @@ den fagkyndige bruger tage stilling til:
   de små undergruppestørrelser.
 
 **Trin 5 (GeoNames-mapping af de godkendte kategorier til Feature
-Classes/Codes) igangsættes først, når denne liste er godkendt.**
+Classes/Codes) igangsættes først, når denne liste er godkendt.** — se dog
+afsnit E for en foreløbig mapping af den komprimerede 6-kategori-variant,
+udført efter direkte redaktionel anmodning.
+
+---
+
+## E. Komprimeret variant (6 kategorier) med GeoNames-mapping
+
+Redaktionelt ønske: slå de 11 kategorier sammen til færre, samle *alle*
+bygninger — inklusive kulturinstitutioner og fortidsminder — i én
+kategori, holde bygninger adskilt fra bebyggede områder, og droppe "Øer"
+som selvstændig kategori. Nedenfor er resultatet af den sammenlægning,
+afprøvet mod de samme 480 klassificerede poster som afsnit A–D (+ 1
+tvivlstilfælde, *Falleberthor*, uændret fra afsnit C).
+
+### Sammenlægningen
+
+| Ny kategori | Sammensat af (afsnit B) |
+|---|---|
+| Bebyggede områder | Byer, landsbyer og bebyggelser |
+| Lande, regioner og landsdele | (uændret) |
+| Vandområder | (uændret) |
+| Landskabsformer og naturfænomener | Landskabsformer og naturfænomener + Øer |
+| Parker, haver og naturområder | (uændret) |
+| Bygninger, anlæg og fortidsminder | Kirker og religiøse bygninger + Slotte/borge/paladser/herregårde + Teatre/museer/kulturinstitutioner + Fortidsminder/monumenter/gravsteder + Gader/pladser/bebygget infrastruktur |
+
+Bemærk: at lægge "Øer" ind under landskabsformer viser sig at matche
+GeoNames' egen klassestruktur — `T.ISL` (island) hører allerede til
+Feature Class **T** ("mountain, hill, rock, area"), samme klasse som
+bjerge, høje og klipper. Sammenlægningen er altså ikke kun redaktionelt
+bekvem, den er også geografisk-taksonomisk konsistent.
+
+### Kategoristørrelser (n=480 klassificerede poster)
+
+| Kategori | Antal poster | Andel |
+|---|---:|---:|
+| Bebyggede områder | 209 | 44 % |
+| Bygninger, anlæg og fortidsminder | 141 | 29 % |
+| Landskabsformer og naturfænomener (inkl. øer) | 72 | 15 % |
+| Vandområder | 31 | 6 % |
+| Lande, regioner og landsdele | 15 | 3 % |
+| Parker, haver og naturområder | 12 | 3 % |
+
+Konsekvens af kompressionen: kategori 6 dominerer med 29 % af registret og
+spænder fra Colosseum til gadenavnet Via del Corso — betydeligt mere
+heterogen end nogen af de 11 oprindelige kategorier. Det er en direkte
+følge af den ønskede sammenlægning, ikke en fejl i afprøvningen, men værd
+at have med i beslutningen.
+
+### GeoNames-mapping
+
+| Vores kategori | GeoNames Feature Class | GeoNames Feature Code | GeoNames-term | Bemærkning |
+|---|---|---|---|---|
+| Bebyggede områder | **P** | `P.PPL` | populated place | Inkluderer de tyske `A.ADM3`–`A.ADM5`-poster (Elben, Uelzen, Thale m.fl.), der reelt er landsbyer, selvom GeoNames koder dem administrativt |
+| Lande, regioner og landsdele | **A** | `A.ADM1` | first-order administrative division | Spænder reelt hele A-klassen (`A.PCLI` for suveræne stater som Kongeriget Danmark, `A.ADM2` for provinser som Napoli) samt to L-klasse "region"-koder (`L.RGN`, `L.RGNH`: Tyrol, Wallakiet, Lüneburger Heide), der ikke er administrative i streng forstand. Ingen enkelt kode dækker kategorien præcist |
+| Vandområder | **H** | `H.STM` | stream | Hyppigste enkeltkode (floder/åer, 16 af 31). Klassen dækker desuden søer (`H.LK`), have (`H.SEA`), strædet (`H.STRT`), bugter/havne (`H.BAY`/`H.HBR`), kanaler (`H.CNL`) |
+| Landskabsformer og naturfænomener (inkl. øer) | **T** | `T.HLL` | hill | `T.ISL` (island, 22 poster) er faktisk den hyppigste enkeltkode i denne kategori, foran `T.HLL` (hill, 9). `T.HLL` er valgt som sprogligt mest generisk term for "landskabsform" bredt, men `T.ISL` bør overvejes som alternativ, hvis øer skal kunne genfindes som egen facet trods sammenlægningen |
+| Parker, haver og naturområder | **L** | `L.PRK` | park | Ren L-klasse-kategori, ingen krydsklasse-problemer |
+| Bygninger, anlæg og fortidsminder | **S** | `S.BLDG` | building(s) | Samlekategori for kirker (`S.CH`), slotte/borge/paladser (`S.CSTL`, `S.PAL`), teatre/museer (`S.THTR`, `S.MUS`), fortidsminder (`S.ANS`, `S.MNMT`, `S.RUIN`) og gader/pladser/broer (`S.SQR`, `S.BDG`, samt et par R-klasse-veje: `R.RD`, `R.ST`) |
+
+**Implementeringsanbefaling, ikke en indvending mod kompressionen:**
+`S.BLDG` som repræsentativ kode for "Bygninger, anlæg og fortidsminder"
+er nødvendigvis upræcis, fordi kategorien dækker fem tidligere
+delkategorier. 480 af 481 poster har allerede en mere præcis undertype i
+registrets eget `type`-felt (`S.CH`, `S.CSTL`, `S.RUIN` osv.). Hvis
+kategorifeltet indarbejdes i registret, anbefales det at gemme denne
+undertype som en finere valgfri "subtype"-kolonne ved siden af den brede
+kategori, så oplysningen ikke går tabt — men det er en implementerings-
+beslutning, som ligger uden for selve kategoriseringsopgaven.
+
+**Afprøvet endnu ikke mod:** det langt større STED-REGISTER i
+`data/normalized/entities.csv` (2508 poster, hele SV-udgavens printregister
+på tværs af alle værktyper, ikke kun rejseskildringerne). Den fil har
+ingen `<note>`/`description`-felt og intet eksisterende GeoNames-`type`-
+felt at støtte sig til, så en afprøvning der vil teste, hvor godt
+navnemønster-baseret klassifikation alene generaliserer til et fire gange
+større og genremæssigt bredere korpus (herunder muligvis fiktive,
+mytologiske eller ikke-geografiske "stednavne" fra eventyr og digte, som
+slet ikke optræder i rejseregistret).
