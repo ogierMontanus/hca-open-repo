@@ -39,6 +39,7 @@ ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
 ETHNIC     = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
 ADJECTIVES = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
+GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
 OUT        = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
 
 # Life-dates parsed from labels like
@@ -101,6 +102,23 @@ def load_nationalities():
     return by_person, {k: labels[k] for k in used_keys if k in labels}
 
 
+def load_gender() -> dict:
+    """{entity_id: (koen, confidence)} fra parse_person_gender.py.
+
+    Tom, hvis parseren ikke er kørt — så bliver `gender` None overalt, og
+    Køn-facetten viser blot ingen rækker (FacetEngine springer tomme
+    værdier over). Kategoriseringen er en FACET, ikke en påstand om den
+    enkelte person: den skriver ikke til registrets øvrige felter, og
+    "Endnu ubestemt" er en gyldig værdi, ikke en manglende værdi."""
+    out = {}
+    if not os.path.exists(GENDER):
+        return out
+    with open(GENDER, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            out[r["entity_id"]] = (r["koen"], float(r["confidence"]))
+    return out
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -125,6 +143,14 @@ def main() -> None:
     print(f"  {len(nationalities_by_person):,} persons with a leading nationality match, "
           f"{len(nationality_labels):,} distinct nationality keys")
 
+    gender_by_person = load_gender()
+    if gender_by_person:
+        print(f"  {len(gender_by_person):,} persons with a gender classification "
+              f"(scripts/parsers/parse_person_gender.py)")
+    else:
+        print("  no person_gender.csv — gender facet stays empty "
+              "(run scripts/parsers/parse_person_gender.py)")
+
     # Emit one entry per person, INCLUDING IDs that mockup/person.html
     # also curates. person.html's `ALL_PERSONS = Object.assign({},
     # PERSONS_EXTRA, PERSONS)` still gives the hand-curated entries
@@ -143,6 +169,12 @@ def main() -> None:
             "era":           era_for(born, died),
             "refs":          ref_count.get(rid, 0),
             "nationalities": nationalities_by_person.get(rid, []),
+            # Afledt facet-værdi, ikke en registreret oplysning — se
+            # docs/data-model/person-gender-facet.md. genderConf bæres med,
+            # så en senere UI kan skelne "høj sikkerhed" fra "sandsynlig"
+            # uden at genberegne noget.
+            "gender":       gender_by_person.get(rid, (None, None))[0],
+            "genderConf":   gender_by_person.get(rid, (None, None))[1],
         }
 
     print(f"  generated {len(generated):,} entries")

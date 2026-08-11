@@ -85,6 +85,23 @@
                  data-facet-empty-label="Uoplyst"></div>
           </div>
 
+          <!-- Køn — AFLEDT facet, ikke en registreret oplysning. Værdierne
+               kommer fra scripts/parsers/parse_person_gender.py, som vægter
+               titler, slægtsrelationer, pigenavn, -inde-professioner og
+               fornavn-i-national-kontekst. "Endnu ubestemt" er en gyldig
+               kategori og ikke en fejl: den markerer, at grundlaget ikke
+               rækker til en pålidelig kategorisering. Se
+               docs/data-model/person-gender-facet.md. Rækker og tal
+               genereres af FacetEngine — skriv dem ikke i hånden. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Køn <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="gender"></div>
+            <div style="padding:0 12px 10px;font-size:0.7rem;color:var(--color-text-muted);line-height:1.45">
+              Automatisk udledt af registerteksten — se
+              <a href="om.html" style="color:inherit;text-decoration:underline">Vores kilder</a>.
+            </div>
+          </div>
+
           <div class="facet-group">
             <div class="facet-group__header">Rolle / Erhverv <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
@@ -498,7 +515,8 @@
   var ALL = Object.keys(PERSONS_EXTRA).map(function (rid) {
     var p = PERSONS_EXTRA[rid];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
-             refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [] };
+             refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [],
+             gender: p.gender || null };
   });
 
   var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
@@ -703,13 +721,19 @@
     panel: document.querySelector('.facet-panel'),
     items: ALL,
     accessors: {
-      nationality: function (p) { return p.nationality; }
+      nationality: function (p) { return p.nationality; },
+      gender: function (p) { return p.gender; }
     },
     labels: {
       nationality: function (k) { return natLabels[k] || k; }
     },
     sortKeys: {
-      nationality: function (k) { return natLabels[k] || k; }
+      nationality: function (k) { return natLabels[k] || k; },
+      // Fast rækkefølge frem for antal/alfabet: "Endnu ubestemt" hører
+      // logisk sidst, uanset hvor stor gruppen er.
+      gender: function (k) {
+        return ({ 'Mandlig': '1', 'Kvindelig': '2', 'Endnu ubestemt': '3' })[k] || '9';
+      }
     },
     onReset: clearLocalState,
     onChange: render
