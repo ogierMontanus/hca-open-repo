@@ -868,7 +868,14 @@ body::before {
 
 .side-acc__panel {
   flex: 1;
-  max-width: 52px;
+  /* 25% = 1/4, so the 4 tabs always sum to exactly 100% of .side-acc's
+     width (fixed 220px on desktop, 100% below the 1100px breakpoint).
+     A fixed px max-width here (previously 52px vs. a 220px container)
+     left a sliver of the container unclaimed by any panel; hovering into
+     that sliver triggered .side-acc:hover's collapse-all-panels rule
+     without ever satisfying a panel's own :hover, so nothing re-expanded
+     and the box went blank. */
+  max-width: 25%;
   overflow: hidden;
   position: relative;
   display: flex;
