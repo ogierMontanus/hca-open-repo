@@ -1283,3 +1283,26 @@ Denne opdatering er ikke udført her, fordi den er mekanisk, men ikke
 triviel at gennemføre korrekt for alle tre afsnit på én gang — den bør
 ske som et samlet, afgrænset følge-op-skridt, hvis 5-kategori-versionen
 skal være den, der reelt bruges til opmærkning og eksport.
+
+### Kommende underkategorier — op til 3 pr. kategori (2026-08-11)
+
+**Redaktionel besked:** underkategorier til de 5 kategorier følger i en
+senere runde. Rammen er fastlagt på forhånd: **højst 3 underkategorier
+pr. hovedkategori** (i alt højst 15 på tværs af de 5).
+
+Dette er en væsentligt strammere ramme end afsnit H's finkategori-forslag,
+som havde op til **10** finkategorier under én enkelt hovedkategori
+(Landskabsformer) og 33 i alt. Når underkategori-arbejdet sættes i gang,
+skal afsnit H derfor **ikke** genbruges ved blot at omnummerere og
+sammenlægge de eksisterende 33 finkategorier til de 5 nye hovedkategorier
+(hvilket forbeholdet ovenfor ellers beskriver som den mekaniske vej) — de
+eksisterende finkategorier er et nyttigt *udgangspunkt for at identificere
+hvilke 3 der er vigtigst* pr. kategori, men skal komprimeres, ikke blot
+omfordeles. Kategori 2 (Landområder og naturfænomener) er særligt udsat
+her, fordi den efter vand-fusionen nu skal dække både øer, bjerge,
+vulkaner, klipper, dale, grotter, vandfald, floder, søer, strædet, bugte
+og have — 15 tidligere finkategorier — inden for kun 3 nye.
+
+Ingen underkategorier er defineret endnu. Dette afsnit er en
+pladsholder-registrering af rammen, til brug når underkategorierne
+specificeres.
