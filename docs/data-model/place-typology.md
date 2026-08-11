@@ -587,3 +587,170 @@ poster, eller (b) en kurateret undtagelsesliste over kendte fejlkilder
 før feltet kan bruges redaktionelt. Ren zero-shot navnemønster-
 klassifikation bør ikke skrives direkte til registret uden denne
 verifikation.
+
+---
+
+## G. Opmærkningsinstruktion — kodning af den 6-leddede kategori i TEI-registret
+
+### Formål og princip
+
+Instruktionen beskriver, hvordan den godkendte 6-kategori-taksonomi
+(afsnit F) kodes som et **selvstændigt, ikke-destruktivt** klassifikations-
+lag oven på det eksisterende GeoNames-baserede `@type`-felt i
+`svNames/data/registers/places.xml` (= `data/raw/SV14_places.xml`).
+`@type` rører vi ikke — det bliver ved med at bære den granulære
+GeoNames-featurekode (`P.PPL`, `S.CH`, `T.ISL` osv.), præcis som i dag.
+Vores 6-kategori-taksonomi lægges ved siden af, ikke ovenpå.
+
+**Denne instruktion beskriver skemaet til godkendelse og til brug for
+høstningsscripts. Den ændrer endnu ikke selve `places.xml`** — det er et
+separat skridt, der kræver eksplicit kørsel af klassifikationsscriptet mod
+den levende fil.
+
+### Attribut
+
+Brug `@subtype` på `<place>`-elementet, med et af de 6 faste slug-værdier
+nedenfor:
+
+```xml
+<place xml:id="geo-2957834" type="P.PPL" subtype="bebygget">
+```
+
+**Hvorfor `@subtype` og ikke `@ana`:** TEI's egen anbefaling for en
+sekundær, taksonomi-baseret klassifikation er `@ana` (der peger ind i en
+`<taxonomy>` i `<classDecl>`, som allerede findes som reference i
+`templates/place-types.xml`). Men den *faktiske* praksis i den levende
+`places.xml` er allerede at skrive GeoNames-koden som en bar tekststreng i
+`@type`, ikke som et `@ana`-pointer-opslag mod classDecl'en. For at følge
+etableret praksis frem for teoretisk korrekthed bruges `@subtype` med en
+tilsvarende bar slug-værdi — konsistent med, hvordan `@type` allerede
+skrives i filen i dag.
+
+### De 6 slug-værdier
+
+| Slug | Kategori | Nummer |
+|---|---|:---:|
+| `bebygget` | Bebyggede områder | 1 |
+| `admreg` | Lande, administrative enheder og regioner | 2 |
+| `vand` | Vandområder | 3 |
+| `landskab` | Landskabsformer og naturfænomener (inkl. øer) | 4 |
+| `anlaeg` | Bygninger, anlæg og fortidsminder | 5 |
+| `park` | Parker, haver og naturområder | 6 |
+
+Usikre tilfælde (jf. afsnit C og den anbefalede procedure nedenfor):
+
+| Slug | Betydning |
+|---|---|
+| `usikker` | Kategori kan ikke afgøres uden forbehold — se `<note>` for begrundelse |
+
+### Beslutningsprocedure (i prioriteret rækkefølge)
+
+En automatisk klassifikator — eller en redaktør, der opmærker manuelt —
+skal anvende reglerne i denne rækkefølge og stoppe ved første match:
+
+**1. Navngivne enkelttilfælde (højeste prioritet).** Kendte poster, hvor
+`@type` er misvisende eller decideret forkert i forhold til stedets
+identitet (se tabellen "Kendte enkelttilfælde med afvigende `@type`"
+nedenfor). Disse skal *altid* opmærkes efter deres reelle identitet, ikke
+efter den rå GeoNames-kode.
+
+**2. Undtagelsesregler (dokumenteret i afsnit F).**
+   - **Kanal** (`H.CNL` og underkoder `H.CNLA/B/D/I/N/Q/SB/X`, samt navne
+     med "kanal"/"canal" hvor `@type` mangler) → `vand`, ikke `anlaeg`,
+     selvom kanaler er menneskeskabte. Se undtagelsesafsnittet i F.
+   - **Grotter/huler** (`S.CAVE`) → `landskab`, ikke `anlaeg`, fordi
+     GeoNames placerer naturlige grotter i S-klassen (structure/spot),
+     men vores taksonomi følger den oprindelige 11-kategori-analyse
+     (afsnit B), hvor grotter hører under Landskabsformer sammen med
+     bjerge og klipper. **Undtagelse fra denne undtagelse:** hvis grotten
+     er dokumenteret menneskeskabt (fx en antik tunnel, jf. Grotta di
+     Pozzuoli i afsnit C, punkt 6) → `anlaeg`.
+   - **Haver** (`S.GDN`) → `park`, ikke `anlaeg`, fordi GeoNames'
+     "garden(s)" begrebsligt hører under vores kategori 6
+     ("Parker, **haver** og naturområder"), selvom S-klassen ellers går
+     til `anlaeg`.
+   - **Kategori 2 vs. 4 — administrativ suffiks-regel** (øer, halvøer,
+     naturgeografiske enheder): navnet *alene* (uden administrativt
+     suffiks) → `landskab`; navnet *med* et administrativt/kirkeligt
+     suffiks (stift, sogn, amt, herred, kommune, län, provins, kanton,
+     bispedømme, region) → `admreg`. Se den fulde regel med eksempler i
+     [`place-categorization-copilot-prompt.md`](place-categorization-copilot-prompt.md).
+   - **Tysk/italiensk `A.ADM3`–`A.ADM5`:** klassificeres som `bebygget`
+     (småby/landsby), ikke `admreg`, uanset det administrative
+     GeoNames-klassepræfiks — se begrundelse i afsnit B og den bekræftede
+     stikprøve i afsnit G nedenfor (Elben, Uelzen, Thale, Pozzuoli m.fl.).
+     `A.ADM1`–`A.ADM2` går omvendt til `admreg` (større provinser/regioner:
+     Lombardia, Calabria, Napoli).
+
+**3. GeoNames Feature Class-opslag** (når intet af ovenstående rammer):
+   slå `@type`s klassepræfiks (bogstavet før punktummet) op i tabellen
+   nedenfor. Denne tabel er udledt af de koder, der faktisk forekommer i
+   SV14-registrets 481 poster — ikke GeoNames' fulde kodeunivers — men
+   dækker klasseniveauet generelt, så den kan bruges på ukendte,
+   fremtidigt høstede koder inden for samme klasse.
+
+   | GeoNames-klasse | Standard-kategori (slug) | Dokumenterede undtagelser inden for klassen |
+   |---|---|---|
+   | **P** (populated place) | `bebygget` | — |
+   | **A** (administrative) | `admreg` for ADM1–ADM2, PCL*; `bebygget` for ADM3–ADM5 (se regel 2) | — |
+   | **H** (hydrographic) | `vand` | — |
+   | **L** (area/landscape) | `park` for `L.PRK`, `L.RES*` (reservater); `admreg` for `L.RGN`, `L.RGNH` (se regel 2); ellers `landskab` som default for øvrige L-koder | — |
+   | **T** (topographic) | `landskab` | — |
+   | **S** (spot/structure) | `anlaeg` | `S.CAVE` → `landskab`, `S.GDN` → `park` (se regel 2) |
+   | **R** (road/railroad) | `anlaeg` | — |
+   | **U** (undersea) | `vand` | (ikke observeret i SV14, men konsistent med H) |
+   | **V** (vegetation) | `landskab` | (ikke observeret i SV14) |
+
+**4. Navnemønster** (kun for poster uden brugbar `@type` — fx den
+placeholder-værdi `PPL` uden klassepræfiks, eller poster med `@type`
+manglende/`null`): anvend de navnemønster-heuristikker, der er dokumenteret
+i afsnit E (endelser som "-kirke/-kirche", "-slot/-schloss", "-sø" osv.).
+Default ved intet matchende mønster er `bebygget`, jf. den etablerede
+konvention for de 90 `PPL`-poster i afsnit A — men **marker resultatet med
+lavere sikkerhed** (se format nedenfor), da afsnit E dokumenterer en
+estimeret nøjagtighed på kun ~68 % for netop denne default-bøtte, når den
+anvendes bredt (STED-REGISTER-testen).
+
+**5. Uafklaret.** Hvis ingen af ovenstående giver et forsvarligt resultat
+→ `subtype="usikker"` med en forklarende `<note>`.
+
+### Kendte enkelttilfælde med afvigende `@type`
+
+Fundet ved gennemgang af alle 481 SV14-poster med henblik på denne
+opmærkning — ud over de allerede dokumenterede i afsnit C:
+
+| xml:id / navn | `@type` | Hvad koden foreslår | Reel identitet → korrekt subtype |
+|---|---|---|---|
+| **Lilienstein** (den fejlkoblede post, `geo-982821`) | `S.FRM` (farm) | `anlaeg` | Stedet skal være det tyske bordbjerg i Sachsisk Schweiz (jf. afsnit C, punkt 5), ikke en gård i Mpumalanga, Sydafrika. **`usikker`**, indtil identifikationsfejlen er rettet — herefter `landskab` |
+| **Hippodrome of Constantinople** | `S.GDN` (garden) | `park` (jf. regel 2's have-undtagelse) | Det byzantinske hippodrom er et antikt monument/stadion, ikke en have. **`anlaeg`** — regel 1 (navngivet enkelttilfælde) tilsidesætter her regel 2's ellers generelle have-undtagelse |
+| **Via Sistina** | `null` (bogstavelig strengværdi, ikke fravær af attribut) | intet | Gadenavn i Rom → `anlaeg` via navnemønster (regel 4: "Via" = gade) |
+| **Deya** (Deià, Mallorca) | (intet `@type`, men fyldigt `<note>`) | intet | `<note>` beskriver eksplicit "a small coastal village" → `bebygget` med høj sikkerhed, selvom kilden er noteteksten, ikke en kode |
+
+### Format for usikre eller lavtsikre klassifikationer
+
+```xml
+<place xml:id="geo-982821" type="S.FRM" subtype="usikker">
+  ...
+  <note>Klassifikation usikker: denne post er sandsynligvis fejlkoblet til
+  en lokalitet i Mpumalanga, Sydafrika, jf. sv14_places_ambiguous.csv.
+  Det tilsigtede Lilienstein (bordbjerg, Sachsisk Schweiz) ville
+  klassificeres "landskab".</note>
+</place>
+```
+
+For poster klassificeret via default-navnemønster (regel 4) med den
+dokumenterede lavere nøjagtighed, tilføjes en tilsvarende note, der
+navngiver metoden (`"subtype sat via navnemønster-default, ~68% forventet
+nøjagtighed, bør stikprøvekontrolleres"`), så efterfølgende gennemgang kan
+prioritere disse poster først.
+
+### Anvendelse på høstede poster (nye/eksterne kilder)
+
+For poster, der høstes fra en ekstern kilde med sin egen typekodning
+(GeoNames API, Wikidata P31, GND Geografikum-klasse), anvendes samme
+firetrins-procedure: slå den indkommende kildekode op mod nærmeste
+GeoNames-klasse (de fleste eksterne geo-autoritetsfiler kan mappes til
+GeoNames-klassebogstaver), og følg derefter tabellen i regel 3. Kanal- og
+kategori-2-vs-4-undtagelserne i regel 2 gælder uændret uafhængigt af
+kildesystem, fordi de er defineret på stednavnets semantik, ikke på en
+bestemt kildes kodeskema.
