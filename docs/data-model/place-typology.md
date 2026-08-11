@@ -349,6 +349,83 @@ store STED-REGISTER.
 
 ---
 
+## F. Endelig 6-kategori-variant — pragmatisk løsning (Trin 5 godkendt)
+
+Redaktionel afgørelse, baseret på feedback på sektion E: **lav kategorier ned
+til 6 i stedet for 5, ved at genoprette "Parker, haver og naturområder" som
+egen kategori** (og dermed adskille den fra "Bygninger, anlæg og fortidsminder").
+Dette løser det overordnede problem med GeoNames-klasseblanding: hvor
+5-kategorivarianten tvang både S (buildings) og L (parks) ind i én kategori,
+giver 6-kategorivarianten en klarest mulig struktur uden at blive for granulær.
+
+Samtidig: **pragmatisk sammentrækning af "Lande, regioner og landsdele"** til
+én kategori ("Lande, administrative enheder og regioner"), der bevidst
+accepterer, at denne kategori blander GeoNames-klasserne A (administrative)
+og L (landscape regions) — som et rimeligt trade-off mod at have langt færre,
+større kategorier.
+
+### De 6 endelige kategorier
+
+| Nummer | Kategori | GeoNames klasse | Eksempler | Antal poster (SV14) |
+|---|---|---|---|---:|
+| 1 | **Bebyggede områder** | P | Odense, København, Rom, Berlin, Athen | 209 |
+| 2 | **Lande, administrative enheder og regioner** | A + L* | Kongeriget Danmark, Kongeriget Sverige, Tyrol, Peloponnes, Wallakiet, italienske provinser | 15 |
+| 3 | **Vandområder** | H | Elbe, Tiberen, Sundet, Bosporus, Dardanellerne, søer | 31 |
+| 4 | **Landskabsformer og naturfænomener** (inkl. øer) | T | Vesuvius, Stevns Klint, Baumannshöhle, Acropolis (terrænnet), Sicilien, Malta, Lolland | 72 |
+| 5 | **Bygninger, anlæg og fortidsminder** | S | Hagia Sophia, Sankt Knuds Kirke, Kronborg Slot, Colosseum, Parthenon, Peterskirken, Det Kongelige Teater | 153 |
+| 6 | **Parker, haver og naturområder** | L | Tiergarten, Villa Borghese, Den Botaniske Have (Odense), Hunderup Skov | 12 |
+
+**I alt:** 492 poster når Falleberthor (uidentificeret) og tvetydighedstilfælde
+(se C) medregnes; 491 når der kun tælles entydige klassifikationer.
+
+### Afgrænsning og grænsetilfælde
+
+**Kategori 2: Lande, administrative enheder og regioner.** Denne kategori
+er den eneste, der spænder over to GeoNames-hovedklasser (A for stater og
+administrativ-hierarki, L for landskabsregioner som Tyrol og Peloponnes).
+Det er en pragmatisk ordning: de to typer — suveræne stater, administrative
+provinser, og landskabsbaserede regioner — er alle "større stedtyper uden et
+enkelt bebygget referencepunkt" og fungerer grammatisk og redaktionelt på
+samme niveau i teksten. Samme årsag til sammentrækning gælder Lüneburger Heide
+og Leipziger Tieflandsbucht (naturgeografiske landskabstyper, men
+GeoNames-kodet som L.RGN). Denne sammentrækning følger opgavens princip om
+pragmatisme fremfor akademisk renhed.
+
+**Kategori 5: Bygninger, anlæg og fortidsminder** (uden parker). Denne kategori
+dækker alle menneskeskabte bygningsværker og monumenter: kirker, slot/borge,
+teatre/museer, fortidsminder, gader/pladser/broer. Ligger entydigt under
+GeoNames-klasse S.
+
+**Kategori 6: Parker, haver og naturområder** (egen kategori, ikke indeholdt i 5).
+Menneskeligt anlagte eller fredede grønne områder — oprindeligt vurderet til
+kun 12 poster i SV14-registret, men en selvstændig og redaktionelt meningsfuld
+type. Placeres i GeoNames-klasse L. Adskilt fra både kategori 4 (Landskabsformer,
+som er vild natur) og kategori 5 (Bygninger, som ikke er parker).
+
+### GeoNames-mapping
+
+| Kategori | Primær GeoNames Feature Class | Typiske Feature Codes | Bemærkning |
+|---|---|---|---|
+| Bebyggede områder | **P** | P.PPLA, P.PPL, P.PPLC, P.ADM* | Inkluderer de tyske ADM3–ADM5-poster, der reelt er småbyer |
+| Lande, administrative enheder og regioner | **A + L*** | A.PCLI, A.ADM1, A.ADM2, L.RGN, L.RGNH | To klasser — pragmatisk løst |
+| Vandområder | **H** | H.STM, H.LK, H.SEA, H.STRT, H.BAY, H.HBR, H.CNL | Floder, åer, søer, have, stræder, kanaler |
+| Landskabsformer og naturfænomener | **T** | T.HLL, T.ISL, T.MT, T.PK, T.PASS, T.CLF, T.CAVE, T.CAPE, T.VLC | Bjerge, høje, øer, pas, kløfter, grotter, forbjerge, vulkaner |
+| Bygninger, anlæg og fortidsminder | **S** | S.CH, S.CSTL, S.PAL, S.THTR, S.MUS, S.ANS, S.MNMT, S.RUIN, S.SQR, S.BDG, R.RD, R.ST | Kirker, slot, teatre, museer, mindesmærker, ruiner, gader, pladser, broer |
+| Parker, haver og naturområder | **L** | L.PRK | Byparker, slotshaver, skove, botaniske haver |
+
+### Wikidata-mapping
+
+| Kategori | Primær Wikidata Q-klasse | Eksempler Q-numre |
+|---|---|---|
+| Bebyggede områder | Q486972 human settlement | Q4016 Odense, Q1748 Athen, Q87 Chicago |
+| Lande, administrative enheder og regioner | Q6256 country, Q56061 administrative territorial entity, Q82794 region | Q35 Danmark, Q16 Italien, Q17055 Tyrol |
+| Vandområder | Q15324 body of water | Q671 Elbe, Q1029 Bosporus, Q13138 Adriaterhavet |
+| Landskabsformer og naturfænomener | Q271669 landform, Q23442 island | Q676 Vesuvius, Q66 Sicilien, Q2061 Parthenon Cliff |
+| Bygninger, anlæg og fortidsminder | Q41176 building, Q1371191 structure, Q4989906 monument | Q162 Hagia Sophia, Q34263 Tower of London, Q202054 Colosseum |
+| Parker, haver og naturområder | Q22698 park, Q4338161 arboretum, Q1629819 botanical garden | Q670524 Tiergarten, Q1266019 Villa Borghese |
+
+---
+
 ## E. Komprimeret variant (5 kategorier) med GeoNames-mapping og test mod STED-REGISTER
 
 Redaktionelt ønske, i to omgange: (1) slå de 11 kategorier sammen til
