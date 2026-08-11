@@ -1,14 +1,14 @@
 # Stedtypologi for SV-udgavens stedregister — forslag til godkendelse
 
-> **Status: UDKAST — afventer faglig/redaktionel godkendelse.**
-> Dette dokument dækker Trin 1–4 af opgaven "Klassifikation af stednavne i
-> H.C. Andersens stedregister": grundlag, kategoriforslag, test mod
-> registret og en foreløbig endelig liste (11 kategorier, afsnit A–D).
->
-> Afsnit E nedenfor er en **redaktionelt anmodet komprimering** af de 11
-> kategorier til 6, med foreløbig GeoNames-mapping. Den fulde 11-kategori-
-> analyse i afsnit A–D er bevaret som den detaljerede baggrund — de to
-> lister lever side om side, indtil den ene er endeligt godkendt.
+> **Status: Afsnit J er den gældende taksonomi (5 kategorier).** Afsnit
+> A–I dokumenterer den analytiske vej dertil — 11 kategorier (§A–D), en
+> mellemliggende 6-kategori-variant med GeoNames/Wikidata-mapping,
+> markup-instruktion og finkategori-forslag (§F–I) — og er bevaret som
+> baggrund og begrundelse, **ikke** som gældende specifikation. §G's
+> markup-instruktion, §H's finkategori-lag og §I's STED-REGISTER-estimat
+> er alle skrevet mod den nu erstattede 6-kategori-inddeling og skal
+> revideres, før de kan bruges sammen med §J's 5-kategori-nummerering —
+> se forbeholdet i slutningen af §J.
 
 ## Kilde
 
@@ -1093,3 +1093,193 @@ estimat alene** — konklusionen fra afsnit E ("ren zero-shot
 navnemønster-klassifikation bør ikke skrives direkte til registret uden
 verifikation") gælder mindst lige så stærkt her, og for `oe` og
 `kloeft_dal` decideret stærkere, end for hovedkategori-niveauet.
+
+---
+
+## J. Revideret taksonomi — 5 kategorier (gældende version)
+
+> **Status: GÆLDENDE.** Redaktionelt fastlagt taksonomi, der erstatter
+> 6-kategori-inddelingen fra afsnit F. Ændringen er tre ting på én gang:
+> (1) antallet af kategorier går fra 6 til 5, (2) rækkefølgen vendes om —
+> naturkategorierne står nu først, de administrative/bebyggede sidst — og
+> (3) hver kategoris definition er omformuleret fra beskrivende prosa til
+> et **enkelt heuristisk ja/nej-spørgsmål**, som kan stilles direkte om
+> ethvert stednavn uden opslag. Vandområder er ikke længere en selvstændig
+> kategori — se særreglen under Kategori 2.
+
+### De 5 kategorier
+
+**1. Parker, haver og naturområder**
+GeoNames: primært **L** (Area)
+*Heuristisk spørgsmål:* Er stedet primært et afgrænset grønt område, der
+er udlagt, fredet eller anvendt til rekreation?
+Eksempler: Munke Mose (nutidig), Tiergarten, Kongens Have
+
+**2. Landområder og naturfænomener**
+GeoNames: primært **T** (Hypsographic); **+ H** (Hydrographic) via
+særreglen nedenfor
+*Heuristisk spørgsmål:* Er stedet et naturligt landbaseret geografisk
+fænomen, som ville eksistere uden menneskelig bebyggelse?
+Eksempler: Fyn, Lolland, Vesuvius, Stevns Klint, Munke Mose (som
+sumpområde i 1800-tallet)
+
+**3. Bygninger og anlæg**
+GeoNames: primært **S** (Spot, Building, Farm, Facility)
+*Heuristisk spørgsmål:* Kan man forestille sig, at stedet har eller har
+haft en adresse, matrikel eller fysisk afgrænsning som enkeltanlæg?
+Eksempler: Benedikts Kirke, Kronborg, Hagia Sophia, Colosseum, Kız Kulesi
+
+**4. Bebyggede områder**
+GeoNames: primært **P** (Populated Place)
+*Heuristisk spørgsmål:* Kan man forestille sig et postnummer eller en
+egentlig bosættelse af mennesker?
+Eksempler: Odense, København, Lübeck, Firenze, Theresienstadt
+
+**5. Områder med flere bebyggede steder**
+GeoNames: primært **A** (Administrative Division)
+*Heuristisk spørgsmål:* Kan området indeholde flere byer, landsbyer eller
+andre bebyggede områder?
+Eksempler: Danmark, Tyrol, Fyns Stift, Bogø Sogn, Slesvig-Holsten, Europa
+
+*Kategori-2-vs-5-grænsen* (Fyn vs. Fyns Stift, Bogø vs. Bogø Sogn) er
+uændret i sagen fra den administrative suffiks-regel i afsnit F/G'en:
+navnet alene → kategori 2; navnet med et administrativt/kirkeligt suffiks
+(stift, sogn, amt, herred, kommune, län, provins, kanton, bispedømme,
+region) → kategori 5.
+
+### Overordnet beslutningstræ
+
+```
+Trin 1: Natur eller menneskeskabt?
+
+Natur
+├── Vand → GeoNames H → SÆRREGEL: kategori 2
+│          (se begrundelse nedenfor)
+└── Land → Kategori 2
+
+Menneskeskabt
+├── Adresse/matrikel tænkelig som enkeltanlæg → Kategori 3
+├── Bosættelse/postnummer tænkelig          → Kategori 4
+└── Indeholder flere bosættelser            → Kategori 5
+```
+
+**Særreglen for vand:** bekræftet redaktionelt — vandområder (floder,
+søer, hav, strædet, kanaler; GeoNames-klasse H) har **ikke** egen
+kategori i 5-kategori-systemet, men klassificeres som **Kategori 2**
+sammen med de landbaserede naturfænomener. Kategori 2's heuristiske
+spørgsmål ("...naturligt landbaseret geografisk fænomen...") skal derfor
+læses bredt — "landbaseret" betyder her *"del af det naturlige,
+ikke-bebyggede landskab"*, ikke bogstaveligt "på land, ikke i vand". Dette
+er en bevidst tilbagevenden til den bredere natur-samling, der også blev
+overvejet tidligt i processen (jf. afsnit E's oprindelige forslag om at
+lægge øer ind under landskabsformer, af samme grundprincip: GeoNames'
+klasseforskel mellem H og T er ikke redaktionelt meningsfuld nok til at
+bære en selvstændig kategori i en 5-leddet taksonomi).
+
+**Kanal-undtagelsen fra afsnit F/G bortfalder som selvstændigt problem:**
+da vand ikke længere skal skelnes fra bygninger/anlæg via en dedikeret
+vandkategori, er spørgsmålet "hører en kanal til vand eller anlæg?"
+afgjort af beslutningstræets trin 1 alene — en kanal er *natur* (selvom
+menneskeskabt vand ligesom en menneskeskabt park er "natur" i denne
+taksonomis forstand: begge er ikke-bebyggede, ikke-enkeltanlæg-typer) →
+Kategori 2. **Grotte- og have-undtagelserne** (§G: `S.CAVE`→landskab,
+`S.GDN`→park) gælder fortsat, fordi de adskiller GeoNames-klasse S fra
+kategori 2/1 uafhængigt af vand-særreglen.
+
+### Munke Mose — eksempel på tidsafhængig klassifikation
+
+Brugerens eget eksempel er værd at fremhæve som princip, ikke kun som
+enkelttilfælde: **Munke Mose** optræder i begge kategori-1- og
+kategori-2-eksempellisterne, fordi stedets *kategori afhænger af hvilket
+tidspunkt der beskrives* — et sumpområde (kategori 2, naturfænomen) i
+1800-tallet, anlagt som bypark (kategori 1) i nutiden. Det er samme
+fysiske lokalitet, men to forskellige stedtyper afhængigt af tid.
+
+Dette er ikke en generel undtagelse, men en påmindelse om, at
+stedtypologien — ligesom personregistrets datoer, jf.
+[`temporal-modelling.md`](temporal-modelling.md) — kan være
+**tidsbunden**: et sted, hvis funktion er dokumenteret ændret over tid
+(sumpe drænet til parker, fæstningsværker nedlagt til byrum, klostre
+sekulariseret til museer), bør i princippet klassificeres efter den
+periode, teksten refererer til, ikke efter stedets nutidige status. For
+SV14-registret specifikt — som gengiver H.C. Andersens egen samtid
+(1805–1875) — betyder det i praksis, at **den historiske** kategori
+normalt er den relevante, medmindre andet fremgår. Det taler for at
+revidere den eksisterende `Munke-Mose`-klassifikation i afsnit H/§G's
+`PPL_NAME_OVERRIDE`-tabel (i dag sat til `park` ud fra dens *nutidige*
+status) til `land_natur` — men dette bør bekræftes redaktionelt, ikke
+ændres ensidigt her, da det afhænger af, hvordan Andersen selv omtaler
+stedet i den relevante tekstpassage.
+
+### GeoNames-mapping (opsummeret)
+
+| Kategori | GeoNames-klasse(r) | Bemærkning |
+|---|---|---|
+| 1. Parker, haver og naturområder | **L** | Uændret fra afsnit F's `L.PRK` m.fl. |
+| 2. Landområder og naturfænomener | **T + H** | Fusion af afsnit F's tidligere kategori 3 (Vandområder, H) og kategori 4 (Landskabsformer, T) |
+| 3. Bygninger og anlæg | **S** | Uændret fra afsnit F's kategori 5 (Bygninger, anlæg og fortidsminder) |
+| 4. Bebyggede områder | **P** | Uændret fra afsnit F's kategori 1 |
+| 5. Områder med flere bebyggede steder | **A** (+ `L.RGN`/`L.RGNH` via samme suffiks-undtagelse som før) | Uændret fra afsnit F's kategori 2 |
+
+### Wikidata-mapping (genbrugt fra afsnit F, verificeret ved live opslag der)
+
+| Kategori | Wikidata Q-klasse |
+|---|---|
+| 1. Parker, haver og naturområder | Q22698 park |
+| 2. Landområder og naturfænomener | Q271669 landform, Q23442 island, Q15324 body of water |
+| 3. Bygninger og anlæg | Q41176 building, Q1371191 structure, Q4989906 monument |
+| 4. Bebyggede områder | Q486972 human settlement |
+| 5. Områder med flere bebyggede steder | Q56061 administrative territorial entity, Q6256 country, Q82794 region |
+
+### Validering mod SV14-registret (481 poster)
+
+Den eksisterende klassifikation fra afsnit G's script (6 kategorier) er
+remappet til de 5 nye kategorier — se
+`scripts/place_typology/` for genkøring — uden at genklassificere nogen
+enkeltpost fra bunden, da mappingen er 1-til-1 undtagen fusionen af
+gammel vand+landskab:
+
+| Ny kategori | Antal (SV14) | Andel | Sammensat af (afsnit F) |
+|---|---:|---:|---|
+| 1. Parker, haver og naturområder | 12 | 2,5 % | Kategori 6 (uændret) |
+| 2. Landområder og naturfænomener | 104 | 21,6 % | Kategori 3 (Vand, 31) + Kategori 4 (Landskab, 73) |
+| 3. Bygninger og anlæg | 139 | 28,9 % | Kategori 5 (uændret) |
+| 4. Bebyggede områder | 209 | 43,5 % | Kategori 1 (uændret) |
+| 5. Områder med flere bebyggede steder | 15 | 3,1 % | Kategori 2 (uændret) |
+| USIKKER | 2 | 0,4 % | (uændret — Falleberthor, fejlkoblet Lilienstein) |
+
+Fusionen af vand og landskab giver, som ventet, en større kategori 2
+(21,6 % — næsten en fjerdedel af registret), hvilket er værd at holde øje
+med redaktionelt: hvis facetten skal bruges til browsing/filtrering,
+bliver "Landområder og naturfænomener" nu den næststørste kategori efter
+"Bebyggede områder", og kan overvejes opdelt via finkategori-laget
+(afsnit H — som dog selv skal revideres til den nye nummerering, se
+forbeholdet nedenfor).
+
+### Forbehold — afsnit G, H og I er ikke opdateret til denne nummerering
+
+§G's markup-instruktion (`@subtype`-værdier `bebygget/admreg/vand/
+landskab/anlaeg/park/usikker`), §H's 33 finkategorier og §I's
+STED-REGISTER-estimat blev alle bygget mod 6-kategori-inddelingen i
+afsnit F. De er **ikke omskrevet** i denne redigering. Den nødvendige
+opdatering, hvis/når den efterspørges:
+
+1. **§G:** `@subtype`-værdisættet reduceres fra 7 til 6 (`vand` udgår,
+   dens indhold flyttes til `landskab`, som omdøbes eller får en
+   udvidet definition, fx `land_natur`). Beslutningsproceduren
+   forenkles, fordi kanal- og grotte/have-undtagelserne fortsat gælder,
+   men vand-vs-anlæg-afvejningen for havne bortfalder som særskilt
+   spørgsmål (havne er nu blot "vand", som er "land_natur").
+2. **§H:** de 5 finkategorier under gammel Kategori 3 (Vandområder:
+   `vandloeb`, `soe`, `hav`, `straede_sund`, `bugt_havn`) flyttes ind
+   under den nye, større Kategori 2 ved siden af de 10 eksisterende
+   landskabs-finkategorier — Kategori 2 får dermed 15 finkategorier i
+   alt, den klart største af de 5.
+3. **§I:** tallene skal genberegnes med samme remapping-logik som
+   valideringen ovenfor (ren kategori-sammenlægning, ingen ny
+   navnemønster-analyse nødvendig).
+
+Denne opdatering er ikke udført her, fordi den er mekanisk, men ikke
+triviel at gennemføre korrekt for alle tre afsnit på én gang — den bør
+ske som et samlet, afgrænset følge-op-skridt, hvis 5-kategori-versionen
+skal være den, der reelt bruges til opmærkning og eksport.
