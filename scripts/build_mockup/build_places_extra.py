@@ -5,7 +5,7 @@ build_places_extra.py
 Generates mockup/data/places-extra.js — a `PLACES_EXTRA` JS object with
 one entry per row in data/normalized/entities.csv where
 entity_type == 'place'. Coordinates and Danish country names come from
-two sources, in precedence order:
+three sources, in precedence order:
 
   1. the hcax.dk Rejser add-on (data/normalized/rejser.tsv) when the
      place label matches — this is the primary, highest-confidence
@@ -14,12 +14,19 @@ two sources, in precedence order:
      scripts/build_mockup/reconcile_sv14_geo.py from the TEI place-list
      data/raw/SV14_places.xml — fills in the remaining gap for places
      that rejser.tsv doesn't cover.
+  3. HERRED_AMT_RE below: a handful of remaining places state their own
+     Danish administrative location in the label itself, in the
+     abbreviated form "<sted>, <herred> H., <amt> A" (e.g. "Sæby, Løve
+     H., Holbæk A", Reg0020710). Herred/Amt are exclusively Danish
+     units, so a match infers country_da = "Danmark" with no
+     coordinates — geo_source records this as "herred_amt" rather than
+     leaving the place's Land facet at "Uoplyst".
 
-`geo_source` on each entry records which of the two supplied the
-coordinates. The hand-curated `PLACES` object inside mockup/place.html
-(if any) keeps precedence over both; PLACES_EXTRA fills every other gap
-so any ?reg=… link to place.html resolves to real metadata instead of a
-blank page.
+`geo_source` on each entry records which source supplied it. The
+hand-curated `PLACES` object inside mockup/place.html (if any) keeps
+precedence over all three; PLACES_EXTRA fills every other gap so any
+?reg=… link to place.html resolves to real metadata instead of a blank
+page.
 
 Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py,
 scripts/build_web/parse_rejser_htm.py and
@@ -29,6 +36,7 @@ scripts/build_mockup/reconcile_sv14_geo.py.
 import csv
 import json
 import os
+import re
 import sys
 from collections import Counter
 
@@ -77,6 +85,20 @@ COUNTRIES = [
     ("Marokko",       21.3, 35.9, -17.0,  -1.0),
     ("Israel",        29.5, 33.3,  34.3, 35.9),
 ]
+
+
+# A handful of STED-REGISTER labels carry no coordinates in either source
+# but do state their own administrative location in the abbreviated form
+# "<sted>, <herred> H., <amt> A" — e.g. "Sæby, Løve H., Holbæk A"
+# (Reg0020710) or "Hundstrup, Salling H., Svendborg A" (Reg0008990).
+# Herred ("H.") and Amt ("A") are exclusively Danish administrative units
+# (abolished 1970/1793–1970 respectively), so a match is enough to infer
+# country_da = "Danmark" even with zero geocoding. The whitespace before
+# "H" and before "A" is required so the abbreviation can't fire on a
+# label that merely happens to end in the letter A (e.g. "Genova"; note
+# this also correctly does NOT match "Beldringe Baarse S., Præstø A" —
+# "S." is Sogn, a different unit the caller didn't ask about).
+HERRED_AMT_RE = re.compile(r",\s*(?P<herred>[^,]+?)\s+H\.?,\s*(?P<amt>[^,]+?)\s+A\.?\s*$")
 
 
 def country_for(lat: float, lon: float) -> str | None:
@@ -175,6 +197,7 @@ def main() -> None:
     generated: dict[str, dict] = {}
     rejser_hits = 0
     sv14_hits = 0
+    herred_amt_hits = 0
     for r in places:
         rid = r["entity_id"]
         label = (r.get("label") or "").strip()
@@ -192,11 +215,20 @@ def main() -> None:
             rec.update(sv14_geo[rid])
             rec["geo_source"] = "sv14"
             sv14_hits += 1
+        else:
+            m = HERRED_AMT_RE.search(label)
+            if m:
+                rec["country_da"] = "Danmark"
+                rec["geo_source"] = "herred_amt"
+                rec["herred"] = m.group("herred")
+                rec["amt"] = m.group("amt")
+                herred_amt_hits += 1
         generated[rid] = rec
 
-    geo_hits = rejser_hits + sv14_hits
-    print(f"  generated {len(generated):,} entries ({geo_hits:,} with coordinates: "
-          f"{rejser_hits:,} rejser, {sv14_hits:,} SV14)")
+    geo_hits = rejser_hits + sv14_hits + herred_amt_hits
+    print(f"  generated {len(generated):,} entries ({geo_hits:,} with coordinates or "
+          f"an inferred country: {rejser_hits:,} rejser, {sv14_hits:,} SV14, "
+          f"{herred_amt_hits:,} herred/amt label match)")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
@@ -204,8 +236,10 @@ def main() -> None:
         f.write("// One entry per place in STED-REGISTER. Coordinates and country come from\n")
         f.write("// data/normalized/rejser.tsv (hcax.dk Rejser add-on) when the label matches,\n")
         f.write("// falling back to data/normalized/sv14_places_reconciled.csv (SV14_places.xml\n")
-        f.write("// reconciliation — see reconcile_sv14_geo.py) when it doesn't. geo_source\n")
-        f.write("// records which of the two supplied an entry's coordinates.\n")
+        f.write("// reconciliation — see reconcile_sv14_geo.py) when it doesn't, falling back further\n")
+        f.write("// to HERRED_AMT_RE (country_da only, no coordinates) when the label itself states a\n")
+        f.write("// Danish herred/amt, e.g. \"Sæby, Løve H., Holbæk A\". geo_source records which of\n")
+        f.write("// the three supplied an entry's country/coordinates.\n")
         f.write("// The hand-curated PLACES object in place.html takes precedence (ALL_PLACES merge).\n")
         f.write("const PLACES_EXTRA = ")
         f.write(json.dumps(generated, ensure_ascii=False, separators=(",", ":")))
