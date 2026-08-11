@@ -669,6 +669,17 @@ efter den rå GeoNames-kode.
      "garden(s)" begrebsligt hører under vores kategori 6
      ("Parker, **haver** og naturområder"), selvom S-klassen ellers går
      til `anlaeg`.
+   - **Vandfald** (`H.FLLS`, `H.FLLSX`) → `landskab`, ikke `vand`, selvom
+     GeoNames placerer vandfald i H-klassen (hydrographic). Fundet ved
+     opbygningen af finkategori-laget i afsnit H: både "Helvetes-Faldene
+     Trollhätta" (80-cases-rapporten) og "Grande Cascata di Tivoli" (en af
+     de individuelt gennemgåede `PPL`-poster) blev allerede konsekvent
+     klassificeret som landskab/naturfænomen, ikke vandområde — et
+     vandfald er narrativt og perceptuelt et naturskue på linje med en
+     klippe eller et bjerg, ikke en sejlbar/gennemstrømmet vandmasse. Ingen
+     `H.FLLS`-kodede poster findes i det nuværende SV14-register, så
+     undtagelsen ændrer ingen eksisterende klassifikation — den er
+     fremtidssikring for høstede poster.
    - **Kategori 2 vs. 4 — administrativ suffiks-regel** (øer, halvøer,
      naturgeografiske enheder): navnet *alene* (uden administrativt
      suffiks) → `landskab`; navnet *med* et administrativt/kirkeligt
@@ -693,7 +704,7 @@ efter den rå GeoNames-kode.
    |---|---|---|
    | **P** (populated place) | `bebygget` | — |
    | **A** (administrative) | `admreg` for ADM1–ADM2, PCL*; `bebygget` for ADM3–ADM5 (se regel 2) | — |
-   | **H** (hydrographic) | `vand` | — |
+   | **H** (hydrographic) | `vand` | `H.FLLS`, `H.FLLSX` (vandfald) → `landskab` |
    | **L** (area/landscape) | `park` for `L.PRK`, `L.RES*` (reservater); `admreg` for `L.RGN`, `L.RGNH` (se regel 2); ellers `landskab` som default for øvrige L-koder | — |
    | **T** (topographic) | `landskab` | — |
    | **S** (spot/structure) | `anlaeg` | `S.CAVE` → `landskab`, `S.GDN` → `park` (se regel 2) |
@@ -754,3 +765,174 @@ GeoNames-klassebogstaver), og følg derefter tabellen i regel 3. Kanal- og
 kategori-2-vs-4-undtagelserne i regel 2 gælder uændret uafhængigt af
 kildesystem, fordi de er defineret på stednavnets semantik, ikke på en
 bestemt kildes kodeskema.
+
+---
+
+## H. Finkategori-lag — forslag til andet niveau under de 6 kategorier
+
+> **Status: FORSLAG, afventer godkendelse**, ligesom afsnit F/G indtil de
+> blev bekræftet. Testet mod alle 481 SV14-poster (se valideringsafsnittet
+> nedenfor), men endnu ikke skrevet til den levende `places.xml`.
+
+### Formål
+
+De 6 kategorier fra afsnit F er bevidst brede — det var selve pointen med
+kompressionen fra 11 til 6. Men flere kategorier dækker over stedtyper, der
+er tydeligt forskellige for en bruger, der browser eller filtrerer
+registret: "Landskabsformer og naturfænomener" rummer både bjerge, øer,
+vulkaner og grotter; "Bygninger, anlæg og fortidsminder" rummer både
+kirker, slotte, teatre og gader. Et **andet, valgfrit lag** — en
+finkategori under hver af de 6 hovedkategorier — giver den detaljering
+tilbage uden at gå på kompromis med den brede taksonomi til overbliksbrug
+(fx en facet med kun 6 valg).
+
+Finkategorierne er **strengt underordnet** hovedkategorien: en post's
+finkategori kan aldrig pege på et andet hovedniveau end den, posten allerede
+er tildelt i afsnit F/G. Det gør laget sikkert at tilføje uden at ændre
+nogen eksisterende klassifikation.
+
+### Markup — tredje attribut
+
+`@subtype` (afsnit G) bærer fortsat hovedkategorien. Finkategorien kodes i
+en **tredje** attribut, `@ana`, efter TEI's egen konvention for et
+taksonomi-baseret analyselag (modsat `@subtype`, hvor vi bevidst fulgte den
+eksisterende, pragmatiske `@type`-praksis frem for `@ana`). Der er ingen
+konflikt: de tre attributter dækker hver sit granularitetsniveau og kan stå
+side om side uden indbyrdes afhængighed i selve XML-strukturen (om end
+finkategorien indholdsmæssigt altid skal være konsistent med hovedkategorien,
+jf. ovenfor).
+
+```xml
+<place xml:id="geo-XXX" type="S.CSTL" subtype="anlaeg" ana="#slot_borg">
+```
+
+En tilhørende `<classDecl><taxonomy xml:id="place-subgroups">` (parallel til
+`templates/place-types.xml`) kan rumme de 32 `<category>`-poster fra
+tabellerne nedenfor, hvis `@ana` skal pege ind i en formel taksonomi frem for
+blot at bære slug-værdien direkte.
+
+### Finkategorier pr. hovedkategori
+
+Tabellerne er udledt af de GeoNames-koder, der faktisk forekommer i
+SV14-registrets 481 poster (samme metode som afsnit G), suppleret med
+enkelttilfælde fra de individuelt gennemgåede `PPL`-poster. Antal er talt
+ved kørsel mod den fulde register — se valideringsafsnittet.
+
+**Kategori 1 — Bebyggede områder** (209 poster, 5 finkategorier)
+
+| Slug | Navn | GeoNames-koder | Antal (SV14) | Eksempler |
+|---|---|---|---:|---|
+| `regionssaede` | Regions-/amtssæder | `P.PPLA`, `P.PPLA2–5` | 105 | Palma, Firenze, Helsingør |
+| `by_landsby` | Byer og landsbyer | `P.PPL`, `A.ADM3–5` | 63 | Altenberg, Slangerup, Dalum |
+| `bydel` | Bydele/sektioner | `P.PPLX` | 28 | Priwall, Travemünde, Wandsbek |
+| `hovedstad` | Hovedstæder | `P.PPLC` | 12 | Rom, Berlin, London |
+| `historisk_bebyggelse` | Historiske/opgivne bebyggelser | `P.PPLH`, `P.PPLQ`, `P.PPLW` | 1 | Sestos |
+
+*Bemærkning:* `regionssaede` er selv temmelig bred (den slår GeoNames'
+egne PPLA–PPLA5-niveauer sammen), fordi disse i praksis alle fungerer som
+"en by, der også er administrativt sæde" i registret. En yderligere
+opdeling (fx PPLA/PPLA2 = større regionalcentre vs. PPLA3–5 = mindre
+sæder) er mulig, hvis facetten viser sig for stor i praksis.
+
+**Kategori 2 — Lande, administrative enheder og regioner** (15 poster, 3 finkategorier)
+
+| Slug | Navn | GeoNames-koder | Antal (SV14) | Eksempler |
+|---|---|---|---:|---|
+| `landskabsregion` | Landskabsregioner (kultur/natur) | `L.RGN`, `L.RGNH`, `L.RGNE`, `L.RGNL` | 6 | Tyrol, Peloponnes, Böhmen |
+| `provins` | Provinser/regionale forvaltningsenheder | `A.ADM1`, `A.ADM2` | 5 | Napoli, Lombardia, Calabria |
+| `suveraen_stat` | Suveræne stater | `A.PCLI` | 4 | Kongeriget Danmark, Italien |
+
+**Kategori 3 — Vandområder** (31 poster, 5 finkategorier)
+
+| Slug | Navn | GeoNames-koder | Antal (SV14) | Eksempler |
+|---|---|---|---:|---|
+| `vandloeb` | Vandløb (floder, åer, kanaler) | `H.STM`, `H.CNL*`, `H.STMC` | 18 | Trave, Alster, Donau-Sortehavskanalen |
+| `straede_sund` | Stræder og sunde | `H.STRT`, `H.SD`, `H.NRWS` | 4 | Sundet, Dardanellerne |
+| `soe` | Søer | `H.LK`, `H.LKS` | 3 | Lago Maggiore, Lago di Nemi |
+| `bugt_havn` | Bugter og havne | `H.BAY`, `H.HBR`, `H.GULF`, `H.COVE` | 3 | Grand Harbour (Valletta) |
+| `hav` | Have | `H.SEA`, `H.OCN` | 3 | Sortehavet, Marmarahavet |
+
+**Kategori 4 — Landskabsformer og naturfænomener** (73 poster, 10 finkategorier)
+— den kategori brugerens eksempel (bjerge, kontinenter, øer) sigtede mod:
+
+| Slug | Navn | GeoNames-koder | Antal (SV14) | Eksempler |
+|---|---|---|---:|---|
+| `oe` | Øer | `T.ISL`, `T.ISLS` | 22 | Lolland, Ischia, Capri |
+| `bjerg` | Bjerge og høje | `T.MT`, `T.MTS`, `T.HLL`, `T.PK` | 19 | Brocken, Bloksbjerg |
+| `forbjerg` | Forbjerge/næs | `T.CAPE`, `T.PROM` | 7 | Kullen, Bastei, Kap Miseno |
+| `klippe` | Klipper og klinter | `T.CLF`, `T.RK` | 6 | Stevns Klint, Møns Klint |
+| `kloeft_dal` | Kløfter og dale | `T.GRGE`, `T.VAL` | 6 | Ilsedalen, Bodetal |
+| `grotte` | Grotter/huler | `S.CAVE` (undtagelse, afsnit G) | 6 | Baumannshöhle, Kuhstall |
+| `vulkan` | Vulkaner | `T.VLC` | 4 | Vesuvius, Stromboli |
+| `pas` | Bjergpas | `T.PASS` | 2 | Brennerpasset |
+| `vandfald` | Vandfald | `H.FLLS*` (undtagelse, afsnit G) | 1 | Grande Cascata di Tivoli |
+| `kontinent` | Kontinenter | `L.CONT` | 0 | *(ikke observeret i SV14 — medtaget for STED-REGISTER/fremtidige poster)* |
+
+**Kategori 5 — Bygninger, anlæg og fortidsminder** (139 poster, 6 finkategorier)
+— genskaber i praksis den oprindelige 11-kategori-analyse fra afsnit B
+inden for denne ene hovedkategori:
+
+| Slug | Navn | GeoNames-koder | Antal (SV14) | Eksempler |
+|---|---|---|---:|---|
+| `religioes_bygning` | Kirker og andre religiøse bygninger | `S.CH`, `S.MSTY`, `S.MSQE`, `S.TMPL`, `S.CVNT`, `S.HERM` | 38 | Hagia Sophia, Skt. Knuds Kirke |
+| `slot_borg` | Slotte, borge, paladser, herregårde | `S.CSTL`, `S.PAL`, `S.EST`, `S.FT` | 26 | Kronborg, Frederiksborg |
+| `kulturinstitution` | Teatre, museer, kulturinstitutioner | `S.MUS`, `S.THTR`, `S.OPRA` | 24 | Det Kongelige Teater, La Scala |
+| `infrastruktur` | Gader, pladser, broer m.v. | `S.SQR`, `S.BDG`, `S.GATE`, `S.ARCH`, `S.WALLA`, `R.RD`, `R.ST`, `R.TNL` | 22 | Kongens Nytorv, Via di Ripetta |
+| `fortidsminde` | Fortidsminder, monumenter, gravsteder | `S.ANS`, `S.MNMT`, `S.RUIN`, `S.CMTY`, `S.GRVE`, `S.AMTH` | 21 | Colosseum, Nonnebakken |
+| `bolig_erhverv` | Boliger og erhvervsbygninger | `S.HSE`, `S.FRM`, `S.HTL`, `S.RSRT`, `S.BLDG` | 8 | Hôtel de Bavière |
+
+**Kategori 6 — Parker, haver og naturområder** (12 poster, 4 finkategorier)
+
+| Slug | Navn | GeoNames-koder | Antal (SV14) | Eksempler |
+|---|---|---|---:|---|
+| `bypark` | Byparker | `L.PRK` | 6 | Tiergarten, Munke-Mose |
+| `skov` | Skove (nær bebyggelse) | *(individuel navnegennemgang, ingen dedikeret GeoNames-kode observeret)* | 3 | Hunderup Skov, Næsbyhoved Skov |
+| `have` | Haver | `S.GDN` (undtagelse, afsnit G) | 2 | Den Botaniske Have, Villa Comunale |
+| `naturreservat` | Naturreservater/fredede områder | `L.RESN`, `L.RES*` | 1 | Liebethaler Grund |
+
+**I alt: 33 finkategorier** fordelt på de 6 hovedkategorier.
+
+### Wikidata-eksempler (finkategori-niveau)
+
+Kun de af brugeren efterspurgte eksempler er verificeret ved live opslag
+(jf. CLAUDE.md); fuld verifikation af alle 33 finkategoriers Wikidata-mapping
+er et naturligt næste skridt, men ikke udført her.
+
+| Finkategori | Wikidata Q-nummer | Verificeret |
+|---|---|---|
+| `bjerg` (mountain) | Q8502 | ✓ søgning, krydsbekræftet af Wikidata:WikiProject Mountains |
+| `kontinent` (continent) | Q5107 | ✓ søgning |
+| `oe` (island) | Q23442 | ✓ søgning (allerede verificeret i afsnit F) |
+
+### Validering mod SV14-registret
+
+Klassificeringsscriptet fra afsnit G blev udvidet med finkategori-opslag og
+kørt mod alle 481 poster: **479 af 481 (99,6 %) fik en finkategori.** De
+resterende 2 er de samme poster, der allerede er markeret `usikker` på
+hovedkategori-niveau (Falleberthor, den fejlkoblede Lilienstein-post) — de
+har konsekvent ingen finkategori heller, indtil deres identitet er
+afklaret, hvilket er den korrekte adfærd, ikke en fejl.
+
+Under valideringen blev to konsistensfejl fundet og rettet, begge værd at
+notere som eksempler på, hvorfor finkategori-laget skal **arve** sine
+undtagelser fra hovedkategori-laget og ikke genberegnes uafhængigt af den
+rå GeoNames-kode:
+
+1. **Hippodrome of Constantinople** har `@type="S.GDN"`, som ved et rent
+   kodeopslag ville give finkategorien `have` (park-gruppen) — men
+   hovedkategorien er allerede korrigeret til `anlaeg` i afsnit G (regel 1,
+   navngivet enkelttilfælde: hippodromet er et antikt monument, ikke en
+   have). En finkategori `have` under hovedkategori `anlaeg` ville være
+   selvmodsigende. Rettet til finkategori `fortidsminde`.
+2. **Colosseum** (`S.AMTH`, amfiteater) manglede oprindeligt i
+   kodeopslagstabellen og ville være faldet ud som "ukategoriseret" —
+   tilføjet til `fortidsminde`.
+
+### Anbefaling
+
+Finkategori-laget bør **ikke** implementeres før hovedkategorierne (afsnit
+F/G) er formelt godkendt, da laget er meningsløst uden det overordnede
+niveau. Når/hvis det godkendes, kan det tilføjes ikke-destruktivt til
+`places.xml` i samme arbejdsgang som `@subtype` — de deler samme
+klassificeringskilde (GeoNames-koden + de navngivne enkelttilfælde) og kan
+udledes i én scriptkørsel.
