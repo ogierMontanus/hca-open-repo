@@ -739,6 +739,19 @@
     onChange: render
   });
 
+  // Cross-page facet activation — e.g. index.html's "Hvem › Kvinder" link
+  // goes to persons.html?gender=Kvindelig. The gender checkboxes are
+  // rendered synchronously inside FacetEngine.create() (renderSources()),
+  // so they already exist in the DOM by this point; checking one here
+  // before the first apply() means the page opens already filtered,
+  // without an extra unfiltered render+refilter round-trip.
+  var urlGender = new URLSearchParams(location.search).get('gender');
+  if (urlGender) {
+    var genderBox = document.querySelector(
+      '.facet-panel input[data-facet="gender"][data-match="' + urlGender.replace(/"/g, '') + '"]');
+    if (genderBox) genderBox.checked = true;
+  }
+
   facets.apply();
 })();
 </script>

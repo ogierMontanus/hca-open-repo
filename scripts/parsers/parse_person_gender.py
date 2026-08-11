@@ -250,9 +250,16 @@ PLACE_NOISE_RE = re.compile(
 #   1) Slægtsord tæller kun som "X til …" eller som beskrivelsens indledning
 #      — og ikke efter et ejestedord ("hans Moder").
 #   2) Titler (Fru/Frøken/Madame) tæller kun PRÆDIKATIVT, altså når de ikke
-#      står foran et egennavn. "Frue i Aarhus, hos hvem …" beskriver posten;
-#      "Fru Therese Henriques" navngiver en anden.
-POSSESSIVE_RE = re.compile(r"\b(hans|hendes|sin|sine|deres|vor|min|dennes)\s+$", re.I)
+#      står foran et egennavn og ikke er en LEDSAGER. "Frue i Aarhus, hos
+#      hvem …" beskriver posten; "Fru Therese Henriques" navngiver en
+#      anden; "Dansk Turist med Frue og Børn" ledsages af en — »med Frue«
+#      betyder »sammen med [sin] hustru«, ikke »er en frue«. Fundet ved
+#      Reg0058070 ("Fog", mand, fejlklassificeret Kvindelig af netop dette
+#      mønster) — én forekomst i korpuset i dag, men mønsterklassen
+#      (ledsagelse via "med") er den samme referentfejl som possessiv- og
+#      slægtsordsværnet nedenfor, og rettes derfor generelt, ikke som en
+#      punktrettelse af den ene post.
+POSSESSIVE_RE = re.compile(r"\b(hans|hendes|sin|sine|deres|vor|min|dennes|med)\s+$", re.I)
 
 
 def _relation_hits(desc, term):
