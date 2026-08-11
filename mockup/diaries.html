@@ -222,6 +222,7 @@
             </label>
             <div class="layout-switcher">
               <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
+              <button class="layout-switcher__btn" data-layout="table">Tabel</button>
               <button class="layout-switcher__btn" data-layout="calendar">Kalender</button>
               <button class="layout-switcher__btn" data-layout="timeline">Tidslinje</button>
             </div>
@@ -367,6 +368,12 @@
             <button id="diary-more" class="layout-switcher__btn" style="display:none;padding:8px 22px">Vis flere</button>
           </div>
 
+          <!-- Table view (Tabel) — every diary page at once, sortable, populated
+               below from DIARY_INDEX directly (same independence from the free-text
+               search box as Kalender/Tidslinje already have — see the layout
+               switcher wiring). -->
+          <div id="diary-table-results" style="display:none"></div>
+
           <!-- Timeline view (Tidslinje) — populated by timeline-wire.js when data is present -->
           <div id="timeline-results" style="display:none"></div>
         </div>
@@ -449,6 +456,7 @@
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="data/timeline-index.js" onerror="void 0"></script>
 <script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
 <script src="js/diary-wire.js"></script>
 <script src="js/timeline-wire.js"></script>
 <script>
@@ -459,11 +467,58 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   var grid     = document.getElementById('diary-results');
   var tlPane   = document.getElementById('timeline-results');
+  var tablePane = document.getElementById('diary-table-results');
   var moreBtn  = document.getElementById('diary-more');
   var countEl  = document.getElementById('diary-count');
   var toolbar  = document.getElementById('diary-toolbar');
   var filter   = document.getElementById('diary-filter');
   var yearSel  = document.getElementById('diary-year');
+
+  function escTable(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  // Chronological-ish sort key: full date → YYYY-MM-DD, month-only → the 1st
+  // of that month, year-only → Jan 1 of that year, undated → sorts first.
+  // Same partial-date shapes diary-wire.js's own formatDate() parses.
+  function diarySortKey(row) {
+    var pad2 = function (n) { return (n < 10 ? '0' : '') + n; };
+    if (row.d) {
+      var full = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(row.d);
+      if (full) return full[3] + '-' + pad2(+full[2]) + '-' + pad2(+full[1]);
+      var my = /^(\d{1,2})-(\d{4})$/.exec(row.d);
+      if (my) return my[2] + '-' + pad2(+my[1]) + '-01';
+    }
+    if (row.y) return row.y + '-01-01';
+    return '';
+  }
+
+  var tableViewCtrl = null;
+  function renderDiaryTable() {
+    if (typeof DIARY_INDEX === 'undefined' || typeof TableView === 'undefined') {
+      tablePane.innerHTML = '<p class="cart-note">Kræver data/diary-index.js.</p>';
+      return;
+    }
+    if (!tableViewCtrl) {
+      tableViewCtrl = TableView.create(tablePane, [
+        { key: 'select', label: '', sortable: false,
+          html: function (r) { return '<label class="result-card__select"><input type="checkbox" data-cart-type="diary" data-cart-rid="' +
+            escTable(r.h) + '" data-cart-label="' + escTable(DiaryWire.heading(r)) + '"></label>'; } },
+        { key: 'h', label: 'ID',
+          html: function (r) { return '<a class="data-table__id-link" href="diary-pages/' +
+            escTable(r.h) + '.html">' + escTable(r.h) + '</a>'; } },
+        { key: 'dato', label: 'Dato', value: function (r) { return DiaryWire.heading(r); },
+          sortValue: diarySortKey },
+        { key: 'bindside', label: 'Bind/side',
+          value: function (r) { return 'Bind ' + (r.v || '?') + ', s. ' + (r.p || '?'); } },
+        { key: 'pl', label: 'Sted', value: function (r) { return r.pl || ''; } }
+      ], { initialSort: 'dato', initialDir: 'asc',
+           afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } });
+    }
+    tableViewCtrl.render(DIARY_INDEX);
+  }
 
   /* ── Layout switcher ──────────────────────────────────────────────── */
   var tlRendered = false;
@@ -664,6 +719,7 @@ document.addEventListener('DOMContentLoaded', function () {
         moreBtn.style.display = 'none';
         toolbar.style.display = 'none';
         tlPane.style.display  = 'none';
+        tablePane.style.display = 'none';
         calendarPane.style.display = '';
         countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
           ? DIARY_INDEX.length.toLocaleString('da-DK') : '0') +
@@ -672,9 +728,21 @@ document.addEventListener('DOMContentLoaded', function () {
         var defaultMonth = parseInt(calMonthSel.value) || 0;
         renderCalendar(parseInt(defaultYear), defaultMonth);
         showCalendarEntriesForYear(parseInt(defaultYear));
+      } else if (layout === 'table') {
+        grid.style.display    = 'none';
+        moreBtn.style.display = 'none';
+        toolbar.style.display = 'none';
+        tlPane.style.display  = 'none';
+        calendarPane.style.display = 'none';
+        tablePane.style.display = '';
+        countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
+          ? DIARY_INDEX.length.toLocaleString('da-DK') : '0') +
+          '</strong> dagbogssider';
+        renderDiaryTable();
       } else {
         tlPane.style.display  = 'none';
         calendarPane.style.display = 'none';
+        tablePane.style.display = 'none';
         grid.style.display    = '';
         if (diaryCtrl) toolbar.style.display = 'flex';
       }

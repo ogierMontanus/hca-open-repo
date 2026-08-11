@@ -276,6 +276,10 @@
               <label class="results-header__select-all">
                 <input type="checkbox" id="js-cat-select-all"> Vælg alle
               </label>
+              <div class="layout-switcher" id="js-cat-layout-switcher">
+                <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
+                <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+              </div>
             </div>
             <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
               <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
@@ -306,6 +310,7 @@
 <script src="data/works-extra.js" onerror="void 0"></script>
 <script>window.CATEGORY_WING='billedkunst.html';window.CATEGORY_LABEL='Billedkunst';</script>
 <script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
 <script src="js/category-catalogue.js"></script>
 <script src="js/nav.js"></script>
 </body>

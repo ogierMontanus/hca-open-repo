@@ -452,6 +452,36 @@ body[data-section="hvor"] .page-hero {
 .layout-switcher__btn--active { background: var(--color-accent); color: white; }
 .layout-switcher__btn--active:hover { background: var(--color-accent-hover); }
 
+/* === Data table (sortable "Tabel" view) ===
+   Shared by js/table-view.js across every register listing (persons.html,
+   places.html, the works wings via category-catalogue.js, diaries.html,
+   nation.html) — the same look cart.html's own .cart-table established for
+   the cart's Tabel view. Kept as a distinct class (not a rename of
+   .cart-table) so cart.html's print-specific rules stay scoped to the cart
+   alone; every other page's table is screen-only. */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.data-table th, .data-table td {
+  text-align: left; padding: var(--sp3) var(--sp4);
+  border-bottom: 1px solid var(--color-border);
+}
+.data-table th {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.data-table th[data-sort] { cursor: pointer; user-select: none; }
+.data-table th[data-sort]:hover { color: var(--color-text); }
+.data-table__sort-arrow { display: inline-block; width: 1em; opacity: 0.5; }
+.data-table th[aria-sort="ascending"] .data-table__sort-arrow,
+.data-table th[aria-sort="descending"] .data-table__sort-arrow { opacity: 1; }
+.data-table td.data-table__num { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: var(--color-surface-2); }
+.data-table__id-link {
+  font-family: monospace; font-size: 0.78rem; color: var(--color-text-muted);
+  text-decoration: none; border-bottom: 1px dotted var(--color-text-muted);
+}
+.data-table__id-link:hover { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+
 /* === Result Grid === */
 .result-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp4);

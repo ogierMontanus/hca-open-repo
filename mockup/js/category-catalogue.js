@@ -158,6 +158,29 @@
   var countEl = document.getElementById('js-cat-count');
   var moreBtn = document.getElementById('js-cat-more');
 
+  // "Liste" (cards, paginated via Vis flere) vs "Tabel" (flat, sortable,
+  // every filtered row at once) — same switcher pattern as cart.html's own
+  // Liste/Tabel toggle. Shared localStorage key across all three wings
+  // (billedkunst/teater-musik/bibliotek): they're separate page loads of
+  // the same catalogue concept, so one Tabel preference should carry over.
+  var layout = (function () {
+    try { return localStorage.getItem('works-layout') || 'list'; } catch (e) { return 'list'; }
+  })();
+  var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [
+    { key: 'select', label: '', sortable: false,
+      html: function (w) { return '<label class="result-card__select"><input type="checkbox" data-cart-type="work" data-cart-rid="' +
+        esc(w.rid) + '" data-cart-label="' + esc(w.title) + '"></label>'; } },
+    { key: 'rid', label: 'ID',
+      html: function (w) { return '<a class="data-table__id-link" href="work.html?reg=' +
+        esc(w.rid) + '">' + esc(w.rid) + '</a>'; } },
+    { key: 'title', label: 'Titel', value: function (w) { return w.title; } },
+    { key: 'author', label: 'Forfatter', value: function (w) { return w.author || ''; },
+      sortValue: function (w) { return surnameKey(w.author || ''); } },
+    { key: 'category', label: 'Kategori', value: function (w) { return w.h3 || w.h2 || ''; } },
+    { key: 'refs', label: 'Refs.', numeric: true, value: function (w) { return w.refs; } }
+  ], { initialSort: 'refs', initialDir: 'desc',
+       afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
+
   function card(w) {
     return '<div class="result-row">' +
       '<label class="result-card__select"><input type="checkbox" ' +
@@ -309,6 +332,9 @@
           if (cb) cb.click();
         });
       }
+    } else if (layout === 'table' && tableView) {
+      moreBtn.style.display = 'none';
+      tableView.render(filtered);
     } else {
       renderMore();
     }
@@ -343,6 +369,25 @@
   }
 
   moreBtn.addEventListener('click', renderMore);
+
+  var layoutSwitcher = document.getElementById('js-cat-layout-switcher');
+  function syncLayoutButtons() {
+    if (!layoutSwitcher) return;
+    layoutSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+      b.classList.toggle('layout-switcher__btn--active', b.getAttribute('data-layout') === layout);
+    });
+  }
+  syncLayoutButtons();
+  if (layoutSwitcher) {
+    layoutSwitcher.addEventListener('click', function (ev) {
+      var btn = ev.target.closest('[data-layout]');
+      if (!btn) return;
+      layout = btn.getAttribute('data-layout');
+      try { localStorage.setItem('works-layout', layout); } catch (e) {}
+      syncLayoutButtons();
+      apply();
+    });
+  }
 
   // Extract a person's surname for alphabetic sorting. The register's
   // person labels are already "Surname, Given names" (Collin, Edvard),
