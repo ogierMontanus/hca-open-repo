@@ -121,3 +121,30 @@ allerede er kurateret i `references.csv`. Opgaven svarer nærmest til
 den forsonings-/valideringslogik, der i ner4andersen anvendes på
 allerede foreslåede kandidater (§7) — men her er kandidatens
 `entity_id` fast, og det eneste usikre er placeringen i teksten.
+
+## Implementering (regelbaseret grundlinje)
+
+`scripts/parsers/ner_page_grounding.py` implementerer ovenstående som
+en regelbaseret grundlinje (samme stil som `parse_person_gender.py`):
+efternavn/fornavn-mønstre for personer, mærkat-match for steder,
+grådig ikke-overlappende span-tildeling pr. side, loft på 5 fund pr.
+entitet. Output: `data/normalized/ner_page_grounding.csv` (alle
+forslagsrækker) og `data/normalized/ner_page_grounding_review.csv`
+(rækker under `--min-conf`, default 0,6).
+
+**Dækningsbegrænsning:** `data/normalized/diary.csv` indeholder pt.
+kun transskriberet tekst for 751 af de 4.549 sider, der optræder i
+`references.csv` — de resterende ~47.500 facit-rækker kan ikke
+groundes endnu og springes eksplicit over (rapporteret særskilt i
+scriptets opsummering, ikke som `no_match`, da fravær af kildetekst
+er en anden situation end et forgæves søgeforsøg).
+
+Ved seneste kørsel på de 751 tilgængelige sider: 11.581 groundede
+facit-rækker, heraf 5.145 `no_match` (44 %), 3.912 `surname_only`,
+491 `full_name_proximity` (højeste sikkerhed, 0,90), 483
+`given_name_only` (laveste sikkerhed, 0,30), og 1.550 sted-match. Den
+høje `no_match`-rate afspejler dels OCR-støj, dels at mange
+registrerede personer omtales i teksten via titel/pronomen/
+kaldenavn frem for efternavn — grundlinjen fanger kun bogstavelige
+efternavns-/fornavns-forekomster og er bevidst konservativ frem for
+at gætte.
