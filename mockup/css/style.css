@@ -619,6 +619,13 @@ body[data-section="hvor"] .page-hero {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
 
+/* Hero-example pane on a wing landing page. Taller thumbnail than the
+   default 110px card because these are the page's illustrations, and a fixed
+   height across the row so cards line up instead of stair-stepping. */
+.result-grid--hero { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.result-grid--hero .result-card__thumb { height: 168px; background: var(--color-surface-2); }
+.result-grid--hero .result-card__body { gap: 4px; }
+
 /* === Chips === */
 .chip {
   display: inline-flex; align-items: center; gap: 4px;

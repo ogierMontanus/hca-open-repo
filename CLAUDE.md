@@ -99,6 +99,25 @@ Push aldrig direkte til `main` uden eksplicit godkendelse.
 
 ---
 
+## Eksterne links — nyt faneblad, diskret placering
+
+**Brugerpræference (2026-08-12):** Links der fører væk fra webstedet
+(Det Kgl. Bibliotek, Wikidata, VIAF, GeoNames …) åbnes i et **nyt
+faneblad** — `target="_blank"` + `rel="noopener noreferrer"` — så
+brugerens søgning eller filtrerede liste ikke går tabt, og så det
+signaleres at man forlader registret. Interne links åbner altid i samme
+faneblad.
+
+Eksterne links skal være **diskrete**: højt på siden hvor læseren leder
+efter kilden, men små og dæmpede, uden ramme eller knap. De er proveniens,
+ikke handlingsopfordringer.
+
+Fuld politik med markup, tilgængelighedskrav (↗ + `.sr-only`-varsling) og
+faste linktekster: `docs/external-links.md`. Følg den også for
+Wikidata-badges.
+
+---
+
 ## Kortvisning — kortfliser via CARTO
 
 **Brugerpræference (2026-06-03):** Alle Leaflet-visninger (i `mockup/`,

@@ -31,10 +31,15 @@ needed to change.
    ```
 
    This needs a direct connection to `www.wikidata.org` and
-   `query.wikidata.org` — it's stdlib-only (`urllib`), no new dependency,
-   but this project's own dev sandbox blocks both hosts at the network-
-   egress layer. Run it from a machine with normal internet, or fall back
-   to the manual WebSearch procedure below.
+   `query.wikidata.org` — it's stdlib-only (`urllib`), no new dependency.
+
+   **Update 2026-08-12:** both hosts, plus `commons.wikimedia.org`, are
+   reachable from the dev sandbox again (verified 200 OK). The note that
+   they were blocked at the network-egress layer no longer holds. Querying
+   the SPARQL endpoint directly is now the preferred proposal step, because
+   it returns `P195` (collection) and `P276` (location) alongside the image,
+   which is exactly what the verification below turns on — a WebSearch hit
+   gives you a Q-number but not the collection to check it against.
 
 2. **Verify by hand, then promote a row** — open each candidate's
    `wikidata_url`, check the collection actually matches what the local
@@ -229,3 +234,46 @@ prints how many overlay rows it loaded:
 ```
 30 hand-verified Wikidata entries loaded from data/curated/works_wikidata.csv
 ```
+
+
+## What a Reni pass actually looked like (2026-08-12)
+
+A worked example of why step 2 is not a formality. 28 works in this register
+are credited to Guido Reni; a SPARQL query for `wdt:P170 wd:Q109061` with an
+image returned 310 items, 333 rows with a collection. Automatic matching on
+title tokens plus collection tokens produced candidates for 22 of the 28.
+
+**Three survived verification.** Reg000280 *Aurora* (Palazzo
+Pallavicini-Rospigliosi, still in situ), Reg000530 *Cleopatra* (Galleria
+Palatina, i.e. Palazzo Pitti), Reg002187 *Lucrezia* (Galleria Spada). In each
+case `P195` names the same collection as the register's own title.
+
+**The rest were wrong, and wrong in instructive ways:**
+
+- *Christus paa Korset* matched "Crucifixion of Saint Peter" — a different
+  subject that shares a token.
+- *La Pietà (Bologna)* and *Madonna della Pietà* both matched a "Pietas" in
+  the Nationalmuseum, Stockholm — right word, wrong continent.
+- *Maria Magdalene (Durazzo, Genova)* matched Munich copies; Reni's Magdalenes
+  exist in at least five collections.
+- *Beatrice Cenci (Barberini, Rom)* matched a version in Blackburn.
+- *Moses (Sciarra, Rom)* matched one in the National Galleries of Scotland.
+
+The pattern: the register's titles name **historical** collections — Sciarra,
+Manfrin, Fesch, Leuchtenberg, Durazzo — most of which were dispersed in the
+19th century. Wikidata records where a painting is **now**. So collection
+matching cannot be automated for those; it needs someone who knows the
+painting moved, and where to. Roughly a 1-in-9 hit rate on candidates that
+looked plausible to the matcher.
+
+Two caveats were recorded in `notes` rather than silently accepted:
+
+- The Aurora image file is named "…nelle arti decorative" and may be a
+  reproduction rather than a photograph of the fresco; its 2498×995 proportion
+  does match the ceiling panel, and it is the `P18` Wikidata itself declares.
+  Flagged for a human eye.
+- The Spada *Lucrezia* is catalogued by the gallery as anonymous 17th century,
+  while Wikidata still gives `P170` = Reni. The *painting* is identified beyond
+  doubt (right collection, right subject); only the attribution is contested,
+  and the register follows the contemporary attribution Andersen would have
+  known. Recorded in `attribution_note`.
