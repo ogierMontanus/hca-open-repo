@@ -182,3 +182,76 @@ registrerede personer omtales i teksten via titel/pronomen/
 kaldenavn frem for efternavn — grundlinjen fanger kun bogstavelige
 efternavns-/fornavns-forekomster og er bevidst konservativ frem for
 at gætte.
+
+## Entitetslinking — opgaver og mål (autoritetsfiler)
+
+Grounding (ovenfor) løser kun **intern** linking: streng → `entity_id`
+inden for repoets eget register. ner4andersens fulde arkitektur
+(§7 i `plan-v3.md`) går videre og forsoner hver `entity_id` mod
+**eksterne autoritetsfiler**. I `hca-open-repo` er dette trin
+implementeret forskelligt for hver af de tre entitetstyper i
+`entities.csv` — ét er kørt i produktion, ét er delvist kørt for en
+delmængde, ét er kun planlagt. Nedenstående er den samlede status,
+så det er eksplicit hvilke autoritetsmål der reelt findes at linke
+imod lige nu, og hvilke der stadig kun er en fremtidig kolonne.
+
+| Entitetstype | Register (`category_h1`) | Antal poster | Intern autoritet (mål 1) | Ekstern autoritet (mål 2) | Status | Implementering |
+|---|---|---|---|---|---|---|
+| `work` | VÆRK-REGISTER | 3.708 | `entities.csv` (`entity_id`, præfiks `Reg`) | **Wikidata** (Q-nummer + Commons-billede) | Kørt for en artist-baseret delmængde (Murillo-værker m.fl.) | `scripts/parsers/wikidata_lookup.py` → forslag; `data/curated/works_wikidata.csv` → kurateret mål |
+| `place` | STED-REGISTER | 2.508 | `entities.csv` | **GeoNames** (primært) + Wikidata (sekundær kolonne) | Kørt for SV14-delmængden (bind XIV); resten af registret ikke forsonet endnu | `scripts/build_mockup/reconcile_sv14_geo.py` → `data/normalized/sv14_places_reconciled.csv` (mål) / `..._ambiguous.csv` (uafgjorte) |
+| `person` | PERSON-REGISTER | 10.228 | `entities.csv` | **VIAF** / **GND** (planlagt) | Ikke implementeret — kun nævnt som fremtidigt felt | `docs/roadmap.md` §1.3 "Authority Integration" (VIAF, Wikidata, Getty ULAN, GeoNames, "Library authority IDs" som "future-compatible fields"); `docs/pipeline/stages.md` nævner OpenRefine-forsoning "mod VIAF / Wikidata" som kuraterings-trin, ikke som kørt pipeline |
+
+### Mål 1 — intern autoritet: `entities.csv`
+
+Dette er selve registret og gælder alle tre typer ens: enhver
+linking-opgave (grounding såvel som ekstern forsoning) forankres i
+`entity_id`. Der findes ingen konkurrerende intern id-rumfordeling —
+alle `entity_id`-værdier har præfiks `Reg`, og det er
+`category_h1`/`entity_type`, ikke id-formen, der afgør registertype
+(til forskel fra `normalized_v092`, hvor person/sted havde separate
+`P`/`L`-præfikser — se `docs/data-model/v0.92-structural-diff.md`).
+
+### Mål 2 — eksterne autoriteter pr. type
+
+**Works → Wikidata.** `wikidata_lookup.py` forsoner værker mod
+Wikidata-kunstnerens P170-relaterede items og scorer titel-lighed +
+samling (`P195`). Outputtet er en **forslags**-CSV, aldrig et direkte
+skriv til `works_wikidata.csv` — en kurator skal bekræfte
+samling/lokalitet før optag (jf. CLAUDE.md's Faktakontrol-regel:
+en artist malede ofte samme motiv til flere samlinger, så
+titel-lighed alene er utilstrækkelig).
+
+**Places → GeoNames (+ Wikidata).** `reconcile_sv14_geo.py` matcher
+STED-REGISTRET mod `raw/SV14_places.xml` (TEI-stedliste, allerede
+geokodet mod GeoNames) via direkte navnematch og en DA→EN-alias via
+`rejser.tsv`. Tvetydige træk (samme navn, forskellige koordinater —
+fx "Lilienstein" i Sachsen vs. en fejltagget sydafrikansk post)
+auto-anvendes **aldrig**, men skrives til
+`sv14_places_ambiguous.csv` til manuel afgørelse. Dette dækker kun
+bind XIV's stedliste; `place-typology.md` (§ eksternt opslag,
+linje ~586 og ~758) peger på samme GeoNames/GND-stil opslag som
+nødvendigt for resten af STED-REGISTRET, men det er endnu ikke kørt
+i skala.
+
+**Persons → VIAF / GND.** Ingen kørende reconciliation findes.
+`docs/roadmap.md` §1.3 lister VIAF, Wikidata, Getty ULAN, GeoNames og
+"Library authority IDs" som **fremtidskompatible felter** — altså en
+tilsigtet, men ikke bygget, udvidelse. Hvis/når dette implementeres,
+bør det følge samme forslag/kuratering-adskillelse som de to andre
+(separat forslags-CSV, aldrig direkte skriv til `entities.csv`), og —
+jf. ner4andersens mønster med interne `gnd-*`/`geo-*`-registre før
+ekstern forsoning — kan med fordel først cache kandidat-hits i en
+`data/normalized/person_viaf_candidates.csv`-lignende fil frem for at
+kalde VIAF/GND live for hver kørsel.
+
+### Provenance-mål (ikke en autoritet, men beslægtet)
+
+`data/normalized/kb_diary_links.csv` linker hver `(vol, page)` til
+den tilsvarende live side hos Det Kgl. Bibliotek
+(`epub3.kb.dk/hcadag/...`). Det er ikke et forsoningsmål for en
+entitet, men et **kilde-provenance-link** for selve dagbogssiden —
+samme rolle som `sources[]`-listen i ner4andersens konsoliderede
+kandidatrecord (§6). Et fremtidigt entitetslinking-output (grounding
+eller ekstern forsoning) bør genbruge dette link som en del af sin
+egen provenance, fx som en `source_url`-kolonne der peger tilbage på
+den konkrete KB-side, mentionen blev fundet på.
