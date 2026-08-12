@@ -329,6 +329,46 @@ preserves any `<a href>` present in the printed DOM as a clickable link;
 the only change needed was making sure the *id* was the element carrying
 the `href`.
 
+## A third view: sortable table, and the PDF's actual default
+
+`cart.html` originally had one view — cards grouped by type ("Liste").
+Added a second, "Tabel": a single flat table across all four types
+(columns Type / ID / Titel, click a header to sort, click again to
+reverse), using the same `.layout-switcher` markup/CSS every diary-
+reference section on the site already uses, so it needed no new component,
+just a new pair of buttons. Persisted the same way as those (`localStorage`,
+falls back to `'list'` silently if storage is unavailable).
+
+**The PDF export defaults to the table regardless of which view is
+selected on screen** — denser and easier to scan for a large cart than a
+card per item, and the point of a request specifically about *export*
+behavior rather than the on-screen default. `#js-cart-download`'s click
+handler temporarily forces `layout = 'table'` and re-renders before calling
+`window.print()`, then restores whatever the reader actually had selected
+once the print dialog closes (`afterprint`), without touching their saved
+`localStorage` preference — printing to PDF doesn't change what you see
+when you come back to the page normally.
+
+One real ordering bug came out of testing this with Playwright (not just a
+test artifact — the same mistake would have bitten real browsers under the
+wrong timing): the `afterprint` listener was originally registered *after*
+`window.print()` was called. That's fragile — depending on how quickly a
+given browser resolves `print()`, the listener could end up registered
+after the event already fired, silently leaving the reader stuck on the
+table view with no restore ever happening. Fixed by registering the
+listener *before* calling `print()`, always, not after — verified by
+stubbing `window.print()` to fire `afterprint` synchronously and confirming
+the view restores correctly.
+
+The table also needed its own `@media print` rules distinct from the
+card view's: `thead { display: table-header-group }` so the column headers
+repeat on every printed page, `tr { break-inside: avoid }` so a row never
+splits across a page boundary, and the Fjern (remove) column hidden
+entirely — an on-screen action with no meaning on paper. Verified directly
+with Playwright's `page.emulate_media(media='print')` rather than assumed:
+toolbar/switcher hidden, remove column hidden, `thead` computed as
+`table-header-group`.
+
 ## Known failure mode: one bad entry must not blank the whole list
 
 Reported symptom: after "Vælg alle" on the 229-item Romaner facet, the

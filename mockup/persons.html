@@ -85,6 +85,23 @@
                  data-facet-empty-label="Uoplyst"></div>
           </div>
 
+          <!-- Køn — AFLEDT facet, ikke en registreret oplysning. Værdierne
+               kommer fra scripts/parsers/parse_person_gender.py, som vægter
+               titler, slægtsrelationer, pigenavn, -inde-professioner og
+               fornavn-i-national-kontekst. "Endnu ubestemt" er en gyldig
+               kategori og ikke en fejl: den markerer, at grundlaget ikke
+               rækker til en pålidelig kategorisering. Se
+               docs/data-model/person-gender-facet.md. Rækker og tal
+               genereres af FacetEngine — skriv dem ikke i hånden. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Køn <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="gender"></div>
+            <div style="padding:0 12px 10px;font-size:0.7rem;color:var(--color-text-muted);line-height:1.45">
+              Automatisk udledt af registerteksten — se
+              <a href="om.html" style="color:inherit;text-decoration:underline">Vores kilder</a>.
+            </div>
+          </div>
+
           <div class="facet-group">
             <div class="facet-group__header">Rolle / Erhverv <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body">
@@ -130,6 +147,10 @@
             <label class="results-header__select-all">
               <input type="checkbox" id="js-select-all"> Vælg alle
             </label>
+            <div class="layout-switcher" id="js-person-layout-switcher">
+              <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
+              <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+            </div>
           </div>
 
           <!-- Nation cross-link — filled by js/nation-link.js when the
@@ -137,7 +158,9 @@
                otherwise. -->
           <div id="js-nation-link"></div>
 
-          <!-- Persons list — data-driven from PERSONS_EXTRA (js/persons-extra.js) -->
+          <!-- Persons list — data-driven from PERSONS_EXTRA (js/persons-extra.js).
+               Reused as the render target for both layouts (Liste/Tabel), same
+               as cart.html's #js-cart-body — see the layout dispatcher below. -->
           <div class="result-list" id="js-person-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
           <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
             <button id="js-person-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
@@ -237,6 +260,7 @@
 <script src="js/facet-engine.js"></script>
 <script src="js/nation-link.js"></script>
 <script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
 <script>
 (function () {
   'use strict';
@@ -498,7 +522,8 @@
   var ALL = Object.keys(PERSONS_EXTRA).map(function (rid) {
     var p = PERSONS_EXTRA[rid];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
-             refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [] };
+             refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [],
+             gender: p.gender || null };
   });
 
   var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
@@ -517,6 +542,29 @@
   var filtered = ALL.slice().sort(byRefs);
   var countEl = document.querySelector('.results-count');
   var moreBtn = document.getElementById('js-person-more');
+
+  // "Liste" (cards, paginated via Vis flere) vs "Tabel" (flat, sortable,
+  // every filtered row at once) — same switcher pattern as cart.html's own
+  // Liste/Tabel toggle. Persisted per page, like the diary list/grid toggle.
+  var layout = (function () {
+    try { return localStorage.getItem('persons-layout') || 'list'; } catch (e) { return 'list'; }
+  })();
+  var GENDER_SORT = { 'Mandlig': '1', 'Kvindelig': '2', 'Endnu ubestemt': '3' };
+  var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [
+    { key: 'select', label: '', sortable: false,
+      html: function (p) { return '<label class="result-card__select"><input type="checkbox" data-cart-type="person" data-cart-rid="' +
+        esc(p.rid) + '" data-cart-label="' + esc(p.label) + '"></label>'; } },
+    { key: 'rid', label: 'ID',
+      html: function (p) { return '<a class="data-table__id-link" href="persons.html?reg=' +
+        esc(p.rid) + '">' + esc(p.rid) + '</a>'; } },
+    { key: 'label', label: 'Navn', value: function (p) { return p.label; } },
+    { key: 'nationality', label: 'Nationalitet',
+      value: function (p) { return (p.nationality || []).map(function (k) { return natLabels[k] || k; }).join(', '); } },
+    { key: 'gender', label: 'Køn', value: function (p) { return p.gender || ''; },
+      sortValue: function (p) { return GENDER_SORT[p.gender] || '9'; } },
+    { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
+  ], { initialSort: 'refs', initialDir: 'desc',
+       afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
 
   function card(p) {
     var meta = 'PERSON-REGISTER' + (p.desc ? ' · ' + esc(p.desc) : '');
@@ -608,7 +656,12 @@
       updateSelectAll();
       return;
     }
-    renderMore();
+    if (layout === 'table' && tableView) {
+      moreBtn.style.display = 'none';
+      tableView.render(filtered);
+    } else {
+      renderMore();
+    }
     updateLetterAvailability();
     updateSelectAll();
   }
@@ -699,21 +752,59 @@
 
   moreBtn.addEventListener('click', renderMore);
 
+  var layoutSwitcher = document.getElementById('js-person-layout-switcher');
+  function syncLayoutButtons() {
+    if (!layoutSwitcher) return;
+    layoutSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+      b.classList.toggle('layout-switcher__btn--active', b.getAttribute('data-layout') === layout);
+    });
+  }
+  syncLayoutButtons();
+  if (layoutSwitcher) {
+    layoutSwitcher.addEventListener('click', function (ev) {
+      var btn = ev.target.closest('[data-layout]');
+      if (!btn) return;
+      layout = btn.getAttribute('data-layout');
+      try { localStorage.setItem('persons-layout', layout); } catch (e) {}
+      syncLayoutButtons();
+      facets.apply();
+    });
+  }
+
   var facets = FacetEngine.create({
     panel: document.querySelector('.facet-panel'),
     items: ALL,
     accessors: {
-      nationality: function (p) { return p.nationality; }
+      nationality: function (p) { return p.nationality; },
+      gender: function (p) { return p.gender; }
     },
     labels: {
       nationality: function (k) { return natLabels[k] || k; }
     },
     sortKeys: {
-      nationality: function (k) { return natLabels[k] || k; }
+      nationality: function (k) { return natLabels[k] || k; },
+      // Fast rækkefølge frem for antal/alfabet: "Endnu ubestemt" hører
+      // logisk sidst, uanset hvor stor gruppen er.
+      gender: function (k) {
+        return ({ 'Mandlig': '1', 'Kvindelig': '2', 'Endnu ubestemt': '3' })[k] || '9';
+      }
     },
     onReset: clearLocalState,
     onChange: render
   });
+
+  // Cross-page facet activation — e.g. index.html's "Hvem › Kvinder" link
+  // goes to persons.html?gender=Kvindelig. The gender checkboxes are
+  // rendered synchronously inside FacetEngine.create() (renderSources()),
+  // so they already exist in the DOM by this point; checking one here
+  // before the first apply() means the page opens already filtered,
+  // without an extra unfiltered render+refilter round-trip.
+  var urlGender = new URLSearchParams(location.search).get('gender');
+  if (urlGender) {
+    var genderBox = document.querySelector(
+      '.facet-panel input[data-facet="gender"][data-match="' + urlGender.replace(/"/g, '') + '"]');
+    if (genderBox) genderBox.checked = true;
+  }
 
   facets.apply();
 })();

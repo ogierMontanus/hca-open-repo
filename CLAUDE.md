@@ -29,6 +29,21 @@ ud af 8 forsøg (fejlrate 75 %) ved ren hukommelsesbaseret gæt. Kun Q5686
 | Little Dorrit (roman) | Q565638 | ✓ søgning |
 | Odense (by, Danmark) | Q25331 | ✓ søgning |
 | Gad's Hill Place (Dickens' hjem) | Q5516441 | ✓ bruger |
+| Den gode Hyrde (Murillo, Prado) | Q11694421 | ✓ søgning |
+| Den hellige Familie med Fuglen (Murillo, Prado) | Q16627776 | ✓ søgning |
+| Den ubesmittede Undfangelse "La Colosal" (Murillo, Sevilla) | Q22120723 | ✓ søgning |
+| Jeune mendiant (Murillo, Louvre) | Q5659824 | ✓ søgning |
+| La Virgen de la Servilleta (Murillo) | Q2880218 | ✓ søgning |
+| Moses slaar Vand af Klippen "La Sed" (Murillo, Caridad) | Q109535214 | ✓ søgning |
+| S. S. Justa y Rufina (Murillo) | Q6120755 | ✓ søgning |
+
+For værk-Wikidata/hero-billeder i stor skala: se
+`scripts/parsers/wikidata_lookup.py` (foreslår kandidater — skriver aldrig
+selv til `data/curated/works_wikidata.csv`) og
+`docs/data-model/wikidata-hero-images.md`. Samme regel gælder der: en live
+opslag kan stadig ramme det forkerte MALERI af den rigtige kunstner (en
+kunstner malede ofte samme motiv flere gange til forskellige samlinger) —
+bekræft altid samlingen/lokaliteten, ikke kun Q-nummeret.
 
 ### Kendte forkerte Q-numre (må ikke genbruges)
 

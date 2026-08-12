@@ -148,6 +148,10 @@
             <label class="results-header__select-all">
               <input type="checkbox" id="js-select-all"> Vælg alle
             </label>
+            <div class="layout-switcher" id="js-place-layout-switcher">
+              <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
+              <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+            </div>
           </div>
 
           <!-- Nation cross-link — filled by js/nation-link.js when the Land
@@ -159,7 +163,9 @@
             <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Bogstav:</span>
           </div>
 
-          <!-- Places list — data-driven from PLACES_EXTRA (data/places-extra.js) -->
+          <!-- Places list — data-driven from PLACES_EXTRA (data/places-extra.js).
+               Reused as the render target for both layouts (Liste/Tabel), same
+               as cart.html's #js-cart-body — see the layout dispatcher below. -->
           <div class="result-list" id="js-place-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
           <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
             <button id="js-place-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>
@@ -252,6 +258,7 @@
 <script src="js/facet-engine.js"></script>
 <script src="js/nation-link.js"></script>
 <script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
 <script>
 (function () {
   'use strict';
@@ -329,6 +336,25 @@
   var filtered = ALL.slice().sort(byRefs);
   var countEl = document.querySelector('.results-count');
   var moreBtn = document.getElementById('js-place-more');
+
+  // "Liste" (cards, paginated via Vis flere) vs "Tabel" (flat, sortable,
+  // every filtered row at once) — same switcher pattern as cart.html's own
+  // Liste/Tabel toggle. Persisted per page, like the diary list/grid toggle.
+  var layout = (function () {
+    try { return localStorage.getItem('places-layout') || 'list'; } catch (e) { return 'list'; }
+  })();
+  var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [
+    { key: 'select', label: '', sortable: false,
+      html: function (p) { return '<label class="result-card__select"><input type="checkbox" data-cart-type="place" data-cart-rid="' +
+        esc(p.rid) + '" data-cart-label="' + esc(p.label) + '"></label>'; } },
+    { key: 'rid', label: 'ID',
+      html: function (p) { return '<a class="data-table__id-link" href="place.html?reg=' +
+        esc(p.rid) + '">' + esc(p.rid) + '</a>'; } },
+    { key: 'label', label: 'Navn', value: function (p) { return p.label; } },
+    { key: 'country', label: 'Land', value: function (p) { return p.country || 'Uoplyst'; } },
+    { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
+  ], { initialSort: 'refs', initialDir: 'desc',
+       afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
 
   function card(p) {
     var meta = 'STED-REGISTER' + (p.desc ? ' · ' + esc(p.desc) : '');
@@ -416,7 +442,12 @@
       updateSelectAll();
       return;
     }
-    renderMore();
+    if (layout === 'table' && tableView) {
+      moreBtn.style.display = 'none';
+      tableView.render(filtered);
+    } else {
+      renderMore();
+    }
     updateLetterAvailability();
     updateSelectAll();
   }
@@ -505,6 +536,25 @@
   }
 
   moreBtn.addEventListener('click', renderMore);
+
+  var layoutSwitcher = document.getElementById('js-place-layout-switcher');
+  function syncLayoutButtons() {
+    if (!layoutSwitcher) return;
+    layoutSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+      b.classList.toggle('layout-switcher__btn--active', b.getAttribute('data-layout') === layout);
+    });
+  }
+  syncLayoutButtons();
+  if (layoutSwitcher) {
+    layoutSwitcher.addEventListener('click', function (ev) {
+      var btn = ev.target.closest('[data-layout]');
+      if (!btn) return;
+      layout = btn.getAttribute('data-layout');
+      try { localStorage.setItem('places-layout', layout); } catch (e) {}
+      syncLayoutButtons();
+      facets.apply();
+    });
+  }
 
   // "Samtidige personer" needs both the co-occurrence index and the person
   // labels. Without them the group would render bare Reg-ids, so mark it

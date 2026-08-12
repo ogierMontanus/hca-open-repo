@@ -15,6 +15,7 @@
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
+    <span id="js-cart-badge"></span>
   </div>
 </header>
 
@@ -203,5 +204,12 @@
   </div>
 </footer>
 
+<!-- works.html is the "Hvad" overview page — pure navigation to the three
+     wings, no individual results of its own, so only the badge is wired
+     (no Cart.wireCheckboxes(): there's nothing here for it to catch). -->
+<script src="js/cart.js"></script>
+<script>
+  if (typeof Cart !== 'undefined') Cart.mountBadge(document.getElementById('js-cart-badge'));
+</script>
 </body>
 </html>

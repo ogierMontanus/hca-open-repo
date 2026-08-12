@@ -202,6 +202,16 @@
       color: var(--color-accent);
     }
     .landing-card__list li:last-child { border-bottom: none; }
+    /* The "Who" card is a <div>, not an <a> — its Women list item needs its
+       own independent link to persons.html?gender=Kvindelig, and an <a>
+       can't nest inside another <a>. Same overlay technique as
+       .result-card__link/.result-card__chip-link in style.css: a
+       full-cover link behind the card (z-index 0), individual links given
+       their own stacking context above it (z-index 1) so they stay
+       independently clickable. */
+    .landing-card__link { position: absolute; inset: 0; z-index: 0; text-decoration: none; color: inherit; }
+    .landing-card__link-item { position: relative; z-index: 1; color: inherit; text-decoration: none; }
+    .landing-card__link-item:hover { text-decoration: underline; }
     .landing-card__examples {
       font-size: 0.77rem;
       color: var(--color-text-muted);
@@ -318,12 +328,14 @@
       <div class="landing-grid">
 
         <!-- Who -->
-        <a href="persons.html" class="landing-card">
+        <div class="landing-card">
+          <a href="persons.html" class="landing-card__link" aria-label="Who"></a>
           <div class="landing-card__heading"><span class="w">W</span>ho</div>
           <div class="landing-card__count">10,228 persons · 39,361 diary refs.</div>
           <ul class="landing-card__list">
             <li>Poets &amp; Authors</li>
             <li>Family</li>
+            <li><a href="persons.html?gender=Kvindelig" class="landing-card__link-item">Women</a></li>
             <li>Friends</li>
             <li>Artists</li>
             <li>Royalty</li>
@@ -332,7 +344,7 @@
             E. Collin · Jenny Lind · Thorvaldsen · Bournonville · H.C. Ørsted …
           </div>
           <span class="landing-card__arrow">→</span>
-        </a>
+        </div>
 
         <!-- What -->
         <a href="works.html" class="landing-card">

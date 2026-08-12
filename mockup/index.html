@@ -200,6 +200,16 @@
       font-size: 0.9rem;
     }
     .landing-card__list li:last-child { border-bottom: none; }
+    /* "Hvem" card is a <div>, not an <a> — one of its list items (Kvinder)
+       needs its own independent link to persons.html?gender=Kvindelig, and
+       an <a> can't nest inside another <a>. Same overlay technique as
+       .result-card__link/.result-card__chip-link in style.css: a
+       full-cover link behind the card (z-index 0), individual links given
+       their own stacking context above it (z-index 1) so they stay
+       independently clickable. */
+    .landing-card__link { position: absolute; inset: 0; z-index: 0; text-decoration: none; color: inherit; }
+    .landing-card__link-item { position: relative; z-index: 1; color: inherit; text-decoration: none; }
+    .landing-card__link-item:hover { text-decoration: underline; }
     .landing-card__examples {
       font-size: 0.77rem;
       color: var(--color-text-muted);
@@ -375,17 +385,18 @@
       <div class="landing-grid">
 
         <!-- 1. Hvem -->
-        <a href="persons.html" class="landing-card landing-card--hvem">
+        <div class="landing-card landing-card--hvem">
+          <a href="persons.html" class="landing-card__link" aria-label="Hvem"></a>
           <div class="landing-card__heading">Hvem</div>
           <div class="landing-card__count">10.228 personer · 39.361 poster i dagbøgerne</div>
           <ul class="landing-card__list">
             <li>Kunstnere</li>
-            <li>Kvinder</li>
+            <li><a href="persons.html?gender=Kvindelig" class="landing-card__link-item">Kvinder</a></li>
             <li>Kongelige &amp; adelige</li>
           </ul>
           <div class="landing-card__examples">Collin, Edvard · Lind, Jenny</div>
           <span class="landing-card__arrow">→</span>
-        </a>
+        </div>
 
         <!-- 2. Hvad -->
         <a href="works.html" class="landing-card landing-card--hvad">

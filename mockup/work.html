@@ -45,6 +45,21 @@
     }
     .register-dl dt { color: var(--color-text-muted); font-weight: 600; }
     .register-dl dd { margin: 0; }
+    /* Reader-facing caveat when current scholarship no longer agrees with
+       this work's historical register attribution (e.g. a 19th-century
+       "Rafael" attribution since moved to another artist). Detail view
+       only, by design — see WORKS_EXTRA.attributionNote's field comment in
+       build_works_extra.py and docs/data-model/wikidata-hero-images.md. */
+    .attribution-flag {
+      background: #fdf6e8; border: 1px solid #d9b866;
+      border-radius: var(--radius-lg); padding: var(--sp4) var(--sp5);
+      margin-bottom: var(--sp5); font-size: 0.81rem;
+      color: #6b4f14; line-height: 1.6;
+    }
+    .attribution-flag__title {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: #8a6a1f; margin-bottom: 6px;
+    }
   </style>
 </head>
 <body data-section="hvad">
@@ -545,6 +560,19 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
 
   // ── Main content ─────────────────────────────────────────────────────────
   let main = '';
+
+  // Attribution caveat — reg=… detail view ONLY. Deliberately not rendered
+  // anywhere else this work's title/card can appear (category-catalogue.js's
+  // list cards, facets, diary-reference chips, cart.html, search) — those
+  // all read title/author/refs off WORKS_EXTRA without touching this field,
+  // so there's nothing to explicitly suppress there; the note simply never
+  // reaches those templates. Shown before the LOD callout on purpose: the
+  // "connected to the global knowledge graph" framing below reads oddly if
+  // a reader hasn't already seen that the graph itself has moved on from
+  // this work's register attribution.
+  if (w.attributionNote) {
+    main += `<div class="attribution-flag"><div class="attribution-flag__title">Om attributionen</div>${escAttr(w.attributionNote)}</div>`;
+  }
 
   // LOD callout
   if (w.wd) {

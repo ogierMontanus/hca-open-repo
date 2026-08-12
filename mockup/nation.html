@@ -147,6 +147,10 @@
         <div class="nation-section__header">
           <span class="nation-section__title">Personer</span>
           <span id="js-persons-count" class="nation-section__count"></span>
+          <div class="layout-switcher" id="js-persons-layout-switcher" style="margin-left:auto">
+            <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
+            <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+          </div>
         </div>
         <p class="nation-section__note">
           Personer hvis registeropslag indledes med denne beskrivelse
@@ -154,7 +158,10 @@
           <code>docs/data-model/person-ethnic-descriptors.md</code>
           for hvordan disse er udtrukket.
         </p>
-        <div id="js-persons-certain"></div>
+        <div id="js-persons-certain-wrap">
+          <div id="js-persons-certain"></div>
+          <div id="js-persons-certain-table" style="display:none"></div>
+        </div>
 
         <div id="js-persons-possible-wrap">
           <div class="nation-subgroup__label">Muligvis — nævnt længere inde i beskrivelsen</div>
@@ -163,9 +170,11 @@
             i stedet beskrive en ægtefælle, slægtning eller institution
             frem for personen selv (fx »g. m. <em>svensk</em>
             Premierløjtnant« — beskriver ægtefællen). Vist til manuel
-            vurdering, ikke slået sammen med listen ovenfor.
+            vurdering, ikke slået sammen med listen ovenfor — heller ikke
+            i Tabel-visningen.
           </p>
           <div id="js-persons-possible"></div>
+          <div id="js-persons-possible-table" style="display:none"></div>
         </div>
       </div>
 
@@ -173,6 +182,10 @@
         <div class="nation-section__header">
           <span class="nation-section__title">Steder</span>
           <span id="js-places-count" class="nation-section__count"></span>
+          <div class="layout-switcher" id="js-places-layout-switcher" style="margin-left:auto">
+            <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
+            <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+          </div>
         </div>
         <p class="nation-section__note">
           Andre stedregisterposter hvis koordinater falder inden for
@@ -181,6 +194,7 @@
           Stedregistret har koordinater endnu, så listen er ufuldstændig.
         </p>
         <div id="js-places"></div>
+        <div id="js-places-table" style="display:none"></div>
       </div>
 
       <div class="nation-section">
@@ -246,6 +260,7 @@
 <script src="data/places-extra.js" onerror="void 0"></script>
 <script src="data/works-extra.js" onerror="void 0"></script>
 <script src="js/entity-refs.js"></script>
+<script src="js/table-view.js"></script>
 <script>
 (function () {
   'use strict';
@@ -291,6 +306,71 @@
     }
     select.appendChild(opt);
   });
+
+  // Tabel view for Personer/Steder — the same flat/sortable pattern as
+  // persons.html and places.html, kept to a single table each (persons_certain
+  // and persons_possible stay in SEPARATE tables, never merged into one
+  // dataset — see the "ikke slået sammen" note above the possible-list, which
+  // the Tabel view honours just as the card view does).
+  var personsCertainTable = null, personsPossibleTable = null, placesTable = null;
+  function renderPersonsTable(container, getCtrl, setCtrl, rids) {
+    if (typeof TableView === 'undefined') return;
+    var ctrl = getCtrl();
+    if (!ctrl) {
+      ctrl = TableView.create(container, [
+        { key: 'label', label: 'Navn',
+          html: function (rid) {
+            var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
+            return '<a class="data-table__id-link" href="persons.html?reg=' + esc(rid) + '">' +
+              esc(p ? p.label : rid) + '</a>';
+          },
+          sortValue: function (rid) {
+            var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
+            return p ? p.label : rid;
+          } },
+        { key: 'desc', label: 'Beskrivelse',
+          value: function (rid) {
+            var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
+            return p && p.description ? p.description : '';
+          } },
+        { key: 'refs', label: 'Refs.', numeric: true,
+          value: function (rid) {
+            var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
+            return p && p.refs || 0;
+          } }
+      ], { initialSort: 'refs', initialDir: 'desc' });
+      setCtrl(ctrl);
+    }
+    ctrl.render(rids);
+  }
+  function renderPlacesTable(rids) {
+    if (typeof TableView === 'undefined') return;
+    if (!placesTable) {
+      placesTable = TableView.create(document.getElementById('js-places-table'), [
+        { key: 'label', label: 'Navn',
+          html: function (rid) {
+            var p = typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[rid];
+            return '<a class="data-table__id-link" href="place.html?reg=' + esc(rid) + '">' +
+              esc(p ? p.label : rid) + '</a>';
+          },
+          sortValue: function (rid) {
+            var p = typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[rid];
+            return p ? p.label : rid;
+          } },
+        { key: 'desc', label: 'Beskrivelse',
+          value: function (rid) {
+            var p = typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[rid];
+            return p && p.description ? p.description : '';
+          } },
+        { key: 'refs', label: 'Refs.', numeric: true,
+          value: function (rid) {
+            var p = typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[rid];
+            return p && p.refs || 0;
+          } }
+      ], { initialSort: 'refs', initialDir: 'desc' });
+    }
+    placesTable.render(rids);
+  }
 
   function personCard(rid) {
     var p = (typeof PERSONS_EXTRA !== 'undefined') ? PERSONS_EXTRA[rid] : null;
@@ -429,12 +509,18 @@
       n.persons_certain.length + ' sikre · ' + n.persons_possible.length + ' mulige';
     renderByMember(document.getElementById('js-persons-certain'), n, 'persons_certain',
       personCard, 'Ingen personer fundet med denne beskrivelse som første ord.');
+    renderPersonsTable(document.getElementById('js-persons-certain-table'),
+      function () { return personsCertainTable; }, function (c) { personsCertainTable = c; },
+      n.persons_certain);
 
     var possibleWrap = document.getElementById('js-persons-possible-wrap');
     if (n.persons_possible.length) {
       possibleWrap.style.display = '';
       renderByMember(document.getElementById('js-persons-possible'), n, 'persons_possible',
         personCard, '');
+      renderPersonsTable(document.getElementById('js-persons-possible-table'),
+        function () { return personsPossibleTable; }, function (c) { personsPossibleTable = c; },
+        n.persons_possible);
     } else {
       possibleWrap.style.display = 'none';
     }
@@ -442,6 +528,7 @@
     document.getElementById('js-places-count').textContent = n.places_in_country.length + ' steder';
     renderByMember(document.getElementById('js-places'), n, 'places_in_country',
       placeCard, 'Ingen andre geokodede steder fundet i denne nation endnu.');
+    renderPlacesTable(n.places_in_country);
 
     // Works — best-effort client-side hooks via EntityRefs (see the
     // "Åbent for udvidelse" note above for what these do and don't cover).
@@ -496,6 +583,44 @@
   }
 
   select.addEventListener('change', function () { render(select.value); });
+
+  // Liste/Tabel switchers for Personer and Steder — independent of each
+  // other (Værker keeps its always-separate three-list card view; merging
+  // those into one flat table would violate the "aldrig lagt sammen" rule
+  // documented above the Værker section, so it has no Tabel toggle).
+  function wireLayoutSwitcher(switcherId, storageKey, listEls, tableEls) {
+    var el = document.getElementById(switcherId);
+    if (!el) return;
+    var layout = (function () {
+      try { return localStorage.getItem(storageKey) || 'list'; } catch (e) { return 'list'; }
+    })();
+    function apply() {
+      el.querySelectorAll('[data-layout]').forEach(function (b) {
+        b.classList.toggle('layout-switcher__btn--active', b.getAttribute('data-layout') === layout);
+      });
+      listEls.forEach(function (id) {
+        var n = document.getElementById(id);
+        if (n) n.style.display = layout === 'list' ? '' : 'none';
+      });
+      tableEls.forEach(function (id) {
+        var n = document.getElementById(id);
+        if (n) n.style.display = layout === 'table' ? '' : 'none';
+      });
+    }
+    apply();
+    el.addEventListener('click', function (ev) {
+      var btn = ev.target.closest('[data-layout]');
+      if (!btn) return;
+      layout = btn.getAttribute('data-layout');
+      try { localStorage.setItem(storageKey, layout); } catch (e) {}
+      apply();
+    });
+  }
+  wireLayoutSwitcher('js-persons-layout-switcher', 'nation-persons-layout',
+    ['js-persons-certain', 'js-persons-possible'],
+    ['js-persons-certain-table', 'js-persons-possible-table']);
+  wireLayoutSwitcher('js-places-layout-switcher', 'nation-places-layout',
+    ['js-places'], ['js-places-table']);
 
   var params = new URLSearchParams(window.location.search);
   var initial = params.get('nat');

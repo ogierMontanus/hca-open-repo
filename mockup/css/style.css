@@ -452,6 +452,36 @@ body[data-section="hvor"] .page-hero {
 .layout-switcher__btn--active { background: var(--color-accent); color: white; }
 .layout-switcher__btn--active:hover { background: var(--color-accent-hover); }
 
+/* === Data table (sortable "Tabel" view) ===
+   Shared by js/table-view.js across every register listing (persons.html,
+   places.html, the works wings via category-catalogue.js, diaries.html,
+   nation.html) — the same look cart.html's own .cart-table established for
+   the cart's Tabel view. Kept as a distinct class (not a rename of
+   .cart-table) so cart.html's print-specific rules stay scoped to the cart
+   alone; every other page's table is screen-only. */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.data-table th, .data-table td {
+  text-align: left; padding: var(--sp3) var(--sp4);
+  border-bottom: 1px solid var(--color-border);
+}
+.data-table th {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.data-table th[data-sort] { cursor: pointer; user-select: none; }
+.data-table th[data-sort]:hover { color: var(--color-text); }
+.data-table__sort-arrow { display: inline-block; width: 1em; opacity: 0.5; }
+.data-table th[aria-sort="ascending"] .data-table__sort-arrow,
+.data-table th[aria-sort="descending"] .data-table__sort-arrow { opacity: 1; }
+.data-table td.data-table__num { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: var(--color-surface-2); }
+.data-table__id-link {
+  font-family: monospace; font-size: 0.78rem; color: var(--color-text-muted);
+  text-decoration: none; border-bottom: 1px dotted var(--color-text-muted);
+}
+.data-table__id-link:hover { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+
 /* === Result Grid === */
 .result-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp4);
@@ -868,7 +898,14 @@ body::before {
 
 .side-acc__panel {
   flex: 1;
-  max-width: 52px;
+  /* 25% = 1/4, so the 4 tabs always sum to exactly 100% of .side-acc's
+     width (fixed 220px on desktop, 100% below the 1100px breakpoint).
+     A fixed px max-width here (previously 52px vs. a 220px container)
+     left a sliver of the container unclaimed by any panel; hovering into
+     that sliver triggered .side-acc:hover's collapse-all-panels rule
+     without ever satisfying a panel's own :hover, so nothing re-expanded
+     and the box went blank. */
+  max-width: 25%;
   overflow: hidden;
   position: relative;
   display: flex;
