@@ -31,6 +31,40 @@ identiteten (`entity_id`) er allerede givet af `references.csv`;
 opgaven er at lokalisere og skelne de konkrete forekomst-strenge i
 sidens rå tekst.
 
+### Eksempel: en side med mange entiteter på tværs af flere registre
+
+Bind V, side 20, er blandt de sider i `references.csv` med flest
+linkede entiteter fordelt på flest registertyper: **38 links i alt —
+30 fra PERSON-REGISTRET, 5 fra STED-REGISTRET, 3 fra VÆRK-REGISTRET**
+(værk-links er uden for scope for selve grounding-opgaven, jf.
+ner4andersen §11, men tælles med her som eksempel på "flere
+indekser" på samme side).
+
+Live side hos Det Kgl. Bibliotek (fra `data/normalized/
+kb_diary_links.csv`, kolonne `kb_url`, kilde `workbook`):
+
+**<https://epub3.kb.dk/hcadag/epub3/EPUB/hcadag05_040_20.xhtml>**
+
+(Linket kunne ikke verificeres live fra denne session — udgående
+adgang til `epub3.kb.dk` er blokeret af sandkassens netværksproxy —
+men det er hentet direkte fra repoets egen `kb_diary_links.csv`,
+ikke gættet.)
+
+Eksempler på entiteter linket til siden:
+
+| Type | Eksempler (label) |
+|---|---|
+| person | Bissen, H. V. (1798–1868) · Bournonville, August (1805–1879) · Boye, Maria, f. Birckner (1796–1880) |
+| place | Dresden · Haderslev · London · Silkeborg |
+| work | Ole Lukøie (Eventyrkomedie) · Minerva (H. V. Bissen, Udg. i Biscuit) |
+
+Bemærk: side V/20 har (som de fleste referencerede sider) endnu
+ingen transskriberet tekst i `data/normalized/diary.csv` — den kan
+derfor ikke selv groundes af `ner_page_grounding.py` før teksten
+findes. Den bruges her udelukkende som illustration af
+kandidatlistens bredde pr. side, jf. afsnittet om dæknings-
+begrænsning nedenfor.
+
 ## Opgavedefinition
 
 Point of departure: **`data/normalized/references.csv`**, ikke sidens
