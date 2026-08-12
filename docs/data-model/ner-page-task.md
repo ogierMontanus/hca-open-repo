@@ -8,87 +8,116 @@ registret, med kilde-provenance pr. kandidat (`sources[]`: bind, side,
 type) og en confidence-score pr. forsoningskandidat (§6–§7 i
 `plan-v3.md`).
 
-I `hca-open-repo` findes allerede en side-skaleret faktatabel for
-forekomster (`data/normalized_v092/references.csv`, grain: én række pr.
-`entity_id` × `page_id` × `seq`), men ingen NLP-baseret
-udtræksopgave, der genererer disse rækker fra dagbogsteksten selv —
-lige nu kommer forekomsterne fra de allerede strukturerede Excel-
-registre (`raw/HCA-Repository V0.82.xlsx`), ikke fra tekstgenkendelse.
+**`data/normalized/references.csv` er facit for opgaven** — den er den
+rå entitetsforekomst-tabel: én række pr. dagbogsside↔entitet-link,
+udledt af `entities.csv` (`entity_id`/`entity_label` er fremmednøgler
+ind i registret) og af `RefInDiaryPage`-arket i kilde-Excel'en
+(`raw/HCA-Repository V0.82.xlsx`, se `scripts/normalization/
+hca_xlsx_to_csv.py`). Filen fortæller **hvilke** entiteter der er
+knyttet til hvilken side — ikke hvor i sidens tekst de faktisk står.
+69.405 rækker, én pr. `(vol, page, entity_id)`-kombination (ingen
+dubletter); antallet af entiteter pr. side varierer fra 1 til over 200
+(fx bind III side 64: 17 forskellige entiteter). `page_id`-feltet i
+denne fil er **ikke** en sammensat side-nøgle som i
+`data/normalized_v092/references.csv` (`Pag{vol:02d}{page:04d}`) —
+her er det et unikt løbenummer pr. række, og `seq` er et globalt
+løbenummer, ikke et forekomst-antal. Side-nøglen er derfor `(vol,
+page)`, matchet mod `data/normalized/diary.csv`.
 
-Dette dokument definerer opgaven, der producerer de manglende rækker:
-**pr. dagbogsside, identificér navngivne entiteter i sidens rå tekst**.
+Dette dokument definerer opgaven, der supplerer denne kendte
+entitetsliste pr. side med **hvor i teksten** hver entitet faktisk
+optræder — en **grounding-opgave**, ikke åben NER-udtræk: entitets-
+identiteten (`entity_id`) er allerede givet af `references.csv`;
+opgaven er at lokalisere og skelne de konkrete forekomst-strenge i
+sidens rå tekst.
 
 ## Opgavedefinition
 
-For hver side i `data/normalized_v092/diary.csv` (nøgle: `vol` + `page`,
-tekstfelt `text` med linjetags `NNN-LL`):
+Point of departure: **`data/normalized/references.csv`**, ikke sidens
+rå tekst. For hver `(vol, page)`, slå det tilhørende sæt af
+`entity_id`'er op i `references.csv` — dette er den lukkede
+kandidatliste for siden. Slå derefter siden op i
+`data/normalized/diary.csv` (tekstfelt `text`, linjetags `NNN-LL`) for
+at finde forekomsterne.
 
-1. **Udtræk** alle strenge i sidens tekst, der udgør en navngiven
-   entitet (person eller sted — samme afgrænsning som ner4andersen §11:
-   organisationer/nøgleord er uden for scope).
-2. **Antagelse om forekomsthyppighed:** hver entitet, der optræder på
-   siden, antages at forekomme **mellem 1 og 5 gange** på den side.
-   Dette er en heuristik til at kalibrere recall-mål og til at
-   sandsynlighedsvurdere kandidatlister — ikke en hård grænse i output.
-3. **Mål:** identificér så mange af siden entiteter som muligt (maksimér
-   recall over listen af entiteter, der reelt optræder på siden), givet
-   antagelsen i punkt 2.
-4. **1:1-tildeling:** hver forekomst-streng bør ideelt tildeles **præcis
-   én** entitet (samme entydigheds-princip som `person_derived`/
-   `entity_id`-kobling i eksisterende data — en streng er ikke delt
-   mellem to registerposter). Hvor en streng er reelt tvetydig
-   (f.eks. et fornavn der matcher flere registrerede personer), skal
-   den bedste kandidat vælges og usikkerheden afspejles i
-   confidence-scoren, ikke ved at tildele strengen til flere entiteter.
-5. **Confidence-score:** hver streng→entitet-tildeling får en numerisk
-   confidence-score, efter samme mønster som eksisterende scorere i
-   repoet (`parse_person_gender.py`, `detect_work_language.py`,
-   `add_language_column.py`): en scorer/klassifikator producerer en
-   værdi, ingen automatisk skrivning til de kuraterede filer uden
-   menneskelig gennemgang under en tærskel.
+1. **For hver entitet i sidens kandidatliste** (fra `references.csv`),
+   find den eller de strenge i sidens tekst, der refererer til den
+   (person eller sted — samme afgrænsning som ner4andersen §11:
+   organisationer/nøgleord er uden for scope for selve NER-opgaven,
+   men kan allerede optræde som `entity_type` i `entities.csv` og skal
+   i så fald ekskluderes fra grounding-kørslen).
+2. **Antagelse om forekomsthyppighed:** hver entitet i sidens
+   kandidatliste antages at forekomme **mellem 1 og 5 gange** i
+   sidens tekst. Dette er en heuristik til at kalibrere recall-mål
+   og sandsynlighedsvurdere kandidat-spans — ikke en hård grænse i
+   output, og ikke udledt af `seq`-feltet (som ikke er et
+   forekomst-antal, jf. ovenfor).
+3. **Mål:** find så mange faktiske tekst-forekomster som muligt for
+   entiteterne i sidens kandidatliste (maksimér recall over den
+   kendte entitetsliste — ikke over en ukendt/åben entitetsmængde,
+   da den allerede er givet af `references.csv`).
+4. **1:1-tildeling:** hver forekomst-streng i teksten bør ideelt
+   tildeles **præcis én** entitet fra sidens kandidatliste. Hvor en
+   streng er reelt tvetydig mellem to entiteter på samme
+   kandidatliste (f.eks. et fornavn der matcher flere personer
+   nævnt på samme side), skal den bedste kandidat vælges og
+   usikkerheden afspejles i confidence-scoren — ikke ved at tildele
+   strengen til flere entiteter.
+5. **Confidence-score:** hver streng→entitet-grounding får en
+   numerisk confidence-score, efter samme mønster som eksisterende
+   scorere i repoet (`parse_person_gender.py`,
+   `detect_work_language.py`, `add_language_column.py`): en
+   scorer/klassifikator producerer en værdi, ingen automatisk
+   skrivning til kuraterede filer uden menneskelig gennemgang under
+   en tærskel.
 
 ## Output-skema
 
-Foreslået udvidelse af den eksisterende forekomst-model
-(`references.csv`-mønsteret), som et separat forslags-lag —
-samme separations-princip som `wikidata_lookup.py`, der **aldrig**
-selv skriver til den kuraterede fil:
+Foreslået udvidelse — et separat forslags-lag ud fra den eksisterende
+`references.csv`-række, samme separations-princip som
+`wikidata_lookup.py`, der **aldrig** selv skriver til den kuraterede
+fil. Hver output-række **udvider** en given `references.csv`-række
+med span-oplysninger, den skriver ikke en ny entitet-forbindelse:
 
 ```
-page_id,vol,page,mention_text,mention_start,mention_end,entity_id,entity_label,confidence,method
-Pag060001,VI,1,"Bentley",12,19,P1324800,"Bentley, Richard (1794–1871)",0.87,ner_candidate_v1
+ref_page_id,vol,page,entity_id,entity_label,mention_text,mention_start,mention_end,confidence,method
+Pag100000,III,64,Reg001445,"Gesammelte Werke (1847-72)","Gesammelte Werke",412,428,0.87,ner_grounding_v1
 ```
 
 | Felt | Betydning |
 |---|---|
-| `page_id` | Samme nøgle som `references.csv` (`Pag{vol:02d}{page:04d}`) |
-| `mention_text` | Den udtrukne streng, som den forekommer i `diary.csv.text` |
+| `ref_page_id` | Fremmednøgle til kildens `page_id` i `data/normalized/references.csv` (bemærk: løbenummer, ikke side-nøgle) |
+| `vol`/`page` | Side-nøglen, matchet mod `diary.csv` |
+| `entity_id`/`entity_label` | Kopieret fra den `references.csv`-række, der groundes — **ikke** genfundet af scoreren |
+| `mention_text` | Den lokaliserede streng, som den forekommer i `diary.csv.text` |
 | `mention_start`/`mention_end` | Tegnposition i sidens `text`-felt (linjetag `NNN-LL` medregnes som en del af teksten, jf. eksisterende OCR-linjetagging) |
-| `entity_id` | Bedste 1:1-kandidat fra `entities.csv` |
 | `confidence` | `[0.0, 1.0]`, samme skala som `person_gender.csv` |
 | `method` | Scorer-/model-identifikator, til reproducerbarhed (jf. ner4andersen §9's krav om reproducerbare evalueringsrapporter) |
 
 ## Kuraterings-tærskel
 
 Følg samme mønster som `add_language_column.py`: rækker under en
-tærskel (foreslået `NER_MIN_CONF`, kalibreres senere) flages til manuel
-gennemgang og skrives **ikke** direkte til `references.csv`. Kun en
-kurator kan flytte en kandidatrække fra forslagslaget til den
-kuraterede faktatabel — jf. den generelle regel i `CLAUDE.md` om
-faktakontrol og selvkritik: en confidence-score erstatter aldrig
-verifikation.
+tærskel (foreslået `NER_MIN_CONF`, kalibreres senere) flages til
+manuel gennemgang. Da `entity_id`/`entity_label` allerede er
+kuraterede facts fra `references.csv`, skriver denne opgave **ikke**
+tilbage til `references.csv` selv — outputtet er et rent
+tilføjelses-lag (span-annotationer), adskilt fra kildetabellen, jf.
+den generelle regel i `CLAUDE.md` om faktakontrol og selvkritik: en
+confidence-score erstatter aldrig verifikation.
 
 ## Forhold til ner4andersen
 
 | ner4andersen (fuldt register, flertrins) | hca-open-repo (denne opgave) |
 |---|---|
-| Kilder: redaktionelle noter + trykte indekser | Kilde: rå sidetekst (`diary.csv.text`) |
-| Konsolideret kandidatrecord med `sources[]` | Forslagsrække pr. side med `mention_start/end` |
-| Ekstern forsoning (Wikidata/GND/VIAF/GeoNames) | Intern forsoning mod `entities.csv` (samme repo-registre) |
-| Menneskelig kuratering via OpenRefine + TEI `@ref` | Menneskelig kuratering før optag i `references.csv` |
-| Entitetstyper: person, place | Samme — person, place |
+| Kilder: redaktionelle noter + trykte indekser | Kilde/facit: `data/normalized/references.csv` (kendt side↔entitet-liste) |
+| Konsolideret kandidatrecord med `sources[]` | Span-annotationsrække pr. kendt side-entitet-link |
+| Åben entitetsopdagelse + ekstern forsoning (Wikidata/GND/VIAF/GeoNames) | Ingen entitetsopdagelse — `entity_id` er allerede givet; opgaven er grounding, ikke forsoning |
+| Menneskelig kuratering via OpenRefine + TEI `@ref` | Menneskelig kuratering af span-annotationer før evt. videre brug |
+| Entitetstyper: person, place | Samme — person, place (afledt af `entity_type` i `entities.csv` for de linkede entiteter) |
 
-Denne opgave dækker ner4andersens Stage 0.5–1 (harvest + konsolidering)
-i miniature, skaleret til én sides tekst ad gangen, uden den eksterne
-forsoningsfase — fordi `hca-open-repo`s entiteter allerede er interne
-registerposter.
+Denne opgave er smallere end ner4andersens Stage 0.5–1: der er ingen
+harvest- eller konsolideringsfase, fordi entitetslisten pr. side
+allerede er kurateret i `references.csv`. Opgaven svarer nærmest til
+den forsonings-/valideringslogik, der i ner4andersen anvendes på
+allerede foreslåede kandidater (§7) — men her er kandidatens
+`entity_id` fast, og det eneste usikre er placeringen i teksten.
