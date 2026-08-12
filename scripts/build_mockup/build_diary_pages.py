@@ -29,6 +29,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 REFS_CSV  = REPO_ROOT / "data" / "normalized" / "references.csv"
 DIARY_CSV = REPO_ROOT / "data" / "normalized" / "diary.csv"
 ENTS_CSV  = REPO_ROOT / "data" / "normalized" / "entities.csv"
+KB_CSV    = REPO_ROOT / "data" / "normalized" / "kb_diary_links.csv"
 OUT_DIR   = REPO_ROOT / "mockup" / "diary-pages"
 
 VOL_NUM = {
@@ -89,6 +90,24 @@ def load_diary() -> dict:
     return d
 
 
+def load_kb_links() -> dict:
+    """pag_id -> permanent Det Kgl. Bibliotek URL.
+
+    Built by scripts/build_mockup/build_kb_links.py from the KB link
+    workbook. Optional: if the CSV has not been generated the pages are
+    written without the link rather than failing the build. Vol XI is
+    absent upstream, so those pages never get one.
+    """
+    links = {}
+    if not KB_CSV.exists():
+        return links
+    with KB_CSV.open(newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r.get("kb_url"):
+                links[r["pag_id"]] = r["kb_url"]
+    return links
+
+
 def load_references() -> dict:
     """Returns {(vol, page): [entity_id, ...]} preserving seq order."""
     refs = defaultdict(list)
@@ -143,12 +162,26 @@ def date_range(diary_rows: list) -> str:
 
 
 def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
-                all_pages: list, idx: int) -> str:
+                all_pages: list, idx: int, kb_links: dict) -> str:
     vp = (vol, page)
     entity_ids = refs.get(vp, [])
     diary_rows = diary.get(vp, [])
     pid = page_id(vol, page)
     date_str = date_range(diary_rows)
+
+    # Permanent link to the page at Det Kgl. Bibliotek. Deliberately quiet:
+    # it sits under the title where a reader looks first, but is small and
+    # low-contrast so it does not compete with the page's own content. The
+    # arrow and the new tab mark it as leaving the site — see
+    # docs/external-links.md.
+    kb_url = kb_links.get(pid, "")
+    kb_link_html = (
+        f'<a class="external-link external-link--on-dark" href="{html.escape(kb_url)}" '
+        f'target="_blank" rel="noopener noreferrer">'
+        f'Læs siden hos Det Kgl. Bibliotek<span class="external-link__icon" aria-hidden="true">↗</span>'
+        f'<span class="sr-only"> (åbner i nyt faneblad)</span></a>'
+        if kb_url else ""
+    )
     has_text = bool(diary_rows)
     # Same heading rule as js/diary-wire.js's headingFor(): the date wins
     # when there is one, otherwise the volume/page reference. Used as the
@@ -264,6 +297,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
       </nav>
       <h1>Bind {html.escape(vol)}, side {html.escape(page)}</h1>
       <p>Dagbogsside · Det Kongelige Bibliotek</p>
+      {kb_link_html}
       <div id="js-cart-toggle" style="margin-top:8px"></div>
       <div class="page-hero__meta">
         <span>{html.escape(date_str)}</span>
@@ -350,11 +384,15 @@ def main():
     ents  = load_entities()
     diary = load_diary()
     refs  = load_references()
+    kb    = load_kb_links()
 
     all_pages = sorted_pages(refs)
     total = len(all_pages)
     print(f"  {total} unique diary pages to generate")
     print(f"  {len([p for p in all_pages if p in diary])} pages with transcribed text")
+    have_kb = len([p for p in all_pages if page_id(*p) in kb])
+    print(f"  {have_kb} pages with a Det Kgl. Bibliotek link"
+          + ("" if kb else "  (kb_diary_links.csv not built — links omitted)"))
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -364,7 +402,7 @@ def main():
             continue
         pid = page_id(vol, page)
         out_path = OUT_DIR / f"{pid}.html"
-        html_content = render_page(vol, page, ents, diary, refs, all_pages, idx)
+        html_content = render_page(vol, page, ents, diary, refs, all_pages, idx, kb)
         out_path.write_text(html_content, encoding="utf-8")
         written += 1
         if written % 500 == 0:

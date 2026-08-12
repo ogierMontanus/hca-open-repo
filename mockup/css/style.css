@@ -1102,3 +1102,37 @@ body::before {
   .tl-event { grid-template-columns: 1fr; gap: var(--sp1); }
   .tl-event__date { color: var(--color-event, #b45309); font-weight: 500; }
 }
+
+/* === External links ======================================================
+   Links that leave the site (Det Kgl. Bibliotek facsimiles, Wikidata, VIAF,
+   GeoNames …). Policy and rationale: docs/external-links.md.
+
+   Deliberately quiet — these are provenance, not calls to action, so they
+   sit near the top where a reader looks for the source but stay smaller and
+   lower-contrast than the surrounding text. The trailing ↗ marks the link as
+   outbound; every such link also carries target="_blank" plus a visually
+   hidden "(åbner i nyt faneblad)" so the new tab is announced rather than
+   sprung on screen-reader and keyboard users. */
+.external-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.8rem; color: var(--color-text-muted);
+  text-decoration: none; border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.external-link:hover,
+.external-link:focus-visible {
+  color: var(--color-accent); border-bottom-color: currentColor; text-decoration: none;
+}
+.external-link__icon { font-size: 0.72em; opacity: 0.75; }
+
+/* On the dark page-hero the muted grey disappears — switch to a translucent
+   white that brightens on hover instead. */
+.external-link--on-dark { color: rgba(255, 255, 255, 0.72); margin-top: 6px; }
+.external-link--on-dark:hover,
+.external-link--on-dark:focus-visible { color: #ffffff; border-bottom-color: rgba(255, 255, 255, 0.6); }
+
+/* Visually hidden, still read aloud. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
