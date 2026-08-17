@@ -999,16 +999,26 @@ body::before {
 .page-hero__head { display: flex; align-items: center; gap: var(--sp4); }
 
 /* H2/H3 badge — section-title (works.html's Værk-Register) and wing-card
-   headings (billedkunst/teater-musik/bibliotek). */
+   headings (billedkunst/teater-musik/bibliotek). Sized by padding, not a
+   fixed width/height: a fixed box was too small for a 2-3 icon cluster
+   (book+painting+note at 13px + gaps runs to ~45px) and the icons spilled
+   out past the background — padding lets the badge always wrap however
+   many icons it holds, single or cluster alike. Icons are also bigger
+   here than in the cramped side-acc tab (24px / 18px vs 22px / 13-17px)
+   since an H2/H3 has the room and is the more prominent occurrence. */
 .section-title__icon,
 .wing-card__icon {
-  width: 30px; height: 30px; border-radius: var(--radius);
   display: inline-flex; align-items: center; justify-content: center;
+  padding: 7px; border-radius: var(--radius);
   background: var(--color-work-bg); color: var(--color-work);
   vertical-align: middle;
 }
 .section-title__icon svg,
-.wing-card__icon svg { width: 17px; height: 17px; }
+.wing-card__icon svg { width: 24px; height: 24px; }
+.section-title__icon .icon-cluster,
+.wing-card__icon .icon-cluster { gap: 4px; }
+.section-title__icon .icon-cluster svg,
+.wing-card__icon .icon-cluster svg { width: 18px; height: 18px; }
 .section-title__icon { margin-right: var(--sp2); }
 .wing-card__icon { margin-bottom: var(--sp3); }
 .side-acc__count {

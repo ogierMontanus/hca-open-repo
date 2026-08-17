@@ -55,10 +55,17 @@
         '<path d="M16.6 6.5c1.7.4 2.7 1.4 2.7 2.8"/>' +
       '</g>' +
       '<g id="icon-mask">' +
-        '<rect x="5" y="3.6" width="14" height="16.8" rx="6"/>' +
-        '<circle cx="9.2" cy="10" r="1.1" fill="currentColor" stroke="none"/>' +
-        '<circle cx="14.8" cy="10" r="1.1" fill="currentColor" stroke="none"/>' +
-        '<path d="M8.4 14.6c1.6 1.9 5.6 1.9 7.2 0"/>' +
+        // Small tied-hair/laurel flourishes at the crown, like the classic
+        // gold theater masks — this is what reads as "mask" rather than
+        // "smiley" at a glance.
+        '<path d="M7.6 4.6 5.6 6.2M16.4 4.6l2 1.6"/>' +
+        '<ellipse cx="12" cy="11.6" rx="6.6" ry="7.6"/>' +
+        // Angled, raised brows — Thalia's animated comedic brow.
+        '<path d="M8.4 9.2l1.8.9M15.6 9.2l-1.8.9" stroke-width="2"/>' +
+        '<ellipse cx="9.6" cy="11.6" rx=".9" ry="1.3" fill="currentColor" stroke="none"/>' +
+        '<ellipse cx="14.4" cy="11.6" rx=".9" ry="1.3" fill="currentColor" stroke="none"/>' +
+        // Wide open laughing mouth — filled, not a thin curved line.
+        '<path d="M8.6 15.2c1 1.9 5.8 1.9 6.8 0-.3 2.1-1.8 3.4-3.4 3.4s-3.1-1.3-3.4-3.4z" fill="currentColor" stroke="none"/>' +
       '</g>' +
       '<g id="icon-calendar">' +
         '<rect x="3.6" y="5.2" width="16.8" height="15" rx="1.6"/>' +
