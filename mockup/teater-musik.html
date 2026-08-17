@@ -148,13 +148,20 @@
             <div class="facet-group__body" data-facet-source="author"></div>
           </div>
 
+          <!-- Sted — replaces the static "Omtalte steder" facet. Data-driven
+               from WORKS_EXTRA.place (data-facet-source="place", same
+               mechanism and "By" / "By — Etablissement" convention as
+               billedkunst.html's Sted facet), populated by
+               place_from_teater_title() in build_works_extra.py from
+               titles that state a premiere ("Il Bandocani (19.1.1834,
+               Teatro Fiano, Rom)") — only ~3% of titles carry this (most
+               just name the composer/playwright), so this facet is sparse
+               by nature, not a bug. Sorted alphabetically so every By and
+               its etablissementer land together, same as billedkunst.html. -->
           <div class="facet-group">
-            <div class="facet-group__header">Omtalte steder <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">København</span><span class="facet-item__count">212</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">87</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Wien</span><span class="facet-item__count">54</span></label>
-            </div>
+            <div class="facet-group__header">Sted <span class="facet-group__toggle">▲</span></div>
+            <p class="facet-note">By (og evt. etablissement) nævnt ved værkets premiere i titlen.</p>
+            <div class="facet-group__body" data-facet-source="place"></div>
           </div>
         </aside>
 

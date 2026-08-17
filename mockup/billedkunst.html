@@ -131,23 +131,22 @@
             <div class="facet-group__body" data-facet-source="author"></div>
           </div>
 
-          <!-- Gallerier — replaces the static "Omtalte steder" facet.
-               Each box filters the catalogue to one gallery entry (data-rid)
-               taken from the H3 "Museer og Samlinger" register, ranked by refs.
-               Parser cleanup of these labels is tracked in plan §9.1. -->
+          <!-- Sted — data-driven from WORKS_EXTRA.place, populated by
+               category-catalogue.js (data-facet-source="place"). One entry
+               per distinct "By" or "By — Galleri/Sted" value recovered from
+               EVERY billedkunst title's own parenthetical (Malerier og
+               Tegninger and Skulptur alike, not just Museer og Samlinger),
+               via place_from_billedkunst_title() in build_works_extra.py —
+               see docs/data-model/billedkunst-artist-extraction.md for the
+               shared "group whose last piece is a real place" heuristic
+               this reuses. Sorted alphabetically (not by count, unlike
+               Kunstner above) so every "By" and its galleries land next to
+               each other — "Firenze", "Firenze — Uffizi", "Firenze — Pitti",
+               then "München", … — per CLAUDE.md's alphabetisation note. -->
           <div class="facet-group">
-            <div class="facet-group__header">Gallerier <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" data-rid="Reg000992"><span class="facet-item__label">Dresden Gemäldegalerie</span><span class="facet-item__count">19</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002475"><span class="facet-item__label">Napoli — Museo Borbonico</span><span class="facet-item__count">16</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002452"><span class="facet-item__label">München — Glyptoteket</span><span class="facet-item__count">15</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002834"><span class="facet-item__label">Rom — Capitol &amp; Vatikan-Museerne</span><span class="facet-item__count">15</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg001961"><span class="facet-item__label">København — Thorvaldsens Museum</span><span class="facet-item__count">14</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg001294"><span class="facet-item__label">Firenze — Galleria degli Uffizi</span><span class="facet-item__count">9</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg001293"><span class="facet-item__label">Firenze — Galleria Pitti</span><span class="facet-item__count">8</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002653"><span class="facet-item__label">Paris — Louvre</span><span class="facet-item__count">8</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg003500"><span class="facet-item__label">Wien — Belvedere-Samlingen</span><span class="facet-item__count">5</span></label>
-            </div>
+            <div class="facet-group__header">Sted <span class="facet-group__toggle">▲</span></div>
+            <p class="facet-note">By (og evt. galleri) nævnt i værkets egen titel — 1800-tallets stednavne.</p>
+            <div class="facet-group__body" data-facet-source="place"></div>
           </div>
 
           <div class="facet-group">
@@ -308,7 +307,17 @@
 
 <!-- Full work catalogue for this wing (gitignored data; CI regenerates). -->
 <script src="data/works-extra.js" onerror="void 0"></script>
-<script>window.CATEGORY_WING='billedkunst.html';window.CATEGORY_LABEL='Billedkunst';</script>
+<script>
+  window.CATEGORY_WING='billedkunst.html';
+  window.CATEGORY_LABEL='Billedkunst';
+  // #h3-malerier / #h3-skulptur (linked from the subsection cards above)
+  // check the matching H3 facet on load — see category-catalogue.js's
+  // CATEGORY_H3_SLUGS handling.
+  window.CATEGORY_H3_SLUGS = {
+    'h3-malerier': 'Malerier og Tegninger',
+    'h3-skulptur': 'Skulptur'
+  };
+</script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script src="js/category-catalogue.js"></script>

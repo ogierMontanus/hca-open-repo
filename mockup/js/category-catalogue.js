@@ -70,26 +70,29 @@
       rid: rid, title: w.title || rid,
       meta: [w.author, w.h3, w.year].filter(Boolean).join(' · '),
       refs: w.refs || 0, init: initialOf(w.title),
-      h2: w.h2 || '', h3: w.h3 || '', author: w.author || ''
+      h2: w.h2 || '', h3: w.h3 || '', author: w.author || '',
+      place: w.place || ''
     });
     return acc;
   }, []);
 
   // Faceted filtering — read state from the sibling .facet-panel on every
-  // render. Each H2/H3/author/rid checkbox carries the matching data-*
-  // attribute naming the exact WORKS_EXTRA value it filters on. Within a
-  // .facet-group the predicates combine with OR; across groups with AND;
-  // an empty group (no boxes ticked) imposes no constraint.
+  // render. Each H2/H3/author/rid/place checkbox carries the matching
+  // data-* attribute naming the exact WORKS_EXTRA value it filters on.
+  // Within a .facet-group the predicates combine with OR; across groups
+  // with AND; an empty group (no boxes ticked) imposes no constraint.
   var FACET_SEL =
     'input[type=checkbox][data-h2], input[type=checkbox][data-h3], ' +
-    'input[type=checkbox][data-author], input[type=checkbox][data-rid]';
+    'input[type=checkbox][data-author], input[type=checkbox][data-rid], ' +
+    'input[type=checkbox][data-place]';
 
   function predOf(b) {
     return {
       h2: b.getAttribute('data-h2') || null,
       h3: b.getAttribute('data-h3') || null,
       author: b.getAttribute('data-author') || null,
-      rid: b.getAttribute('data-rid') || null
+      rid: b.getAttribute('data-rid') || null,
+      place: b.getAttribute('data-place') || null
     };
   }
 
@@ -97,7 +100,8 @@
     return (p.h2 == null || w.h2 === p.h2) &&
            (p.h3 == null || w.h3 === p.h3) &&
            (p.author == null || w.author === p.author) &&
-           (p.rid == null || w.rid === p.rid);
+           (p.rid == null || w.rid === p.rid) &&
+           (p.place == null || w.place === p.place);
   }
 
   function readFacetGroups() {
@@ -177,6 +181,7 @@
     { key: 'author', label: 'Forfatter', value: function (w) { return w.author || ''; },
       sortValue: function (w) { return surnameKey(w.author || ''); } },
     { key: 'category', label: 'Kategori', value: function (w) { return w.h3 || w.h2 || ''; } },
+    { key: 'place', label: 'Sted', value: function (w) { return w.place || ''; } },
     { key: 'refs', label: 'Refs.', numeric: true, value: function (w) { return w.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
@@ -434,6 +439,53 @@
     }).join('');
   });
 
+  // Sted — data-facet-source="place", populated from WORKS_EXTRA.place
+  // (build_works_extra.py's place_from_billedkunst_title() /
+  // place_from_teater_title() — "City" or "City — Venue"). Sorted purely
+  // alphabetically (da collator) on the label itself, per CLAUDE.md-adjacent
+  // convention set for this facet: because every value starts with its
+  // city, a plain alphabetical sort already clusters every venue directly
+  // under its city ("Firenze" next to "Firenze — Uffizi" next to
+  // "Firenze — Pitti", then "München", …) with no separate city/venue sort
+  // key needed — unlike Kunstner/Komponist above, this is NOT ranked by
+  // count.
+  var placeCollator = (typeof Intl !== 'undefined' && Intl.Collator)
+    ? new Intl.Collator('da') : null;
+  document.querySelectorAll('.facet-panel [data-facet-source="place"]').forEach(function (host) {
+    var counts = {};
+    ALL.forEach(function (w) {
+      if (!w.place) return;
+      counts[w.place] = (counts[w.place] || 0) + 1;
+    });
+    var rows = Object.keys(counts).sort(function (a, b) {
+      return placeCollator ? placeCollator.compare(a, b) : (a < b ? -1 : a > b ? 1 : 0);
+    });
+    host.innerHTML = rows.map(function (p) {
+      var esc_p = esc(p);
+      return '<label class="facet-item"><input type="checkbox" data-place="' + esc_p +
+        '"><span class="facet-item__label">' + esc_p +
+        '</span><span class="facet-item__count">' + counts[p] + '</span></label>';
+    }).join('');
+  });
+
+  // Cross-page/URL-hash facet activation — e.g. billedkunst.html's own
+  // subsection cards link to "#h3-skulptur", and a bare visit to that URL
+  // should land with the Skulptur H3 facet already ticked, not just an
+  // inert scroll target. window.CATEGORY_H3_SLUGS (declared per-page,
+  // alongside CATEGORY_WING/CATEGORY_LABEL) maps each slug to the exact H3
+  // facet value it should check — the slugs aren't a mechanical transform
+  // of the H3 label (teater-musik.html's are hand-picked short names), so
+  // this is a lookup table, not a slugify function.
+  var h3Slugs = window.CATEGORY_H3_SLUGS;
+  if (h3Slugs && location.hash) {
+    var h3Label = h3Slugs[location.hash.replace(/^#/, '')];
+    if (h3Label) {
+      var h3Box = document.querySelector(
+        '.facet-panel input[data-h3="' + h3Label.replace(/"/g, '') + '"]');
+      if (h3Box) h3Box.checked = true;
+    }
+  }
+
   // The curated showcase sits directly inside the browse-layout main column,
   // above the catalogue block. When the reader narrows by H2/H3 or by letter,
   // the showcase becomes noise (it doesn't react to facets) and pushes the
@@ -450,7 +502,8 @@
     '.facet-panel input[type=checkbox][data-h2], ' +
     '.facet-panel input[type=checkbox][data-h3], ' +
     '.facet-panel input[type=checkbox][data-author], ' +
-    '.facet-panel input[type=checkbox][data-rid]'
+    '.facet-panel input[type=checkbox][data-rid], ' +
+    '.facet-panel input[type=checkbox][data-place]'
   );
   facetBoxes.forEach(function (cb) { cb.addEventListener('change', apply); });
 
