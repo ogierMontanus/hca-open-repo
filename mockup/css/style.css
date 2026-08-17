@@ -785,12 +785,6 @@ body[data-section="hvor"] .page-hero {
   border-color: var(--color-accent); box-shadow: var(--shadow);
   transform: translateY(-1px); text-decoration: none;
 }
-.wing-card__label {
-  width: 42px; height: 42px; background: var(--color-accent-light);
-  color: var(--color-accent); border-radius: var(--radius);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
-}
 .wing-card h3 { font-size: 1.1rem; font-weight: 700; }
 .wing-card > p { font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.45; }
 .wing-card__subs {
