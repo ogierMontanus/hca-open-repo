@@ -8,6 +8,9 @@
 </head>
 <body>
 
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA Open Repository</a>
@@ -36,11 +39,26 @@
     <div class="container">
       <div class="detail-with-sideacc">
        <div>
-      <h2 class="section-title">Værk-Register</h2>
+      <h2 class="section-title">
+        <span class="section-title__icon">
+          <span class="icon-cluster">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg>
+          </span>
+        </span>
+        Værk-Register
+      </h2>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
 
         <a href="billedkunst.html" class="wing-card">
           <div class="wing-card__label">BIL</div>
+          <span class="wing-card__icon">
+            <span class="icon-cluster">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-sculpture"></use></svg>
+            </span>
+          </span>
           <h3>Billedkunst</h3>
           <p>Malerier, tegninger, skulpturer og museumsamlinger</p>
           <div class="wing-card__subs">
@@ -53,6 +71,12 @@
 
         <a href="teater-musik.html" class="wing-card">
           <div class="wing-card__label">TEA</div>
+          <span class="wing-card__icon">
+            <span class="icon-cluster">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-mask"></use></svg>
+            </span>
+          </span>
           <h3>Teater &amp; Musik</h3>
           <p>Operaer, skuespil, balletter og instrumentalmusik</p>
           <div class="wing-card__subs">
@@ -67,6 +91,7 @@
 
         <a href="bibliotek.html" class="wing-card">
           <div class="wing-card__label">BOG</div>
+          <span class="wing-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg></span>
           <h3>Bibliotek</h3>
           <p>Eventyr, digte, romaner, faglitteratur og periodica</p>
           <div class="wing-card__subs">
@@ -84,9 +109,9 @@
        <!-- Right-margin accordion: current section + three others (Hvem · Hvad · Hvor · Hvornår) -->
        <aside class="side-acc" aria-label="Andre indgange">
          <a href="persons.html" class="side-acc__panel side-acc__panel--hvem">
-           <div class="side-acc__tab">Hvem</div>
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg><span class="side-acc__tab-word">Hvem</span></div>
            <div class="side-acc__body">
-             <div class="side-acc__heading">Hvem</div>
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg>Hvem</div>
              <div class="side-acc__count">10.228 personer · 39.361 poster</div>
              <ul class="side-acc__list">
                <li>Kunstnere</li>
@@ -97,9 +122,9 @@
            </div>
          </a>
          <a href="works.html" class="side-acc__panel side-acc__panel--hvad side-acc__panel--active" aria-current="page">
-           <div class="side-acc__tab">Hvad</div>
+           <div class="side-acc__tab"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span><span class="side-acc__tab-word">Hvad</span></div>
            <div class="side-acc__body">
-             <div class="side-acc__heading">Hvad</div>
+             <div class="side-acc__heading"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span>Hvad</div>
              <div class="side-acc__count">3.708 registerposter · 11.195 poster</div>
              <ul class="side-acc__list">
                <li>Teater &amp; Musik</li>
@@ -110,9 +135,9 @@
            </div>
          </a>
          <a href="places.html" class="side-acc__panel side-acc__panel--hvor">
-           <div class="side-acc__tab">Hvor</div>
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg><span class="side-acc__tab-word">Hvor</span></div>
            <div class="side-acc__body">
-             <div class="side-acc__heading">Hvor</div>
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg>Hvor</div>
              <div class="side-acc__count">2.508 steder · 18.849 poster</div>
              <ul class="side-acc__list">
                <li>Byer</li>
@@ -123,9 +148,9 @@
            </div>
          </a>
          <a href="diaries.html" class="side-acc__panel side-acc__panel--hvornaar">
-           <div class="side-acc__tab">Hvornår</div>
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg><span class="side-acc__tab-word">Hvornår</span></div>
            <div class="side-acc__body">
-             <div class="side-acc__heading">Hvornår</div>
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg>Hvornår</div>
              <div class="side-acc__count">1825–1875 · 50 år med dagbøger</div>
              <ul class="side-acc__list">
                <li>Årstal for omtaler</li>
