@@ -102,14 +102,21 @@
             </div>
           </div>
 
+          <!-- Rolle / Erhverv — AFLEDT facet, ikke en registreret oplysning
+               (samme princip som Køn ovenfor). Værdierne kommer fra
+               scripts/parsers/parse_person_role.py, som kombinerer to
+               kilder: a) forfatter/kunstner/komponist-optræden i
+               VÆRK-REGISTER, b) en høstet klassificering af beskrivelses-
+               feltets erhvervsord, klynget i ~10 buckets. En person kan
+               høre til flere buckets; en person uden match er ikke fejl —
+               se docs/data-model/person-role-facet.md. Rækker og tal
+               genereres af FacetEngine — skriv dem ikke i hånden. -->
           <div class="facet-group">
             <div class="facet-group__header">Rolle / Erhverv <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Kunstner / Maler</span><span class="facet-item__count">892</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Forfatter / Digter</span><span class="facet-item__count">743</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Musiker / Komponist</span><span class="facet-item__count">618</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Adelsperson / Adel</span><span class="facet-item__count">541</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Skuespiller / Sanger</span><span class="facet-item__count">498</span></label>
+            <div class="facet-group__body" data-facet-source="role"></div>
+            <div style="padding:0 12px 10px;font-size:0.7rem;color:var(--color-text-muted);line-height:1.45">
+              Automatisk udledt af værkregistret og registerteksten — se
+              <a href="om.html" style="color:inherit;text-decoration:underline">Vores kilder</a>.
             </div>
           </div>
 
@@ -523,7 +530,7 @@
     var p = PERSONS_EXTRA[rid];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
              refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [],
-             gender: p.gender || null };
+             gender: p.gender || null, role: p.roles || [] };
   });
 
   var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
@@ -562,6 +569,7 @@
       value: function (p) { return (p.nationality || []).map(function (k) { return natLabels[k] || k; }).join(', '); } },
     { key: 'gender', label: 'Køn', value: function (p) { return p.gender || ''; },
       sortValue: function (p) { return GENDER_SORT[p.gender] || '9'; } },
+    { key: 'role', label: 'Rolle / Erhverv', value: function (p) { return (p.role || []).join(', '); } },
     { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
@@ -776,7 +784,8 @@
     items: ALL,
     accessors: {
       nationality: function (p) { return p.nationality; },
-      gender: function (p) { return p.gender; }
+      gender: function (p) { return p.gender; },
+      role: function (p) { return p.role; }
     },
     labels: {
       nationality: function (k) { return natLabels[k] || k; }
