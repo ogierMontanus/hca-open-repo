@@ -40,6 +40,7 @@ REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
 ETHNIC     = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
 ADJECTIVES = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
 GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
+ROLE       = os.path.join(ROOT, "data", "normalized", "person_role.csv")
 OUT        = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
 
 # Life-dates parsed from labels like
@@ -119,6 +120,25 @@ def load_gender() -> dict:
     return out
 
 
+def load_roles() -> dict:
+    """{entity_id: [bucket, ...]} fra parse_person_role.py — VÆRK-REGISTER-
+    optræden kombineret med en høstet klassificering af beskrivelsesfeltet
+    (se docs/data-model/person-role-facet.md). Ligesom Køn er dette en
+    AFLEDT facet-værdi: en person uden match får en tom liste, hvilket
+    FacetEngine viser som "ingen rolle fundet" snarere end en fejl.
+
+    Tom, hvis parseren ikke er kørt."""
+    out = {}
+    if not os.path.exists(ROLE):
+        return out
+    with open(ROLE, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            roller = [x for x in (r.get("roller") or "").split(";") if x]
+            if roller:
+                out[r["entity_id"]] = roller
+    return out
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -151,6 +171,14 @@ def main() -> None:
         print("  no person_gender.csv — gender facet stays empty "
               "(run scripts/parsers/parse_person_gender.py)")
 
+    roles_by_person = load_roles()
+    if roles_by_person:
+        print(f"  {len(roles_by_person):,} persons with a Rolle/Erhverv classification "
+              f"(scripts/parsers/parse_person_role.py)")
+    else:
+        print("  no person_role.csv — role facet stays empty "
+              "(run scripts/parsers/parse_person_role.py)")
+
     # Emit one entry per person, INCLUDING IDs that mockup/person.html
     # also curates. person.html's `ALL_PERSONS = Object.assign({},
     # PERSONS_EXTRA, PERSONS)` still gives the hand-curated entries
@@ -175,6 +203,7 @@ def main() -> None:
             # uden at genberegne noget.
             "gender":       gender_by_person.get(rid, (None, None))[0],
             "genderConf":   gender_by_person.get(rid, (None, None))[1],
+            "roles":        roles_by_person.get(rid, []),
         }
 
     print(f"  generated {len(generated):,} entries")

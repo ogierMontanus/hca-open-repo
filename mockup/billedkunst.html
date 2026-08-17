@@ -8,6 +8,9 @@
 </head>
 <body data-section="hvad">
 
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA Open Repository</a>
@@ -29,7 +32,15 @@
         <span class="breadcrumb__sep">›</span>
         <span class="breadcrumb__current">Billedkunst</span>
       </nav>
-      <h1>Billedkunst</h1>
+      <div class="page-hero__head">
+        <span class="page-hero__icon">
+          <span class="icon-cluster">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-sculpture"></use></svg>
+          </span>
+        </span>
+        <h1>Billedkunst</h1>
+      </div>
       <p>H2 = BILLEDKUNST · Malerier, tegninger, skulpturer og museumsamlinger</p>
       <div class="page-hero__meta">
         <span>941 registerposter</span>
@@ -131,23 +142,22 @@
             <div class="facet-group__body" data-facet-source="author"></div>
           </div>
 
-          <!-- Gallerier — replaces the static "Omtalte steder" facet.
-               Each box filters the catalogue to one gallery entry (data-rid)
-               taken from the H3 "Museer og Samlinger" register, ranked by refs.
-               Parser cleanup of these labels is tracked in plan §9.1. -->
+          <!-- Sted — data-driven from WORKS_EXTRA.place, populated by
+               category-catalogue.js (data-facet-source="place"). One entry
+               per distinct "By" or "By — Galleri/Sted" value recovered from
+               EVERY billedkunst title's own parenthetical (Malerier og
+               Tegninger and Skulptur alike, not just Museer og Samlinger),
+               via place_from_billedkunst_title() in build_works_extra.py —
+               see docs/data-model/billedkunst-artist-extraction.md for the
+               shared "group whose last piece is a real place" heuristic
+               this reuses. Sorted alphabetically (not by count, unlike
+               Kunstner above) so every "By" and its galleries land next to
+               each other — "Firenze", "Firenze — Uffizi", "Firenze — Pitti",
+               then "München", … — per CLAUDE.md's alphabetisation note. -->
           <div class="facet-group">
-            <div class="facet-group__header">Gallerier <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" data-rid="Reg000992"><span class="facet-item__label">Dresden Gemäldegalerie</span><span class="facet-item__count">19</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002475"><span class="facet-item__label">Napoli — Museo Borbonico</span><span class="facet-item__count">16</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002452"><span class="facet-item__label">München — Glyptoteket</span><span class="facet-item__count">15</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002834"><span class="facet-item__label">Rom — Capitol &amp; Vatikan-Museerne</span><span class="facet-item__count">15</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg001961"><span class="facet-item__label">København — Thorvaldsens Museum</span><span class="facet-item__count">14</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg001294"><span class="facet-item__label">Firenze — Galleria degli Uffizi</span><span class="facet-item__count">9</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg001293"><span class="facet-item__label">Firenze — Galleria Pitti</span><span class="facet-item__count">8</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg002653"><span class="facet-item__label">Paris — Louvre</span><span class="facet-item__count">8</span></label>
-              <label class="facet-item"><input type="checkbox" data-rid="Reg003500"><span class="facet-item__label">Wien — Belvedere-Samlingen</span><span class="facet-item__count">5</span></label>
-            </div>
+            <div class="facet-group__header">Sted <span class="facet-group__toggle">▲</span></div>
+            <p class="facet-note">By (og evt. galleri) nævnt i værkets egen titel — 1800-tallets stednavne.</p>
+            <div class="facet-group__body" data-facet-source="place"></div>
           </div>
 
           <div class="facet-group">
@@ -169,22 +179,102 @@
 
         <div>
           <div class="results-header">
-            <span class="results-count" id="js-hero-count"><strong>941</strong> poster i Billedkunst</span>
+            <span class="results-count"><strong>941</strong> poster i Billedkunst &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— fedmarkerede kort = et eksempel pr. H3</span></span>
           </div>
 
-          <!-- Illustrerede eksempler. Datadrevet (js/hero-examples.js): kun
-               værker med et kurateret hero-billede vises her, og et kort der
-               ikke kan hente sit billede fjerner sig selv. Tidligere var
-               kortene håndskrevne, hvilket gav både tomme grå felter uden
-               billede og en itu-klippet grid, fordi Wikidata-badgen lå som et
-               <a> inde i kortets eget <a>. -->
-          <div class="result-grid result-grid--hero" id="js-hero-examples"></div>
-          <p id="js-hero-empty" style="display:none;font-size:0.85rem;color:var(--color-text-muted);
-             background:var(--color-surface-2);border:1px dashed var(--color-border);
-             border-radius:var(--radius);padding:var(--sp5);text-align:center">
-            Ingen værker i Billedkunst har endnu et kurateret billede.
-            Se hele registret nedenfor.
-          </p>
+          <div class="result-grid">
+
+            <!-- ★ Malerier og Tegninger — featured -->
+            <a id="h3-malerier" href="work.html?reg=Reg003004" class="result-card result-card--featured">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Raphael_-_The_Sistine_Madonna_-_Google_Art_Project.jpg" alt="Sixtinske Madonna" loading="lazy">
+              </div>
+              <div class="result-card__body">
+                <div class="result-card__title">Sixtinske Madonna</div>
+                <div class="result-card__meta">Raffael · Malerier og Tegninger · Dresden</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Dresden</span>
+                  <a href="https://www.wikidata.org/wiki/Q328079" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q328079</a>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">15 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Malerier og Tegninger — secondary -->
+            <a href="work.html?reg=Reg000726" class="result-card">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Correggio_-_The_Holy_Night_-_Google_Art_Project.jpg" alt="Den hellige Nat" loading="lazy">
+              </div>
+              <div class="result-card__body">
+                <div class="result-card__title">Den hellige Nat</div>
+                <div class="result-card__meta">Correggio · Malerier og Tegninger · Dresden</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Dresden</span>
+                  <a href="https://www.wikidata.org/wiki/Q1527541" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q1527541</a>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Malerier og Tegninger — secondary -->
+            <a href="work.html?reg=Reg002506" class="result-card">
+              <div class="result-card__thumb">Reg002506 · Maleri</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Niels Ebbesen og Grev Gert</div>
+                <div class="result-card__meta">Carl Bloch · Malerier og Tegninger</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--person">Carl Bloch</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- ★ Skulptur — featured -->
+            <a id="h3-skulptur" href="work.html?reg=Reg000737" class="result-card result-card--featured">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Venus_Uffizi.jpg" alt="Den mediceiske Venus" loading="lazy">
+              </div>
+              <div class="result-card__body">
+                <div class="result-card__title">Den mediceiske Venus</div>
+                <div class="result-card__meta">Kleomenes · Skulptur · Uffizi, Firenze</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Firenze</span>
+                  <a href="https://www.wikidata.org/wiki/Q774967" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q774967</a>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">10 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Skulptur — secondary -->
+            <a href="work.html?reg=Reg002041" class="result-card">
+              <div class="result-card__thumb" style="padding:0;overflow:hidden">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Laocoon_and_His_Sons.jpg" alt="Laokoon-Gruppen" loading="lazy">
+              </div>
+              <div class="result-card__body">
+                <div class="result-card__title">Laokoon-Gruppen</div>
+                <div class="result-card__meta">Skulptur · Vatikanet, Rom</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Rom</span>
+                  <a href="https://www.wikidata.org/wiki/Q465762" class="chip" style="font-size:0.65rem;background:#edf4fb;border-color:#93bcd9;color:#2a5e8a" target="_blank" rel="noopener">wd:Q465762</a>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">7 refs.</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Skulptur — secondary -->
+            <a href="work.html?reg=Reg000248" class="result-card">
+              <div class="result-card__thumb">Reg000248 · Skulptur</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Apollo di Belvedere</div>
+                <div class="result-card__meta">Skulptur · Vatikanet, Rom</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Rom</span>
+                  <span style="font-size:0.7rem;color:var(--color-text-muted)">6 refs.</span>
+                </div>
+              </div>
+            </a>
+
+          </div>
 
           <!-- Hele registret — complete data-driven catalogue (js/category-catalogue.js).
                Sits inside the browse-layout main column so the sticky facet-panel
@@ -228,26 +318,16 @@
 
 <!-- Full work catalogue for this wing (gitignored data; CI regenerates). -->
 <script src="data/works-extra.js" onerror="void 0"></script>
-<script>window.CATEGORY_WING='billedkunst.html';window.CATEGORY_LABEL='Billedkunst';</script>
-<script src="js/hero-examples.js"></script>
 <script>
-(function () {
-  var box = document.getElementById('js-hero-examples');
-  var empty = document.getElementById('js-hero-empty');
-  var count = document.getElementById('js-hero-count');
-  function showEmpty() {
-    if (box) box.style.display = 'none';
-    if (empty) empty.style.display = '';
-  }
-  var r = HeroExamples.render(box, { wing: window.CATEGORY_WING, limit: 8, onEmpty: showEmpty });
-  if (!r || !r.shown) { showEmpty(); return; }
-  if (count) {
-    count.innerHTML = '<strong>941</strong> poster i Billedkunst &nbsp;' +
-      '<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">' +
-      '— viser ' + r.shown + ' af ' + r.total + ' med billede' +
-      '; fedmarkeret kort = eksempel pr. underkategori</span>';
-  }
-})();
+  window.CATEGORY_WING='billedkunst.html';
+  window.CATEGORY_LABEL='Billedkunst';
+  // #h3-malerier / #h3-skulptur (linked from the subsection cards above)
+  // check the matching H3 facet on load — see category-catalogue.js's
+  // CATEGORY_H3_SLUGS handling.
+  window.CATEGORY_H3_SLUGS = {
+    'h3-malerier': 'Malerier og Tegninger',
+    'h3-skulptur': 'Skulptur'
+  };
 </script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>

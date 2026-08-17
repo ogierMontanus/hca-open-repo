@@ -86,13 +86,13 @@ PAREN_ALL_RE = re.compile(r"\(([^()]+)\)")
 _ARTIST_STOPLIST = {
     # Recurring institution/collection abbreviations that showed up as the
     # FIRST piece — i.e. titles with no artist, just "(Collection, City)".
-    "m. borbonico", "m. bonbornico",  # latter is an OCR letter-transposition
+    "m. borbonico", "m. bonbornico", "m. borbon.ico",  # OCR variants
     "capitol", "vatikanet", "uffizi", "glyptoteket", "fesch",
     "libreria piccolomini", "palazzo della ragione", "raadhuspladsen",
     "domkirken",
     # Medium/technique descriptors, not names.
     "tegning", "kopi", "selvportræt", "kultegning", "udstillingsmedaljen",
-    "arvesynden", "fresko", "karton", "malet buste",
+    "arvesynden", "fresko", "karton", "malet buste", "skitse",
     # Mythological sculpture subjects (the artwork's subject, not its maker).
     "pallas", "hermes", "satyren", "hera farnese", "ilioneus",
     # Room/monument names inside a museum or city, not the maker.
@@ -160,6 +160,114 @@ def artist_from_billedkunst_title(title, place_labels):
         if _looks_like_artist(g[0], place_labels):
             return g[0]
     return None
+
+
+_VENUE_REJECT_RE = re.compile(r"^n\.?\s*n\.?$", re.I)
+
+
+def _looks_like_venue(candidate):
+    """Screens a would-be venue/gallery piece the same way _looks_like_artist
+    screens an author candidate, but far more permissively — venues in this
+    data are institution names, so the artist function's name-shape checks
+    (no digits, not an article, ≤5 words, …) would reject real ones
+    ("Teatro Vittorio Emanuele", "Her Majesty's Theatre"). Still rejects:
+    - TEATER & MUSIK's "N.N." placeholder for an unknown author leaking into
+      the venue slot when a title has no date to anchor the split
+      ("Forseent (N.N., Odense)");
+    - the same medium/technique and bare-institution _ARTIST_STOPLIST
+      entries, which leak into the venue slot exactly as they do into the
+      artist slot ("Rom (..., Kultegning, Villa Farnesina)" — "Kultegning"
+      is a drawing technique, not a venue);
+    - a "kaldet <alias>", "Kopi af <artist>", "fuldført af <artist>", or
+      "efter <source>" clause — an artist-alias, copyist, completion, or
+      source-work note that happens to share a comma-separated slot with
+      the real venue ("Rom (..., kaldet il Grechetto, Doria-P., Rom)",
+      "Madrid (..., fuldført af Pietro Tacca, Plaza Mayor, Madrid)")."""
+    c = candidate.strip().strip(".")
+    if not c or _VENUE_REJECT_RE.match(c):
+        return False
+    cf = c.casefold()
+    if cf in _ARTIST_STOPLIST:
+        return False
+    if cf.startswith(("kaldet ", "kopi af ", "udkast", "fuldført af ", "efter ")):
+        return False
+    return True
+
+
+def place_from_billedkunst_title(title, place_labels):
+    """Recover (city, venue) from a BILLEDKUNST title's own parenthetical,
+    using the same "group whose last piece is a real place name" signal as
+    artist_from_billedkunst_title() — see that function's docstring for why
+    every group is tried rather than just the first. Unlike the artist
+    extraction, this doesn't require the leading piece to look like a name:
+    "Alexander-Slaget (Pompeji)" (bare place, no recoverable artist) still
+    yields city="Pompeji", venue=None here, deliberately — the reader wants
+    a Sted facet entry for that work even when authorship isn't recoverable.
+    Returns (None, None) when no group's last piece is a known place."""
+    groups = [[p.strip() for p in g.split(",")] for g in PAREN_ALL_RE.findall(title)]
+    groups = [g for g in groups if g and g[0]]
+    for g in groups:
+        if g[-1].casefold() in place_labels:
+            venue_parts = [p for p in g[1:-1] if _looks_like_venue(p)]
+            return g[-1], (", ".join(venue_parts) or None)
+    return None, None
+
+
+# TEATER & MUSIK titles that DO carry a premiere location state it as
+# "(DD.MM.YYYY, Venue, City)" — e.g. "Il Bandocani (19.1.1834, Teatro Fiano,
+# Rom)". Only ~38 of 1,257 titles have this (most just name the composer/
+# playwright), but every hit is a real, checkable premiere.
+#
+# The date isn't always the group's first piece — "La finta strega (efter
+# W. Scott: »Guy Mannering«, 12.6.1846, Teatro Fiorentini, Napoli)" has a
+# "efter <source>" note ahead of it — so this SEARCHES for the date instead
+# of anchoring to the start, and keeps only what comes AFTER it; whatever
+# precedes the date (a note, or nothing) is discarded either way, never
+# folded into the venue. The first date's own year is optional so a
+# compound "16.1. og 25.1.1841" (two performance dates, one title) still
+# matches as a whole rather than stopping at the year-less first fragment.
+_TEATER_DATE_RE = re.compile(
+    r"\d{1,2}\.\s*\d{1,2}\.?\s*(?:\d{4}\.?)?"
+    r"(?:\s*og\s*\d{1,2}\.\s*\d{1,2}\.\d{4}\.?)?"
+)
+
+
+def place_from_teater_title(title, place_labels):
+    """Recover (city, venue) from a TEATER & MUSIK title's own parenthetical
+    when it states a premiere location — see _TEATER_DATE_RE above. Unlike
+    BILLEDKUNST there's no leading-artist piece to skip past on purpose;
+    this just wants the first group whose last piece is a real place, after
+    cutting that group down to whatever follows its date (or the group
+    as-is when it has no date at all — "Forseent (N.N., Odense)"). Returns
+    (None, None) for the ~97% of titles with no such parenthetical (or one
+    that doesn't resolve to a known place).
+
+    Known remaining gap: a title that jams two distinct premieres (two
+    dates, two venues, two cities) into one parenthetical — one seen case,
+    "Cracovienne (... 21.3.1846, Teatro grande, Trieste. - 13.6.1849. Kgl.
+    Teater, Stockholm)" — still yields a venue that runs on into the second
+    performance's own venue/date text. Splitting that generally is a
+    data-curation question (which premiere is "the" one?), not something a
+    single regex should guess at."""
+    for raw in PAREN_ALL_RE.findall(title):
+        m = _TEATER_DATE_RE.search(raw)
+        rest = raw[m.end():] if m else raw
+        rest = rest.lstrip(" ,.")
+        parts = [p.strip() for p in rest.split(",") if p.strip()]
+        if parts and parts[-1].casefold() in place_labels:
+            venue_parts = [p for p in parts[:-1] if _looks_like_venue(p)]
+            return parts[-1], (", ".join(venue_parts) or None)
+    return None, None
+
+
+def format_place(city, venue):
+    """"City" alone, or "City — Venue" — chosen so that a plain alphabetical
+    sort of the formatted string already clusters every venue under its city
+    (a bare "Rom" sorts immediately next to "Rom — Vatikanet" etc.), with no
+    separate sort key needed in the front end."""
+    if not city:
+        return None
+    return city if not venue else f"{city} — {venue}"
 
 
 def _person_derived_is_title_subject(person_derived, title):
@@ -370,6 +478,19 @@ def main():
         h3 = (r.get("form_h3") or "").strip()
         wing, wing_label = wing_for(h2, h3)
         wd, image, attribution_note = wd_overlay.get(rid, (None, None, None))
+
+        # Sted (venue/city) — see place_from_billedkunst_title() and
+        # place_from_teater_title() above. Museer og Samlinger is excluded
+        # from the BILLEDKUNST extraction the same way author_from() already
+        # excludes it: those titles are bare museum names, not "Subject
+        # (Artist[, Venue], City)" shaped, so there's nothing to parse.
+        h3l = h3.lower()
+        place_city = place_venue = None
+        if wing == "billedkunst.html" and "museer" not in h3l and "samlinger" not in h3l:
+            place_city, place_venue = place_from_billedkunst_title(r["label"], place_labels)
+        elif wing == "teater-musik.html":
+            place_city, place_venue = place_from_teater_title(r["label"], place_labels)
+
         generated[rid] = {
             "title": r["label"].strip(),
             "h2": h2 or "ANDRE FORFATTERE",
@@ -398,6 +519,7 @@ def main():
             # load_wikidata_overlay()'s docstring for why this is a
             # separate field from the CSV's internal `notes` column.
             "attributionNote": attribution_note,
+            "place": format_place(place_city, place_venue),
             "diary": [],
             "related": [],
             "coPlaces": [],
@@ -411,6 +533,15 @@ def main():
         with_author = sum(1 for w in billedkunst if w["author"])
         print(f"  BILLEDKUNST author coverage: {with_author}/{len(billedkunst)} "
               f"({with_author / len(billedkunst):.0%})")
+        with_place = sum(1 for w in billedkunst if w["place"])
+        print(f"  BILLEDKUNST Sted coverage: {with_place}/{len(billedkunst)} "
+              f"({with_place / len(billedkunst):.0%})")
+
+    teater = [w for w in generated.values() if w["wing"] == "teater-musik.html"]
+    if teater:
+        with_place = sum(1 for w in teater if w["place"])
+        print(f"  TEATER & MUSIK Sted coverage: {with_place}/{len(teater)} "
+              f"({with_place / len(teater):.0%})")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
