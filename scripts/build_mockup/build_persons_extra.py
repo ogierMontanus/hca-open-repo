@@ -22,6 +22,11 @@ here on purpose: they may describe a relative or institution rather than
 the person themself (see docs/data-model/person-ethnic-descriptors.md),
 which is too uncertain to drive a filter a reader trusts at face value.
 
+Also emits `wd` (Wikidata QID, currently always null — see
+load_person_wikidata()) and `bioLinks` (a broad, non-asserting biographical
+search link for Lex.dk/Deutsche Biographie/VIAF, added only when `wd` is
+absent — see docs/data-model/person-bio-search-links.md for the full rule).
+
 Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py. Degrades
 gracefully — nationalities stay empty and NATIONALITY_LABELS stays empty
 if parse_person_ethnic_descriptors.py hasn't been run.
@@ -32,6 +37,7 @@ import json
 import os
 import re
 import sys
+import urllib.parse
 from collections import Counter
 
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -39,8 +45,10 @@ ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
 ETHNIC     = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
 ADJECTIVES = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
+UMBRELLAS  = os.path.join(ROOT, "data", "curated", "nation_umbrellas_da.csv")
 GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
 ROLE       = os.path.join(ROOT, "data", "normalized", "person_role.csv")
+WIKIDATA   = os.path.join(ROOT, "data", "curated", "persons_wikidata.csv")
 OUT        = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
 
 # Life-dates parsed from labels like
@@ -139,6 +147,140 @@ def load_roles() -> dict:
     return out
 
 
+def load_person_wikidata() -> dict:
+    """{entity_id: wd_qid} from an optional data/curated/persons_wikidata.csv
+    (rid,wd — same shape as works_wikidata.csv). No such file exists yet as
+    of this writing (only mockup/person.html's own small hand-curated demo
+    entry, Dickens/Q5686, carries a wd value, and that page isn't the one
+    linked from the live register — persons.html is). This loader exists so
+    the "already has an authority link" check below is forward-compatible:
+    if a curated overlay is added later, bio_search_links() picks it up
+    automatically and stops suggesting a search link for those persons,
+    with no code change needed."""
+    out = {}
+    if not os.path.exists(WIKIDATA):
+        return out
+    with open(WIKIDATA, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            wd = (r.get("wd") or "").strip()
+            if wd:
+                out[r["entity_id"]] = wd
+    return out
+
+
+def load_nation_umbrellas() -> dict:
+    """{umbrella_key: {member_key, ...}} from data/curated/nation_umbrellas_da.csv
+    — the same clustering nation.html itself uses (e.g. "Tyskland" groups
+    tysk with every pre-1871 German state: preussisk, sachsisk, bayersk...).
+    Reused here rather than re-deriving a narrower "German states" list by
+    hand, so a person bio_search_links() calls German is exactly the same
+    set of persons nation.html's own Tyskland page would show — including
+    the deliberately dual-membership Schleswig-Holstein keys (holstensk,
+    slesvigholstensk, holstenlauenborgsk), which count as BOTH Danish and
+    German per that CSV's own documented rationale (the duchies were the
+    contested ground of the 1848-51 and 1864 wars; picking one nation for
+    them would take a side the register does not take)."""
+    out = {}
+    if not os.path.exists(UMBRELLAS):
+        return out
+    with open(UMBRELLAS, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            out[r["umbrella_key"]] = set((r.get("members") or "").split(";"))
+    return out
+
+
+# Strips a label's trailing "(1805–1875)" / "(død 1918)" / "(ca. 1866–…)"
+# date parenthetical, but NOT a mid-string one — "Reventlow, Frederik
+# (Fritz), Greve (1791–1851)" must keep the "(Fritz)" nickname and only
+# lose the trailing date, since only the trailing one is ever a date here.
+_TRAILING_DATE_PAREN_RE = re.compile(r"\s*\([^)]*\)\s*$")
+_MID_NICKNAME_PAREN_RE = re.compile(r"\s*\([^)]*\)")
+
+
+def full_name_from_label(label: str) -> str:
+    """"Efternavn, Fornavn(e) [, Titel...]" -> "Fornavn(e) Efternavn" for a
+    search-engine query — deliberately looser than the name parsing
+    parse_person_gender.py/parse_person_role.py do, since a search query
+    only needs to be close enough for the target site's own (fuzzy,
+    relevance-ranked) search to find the right person, not a structurally
+    correct name field. A label with no comma (surname only, e.g. "Fog",
+    "Schytte" — no given name known in this register) is returned as-is;
+    that is still a legitimate, if wide, search. A third+ comma-separated
+    segment (a title like ", Greve" / ", Baron") is dropped rather than
+    appended, since it would only add search noise, not help."""
+    s = _TRAILING_DATE_PAREN_RE.sub("", label).strip()
+    parts = [p.strip() for p in s.split(",")]
+    if len(parts) == 1:
+        return parts[0]
+    surname, given = parts[0], parts[1]
+    given = _MID_NICKNAME_PAREN_RE.sub("", given).strip()
+    return (given + " " + surname).strip() if given else surname
+
+
+# Two umbrella keys ('dansk','tysk') from nation_umbrellas_da.csv decide
+# Lex.dk / Deutsche Biographie eligibility. A third resource, VIAF, is
+# explicitly narrower per the brief: only WRITERS (Forfatter/Digter role —
+# see parse_person_role.py) whose nationality is recorded but falls outside
+# both umbrellas ("not covered by other rules"), never a blanket fallback
+# for every uncovered nationality.
+#
+# URL templates — verified against a real, independently crawled/indexed
+# URL for each site (not guessed), per CLAUDE.md's live-verification rule:
+#   Lex.dk:              https://lex.dk/api/v1/search?query=... (JSON API;
+#                         confirmed via a third-party client library's
+#                         source reading this exact endpoint) — the
+#                         human-facing page mirrors the same "query" param
+#                         at /search per lex.dk's own SPA routing.
+#   Deutsche Biographie:  https://www.deutsche-biographie.de/search?name=...
+#                         &geburtsjahr=...&todesjahr=...&st=erw — an actual
+#                         URL the site itself emitted, found crawled/indexed
+#                         (not a documentation guess); st=erw selects its
+#                         "erweiterte Suche" (advanced search) mode so the
+#                         separate name/year fields are honoured.
+#   VIAF:                 https://viaf.org/viaf/search?query=local.personalNames+all+"..."
+#                         — CQL syntax, confirmed both via a real crawled/
+#                         indexed example URL and independently corroborated
+#                         by the Ex Libris developer blog and the viapy/
+#                         wikiTools library docs (all describe the same
+#                         local.personalNames all "..." pattern).
+def bio_search_links(label, born, died, nationalities, roles, umbrellas):
+    if not nationalities:
+        return []
+    name = full_name_from_label(label)
+    if not name:
+        return []
+    date_bits = [d for d in (born, died) if d]
+    query = " ".join([name] + date_bits)
+    nat_set = set(nationalities)
+    danish_keys = umbrellas.get("dansk", set())
+    german_keys = umbrellas.get("tysk", set())
+    is_danish = bool(nat_set & danish_keys)
+    is_german = bool(nat_set & german_keys)
+
+    links = []
+    if is_danish:
+        links.append({
+            "label": "Søg på Lex.dk",
+            "url": "https://lex.dk/search?query=" + urllib.parse.quote(query),
+        })
+    if is_german:
+        links.append({
+            "label": "Søg hos Deutsche Biographie",
+            "url": "https://www.deutsche-biographie.de/search?name=" +
+                   urllib.parse.quote(name) +
+                   "&geburtsjahr=" + urllib.parse.quote(born or "") +
+                   "&todesjahr=" + urllib.parse.quote(died or "") +
+                   "&st=erw",
+        })
+    if not is_danish and not is_german and "Forfatter/Digter" in (roles or []):
+        links.append({
+            "label": "Søg på VIAF",
+            "url": "https://viaf.org/viaf/search?query=" +
+                   urllib.parse.quote('local.personalNames all "%s"' % query),
+        })
+    return links
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -179,6 +321,10 @@ def main() -> None:
         print("  no person_role.csv — role facet stays empty "
               "(run scripts/parsers/parse_person_role.py)")
 
+    wd_by_person = load_person_wikidata()
+    umbrellas = load_nation_umbrellas()
+    bio_links_count = 0
+
     # Emit one entry per person, INCLUDING IDs that mockup/person.html
     # also curates. person.html's `ALL_PERSONS = Object.assign({},
     # PERSONS_EXTRA, PERSONS)` still gives the hand-curated entries
@@ -189,6 +335,19 @@ def main() -> None:
         rid = r["entity_id"]
         label = (r.get("label") or "").strip()
         born, died = parse_life(label)
+        nats = nationalities_by_person.get(rid, [])
+        roles = roles_by_person.get(rid, [])
+        wd = wd_by_person.get(rid)
+
+        # Broad biographical search links (Lex.dk / Deutsche Biographie /
+        # VIAF) — a research aid, not an identification, so this ONLY
+        # applies when no authority-file link already exists (wd here, or
+        # a future persons_wikidata.csv entry — see load_person_wikidata()).
+        # See docs/data-model/person-bio-search-links.md for the full rule.
+        bio_links = [] if wd else bio_search_links(label, born, died, nats, roles, umbrellas)
+        if bio_links:
+            bio_links_count += 1
+
         generated[rid] = {
             "label":         label,
             "description":   (r.get("description") or "").strip() or None,
@@ -196,17 +355,21 @@ def main() -> None:
             "died":          died,
             "era":           era_for(born, died),
             "refs":          ref_count.get(rid, 0),
-            "nationalities": nationalities_by_person.get(rid, []),
+            "nationalities": nats,
             # Afledt facet-værdi, ikke en registreret oplysning — se
             # docs/data-model/person-gender-facet.md. genderConf bæres med,
             # så en senere UI kan skelne "høj sikkerhed" fra "sandsynlig"
             # uden at genberegne noget.
             "gender":       gender_by_person.get(rid, (None, None))[0],
             "genderConf":   gender_by_person.get(rid, (None, None))[1],
-            "roles":        roles_by_person.get(rid, []),
+            "roles":        roles,
+            "wd":           wd,
+            "bioLinks":     bio_links,
         }
 
     print(f"  generated {len(generated):,} entries")
+    print(f"  {bio_links_count:,} persons with a suggested biographical search link "
+          f"(docs/data-model/person-bio-search-links.md)")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:

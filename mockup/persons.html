@@ -376,6 +376,25 @@
           'style="display:flex;align-items:center;gap:6px"><span class="wd-badge">wd:' + esc(p.wd) + '</span>' +
           '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
       }
+      // Biografiske opslag — søgelinks, ikke identifikationer. Kun udfyldt
+      // når personen IKKE har et autoritetslink ovenfor (se bio_search_links()
+      // i build_persons_extra.py) — de to blokke udelukker derfor hinanden i
+      // praksis, men begge if'er er uafhængige for robusthedens skyld.
+      // Se docs/data-model/person-bio-search-links.md.
+      if (p.bioLinks && p.bioLinks.length) {
+        sbH += '<div class="info-block"><div class="info-block__header">Biografiske opslag</div>' +
+          '<div class="info-block__body">' +
+          '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
+          'Søgelinks til eksterne opslagsværker ud fra navn og nationalitet — ' +
+          'ikke en bekræftet identifikation af personen.</p>' +
+          '<div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
+        p.bioLinks.forEach(function (l) {
+          sbH += '<a class="external-link" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' +
+            esc(l.label) + '<span class="external-link__icon" aria-hidden="true">↗</span>' +
+            '<span class="sr-only"> (åbner i nyt faneblad)</span></a>';
+        });
+        sbH += '</div></div></div>';
+      }
       sb.innerHTML = sbH;
     }
 
