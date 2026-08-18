@@ -218,34 +218,44 @@ def full_name_from_label(label: str) -> str:
 
 
 # Two umbrella keys ('dansk','tysk') from nation_umbrellas_da.csv decide
-# Lex.dk / Deutsche Biographie eligibility. A third resource, VIAF, is
-# explicitly narrower per the brief: only WRITERS (Forfatter/Digter role —
-# see parse_person_role.py) whose nationality is recorded but falls outside
-# both umbrellas ("not covered by other rules"), never a blanket fallback
-# for every uncovered nationality.
+# Lex.dk / Deutsche Biographie eligibility; 'norsk' has no umbrella row
+# (no Norwegian sub-regional keys exist in ethnic_adjectives_da.csv, unlike
+# the Danish/German regional/historical-state variants), so it's checked
+# as a bare nationality key. Everyone left after those three — nationality
+# recorded, but neither Danish, German nor Norwegian — splits two ways:
+# WRITERS (Forfatter/Digter role — see parse_person_role.py) get VIAF,
+# whose whole raison d'être is bibliographic author authority; everyone
+# else in that remaining group gets GND Explorer, a general person/
+# corporate-body/subject authority search with no author-specific bias.
 #
 # URL templates — verified against a real, independently crawled/indexed
-# URL for each site (not guessed), per CLAUDE.md's live-verification rule:
-#   Lex.dk:              https://lex.dk/.search?query=... — the leading dot
-#                         before "search" is not a typo; this sandbox's
-#                         network proxy blocks lex.dk outright, so this was
-#                         manually confirmed in a real browser (not by this
-#                         session) rather than crawled/indexed like the
-#                         other two. See docs/data-model/
-#                         person-bio-search-links.md for that verification
-#                         note.
-#   Deutsche Biographie:  https://www.deutsche-biographie.de/search?name=...
-#                         &geburtsjahr=...&todesjahr=...&st=erw — an actual
-#                         URL the site itself emitted, found crawled/indexed
-#                         (not a documentation guess); st=erw selects its
-#                         "erweiterte Suche" (advanced search) mode so the
-#                         separate name/year fields are honoured.
-#   VIAF:                 https://viaf.org/viaf/search?query=local.personalNames+all+"..."
-#                         — CQL syntax, confirmed both via a real crawled/
-#                         indexed example URL and independently corroborated
-#                         by the Ex Libris developer blog and the viapy/
-#                         wikiTools library docs (all describe the same
-#                         local.personalNames all "..." pattern).
+# URL for each site (not guessed), per CLAUDE.md's live-verification rule,
+# EXCEPT Lex.dk and Store norske leksikon, whose oddball leading-dot path
+# (".search", not "search") this sandbox's blocked network access to
+# lex.dk/snl.no couldn't confirm — both instead manually confirmed by the
+# user in a real browser (lex.dk: https://lex.dk/.search?query=Ingemann;
+# snl.no supplied directly with the same convention, the two sites being
+# sibling national encyclopedias on shared infrastructure, which is also
+# retroactive corroboration for the Lex.dk fix). See docs/data-model/
+# person-bio-search-links.md for the full per-resource confidence notes.
+#   Lex.dk:                https://lex.dk/.search?query=...
+#   Store norske leksikon:  https://snl.no/.search?query=...
+#   Deutsche Biographie:    https://www.deutsche-biographie.de/search?name=...
+#                           &geburtsjahr=...&todesjahr=...&st=erw — an actual
+#                           URL the site itself emitted, found crawled/indexed
+#                           (not a documentation guess); st=erw selects its
+#                           "erweiterte Suche" (advanced search) mode so the
+#                           separate name/year fields are honoured.
+#   VIAF:                   https://viaf.org/viaf/search?query=local.personalNames+all+"..."
+#                           — CQL syntax, confirmed both via a real crawled/
+#                           indexed example URL and independently corroborated
+#                           by the Ex Libris developer blog and the viapy/
+#                           wikiTools library docs (all describe the same
+#                           local.personalNames all "..." pattern).
+#   GND Explorer:           https://explore.gnd.network/en/search?term=...
+#                           &rows=25 — URL and both param names (term, rows)
+#                           supplied directly by the user, not independently
+#                           verified by this session.
 def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     if not nationalities:
         return []
@@ -259,6 +269,7 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     german_keys = umbrellas.get("tysk", set())
     is_danish = bool(nat_set & danish_keys)
     is_german = bool(nat_set & german_keys)
+    is_norwegian = "norsk" in nat_set
 
     links = []
     if is_danish:
@@ -275,12 +286,24 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
                    "&todesjahr=" + urllib.parse.quote(died or "") +
                    "&st=erw",
         })
-    if not is_danish and not is_german and "Forfatter/Digter" in (roles or []):
+    if is_norwegian:
         links.append({
-            "label": "Søg på VIAF",
-            "url": "https://viaf.org/viaf/search?query=" +
-                   urllib.parse.quote('local.personalNames all "%s"' % query),
+            "label": "Søg på Store norske leksikon",
+            "url": "https://snl.no/.search?query=" + urllib.parse.quote(query),
         })
+    if not (is_danish or is_german or is_norwegian):
+        if "Forfatter/Digter" in (roles or []):
+            links.append({
+                "label": "Søg på VIAF",
+                "url": "https://viaf.org/viaf/search?query=" +
+                       urllib.parse.quote('local.personalNames all "%s"' % query),
+            })
+        else:
+            links.append({
+                "label": "Søg i GND Explorer",
+                "url": "https://explore.gnd.network/en/search?term=" +
+                       urllib.parse.quote(query) + "&rows=25",
+            })
     return links
 
 

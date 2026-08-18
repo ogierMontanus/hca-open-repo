@@ -72,11 +72,13 @@ tastaturbrugere. Derfor:
 | Wikidata-entitet | `wd:Q…` (badge) eller `Wikidata` |
 | Lex.dk-søgning (personregister, dansk nationalitet) | `Søg på Lex.dk` |
 | Deutsche Biographie-søgning (personregister, tysk nationalitet) | `Søg hos Deutsche Biographie` |
-| VIAF-søgning (personregister, forfatter uden dansk/tysk nationalitet) | `Søg på VIAF` |
+| Store norske leksikon-søgning (personregister, norsk nationalitet) | `Søg på Store norske leksikon` |
+| VIAF-søgning (personregister, forfatter uden dansk/tysk/norsk nationalitet) | `Søg på VIAF` |
+| GND Explorer-søgning (personregister, øvrig nationalitet, ikke-forfatter) | `Søg i GND Explorer` |
 
 Ny type ekstern kilde: tilføj den her, så teksten er ens på tværs af sider.
 
-De tre søgelinks ovenfor er en anden underkategori end resten af tabellen:
+De fem søgelinks ovenfor er en anden underkategori end resten af tabellen:
 de peger på en SØGNING, ikke en bekræftet post — se
 `docs/data-model/person-bio-search-links.md` for hele reglen (hvornår de
 tilføjes, hvordan URL'en bygges, og hvorfor de ikke må se ud som

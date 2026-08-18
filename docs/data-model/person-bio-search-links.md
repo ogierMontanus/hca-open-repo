@@ -3,11 +3,11 @@
 `scripts/build_mockup/build_persons_extra.py`s `bio_search_links()` tilføjer
 op til to søgelinks til eksterne biografiske opslagsværker for en person —
 **kun** når personen a) ikke allerede har et autoritetslink, og b) har en
-registreret nationalitet der udløser en af tre regler. Linkene er
+registreret nationalitet der udløser en af fem regler. Linkene er
 **søgninger, ikke identifikationer** — se princip 3 nedenfor, som er
 bindende for både data og UI.
 
-987 af 10.228 personer får mindst ét link ved første kørsel.
+1.969 af 10.228 personer får mindst ét link ved seneste kørsel.
 
 ## Reglerne
 
@@ -15,13 +15,18 @@ bindende for både data og UI.
 |---|---|---|
 | Dansk nationalitet (Dansk-paraplyen) | Lex.dk | `Søg på Lex.dk` |
 | Tysk nationalitet (Tysk-paraplyen) | Deutsche Biographie | `Søg hos Deutsche Biographie` |
-| Forfatter/Digter-rolle, nationalitet hverken dansk eller tysk | VIAF | `Søg på VIAF` |
+| Norsk nationalitet | Store norske leksikon | `Søg på Store norske leksikon` |
+| Forfatter/Digter-rolle, nationalitet hverken dansk, tysk eller norsk | VIAF | `Søg på VIAF` |
+| Øvrige, nationalitet hverken dansk, tysk eller norsk, ikke forfatter | GND Explorer | `Søg i GND Explorer` |
 
 En person med både en dansk- og en tysk-paraply-nationalitet (23 personer —
-se nedenfor) får **begge** de to første links, ikke et valgt. VIAF-reglen
-gælder kun når hverken den danske eller den tyske regel allerede har
-udløst — "nationaliteter der ikke er dækket af de andre regler", ikke en
-generel fallback for enhver ukendt nationalitet.
+se §1) får **begge** de to første links, ikke et valgt — Dansk, Tysk og
+Norsk er uafhængige if-grene, ikke gensidigt udelukkende. De sidste to
+regler (VIAF/GND Explorer) er derimod indbyrdes udelukkende og gælder kun
+**resten** — dem ingen af de tre nationalitetsregler ramte — delt i to efter
+om personen er forfatter eller ej. "Nationalitet hverken dansk, tysk eller
+norsk" er ikke en generel fallback for enhver ukendt nationalitet: uden en
+registreret nationalitet får ingen af de fem regler noget at arbejde med.
 
 ## 0. Forudsætning: intet autoritetslink i forvejen
 
@@ -58,18 +63,38 @@ bevidst ikke gør (se `nation_umbrellas_da.csv`s egen note herom). De 23
 personer med link til begge kilder er næsten alle netop disse nøgler (plus
 2 ægte dansk-tyske dobbeltnationaliteter, fx Friederike Brun).
 
-## 2. VIAF — kun forfattere, kun når intet andet dækker
+## 2. Norsk — bar nøgle, ingen paraply
 
-Tilføjet efter en opfølgende instruks: *"For writers with nationalities
-not covered by other rules link to viaf.org."* "Forfatter" genbruger
-`Rolle/Erhverv`-facettens `Forfatter/Digter`-bucket (se
-`docs/data-model/person-role-facet.md`) — samme kombination af
-VÆRK-REGISTER-optræden og beskrivelses-høst som allerede driver den
-facet, ikke en ny "er dette en forfatter"-heuristik. 297 personer
-kvalificerer — eksempler: Vittorio Alfieri (italiensk), Arvid August
-Afzelius (svensk), William Harrison Ainsworth (engelsk).
+`nation_umbrellas_da.csv` har ingen `norsk`-række (i modsætning til dansk
+og tysk har den norske nationalitet ingen regionale/historiske
+underidentiteter i `ethnic_adjectives_da.csv`), så `is_norwegian` tjekker
+blot om `norsk` selv indgår i personens nationaliteter — ingen klynge at
+udvide til. 93 personer kvalificerer.
 
-## 3. Søgning, ikke identifikation
+## 3. VIAF vs. GND Explorer — forfattere vs. alle andre, kun for "resten"
+
+VIAF-reglen blev tilføjet efter en opfølgende instruks: *"For writers with
+nationalities not covered by other rules link to viaf.org."* GND
+Explorer-reglen efter en senere instruks: *"For other nationals use gnd
+explorer."* Sammen dækker de to regler præcis den gruppe, ingen af de tre
+nationalitetsregler rammer:
+
+- **Forfattere** (`Rolle/Erhverv`-facettens `Forfatter/Digter`-bucket, se
+  `docs/data-model/person-role-facet.md` — samme kombination af
+  VÆRK-REGISTER-optræden og beskrivelses-høst som allerede driver den
+  facet, ikke en ny "er dette en forfatter"-heuristik) får **VIAF**, hvis
+  hele formål er bibliografisk forfatter-autoritet — det bedst egnede af de
+  to til netop denne gruppe. 282 personer.
+- **Alle andre** i samme "ikke dansk/tysk/norsk"-gruppe — adelige,
+  officerer, videnskabsfolk, og enhver anden ikke-forfatter — får **GND
+  Explorer**, en bredere person-/institutions-/emne-autoritetssøgning uden
+  forfatter-bias. 905 personer.
+
+Rækkefølgen betyder noget: en forfatter fra fx Sverige eller England får
+VIAF, ikke GND Explorer, fordi forfatter-tjekket kommer først inden for
+"resten"-grenen.
+
+## 4. Søgning, ikke identifikation
 
 Linkene sidder i deres **egen** sidebar-blok, "Biografiske opslag", adskilt
 fra den eksisterende "Autoritetslinks"-blok (som kun vises når `wd` er
@@ -98,14 +123,14 @@ Fødsels- og dødsår tilføjes til søgestrengen når kendt (kun det ene, hvis
 kun det ene er registreret) — "Include the full name and available life
 dates to reduce ambiguity" fra selve opgaveformuleringen.
 
-## URL-skabeloner — verificeret, ikke gættet
+## URL-skabeloner — verificeret, ikke gættet, med forskellig sikkerhedsgrad
 
 CLAUDE.md kræver live-verifikation af eksterne fakta før output. Denne
-sandbox' netværksproxy blokerer direkte adgang til alle tre mål-domæner
-(`lex.dk`, `deutsche-biographie.de`, `viaf.org` gav alle `EGRESS_BLOCKED`
-via både `WebFetch` og `curl`), så ingen af URL'erne kunne bekræftes ved
-selv at hente og se søgeresultatsiden. I stedet blev hver skabelon
-bekræftet indirekte, med forskellig sikkerhedsgrad:
+sandbox' netværksproxy blokerer direkte adgang til alle fem mål-domæner
+(`lex.dk`, `snl.no`, `deutsche-biographie.de`, `viaf.org`,
+`explore.gnd.network` gav alle `EGRESS_BLOCKED` via både `WebFetch` og
+`curl`), så ingen af URL'erne kunne bekræftes ved selv at hente og se
+søgeresultatsiden. Hver skabelon er derfor bekræftet forskelligt:
 
 - **Deutsche Biographie** — **moderat sikker.** Google havde selv crawlet
   og indekseret en reel, af sitet selv udsendt søge-URL med de fulde
@@ -123,13 +148,27 @@ bekræftet indirekte, med forskellig sikkerhedsgrad:
   `/api/v1/search?query=…`, en separat JSON-API, var direkte bekræftet
   fra kildekode). Brugeren testede selve URL'en i en almindelig browser
   (`https://lex.dk/.search?query=Ingemann`) og bekræftede at den renderer
-  søgeresultater; skabelonen i `bio_search_links()` er rettet til det
-  punktum-præfikserede path på baggrund af den test.
+  søgeresultater.
+- **Store norske leksikon** — **antaget ud fra Lex.dk, ikke selvstændigt
+  testet.** Brugeren angav URL'en direkte (`https://snl.no/.search?query=…`)
+  med samme punktum-præfikserede sti som den bekræftede Lex.dk-adresse —
+  SNL og Lex.dk er søsterplatforme (norsk hhv. dansk nationalleksikon på
+  formodet fælles infrastruktur), hvilket gør mønstret sandsynligt, men
+  denne specifikke URL er ikke selv afprøvet i en browser.
+- **GND Explorer** — **ikke uafhængigt verificeret.** URL og begge
+  parameternavne (`term`, `rows`) er angivet direkte af brugeren
+  (`https://explore.gnd.network/en/search?term=Test&rows=25`), ikke fundet
+  eller bekræftet af denne session selv.
+
+**Praktisk konsekvens:** ret kun URL-formen i `bio_search_links()`, hvis en
+af de sidste to skabeloner viser sig forkert — resten af logikken
+(paraplyer, forfatter-reglen, navnekonvertering) er upåvirket af hvilken
+præcis sti/parameter det enkelte site faktisk bruger.
 
 ## Kørsel
 
 ```
-python scripts/parsers/parse_person_role.py       # forudsætning for VIAF-reglen
+python scripts/parsers/parse_person_role.py       # forudsætning for VIAF/GND-reglen
 python scripts/build_mockup/build_persons_extra.py
 ```
 
