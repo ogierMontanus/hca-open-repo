@@ -226,11 +226,14 @@ def full_name_from_label(label: str) -> str:
 #
 # URL templates — verified against a real, independently crawled/indexed
 # URL for each site (not guessed), per CLAUDE.md's live-verification rule:
-#   Lex.dk:              https://lex.dk/api/v1/search?query=... (JSON API;
-#                         confirmed via a third-party client library's
-#                         source reading this exact endpoint) — the
-#                         human-facing page mirrors the same "query" param
-#                         at /search per lex.dk's own SPA routing.
+#   Lex.dk:              https://lex.dk/.search?query=... — the leading dot
+#                         before "search" is not a typo; this sandbox's
+#                         network proxy blocks lex.dk outright, so this was
+#                         manually confirmed in a real browser (not by this
+#                         session) rather than crawled/indexed like the
+#                         other two. See docs/data-model/
+#                         person-bio-search-links.md for that verification
+#                         note.
 #   Deutsche Biographie:  https://www.deutsche-biographie.de/search?name=...
 #                         &geburtsjahr=...&todesjahr=...&st=erw — an actual
 #                         URL the site itself emitted, found crawled/indexed
@@ -261,7 +264,7 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     if is_danish:
         links.append({
             "label": "Søg på Lex.dk",
-            "url": "https://lex.dk/search?query=" + urllib.parse.quote(query),
+            "url": "https://lex.dk/.search?query=" + urllib.parse.quote(query),
         })
     if is_german:
         links.append({

@@ -116,20 +116,15 @@ bekræftet indirekte, med forskellig sikkerhedsgrad:
   crawlet eksempel-URL i CQL-form (`local.personalNames all "…"`),
   **og** samme mønster går igen uafhængigt i Ex Libris' udvikler-blog og
   R-pakken wikiTools' dokumentation — tre uafhængige kilder, samme svar.
-- **Lex.dk** — **svagest bekræftet af de tre.** Kun `/api/v1/search?query=…`
-  (en JSON-API, fundet via kildekoden til et tredjeparts Python-bibliotek
-  der forespørger den) er direkte bekræftet. Den menneskevendte søgeside
-  (`lex.dk/search?query=…`) er en rimelig, men **ikke uafhængigt
-  bekræftet** slutning ud fra samme parameternavn — ingen crawlet
-  eksempel-URL blev fundet for selve søgesiden.
-
-**Konsekvens:** Lex.dk-skabelonen bør efterprøves manuelt (fx
-`https://lex.dk/search?query=Hans%20Christian%20Andersen%201805%201875` i
-en almindelig browser) af nogen med netværksadgang, før den regnes for
-lige så sikker som de to andre. Ret kun URL-formen i
-`bio_search_links()` — resten af logikken (paraplyer, forfatter-reglen,
-navnekonvertering) er upåvirket af hvilken præcis sti/parameter Lex.dk
-faktisk bruger.
+- **Lex.dk** — **bekræftet ved manuel test.** Den menneskevendte søgeside
+  har en usædvanlig sti — et indledende punktum foran "search"
+  (`https://lex.dk/.search?query=…`, ikke `/search?query=…`) — som ingen
+  af de indirekte kilder denne session kunne nå frem til alene (kun
+  `/api/v1/search?query=…`, en separat JSON-API, var direkte bekræftet
+  fra kildekode). Brugeren testede selve URL'en i en almindelig browser
+  (`https://lex.dk/.search?query=Ingemann`) og bekræftede at den renderer
+  søgeresultater; skabelonen i `bio_search_links()` er rettet til det
+  punktum-præfikserede path på baggrund af den test.
 
 ## Kørsel
 
