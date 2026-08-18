@@ -16,17 +16,15 @@ siden en manglende nationalitet nu selv har sin egen regel (§5 herunder).
 | Dansk nationalitet (Dansk-paraplyen) | Lex.dk | `Søg på Lex.dk` |
 | Tysk nationalitet (Tysk-paraplyen) | Deutsche Biographie | `Søg hos Deutsche Biographie` |
 | Norsk nationalitet | Store norske leksikon | `Søg på Store norske leksikon` |
-| Forfatter/Digter-rolle, nationalitet hverken dansk, tysk eller norsk | VIAF | `Søg på VIAF` |
-| Øvrige, nationalitet hverken dansk, tysk eller norsk, ikke forfatter | GND Explorer | `Søg i GND Explorer` |
+| Øvrig nationalitet (hverken dansk, tysk eller norsk) | GND Explorer | `Søg i GND Explorer` |
 | **Ingen registreret nationalitet** | Lex.dk | `Søg på Lex.dk` |
 
 En person med både en dansk- og en tysk-paraply-nationalitet (23 personer —
 se §1) får **begge** de to første links, ikke et valgt — Dansk, Tysk og
-Norsk er uafhængige if-grene, ikke gensidigt udelukkende. De to VIAF/GND
-Explorer-regler er derimod indbyrdes udelukkende og gælder kun **resten**
-— dem ingen af de tre nationalitetsregler ramte, og som RENT FAKTISK har
-en nationalitet registreret — delt i to efter om personen er forfatter
-eller ej. Sidste-række-reglen (§0) er den eneste af de seks, der IKKE
+Norsk er uafhængige if-grene, ikke gensidigt udelukkende. GND
+Explorer-reglen gælder kun **resten** — dem ingen af de tre
+nationalitetsregler ramte, og som RENT FAKTISK har en nationalitet
+registreret. Sidste-række-reglen (§0) er den eneste af de fem, der IKKE
 kræver en registreret nationalitet.
 
 ## 0. Forudsætning: intet autoritetslink i forvejen
@@ -72,28 +70,12 @@ underidentiteter i `ethnic_adjectives_da.csv`), så `is_norwegian` tjekker
 blot om `norsk` selv indgår i personens nationaliteter — ingen klynge at
 udvide til. 93 personer kvalificerer.
 
-## 3. VIAF vs. GND Explorer — forfattere vs. alle andre, kun for "resten"
+## 3. GND Explorer — fald-back for øvrige nationaliteter
 
-VIAF-reglen blev tilføjet efter en opfølgende instruks: *"For writers with
-nationalities not covered by other rules link to viaf.org."* GND
-Explorer-reglen efter en senere instruks: *"For other nationals use gnd
-explorer."* Sammen dækker de to regler præcis den gruppe, ingen af de tre
-nationalitetsregler rammer:
-
-- **Forfattere** (`Rolle/Erhverv`-facettens `Forfatter/Digter`-bucket, se
-  `docs/data-model/person-role-facet.md` — samme kombination af
-  VÆRK-REGISTER-optræden og beskrivelses-høst som allerede driver den
-  facet, ikke en ny "er dette en forfatter"-heuristik) får **VIAF**, hvis
-  hele formål er bibliografisk forfatter-autoritet — det bedst egnede af de
-  to til netop denne gruppe. 282 personer.
-- **Alle andre** i samme "ikke dansk/tysk/norsk"-gruppe — adelige,
-  officerer, videnskabsfolk, og enhver anden ikke-forfatter — får **GND
-  Explorer**, en bredere person-/institutions-/emne-autoritetssøgning uden
-  forfatter-bias. 905 personer.
-
-Rækkefølgen betyder noget: en forfatter fra fx Sverige eller England får
-VIAF, ikke GND Explorer, fordi forfatter-tjekket kommer først inden for
-"resten"-grenen.
+Alle personer uden dansk, tysk eller norsk nationalitet får **GND Explorer**,
+en bredere person-/institutions-/emne-autoritetssøgning uden nationale
+grænsninger. Dette dækker adelige, officerer, videnskabsfolk, forfattere og
+enhver anden person uden dansk/tysk/norsk nationalitet. ~1.187 personer.
 
 ## 4. Søgning, ikke identifikation
 
