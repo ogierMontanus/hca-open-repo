@@ -320,7 +320,7 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     if is_norwegian:
         links.append({
             "label": "Søg på Store norske leksikon",
-            "url": "https://snl.no/.search?query=" + urllib.parse.quote(query),
+            "url": "https://snl.no/.search?query=" + urllib.parse.quote(name),
         })
     if not (is_danish or is_german or is_norwegian):
         if "Forfatter/Digter" in (roles or []):
