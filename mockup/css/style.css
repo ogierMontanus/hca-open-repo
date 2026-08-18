@@ -681,7 +681,10 @@ body[data-section="hvor"] .page-hero {
 .info-table tr + tr td { padding-top: var(--sp3); }
 .info-table td:first-child {
   color: var(--color-text-muted); white-space: nowrap;
-  padding-right: var(--sp4); width: 42%; vertical-align: top;
+  padding-right: var(--sp4); width: 30%; vertical-align: top;
+}
+.info-table td:last-child {
+  word-break: break-word; word-wrap: break-word; overflow-wrap: break-word;
 }
 
 /* === Timeline Bar === */
