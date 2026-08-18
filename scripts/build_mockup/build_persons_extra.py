@@ -195,6 +195,17 @@ def load_nation_umbrellas() -> dict:
 # lose the trailing date, since only the trailing one is ever a date here.
 _TRAILING_DATE_PAREN_RE = re.compile(r"\s*\([^)]*\)\s*$")
 _MID_NICKNAME_PAREN_RE = re.compile(r"\s*\([^)]*\)")
+# Redirect-stub labels — the same "se også:"/"se:" convention
+# build_works_extra.py's SEE_TAIL_RE/head_label() already strip for works,
+# reused here for persons. Two shapes, stripped in opposite directions:
+# "– Se også: Hansen, Magdalene." has the real name AFTER the marker (the
+# whole label IS the pointer); "Christensen, dansk Officer, se:
+# Christiansen, Eduard." has it BEFORE (a self-contained entry that
+# happens to also cross-reference another spelling). ~630 of 10,228
+# persons carry one of these two shapes. The colon after "også" is
+# optional — 6 leading labels read "– Se også X" with no colon.
+_LEADING_SEE_ALSO_RE = re.compile(r"^\s*[–-]\s*[Ss]e\s+ogs[åa]a?\s*:?\s*")
+_TRAILING_SEE_RE = re.compile(r",?\s*\bse\s*:.*$", re.I)
 
 
 def full_name_from_label(label: str) -> str:
@@ -208,7 +219,9 @@ def full_name_from_label(label: str) -> str:
     that is still a legitimate, if wide, search. A third+ comma-separated
     segment (a title like ", Greve" / ", Baron") is dropped rather than
     appended, since it would only add search noise, not help."""
-    s = _TRAILING_DATE_PAREN_RE.sub("", label).strip()
+    s = _LEADING_SEE_ALSO_RE.sub("", label)
+    s = _TRAILING_SEE_RE.sub("", s)
+    s = _TRAILING_DATE_PAREN_RE.sub("", s).strip()
     parts = [p.strip() for p in s.split(",")]
     if len(parts) == 1:
         return parts[0]
@@ -217,16 +230,20 @@ def full_name_from_label(label: str) -> str:
     return (given + " " + surname).strip() if given else surname
 
 
-# Two umbrella keys ('dansk','tysk') from nation_umbrellas_da.csv decide
-# Lex.dk / Deutsche Biographie eligibility; 'norsk' has no umbrella row
-# (no Norwegian sub-regional keys exist in ethnic_adjectives_da.csv, unlike
-# the Danish/German regional/historical-state variants), so it's checked
-# as a bare nationality key. Everyone left after those three — nationality
-# recorded, but neither Danish, German nor Norwegian — splits two ways:
-# WRITERS (Forfatter/Digter role — see parse_person_role.py) get VIAF,
-# whose whole raison d'être is bibliographic author authority; everyone
-# else in that remaining group gets GND Explorer, a general person/
-# corporate-body/subject authority search with no author-specific bias.
+# A person with NO recorded nationality at all defaults to Lex.dk too —
+# see the dedicated comment inside bio_search_links() for why that's a
+# resource default, not a nationality inference. Two umbrella keys
+# ('dansk','tysk') from nation_umbrellas_da.csv decide Lex.dk / Deutsche
+# Biographie eligibility for everyone who DOES have one; 'norsk' has no
+# umbrella row (no Norwegian sub-regional keys exist in
+# ethnic_adjectives_da.csv, unlike the Danish/German regional/historical-
+# state variants), so it's checked as a bare nationality key. Everyone
+# left after those three — nationality recorded, but neither Danish,
+# German nor Norwegian — splits two ways: WRITERS (Forfatter/Digter role
+# — see parse_person_role.py) get VIAF, whose whole raison d'être is
+# bibliographic author authority; everyone else in that remaining group
+# gets GND Explorer, a general person/corporate-body/subject authority
+# search with no author-specific bias.
 #
 # URL templates — verified against a real, independently crawled/indexed
 # URL for each site (not guessed), per CLAUDE.md's live-verification rule,
@@ -257,13 +274,27 @@ def full_name_from_label(label: str) -> str:
 #                           supplied directly by the user, not independently
 #                           verified by this session.
 def bio_search_links(label, born, died, nationalities, roles, umbrellas):
-    if not nationalities:
-        return []
     name = full_name_from_label(label)
     if not name:
         return []
     date_bits = [d for d in (born, died) if d]
     query = " ".join([name] + date_bits)
+
+    # Unverified nationality (nothing recorded at all) also defaults to
+    # Lex.dk, per an explicit follow-up instruction — NOT the same thing
+    # as inferring a nationality from the name, which the brief's own
+    # principle 4 forbids. This register is itself Danish-centric (H.C.
+    # Andersen's own diaries): its editorial convention marks nationality
+    # explicitly only when a person is NOT Danish, so an unmarked person
+    # defaulting to a Danish search is a reasonable resource choice, not
+    # an assertion that the person IS Danish. 8,259 of 10,228 persons
+    # carry no nationality tag at all and fall into this branch.
+    if not nationalities:
+        return [{
+            "label": "Søg på Lex.dk",
+            "url": "https://lex.dk/.search?query=" + urllib.parse.quote(query),
+        }]
+
     nat_set = set(nationalities)
     danish_keys = umbrellas.get("dansk", set())
     german_keys = umbrellas.get("tysk", set())

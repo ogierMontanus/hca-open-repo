@@ -2,12 +2,12 @@
 
 `scripts/build_mockup/build_persons_extra.py`s `bio_search_links()` tilføjer
 op til to søgelinks til eksterne biografiske opslagsværker for en person —
-**kun** når personen a) ikke allerede har et autoritetslink, og b) har en
-registreret nationalitet der udløser en af fem regler. Linkene er
-**søgninger, ikke identifikationer** — se princip 3 nedenfor, som er
+**kun** når personen ikke allerede har et autoritetslink. Linkene er
+**søgninger, ikke identifikationer** — se princip 4 nedenfor, som er
 bindende for både data og UI.
 
-1.969 af 10.228 personer får mindst ét link ved seneste kørsel.
+10.228 af 10.228 personer får mindst ét link ved seneste kørsel — alle,
+siden en manglende nationalitet nu selv har sin egen regel (§5 herunder).
 
 ## Reglerne
 
@@ -18,15 +18,16 @@ bindende for både data og UI.
 | Norsk nationalitet | Store norske leksikon | `Søg på Store norske leksikon` |
 | Forfatter/Digter-rolle, nationalitet hverken dansk, tysk eller norsk | VIAF | `Søg på VIAF` |
 | Øvrige, nationalitet hverken dansk, tysk eller norsk, ikke forfatter | GND Explorer | `Søg i GND Explorer` |
+| **Ingen registreret nationalitet** | Lex.dk | `Søg på Lex.dk` |
 
 En person med både en dansk- og en tysk-paraply-nationalitet (23 personer —
 se §1) får **begge** de to første links, ikke et valgt — Dansk, Tysk og
-Norsk er uafhængige if-grene, ikke gensidigt udelukkende. De sidste to
-regler (VIAF/GND Explorer) er derimod indbyrdes udelukkende og gælder kun
-**resten** — dem ingen af de tre nationalitetsregler ramte — delt i to efter
-om personen er forfatter eller ej. "Nationalitet hverken dansk, tysk eller
-norsk" er ikke en generel fallback for enhver ukendt nationalitet: uden en
-registreret nationalitet får ingen af de fem regler noget at arbejde med.
+Norsk er uafhængige if-grene, ikke gensidigt udelukkende. De to VIAF/GND
+Explorer-regler er derimod indbyrdes udelukkende og gælder kun **resten**
+— dem ingen af de tre nationalitetsregler ramte, og som RENT FAKTISK har
+en nationalitet registreret — delt i to efter om personen er forfatter
+eller ej. Sidste-række-reglen (§0) er den eneste af de seks, der IKKE
+kræver en registreret nationalitet.
 
 ## 0. Forudsætning: intet autoritetslink i forvejen
 
@@ -107,6 +108,32 @@ Markup følger `docs/external-links.md` fuldt ud: `.external-link`,
 `target="_blank"`, `rel="noopener noreferrer"`, ↗-ikon og
 `.sr-only`-varsling.
 
+## 5. Ingen registreret nationalitet — Lex.dk som standard
+
+**Instruks:** *"Link persons with unverified nationality to lex.dk."*
+
+8.259 af registrets 10.228 personer har slet ingen nationalitet
+registreret — kun personer, hvor korpusset eksplicit nævner en ikke-dansk
+oprindelse, får en nationalitetstag i `data/curated/…nationalities…` (se
+`docs/data-model/`-notater for den facet). Registret selv er
+dansk-centreret: en person uden nationalitetstag er langt oftest dansk
+eller har simpelthen ingen nationalitetsoplysning i kilderne, ikke en
+person med en *anden*, blot uregistreret nationalitet.
+
+`bio_search_links()` tjekker derfor `if not nationalities` **først**, før
+nogen af paraply- eller rolle-reglerne i §1–§3, og returnerer i så fald et
+enkelt Lex.dk-søgelink med det samme — uden at sætte eller udlede nogen
+nationalitet på personen. Det er bevidst en **ressource-standard, ikke en
+nationalitetspåstand**: samme princip 4 (søgning, ikke identifikation) som
+gælder for de nationalitetsbaserede regler, blot uden nationalitet som
+signal. Det ændrer intet ved instruks 4's regel om aldrig at *udlede*
+nationalitet af navnet — kun hvilken søgeressource der foreslås, når der
+slet ingen nationalitet er at gå ud fra.
+
+En person med en registreret nationalitet, der hverken er dansk, tysk
+eller norsk, rammer stadig §3 (VIAF/GND Explorer), ikke denne regel — §5
+gælder kun det helt tomme `nationalities`-felt.
+
 ## Navn til søgestreng
 
 `full_name_from_label()` vender registrets `"Efternavn, Fornavn(e)"`-form
@@ -118,6 +145,30 @@ tredje komma-separeret segment (en titel som `, Greve` / `, Baron`)
 droppes — det ville kun tilføje støj, ikke hjælpe søgningen. Et label uden
 komma (kun efternavn kendt, fx "Fog", "Schytte") bruges som det er; det er
 stadig et gyldigt, om end bredt, søgeudgangspunkt.
+
+**Henvisnings-labels ("– Se også:" / ", se:").** ~630 af 10.228 personer
+har et label, der bærer registrets egen krydshenvisnings-konvention —
+enten et ledende `"– Se også: Efternavn, Fornavn."` (251 personer, heraf
+6 uden kolon efter "også" — `"– Se også Efternavn, Fornavn."`) eller et
+afsluttende `", se: Efternavn, Fornavn."` (385 personer), samme mønster
+`build_works_extra.py`s `SEE_TAIL_RE`/`head_label()` allerede renser væk
+for værktitler. Ubehandlet gav det søgestrenge som
+`"Magdalene. – Se også: Hansen"` i stedet for `"Magdalene Hansen"`.
+`full_name_from_label()` fjerner nu begge mønstre (`_LEADING_SEE_ALSO_RE`,
+`_TRAILING_SEE_RE`) før navnet parses, så søgestrengen bruger navnet selv,
+ikke henvisningsteksten omkring det. `_LEADING_SEE_ALSO_RE`s kolon er
+valgfri af samme grund — ellers gled de 6 kolon-løse labels (fx
+`"– Se også Pedersen, Sophie."`) igennem urenset.
+
+**Kendt resterende begrænsning.** Rensningen løser kun selve
+henvisningsmarkøren, ikke andre titler i samme felt — et label som
+`"Christensen, dansk Officer, se: Christiansen, Eduard."` giver stadig
+`"dansk Officer Christensen"`, fordi `"dansk Officer"` ligger i
+fornavns-positionen efter kommaet og ikke er en titel,
+`full_name_from_label()` kender til. At rette det generelt ville kræve at
+genbruge titel-udtrækket fra `parse_person_gender.py`/
+`parse_person_role.py`, vurderet uden for scope for denne rettelse — en
+lidt støjet, men stadig brugbar, bred søgestreng.
 
 Fødsels- og dødsår tilføjes til søgestrengen når kendt (kun det ene, hvis
 kun det ene er registreret) — "Include the full name and available life
