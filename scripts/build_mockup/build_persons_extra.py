@@ -239,11 +239,8 @@ def full_name_from_label(label: str) -> str:
 # ethnic_adjectives_da.csv, unlike the Danish/German regional/historical-
 # state variants), so it's checked as a bare nationality key. Everyone
 # left after those three — nationality recorded, but neither Danish,
-# German nor Norwegian — splits two ways: WRITERS (Forfatter/Digter role
-# — see parse_person_role.py) get VIAF, whose whole raison d'être is
-# bibliographic author authority; everyone else in that remaining group
-# gets GND Explorer, a general person/corporate-body/subject authority
-# search with no author-specific bias.
+# German nor Norwegian — gets GND Explorer, a general person/corporate-
+# body/subject authority search.
 #
 # URL templates — verified against a real, independently crawled/indexed
 # URL for each site (not guessed), per CLAUDE.md's live-verification rule,
@@ -263,16 +260,14 @@ def full_name_from_label(label: str) -> str:
 #                           (not a documentation guess); st=erw selects its
 #                           "erweiterte Suche" (advanced search) mode so the
 #                           separate name/year fields are honoured.
-#   VIAF:                   https://viaf.org/viaf/search?query=local.personalNames+all+"..."
-#                           — CQL syntax, confirmed both via a real crawled/
-#                           indexed example URL and independently corroborated
-#                           by the Ex Libris developer blog and the viapy/
-#                           wikiTools library docs (all describe the same
-#                           local.personalNames all "..." pattern).
 #   GND Explorer:           https://explore.gnd.network/en/search?term=...
 #                           &rows=25 — URL and both param names (term, rows)
 #                           supplied directly by the user, not independently
 #                           verified by this session.
+#
+# ARCHIVED URLS (no longer in use):
+#   VIAF (replaced by GND Explorer for all non-Danish/German/Norwegian persons):
+#                           https://viaf.org/en/viaf/search?field=cql.any+all&index=VIAF&searchTerms=...
 def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     name = full_name_from_label(label)
     if not name:
@@ -323,18 +318,11 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
             "url": "https://snl.no/.search?query=" + urllib.parse.quote(name),
         })
     if not (is_danish or is_german or is_norwegian):
-        if "Forfatter/Digter" in (roles or []):
-            links.append({
-                "label": "Søg på VIAF",
-                "url": "https://viaf.org/viaf/search?query=" +
-                       urllib.parse.quote('local.personalNames all "%s"' % query),
-            })
-        else:
-            links.append({
-                "label": "Søg i GND Explorer",
-                "url": "https://explore.gnd.network/en/search?term=" +
-                       urllib.parse.quote(query) + "&rows=25",
-            })
+        links.append({
+            "label": "Søg i GND Explorer",
+            "url": "https://explore.gnd.network/en/search?term=" +
+                   urllib.parse.quote(query) + "&rows=25",
+        })
     return links
 
 
