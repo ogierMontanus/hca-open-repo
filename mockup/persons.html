@@ -370,7 +370,8 @@
       if (p.description) sbH += '<tr><td>Rolle</td><td>' + esc(p.description) + '</td></tr>';
       sbH += '<tr><td>Træffere</td><td>' + total + '</td></tr></table></div></div>';
       if (p.wd) {
-        sbH += '<div class="info-block"><div class="info-block__header">Autoritetslinks</div>' +
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Autoritetslinks' +
+          '<span class="info-block__tag">tilføjet</span></div>' +
           '<div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">' +
           '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) + '" target="_blank" rel="noopener" ' +
           'style="display:flex;align-items:center;gap:6px"><span class="wd-badge">wd:' + esc(p.wd) + '</span>' +
@@ -382,7 +383,8 @@
       // praksis, men begge if'er er uafhængige for robusthedens skyld.
       // Se docs/data-model/person-bio-search-links.md.
       if (p.bioLinks && p.bioLinks.length) {
-        sbH += '<div class="info-block"><div class="info-block__header">Biografiske opslag</div>' +
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Biografiske opslag' +
+          '<span class="info-block__tag">tilføjet</span></div>' +
           '<div class="info-block__body">' +
           '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
           'Søgelinks til eksterne opslagsværker ud fra navn og nationalitet — ' +

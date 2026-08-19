@@ -675,8 +675,24 @@ body[data-section="hvor"] .page-hero {
   padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border);
   font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em;
   text-transform: uppercase; color: var(--color-text-muted);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp2);
 }
 .info-block__body { padding: var(--sp4) var(--sp5); }
+
+/* Enriched-data marker — a sidebar info-block whose content was added by
+   this project (authority links, biographical search links) rather than
+   transcribed from the printed diary register. A tinted background marks
+   the whole card at a glance; the small header tag repeats the distinction
+   in text so it isn't color-only. Kept quiet on purpose, matching
+   docs/external-links.md's "provenance, not a call to action" principle —
+   see that doc for the full rationale. */
+.info-block--enriched { background: var(--color-surface-2); }
+.info-block__tag {
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.02em; text-transform: none;
+  padding: 1px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
 .info-table { width: 100%; font-size: 0.84rem; border-collapse: collapse; }
 .info-table tr + tr td { padding-top: var(--sp3); }
 .info-table td:first-child {

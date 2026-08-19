@@ -186,7 +186,7 @@ function escAttr(s) { return String(s == null ? '' : s)
   sb += '</table></div></div>';
 
   if (pl.wd) {
-    sb += '<div class="info-block"><div class="info-block__header">Autoritetslinks</div><div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
+    sb += '<div class="info-block info-block--enriched"><div class="info-block__header">Autoritetslinks<span class="info-block__tag">tilføjet</span></div><div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
     sb += '<a href="https://www.wikidata.org/wiki/' + escAttr(pl.wd) +
       '" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px">' +
       '<span class="wd-badge">wd:' + escAttr(pl.wd) + '</span>' +
