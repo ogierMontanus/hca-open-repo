@@ -470,8 +470,8 @@
       '<div class="results-header">' +
       '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
       '<div class="layout-switcher" id="person-diary-switcher">' +
-      '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>' +
-      '<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>' +
+      '<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>' +
+      '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>' +
       '</div></div>' +
       '<div class="result-grid" id="person-diary"></div>' +
       '<div style="text-align:center;margin-top:var(--sp5)">' +
@@ -484,7 +484,7 @@
     var dGrid = document.getElementById('person-diary');
     var dSummary = document.getElementById('person-diary-summary');
     var dSwitcher = document.getElementById('person-diary-switcher');
-    var savedLayout = (function () { try { return localStorage.getItem('diary-layout') || 'list'; } catch (e) { return 'list'; } })();
+    var savedLayout = (function () { try { return localStorage.getItem('diary-layout') || 'table'; } catch (e) { return 'table'; } })();
     var diaryResult = (typeof DiaryWire !== 'undefined') ? DiaryWire.refs(dGrid, urlReg, {
       pageSize: 24, layout: savedLayout,
       moreBtn: document.getElementById('person-diary-more'),
@@ -566,7 +566,7 @@
   // every filtered row at once) — same switcher pattern as cart.html's own
   // Liste/Tabel toggle. Persisted per page, like the diary list/grid toggle.
   var layout = (function () {
-    try { return localStorage.getItem('persons-layout') || 'list'; } catch (e) { return 'list'; }
+    try { return localStorage.getItem('persons-layout') || 'table'; } catch (e) { return 'table'; }
   })();
   var GENDER_SORT = { 'Mandlig': '1', 'Kvindelig': '2', 'Endnu ubestemt': '3' };
   var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [

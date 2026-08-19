@@ -253,7 +253,7 @@
   // the diary-card list/grid toggle elsewhere on the site; falls back to
   // 'list' rather than throwing when storage is unavailable.
   var layout = (function () {
-    try { return localStorage.getItem('cart-layout') || 'list'; } catch (e) { return 'list'; }
+    try { return localStorage.getItem('cart-layout') || 'table'; } catch (e) { return 'table'; }
   })();
   var sortKey = 'type';
   var sortDir = 'asc';

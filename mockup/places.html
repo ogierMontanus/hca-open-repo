@@ -347,7 +347,7 @@
   // every filtered row at once) — same switcher pattern as cart.html's own
   // Liste/Tabel toggle. Persisted per page, like the diary list/grid toggle.
   var layout = (function () {
-    try { return localStorage.getItem('places-layout') || 'list'; } catch (e) { return 'list'; }
+    try { return localStorage.getItem('places-layout') || 'table'; } catch (e) { return 'table'; }
   })();
   var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [
     { key: 'select', label: '', sortable: false,

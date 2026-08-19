@@ -592,7 +592,7 @@
     var el = document.getElementById(switcherId);
     if (!el) return;
     var layout = (function () {
-      try { return localStorage.getItem(storageKey) || 'list'; } catch (e) { return 'list'; }
+      try { return localStorage.getItem(storageKey) || 'table'; } catch (e) { return 'table'; }
     })();
     function apply() {
       el.querySelectorAll('[data-layout]').forEach(function (b) {

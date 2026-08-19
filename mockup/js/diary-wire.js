@@ -120,7 +120,11 @@ window.DiaryWire = (function () {
     var rec = DIARY_REFS[regId];
     var shown = 0;
     var step = opts.pageSize || 24;
-    var layout = opts.layout || 'list';  // 'list' | 'grid'
+    // Anything other than 'list' normalizes to 'table' — including a stale
+    // 'grid' value from localStorage written before the Gitter view was
+    // dropped in favor of Tabel (2026-08-19).
+    var layout = opts.layout === 'list' ? 'list' : 'table';
+    var tv = null;
 
     /* List card: heading + bibliographic sub-line + entity chips.
      * When the page is undated the heading already *is* the volume/page
@@ -142,41 +146,55 @@ window.DiaryWire = (function () {
         '</div>';
     }
 
-    /* Grid card: compact — heading on top, place below. No chips, so the
-     * place name is kept here; in the list layout it arrives as a chip. */
-    function cardGrid(pag) {
+    /* One row's data for the Tabel view — same fields the list card shows,
+     * flattened for TableView's column accessors. */
+    function rowData(pag) {
       var m = (hasMeta() && DIARY_META[pag]) || {};
-      var heading = headingFor(m);
-      var vp = titleFor(m);
-      var sub = m.pl ? esc(m.pl) : (heading === vp ? '' : vp);
-      var href = PAGES_DIR + esc(pag) + '.html';
-      return '<div class="result-row">' + selectBox(pag, heading) +
-        '<div class="result-card result-card--compact">' +
-        '<a href="' + href + '" class="result-card__link" title="' + esc(m.d ? formatDate(m.d) : pag) + '"></a>' +
-        '<div class="result-card__body">' +
-        '<div class="result-card__title">' + heading + '</div>' +
-        '<div class="result-card__meta">' + sub + '</div>' +
-        '</div></div>' +
-        '</div>';
+      return {
+        pag: pag,
+        heading: headingFor(m),
+        vp: titleFor(m),
+        place: m.pl ? esc(m.pl) : '',
+        chipsHtml: (chipsFor(pag) || []).slice(0, 3).map(chipHtml).join(' ')
+      };
     }
 
-    function applyContainerStyle() {
-      container.style.gridTemplateColumns = layout === 'grid'
-        ? 'repeat(auto-fill,minmax(150px,1fr))'
-        : '1fr';
+    function ensureTableView() {
+      if (tv || typeof TableView === 'undefined') return tv;
+      tv = TableView.create(container, [
+        { key: 'select', label: '', sortable: false,
+          html: function (row) { return selectBox(row.pag, row.heading); } },
+        { key: 'heading', label: 'Reference', value: function (row) { return row.heading; },
+          html: function (row) { return '<a class="data-table__id-link" href="' +
+            PAGES_DIR + esc(row.pag) + '.html">' + row.heading + '</a>'; } },
+        { key: 'vp', label: 'Bind/side', value: function (row) { return row.vp; } },
+        { key: 'place', label: 'Sted', value: function (row) { return row.place; } },
+        { key: 'chips', label: 'Omtaler', sortable: false,
+          html: function (row) { return row.chipsHtml; } }
+      ], { initialSort: 'heading',
+           afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } });
+      return tv;
     }
 
     function render(limit) {
-      applyContainerStyle();
-      var html = rec.e.slice(0, limit).map(function (p) {
-        return layout === 'grid' ? cardGrid(p) : cardList(p, chipsFor(p));
-      }).join('');
-      container.innerHTML = html;
-      shown = Math.min(limit, rec.e.length);
+      if (layout === 'table') {
+        container.style.gridTemplateColumns = '1fr';
+        var t = ensureTableView();
+        if (t) t.render(rec.e.map(rowData));
+        shown = rec.e.length;
+      } else {
+        container.style.gridTemplateColumns = '1fr';
+        container.innerHTML = rec.e.slice(0, limit).map(function (p) {
+          return cardList(p, chipsFor(p));
+        }).join('');
+        shown = Math.min(limit, rec.e.length);
+      }
       if (typeof Cart !== 'undefined') Cart.syncCheckboxes(container);
       if (opts.onCount) opts.onCount(shown, rec.n, rec.e.length);
       if (opts.moreBtn) {
-        opts.moreBtn.style.display = shown < rec.e.length ? '' : 'none';
+        // Tabel shows every reference at once, like every other Tabel view
+        // on the site — "Vis flere" only applies to the paginated list.
+        opts.moreBtn.style.display = (layout !== 'table' && shown < rec.e.length) ? '' : 'none';
       }
     }
 
@@ -191,8 +209,8 @@ window.DiaryWire = (function () {
     return {
       n: rec.n,
       setLayout: function (newLayout) {
-        layout = newLayout;
-        render(shown || step);
+        layout = newLayout === 'list' ? 'list' : 'table';
+        render(layout === 'table' ? rec.e.length : step);
       }
     };
   }

@@ -617,12 +617,12 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
       regBox.innerHTML =
         `<div class="results-header"><span class="results-count" style="flex:1"><strong>${total}</strong> dagbogsside${total === 1 ? '' : 'r'} omtaler ${escAttr(w.title)}</span>` +
         `<div class="layout-switcher" id="js-reg-diary-switcher">` +
-        `<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>` +
-        `<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>` +
+        `<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>` +
+        `<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>` +
         `</div></div>` +
         `<div class="result-grid" id="js-reg-diary-grid"></div>` +
         `<div style="text-align:center;margin-top:var(--sp5)"><button id="js-reg-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button></div>`;
-      const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'list'; } catch(e) { return 'list'; } })();
+      const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'table'; } catch(e) { return 'table'; } })();
       const diaryResult = DiaryWire.refs(
         document.getElementById('js-reg-diary-grid'), reg,
         { pageSize: 24, layout: savedLayout, moreBtn: document.getElementById('js-reg-diary-more') }

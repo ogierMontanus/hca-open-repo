@@ -271,8 +271,8 @@ function escAttr(s) { return String(s == null ? '' : s)
     '<div class="results-header">' +
     '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
     '<div class="layout-switcher" id="person-diary-switcher">' +
-    '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>' +
-    '<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>' +
+    '<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>' +
+    '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>' +
     '</div></div>' +
     '<div class="result-grid" id="person-diary"></div>' +
     '<div style="text-align:center;margin-top:var(--sp5)">' +
@@ -285,7 +285,7 @@ function escAttr(s) { return String(s == null ? '' : s)
   const grid = document.getElementById('person-diary');
   const summary = document.getElementById('person-diary-summary');
   const switcher = document.getElementById('person-diary-switcher');
-  const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'list'; } catch(e) { return 'list'; } })();
+  const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'table'; } catch(e) { return 'table'; } })();
   const result = DiaryWire.refs(grid, reg, {
     pageSize: 24,
     layout: savedLayout,

@@ -166,9 +166,24 @@
   // every filtered row at once) — same switcher pattern as cart.html's own
   // Liste/Tabel toggle. Shared localStorage key across all three wings
   // (billedkunst/teater-musik/bibliotek): they're separate page loads of
-  // the same catalogue concept, so one Tabel preference should carry over.
+  // the same catalogue concept, so one Tabel preference should carry over
+  // once the reader has actually chosen one.
+  //
+  // The *default* before any choice is saved differs by wing: Tabel for
+  // bibliotek/teater-musik, but billedkunst keeps Liste — its cards are the
+  // one place on the register where a reader browses by cover thumbnail
+  // rather than by row, so collapsing straight to a flat table by default
+  // would hide that. See docs/data-model/detail-page-redundancy.md's
+  // "Gitter"-removal note for why every OTHER Liste/Grid toggle on the site
+  // lost its Grid option in favor of Tabel — billedkunst.html was never one
+  // of those (it had no Grid to begin with) and is deliberately exempted
+  // from the Tabel-default sweep too.
   var layout = (function () {
-    try { return localStorage.getItem('works-layout') || 'list'; } catch (e) { return 'list'; }
+    try {
+      var saved = localStorage.getItem('works-layout');
+      if (saved) return saved;
+    } catch (e) { /* ignore */ }
+    return wing === 'billedkunst.html' ? 'list' : 'table';
   })();
   var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [
     { key: 'select', label: '', sortable: false,
