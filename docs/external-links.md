@@ -50,6 +50,52 @@ Klasserne ligger i `mockup/css/style.css` under `=== External links ===`.
 
 ---
 
+## 2a. Kilde vs. beriget data — sidebar info-blocks
+
+**Brugerpræference (2026-08-19):** Sidebar-`info-block`e skal visuelt
+skelne data, der er transskriberet fra det trykte register (`Registerdata`),
+fra data dette projekt selv har tilføjet bagefter (autoritetslinks til
+Wikidata, biografiske søgelinks). Skellet er farve, ikke kun ordlyd — en
+læser skal kunne se det uden at læse forklaringsteksten i blokken.
+
+**Markup.** Tilføj `info-block--enriched` til blok-klassen og en
+`<span class="info-block__tag">tilføjet</span>` som sidste barn af
+`info-block__header`:
+
+```html
+<div class="info-block info-block--enriched">
+  <div class="info-block__header">Autoritetslinks<span class="info-block__tag">tilføjet</span></div>
+  <div class="info-block__body">…</div>
+</div>
+```
+
+`Registerdata`-blokken får **ingen** af de to — dens hvide baggrund og
+manglende tag er selve normen, kun undtagelserne markeres.
+
+**Farverne genbruger eksisterende variabler**, ingen nye hex-værdier:
+
+| Element | Kilde-data (`Registerdata`) | Beriget data |
+|---|---|---|
+| Blok-baggrund | `--color-surface` (hvid) | `--color-surface-2` (lys varm grå) |
+| Tag | intet | `info-block__tag`: `--color-surface`-baggrund, `--color-border`-kant, `--color-text-muted`-tekst |
+
+**Anvendt på:** `persons.html` (Autoritetslinks + Biografiske opslag),
+`person.html` (Autoritetslinks, den ubrugte legacy-side — se
+`docs/data-model/person-bio-search-links.md`), `place.html`
+(Autoritetslinks). `entry.html`s "Bladr i dagbøgerne"-blok er **ikke**
+markeret — det er intern navigation, ikke eksternt tilføjet data.
+
+**Begrundelse for farvevalg.** Samme princip som `nation.html`s
+`.lang-src--register`/`.lang-src--derived`-badges (se
+`docs/data-model/person-ethnic-descriptors.md`), men anvendt på hele
+blokke i stedet for enkelte ord: en rolig, dæmpet nuanceforskel —
+`--color-surface-2` er allerede sidens standard "sekundær overflade"
+(bruges bl.a. til chips og timeline-baggrunde), så farvevalget føjer sig
+ind i det eksisterende system frem for at introducere en ny signalfarve.
+Tagget sikrer desuden, at skellet ikke er rent farvebaseret (tilgængelighed).
+
+---
+
 ## 3. Tilgængelighed
 
 Et nyt faneblad, der åbner uvarslet, desorienterer skærmlæser- og
@@ -70,8 +116,19 @@ tastaturbrugere. Derfor:
 |-----|-----------|
 | Det Kgl. Biblioteks dagbogsfaksimile | `Læs siden hos Det Kgl. Bibliotek` |
 | Wikidata-entitet | `wd:Q…` (badge) eller `Wikidata` |
+| Lex.dk-søgning (personregister, dansk nationalitet) | `Søg på Lex.dk` |
+| Deutsche Biographie-søgning (personregister, tysk nationalitet) | `Søg hos Deutsche Biographie` |
+| Store norske leksikon-søgning (personregister, norsk nationalitet) | `Søg på Store norske leksikon` |
+| GND Explorer-søgning (personregister, øvrig nationalitet) | `Søg i GND Explorer` |
+| Lex.dk-søgning (personregister, ingen registreret nationalitet) | `Søg på Lex.dk` |
 
 Ny type ekstern kilde: tilføj den her, så teksten er ens på tværs af sider.
+
+De fem søgelinks ovenfor er en anden underkategori end resten af tabellen:
+de peger på en SØGNING, ikke en bekræftet post — se
+`docs/data-model/person-bio-search-links.md` for hele reglen (hvornår de
+tilføjes, hvordan URL'en bygges, og hvorfor de ikke må se ud som
+Autoritetslinks-blokken).
 
 ---
 

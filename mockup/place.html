@@ -139,54 +139,42 @@ function escAttr(s) { return String(s == null ? '' : s)
 
   document.title = pl.label + ' — HCA Open Repository';
 
-  // Breadcrumb
+  // Breadcrumb ends in the internal ID, not the name — the name is
+  // already the H1 right below. See docs/data-model/detail-page-redundancy.md.
   document.getElementById('js-breadcrumb').innerHTML =
     '<a href="index.html">Forside</a>' +
     '<span class="breadcrumb__sep">›</span>' +
     '<a href="places.html">Stedregister</a>' +
     '<span class="breadcrumb__sep">›</span>' +
-    '<span class="breadcrumb__current">' + escAttr(pl.label) + '</span>';
+    '<span class="breadcrumb__current" style="font-family:monospace">' + escAttr(reg) + '</span>';
 
   document.getElementById('js-title').textContent = pl.label;
 
   const hasCoords = pl.lat != null && pl.lon != null;
-  let chips = '<span class="chip chip--place">STED-REGISTER</span>';
-  if (pl.country_da) chips += '<span class="chip">' + escAttr(pl.country_da) + '</span>';
-  chips += '<span class="chip" style="font-family:monospace">' + escAttr(reg) + '</span>';
-  if (hasCoords) chips += '<span class="chip" title="Geokodet via hcax.dk Rejser">geokodet</span>';
-  if (pl.wd) chips += '<a href="https://www.wikidata.org/wiki/' + escAttr(pl.wd) +
-    '" class="wd-badge" target="_blank" rel="noopener" title="' + escAttr(pl.label) +
-    ' på Wikidata">wd:' + escAttr(pl.wd) + '</a>';
-  document.getElementById('js-chips').innerHTML = chips;
+  // No chip row: register-type/ID/"geokodet" duplicated the breadcrumb and
+  // the Kort section below; the wd chip duplicated the Autoritetslinks
+  // sidebar block. See docs/data-model/detail-page-redundancy.md.
+  document.getElementById('js-chips').style.display = 'none';
 
-  // Hero meta
+  // Hero meta keeps only what's shown nowhere else on the page: country and
+  // the English exonym. Coordinates live with the map (Kort section) and
+  // the hit count lives in the Dagbogsreferencer intro line below.
   const metaItems = [];
   if (pl.country_da) metaItems.push(pl.country_da);
   if (pl.destination_en && pl.destination_en !== pl.label) metaItems.push('a.k.a. ' + pl.destination_en);
-  if (hasCoords) metaItems.push(pl.lat.toFixed(4) + ', ' + pl.lon.toFixed(4));
-  const total = (typeof DIARY_REFS !== 'undefined' && DIARY_REFS[reg])
-    ? DIARY_REFS[reg].n : (pl.refs || 0);
-  metaItems.push(total + ' dagbogsreferencer');
-  document.getElementById('js-meta').innerHTML =
-    metaItems.map(m => '<span>' + escAttr(m) + '</span>').join('');
+  document.getElementById('js-meta').innerHTML = metaItems.length
+    ? metaItems.map(m => '<span>' + escAttr(m) + '</span>').join('')
+    : '';
+  if (!metaItems.length) document.getElementById('js-meta').style.display = 'none';
 
-  // ── Sidebar ──────────────────────────────────────────────────────────────
+  // ── Sidebar — Registerdata is not repeated here: ID/register-type/label
+  // are shown via the breadcrumb and H1, country/English via the hero meta,
+  // coordinates via the Kort section, and the hit count via the
+  // Dagbogsreferencer intro. Only genuinely-added data (Wikidata) gets a
+  // sidebar block. See docs/data-model/detail-page-redundancy.md. ──────────
   let sb = '';
-  sb += '<div class="info-block"><div class="info-block__header">Registerdata</div><div class="info-block__body"><table class="info-table">';
-  sb += '<tr><td>Internt ID-nr.</td><td style="font-family:monospace">' + escAttr(reg) + '</td></tr>';
-  sb += '<tr><td>Register</td><td>STED-REGISTER</td></tr>';
-  sb += '<tr><td>Label</td><td>' + escAttr(pl.label) + '</td></tr>';
-  if (pl.destination_en && pl.destination_en !== pl.label)
-    sb += '<tr><td>English</td><td>' + escAttr(pl.destination_en) + '</td></tr>';
-  if (pl.country_da) sb += '<tr><td>Land</td><td>' + escAttr(pl.country_da) + '</td></tr>';
-  if (hasCoords)
-    sb += '<tr><td>Koordinater</td><td style="font-family:monospace">' +
-      pl.lat.toFixed(4) + ', ' + pl.lon.toFixed(4) + '</td></tr>';
-  sb += '<tr><td>Træffere</td><td>' + total + '</td></tr>';
-  sb += '</table></div></div>';
-
   if (pl.wd) {
-    sb += '<div class="info-block"><div class="info-block__header">Autoritetslinks</div><div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
+    sb += '<div class="info-block info-block--enriched"><div class="info-block__header">Autoritetslinks<span class="info-block__tag">tilføjet</span></div><div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
     sb += '<a href="https://www.wikidata.org/wiki/' + escAttr(pl.wd) +
       '" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px">' +
       '<span class="wd-badge">wd:' + escAttr(pl.wd) + '</span>' +
