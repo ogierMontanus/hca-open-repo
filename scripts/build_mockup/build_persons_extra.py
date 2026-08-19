@@ -287,7 +287,7 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     if not nationalities:
         return [{
             "label": "Søg på Lex.dk",
-            "url": "https://lex.dk/.search?query=" + urllib.parse.quote(query),
+            "url": "https://lex.dk/.search?query=" + urllib.parse.quote(name),
         }]
 
     nat_set = set(nationalities)
@@ -301,7 +301,7 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     if is_danish:
         links.append({
             "label": "Søg på Lex.dk",
-            "url": "https://lex.dk/.search?query=" + urllib.parse.quote(query),
+            "url": "https://lex.dk/.search?query=" + urllib.parse.quote(name),
         })
     if is_german:
         links.append({
