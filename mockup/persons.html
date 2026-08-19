@@ -303,11 +303,15 @@
 
     document.title = (p ? p.label : urlReg) + ' — HCA Open Repository';
 
+    // Breadcrumb ends in the internal ID, not the name — the name is
+    // already the H1 right below, so repeating it here would just be a
+    // second, smaller copy of the same string. See
+    // docs/data-model/detail-page-redundancy.md.
     var bc = document.getElementById('js-breadcrumb');
     if (bc) bc.innerHTML =
       '<a href="index.html">Forside</a><span class="breadcrumb__sep">›</span>' +
       '<a href="persons.html">Personregister</a><span class="breadcrumb__sep">›</span>' +
-      '<span class="breadcrumb__current">' + esc(p ? p.label : urlReg) + '</span>';
+      '<span class="breadcrumb__current" style="font-family:monospace">' + esc(urlReg) + '</span>';
 
     var h1El = document.getElementById('js-h1');
     if (h1El) h1El.textContent = p ? p.label : urlReg;
@@ -315,30 +319,15 @@
     var subEl = document.getElementById('js-hero-sub');
     if (subEl) subEl.style.display = 'none';
 
+    // The old chip row (PERSON-REGISTER / era / ID / wd) and meta line
+    // (dates / role / hit count) duplicated the breadcrumb, the H1, the
+    // Beskrivelse section, the Autoritetslinks block and the
+    // Dagbogsreferencer intro respectively — removed rather than
+    // populated. See docs/data-model/detail-page-redundancy.md.
     var chEl = document.getElementById('js-hero-chips');
-    if (chEl && p) {
-      var chips = '<span class="chip chip--person">PERSON-REGISTER</span>';
-      if (p.era) chips += '<span class="chip">' + esc(p.era) + '</span>';
-      chips += '<span class="chip" style="font-family:monospace">' + esc(urlReg) + '</span>';
-      if (p.wd) chips += '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) +
-        '" class="wd-badge" target="_blank" rel="noopener">wd:' + esc(p.wd) + '</a>';
-      chEl.innerHTML = chips;
-    }
-
-    var total = (typeof DIARY_REFS !== 'undefined' && DIARY_REFS[urlReg])
-      ? DIARY_REFS[urlReg].n : (p && p.refs || 0);
+    if (chEl) chEl.style.display = 'none';
     var metaEl = document.getElementById('js-hero-meta');
-    if (metaEl) {
-      var mItems = [];
-      if (p) {
-        if (p.born && p.died) mItems.push(p.born + '–' + p.died);
-        else if (p.born) mItems.push('* ' + p.born);
-        else if (p.died) mItems.push('† ' + p.died);
-        if (p.description) mItems.push(p.description);
-      }
-      mItems.push(total + ' poster i dagbøgerne');
-      metaEl.innerHTML = mItems.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('');
-    }
+    if (metaEl) metaEl.style.display = 'none';
 
     var listSec = document.getElementById('js-list-section');
     if (listSec) listSec.style.display = 'none';
@@ -357,18 +346,14 @@
       Cart.mountToggle(document.getElementById('js-cart-toggle'), 'person', urlReg, p.label);
     }
 
-    // Sidebar
+    // Sidebar — Registerdata (ID/register-type/label/dates/role/hit-count)
+    // is deliberately not repeated here: every one of those fields is
+    // already shown elsewhere on the page (breadcrumb, H1, Beskrivelse,
+    // Dagbogsreferencer). Only genuinely-added data gets a sidebar block.
+    // See docs/data-model/detail-page-redundancy.md.
     var sb = document.getElementById('js-detail-sidebar');
     if (sb) {
-      var sbH = '<div class="info-block"><div class="info-block__header">Registerdata</div>' +
-        '<div class="info-block__body"><table class="info-table">' +
-        '<tr><td>Internt ID-nr.</td><td style="font-family:monospace">' + esc(urlReg) + '</td></tr>' +
-        '<tr><td>Register</td><td>PERSON-REGISTER</td></tr>' +
-        '<tr><td>Label</td><td>' + esc(p.label) + '</td></tr>';
-      if (p.born) sbH += '<tr><td>Født</td><td>' + esc(p.born) + '</td></tr>';
-      if (p.died) sbH += '<tr><td>Død</td><td>' + esc(p.died) + '</td></tr>';
-      if (p.description) sbH += '<tr><td>Rolle</td><td>' + esc(p.description) + '</td></tr>';
-      sbH += '<tr><td>Træffere</td><td>' + total + '</td></tr></table></div></div>';
+      var sbH = '';
       if (p.wd) {
         sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Autoritetslinks' +
           '<span class="info-block__tag">tilføjet</span></div>' +

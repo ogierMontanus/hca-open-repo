@@ -461,7 +461,11 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
 
   document.title = w.title + ' — HCA Open Repository';
 
-  // Breadcrumb
+  // Breadcrumb ends in the internal ID, not the title — the title is
+  // already the H1 right below. H2/H3 stay as the two preceding crumbs
+  // (they're navigational, not pure repetition) and are therefore not
+  // also repeated as hero chips, hero meta, or sidebar rows below. See
+  // docs/data-model/detail-page-redundancy.md.
   document.getElementById('js-breadcrumb').innerHTML =
     `<a href="index.html">Forside</a>` +
     `<span class="breadcrumb__sep">›</span>` +
@@ -469,41 +473,43 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     `<span class="breadcrumb__sep">›</span>` +
     `<span style="color:var(--color-text-muted)">${w.h3}</span>` +
     `<span class="breadcrumb__sep">›</span>` +
-    `<span class="breadcrumb__current">${w.title}</span>`;
+    `<span class="breadcrumb__current" style="font-family:monospace">${reg}</span>`;
 
-  // Hero title + chips
+  // Hero title — no chip row: H2/H3/ID duplicated the breadcrumb, and the
+  // wd chip duplicated the Autoritetslinks sidebar block and the LOD
+  // callout below. See docs/data-model/detail-page-redundancy.md.
   document.getElementById('js-title').textContent = w.title;
-  let chips = `<span class="chip">${w.h2}</span><span class="chip">${w.h3}</span><span class="chip chip--work">${reg}</span>`;
-  if (w.wd) chips += wdBadge(w.wd, w.title);
-  document.getElementById('js-chips').innerHTML = chips;
+  document.getElementById('js-chips').style.display = 'none';
 
-  // Hero meta
-  const metaItems = [`${w.refs} poster i dagbøgerne`, `${w.wingLabel} · ${w.h3}`];
-  if (w.lang) metaItems.push(w.lang);
-  document.getElementById('js-meta').innerHTML = metaItems.map(m => `<span>${m}</span>`).join('');
+  // Hero meta: refs count duplicated the diary-mentions intro below,
+  // wingLabel/h3 duplicated the breadcrumb, and lang duplicated the
+  // sidebar's Originalsprog row — all removed.
+  document.getElementById('js-meta').style.display = 'none';
 
   // ── Sidebar ──────────────────────────────────────────────────────────────
   let sb = '';
 
-  // 1. Registeroplysninger
-  sb += `<div class="sidebar-box"><div class="sidebar-box__title">Registeroplysninger</div><dl class="register-dl">`;
-  sb += `<dt>ID</dt><dd style="font-family:monospace">${reg}</dd>`;
-  sb += `<dt>H1</dt><dd>VÆRK-REGISTER</dd>`;
-  sb += `<dt>H2</dt><dd>${w.h2}</dd>`;
-  sb += `<dt>H3</dt><dd>${w.h3}</dd>`;
-  if (w.author) {
-    sb += `<dt>person</dt><dd><a href="${personHref(w.author)}" style="color:var(--color-accent)">${w.author}</a>`;
-    if (w.authorWd) sb += ` ${wdBadge(w.authorWd, w.author)}`;
-    sb += `</dd>`;
+  // 1. Registeroplysninger — ID/H1/H2/H3/refs-count are not repeated here:
+  // ID is in the breadcrumb, H1 (VÆRK-REGISTER) is a constant that carries
+  // no information once you're on a work's own page, H2/H3 are in the
+  // breadcrumb, and the ref count is in the diary-mentions intro below.
+  // Only the fields with no other home on the page remain: author,
+  // language, date. See docs/data-model/detail-page-redundancy.md.
+  if (w.author || w.lang || dispDate || dispYear) {
+    sb += `<div class="sidebar-box"><div class="sidebar-box__title">Registeroplysninger</div><dl class="register-dl">`;
+    if (w.author) {
+      sb += `<dt>person</dt><dd><a href="${personHref(w.author)}" style="color:var(--color-accent)">${w.author}</a>`;
+      if (w.authorWd) sb += ` ${wdBadge(w.authorWd, w.author)}`;
+      sb += `</dd>`;
+    }
+    if (w.lang) sb += `<dt>Originalsprog</dt><dd>${w.lang}</dd>`;
+    if (dispDate) {
+      sb += `<dt>Dateret</dt><dd>${dispDate}</dd>`;
+    } else if (dispYear) {
+      sb += `<dt>År</dt><dd>${dispYear}</dd>`;
+    }
+    sb += `</dl></div>`;
   }
-  if (w.lang) sb += `<dt>Originalsprog</dt><dd>${w.lang}</dd>`;
-  if (dispDate) {
-    sb += `<dt>Dateret</dt><dd>${dispDate}</dd>`;
-  } else if (dispYear) {
-    sb += `<dt>År</dt><dd>${dispYear}</dd>`;
-  }
-  sb += `<dt>Antal refs.</dt><dd>${w.refs}</dd>`;
-  sb += `</dl></div>`;
 
   // 2. Image
   if (w.image) {
