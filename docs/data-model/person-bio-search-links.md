@@ -152,9 +152,12 @@ genbruge titel-udtrækket fra `parse_person_gender.py`/
 `parse_person_role.py`, vurderet uden for scope for denne rettelse — en
 lidt støjet, men stadig brugbar, bred søgestreng.
 
-Fødsels- og dødsår tilføjes til søgestrengen når kendt (kun det ene, hvis
-kun det ene er registreret) — "Include the full name and available life
-dates to reduce ambiguity" fra selve opgaveformuleringen.
+Fødsels- og dødsår tilføjes til søgestrengen for **Deutsche Biographie** og
+**GND Explorer** når kendt (kun det ene, hvis kun det ene er registreret) —
+"Include the full name and available life dates to reduce ambiguity" fra
+selve opgaveformuleringen. **Lex.dk** og **Store norske leksikon** bruger
+derimod kun navnet, uden årstal — en efterfølgende justering, da årstal
+viste sig at forringe søgeresultaterne på de to leksikon-søgninger.
 
 ## URL-skabeloner — verificeret, ikke gættet, med forskellig sikkerhedsgrad
 
