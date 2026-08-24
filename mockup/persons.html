@@ -391,6 +391,21 @@
           'style="display:flex;align-items:center;gap:6px"><span class="wd-badge">wd:' + esc(p.wd) + '</span>' +
           '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
       }
+      // Brevveksling — verificeret link til andersen.sdu.dk's Brevbasen
+      // (adskilt fra dette registers egne dagbogsindekser). Kun udfyldt for
+      // personer, der er hånd-verificeret i
+      // data/curated/breve_person_crosswalk.csv — se
+      // docs/data-model/correspondence-integration.md §2-4. Eksternt link,
+      // følger docs/external-links.md.
+      if (p.breve) {
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Brevveksling' +
+          '<span class="info-block__tag">tilføjet</span></div>' +
+          '<div class="info-block__body" style="font-size:0.82rem">' +
+          '<a class="external-link" href="' + esc(p.breve.url) + '" target="_blank" rel="noopener noreferrer">' +
+          (p.breve.letters ? 'Se ' + p.breve.letters + ' breve ' : 'Se brevveksling ') + 'hos H.C. Andersen Centret' +
+          '<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (åbner i nyt faneblad)</span></a>' +
+          '</div></div>';
+      }
       // Biografiske opslag — søgelinks, ikke identifikationer. Kun udfyldt
       // når personen IKKE har et autoritetslink ovenfor (se bio_search_links()
       // i build_persons_extra.py) — de to blokke udelukker derfor hinanden i
@@ -505,7 +520,7 @@
       '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
       '<div class="layout-switcher" id="person-diary-switcher">' +
       '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>' +
-      '<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>' +
+      '<button class="layout-switcher__btn" data-layout="table">▦ Tabel</button>' +
       '</div></div>' +
       '<div class="result-grid" id="person-diary"></div>' +
       '<div style="text-align:center;margin-top:var(--sp5)">' +
@@ -518,7 +533,12 @@
     var dGrid = document.getElementById('person-diary');
     var dSummary = document.getElementById('person-diary-summary');
     var dSwitcher = document.getElementById('person-diary-switcher');
-    var savedLayout = (function () { try { return localStorage.getItem('diary-layout') || 'list'; } catch (e) { return 'list'; } })();
+    // A stale 'grid' value from before this switcher moved to Liste/Tabel
+    // (or from a painting/sculpture page, which still writes 'grid' but under
+    // its own 'diary-layout-visual' key) should not leave neither button
+    // marked active on a page that no longer offers Gitter.
+    function normalizeSavedLayout(v) { return (v === 'table' || v === 'list') ? v : 'list'; }
+    var savedLayout = (function () { try { return normalizeSavedLayout(localStorage.getItem('diary-layout')); } catch (e) { return 'list'; } })();
     var diaryResult = (typeof DiaryWire !== 'undefined') ? DiaryWire.refs(dGrid, urlReg, {
       pageSize: 24, layout: savedLayout,
       moreBtn: document.getElementById('person-diary-more'),
