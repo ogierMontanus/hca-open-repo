@@ -120,7 +120,43 @@ window.DiaryWire = (function () {
     var rec = DIARY_REFS[regId];
     var shown = 0;
     var step = opts.pageSize || 24;
-    var layout = opts.layout || 'list';  // 'list' | 'grid'
+    var layout = opts.layout || 'list';  // 'list' | 'grid' | 'table'
+
+    /* Table row data for one diary page. Fields that already went through
+     * esc() (heading, vp -- see headingFor/titleFor) are handed to TableView
+     * via a column's html() so they are not escaped a second time; `place`
+     * stays raw for TableView's own value()-column escaping. sortKey reuses
+     * the page id's own zero-padded Pag{VV}{PPPP} number, which is already
+     * in vol/page order -- no separate volume lookup table needed here. */
+    function rowData(pag) {
+      var m = (hasMeta() && DIARY_META[pag]) || {};
+      var heading = headingFor(m);
+      var vp = titleFor(m);
+      var digits = pag.replace(/\D/g, '');
+      return {
+        pag: pag, heading: heading, vp: vp, place: m.pl || '',
+        chipHtml: (chipsFor(pag) || []).slice(0, 3).map(chipHtml).join(''),
+        sortKey: digits ? parseInt(digits, 10) : 0
+      };
+    }
+
+    // Same TableView the wing catalogues and register overviews already use
+    // (js/table-view.js) -- degrades to null (table mode falls back to list,
+    // see render() below) if the caller's page hasn't loaded that script.
+    var tableView = (typeof TableView !== 'undefined') ? TableView.create(container, [
+      { key: 'select', label: '', sortable: false,
+        html: function (r) { return selectBox(r.pag, r.heading); } },
+      { key: 'pag', label: 'ID',
+        html: function (r) { return '<a class="data-table__id-link" href="' +
+          PAGES_DIR + esc(r.pag) + '.html">' + esc(r.pag) + '</a>'; } },
+      { key: 'heading', label: 'Dato / reference',
+        html: function (r) { return r.heading; }, sortValue: function (r) { return r.sortKey; } },
+      { key: 'vp', label: 'Bind, side',
+        html: function (r) { return r.vp; }, sortValue: function (r) { return r.sortKey; } },
+      { key: 'place', label: 'Sted', value: function (r) { return r.place; } },
+      { key: 'chips', label: 'Registerposter', sortable: false,
+        html: function (r) { return r.chipHtml || '—'; } }
+    ], { initialSort: 'heading', initialDir: 'asc' }) : null;
 
     /* List card: heading + bibliographic sub-line + entity chips.
      * When the page is undated the heading already *is* the volume/page
@@ -160,7 +196,16 @@ window.DiaryWire = (function () {
         '</div>';
     }
 
+    // Table mode replaces the container's CSS grid (declared on .result-grid,
+    // sized for ~200px cards) with a plain block, since a <table> as a single
+    // grid item would otherwise be squeezed into one card-width column.
     function applyContainerStyle() {
+      if (layout === 'table') {
+        container.style.display = 'block';
+        container.style.gridTemplateColumns = '';
+        return;
+      }
+      container.style.display = '';
       container.style.gridTemplateColumns = layout === 'grid'
         ? 'repeat(auto-fill,minmax(150px,1fr))'
         : '1fr';
@@ -168,15 +213,23 @@ window.DiaryWire = (function () {
 
     function render(limit) {
       applyContainerStyle();
-      var html = rec.e.slice(0, limit).map(function (p) {
-        return layout === 'grid' ? cardGrid(p) : cardList(p, chipsFor(p));
-      }).join('');
-      container.innerHTML = html;
-      shown = Math.min(limit, rec.e.length);
+      if (layout === 'table' && tableView) {
+        // Sorting only the first page would be misleading, so table mode
+        // renders every reference at once and hides "Vis flere" -- the same
+        // choice category-catalogue.js's own Tabel view makes.
+        tableView.render(rec.e.map(rowData));
+        shown = rec.e.length;
+      } else {
+        var html = rec.e.slice(0, limit).map(function (p) {
+          return layout === 'grid' ? cardGrid(p) : cardList(p, chipsFor(p));
+        }).join('');
+        container.innerHTML = html;
+        shown = Math.min(limit, rec.e.length);
+      }
       if (typeof Cart !== 'undefined') Cart.syncCheckboxes(container);
       if (opts.onCount) opts.onCount(shown, rec.n, rec.e.length);
       if (opts.moreBtn) {
-        opts.moreBtn.style.display = shown < rec.e.length ? '' : 'none';
+        opts.moreBtn.style.display = (layout === 'table' || shown >= rec.e.length) ? 'none' : '';
       }
     }
 

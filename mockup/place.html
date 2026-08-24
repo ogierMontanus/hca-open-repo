@@ -81,6 +81,7 @@
      python scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/table-view.js"></script>
 <script src="js/diary-wire.js"></script>
 <script src="data/nation-index.js" onerror="void 0"></script>
 <script src="js/nation-link.js"></script>
@@ -299,7 +300,7 @@ function escAttr(s) { return String(s == null ? '' : s)
     '<p id="place-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
     '<div class="layout-switcher" id="place-diary-switcher">' +
     '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>' +
-    '<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>' +
+    '<button class="layout-switcher__btn" data-layout="table">▦ Tabel</button>' +
     '</div></div>' +
     '<div class="result-grid" id="place-diary"></div>' +
     '<div style="text-align:center;margin-top:var(--sp5)">' +
@@ -351,7 +352,14 @@ function escAttr(s) { return String(s == null ? '' : s)
   const grid = document.getElementById('place-diary');
   const summary = document.getElementById('place-diary-summary');
   const switcher = document.getElementById('place-diary-switcher');
-  const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'list'; } catch(e) { return 'list'; } })();
+  // A stale 'grid' value from before this switcher moved to Liste/Tabel
+  // (or from a painting/sculpture page, which still writes 'grid' but under
+  // its own 'diary-layout-visual' key) should not leave neither button
+  // marked active on a page that no longer offers Gitter.
+  function normalizeSavedLayout(v) {
+    return (v === 'table' || v === 'list') ? v : 'list';
+  }
+  const savedLayout = (() => { try { return normalizeSavedLayout(localStorage.getItem('diary-layout')); } catch(e) { return 'list'; } })();
   const result = DiaryWire.refs(grid, reg, {
     pageSize: 24,
     layout: savedLayout,

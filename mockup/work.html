@@ -119,6 +119,7 @@
      python scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/table-view.js"></script>
 <script src="js/diary-wire.js"></script>
 <script src="js/cart.js"></script>
 <script>
@@ -614,15 +615,36 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
                     typeof DIARY_REFS !== 'undefined' && DIARY_REFS[reg];
     if (hasData) {
       const total = DIARY_REFS[reg].n;
+      // Paintings and sculptures keep the current Liste/Gitter switcher: the
+      // hero image is the point of these pages, and a sortable text table
+      // adds little for the handful of diary mentions a single artwork gets.
+      // Every other individual entry (works and places alike) gets the
+      // sitewide Liste/Tabel switcher instead of Gitter -- see
+      // js/table-view.js and CLAUDE.md on why grid mode was retired there.
+      const isVisualArt = w.h2 === 'BILLEDKUNST' &&
+        (w.h3 === 'Malerier og Tegninger' || w.h3 === 'Skulptur');
+      // Separate localStorage keys per switcher vocabulary: mixing 'table'
+      // into a page that only knows list/grid (or vice versa) would leave
+      // neither button marked active and silently fall back to Liste.
+      const layoutKey = isVisualArt ? 'diary-layout-visual' : 'diary-layout';
+      const secondBtn = isVisualArt
+        ? `<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>`
+        : `<button class="layout-switcher__btn" data-layout="table">▦ Tabel</button>`;
       regBox.innerHTML =
         `<div class="results-header"><span class="results-count" style="flex:1"><strong>${total}</strong> dagbogsside${total === 1 ? '' : 'r'} omtaler ${escAttr(w.title)}</span>` +
         `<div class="layout-switcher" id="js-reg-diary-switcher">` +
         `<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>` +
-        `<button class="layout-switcher__btn" data-layout="grid">⊞ Gitter</button>` +
+        secondBtn +
         `</div></div>` +
         `<div class="result-grid" id="js-reg-diary-grid"></div>` +
         `<div style="text-align:center;margin-top:var(--sp5)"><button id="js-reg-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button></div>`;
-      const savedLayout = (() => { try { return localStorage.getItem('diary-layout') || 'list'; } catch(e) { return 'list'; } })();
+      const savedLayout = (() => {
+        try {
+          const v = localStorage.getItem(layoutKey);
+          const valid = isVisualArt ? ['list', 'grid'] : ['list', 'table'];
+          return valid.includes(v) ? v : 'list';
+        } catch (e) { return 'list'; }
+      })();
       const diaryResult = DiaryWire.refs(
         document.getElementById('js-reg-diary-grid'), reg,
         { pageSize: 24, layout: savedLayout, moreBtn: document.getElementById('js-reg-diary-more') }
@@ -637,7 +659,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
           if (!btn) return;
           const nl = btn.dataset.layout;
           diaryResult.setLayout(nl);
-          try { localStorage.setItem('diary-layout', nl); } catch(e) {}
+          try { localStorage.setItem(layoutKey, nl); } catch(e) {}
           sw.querySelectorAll('[data-layout]').forEach(b => {
             b.classList.toggle('layout-switcher__btn--active', b === btn);
           });
