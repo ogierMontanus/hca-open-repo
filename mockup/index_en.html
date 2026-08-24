@@ -6,7 +6,11 @@
   <title>HCA Open Repository — Andersen's · Who · What · Where</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    body.landing-page { background: var(--color-bg); }
+    /* Landing-page specific styles */
+
+    body.landing-page {
+      background: var(--color-bg);
+    }
 
     /* Minimal header */
     .landing-header {
@@ -34,8 +38,10 @@
       color: var(--color-text-muted);
     }
     .landing-header__link:hover { color: var(--color-accent); text-decoration: none; }
+    /* .lang-switch styling now lives in css/style.css (shared across every page). */
 
-    /* Hero */
+    /* Hero: title + WWW + search. Sized a touch taller/wider than the DA
+       hero to make room for the WWW display line below the title. */
     .landing-hero {
       min-height: 48vh;
       display: flex;
@@ -49,8 +55,6 @@
       max-width: 660px;
       width: 100%;
     }
-
-    /* "Andersen's" */
     .landing-title {
       font-family: var(--font-serif);
       font-size: 3.4rem;
@@ -60,8 +64,8 @@
       line-height: 1.05;
       margin-bottom: 0.25em;
     }
-
-    /* WWW display line */
+    /* WWW display line -- the English title concept: Andersen's / W W W /
+       Who -- What -- Where. Kept as established; not re-translated. */
     .landing-www {
       font-family: var(--font-serif);
       font-size: 2.9rem;
@@ -73,8 +77,6 @@
       opacity: 0.18;
       user-select: none;
     }
-
-    /* "Who — What — Where" subtitle with W highlights */
     .landing-subtitle {
       font-family: var(--font-serif);
       font-size: 1.45rem;
@@ -89,8 +91,6 @@
       font-weight: 700;
       font-size: 1.55rem;
     }
-
-    /* Search */
     .landing-search-form {
       display: flex;
       max-width: 540px;
@@ -132,19 +132,33 @@
     }
     .landing-search-btn:hover { background: var(--color-accent-hover); }
 
-    /* Three columns */
-    .landing-three { padding: 0 0 var(--sp12); }
+    /* Typeahead dropdown — generic .typeahead* rules live in css/style.css
+       so the inner-page header search bars share them. Only the landing
+       hero's wrapper positioning is page-specific. */
+    .landing-search-wrap {
+      position: relative;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+    .landing-search-wrap .landing-search-form { margin: 0; }
+
+    /* Three-column section */
+    .landing-three {
+      padding: 0 0 var(--sp12);
+      background: var(--color-bg);
+    }
     .landing-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 0;
       border: 1.5px solid var(--color-border);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
       overflow: hidden;
       background: var(--color-surface);
       box-shadow: var(--shadow);
     }
 
+    /* Individual cards */
     .landing-card {
       display: flex;
       flex-direction: column;
@@ -156,29 +170,30 @@
       position: relative;
     }
     .landing-card:last-child { border-right: none; }
-    .landing-card:hover { background: var(--color-accent-light); text-decoration: none; }
-
-    /* W + rest of heading */
+    .landing-card:hover {
+      background: var(--color-accent-light);
+      text-decoration: none;
+    }
     .landing-card__heading {
       font-family: var(--font-serif);
       font-size: 2rem;
       font-weight: 400;
-      color: var(--color-text);
+      color: var(--color-accent);
       margin-bottom: var(--sp2);
       letter-spacing: -0.01em;
       line-height: 1;
     }
+    /* Leading W of each card heading, echoing the hero's WWW motif. */
     .landing-card__heading .w {
-      color: var(--color-accent);
       font-weight: 700;
       font-size: 2.3rem;
     }
-
     .landing-card__count {
       font-size: 0.78rem;
       color: var(--color-text-muted);
       margin-bottom: var(--sp5);
       font-weight: 500;
+      letter-spacing: 0.01em;
     }
     .landing-card__list {
       list-style: none;
@@ -200,11 +215,12 @@
     .landing-card__list li::before {
       content: '›';
       color: var(--color-accent);
+      font-size: 0.9rem;
     }
     .landing-card__list li:last-child { border-bottom: none; }
-    /* The "Who" card is a <div>, not an <a> — its Women list item needs its
-       own independent link to persons.html?gender=Kvindelig, and an <a>
-       can't nest inside another <a>. Same overlay technique as
+    /* "Who" card is a <div>, not an <a> — one of its list items (Women)
+       needs its own independent link to persons_en.html?gender=Kvindelig, and
+       an <a> can't nest inside another <a>. Same overlay technique as
        .result-card__link/.result-card__chip-link in style.css: a
        full-cover link behind the card (z-index 0), individual links given
        their own stacking context above it (z-index 1) so they stay
@@ -230,7 +246,81 @@
       opacity: 0;
       transition: opacity 0.15s, transform 0.15s;
     }
-    .landing-card:hover .landing-card__arrow { opacity: 1; transform: translateX(3px); }
+    .landing-card:hover .landing-card__arrow {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+
+    /* Per-section colour cue */
+    .landing-card--hvem .landing-card__heading,
+    .landing-card--hvem .landing-card__list li::before,
+    .landing-card--hvem .landing-card__arrow {
+      color: var(--color-person);
+    }
+    .landing-card--hvem:hover { background: var(--color-person-bg); }
+
+    .landing-card--hvad .landing-card__heading,
+    .landing-card--hvad .landing-card__list li::before,
+    .landing-card--hvad .landing-card__arrow {
+      color: var(--color-work);
+    }
+    .landing-card--hvad:hover { background: var(--color-work-bg); }
+
+    .landing-card--hvor .landing-card__heading,
+    .landing-card--hvor .landing-card__list li::before,
+    .landing-card--hvor .landing-card__arrow {
+      color: var(--color-place);
+    }
+    .landing-card--hvor:hover { background: var(--color-place-bg); }
+
+    /* Slim wide "When" row directly below the three cards */
+    .landing-hvornaar {
+      display: flex;
+      align-items: center;
+      gap: var(--sp4);
+      padding: var(--sp4) var(--sp6);
+      margin-top: var(--sp3);
+      border: 1.5px solid var(--color-border);
+      border-top: none;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      background: var(--color-surface);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: var(--color-text);
+      transition: background 0.15s;
+    }
+    .landing-hvornaar:hover {
+      background: var(--color-event-bg);
+      text-decoration: none;
+    }
+    .landing-hvornaar__heading {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 400;
+      color: var(--color-event);
+      letter-spacing: -0.005em;
+      flex-shrink: 0;
+    }
+    .landing-hvornaar__count {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+    }
+    .landing-hvornaar__examples {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+    .landing-hvornaar__arrow {
+      color: var(--color-event);
+      font-size: 1.05rem;
+      opacity: 0.5;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .landing-hvornaar:hover .landing-hvornaar__arrow {
+      opacity: 1;
+      transform: translateX(3px);
+    }
 
     /* Bottom nav strip */
     .landing-nav {
@@ -252,9 +342,12 @@
       display: flex;
       align-items: center;
       gap: var(--sp2);
+      transition: color 0.15s;
     }
     .landing-nav__item:hover { color: var(--color-accent); text-decoration: none; }
-    .landing-nav__sep { color: var(--color-border); }
+    .landing-nav__sep {
+      color: var(--color-border);
+    }
 
     /* Footer */
     .landing-footer {
@@ -264,8 +357,6 @@
       color: var(--color-text-muted);
       border-top: 1px solid var(--color-border);
     }
-
-    /* .lang-switch styling now lives in css/style.css (shared across every page). */
   </style>
 </head>
 <body class="landing-page">
@@ -273,13 +364,10 @@
 <header class="landing-header">
   <div class="container">
     <span class="landing-header__logo">HCA Open Repository</span>
-    <div style="display:flex;align-items:center;gap:var(--sp6)">
-      <div class="lang-switch">
-        <a href="index.html">DA</a>
-        <span style="color:var(--color-border)">|</span>
-        <a href="index_en.html" class="active">EN</a>
-      </div>
-      <a href="works.html" class="landing-header__link">Full index →</a>
+    <div class="lang-switch">
+      <a href="index.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="index_en.html" class="active">EN</a>
     </div>
   </div>
 </header>
@@ -294,77 +382,82 @@
       <div class="landing-subtitle">
         <span class="w">W</span>ho&ensp;—&ensp;<span class="w">W</span>hat&ensp;—&ensp;<span class="w">W</span>here
       </div>
-      <form class="landing-search-form" role="search" onsubmit="return false">
-        <input type="search"
-               class="landing-search-input"
-               placeholder="Jenny Lind · Rome · The Ugly Duckling · theatre…"
-               aria-label="Search across persons, places, works and themes">
-        <button type="submit" class="landing-search-btn">Search</button>
-      </form>
+      <div class="landing-search-wrap">
+        <form class="landing-search-form" role="search" onsubmit="return false" autocomplete="off">
+          <input type="search"
+                 id="landing-search-input"
+                 class="landing-search-input"
+                 placeholder="Jenny Lind · Rome · The Improvisatore · theatre…"
+                 aria-label="Search across persons, places, works and themes"
+                 aria-autocomplete="list"
+                 aria-controls="landing-typeahead"
+                 autocomplete="off"
+                 spellcheck="false">
+          <button type="submit" class="landing-search-btn">Search</button>
+        </form>
+        <div id="landing-typeahead" class="typeahead" role="listbox" aria-label="Suggestions"></div>
+      </div>
     </div>
   </section>
 
-  <!-- Three columns -->
+  <!-- Three columns: Who · What · Where -->
   <section class="landing-three">
     <div class="container">
       <div class="landing-grid">
 
-        <!-- Who -->
-        <div class="landing-card">
-          <a href="persons.html" class="landing-card__link" aria-label="Who"></a>
+        <!-- 1. Who -->
+        <div class="landing-card landing-card--hvem">
+          <a href="persons_en.html" class="landing-card__link" aria-label="Who"></a>
           <div class="landing-card__heading"><span class="w">W</span>ho</div>
           <div class="landing-card__count">10,228 persons · 39,361 diary refs.</div>
           <ul class="landing-card__list">
-            <li>Poets &amp; Authors</li>
-            <li>Family</li>
-            <li><a href="persons.html?gender=Kvindelig" class="landing-card__link-item">Women</a></li>
-            <li>Friends</li>
             <li>Artists</li>
-            <li>Royalty</li>
+            <li><a href="persons_en.html?gender=Kvindelig" class="landing-card__link-item">Women</a></li>
+            <li>Royalty &amp; nobility</li>
           </ul>
-          <div class="landing-card__examples">
-            E. Collin · Jenny Lind · Thorvaldsen · Bournonville · H.C. Ørsted …
-          </div>
+          <div class="landing-card__examples">Edvard Collin · Jenny Lind</div>
           <span class="landing-card__arrow">→</span>
         </div>
 
-        <!-- What -->
-        <a href="works.html" class="landing-card">
+        <!-- 2. What -->
+        <a href="works.html" class="landing-card landing-card--hvad">
           <div class="landing-card__heading"><span class="w">W</span>hat</div>
-          <div class="landing-card__count">3,708 works · 11,195 diary refs.</div>
+          <div class="landing-card__count">3,708 register entries · 11,195 diary refs.</div>
           <ul class="landing-card__list">
             <li>Theatre &amp; Music</li>
             <li>Paintings &amp; Visual Art</li>
             <li>Books &amp; Poetry</li>
           </ul>
-          <div class="landing-card__examples">
-            Visual art · Theatre &amp; Music · Book collection — Fairy tales, Ballets, Operas, Sculptures …
-          </div>
+          <div class="landing-card__examples">Visual Art · Theatre &amp; Music · Library — Fairy tales, Ballets, Operas, Sculptures …</div>
           <span class="landing-card__arrow">→</span>
         </a>
 
-        <!-- Where -->
-        <a href="places.html" class="landing-card">
+        <!-- 3. Where -->
+        <a href="places.html" class="landing-card landing-card--hvor">
           <div class="landing-card__heading"><span class="w">W</span>here</div>
           <div class="landing-card__count">2,508 places · 18,849 diary refs.</div>
           <ul class="landing-card__list">
-            <li>Copenhagen</li>
-            <li>Italy</li>
-            <li>Odense</li>
-            <li>Hotels</li>
-            <li>Theatres</li>
+            <li>Cities</li>
+            <li>Countries</li>
+            <li>Rivers</li>
           </ul>
-          <div class="landing-card__examples">
-            Berlin · Paris · Rome · Dresden · Stockholm · Weimar · Nice …
-          </div>
+          <div class="landing-card__examples">Berlin · Paris · Rome · Dresden · Stockholm · Weimar · Nice …</div>
           <span class="landing-card__arrow">→</span>
         </a>
 
       </div>
+
+      <!-- Slim wide "When" row beneath the three cards -->
+      <a href="#" class="landing-hvornaar">
+        <span class="landing-hvornaar__heading">When</span>
+        <span class="landing-hvornaar__count">1825–1875 · 50 years of diaries</span>
+        <span class="landing-hvornaar__examples">Timeline of travels · Years of mentions · Period boundaries</span>
+        <span class="landing-hvornaar__arrow">→</span>
+      </a>
     </div>
   </section>
 
-  <!-- Secondary navigation -->
+  <!-- Secondary navigation strip -->
   <nav class="landing-nav" aria-label="Secondary navigation">
     <div class="container">
       <a href="diaries.html" class="landing-nav__item">
@@ -372,15 +465,14 @@
         <span style="font-size:0.72rem;color:var(--color-text-muted)">(2,177 pages)</span>
       </a>
       <span class="landing-nav__sep">·</span>
-      <a href="search.html" class="landing-nav__item">Search</a>
+      <a href="kort.html" class="landing-nav__item">
+        Map
+        <span style="font-size:0.72rem;color:var(--color-text-muted)">(391 places)</span>
+      </a>
       <span class="landing-nav__sep">·</span>
-      <a href="#" class="landing-nav__item">Timeline</a>
-      <span class="landing-nav__sep">·</span>
-      <a href="#" class="landing-nav__item">Map</a>
-      <span class="landing-nav__sep">·</span>
-      <a href="works.html" class="landing-nav__item">
-        Full index
-        <span style="font-size:0.72rem;color:var(--color-text-muted)">(advanced)</span>
+      <a href="nation.html" class="landing-nav__item">
+        Nations
+        <span style="font-size:0.72rem;color:var(--color-text-muted)">(persons &amp; places per nation)</span>
       </a>
     </div>
   </nav>
@@ -391,8 +483,12 @@
   <div class="container">
     Developed by citizen scientists in collaboration with
     <a href="https://www.sdu.dk/hca" style="color:inherit">the H.C. Andersen Centre, University of Southern Denmark, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Our sources</a>
   </div>
 </footer>
+
+<script src="data/search-index.js" onerror="window.SEARCH_INDEX_MISSING=true"></script>
+<script src="js/site-search.js"></script>
 
 </body>
 </html>
