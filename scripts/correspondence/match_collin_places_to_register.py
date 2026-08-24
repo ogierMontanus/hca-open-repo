@@ -47,15 +47,34 @@ def load_json_object(path):
     return json.loads(text[start:end])
 
 
-def normalize_name(s):
-    s = (s or "").strip()
-    s = s.replace("æ", "ae").replace("Æ", "AE")
-    s = s.replace("ø", "o").replace("Ø", "O")
-    s = s.replace("å", "aa").replace("Å", "AA")
+def _base(s):
     s = unicodedata.normalize("NFD", s)
     s = "".join(c for c in s if unicodedata.category(c) != "Mn")
     s = re.sub(r"[^A-Za-z]", "", s)
     return s.upper()
+
+
+def normalize_keys(s):
+    """Two candidate keys, not one: oe/ae folding is unconditionally
+    applied (empirically +4/-0 exact matches on this index -- ø/ö have no
+    shared NFD decomposition otherwise and would silently collide or
+    vanish), but aa<->å is tried BOTH ways rather than committed to a
+    single doubled form. Pre-1948 Danish orthography prints "aa" where a
+    modern label has "å" (Aabenraa/Åbenrå) -- but unconditionally
+    replacing å with "aa" also collapses it onto the wrong letter when a
+    name instead varies by å vs ä (Håckeberga vs the register's
+    Häckeberga, an unrelated OCR-adjacent variant): NFD already reduces
+    both å and ä to bare "a", and doubling å to "aa" breaks that shared
+    reduction for no matching gain -- measured directly against this
+    index: aa-doubling alone found 0 new exact matches and broke 1
+    (Håckeberga/Häckeberga); trying both forms keeps the 0 upside
+    available for names that do need it while not paying that cost.
+    See docs/data-model/collin-place-index.md for the numbers."""
+    s = (s or "").strip()
+    s = s.replace("æ", "ae").replace("Æ", "AE")
+    s = s.replace("ø", "o").replace("Ø", "O")
+    doubled = s.replace("å", "aa").replace("Å", "AA")
+    return {_base(doubled), _base(s)}
 
 
 def main():
@@ -65,9 +84,9 @@ def main():
 
     by_name = {}
     for reg_id, p in places.items():
-        key = normalize_name(p.get("label"))
-        if key:
-            by_name.setdefault(key, []).append((reg_id, p.get("label"), p.get("country_da")))
+        for key in normalize_keys(p.get("label")):
+            if key:
+                by_name.setdefault(key, []).append((reg_id, p.get("label"), p.get("country_da")))
 
     with open(COLLIN_CSV, encoding="utf-8") as f:
         collin_rows = list(csv.DictReader(f))
@@ -79,8 +98,11 @@ def main():
         if row.get("see_also"):
             continue  # redirect rows carry no citation of their own to match
         name = row["place_name_clean"] or row["place_name_raw"]
-        key = normalize_name(name)
-        matches = by_name.get(key, [])
+        matches_by_id = {}
+        for key in normalize_keys(name):
+            for m in by_name.get(key, []):
+                matches_by_id[m[0]] = m
+        matches = list(matches_by_id.values())
         tier = "exact" if len(matches) == 1 else "ambiguous" if len(matches) > 1 else "none"
         tiers[tier] = tiers.get(tier, 0) + 1
         out_rows.append({
