@@ -68,6 +68,19 @@ main { flex: 1; }
 .site-header .container {
   height: 100%; display: flex; align-items: center; gap: var(--sp8);
 }
+/* DA/EN toggle in the shared .site-header, alongside search + cart badge --
+   moved here from index.html's own inline copy so every page can use the
+   same switcher, not just the landing page. */
+.lang-switch {
+  display: flex; align-items: center; gap: 6px; font-size: 0.76rem;
+  flex-shrink: 0;
+}
+.lang-switch a {
+  color: var(--color-text-muted); padding: 2px 6px;
+  border-radius: var(--radius); border: 1px solid transparent;
+}
+.lang-switch a:hover { text-decoration: none; color: var(--color-accent); }
+.lang-switch a.active { border-color: var(--color-border); color: var(--color-text); font-weight: 600; }
 .site-logo {
   font-weight: 700; font-size: 1.05rem; color: var(--color-text);
   white-space: nowrap; letter-spacing: -0.02em;
