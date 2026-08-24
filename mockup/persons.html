@@ -16,19 +16,28 @@
 
     /* #js-detail-sidebar now carries Beskrivelse/Værker/Hyppigste steder/
        Se alt under [nationalitet] as well as the original Autoritetslinks/
-       Biografiske opslag blocks, so it's routinely taller than the
-       viewport. .entity-sidebar's default (shared with person.html,
+       Brevveksling/Biografiske opslag blocks, so it's routinely taller than
+       the viewport. .entity-sidebar's default (shared with person.html,
        place.html, entry.html -- not touched here) makes the WHOLE column
        stick as one rigid block, which only reads well while everything
        fits on screen at once. Overridden here, scoped to this page's
-       sidebar only: the column itself scrolls normally, and just the
-       Beskrivelse card gets its own sticky positioning so it alone stays
-       in view while Værker/Hyppigste steder/Se alt scroll past underneath
-       it -- matching how Biografiske opslag already reads as "the block
-       that stays put" today. */
+       sidebar only: the column itself scrolls normally, and Beskrivelse
+       (second in the DOM: sbDesc + sbH + sbExtra) plus any Autoritetslinks/
+       Brevveksling/Biografiske opslag .info-block--enriched card get their
+       own sticky positioning, stacked together via stackSidebarSticky() in
+       the script below, so both stay in view while Værker/Hyppigste
+       steder/Se alt scroll past underneath. */
     #js-detail-sidebar { position: static; }
     #js-detail-sidebar .info-block--sticky {
       position: sticky; top: calc(var(--header-height) + 16px);
+      background: var(--color-surface);
+    }
+    /* Stays in view alongside Beskrivelse while Værker/Hyppigste steder/Se
+       alt scroll past underneath -- top is set per-instance by
+       stackSidebarSticky() below, since it depends on Beskrivelse's
+       rendered height (variable per person). */
+    #js-detail-sidebar .info-block--enriched {
+      position: sticky;
     }
   </style>
 </head>
@@ -306,6 +315,31 @@
     });
   }
 
+  // Stacks the sidebar's two sticky blocks (Beskrivelse, then any
+  // Autoritetslinks/Brevveksling/Biografiske opslag .info-block--enriched
+  // cards) so both stay in view together while Værker/Hyppigste steder/Se
+  // alt scroll past underneath. Plain CSS can't do this on its own: giving
+  // every sticky sibling the same `top` makes each later one ride up and
+  // overlap the one(s) above it once scrolled far enough, because `top` is
+  // resolved independently per element. Beskrivelse's length varies a lot
+  // (41 chars median, 437 max across the register), so a fixed guessed
+  // offset would overlap for longer descriptions -- this measures the
+  // actual rendered height instead and re-runs on resize, since narrower
+  // viewports rewrap Beskrivelse's text to a different height.
+  function stackSidebarSticky(sidebar) {
+    var descEl = sidebar.querySelector('.info-block--sticky');
+    var enriched = sidebar.querySelectorAll('.info-block--enriched');
+    if (!descEl || !enriched.length) return;
+    function apply() {
+      var baseTop = parseFloat(getComputedStyle(descEl).top) || 0;
+      var gap = parseFloat(getComputedStyle(sidebar).rowGap) || 0;
+      var top = baseTop + descEl.offsetHeight + gap;
+      enriched.forEach(function (el) { el.style.top = top + 'px'; });
+    }
+    apply();
+    window.addEventListener('resize', apply);
+  }
+
   // wireCheckboxes() registers one delegated document-level listener — it
   // must run exactly once per page load regardless of which branch below
   // renders (list view's own .result-card__select boxes, or the detail
@@ -374,12 +408,16 @@
     // Dagbogsreferencer). Only genuinely-added data gets a sidebar block.
     // See docs/data-model/detail-page-redundancy.md.
     var sb = document.getElementById('js-detail-sidebar');
-    // sbExtra holds the four blocks moved into the sidebar per the layout
-    // change below (Beskrivelse, Værker, Hyppigste steder, Se alt under
-    // [nationalitet]) — built first so it can be PREPENDED to sbH's existing
-    // Autoritetslinks/Biografiske opslag content, in that exact order.
+    // sbDesc (Beskrivelse) and sbExtra (Værker, Hyppigste steder, Se alt
+    // under [nationalitet]) are built separately so sbH's Autoritetslinks/
+    // Brevveksling/Biografiske opslag blocks can be spliced in second,
+    // right after Beskrivelse: sbDesc + sbH + sbExtra. Both sbDesc and the
+    // .info-block--enriched blocks inside sbH are sticky (see the
+    // #js-detail-sidebar rules in this page's own <style> block); Værker/
+    // Hyppigste steder/Se alt (sbExtra) scroll normally underneath.
     // sbH's own DOM write is deferred to the end of this block (it used to
-    // happen immediately) so the two can be combined into one innerHTML set.
+    // happen immediately) so all three can be combined into one innerHTML set.
+    var sbDesc = '';
     var sbExtra = '';
     if (sb) {
       var sbH = '';
@@ -437,7 +475,7 @@
     // while the longer Værker/Hyppigste steder lists scroll past underneath.
     // See the #js-detail-sidebar override in this page's own <style> block.
     if (p.description) {
-      sbExtra += '<div class="info-block--sticky"><h2 class="section-title">Beskrivelse</h2>' +
+      sbDesc += '<div class="info-block--sticky"><h2 class="section-title">Beskrivelse</h2>' +
         '<p style="font-size:0.92rem;line-height:1.75">' + esc(p.description) + '</p></div>';
     }
 
@@ -512,7 +550,10 @@
       });
     }
 
-    if (sb) sb.innerHTML = sbExtra + sbH;
+    if (sb) {
+      sb.innerHTML = sbDesc + sbH + sbExtra;
+      stackSidebarSticky(sb);
+    }
 
     // Diary references
     mainH += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
