@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diaries — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #calendar-results {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp6);
+    }
+
+    #calendar-results > div:first-child {
+      background: var(--color-surface-2);
+      padding: var(--sp4);
+      border-radius: var(--radius);
+      margin-bottom: var(--sp4);
+    }
+
+    #calendar-results select {
+      font-weight: 500;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #calendar-results select:hover {
+      border-color: var(--color-accent);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #calendar-grid {
+      max-width: 520px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    #calendar-grid > button {
+      transition: all 0.15s ease;
+      font-weight: 500;
+    }
+
+    #calendar-grid > button:hover {
+      background: var(--color-surface-2) !important;
+      transform: scale(1.02);
+    }
+
+    #calendar-grid > button:active {
+      transform: scale(0.98);
+    }
+
+    #calendar-grid > button[style*="color-accent"] {
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+
+    #calendar-entries {
+      margin-top: var(--sp8);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="diaries.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="diaries_en.html" class="active">EN</a>
+    </div>
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index_en.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Diaries</span>
+      </nav>
+      <div class="page-hero__head">
+        <span class="page-hero__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg></span>
+        <h1>Diaries</h1>
+      </div>
+      <p>H. C. Andersen's handwritten travel and personal diaries, 1825–1875</p>
+      <div class="page-hero__meta">
+        <span>2,177 diary pages</span>
+        <span>Vols. I–XII</span>
+        <span>1825–1875</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="detail-with-sideacc">
+       <div>
+      <div class="browse-layout">
+
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filter</span>
+            <button class="facet-panel__clear">Reset</button>
+          </div>
+
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md.
+               Diary pages are mentions by definition (a diary page IS Andersen
+               writing on that date), so only "Omtaledatoer" is applicable here.
+               The disabled "Begivenhedsdatoer" pill keeps the dual-family model
+               visible and prepares readers for person/work pages where it
+               becomes active. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
+            <div class="facet-group__header">Date category <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="The date Andersen wrote the diary page">Mention dates</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Event dates (born · published · premiered …) belong to the entities mentioned, not to the diary pages themselves. Selected on person, place and work pages.">Event dates</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                Dates on diary pages are, by definition, mention dates — the date Andersen wrote. Event dates (born, died, published, premiered …) belong to the entities mentioned and are selected on their own pages.
+              </div>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Mention year <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="From year">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="To year">
+              </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Places mentioned <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Copenhagen</span><span class="facet-item__count">1,564</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">373</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rolighed</span><span class="facet-item__count">346</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rome</span><span class="facet-item__count">332</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Dresden</span><span class="facet-item__count">325</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Odense</span><span class="facet-item__count">287</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Persons mentioned <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Edvard</span><span class="facet-item__count">767</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Henriques, Martin R.</span><span class="facet-item__count">462</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Melchior, Moritz G.</span><span class="facet-item__count">457</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Henriette Oline</span><span class="facet-item__count">438</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Lind, Jenny</span><span class="facet-item__count">318</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Works mentioned — Library <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Fairy Tales (H.C.A.)</span><span class="facet-item__count">2,784</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Poems (H.C.A.)</span><span class="facet-item__count">770</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Novels and Short Stories (H.C.A.)</span><span class="facet-item__count">417</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Plays and Opera Librettos (H.C.A.)</span><span class="facet-item__count">681</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Poems (Other authors)</span><span class="facet-item__count">341</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Works mentioned — Theatre &amp; Music <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Operas &amp; Singspiele</span><span class="facet-item__count">1,041</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Plays — Other authors</span><span class="facet-item__count">1,479</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Ballets</span><span class="facet-item__count">292</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Vocal &amp; Instrumental Music</span><span class="facet-item__count">218</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Works mentioned — Visual Art <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paintings and Drawings</span><span class="facet-item__count">758</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Sculpture</span><span class="facet-item__count">489</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Museums and Collections</span><span class="facet-item__count">189</span></label>
+            </div>
+          </div>
+        </aside>
+
+        <div>
+          <div class="results-header">
+            <span class="results-count" id="diary-count"><strong>2,177</strong> diary pages</span>
+            <!-- Selects/deselects every currently FILTERED diary page (not just
+                 the rendered page) — see js/cart.js and js/diary-wire.js's
+                 list() opts.selectAll wiring. -->
+            <label class="results-header__select-all">
+              <input type="checkbox" id="js-diary-select-all"> Select all
+            </label>
+            <div class="layout-switcher">
+              <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">List</button>
+              <button class="layout-switcher__btn" data-layout="table">Table</button>
+              <button class="layout-switcher__btn" data-layout="calendar">Calendar</button>
+              <button class="layout-switcher__btn" data-layout="timeline">Timeline</button>
+            </div>
+          </div>
+
+          <!-- Live filter toolbar (shown only when the generated index is loaded) -->
+          <div id="diary-toolbar" style="display:none;gap:10px;margin-bottom:var(--sp5);flex-wrap:wrap">
+            <input type="search" id="diary-filter" placeholder="Filter by place, person, work or Pag ID…"
+                   style="flex:1;min-width:220px;padding:7px 12px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
+            <select id="diary-year"
+                    aria-label="Filter by mention year (the date Andersen wrote)"
+                    title="Mention year — the date Andersen wrote the diary page"
+                    style="padding:7px 12px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
+              <option value="">All mention years</option>
+            </select>
+          </div>
+
+          <!-- Calendar view (Kalender) — populated by calendar-wire.js when user switches to calendar mode -->
+          <div id="calendar-results" style="display:none">
+            <div style="display:flex;gap:var(--sp4);flex-wrap:wrap;margin-bottom:var(--sp6);align-items:center">
+              <div style="display:flex;gap:8px;align-items:center">
+                <label for="cal-year" style="font-size:0.85rem;font-weight:600">Year:</label>
+                <select id="cal-year" style="padding:6px 10px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
+                </select>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <label for="cal-month" style="font-size:0.85rem;font-weight:600">Month:</label>
+                <select id="cal-month" style="padding:6px 10px;border:1px solid var(--color-border);border-radius:var(--radius);font-size:0.86rem">
+                  <option value="0">January</option>
+                  <option value="1">February</option>
+                  <option value="2">March</option>
+                  <option value="3">April</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="7">August</option>
+                  <option value="8">September</option>
+                  <option value="9">October</option>
+                  <option value="10">November</option>
+                  <option value="11">December</option>
+                </select>
+              </div>
+            </div>
+            <div id="calendar-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;background:var(--color-border);padding:2px;border-radius:var(--radius)">
+              <!-- Calendar weeks will be rendered here -->
+            </div>
+            <div id="calendar-entries" style="margin-top:var(--sp6)">
+              <!-- Selected date entries will be shown here -->
+            </div>
+          </div>
+
+          <div class="result-grid" id="diary-results">
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100100 · Vol. XII</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Rome, 18 October 1833</div>
+                <div class="result-card__meta">1833 · Rome, Italy · Vol. XII p. 100</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Rome</span>
+                  <span class="chip chip--person">Thorvaldsen</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100200 · Vol. XII</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Naples, 12 November 1833</div>
+                <div class="result-card__meta">1833 · Naples, Italy · Vol. XII p. 140</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Naples</span>
+                  <span class="chip chip--place">Vesuvius</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100300 · Vol. XVI</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Paris, 24 September 1843</div>
+                <div class="result-card__meta">1843 · Paris, France · Vol. XVI p. 55</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Paris</span>
+                  <span class="chip chip--person">Heine</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100400 · Vol. XVIII</div>
+              <div class="result-card__body">
+                <div class="result-card__title">London, 30 June 1847</div>
+                <div class="result-card__meta">1847 · London · Vol. XVIII p. 82</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">London</span>
+                  <span class="chip chip--person">Dickens</span>
+                  <span class="chip chip--person">Lind, Jenny</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100500 · Vol. XX</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Weimar, 17 November 1854</div>
+                <div class="result-card__meta">1854 · Weimar, Germany · Vol. XX p. 210</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Weimar</span>
+                  <span class="chip chip--person">Liszt</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100600 · Vol. XXII</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Kjøbenhavn, 15 July 1860</div>
+                <div class="result-card__meta">1860 · Copenhagen, Denmark · Vol. XXII p. 44</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Copenhagen</span>
+                  <span class="chip chip--person">Ørsted</span>
+                  <span class="chip chip--person">Collin, Edvard</span>
+                </div>
+              </div>
+            </a>
+
+            <a href="entry.html" class="result-card">
+              <div class="result-card__thumb">Pag100700 · Vol. XXIV</div>
+              <div class="result-card__body">
+                <div class="result-card__title">Nice, 5 December 1862</div>
+                <div class="result-card__meta">1862 · Nice, France · Vol. XXIV p. 330</div>
+                <div class="result-card__chips">
+                  <span class="chip chip--place">Nice</span>
+                  <span class="chip chip--person">Lind, Jenny</span>
+                </div>
+              </div>
+            </a>
+
+          </div>
+
+          <div style="text-align:center;margin-top:var(--sp6)">
+            <button id="diary-more" class="layout-switcher__btn" style="display:none;padding:8px 22px">Show more</button>
+          </div>
+
+          <!-- Table view (Tabel) — every diary page at once, sortable, populated
+               below from DIARY_INDEX directly (same independence from the free-text
+               search box as Kalender/Tidslinje already have — see the layout
+               switcher wiring). -->
+          <div id="diary-table-results" style="display:none"></div>
+
+          <!-- Timeline view (Tidslinje) — populated by timeline-wire.js when data is present -->
+          <div id="timeline-results" style="display:none"></div>
+        </div>
+
+      </div>
+       </div>
+
+       <!-- Right-margin accordion: current section + three others (Hvem · Hvad · Hvor · Hvornår) -->
+       <aside class="side-acc" aria-label="Andre indgange">
+         <a href="persons_en.html" class="side-acc__panel side-acc__panel--hvem">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg><span class="side-acc__tab-word">Who</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg>Who</div>
+             <div class="side-acc__count">10,228 register entries · 39,361 refs.</div>
+             <ul class="side-acc__list">
+               <li>Artists</li>
+               <li>Women</li>
+               <li>Royalty &amp; nobility</li>
+             </ul>
+             <div class="side-acc__examples">Edvard Collin · Jenny Lind</div>
+           </div>
+         </a>
+         <a href="works_en.html" class="side-acc__panel side-acc__panel--hvad">
+           <div class="side-acc__tab"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span><span class="side-acc__tab-word">What</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span>What</div>
+             <div class="side-acc__count">3,708 register entries · 11,195 refs.</div>
+             <ul class="side-acc__list">
+               <li>Theatre &amp; Music</li>
+               <li>Visual Art</li>
+               <li>Library</li>
+             </ul>
+             <div class="side-acc__examples">Fairy tales, Ballets, Operas, Sculptures …</div>
+           </div>
+         </a>
+         <a href="places_en.html" class="side-acc__panel side-acc__panel--hvor">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg><span class="side-acc__tab-word">Where</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg>Where</div>
+             <div class="side-acc__count">2,508 places · 18,849 refs.</div>
+             <ul class="side-acc__list">
+               <li>Cities</li>
+               <li>Countries</li>
+               <li>Rivers</li>
+             </ul>
+             <div class="side-acc__examples">Berlin · Rome · Paris · Weimar …</div>
+           </div>
+         </a>
+         <a href="diaries_en.html" class="side-acc__panel side-acc__panel--hvornaar side-acc__panel--active" aria-current="page">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg><span class="side-acc__tab-word">When</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg>When</div>
+             <div class="side-acc__count">1825–1875 · 50 years of diaries</div>
+             <ul class="side-acc__list">
+               <li>Years of mentions</li>
+               <li>Period boundaries</li>
+             </ul>
+             <div class="side-acc__examples">1805–1875 · 1,446 events</div>
+           </div>
+         </a>
+       </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Developed by citizen scientists in collaboration with
+    <a href="https://www.sdu.dk/hca" style="color:inherit">the H.C. Andersen Centre, University of Southern Denmark, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Our sources</a>
+  </div>
+</footer>
+
+<!-- Generated diary data (gitignored). Build with:
+     python scripts/build_mockup/build_diary_index.py
+     python scripts/build_mockup/build_timeline_index.py -->
+<script src="data/diary-index.js" onerror="void 0"></script>
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="data/timeline-index.js" onerror="void 0"></script>
+<script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
+<script src="js/diary-wire.js"></script>
+<script src="js/timeline-wire.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Cart !== 'undefined') {
+    Cart.mountBadge(document.getElementById('js-cart-badge'));
+    Cart.wireCheckboxes();
+  }
+  var grid     = document.getElementById('diary-results');
+  var tlPane   = document.getElementById('timeline-results');
+  var tablePane = document.getElementById('diary-table-results');
+  var moreBtn  = document.getElementById('diary-more');
+  var countEl  = document.getElementById('diary-count');
+  var toolbar  = document.getElementById('diary-toolbar');
+  var filter   = document.getElementById('diary-filter');
+  var yearSel  = document.getElementById('diary-year');
+
+  function escTable(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  // Chronological-ish sort key: full date → YYYY-MM-DD, month-only → the 1st
+  // of that month, year-only → Jan 1 of that year, undated → sorts first.
+  // Same partial-date shapes diary-wire.js's own formatDate() parses.
+  function diarySortKey(row) {
+    var pad2 = function (n) { return (n < 10 ? '0' : '') + n; };
+    if (row.d) {
+      var full = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(row.d);
+      if (full) return full[3] + '-' + pad2(+full[2]) + '-' + pad2(+full[1]);
+      var my = /^(\d{1,2})-(\d{4})$/.exec(row.d);
+      if (my) return my[2] + '-' + pad2(+my[1]) + '-01';
+    }
+    if (row.y) return row.y + '-01-01';
+    return '';
+  }
+
+  var tableViewCtrl = null;
+  function renderDiaryTable() {
+    if (typeof DIARY_INDEX === 'undefined' || typeof TableView === 'undefined') {
+      tablePane.innerHTML = '<p class="cart-note">Requires data/diary-index.js.</p>';
+      return;
+    }
+    if (!tableViewCtrl) {
+      tableViewCtrl = TableView.create(tablePane, [
+        { key: 'select', label: '', sortable: false,
+          html: function (r) { return '<label class="result-card__select"><input type="checkbox" data-cart-type="diary" data-cart-rid="' +
+            escTable(r.h) + '" data-cart-label="' + escTable(DiaryWire.heading(r)) + '"></label>'; } },
+        { key: 'h', label: 'ID',
+          html: function (r) { return '<a class="data-table__id-link" href="diary-pages/' +
+            escTable(r.h) + '.html">' + escTable(r.h) + '</a>'; } },
+        { key: 'dato', label: 'Date', value: function (r) { return DiaryWire.heading(r); },
+          sortValue: diarySortKey },
+        { key: 'bindside', label: 'Vol./page',
+          value: function (r) { return 'Vol. ' + (r.v || '?') + ', p. ' + (r.p || '?'); } },
+        { key: 'pl', label: 'Place', value: function (r) { return r.pl || ''; } }
+      ], { initialSort: 'dato', initialDir: 'asc',
+           afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } });
+    }
+    tableViewCtrl.render(DIARY_INDEX);
+  }
+
+  /* ── Layout switcher ──────────────────────────────────────────────── */
+  var tlRendered = false;
+  var calendarPane = document.getElementById('calendar-results');
+  var calendarGrid = document.getElementById('calendar-grid');
+  var calendarEntries = document.getElementById('calendar-entries');
+  var calYearSel = document.getElementById('cal-year');
+  var calMonthSel = document.getElementById('cal-month');
+  var selectedDate = null;
+
+  // Calendar helper functions
+  function getDaysInMonth(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  function getFirstDayOfMonth(year, month) {
+    return new Date(year, month, 1).getDay();
+  }
+
+  function formatDateKey(year, month, day) {
+    return year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+  }
+
+  // Build a map of dates with diary entries
+  function buildDateMap() {
+    var dateMap = {};
+    if (typeof DIARY_INDEX !== 'undefined') {
+      DIARY_INDEX.forEach(function (entry) {
+        if (entry.y) {  // year exists
+          var dateKey = entry.y;
+          if (!dateMap[dateKey]) dateMap[dateKey] = [];
+          dateMap[dateKey].push(entry);
+        }
+      });
+    }
+    return dateMap;
+  }
+
+  var diaryDateMap = buildDateMap();
+
+  function renderCalendar(year, month) {
+    calendarGrid.innerHTML = '';
+    var daysInMonth = getDaysInMonth(year, month);
+    var firstDay = getFirstDayOfMonth(year, month);
+    // Convert Sunday (0) to the end of the week for Nordic calendar
+    firstDay = firstDay === 0 ? 6 : firstDay - 1;
+
+    // Day headers (Mon-Sun)
+    var dayHeaders = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    dayHeaders.forEach(function (day) {
+      var header = document.createElement('div');
+      header.style.cssText = 'padding:8px;text-align:center;font-weight:700;font-size:0.75rem;color:var(--color-text-muted);background:var(--color-surface-2)';
+      header.textContent = day;
+      calendarGrid.appendChild(header);
+    });
+
+    // Empty cells before first day
+    for (var i = 0; i < firstDay; i++) {
+      var empty = document.createElement('div');
+      empty.style.background = 'var(--color-surface)';
+      calendarGrid.appendChild(empty);
+    }
+
+    // Calendar days
+    for (var day = 1; day <= daysInMonth; day++) {
+      var dayCell = document.createElement('button');
+      var dateKey = formatDateKey(year, month, day);
+      var dayEntries = (typeof DIARY_INDEX !== 'undefined')
+        ? DIARY_INDEX.filter(function (entry) {
+            // Simple month/year check based on year value
+            return entry.y === String(year);
+          })
+        : [];
+
+      dayCell.type = 'button';
+      dayCell.style.cssText = 'padding:8px;text-align:center;font-size:0.85rem;border:1px solid var(--color-border);background:var(--color-surface);cursor:pointer;position:relative;min-height:40px;display:flex;align-items:center;justify-content:center';
+      dayCell.textContent = day;
+      dayCell.dataset.date = dateKey;
+      dayCell.dataset.day = day;
+
+      if (dayEntries.length > 0) {
+        dayCell.style.background = 'var(--color-accent)';
+        dayCell.style.color = '#fff';
+        dayCell.style.fontWeight = '600';
+        dayCell.style.borderColor = 'var(--color-accent)';
+        var countBadge = document.createElement('span');
+        countBadge.style.cssText = 'position:absolute;top:2px;right:2px;background:#fff;color:var(--color-accent);font-size:0.65rem;font-weight:700;padding:1px 4px;border-radius:3px;min-width:16px;text-align:center';
+        countBadge.textContent = dayEntries.length;
+        dayCell.appendChild(countBadge);
+      }
+
+      if (selectedDate === dateKey) {
+        dayCell.style.outline = '2px solid var(--color-accent)';
+        dayCell.style.outlineOffset = '-2px';
+      }
+
+      dayCell.addEventListener('click', function () {
+        selectedDate = dateKey;
+        renderCalendar(year, month);
+        showCalendarEntriesForYear(year);
+      });
+
+      calendarGrid.appendChild(dayCell);
+    }
+  }
+
+  function showCalendarEntriesForYear(year) {
+    calendarEntries.innerHTML = '';
+
+    var title = document.createElement('h3');
+    title.style.cssText = 'font-size:0.95rem;font-weight:600;margin-bottom:var(--sp3)';
+    title.textContent = 'Year ' + year;
+    calendarEntries.appendChild(title);
+
+    // Find diary entries for this year
+    if (typeof DIARY_INDEX !== 'undefined') {
+      var entries = DIARY_INDEX.filter(function (entry) {
+        return entry.y === String(year);
+      });
+
+      if (entries.length === 0) {
+        var noEntries = document.createElement('p');
+        noEntries.style.cssText = 'color:var(--color-text-muted);font-size:0.85rem';
+        noEntries.textContent = 'No diary entries for year ' + year + '.';
+        calendarEntries.appendChild(noEntries);
+      } else {
+        var info = document.createElement('p');
+        info.style.cssText = 'color:var(--color-text-muted);font-size:0.83rem;margin-bottom:var(--sp4)';
+        info.textContent = entries.length + ' diary pages from ' + year;
+        calendarEntries.appendChild(info);
+
+        var resultsDiv = document.createElement('div');
+        resultsDiv.className = 'result-grid';
+        resultsDiv.style.gridTemplateColumns = 'repeat(auto-fill,minmax(280px,1fr))';
+
+        entries.forEach(function (entry) {
+          var m = { v: entry.v, p: entry.p, d: entry.d, y: entry.y, pl: entry.pl };
+          var chipMarkup = (entry.c || []).map(function (c) {
+            var cls = c.t === 'place' ? 'chip chip--place'
+                    : c.t === 'person' ? 'chip chip--person' : 'chip';
+            if (c.r) {
+              var page = c.t === 'place' ? 'place.html'
+                       : c.t === 'person' ? 'persons_en.html' : 'work.html';
+              return '<a href="' + page + '?reg=' + c.r + '" class="' + cls + '" style="font-size:0.68rem">' + c.l + '</a>';
+            }
+            return '<span class="' + cls + '" style="font-size:0.68rem">' + c.l + '</span>';
+          }).join('');
+
+          // Same heading rule as every other diary card — date when the page
+          // has one, otherwise the volume/page reference (DiaryWire.heading).
+          // Must byte-match js/diary-wire.js's own titleFor() fallback format
+          // ("Bind X, s. Y") -- that shared, untranslated function is what
+          // headingFor()/DiaryWire.heading() falls back to for undated pages,
+          // and this equality check only works if the two strings agree.
+          // Known limitation: undated pages therefore still show a Danish
+          // "Bind X, s. Y" heading here even on this English page.
+          var vp = 'Bind ' + entry.v + ', s. ' + entry.p;
+          var heading = DiaryWire.heading(entry);
+          var sub = (heading === vp) ? entry.h : vp + ' · ' + entry.h;
+
+          var row = document.createElement('div');
+          row.className = 'result-row';
+          row.innerHTML =
+            '<label class="result-card__select"><input type="checkbox" ' +
+            'data-cart-type="diary" data-cart-rid="' + entry.h + '" data-cart-label="' + heading + '"></label>' +
+            '<div class="result-card">' +
+            '<a href="diary-pages/' + entry.h + '.html" class="result-card__link" title="Go to ' + entry.h + '"></a>' +
+            '<div class="result-card__body">' +
+            '<div class="result-card__title">' + heading + '</div>' +
+            '<div class="result-card__meta">' + sub + '</div>' +
+            '<div class="result-card__chips">' + chipMarkup + '</div></div></div>';
+          resultsDiv.appendChild(row);
+        });
+
+        calendarEntries.appendChild(resultsDiv);
+        if (typeof Cart !== 'undefined') Cart.syncCheckboxes(resultsDiv);
+      }
+    }
+  }
+
+  document.querySelectorAll('.layout-switcher__btn[data-layout]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.layout-switcher__btn[data-layout]').forEach(function (b) {
+        b.classList.remove('layout-switcher__btn--active');
+      });
+      btn.classList.add('layout-switcher__btn--active');
+
+      var layout = btn.dataset.layout;
+      if (layout === 'timeline') {
+        grid.style.display    = 'none';
+        moreBtn.style.display = 'none';
+        toolbar.style.display = 'none';
+        calendarPane.style.display = 'none';
+        tlPane.style.display  = '';
+        countEl.innerHTML = '<strong>' + (typeof TIMELINE_INDEX !== 'undefined'
+          ? TIMELINE_INDEX.length.toLocaleString('en-US') : '0') +
+          '</strong> events · 1805–1875';
+        if (!tlRendered) {
+          TimelineWire.render(tlPane);
+          tlRendered = true;
+        }
+      } else if (layout === 'calendar') {
+        grid.style.display    = 'none';
+        moreBtn.style.display = 'none';
+        toolbar.style.display = 'none';
+        tlPane.style.display  = 'none';
+        tablePane.style.display = 'none';
+        calendarPane.style.display = '';
+        countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
+          ? DIARY_INDEX.length.toLocaleString('en-US') : '0') +
+          '</strong> diary pages';
+        var defaultYear = calYearSel.value || (typeof DIARY_INDEX !== 'undefined' && DIARY_INDEX.length > 0 ? DIARY_INDEX[0].y : new Date().getFullYear());
+        var defaultMonth = parseInt(calMonthSel.value) || 0;
+        renderCalendar(parseInt(defaultYear), defaultMonth);
+        showCalendarEntriesForYear(parseInt(defaultYear));
+      } else if (layout === 'table') {
+        grid.style.display    = 'none';
+        moreBtn.style.display = 'none';
+        toolbar.style.display = 'none';
+        tlPane.style.display  = 'none';
+        calendarPane.style.display = 'none';
+        tablePane.style.display = '';
+        countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
+          ? DIARY_INDEX.length.toLocaleString('en-US') : '0') +
+          '</strong> diary pages';
+        renderDiaryTable();
+      } else {
+        tlPane.style.display  = 'none';
+        calendarPane.style.display = 'none';
+        tablePane.style.display = 'none';
+        grid.style.display    = '';
+        if (diaryCtrl) toolbar.style.display = 'flex';
+      }
+    });
+  });
+
+  /* ── Diary list ───────────────────────────────────────────────────── */
+  var diaryCtrl = DiaryWire.list(grid, {
+    pageSize: 60,
+    moreBtn: moreBtn,
+    selectAll: document.getElementById('js-diary-select-all'),
+    onCount: function (shown, total) {
+      var yearActive = yearSel && yearSel.value;
+      var modeNote = yearActive
+        ? '<br><span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">mention year ' + yearSel.value + '</span>'
+        : '';
+      var showing = shown < total
+        ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— showing ' + shown + '</span>'
+        : '';
+      countEl.innerHTML =
+        '<strong>' + total.toLocaleString('en-US') + '</strong> diary pages' + modeNote + showing;
+    }
+  });
+  if (!diaryCtrl) return;  // no generated data → keep the static sample cards
+
+  toolbar.style.display = 'flex';
+  var years = diaryCtrl.years();
+  var yearList = Object.keys(years).sort();
+
+  // Populate toolbar year selector
+  yearList.forEach(function (y) {
+    var o = document.createElement('option');
+    o.value = y; o.textContent = y + ' (' + years[y] + ')';
+    yearSel.appendChild(o);
+  });
+
+  // Populate calendar year selector
+  yearList.forEach(function (y) {
+    var o = document.createElement('option');
+    o.value = y;
+    o.textContent = y;
+    calYearSel.appendChild(o);
+  });
+
+  // Calendar month/year change handlers
+  calYearSel.addEventListener('change', function () {
+    var year = parseInt(calYearSel.value);
+    var month = parseInt(calMonthSel.value);
+    renderCalendar(year, month);
+    showCalendarEntriesForYear(year);
+    selectedDate = null;
+  });
+
+  calMonthSel.addEventListener('change', function () {
+    var year = parseInt(calYearSel.value);
+    var month = parseInt(calMonthSel.value);
+    renderCalendar(year, month);
+    showCalendarEntriesForYear(year);
+    selectedDate = null;
+  });
+
+  function apply() { diaryCtrl.applyFilter(filter.value.trim(), yearSel.value); }
+  filter.addEventListener('input', apply);
+  yearSel.addEventListener('change', apply);
+});
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>
