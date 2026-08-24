@@ -44,6 +44,23 @@ CATEGORY_RE = re.compile(r"^[A-ZÆØÅ][a-zæøå .\-]{2,35}\.\s*$")
 GARBLED_ROMAN = re.compile(r"^(Ill|HI|H1|Il|IH|II|IV|VI)[,.\s]")
 ENTRY_START = re.compile(r"^[A-ZÆØÅÖ][\wæøåÆØÅöäü’]")
 YEAR_RE = re.compile(r"^\((\d{4})(?:\s*ff?\.?)?\)")
+SEE_RE = re.compile(r"^(.*?),\s*se\s+(.+?)\.?\s*$")
+
+# Section/sub-section labels within VÆRK-REGISTER's own internal layout,
+# not works -- CATEGORY_RE's line-start heuristic misses these because
+# some carry a parenthetical or lack a clean trailing period after OCR.
+# Verified by direct inspection against the PDF, not guessed; extend this
+# set if a future re-run's output CSV surfaces more of the same shape
+# (short line, no citation, no year, reads as a label not a title).
+KNOWN_HEADERS = {
+    "Samlede og blandede Skrifter",
+    "Eventyrene. (I Alm.)",
+    "Eventyrene",
+    "Oversættelser",
+    "Eventyr-Samlinger (kronologisk)",
+    "Enkelte Eventyr (alfabetisk)",
+    "Enkelte Digte",
+}
 
 
 def is_noise_block(b, page_h=565.2):
@@ -99,27 +116,49 @@ def parse_entry(category, raw_lines):
     text = " ".join(l.strip() for l in raw_lines)
     text = re.sub(r"\s+", " ", text).strip()
 
-    ym = re.search(r"\((\d{4})\s*(?:ff?\.?)?\)", text)
-    year = ""
-    title = text
-    citation = ""
+    sm = SEE_RE.match(text)
+    if sm and not re.search(r"\d", sm.group(1)):
+        return {
+            "category": category or "", "title": sm.group(1).strip(),
+            "year": "", "citation_raw": "", "see_also": sm.group(2).strip(),
+            "issue_type": "",
+        }
+
+    ym = re.search(r"\((\d{4})\s*(f[fr]?\.?)?\)", text)
+    year, title, citation, issue_type = "", text, "", ""
     if ym:
         title = text[:ym.start()].strip()
-        rest = text[ym.end():].strip()
+        citation = text[ym.end():].strip()
         year = ym.group(1)
-        citation = rest
+        if ym.group(2):  # "(YYYY ff.)" / OCR "fr." -- an ongoing/multi-volume
+            issue_type = "omnibus_collection"
     else:
         cm = re.search(r"\b(I|II|III|IV|V|VI),\s*\d", text)
         if cm:
             title = text[:cm.start()].strip()
             citation = text[cm.start():].strip()
-        else:
-            title = text.strip()
+
+    title = title.rstrip(",")
+    if title in KNOWN_HEADERS:
+        return None  # verified section/sub-section label, not a work
+
+    # Serial/fascicle citation: title itself ends in a bare volume,issue
+    # number ("Nye Eventyr og Historier 1,1" / "II,1" / "III, 1") rather
+    # than a real title -- the printed index cites the installment, not a
+    # story; no story-level match target exists on the site.
+    if re.search(r"\b(?:\d{1,2}|I|II|III|IV|V)\s*,\s*\d\s*$", title):
+        issue_type = "serial_installment"
+
+    if not citation and not year and not issue_type and len(title) < 60:
+        issue_type = "possible_fragment"  # likely a line-wrap split, unverified
+
     return {
         "category": category or "",
-        "title": title.rstrip(","),
+        "title": title,
         "year": year,
         "citation_raw": citation,
+        "see_also": "",
+        "issue_type": issue_type,
     }
 
 
@@ -130,7 +169,7 @@ def main():
     print(f"  {len(entries)} entries split")
 
     rows = [parse_entry(cat, raw) for cat, raw in entries]
-    rows = [r for r in rows if r["title"]]
+    rows = [r for r in rows if r and r["title"]]
 
     os.makedirs(os.path.dirname(OUT_CSV), exist_ok=True)
     with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
