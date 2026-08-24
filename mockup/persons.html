@@ -13,6 +13,23 @@
       text-decoration: none; white-space: nowrap; vertical-align: middle; line-height: 1.7;
     }
     .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
+
+    /* #js-detail-sidebar now carries Beskrivelse/Værker/Hyppigste steder/
+       Se alt under [nationalitet] as well as the original Autoritetslinks/
+       Biografiske opslag blocks, so it's routinely taller than the
+       viewport. .entity-sidebar's default (shared with person.html,
+       place.html, entry.html -- not touched here) makes the WHOLE column
+       stick as one rigid block, which only reads well while everything
+       fits on screen at once. Overridden here, scoped to this page's
+       sidebar only: the column itself scrolls normally, and just the
+       Beskrivelse card gets its own sticky positioning so it alone stays
+       in view while Værker/Hyppigste steder/Se alt scroll past underneath
+       it -- matching how Biografiske opslag already reads as "the block
+       that stays put" today. */
+    #js-detail-sidebar { position: static; }
+    #js-detail-sidebar .info-block--sticky {
+      position: sticky; top: calc(var(--header-height) + 16px);
+    }
   </style>
 </head>
 <body data-section="hvem">
@@ -357,6 +374,13 @@
     // Dagbogsreferencer). Only genuinely-added data gets a sidebar block.
     // See docs/data-model/detail-page-redundancy.md.
     var sb = document.getElementById('js-detail-sidebar');
+    // sbExtra holds the four blocks moved into the sidebar per the layout
+    // change below (Beskrivelse, Værker, Hyppigste steder, Se alt under
+    // [nationalitet]) — built first so it can be PREPENDED to sbH's existing
+    // Autoritetslinks/Biografiske opslag content, in that exact order.
+    // sbH's own DOM write is deferred to the end of this block (it used to
+    // happen immediately) so the two can be combined into one innerHTML set.
+    var sbExtra = '';
     if (sb) {
       var sbH = '';
       if (p.wd) {
@@ -387,31 +411,19 @@
         });
         sbH += '</div></div></div>';
       }
-      sb.innerHTML = sbH;
     }
 
     // Main content
     var mainH = '';
 
+    // Beskrivelse — moved into the sidebar (was the top of the main column)
+    // and kept individually sticky: it's short and identifying, the same
+    // role Biografiske opslag already plays below it, so it stays in view
+    // while the longer Værker/Hyppigste steder lists scroll past underneath.
+    // See the #js-detail-sidebar override in this page's own <style> block.
     if (p.description) {
-      mainH += '<div><h2 class="section-title">Beskrivelse</h2>' +
-        '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' + esc(p.description) + '</p></div>';
-    }
-
-    // ── Nation-krydslink ───────────────────────────────────────────────────
-    // Second block from the top, above Værker / Hyppigste steder: from a
-    // German person, offer every German person *and* place in one view. A
-    // person can carry two nationalities (czekisk-dansk) — show one link per
-    // nationality rather than picking a winner. Emits nothing when the person
-    // has none, or when nation-index.js is absent.
-    if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
-      p.nationalities.forEach(function (key) {
-        var info = NationLink.byKey(key);
-        if (info) {
-          mainH += NationLink.html(info, esc(p.label) + ' er registreret som ' +
-            info.label.toLowerCase());
-        }
-      });
+      sbExtra += '<div class="info-block--sticky"><h2 class="section-title">Beskrivelse</h2>' +
+        '<p style="font-size:0.92rem;line-height:1.75">' + esc(p.description) + '</p></div>';
     }
 
     // Works by this person
@@ -440,8 +452,7 @@
           '<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;' +
           'letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:8px">' +
           esc(h3) + ' <span style="opacity:0.7">(' + items.length + ')</span></div>' +
-          '<ul style="list-style:none;padding:0;margin:0;display:grid;' +
-          'grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 16px;font-size:0.88rem">';
+          '<ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;font-size:0.88rem">';
         items.slice(0, 12).forEach(function (w) {
           wBlock += '<li><a href="' + esc(EntityRefs.workHrefByRid(w.rid)) +
             '" style="color:var(--color-text)">' + esc(w.title) + '</a>' +
@@ -450,7 +461,7 @@
         if (items.length > 12) wBlock += '<li style="color:var(--color-text-muted);font-style:italic">+ ' + (items.length - 12) + ' yderligere</li>';
         wBlock += '</ul></div>';
       });
-      mainH += wBlock + '</div>';
+      sbExtra += wBlock + '</div>';
     }
 
     // Top co-occurring places
@@ -467,8 +478,26 @@
           '" class="chip chip--place" style="font-size:0.82rem">' +
           esc(lab) + ' <span style="opacity:0.7;font-size:0.74rem">· ' + n + '</span></a>';
       });
-      mainH += plH + '</div></div>';
+      sbExtra += plH + '</div></div>';
     }
+
+    // ── Nation-krydslink ("Se alt under [nationalitet]") ───────────────────
+    // Last of the four moved blocks: from a German person, offer every
+    // German person *and* place in one view. A person can carry two
+    // nationalities (czekisk-dansk) — show one link per nationality rather
+    // than picking a winner. Emits nothing when the person has none, or
+    // when nation-index.js is absent.
+    if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
+      p.nationalities.forEach(function (key) {
+        var info = NationLink.byKey(key);
+        if (info) {
+          sbExtra += NationLink.html(info, esc(p.label) + ' er registreret som ' +
+            info.label.toLowerCase());
+        }
+      });
+    }
+
+    if (sb) sb.innerHTML = sbExtra + sbH;
 
     // Diary references
     mainH += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
