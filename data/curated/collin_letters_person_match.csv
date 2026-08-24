@@ -1140,7 +1140,7 @@ Puggaard,Hans,1845,1895,exact,1,Reg0103180,"Puggaard, Hans (1845–1895)"
 Puggaard,Rudolf,1818,1885,exact,1,Reg0103190,"Puggaard, Rudolph (1818–1885)"
 Puggaard,"Signe, f. Andrea, adopt. Brandt",1824,1897,exact,1,Reg0103210,"Puggaard, Signe, f. Andréa, adopt. Brandt (1824–1897)"
 Patges,Johan Anton,1807,1883,exact,1,Reg0103310,"Pätges, Johan Anton (1807–1883)"
-Påtges,Johanne Luise,1812,1890,none,0,,
+Påtges,Johanne Luise,1812,1890,surname_year_mismatch,1,Reg0103310,"Pätges, Johan Anton (1807–1883)"
 Raasløff,"Agnete, f. Toft",1814,1891,exact,1,Reg0103550,"Raasløff, Agnete, f. Toft (1814–1891)"
 Raasløff,Anna,1843,1907,exact,1,Reg0103560,"Raasløff, Anna (1843–1907)"
 Raasløff,Harald,1810,1893,exact,1,Reg0103570,"Raasløff, Harald (1810–1893)"
@@ -1526,7 +1526,7 @@ Wilster,Christian,1797,1840,exact,1,Reg0129390,"Wilster, Christian (1797–1840)
 Winckler,Bernt,1780,1845,none,0,,
 Vind,Chr. Andr.,1794,1869,surname_year_mismatch,4,Reg0125550;Reg0125560;Reg0125570;Reg0125590,"Vind, Anna Sophie Elisabeth, f. Hoppe (1803–1881) | Vind, Emil (1829–1906) | Vind, Sophie (1825–1901) | Vind, Sophus (1842–1913)"
 Vind,"Sophie Elisabeth, f. Hoppe",1803,1881,exact,1,Reg0125550,"Vind, Anna Sophie Elisabeth, f. Hoppe (1803–1881)"
-Wingård,Carl Fredrik af,1781,1851,none,0,,
+Wingård,Carl Fredrik af,1781,1851,exact,1,Reg0129560,"Wingard, Carl Fredrik af (1781–1851)"
 Winsløw,Carl,1796,1834,surname_only,3,Reg0129620;Reg0129630;Reg0129640,"Winsløw | Winsløw, Frue, f. Schiøtt | Winsløw, Ferd. S."
 Winther,Christian,1796,1876,exact,1,Reg0129670,"Winther, Christian (1796–1876)"
 Winther,Chr. M.,1817,1890,exact,1,Reg0129690,"Winther, Chr. M. (1817–1890)"

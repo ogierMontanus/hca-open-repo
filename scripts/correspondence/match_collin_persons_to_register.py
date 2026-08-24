@@ -10,14 +10,24 @@ on (surname, birth year) as requested -- the most reliable simple key
 available: given-name spelling/abbreviation varies far more between the
 two sources than a surname + a specific birth year does.
 
-Match tiers:
-  exact       surname (case/diacritic-normalized) + birth year both match
-              exactly one register entry
+Surname normalization is two-tier (see name_normalize.py for the full
+reasoning and the measured numbers): primary_keys() applies the
+calibrated folds (æ->ae, ø->o always; å tried both bare and doubled to
+"aa"); edge_case_key() is a broader, uncalibrated fallback -- strips
+every diacritic uniformly -- tried only when the primary keys find no
+surname at all, and tagged with its own tier so it stays visible as
+resting on a less-checked rule.
+
+Match tiers (each has an "_edge_case" counterpart when only the
+fallback surname key found the candidate(s)):
+  exact       surname + birth year both match exactly one register entry
   ambiguous   surname + birth year match MORE THAN ONE register entry
-              (rare -- same surname, same birth year, different people)
   surname_only  surname matches but the register entry has no recorded
               birth year (`born` is null) -- plausible, not confirmed
-  none        no register entry shares the surname at all
+  surname_year_mismatch  surname matches, but every candidate's
+              recorded birth year differs
+  none        no register entry shares the surname at all, under either
+              the primary or the edge-case key
 
 Nothing here is written back into entities.csv or persons-extra.js --
 this only proposes matches for human verification, same shape as every
@@ -34,8 +44,8 @@ Run from the repo root:
 import csv
 import json
 import os
-import re
-import unicodedata
+
+from name_normalize import primary_keys, edge_case_key
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 COLLIN_CSV = os.path.join(ROOT, "data", "curated", "collin_letters_person_index.csv")
@@ -49,10 +59,7 @@ def load_persons_extra():
     bracket counting, then parse it as JSON."""
     text = open(PERSONS_JS, encoding="utf-8").read()
     start = text.index("{")
-    depth = 0
-    in_str = False
-    esc = False
-    end = None
+    depth, in_str, esc, end = 0, False, False, None
     for i in range(start, len(text)):
         c = text[i]
         if in_str:
@@ -77,23 +84,24 @@ def load_persons_extra():
     return json.loads(text[start:end])
 
 
-def normalize_surname(s):
-    """Fold to a comparable key: strip accents/diacritics down to ASCII,
-    uppercase, drop non-letters. æ/ø/å get their own explicit mapping
-    first (NFD-stripping alone would mangle them, same reasoning as
-    mockup/js/*'s own initialOf() helpers elsewhere in this project)."""
-    s = (s or "").strip()
-    s = s.replace("æ", "ae").replace("Æ", "AE")
-    s = s.replace("ø", "o").replace("Ø", "O")
-    s = s.replace("å", "aa").replace("Å", "AA")
-    s = unicodedata.normalize("NFD", s)
-    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
-    s = re.sub(r"[^A-Za-z]", "", s)
-    return s.upper()
-
-
 def surname_from_label(label):
     return (label or "").split(",")[0].strip()
+
+
+def tier_for(candidates, birth_year):
+    """Same tiering logic for either key source -- caller appends
+    '_edge_case' when this was reached via the fallback key."""
+    exact = [c for c in candidates if c[2] == birth_year]
+    no_year_same_surname = [c for c in candidates if not c[2]]
+    if len(exact) == 1:
+        return "exact", exact
+    if len(exact) > 1:
+        return "ambiguous", exact
+    if no_year_same_surname:
+        return "surname_only", no_year_same_surname
+    if candidates:
+        return "surname_year_mismatch", candidates
+    return "none", []
 
 
 def main():
@@ -101,14 +109,16 @@ def main():
     persons = load_persons_extra()
     print(f"  {len(persons)} register persons loaded")
 
-    # Index: normalized surname -> list of (reg_id, label, born, died)
-    by_surname = {}
+    by_primary, by_edge = {}, {}
     for reg_id, p in persons.items():
-        key = normalize_surname(surname_from_label(p.get("label")))
-        if not key:
-            continue
-        by_surname.setdefault(key, []).append(
-            (reg_id, p.get("label"), p.get("born"), p.get("died")))
+        surname = surname_from_label(p.get("label"))
+        rec = (reg_id, p.get("label"), p.get("born"), p.get("died"))
+        for key in primary_keys(surname):
+            if key:
+                by_primary.setdefault(key, []).append(rec)
+        ekey = edge_case_key(surname)
+        if ekey:
+            by_edge.setdefault(ekey, []).append(rec)
 
     print("Loading Collin person index …")
     with open(COLLIN_CSV, encoding="utf-8") as f:
@@ -116,34 +126,24 @@ def main():
     print(f"  {len(collin_rows)} Collin entries")
 
     out_rows = []
-    tiers = {"exact": 0, "ambiguous": 0, "surname_only": 0, "none": 0}
+    tiers = {}
     for row in collin_rows:
         if not row["birth_year"]:
             continue  # out of scope: no birth year to match on
-        key = normalize_surname(row["surname"])
-        candidates = by_surname.get(key, [])
         birth_year = row["birth_year"]
 
-        exact = [c for c in candidates if c[2] == birth_year]
-        no_year_same_surname = [c for c in candidates if not c[2]]
+        candidates_by_id = {}
+        for key in primary_keys(row["surname"]):
+            for c in by_primary.get(key, []):
+                candidates_by_id[c[0]] = c
+        tier, matches = tier_for(list(candidates_by_id.values()), birth_year)
 
-        if len(exact) == 1:
-            tier = "exact"
-            matches = exact
-        elif len(exact) > 1:
-            tier = "ambiguous"
-            matches = exact
-        elif no_year_same_surname:
-            tier = "surname_only"
-            matches = no_year_same_surname
-        elif candidates:
-            # Surname matches exist but all have a DIFFERENT recorded
-            # birth year -- worth surfacing as a near-miss, not silence.
-            tier = "surname_year_mismatch"
-            matches = candidates
-        else:
-            tier = "none"
-            matches = []
+        if tier == "none":
+            edge_candidates = by_edge.get(edge_case_key(row["surname"]), [])
+            edge_tier, edge_matches = tier_for(edge_candidates, birth_year)
+            if edge_tier != "none":
+                tier, matches = f"{edge_tier}_edge_case", edge_matches
+
         tiers[tier] = tiers.get(tier, 0) + 1
 
         out_rows.append({
