@@ -531,8 +531,16 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   // 3b. Krydshenvisninger (see / see_also fra registret)
   if ((seeRefs && seeRefs.length) || (seeAlsoRefs && seeAlsoRefs.length)) {
     const refRow = (ref, verb) => {
+      // A resolved link marked "inferred" was added by build_works_extra.py's
+      // reciprocal-closure pass, not typed by the register compiler: the
+      // OTHER work's own see/see_also named this one, but this one's fields
+      // were empty even though its title text often says the same thing
+      // ("...se ogsaa: X"). The title attribute keeps that provenance
+      // visible on hover rather than presenting an inferred link as if a
+      // human had curated it -- see the pass's comment in the build script.
+      const titleAttr = ref.inferred ? ' title="Genfundet fra omvendt krydshenvisning"' : '';
       const inner = ref.rid
-        ? `<a href="work.html?reg=${ref.rid}" class="chip" style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${ref.label}</a>`
+        ? `<a href="work.html?reg=${ref.rid}" class="chip"${titleAttr} style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${ref.label}</a>`
         : `<span class="chip" style="font-size:0.78rem" title="Ingen registerpost fundet">${ref.label}</span>`;
       return `<div style="display:flex;gap:6px;align-items:center"><span style="font-size:0.72rem;color:var(--color-text-muted);min-width:3.6em">${verb}</span>${inner}</div>`;
     };

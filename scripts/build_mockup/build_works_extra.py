@@ -528,6 +528,42 @@ def main():
 
     print(f"  generated {len(generated)} entries across all {len(rows)} works")
 
+    # ── Reciprocal cross-references ─────────────────────────────────────────
+    # entities.csv's see/see_also columns are written by hand against ONE
+    # side of a pair -- e.g. Reg002779's see_also names "La Fille du régiment"
+    # (Reg001983), but Reg001983's own see/see_also columns are empty, even
+    # though ITS label also reads "...se ogsaa: Regimentets Datter". The
+    # register compiler evidently trusted a reader to notice the connection
+    # from either entry in the printed index; the digitised see/see_also
+    # columns only capture the direction someone happened to type. Confirmed
+    # systemic, not a one-off: of 193 rows with either field set, most have
+    # no reciprocal pointer on the target's own row.
+    #
+    # This pass restores the missing direction: for every resolved A -> B,
+    # if B has no pointer back to A in EITHER of its own fields, one is
+    # added to B's seeAlso (never `see` -- that field's stronger "this IS
+    # that" framing is reserved for what a human actually typed; an inferred
+    # backlink only ever claims the softer "see also"). Pairwise only, no
+    # transitive closure: A -> B -> C does not imply A -> C.
+    added_backlinks = 0
+    for rid, w in list(generated.items()):
+        for field in ("see", "seeAlso"):
+            for ref in w[field]:
+                target = ref.get("rid")
+                if not target or target not in generated:
+                    continue  # unresolved label, or resolved to a non-work id
+                tgt = generated[target]
+                already = any(b.get("rid") == rid for b in tgt["see"] + tgt["seeAlso"])
+                if already:
+                    continue
+                tgt["seeAlso"].append({
+                    "label": w["title"], "rid": rid, "inferred": True,
+                })
+                added_backlinks += 1
+    if added_backlinks:
+        print(f"  {added_backlinks} reciprocal cross-reference(s) added "
+              f"(source data only recorded one direction)")
+
     billedkunst = [w for w in generated.values() if w["h2"].upper() == "BILLEDKUNST"]
     if billedkunst:
         with_author = sum(1 for w in billedkunst if w["author"])
