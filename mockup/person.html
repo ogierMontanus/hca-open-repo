@@ -187,6 +187,21 @@ function escAttr(s) { return String(s == null ? '' : s)
       '<span style="color:var(--color-text-muted)">Wikidata</span></a>';
     sb += '</div></div>';
   }
+
+  // Brevveksling -- a verified link into andersen.sdu.dk's Brevbasen
+  // (a separate letter-correspondence database, distinct from this
+  // register's own diary indexes). Only rendered for persons hand-verified
+  // in data/curated/breve_person_crosswalk.csv -- see
+  // docs/data-model/correspondence-integration.md §2-4. Outbound link,
+  // so it follows docs/external-links.md: new tab, quiet styling, ↗ +
+  // an .sr-only announcement rather than a styled button.
+  if (p.breve) {
+    sb += '<div class="info-block info-block--enriched"><div class="info-block__header">Brevveksling<span class="info-block__tag">tilføjet</span></div><div class="info-block__body" style="font-size:0.82rem">';
+    sb += '<a class="external-link" href="' + escAttr(p.breve.url) + '" target="_blank" rel="noopener noreferrer">';
+    sb += (p.breve.letters ? 'Se ' + p.breve.letters + ' breve ' : 'Se brevveksling ') + 'hos H.C. Andersen Centret';
+    sb += '<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (åbner i nyt faneblad)</span></a>';
+    sb += '</div></div>';
+  }
   document.getElementById('js-sidebar').innerHTML = sb;
 
   // ── Main content ─────────────────────────────────────────────────────────

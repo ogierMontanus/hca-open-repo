@@ -118,6 +118,7 @@ tastaturbrugere. Derfor:
 | Wikidata-entitet | `wd:Q…` (badge) eller `Wikidata` |
 | Lex.dk-søgning (personregister, dansk nationalitet) | `Søg på Lex.dk` |
 | Deutsche Biographie-søgning (personregister, tysk nationalitet) | `Søg hos Deutsche Biographie` |
+| Brevbasen (andersen.sdu.dk), verificeret korrespondance | `Se N breve hos H.C. Andersen Centret` |
 | Store norske leksikon-søgning (personregister, norsk nationalitet) | `Søg på Store norske leksikon` |
 | GND Explorer-søgning (personregister, øvrig nationalitet) | `Søg i GND Explorer` |
 | Lex.dk-søgning (personregister, ingen registreret nationalitet) | `Søg på Lex.dk` |

@@ -49,6 +49,7 @@ UMBRELLAS  = os.path.join(ROOT, "data", "curated", "nation_umbrellas_da.csv")
 GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
 ROLE       = os.path.join(ROOT, "data", "normalized", "person_role.csv")
 WIKIDATA   = os.path.join(ROOT, "data", "curated", "persons_wikidata.csv")
+BREVE      = os.path.join(ROOT, "data", "curated", "breve_person_crosswalk.csv")
 OUT        = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
 
 # Life-dates parsed from labels like
@@ -165,6 +166,38 @@ def load_person_wikidata() -> dict:
             wd = (r.get("wd") or "").strip()
             if wd:
                 out[r["entity_id"]] = wd
+    return out
+
+
+def load_breve_crosswalk() -> dict:
+    """{entity_id: {"pid": ..., "letters": ..., "url": ...}} from an optional
+    data/curated/breve_person_crosswalk.csv (rid,breve_pid,letters,
+    verified_via,notes -- same hand-verified-only shape and propose/verify
+    discipline as persons_wikidata.csv / works_wikidata.csv). Links a person
+    to their correspondence with Andersen on the andersen.sdu.dk Brevbasen,
+    a separate database from this project's own diary register -- see
+    docs/data-model/correspondence-integration.md for how rows here were
+    verified and what remains to be added.
+
+    Each row must be individually verified before being added (surname+
+    birth-year matching alone is not enough -- see the same file's
+    docs/data-model/exports/breve-person-crosswalk-candidates.csv, which is
+    NOT loaded here for exactly that reason, matching how
+    load_person_wikidata() only reads its own hand-verified overlay and
+    never the WD lookup script's raw candidate output)."""
+    out = {}
+    if not os.path.exists(BREVE):
+        return out
+    with open(BREVE, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            pid = (r.get("breve_pid") or "").strip()
+            if not pid:
+                continue
+            out[r["rid"]] = {
+                "pid": pid,
+                "letters": int(r["letters"]) if (r.get("letters") or "").strip() else None,
+                "url": f"https://andersen.sdu.dk/brevbase/person.html?breve=sendt&pid={pid}",
+            }
     return out
 
 
@@ -367,6 +400,10 @@ def main() -> None:
               "(run scripts/parsers/parse_person_role.py)")
 
     wd_by_person = load_person_wikidata()
+    breve_by_person = load_breve_crosswalk()
+    if breve_by_person:
+        print(f"  {len(breve_by_person):,} persons with a verified Brevbasen "
+              f"correspondence link (data/curated/breve_person_crosswalk.csv)")
     umbrellas = load_nation_umbrellas()
     bio_links_count = 0
 
@@ -383,6 +420,7 @@ def main() -> None:
         nats = nationalities_by_person.get(rid, [])
         roles = roles_by_person.get(rid, [])
         wd = wd_by_person.get(rid)
+        breve = breve_by_person.get(rid)
 
         # Broad biographical search links (Lex.dk / Deutsche Biographie /
         # VIAF) — a research aid, not an identification, so this ONLY
@@ -410,6 +448,7 @@ def main() -> None:
             "roles":        roles,
             "wd":           wd,
             "bioLinks":     bio_links,
+            "breve":        breve,
         }
 
     print(f"  generated {len(generated):,} entries")
