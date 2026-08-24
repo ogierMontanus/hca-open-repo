@@ -39,7 +39,7 @@ PyMuPDF (`fitz`), stdlib otherwise.
 **Output**: [`data/curated/collin_letters_place_index.csv`](../../data/curated/collin_letters_place_index.csv)
 (623 rows) and a companion
 [`data/curated/collin_letters_place_index_review.csv`](../../data/curated/collin_letters_place_index_review.csv)
-(13 rows flagged for human review — see §5).
+(11 rows flagged for human review — see §5).
 
 ---
 
@@ -128,9 +128,9 @@ mis-sort other entries.
 | Column | Meaning |
 |---|---|
 | `place_name_raw` | As extracted, before any correction |
-| `place_name_clean` | After the two high-confidence corrections in §4; identical to `place_name_raw` for every other row |
+| `place_name_clean` | After the four high-confidence corrections in §4; identical to `place_name_raw` for every other row |
 | `name_corrected` | `yes` if a correction was applied |
-| `correction_note` | Why, for the 2 corrected rows |
+| `correction_note` | Why, for the 4 corrected rows |
 | `parenthetical` | A qualifier printed in parentheses right after the name, e.g. "Baden **(ved Wien)**" — kept separate from the citation |
 | `see_also` | The target of a "se X" redirect (4 rows — Aalsgaarde, Ellekilde, Felsenstein, Såby); `citation_raw` is empty for these |
 | `citation_raw` | The volume+page citation exactly as extracted (dehyphenated/rejoined across the original line wraps, otherwise untouched) |
@@ -150,22 +150,24 @@ flag exists so a later, image-verified pass knows where to start.
 
 ## 4. Place-name corrections applied
 
-Two, both cross-checked two independent ways before being applied — not
-just "this looks plausible":
+Four, each cross-checked before being applied — not just "this looks
+plausible":
 
 | Raw | Corrected | Why |
 |---|---|---|
-| Milona | **Milano** | n/o transposition; the entry's own high, repeated citation count matches Andersen's well-documented, repeated Milan visits; alphabetical position is unaffected by the correction either way |
+| Milona | **Milano** | n/o transposition, confirmed by the user as a typo in the printed index itself (not an OCR artifact); the entry's own high, repeated citation count matches Andersen's well-documented, repeated Milan visits; alphabetical position is unaffected by the correction either way |
 | Inin | **Irun** | Alphabetical-position proof, not just a plausible guess: as printed, "Inin" would sort *before* "Interlaken" — but it is placed *after* Interlaken and *before* Ischia in the source. "Irun" is the only reading beginning with a letter run that both looks like the OCR output and lands correctly in that exact slot (Int- < Iru- < Isc-) |
+| Giion | **Glion** | l/i misreading. Sits between "Glasgow" and the (also corrected) "Giommen"/"Glommen" in the source: Glarus < Glasgow < Glion < Glommen < Glorup < Glückstadt — the corrected reading is the only one that lands in that exact slot |
+| Giommen | **Glommen** | Same l/i misreading, confirmed by the identical alphabetical-position proof (Glion < Glommen < Glorup). Glommen is the Norwegian Glomma river — consistent with the adjacent Drammen/Kongsvinger/Sandviken entries, which all cite the identical page "IV, 188" from the same 1871 Norway itinerary |
 
-Both corrections are visible in the CSV as `place_name_raw` vs.
+All four corrections are visible in the CSV as `place_name_raw` vs.
 `place_name_clean`; nothing was silently overwritten.
 
 ---
 
 ## 5. Flagged for human review (not corrected)
 
-`data/curated/collin_letters_place_index_review.csv` — 13 rows: 3 for a
+`data/curated/collin_letters_place_index_review.csv` — 11 rows: 1 for a
 place name that could not be confidently corrected, plus 10 for citations
 whose OCR-noise count crossed the "high" threshold (long, heavily-cited
 entries — Bregentved, Hamburg, Hellebæk, Holsteinborg, Korsør, Leipzig,
@@ -174,19 +176,13 @@ because of how many citations they carry).
 
 **Place names left uncorrected:**
 
-- **Giion** — sorts after "Glasgow" in the source, which no plausible
-  reading beginning "Gi-" or "Gl-" explains. The surrounding Spain/Portugal
-  citations make "Gijón" plausible, but unlike Irun there is no
-  alphabetical-position proof for it, so it is flagged rather than
-  corrected.
-- **Giommen** — the adjacent entries (Drammen, Kongsvinger, Sandviken) all
-  cite the *identical* page "IV, 188", strongly suggesting this is another
-  stop on the same 1871 Norway itinerary, but no specific corrected
-  spelling could be confirmed.
 - **Mysunde-adjacent ordering** — "Mälaren" prints after "Moen" despite
   sorting before it under every convention checked; no OCR misreading was
   found that resolves the inversion, so it may be a genuine ordering slip
   in the source rather than an OCR error.
+
+(Giion/Giommen were originally flagged here too, but are now resolved as
+**Glion**/**Glommen** — see §4.)
 
 Plus the 8 unresolved alphabetical-order cases from §2.4, for anyone
 later verifying this section against the source page images.
