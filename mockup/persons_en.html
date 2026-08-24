@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Person Register — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .wd-badge {
+      display: inline-block; font-size: 0.63rem; font-family: monospace;
+      font-weight: 600; padding: 1px 5px; border-radius: 3px;
+      background: #edf4fb; border: 1px solid #93bcd9; color: #2a5e8a;
+      text-decoration: none; white-space: nowrap; vertical-align: middle; line-height: 1.7;
+    }
+    .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
+
+    /* #js-detail-sidebar now carries Beskrivelse/Værker/Hyppigste steder/
+       Se alt under [nationalitet] as well as the original Autoritetslinks/
+       Biografiske opslag blocks, so it's routinely taller than the
+       viewport. .entity-sidebar's default (shared with person.html,
+       place.html, entry.html -- not touched here) makes the WHOLE column
+       stick as one rigid block, which only reads well while everything
+       fits on screen at once. Overridden here, scoped to this page's
+       sidebar only: the column itself scrolls normally, and just the
+       Beskrivelse card gets its own sticky positioning so it alone stays
+       in view while Værker/Hyppigste steder/Se alt scroll past underneath
+       it -- matching how Biografiske opslag already reads as "the block
+       that stays put" today. */
+    #js-detail-sidebar { position: static; }
+    #js-detail-sidebar .info-block--sticky {
+      position: sticky; top: calc(var(--header-height) + 16px);
+    }
+  </style>
+</head>
+<body data-section="hvem">
+
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="persons.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="persons_en.html" class="active">EN</a>
+    </div>
+    <!-- Filled by Cart.mountBadge() — js/cart.js. Empty (hidden) markup here
+         degrades to nothing if cart.js fails to load. -->
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav id="js-breadcrumb" class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index_en.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Person Register</span>
+      </nav>
+      <div class="page-hero__head">
+        <span class="page-hero__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg></span>
+        <h1 id="js-h1">Person Register</h1>
+      </div>
+      <p id="js-hero-sub">H1 = PERSON REGISTER — names mentioned in H. C. Andersen’s diaries</p>
+      <div id="js-hero-chips" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+      <!-- Detail view only (?reg=…) — filled by Cart.mountToggle(), stays
+           empty on the list view. -->
+      <div id="js-cart-toggle" style="margin-top:8px"></div>
+      <div id="js-hero-meta" class="page-hero__meta">
+        <span>10,228 register entries</span>
+        <span>39,361 diary references</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="js-list-section" class="section">
+    <div class="container">
+      <div class="detail-with-sideacc">
+       <div>
+
+      <!-- Alphabet navigation — chips generated from PERSONS_EXTRA initials -->
+      <div id="js-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:var(--sp6)">
+        <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Letter:</span>
+      </div>
+
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filter</span>
+            <button class="facet-panel__clear">Reset</button>
+          </div>
+
+          <!-- Nationalitet — live off PERSONS_EXTRA.nationalities (leading-position
+               ethnic-adjective matches only; see build_persons_extra.py and
+               docs/data-model/person-ethnic-descriptors.md). Only 1.969 of
+               10.228 persons carry one today, so the generated "Uoplyst"
+               bucket makes that gap selectable instead of silently dropping
+               those rows — same convention as places.html's Land facet.
+               Rows and counts are rendered by FacetEngine — do not
+               hand-write them here. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Nationality <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body"
+                 data-facet-source="nationality"
+                 data-facet-limit="12"
+                 data-facet-empty-label="Unknown"></div>
+          </div>
+
+          <!-- Køn — AFLEDT facet, ikke en registreret oplysning. Værdierne
+               kommer fra scripts/parsers/parse_person_gender.py, som vægter
+               titler, slægtsrelationer, pigenavn, -inde-professioner og
+               fornavn-i-national-kontekst. "Endnu ubestemt" er en gyldig
+               kategori og ikke en fejl: den markerer, at grundlaget ikke
+               rækker til en pålidelig kategorisering. Se
+               docs/data-model/person-gender-facet.md. Rækker og tal
+               genereres af FacetEngine — skriv dem ikke i hånden. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Gender <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="gender"></div>
+            <div style="padding:0 12px 10px;font-size:0.7rem;color:var(--color-text-muted);line-height:1.45">
+              Automatically derived from the register text — see
+              <a href="om.html" style="color:inherit;text-decoration:underline">Our sources</a>.
+            </div>
+          </div>
+
+          <!-- Rolle / Erhverv — AFLEDT facet, ikke en registreret oplysning
+               (samme princip som Køn ovenfor). Værdierne kommer fra
+               scripts/parsers/parse_person_role.py, som kombinerer to
+               kilder: a) forfatter/kunstner/komponist-optræden i
+               VÆRK-REGISTER, b) en høstet klassificering af beskrivelses-
+               feltets erhvervsord, klynget i ~10 buckets. En person kan
+               høre til flere buckets; en person uden match er ikke fejl —
+               se docs/data-model/person-role-facet.md. Rækker og tal
+               genereres af FacetEngine — skriv dem ikke i hånden. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Role / Occupation <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="role"></div>
+            <div style="padding:0 12px 10px;font-size:0.7rem;color:var(--color-text-muted);line-height:1.45">
+              Automatically derived from the work register and the register text — see
+              <a href="om.html" style="color:inherit;text-decoration:underline">Our sources</a>.
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Connection to the WORK REGISTER <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Diary entries only</span><span class="facet-item__count">9,485</span></label>
+              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Also creator of registered works</span><span class="facet-item__count">743</span></label>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Co-occurring places <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Copenhagen</span><span class="facet-item__count">2,847</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">412</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Vienna</span><span class="facet-item__count">318</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">London</span><span class="facet-item__count">287</span></label>
+              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rome</span><span class="facet-item__count">214</span></label>
+            </div>
+          </div>
+
+          <!-- Year-by-mention slider deliberately omitted on persons.html: a person's
+               life-cycle dates (born/died) are an ontologically distinct register from
+               diary-mention dates, and the two should not share a single year filter.
+               Mention-year filtering remains available on diaries.html; entity-date
+               filtering (born/died) will return here once entity_event is populated. -->
+        </aside>
+
+        <div>
+          <div class="results-header">
+            <span class="results-count"><strong>10,228</strong> persons in the Person Register</span>
+            <!-- Selects/deselects every currently FILTERED person (not just
+                 the rendered page) — see js/cart.js and the wiring below. -->
+            <label class="results-header__select-all">
+              <input type="checkbox" id="js-select-all"> Select all
+            </label>
+            <div class="layout-switcher" id="js-person-layout-switcher">
+              <button class="layout-switcher__btn" data-layout="list" type="button">☰ List</button>
+              <button class="layout-switcher__btn" data-layout="table" type="button">▦ Table</button>
+            </div>
+          </div>
+
+          <!-- Nation cross-link — filled by js/nation-link.js when the
+               Nationalitet facet is narrowed to exactly one value. Empty
+               otherwise. -->
+          <div id="js-nation-link"></div>
+
+          <!-- Persons list — data-driven from PERSONS_EXTRA (js/persons-extra.js).
+               Reused as the render target for both layouts (Liste/Tabel), same
+               as cart.html's #js-cart-body — see the layout dispatcher below. -->
+          <div class="result-list" id="js-person-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+          <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+            <button id="js-person-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Show more</button>
+          </div>
+        </div>
+      </div>
+
+       </div>
+
+       <!-- Right-margin accordion: current section + three others (Who · What · Where · When) -->
+       <aside class="side-acc" aria-label="Other entry points">
+         <a href="persons_en.html" class="side-acc__panel side-acc__panel--hvem side-acc__panel--active" aria-current="page">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg><span class="side-acc__tab-word">Who</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg>Who</div>
+             <div class="side-acc__count">10,228 register entries · 39,361 references</div>
+             <ul class="side-acc__list">
+               <li>Artists</li>
+               <li>Women</li>
+               <li>Royalty &amp; nobility</li>
+             </ul>
+             <div class="side-acc__examples">Collin, Edvard · Lind, Jenny</div>
+           </div>
+         </a>
+         <a href="works_en.html" class="side-acc__panel side-acc__panel--hvad">
+           <div class="side-acc__tab"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span><span class="side-acc__tab-word">What</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span>What</div>
+             <div class="side-acc__count">3,708 register entries · 11,195 references</div>
+             <ul class="side-acc__list">
+               <li>Theatre &amp; Music</li>
+               <li>Visual Art</li>
+               <li>Library</li>
+             </ul>
+             <div class="side-acc__examples">Fairy tales, ballets, operas, sculptures …</div>
+           </div>
+         </a>
+         <a href="places_en.html" class="side-acc__panel side-acc__panel--hvor">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg><span class="side-acc__tab-word">Where</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg>Where</div>
+             <div class="side-acc__count">2,508 places · 18,849 references</div>
+             <ul class="side-acc__list">
+               <li>Cities</li>
+               <li>Countries</li>
+               <li>Rivers</li>
+             </ul>
+             <div class="side-acc__examples">Berlin · Rome · Paris · Weimar …</div>
+           </div>
+         </a>
+         <a href="diaries.html" class="side-acc__panel side-acc__panel--hvornaar">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg><span class="side-acc__tab-word">When</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg>When</div>
+             <div class="side-acc__count">1825–1875 · 50 years of diaries</div>
+             <ul class="side-acc__list">
+               <li>Years mentioned</li>
+               <li>Period boundaries</li>
+             </ul>
+             <div class="side-acc__examples">1805–1875 · 1,446 events</div>
+           </div>
+         </a>
+       </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+  <section id="js-detail-section" class="section" style="display:none">
+    <div class="container">
+      <div class="entity-layout">
+        <div class="entity-main" id="js-detail-main"></div>
+        <aside class="entity-sidebar" id="js-detail-sidebar"></aside>
+      </div>
+    </div>
+  </section>
+
+<footer class="site-footer">
+  <div class="container">
+    Developed by citizen scientists in collaboration with
+    <a href="https://www.sdu.dk/hca" style="color:inherit">the H. C. Andersen Centre, University of Southern Denmark, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Our sources</a>
+  </div>
+</footer>
+
+<!-- Person data + supporting data for the detail view (generated; gitignored). -->
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
+<script src="data/cooccurrence.js" onerror="void 0"></script>
+<script src="data/diary-index.js" onerror="void 0"></script>
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="js/diary-wire.js"></script>
+<script src="data/nation-index.js" onerror="void 0"></script>
+<script src="js/facet-engine.js"></script>
+<script src="js/nation-link.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // wireCheckboxes() registers one delegated document-level listener — it
+  // must run exactly once per page load regardless of which branch below
+  // renders (list view's own .result-card__select boxes, or the detail
+  // view's embedded Dagbogsreferencer cards from diary-wire.js), so it's
+  // called here rather than inside the list-view branch where it used to
+  // live: that left the detail view's diary checkboxes completely unwired.
+  if (typeof Cart !== 'undefined') {
+    Cart.mountBadge(document.getElementById('js-cart-badge'));
+    Cart.wireCheckboxes();
+  }
+
+  var urlReg = new URLSearchParams(location.search).get('reg');
+
+  // ── DETAIL VIEW (?reg=…) ───────────────────────────────────────────────────
+  if (urlReg) {
+    var p = (typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[urlReg]) || null;
+
+    document.title = (p ? p.label : urlReg) + ' — HCA Open Repository';
+
+    // Breadcrumb ends in the internal ID, not the name — the name is
+    // already the H1 right below, so repeating it here would just be a
+    // second, smaller copy of the same string. See
+    // docs/data-model/detail-page-redundancy.md.
+    var bc = document.getElementById('js-breadcrumb');
+    if (bc) bc.innerHTML =
+      '<a href="index_en.html">Home</a><span class="breadcrumb__sep">›</span>' +
+      '<a href="persons_en.html">Person Register</a><span class="breadcrumb__sep">›</span>' +
+      '<span class="breadcrumb__current" style="font-family:monospace">' + esc(urlReg) + '</span>';
+
+    var h1El = document.getElementById('js-h1');
+    if (h1El) h1El.textContent = p ? p.label : urlReg;
+
+    var subEl = document.getElementById('js-hero-sub');
+    if (subEl) subEl.style.display = 'none';
+
+    // The old chip row (PERSON-REGISTER / era / ID / wd) and meta line
+    // (dates / role / hit count) duplicated the breadcrumb, the H1, the
+    // Beskrivelse section, the Autoritetslinks block and the
+    // Dagbogsreferencer intro respectively — removed rather than
+    // populated. See docs/data-model/detail-page-redundancy.md.
+    var chEl = document.getElementById('js-hero-chips');
+    if (chEl) chEl.style.display = 'none';
+    var metaEl = document.getElementById('js-hero-meta');
+    if (metaEl) metaEl.style.display = 'none';
+
+    var listSec = document.getElementById('js-list-section');
+    if (listSec) listSec.style.display = 'none';
+    var detSec = document.getElementById('js-detail-section');
+    if (detSec) detSec.style.display = '';
+
+    var mn = document.getElementById('js-detail-main');
+    if (!mn) return;
+
+    if (!p) {
+      mn.innerHTML = '<p style="color:var(--color-text-muted)">Unknown person: ' + esc(urlReg) + '</p>';
+      return;
+    }
+
+    if (typeof Cart !== 'undefined') {
+      Cart.mountToggle(document.getElementById('js-cart-toggle'), 'person', urlReg, p.label);
+    }
+
+    // Sidebar — Registerdata (ID/register-type/label/dates/role/hit-count)
+    // is deliberately not repeated here: every one of those fields is
+    // already shown elsewhere on the page (breadcrumb, H1, Beskrivelse,
+    // Dagbogsreferencer). Only genuinely-added data gets a sidebar block.
+    // See docs/data-model/detail-page-redundancy.md.
+    var sb = document.getElementById('js-detail-sidebar');
+    // sbExtra holds the four blocks moved into the sidebar per the layout
+    // change below (Beskrivelse, Værker, Hyppigste steder, Se alt under
+    // [nationalitet]) — built first so it can be PREPENDED to sbH's existing
+    // Autoritetslinks/Biografiske opslag content, in that exact order.
+    // sbH's own DOM write is deferred to the end of this block (it used to
+    // happen immediately) so the two can be combined into one innerHTML set.
+    var sbExtra = '';
+    if (sb) {
+      var sbH = '';
+      if (p.wd) {
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Authority links' +
+          '<span class="info-block__tag">added</span></div>' +
+          '<div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">' +
+          '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) + '" target="_blank" rel="noopener" ' +
+          'style="display:flex;align-items:center;gap:6px"><span class="wd-badge">wd:' + esc(p.wd) + '</span>' +
+          '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
+      }
+      // Biografiske opslag — søgelinks, ikke identifikationer. Kun udfyldt
+      // når personen IKKE har et autoritetslink ovenfor (se bio_search_links()
+      // i build_persons_extra.py) — de to blokke udelukker derfor hinanden i
+      // praksis, men begge if'er er uafhængige for robusthedens skyld.
+      // Se docs/data-model/person-bio-search-links.md.
+      if (p.bioLinks && p.bioLinks.length) {
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Biographical lookups' +
+          '<span class="info-block__tag">added</span></div>' +
+          '<div class="info-block__body">' +
+          '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
+          'Search links to external reference works based on name and nationality — ' +
+          'not a confirmed identification of the person.</p>' +
+          '<div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
+        p.bioLinks.forEach(function (l) {
+          sbH += '<a class="external-link" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' +
+            esc(l.label) + '<span class="external-link__icon" aria-hidden="true">↗</span>' +
+            '<span class="sr-only"> (opens in a new tab)</span></a>';
+        });
+        sbH += '</div></div></div>';
+      }
+    }
+
+    // Main content
+    var mainH = '';
+
+    // Beskrivelse — moved into the sidebar (was the top of the main column)
+    // and kept individually sticky: it's short and identifying, the same
+    // role Biografiske opslag already plays below it, so it stays in view
+    // while the longer Værker/Hyppigste steder lists scroll past underneath.
+    // See the #js-detail-sidebar override in this page's own <style> block.
+    if (p.description) {
+      sbExtra += '<div class="info-block--sticky"><h2 class="section-title">Description</h2>' +
+        '<p style="font-size:0.92rem;line-height:1.75">' + esc(p.description) + '</p></div>';
+    }
+
+    // Works by this person
+    var myWorks = (typeof EntityRefs !== 'undefined') ? EntityRefs.worksByAuthor(urlReg) : [];
+    if (myWorks.length) {
+      var byH3 = {};
+      myWorks.forEach(function (w) {
+        var k = w.h3 || '—';
+        (byH3[k] = byH3[k] || []).push(w);
+      });
+      Object.keys(byH3).forEach(function (k) {
+        byH3[k].sort(function (a, b) { return (b.refs || 0) - (a.refs || 0); });
+      });
+      var groups = Object.keys(byH3).sort(function (a, b) {
+        var ra = byH3[a].reduce(function (s, w) { return s + (w.refs || 0); }, 0);
+        var rb = byH3[b].reduce(function (s, w) { return s + (w.refs || 0); }, 0);
+        return rb - ra;
+      });
+      var wBlock = '<div><h2 class="section-title">Works</h2>' +
+        '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+        myWorks.length + ' work' + (myWorks.length === 1 ? '' : 's') +
+        ' attributed to ' + esc(p.label) + ' in the register.</p>';
+      groups.forEach(function (h3) {
+        var items = byH3[h3];
+        wBlock += '<div style="margin-bottom:var(--sp5)">' +
+          '<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;' +
+          'letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:8px">' +
+          esc(h3) + ' <span style="opacity:0.7">(' + items.length + ')</span></div>' +
+          '<ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;font-size:0.88rem">';
+        items.slice(0, 12).forEach(function (w) {
+          wBlock += '<li><a href="' + esc(EntityRefs.workHrefByRid(w.rid)) +
+            '" style="color:var(--color-text)">' + esc(w.title) + '</a>' +
+            (w.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' + w.refs + ' ref.</span>' : '') + '</li>';
+        });
+        if (items.length > 12) wBlock += '<li style="color:var(--color-text-muted);font-style:italic">+ ' + (items.length - 12) + ' more</li>';
+        wBlock += '</ul></div>';
+      });
+      sbExtra += wBlock + '</div>';
+    }
+
+    // Top co-occurring places
+    var topPlaces = (typeof PERSON_TOP_PLACES !== 'undefined' && PERSON_TOP_PLACES[urlReg]) || [];
+    if (topPlaces.length) {
+      var plH = '<div><h2 class="section-title">Most frequent places</h2>' +
+        '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+        'Places most often mentioned on the same diary page as ' + esc(p.label) + '.</p>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px">';
+      topPlaces.forEach(function (pair) {
+        var prid = pair[0], n = pair[1];
+        var lab = (typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[prid] && PLACES_EXTRA[prid].label) || prid;
+        plH += '<a href="' + esc(EntityRefs.placeHrefByRid(prid)) +
+          '" class="chip chip--place" style="font-size:0.82rem">' +
+          esc(lab) + ' <span style="opacity:0.7;font-size:0.74rem">· ' + n + '</span></a>';
+      });
+      sbExtra += plH + '</div></div>';
+    }
+
+    // ── Nation-krydslink ("Se alt under [nationalitet]") ───────────────────
+    // Last of the four moved blocks: from a German person, offer every
+    // German person *and* place in one view. A person can carry two
+    // nationalities (czekisk-dansk) — show one link per nationality rather
+    // than picking a winner. Emits nothing when the person has none, or
+    // when nation-index.js is absent.
+    if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
+      p.nationalities.forEach(function (key) {
+        var info = NationLink.byKey(key);
+        if (info) {
+          sbExtra += NationLink.html(info, esc(p.label) + ' is registered as ' +
+            info.label.toLowerCase());
+        }
+      });
+    }
+
+    if (sb) sb.innerHTML = sbExtra + sbH;
+
+    // Diary references
+    mainH += '<div><h2 class="section-title">Diary references</h2>' +
+      '<div class="results-header">' +
+      '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Loading…</p>' +
+      '<div class="layout-switcher" id="person-diary-switcher">' +
+      '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ List</button>' +
+      '<button class="layout-switcher__btn" data-layout="grid">⊞ Grid</button>' +
+      '</div></div>' +
+      '<div class="result-grid" id="person-diary"></div>' +
+      '<div style="text-align:center;margin-top:var(--sp5)">' +
+      '<button id="person-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Show more</button>' +
+      '</div></div>';
+
+    mn.innerHTML = mainH;
+
+    // Wire diary references
+    var dGrid = document.getElementById('person-diary');
+    var dSummary = document.getElementById('person-diary-summary');
+    var dSwitcher = document.getElementById('person-diary-switcher');
+    var savedLayout = (function () { try { return localStorage.getItem('diary-layout') || 'list'; } catch (e) { return 'list'; } })();
+    var diaryResult = (typeof DiaryWire !== 'undefined') ? DiaryWire.refs(dGrid, urlReg, {
+      pageSize: 24, layout: savedLayout,
+      moreBtn: document.getElementById('person-diary-more'),
+      onCount: function (shown, tot) {
+        if (dSummary) dSummary.textContent = tot === 0
+          ? 'No diary references recorded.'
+          : 'Showing ' + shown + ' of ' + tot + ' diary pages where ' + p.label + ' appears.';
+      }
+    }) : null;
+    if (!diaryResult && dSummary) dSummary.textContent = 'Diary data not loaded (run build_diary_index.py).';
+    if (diaryResult && dSwitcher) {
+      dSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+        b.classList.toggle('layout-switcher__btn--active', b.dataset.layout === savedLayout);
+      });
+      dSwitcher.addEventListener('click', function (ev) {
+        var btn = ev.target.closest('[data-layout]');
+        if (!btn) return;
+        var nl = btn.dataset.layout;
+        diaryResult.setLayout(nl);
+        try { localStorage.setItem('diary-layout', nl); } catch (e) {}
+        dSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+          b.classList.toggle('layout-switcher__btn--active', b === btn);
+        });
+      });
+    }
+    return;  // skip list rendering
+  }
+
+  // ── LIST VIEW (no ?reg=) ──────────────────────────────────────────────────
+  var grid = document.getElementById('js-person-results');
+  if (!grid || typeof PERSONS_EXTRA === 'undefined') return;
+
+  function initialOf(label) {
+    var s = (label || '')
+      .replace(/ä/g, 'æ').replace(/Ä/g, 'Æ')
+      .replace(/ö/g, 'ø').replace(/Ö/g, 'Ø')
+      .replace(/ü/g, 'y').replace(/Ü/g, 'Y')
+      .replace(/ß/g, 's')
+      .trim();
+    if (!s) return '#';
+    if (/^aa/i.test(s)) return 'Å';
+    var c = s.charAt(0).toUpperCase();
+    if (/[A-ZÆØÅ]/.test(c)) return c;
+    // Generic accents fall through to NFD strip: é→E, ç→C, ñ→N, î→I, …
+    // Å/å are handled above — they NFD-decompose to A/a + combining ring,
+    // which would otherwise be stripped.
+    if (c.normalize) {
+      var folded = c.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (/[A-Z]/.test(folded.charAt(0))) return folded.charAt(0);
+    }
+    return '#';
+  }
+
+  var ALL = Object.keys(PERSONS_EXTRA).map(function (rid) {
+    var p = PERSONS_EXTRA[rid];
+    return { rid: rid, label: p.label || rid, desc: p.description || '',
+             refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [],
+             gender: p.gender || null, role: p.roles || [] };
+  });
+
+  var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
+  // Nationality VALUES stay Danish (docs/i18n-policy.md: no chosen
+  // machine-translation procedure yet for the ~40-term controlled
+  // vocabulary) -- only the facet chrome and surrounding sentences below
+  // are translated.
+
+  var collator = (typeof Intl !== 'undefined' && Intl.Collator)
+    ? new Intl.Collator('da') : null;
+  function byLabel(a, b) {
+    return collator ? collator.compare(a.label, b.label)
+                    : (a.label < b.label ? -1 : a.label > b.label ? 1 : 0);
+  }
+  function byRefs(a, b) { return b.refs - a.refs || byLabel(a, b); }
+
+  var PAGE = 60;
+  var letter = null;          // null = "Alle"
+  var shown = 0;
+  var filtered = ALL.slice().sort(byRefs);
+  var countEl = document.querySelector('.results-count');
+  var moreBtn = document.getElementById('js-person-more');
+
+  // "Liste" (cards, paginated via Vis flere) vs "Tabel" (flat, sortable,
+  // every filtered row at once) — same switcher pattern as cart.html's own
+  // Liste/Tabel toggle. Persisted per page, like the diary list/grid toggle.
+  var layout = (function () {
+    try { return localStorage.getItem('persons-layout-en') || 'list'; } catch (e) { return 'list'; }
+  })();
+  var GENDER_SORT = { 'Mandlig': '1', 'Kvindelig': '2', 'Endnu ubestemt': '3' };
+  var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [
+    { key: 'select', label: '', sortable: false,
+      html: function (p) { return '<label class="result-card__select"><input type="checkbox" data-cart-type="person" data-cart-rid="' +
+        esc(p.rid) + '" data-cart-label="' + esc(p.label) + '"></label>'; } },
+    { key: 'rid', label: 'ID',
+      html: function (p) { return '<a class="data-table__id-link" href="persons_en.html?reg=' +
+        esc(p.rid) + '">' + esc(p.rid) + '</a>'; } },
+    { key: 'label', label: 'Name', value: function (p) { return p.label; } },
+    { key: 'nationality', label: 'Nationality',
+      value: function (p) { return (p.nationality || []).map(function (k) { return natLabels[k] || k; }).join(', '); } },
+    { key: 'gender', label: 'Gender', value: function (p) { return p.gender || ''; },
+      sortValue: function (p) { return GENDER_SORT[p.gender] || '9'; } },
+    { key: 'role', label: 'Role / Occupation', value: function (p) { return (p.role || []).join(', '); } },
+    { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
+  ], { initialSort: 'refs', initialDir: 'desc',
+       afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
+
+  function card(p) {
+    var meta = 'PERSON REGISTER' + (p.desc ? ' · ' + esc(p.desc) : '');
+    return '<div class="result-row">' +
+      '<label class="result-card__select"><input type="checkbox" ' +
+      'data-cart-type="person" data-cart-rid="' + esc(p.rid) + '" data-cart-label="' + esc(p.label) + '"></label>' +
+      '<a href="persons_en.html?reg=' + esc(p.rid) + '" class="result-card result-card--list" ' +
+      'style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">' +
+      '<div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">' + esc(p.rid) + '</div>' +
+      '<div style="flex:1"><div class="result-card__title" style="font-size:0.95rem">' + esc(p.label) + '</div>' +
+      '<div class="result-card__meta">' + meta + '</div></div>' +
+      '<div style="min-width:70px;text-align:right;font-size:0.78rem;color:var(--color-text-muted)">' + p.refs + ' refs.</div></a>' +
+      '</div>';
+  }
+
+  function renderMore() {
+    var next = filtered.slice(shown, shown + PAGE);
+    grid.insertAdjacentHTML('beforeend', next.map(card).join(''));
+    shown += next.length;
+    moreBtn.style.display = shown < filtered.length ? '' : 'none';
+    if (typeof Cart !== 'undefined') Cart.syncCheckboxes(grid);
+  }
+
+  // The "Vælg alle" checkbox always means "every currently FILTERED person",
+  // not just the ones rendered so far — ticking it on 223 French persons
+  // with only 60 on screen should add all 223, not the visible 60. Its own
+  // tri-state (checked / unchecked / indeterminate) reflects how much of
+  // that filtered set is already in the cart.
+  var selectAllCb = document.getElementById('js-select-all');
+  function updateSelectAll() {
+    if (!selectAllCb || typeof Cart === 'undefined') return;
+    if (!filtered.length) { selectAllCb.checked = false; selectAllCb.indeterminate = false; return; }
+    var inCount = 0;
+    for (var i = 0; i < filtered.length; i++) if (Cart.has('person', filtered[i].rid)) inCount++;
+    selectAllCb.checked = inCount === filtered.length;
+    selectAllCb.indeterminate = inCount > 0 && inCount < filtered.length;
+  }
+  if (selectAllCb) {
+    selectAllCb.addEventListener('change', function () {
+      if (selectAllCb.checked) {
+        if (filtered.length > 100 &&
+            !confirm('Add all ' + filtered.length.toLocaleString('en-US') + ' persons to the cart?')) {
+          selectAllCb.checked = false;
+          return;
+        }
+        Cart.addMany(filtered.map(function (p) { return { type: 'person', rid: p.rid, label: p.label }; }));
+      } else {
+        Cart.removeMany(filtered.map(function (p) { return { type: 'person', rid: p.rid }; }));
+      }
+      Cart.syncCheckboxes(grid);
+    });
+  }
+  // wireCheckboxes() already ran once, above — only the subscription is
+  // list-view-specific here.
+  if (typeof Cart !== 'undefined') Cart.subscribe(updateSelectAll);
+
+  function emptyStateHtml() {
+    return '<div class="empty-state" style="padding:var(--sp7) var(--sp5);text-align:center;' +
+      'background:var(--color-surface-2);border:1px dashed var(--color-border);border-radius:var(--radius)">' +
+      '<div style="font-size:1.05rem;font-weight:500;margin-bottom:var(--sp3)">No persons match your selection.</div>' +
+      '<div style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
+      'Reset to see the whole Person Register again.</div>' +
+      '<button type="button" class="chip" id="js-empty-reset" ' +
+      'style="cursor:pointer;background:var(--color-accent);color:#fff;border-color:var(--color-accent);padding:6px 14px">' +
+      'Reset filter</button></div>';
+  }
+
+  // Render one page of results. Called by FacetEngine on every change, and
+  // by the alphabet bar through setPrefilter — the two compose rather than
+  // overwrite each other, so "K" + "Fransk" narrows to both.
+  function render(rows, st) {
+    filtered = rows.slice().sort(letter ? byLabel : byRefs);
+    if (countEl) {
+      var note = '';
+      if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— letter ' + letter + '</span>';
+      if (st && st.active) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' +
+        st.active + ' facet' + (st.active === 1 ? '' : 's') + '</span>';
+      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('en-US') +
+        '</strong> persons in the Person Register' + note;
+    }
+    updateNationLink();
+    grid.innerHTML = '';
+    shown = 0;
+    if (filtered.length === 0) {
+      grid.innerHTML = emptyStateHtml();
+      moreBtn.style.display = 'none';
+      var resetBtn = document.getElementById('js-empty-reset');
+      if (resetBtn) resetBtn.addEventListener('click', resetAll);
+      updateSelectAll();
+      return;
+    }
+    if (layout === 'table' && tableView) {
+      moreBtn.style.display = 'none';
+      tableView.render(filtered);
+    } else {
+      renderMore();
+    }
+    updateLetterAvailability();
+    updateSelectAll();
+  }
+
+  // Offer the nation.html mashup once the reader has narrowed Nationalitet
+  // to a single value — "Tysk" ticked here lists German *persons*, while
+  // nation.html additionally shows German places and the Tyskland entry
+  // itself. Only for a single ticked nationality: with two or more there is
+  // no one nation to link to, and "Uoplyst" names no nation at all.
+  function updateNationLink() {
+    var host = document.getElementById('js-nation-link');
+    if (!host || typeof NationLink === 'undefined') return;
+    var checked = document.querySelectorAll(
+      '.facet-panel input[data-facet="nationality"]:checked:not([data-facet-empty])');
+    if (checked.length !== 1) { host.innerHTML = ''; return; }
+    var key = checked[0].getAttribute('data-match');
+    NationLink.mount(host, NationLink.byKey(key),
+      'You are filtering by ' + (natLabels[key] || key));
+  }
+
+  // Dim alphabet chips that have no hits under the current facet selection.
+  // Uses the engine's facet-only matcher, not its output: the output is
+  // already narrowed by the letter prefilter and so cannot say which *other*
+  // letters are still reachable.
+  function updateLetterAvailability() {
+    if (!bar || !facets) return;
+    var passesFacets = facets.matcher();
+    var counts = {};
+    for (var i = 0; i < ALL.length; i++) {
+      if (passesFacets(ALL[i])) counts[ALL[i].init] = 1;
+    }
+    bar.querySelectorAll('a.chip').forEach(function (chip) {
+      var l = chip.getAttribute('data-letter');
+      if (!l) return;
+      var has = !!counts[l];
+      chip.style.opacity = has ? '' : '0.35';
+      chip.style.pointerEvents = has ? '' : 'none';
+      chip.title = has ? '' : 'No persons under the selected facets';
+    });
+  }
+
+  // Drop the page's own filter state (active letter + the prefilter the
+  // engine is holding) without rendering. The caller renders once afterwards.
+  function clearLocalState() {
+    letter = null;
+    if (bar) {
+      bar.querySelectorAll('a.chip').forEach(function (x, i) {
+        x.style.background = i === 0 ? 'var(--color-accent)' : '';
+        x.style.color = i === 0 ? '#fff' : '';
+      });
+    }
+    if (facets) facets.setPrefilter(null, true);
+  }
+
+  // Full reset from the empty-state button: facets, letter, everything.
+  function resetAll() {
+    if (!facets) return;
+    facets.reset(true);
+    clearLocalState();
+    facets.apply();
+  }
+
+  // Build the alphabet bar from the initials that actually occur.
+  var bar = document.getElementById('js-alpha-bar');
+  if (bar) {
+    var present = {};
+    ALL.forEach(function (p) { present[p.init] = true; });
+    var order = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ#'.split('').filter(function (l) { return present[l]; });
+    var chips = [{ l: null, t: 'All' }].concat(order.map(function (l) { return { l: l, t: l }; }));
+    chips.forEach(function (ch) {
+      var a = document.createElement('a');
+      a.href = '#';
+      a.className = 'chip';
+      a.textContent = ch.t;
+      if (ch.l) a.setAttribute('data-letter', ch.l);
+      a.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        letter = ch.l;
+        bar.querySelectorAll('a.chip').forEach(function (x) { x.style.background = ''; x.style.color = ''; });
+        a.style.background = 'var(--color-accent)';
+        a.style.color = '#fff';
+        facets.setPrefilter(letter ? function (p) { return p.init === letter; } : null);
+      });
+      if (ch.l === null) { a.style.background = 'var(--color-accent)'; a.style.color = '#fff'; }
+      bar.appendChild(a);
+    });
+  }
+
+  moreBtn.addEventListener('click', renderMore);
+
+  var layoutSwitcher = document.getElementById('js-person-layout-switcher');
+  function syncLayoutButtons() {
+    if (!layoutSwitcher) return;
+    layoutSwitcher.querySelectorAll('[data-layout]').forEach(function (b) {
+      b.classList.toggle('layout-switcher__btn--active', b.getAttribute('data-layout') === layout);
+    });
+  }
+  syncLayoutButtons();
+  if (layoutSwitcher) {
+    layoutSwitcher.addEventListener('click', function (ev) {
+      var btn = ev.target.closest('[data-layout]');
+      if (!btn) return;
+      layout = btn.getAttribute('data-layout');
+      try { localStorage.setItem('persons-layout-en', layout); } catch (e) {}
+      syncLayoutButtons();
+      facets.apply();
+    });
+  }
+
+  var facets = FacetEngine.create({
+    panel: document.querySelector('.facet-panel'),
+    items: ALL,
+    accessors: {
+      nationality: function (p) { return p.nationality; },
+      gender: function (p) { return p.gender; },
+      role: function (p) { return p.role; }
+    },
+    labels: {
+      nationality: function (k) { return natLabels[k] || k; }
+    },
+    sortKeys: {
+      nationality: function (k) { return natLabels[k] || k; },
+      // Fast rækkefølge frem for antal/alfabet: "Endnu ubestemt" hører
+      // logisk sidst, uanset hvor stor gruppen er.
+      gender: function (k) {
+        return ({ 'Mandlig': '1', 'Kvindelig': '2', 'Endnu ubestemt': '3' })[k] || '9';
+      }
+    },
+    onReset: clearLocalState,
+    onChange: render
+  });
+
+  // Cross-page facet activation — e.g. index.html's "Hvem › Kvinder" link
+  // goes to persons.html?gender=Kvindelig. The gender checkboxes are
+  // rendered synchronously inside FacetEngine.create() (renderSources()),
+  // so they already exist in the DOM by this point; checking one here
+  // before the first apply() means the page opens already filtered,
+  // without an extra unfiltered render+refilter round-trip.
+  var urlGender = new URLSearchParams(location.search).get('gender');
+  if (urlGender) {
+    var genderBox = document.querySelector(
+      '.facet-panel input[data-facet="gender"][data-match="' + urlGender.replace(/"/g, '') + '"]');
+    if (genderBox) genderBox.checked = true;
+  }
+
+  facets.apply();
+})();
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>
