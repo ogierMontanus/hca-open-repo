@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Overview — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="works.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="works_en.html" class="active">EN</a>
+    </div>
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" style="margin-bottom:var(--sp3)">
+        <a href="index_en.html" style="color:rgba(255,255,255,0.7)">← Simple view</a>
+      </nav>
+      <h1>H.C. Andersen's Diary Register</h1>
+      <p>Register overview — 2,177 diary pages and 16,444 register entries spread across three work registers and two name registers.</p>
+    </div>
+  </section>
+
+  <!-- Row 1: Three wings (VÆRK-REGISTER sub-divisions) -->
+  <section class="section">
+    <div class="container">
+      <div class="detail-with-sideacc">
+       <div>
+      <h2 class="section-title">
+        <span class="section-title__icon">
+          <span class="icon-cluster">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg>
+          </span>
+        </span>
+        Work Register
+      </h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
+
+        <a href="billedkunst.html" class="wing-card">
+          <span class="wing-card__icon">
+            <span class="icon-cluster">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-sculpture"></use></svg>
+            </span>
+          </span>
+          <h3>Visual Art</h3>
+          <p>Paintings, drawings, sculptures and museum collections</p>
+          <div class="wing-card__subs">
+            <span>Paintings and Drawings <em>587</em></span>
+            <span>Sculpture <em>315</em></span>
+            <span>Museums and Collections <em>39</em></span>
+          </div>
+          <div class="wing-card__stats">941 entries · 1,436 diary refs.</div>
+        </a>
+
+        <a href="teater-musik.html" class="wing-card">
+          <span class="wing-card__icon">
+            <span class="icon-cluster">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-mask"></use></svg>
+            </span>
+          </span>
+          <h3>Theatre &amp; Music</h3>
+          <p>Operas, plays, ballets and instrumental music</p>
+          <div class="wing-card__subs">
+            <span>Operas &amp; Singspiele <em>241</em></span>
+            <span>Plays — Other Authors <em>747</em></span>
+            <span>Plays &amp; Opera Librettos — HCA <em>57</em></span>
+            <span>Ballets <em>80</em></span>
+            <span>Vocal &amp; Instrumental Music <em>135</em></span>
+          </div>
+          <div class="wing-card__stats">1,257 entries · 3,711 diary refs.</div>
+        </a>
+
+        <a href="bibliotek.html" class="wing-card">
+          <span class="wing-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg></span>
+          <h3>Library</h3>
+          <p>Fairy tales, poems, novels, non-fiction and periodicals</p>
+          <div class="wing-card__subs">
+            <span>H.C. Andersen — Fairy Tales <em>288</em></span>
+            <span>H.C. Andersen — Poems <em>342</em></span>
+            <span>Other Authors — Play texts <em>747</em> (→ Theatre)</span>
+            <span>Other Authors — Poems, Novels… <em>578</em></span>
+          </div>
+          <div class="wing-card__stats">1,510 entries · 6,048 diary refs.</div>
+        </a>
+
+      </div>
+       </div>
+
+       <!-- Right-margin accordion: current section + three others (Who · What · Where · When) -->
+       <aside class="side-acc" aria-label="Other entry points">
+         <a href="persons_en.html" class="side-acc__panel side-acc__panel--hvem">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg><span class="side-acc__tab-word">Who</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg>Who</div>
+             <div class="side-acc__count">10,228 persons · 39,361 refs.</div>
+             <ul class="side-acc__list">
+               <li>Artists</li>
+               <li>Women</li>
+               <li>Royalty &amp; nobility</li>
+             </ul>
+             <div class="side-acc__examples">Edvard Collin · Jenny Lind</div>
+           </div>
+         </a>
+         <a href="works_en.html" class="side-acc__panel side-acc__panel--hvad side-acc__panel--active" aria-current="page">
+           <div class="side-acc__tab"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span><span class="side-acc__tab-word">What</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span>What</div>
+             <div class="side-acc__count">3,708 register entries · 11,195 refs.</div>
+             <ul class="side-acc__list">
+               <li>Theatre &amp; Music</li>
+               <li>Visual Art</li>
+               <li>Library</li>
+             </ul>
+             <div class="side-acc__examples">Fairy tales, Ballets, Operas, Sculptures …</div>
+           </div>
+         </a>
+         <a href="places.html" class="side-acc__panel side-acc__panel--hvor">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg><span class="side-acc__tab-word">Where</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg>Where</div>
+             <div class="side-acc__count">2,508 places · 18,849 refs.</div>
+             <ul class="side-acc__list">
+               <li>Cities</li>
+               <li>Countries</li>
+               <li>Rivers</li>
+             </ul>
+             <div class="side-acc__examples">Berlin · Rome · Paris · Weimar …</div>
+           </div>
+         </a>
+         <a href="diaries.html" class="side-acc__panel side-acc__panel--hvornaar">
+           <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg><span class="side-acc__tab-word">When</span></div>
+           <div class="side-acc__body">
+             <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-calendar"></use></svg>When</div>
+             <div class="side-acc__count">1825–1875 · 50 years of diaries</div>
+             <ul class="side-acc__list">
+               <li>Years of mentions</li>
+               <li>Period boundaries</li>
+             </ul>
+             <div class="side-acc__examples">1805–1875 · 1,446 events</div>
+           </div>
+         </a>
+       </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 2: Flat registers + Diary -->
+  <section class="section section--light section--border-top" style="padding-top:var(--sp8);padding-bottom:var(--sp8)">
+    <div class="container">
+      <h2 class="section-title">Name Registers &amp; Diaries</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
+
+        <a href="persons_en.html" class="dimension-card">
+          <h3>Person Register</h3>
+          <p>10,228 persons · 39,361 diary refs.</p>
+          <p style="font-size:0.78rem;color:var(--color-text-muted);margin-top:6px">
+            Edvard Collin · Martin R. Henriques · Moritz G. Melchior …
+          </p>
+        </a>
+
+        <a href="places.html" class="dimension-card">
+          <h3>Place Register</h3>
+          <p>2,508 places · 18,849 diary refs.</p>
+          <p style="font-size:0.78rem;color:var(--color-text-muted);margin-top:6px">
+            Copenhagen · Paris · Rome · Dresden · Odense …
+          </p>
+        </a>
+
+        <a href="diaries.html" class="dimension-card">
+          <h3>Diaries</h3>
+          <p>2,177 diary pages · 69,405 recorded references</p>
+          <p style="font-size:0.78rem;color:var(--color-text-muted);margin-top:6px">
+            Vols. I–XII · 1825–1875 · full text
+          </p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Row 3: Explorer tools -->
+  <section class="section section--border-top" style="padding-top:var(--sp8);padding-bottom:var(--sp8)">
+    <div class="container">
+      <h2 class="section-title">Explore</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp4);margin-top:var(--sp4)">
+        <a href="search.html" class="dimension-card">
+          <h3>Search</h3>
+          <p>Full-text and register search across all entries and diaries</p>
+        </a>
+        <a href="#" class="dimension-card">
+          <h3>Timeline</h3>
+          <p>Navigate the diaries by year and historical period</p>
+        </a>
+        <a href="#" class="dimension-card">
+          <h3>Map</h3>
+          <p>Geographic connections — travel routes, mentioned places</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Developed by citizen scientists in collaboration with
+    <a href="https://www.sdu.dk/hca" style="color:inherit">the H.C. Andersen Centre, University of Southern Denmark, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Our sources</a>
+  </div>
+</footer>
+
+<!-- works_en.html is the "What" overview page — pure navigation to the three
+     wings, no individual results of its own, so only the badge is wired
+     (no Cart.wireCheckboxes(): there's nothing here for it to catch). -->
+<script src="js/cart.js"></script>
+<script>
+  if (typeof Cart !== 'undefined') Cart.mountBadge(document.getElementById('js-cart-badge'));
+</script>
+</body>
+</html>
