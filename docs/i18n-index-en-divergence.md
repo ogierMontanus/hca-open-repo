@@ -2,6 +2,9 @@
 
 Status: current · 2026-08-24
 
+See `docs/i18n-todo.md` for overall translation progress and the
+remaining-pages list.
+
 ## What happened
 
 `index_en.html` was created early in the site's history (see

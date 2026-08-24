@@ -2,6 +2,10 @@
 
 Princip fastlagt 2026-06-03.
 
+Arkitekturvalg for selve oversættelsen (fulde `_en.html`-duplikater pr.
+side, ikke et delt runtime sprog-lag) samt status og resterende sider:
+se `docs/i18n-todo.md`.
+
 ## Hovedregel
 
 **Når den danske version af websitet vises, skal danske stavninger
