@@ -13,32 +13,6 @@
       text-decoration: none; white-space: nowrap; vertical-align: middle; line-height: 1.7;
     }
     .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
-
-    /* #js-detail-sidebar now carries Beskrivelse/Værker/Hyppigste steder/
-       Se alt under [nationalitet] as well as the original Autoritetslinks/
-       Brevveksling/Biografiske opslag blocks, so it's routinely taller than
-       the viewport. .entity-sidebar's default (shared with person.html,
-       place.html, entry.html -- not touched here) makes the WHOLE column
-       stick as one rigid block, which only reads well while everything
-       fits on screen at once. Overridden here, scoped to this page's
-       sidebar only: the column itself scrolls normally, and Beskrivelse
-       (second in the DOM: sbDesc + sbH + sbExtra) plus any Autoritetslinks/
-       Brevveksling/Biografiske opslag .info-block--enriched card get their
-       own sticky positioning, stacked together via stackSidebarSticky() in
-       the script below, so both stay in view while Værker/Hyppigste
-       steder/Se alt scroll past underneath. */
-    #js-detail-sidebar { position: static; }
-    #js-detail-sidebar .info-block--sticky {
-      position: sticky; top: calc(var(--header-height) + 16px);
-      background: var(--color-surface);
-    }
-    /* Stays in view alongside Beskrivelse while Værker/Hyppigste steder/Se
-       alt scroll past underneath -- top is set per-instance by
-       stackSidebarSticky() below, since it depends on Beskrivelse's
-       rendered height (variable per person). */
-    #js-detail-sidebar .info-block--enriched {
-      position: sticky;
-    }
   </style>
 </head>
 <body data-section="hvem">
@@ -53,11 +27,6 @@
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
-    <div class="lang-switch">
-      <a href="persons.html" class="active">DA</a>
-      <span style="color:var(--color-border)">|</span>
-      <a href="persons_en.html">EN</a>
-    </div>
     <!-- Filled by Cart.mountBadge() — js/cart.js. Empty (hidden) markup here
          degrades to nothing if cart.js fails to load. -->
     <span id="js-cart-badge"></span>
@@ -315,31 +284,6 @@
     });
   }
 
-  // Stacks the sidebar's two sticky blocks (Beskrivelse, then any
-  // Autoritetslinks/Brevveksling/Biografiske opslag .info-block--enriched
-  // cards) so both stay in view together while Værker/Hyppigste steder/Se
-  // alt scroll past underneath. Plain CSS can't do this on its own: giving
-  // every sticky sibling the same `top` makes each later one ride up and
-  // overlap the one(s) above it once scrolled far enough, because `top` is
-  // resolved independently per element. Beskrivelse's length varies a lot
-  // (41 chars median, 437 max across the register), so a fixed guessed
-  // offset would overlap for longer descriptions -- this measures the
-  // actual rendered height instead and re-runs on resize, since narrower
-  // viewports rewrap Beskrivelse's text to a different height.
-  function stackSidebarSticky(sidebar) {
-    var descEl = sidebar.querySelector('.info-block--sticky');
-    var enriched = sidebar.querySelectorAll('.info-block--enriched');
-    if (!descEl || !enriched.length) return;
-    function apply() {
-      var baseTop = parseFloat(getComputedStyle(descEl).top) || 0;
-      var gap = parseFloat(getComputedStyle(sidebar).rowGap) || 0;
-      var top = baseTop + descEl.offsetHeight + gap;
-      enriched.forEach(function (el) { el.style.top = top + 'px'; });
-    }
-    apply();
-    window.addEventListener('resize', apply);
-  }
-
   // wireCheckboxes() registers one delegated document-level listener — it
   // must run exactly once per page load regardless of which branch below
   // renders (list view's own .result-card__select boxes, or the detail
@@ -408,17 +352,6 @@
     // Dagbogsreferencer). Only genuinely-added data gets a sidebar block.
     // See docs/data-model/detail-page-redundancy.md.
     var sb = document.getElementById('js-detail-sidebar');
-    // sbDesc (Beskrivelse) and sbExtra (Værker, Hyppigste steder, Se alt
-    // under [nationalitet]) are built separately so sbH's Autoritetslinks/
-    // Brevveksling/Biografiske opslag blocks can be spliced in second,
-    // right after Beskrivelse: sbDesc + sbH + sbExtra. Both sbDesc and the
-    // .info-block--enriched blocks inside sbH are sticky (see the
-    // #js-detail-sidebar rules in this page's own <style> block); Værker/
-    // Hyppigste steder/Se alt (sbExtra) scroll normally underneath.
-    // sbH's own DOM write is deferred to the end of this block (it used to
-    // happen immediately) so all three can be combined into one innerHTML set.
-    var sbDesc = '';
-    var sbExtra = '';
     if (sb) {
       var sbH = '';
       if (p.wd) {
@@ -428,21 +361,6 @@
           '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) + '" target="_blank" rel="noopener" ' +
           'style="display:flex;align-items:center;gap:6px"><span class="wd-badge">wd:' + esc(p.wd) + '</span>' +
           '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
-      }
-      // Brevveksling — verificeret link til andersen.sdu.dk's Brevbasen
-      // (adskilt fra dette registers egne dagbogsindekser). Kun udfyldt for
-      // personer, der er hånd-verificeret i
-      // data/curated/breve_person_crosswalk.csv — se
-      // docs/data-model/correspondence-integration.md §2-4. Eksternt link,
-      // følger docs/external-links.md.
-      if (p.breve) {
-        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Brevveksling' +
-          '<span class="info-block__tag">tilføjet</span></div>' +
-          '<div class="info-block__body" style="font-size:0.82rem">' +
-          '<a class="external-link" href="' + esc(p.breve.url) + '" target="_blank" rel="noopener noreferrer">' +
-          (p.breve.letters ? 'Se ' + p.breve.letters + ' breve ' : 'Se brevveksling ') + 'hos H.C. Andersen Centret' +
-          '<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (åbner i nyt faneblad)</span></a>' +
-          '</div></div>';
       }
       // Biografiske opslag — søgelinks, ikke identifikationer. Kun udfyldt
       // når personen IKKE har et autoritetslink ovenfor (se bio_search_links()
@@ -464,19 +382,31 @@
         });
         sbH += '</div></div></div>';
       }
+      sb.innerHTML = sbH;
     }
 
     // Main content
     var mainH = '';
 
-    // Beskrivelse — moved into the sidebar (was the top of the main column)
-    // and kept individually sticky: it's short and identifying, the same
-    // role Biografiske opslag already plays below it, so it stays in view
-    // while the longer Værker/Hyppigste steder lists scroll past underneath.
-    // See the #js-detail-sidebar override in this page's own <style> block.
     if (p.description) {
-      sbDesc += '<div class="info-block--sticky"><h2 class="section-title">Beskrivelse</h2>' +
-        '<p style="font-size:0.92rem;line-height:1.75">' + esc(p.description) + '</p></div>';
+      mainH += '<div><h2 class="section-title">Beskrivelse</h2>' +
+        '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' + esc(p.description) + '</p></div>';
+    }
+
+    // ── Nation-krydslink ───────────────────────────────────────────────────
+    // Second block from the top, above Værker / Hyppigste steder: from a
+    // German person, offer every German person *and* place in one view. A
+    // person can carry two nationalities (czekisk-dansk) — show one link per
+    // nationality rather than picking a winner. Emits nothing when the person
+    // has none, or when nation-index.js is absent.
+    if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
+      p.nationalities.forEach(function (key) {
+        var info = NationLink.byKey(key);
+        if (info) {
+          mainH += NationLink.html(info, esc(p.label) + ' er registreret som ' +
+            info.label.toLowerCase());
+        }
+      });
     }
 
     // Works by this person
@@ -505,7 +435,8 @@
           '<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;' +
           'letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:8px">' +
           esc(h3) + ' <span style="opacity:0.7">(' + items.length + ')</span></div>' +
-          '<ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;font-size:0.88rem">';
+          '<ul style="list-style:none;padding:0;margin:0;display:grid;' +
+          'grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 16px;font-size:0.88rem">';
         items.slice(0, 12).forEach(function (w) {
           wBlock += '<li><a href="' + esc(EntityRefs.workHrefByRid(w.rid)) +
             '" style="color:var(--color-text)">' + esc(w.title) + '</a>' +
@@ -514,7 +445,7 @@
         if (items.length > 12) wBlock += '<li style="color:var(--color-text-muted);font-style:italic">+ ' + (items.length - 12) + ' yderligere</li>';
         wBlock += '</ul></div>';
       });
-      sbExtra += wBlock + '</div>';
+      mainH += wBlock + '</div>';
     }
 
     // Top co-occurring places
@@ -531,28 +462,7 @@
           '" class="chip chip--place" style="font-size:0.82rem">' +
           esc(lab) + ' <span style="opacity:0.7;font-size:0.74rem">· ' + n + '</span></a>';
       });
-      sbExtra += plH + '</div></div>';
-    }
-
-    // ── Nation-krydslink ("Se alt under [nationalitet]") ───────────────────
-    // Last of the four moved blocks: from a German person, offer every
-    // German person *and* place in one view. A person can carry two
-    // nationalities (czekisk-dansk) — show one link per nationality rather
-    // than picking a winner. Emits nothing when the person has none, or
-    // when nation-index.js is absent.
-    if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
-      p.nationalities.forEach(function (key) {
-        var info = NationLink.byKey(key);
-        if (info) {
-          sbExtra += NationLink.html(info, esc(p.label) + ' er registreret som ' +
-            info.label.toLowerCase());
-        }
-      });
-    }
-
-    if (sb) {
-      sb.innerHTML = sbDesc + sbH + sbExtra;
-      stackSidebarSticky(sb);
+      mainH += plH + '</div></div>';
     }
 
     // Diary references
@@ -560,8 +470,8 @@
       '<div class="results-header">' +
       '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
       '<div class="layout-switcher" id="person-diary-switcher">' +
-      '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">☰ Liste</button>' +
-      '<button class="layout-switcher__btn" data-layout="table">▦ Tabel</button>' +
+      '<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>' +
+      '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>' +
       '</div></div>' +
       '<div class="result-grid" id="person-diary"></div>' +
       '<div style="text-align:center;margin-top:var(--sp5)">' +
@@ -574,12 +484,7 @@
     var dGrid = document.getElementById('person-diary');
     var dSummary = document.getElementById('person-diary-summary');
     var dSwitcher = document.getElementById('person-diary-switcher');
-    // A stale 'grid' value from before this switcher moved to Liste/Tabel
-    // (or from a painting/sculpture page, which still writes 'grid' but under
-    // its own 'diary-layout-visual' key) should not leave neither button
-    // marked active on a page that no longer offers Gitter.
-    function normalizeSavedLayout(v) { return (v === 'table' || v === 'list') ? v : 'list'; }
-    var savedLayout = (function () { try { return normalizeSavedLayout(localStorage.getItem('diary-layout')); } catch (e) { return 'list'; } })();
+    var savedLayout = (function () { try { return localStorage.getItem('diary-layout') || 'table'; } catch (e) { return 'table'; } })();
     var diaryResult = (typeof DiaryWire !== 'undefined') ? DiaryWire.refs(dGrid, urlReg, {
       pageSize: 24, layout: savedLayout,
       moreBtn: document.getElementById('person-diary-more'),
@@ -661,7 +566,7 @@
   // every filtered row at once) — same switcher pattern as cart.html's own
   // Liste/Tabel toggle. Persisted per page, like the diary list/grid toggle.
   var layout = (function () {
-    try { return localStorage.getItem('persons-layout') || 'list'; } catch (e) { return 'list'; }
+    try { return localStorage.getItem('persons-layout') || 'table'; } catch (e) { return 'table'; }
   })();
   var GENDER_SORT = { 'Mandlig': '1', 'Kvindelig': '2', 'Endnu ubestemt': '3' };
   var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [

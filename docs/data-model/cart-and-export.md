@@ -337,7 +337,23 @@ Added a second, "Tabel": a single flat table across all four types
 reverse), using the same `.layout-switcher` markup/CSS every diary-
 reference section on the site already uses, so it needed no new component,
 just a new pair of buttons. Persisted the same way as those (`localStorage`,
-falls back to `'list'` silently if storage is unavailable).
+falls back to **`'table'`** if storage is unavailable or unset).
+
+**Brugerpræference (2026-08-19):** every Liste/Gitter toggle on the site
+(persons.html's and place.html's and work.html's diary-reference sections,
+the legacy person.html) had its Gitter option dropped in favor of the same
+Liste/Tabel pattern cart.html already used — Tabel replaces Gitter, not
+Liste, and Tabel is now the *default* view everywhere a reader hasn't
+already saved a preference. `billedkunst.html` is the one deliberate
+exception: it never had a Gitter view to begin with (browsing artwork by
+cover thumbnail doesn't fit a flat table the way a diary-reference list
+does), so its `works-layout` default stays `'list'` — see the comment
+above `var layout` in `js/category-catalogue.js` for the wing-conditional
+default that implements this, since billedkunst/bibliotek/teater-musik
+share one `localStorage` key. `diaries.html` (Liste/Tabel/Kalender/
+Tidslinje) was left at its existing Liste default — it never had a Gitter
+option either, and its default isn't persisted the same way the other
+pages' is, so changing it was judged out of scope for this sweep.
 
 **The PDF export defaults to the table regardless of which view is
 selected on screen** — denser and easier to scan for a large cart than a
