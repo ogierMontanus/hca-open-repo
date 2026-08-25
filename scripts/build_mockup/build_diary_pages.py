@@ -58,6 +58,19 @@ H1_LINK = {
     "VÆRK-REGISTER":   "../work.html",
 }
 
+H1_SLUG = {
+    "PERSON-REGISTER": "person",
+    "STED-REGISTER":   "sted",
+    "VÆRK-REGISTER":   "vaerk",
+}
+
+# A group over this many entries folds behind a "Vis N flere" toggle (see
+# .fold-toggle in css/style.css and its click handler in js/nav.js) —
+# same threshold nation.html uses for the same reason: a page can name
+# 40+ persons (Pag080351: 43), and rendering every one unfolded would push
+# the sidebar into a very long scroll for what's usually a skim.
+FOLD_LIMIT = 10
+
 
 def page_id(vol: str, page: str) -> str:
     vn = VOL_NUM.get(vol, 0)
@@ -200,14 +213,8 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
             by_h1[e["h1"]].append((eid, e))
 
     # Build entity refs HTML
-    ref_blocks = []
-    for h1 in ["PERSON-REGISTER", "STED-REGISTER", "VÆRK-REGISTER"]:
-        items = by_h1.get(h1, [])
-        if not items:
-            continue
-        chip_cls = H1_CHIP.get(h1, "")
-        base = H1_LINK[h1]
-        list_html = "\n".join(
+    def ref_items_html(items, base, chip_cls):
+        return "\n".join(
             f'<div class="entity-ref-item">'
             f'<a href="{html.escape(base)}?reg={html.escape(eid)}" class="chip {chip_cls}">'
             f'{html.escape(e["label"])}</a>'
@@ -216,10 +223,30 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
             f'</div>'
             for eid, e in items
         )
+
+    ref_blocks = []
+    for h1 in ["PERSON-REGISTER", "STED-REGISTER", "VÆRK-REGISTER"]:
+        items = by_h1.get(h1, [])
+        if not items:
+            continue
+        chip_cls = H1_CHIP.get(h1, "")
+        base = H1_LINK[h1]
+        if len(items) <= FOLD_LIMIT:
+            list_html = f'<div class="entity-ref-list">{ref_items_html(items, base, chip_cls)}</div>'
+        else:
+            visible, rest = items[:FOLD_LIMIT], items[FOLD_LIMIT:]
+            fold_id = f"fold-{pid}-{H1_SLUG[h1]}"
+            more_label = f"Vis {len(rest)} flere"
+            list_html = (
+                f'<div class="entity-ref-list">{ref_items_html(visible, base, chip_cls)}</div>'
+                f'<div class="entity-ref-list" id="{fold_id}" hidden>{ref_items_html(rest, base, chip_cls)}</div>'
+                f'<button type="button" class="fold-toggle" data-target="{fold_id}" '
+                f'data-more="{html.escape(more_label)}" data-less="Vis færre">{html.escape(more_label)}</button>'
+            )
         ref_blocks.append(
             f'<div class="entity-ref-group">'
             f'<h4>{H1_LABEL[h1]} ({len(items)})</h4>'
-            f'<div class="entity-ref-list">{list_html}</div>'
+            f'{list_html}'
             f'</div>'
         )
 

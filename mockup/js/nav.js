@@ -82,4 +82,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  /* Fold toggle — "Vis N flere" / "Vis færre". Delegated (not bound per
+     button) so it also covers buttons added after DOMContentLoaded, e.g.
+     nation.html's client-rendered lists. See the .fold-toggle CSS comment
+     in css/style.css for the markup contract. */
+  document.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.fold-toggle');
+    if (!btn) return;
+    var target = document.getElementById(btn.getAttribute('data-target'));
+    if (!target) return;
+    var willShow = target.hidden;
+    target.hidden = !willShow;
+    btn.textContent = willShow ? btn.getAttribute('data-less') : btn.getAttribute('data-more');
+  });
+
 });

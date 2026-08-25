@@ -674,6 +674,13 @@ body[data-section="hvor"] .page-hero {
    (above), so its chips read as a vertical list within that column
    rather than a wrapped horizontal run. */
 .entity-ref-list { display: flex; flex-direction: column; gap: var(--sp3); align-items: flex-start; }
+/* Without this, [hidden] does nothing here: the display:flex rule above
+   always wins over the UA stylesheet's [hidden] { display: none }
+   regardless of specificity (same fix nation.html's .nation-grid[hidden]
+   already needed, for the same reason — see its comment). The fold
+   toggle in js/nav.js relies on the hidden attribute actually hiding
+   the folded items. */
+.entity-ref-list[hidden] { display: none; }
 .entity-ref-item { display: flex; align-items: center; gap: var(--sp2); }
 .entity-ref-item__rel {
   font-size: 0.7rem; color: var(--color-text-muted); font-style: italic;
@@ -712,6 +719,30 @@ body[data-section="hvor"] .page-hero {
 .entity-layout--diary {
   grid-template-columns: minmax(320px, 1fr) minmax(380px, 50%);
 }
+
+/* === Fold toggle ===
+   Shared "Vis N flere" / "Vis færre" expand button — reveals a hidden
+   sibling by id via the delegated click handler in js/nav.js. Originally
+   nation.html-only (as .nation-fold-toggle, client-rendered); generalized
+   here so the diary-page Registerposter columns (server-rendered at build
+   time by build_diary_pages.py) can use the exact same behaviour instead
+   of a second copy of the click handler. Markup contract:
+     <div class="…">…first N items…</div>
+     <div id="{targetId}" hidden>…remaining items…</div>
+     <button type="button" class="fold-toggle" data-target="{targetId}"
+             data-more="Vis N flere" data-less="Vis færre">Vis N flere</button> */
+.fold-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin: var(--sp3) 0 var(--sp2);
+  padding: 5px 12px;
+  font: inherit; font-size: 0.78rem; font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.fold-toggle:hover { background: var(--color-accent-light); border-color: var(--color-accent); }
 
 /* === Info Block === */
 .info-block {
