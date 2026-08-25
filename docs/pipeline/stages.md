@@ -84,6 +84,8 @@ This is the "Excel-MVP" referenced throughout the meeting notes — a prototype 
 
 Schema in [`docs/data-model/wemi-and-relations.md`](../data-model/wemi-and-relations.md) (entity + relation layer) and [`docs/data-model/star-schema.md`](../data-model/star-schema.md) (dimensions + facts). The database is a derived artifact: it supports full-text search and multi-hop traversal beyond what the Excel MVP can deliver, but the Power Pivot model remains the authoritative model definition until the web back-end exists.
 
+The concrete PostgreSQL OLTP schema draft for this stage is being continued in [`nosql-hca-open-repo`](https://github.com/ogiermontanus/nosql-hca-open-repo) — see [`docs/data-model/postgresql-migration.md`](../data-model/postgresql-migration.md) for the signpost.
+
 ## Stage extension: language tagging
 
 `scripts/parsers/add_language_column.py` runs on any Stage-2 output and appends `probable_language` (ISO 639-1) and `language_confidence` columns. It uses `lingua-language-detector`, which is designed for short texts like titles. The language column drives downstream OPAC routing (REX/KB, DNB, BnF, BL, Libris, etc.).
