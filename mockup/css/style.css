@@ -654,13 +654,26 @@ body[data-section="hvor"] .page-hero {
 .chip--theme   { background: var(--color-theme-bg);   color: var(--color-theme); }
 .chip--inst    { background: var(--color-accent-light); color: var(--color-accent); }
 
-/* === Entity References === */
-.entity-refs { display: flex; flex-direction: column; gap: var(--sp6); }
+/* === Entity References ===
+   Used exclusively by the diary-page Registerposter block (persons.html/
+   place.html/work.html have their own, unrelated sidebar markup), so
+   these classes are free to assume that context. One column per H1 group
+   (Personer/Steder/Værker) rather than one long stacked list — a busy
+   page can carry 40+ references, and a single column of them would push
+   the sidebar into an very long scroll. auto-fit collapses gracefully to
+   fewer columns when a page has fewer groups, or on a narrower viewport. */
+.entity-refs {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  align-items: start; gap: var(--sp5) var(--sp4);
+}
 .entity-ref-group h4 {
   font-size: 0.74rem; font-weight: 700; letter-spacing: 0.09em;
   text-transform: uppercase; color: var(--color-text-muted); margin-bottom: var(--sp3);
 }
-.entity-ref-list { display: flex; flex-wrap: wrap; gap: var(--sp2); align-items: center; }
+/* Column, not wrapped row: each group now owns a grid column of its own
+   (above), so its chips read as a vertical list within that column
+   rather than a wrapped horizontal run. */
+.entity-ref-list { display: flex; flex-direction: column; gap: var(--sp3); align-items: flex-start; }
 .entity-ref-item { display: flex; align-items: center; gap: var(--sp2); }
 .entity-ref-item__rel {
   font-size: 0.7rem; color: var(--color-text-muted); font-style: italic;
@@ -668,13 +681,11 @@ body[data-section="hvor"] .page-hero {
 }
 .entity-ref-item__rel:hover { color: var(--color-accent); text-decoration: underline; }
 
-/* Diary pages' Registerposter block sits in the 290px .entity-sidebar
-   column (moved there so Dagbogsmetadata/Bladr i dagbøgerne can sit
-   under the diary text in the wider main column instead). A long
-   person/work chip label — "Güldencrone, Isabella, Baronesse, f. Bülow
-   (1796–1873)" — plus its Reg-id no longer fit side by side at that
-   width, so here they stack, and the chip itself is allowed to wrap
-   rather than overflow the column. */
+/* Diary pages' Registerposter block sits in the .entity-sidebar column.
+   A long person/work chip label — "Güldencrone, Isabella, Baronesse, f.
+   Bülow (1796–1873)" — plus its Reg-id no longer fit side by side at a
+   single grid column's width, so here they stack, and the chip itself is
+   allowed to wrap rather than overflow the column. */
 .entity-sidebar .entity-ref-item {
   flex-direction: column; align-items: flex-start; gap: 2px;
 }
@@ -689,6 +700,17 @@ body[data-section="hvor"] .page-hero {
 .entity-sidebar {
   display: flex; flex-direction: column; gap: var(--sp4);
   position: sticky; top: calc(var(--header-height) + 16px);
+}
+
+/* Diary pages only (persons.html/place.html/work.html keep the base 290px
+   .entity-layout — their sidebars hold a couple of short cards, not a
+   variable-length list of references). A page can carry anywhere from a
+   handful to 40+ registerposter, so the sidebar here gets real, flexible
+   width — up to half the content column — instead of a fixed narrow one,
+   so the Personer/Steder/Værker columns above have room to actually show
+   three columns side by side rather than immediately collapsing to one. */
+.entity-layout--diary {
+  grid-template-columns: minmax(320px, 1fr) minmax(380px, 50%);
 }
 
 /* === Info Block === */

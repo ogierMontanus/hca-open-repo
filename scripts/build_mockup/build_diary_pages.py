@@ -310,7 +310,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 
   <section class="section">
     <div class="container">
-      <div class="entity-layout">
+      <div class="entity-layout entity-layout--diary">
 
         <div class="entity-main">
 {diary_section}
