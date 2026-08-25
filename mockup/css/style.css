@@ -668,6 +668,18 @@ body[data-section="hvor"] .page-hero {
 }
 .entity-ref-item__rel:hover { color: var(--color-accent); text-decoration: underline; }
 
+/* Diary pages' Registerposter block sits in the 290px .entity-sidebar
+   column (moved there so Dagbogsmetadata/Bladr i dagbøgerne can sit
+   under the diary text in the wider main column instead). A long
+   person/work chip label — "Güldencrone, Isabella, Baronesse, f. Bülow
+   (1796–1873)" — plus its Reg-id no longer fit side by side at that
+   width, so here they stack, and the chip itself is allowed to wrap
+   rather than overflow the column. */
+.entity-sidebar .entity-ref-item {
+  flex-direction: column; align-items: flex-start; gap: 2px;
+}
+.entity-sidebar .entity-ref-item .chip { white-space: normal; }
+
 /* === Entity Page Layout === */
 .entity-layout {
   display: grid; grid-template-columns: 1fr 290px;

@@ -316,12 +316,23 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 {diary_section}
 
           <div>
-            <h2 class="section-title">Registerposter</h2>
-            <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp5)">
-              {len(entity_ids)} registerposter knyttet til {html.escape(pid)}
-            </p>
-            <div class="entity-refs">
-{refs_html}
+            <h2 class="section-title">Dagbogsmetadata</h2>
+            <table class="info-table">
+              <tr><td>ID</td><td>{html.escape(pid)}</td></tr>
+              <tr><td>Bind</td><td>{html.escape(vol)}</td></tr>
+              <tr><td>Side</td><td>{html.escape(page)}</td></tr>
+              <tr><td>Dato</td><td>{html.escape(date_str)}</td></tr>
+              <tr><td>Tekst</td><td>{"Ja" if has_text else "Ikke transskriberet"}</td></tr>
+              <tr><td>Registerposter</td><td>{len(entity_ids)}</td></tr>
+            </table>
+          </div>
+
+          <div>
+            <h2 class="section-title">Bladr i dagbøgerne</h2>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:0.83rem">
+              {prev_link}
+              {next_link}
+              <a href="../diaries.html" style="margin-top:6px;font-size:0.8rem;color:var(--color-text-muted)">Alle dagbogsider</a>
             </div>
           </div>
 
@@ -330,25 +341,14 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
         <aside class="entity-sidebar">
 
           <div class="info-block">
-            <div class="info-block__header">Dagbogsmetadata</div>
+            <div class="info-block__header">Registerposter</div>
             <div class="info-block__body">
-              <table class="info-table">
-                <tr><td>ID</td><td>{html.escape(pid)}</td></tr>
-                <tr><td>Bind</td><td>{html.escape(vol)}</td></tr>
-                <tr><td>Side</td><td>{html.escape(page)}</td></tr>
-                <tr><td>Dato</td><td>{html.escape(date_str)}</td></tr>
-                <tr><td>Tekst</td><td>{"Ja" if has_text else "Ikke transskriberet"}</td></tr>
-                <tr><td>Registerposter</td><td>{len(entity_ids)}</td></tr>
-              </table>
-            </div>
-          </div>
-
-          <div class="info-block">
-            <div class="info-block__header">Bladr i dagbøgerne</div>
-            <div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.83rem">
-              {prev_link}
-              {next_link}
-              <a href="../diaries.html" style="margin-top:6px;font-size:0.8rem;color:var(--color-text-muted)">Alle dagbogsider</a>
+              <p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+                {len(entity_ids)} registerposter knyttet til {html.escape(pid)}
+              </p>
+              <div class="entity-refs">
+{refs_html}
+              </div>
             </div>
           </div>
 
