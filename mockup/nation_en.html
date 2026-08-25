@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,15 +103,15 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">HCA Open Repository</a>
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
     <form class="search-form" role="search" onsubmit="return false">
-      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
-      <button type="submit" class="search-btn">Søg</button>
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
     </form>
     <div class="lang-switch">
-      <a href="nation.html" class="active">DA</a>
+      <a href="nation.html">DA</a>
       <span style="color:var(--color-border)">|</span>
-      <a href="nation_en.html">EN</a>
+      <a href="nation_en.html" class="active">EN</a>
     </div>
   </div>
 </header>
@@ -121,14 +121,14 @@
   <div class="page-hero page-hero--sm">
     <div class="container">
       <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
-        <a href="index.html">Forside</a>
+        <a href="index_en.html">Home</a>
         <span class="breadcrumb__sep">›</span>
         <span class="breadcrumb__current">Nation</span>
       </nav>
-      <h1 id="js-h1">Vælg en nation</h1>
-      <p id="js-sub">Personer, steder — og efterhånden værker — der matcher en given etnisk/national beskrivelse.</p>
+      <h1 id="js-h1">Choose a nation</h1>
+      <p id="js-sub">Persons, places — and eventually works — that match a given ethnic/national description.</p>
       <div class="nation-picker">
-        <label for="js-nation-select" style="font-size:0.82rem;opacity:0.85">Nation / etnicitet:</label>
+        <label for="js-nation-select" style="font-size:0.82rem;opacity:0.85">Nation / ethnicity:</label>
         <select id="js-nation-select"></select>
       </div>
       <!-- Which sub-identities this umbrella covers, so the grouping is
@@ -143,25 +143,25 @@
 
       <div id="js-country-section" class="nation-section" style="display:none">
         <div class="nation-section__header">
-          <span class="nation-section__title">Nationen selv</span>
+          <span class="nation-section__title">The nation itself</span>
         </div>
         <div id="js-country-card" class="nation-grid"></div>
       </div>
 
       <div class="nation-section">
         <div class="nation-section__header">
-          <span class="nation-section__title">Personer</span>
+          <span class="nation-section__title">Persons</span>
           <span id="js-persons-count" class="nation-section__count"></span>
           <div class="layout-switcher" id="js-persons-layout-switcher" style="margin-left:auto">
-            <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
-            <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+            <button class="layout-switcher__btn" data-layout="list" type="button">☰ List</button>
+            <button class="layout-switcher__btn" data-layout="table" type="button">▦ Table</button>
           </div>
         </div>
         <p class="nation-section__note">
-          Personer hvis registeropslag indledes med denne beskrivelse
-          (fx »<em>Svensk</em> rejsende, Italien 1834.«) — se
+          Persons whose register entry opens with this description
+          (e.g. »<em>Swedish</em> traveller, Italy 1834.«) — see
           <code>docs/data-model/person-ethnic-descriptors.md</code>
-          for hvordan disse er udtrukket.
+          for how these are extracted.
         </p>
         <div id="js-persons-certain-wrap">
           <div id="js-persons-certain"></div>
@@ -169,14 +169,14 @@
         </div>
 
         <div id="js-persons-possible-wrap">
-          <div class="nation-subgroup__label">Muligvis — nævnt længere inde i beskrivelsen</div>
+          <div class="nation-subgroup__label">Possibly — mentioned further into the description</div>
           <p class="nation-section__note">
-            Her optræder beskrivelsen ikke som opslagets første ord, og kan
-            i stedet beskrive en ægtefælle, slægtning eller institution
-            frem for personen selv (fx »g. m. <em>svensk</em>
-            Premierløjtnant« — beskriver ægtefællen). Vist til manuel
-            vurdering, ikke slået sammen med listen ovenfor — heller ikke
-            i Tabel-visningen.
+            Here the description doesn't appear as the entry's first word,
+            and may instead describe a spouse, relative, or institution
+            rather than the person themselves (e.g. »m. to a <em>Swedish</em>
+            First Lieutenant« — describes the spouse). Shown for manual
+            review, not merged with the list above — not in the Table
+            view either.
           </p>
           <div id="js-persons-possible"></div>
           <div id="js-persons-possible-table" style="display:none"></div>
@@ -185,18 +185,18 @@
 
       <div class="nation-section">
         <div class="nation-section__header">
-          <span class="nation-section__title">Steder</span>
+          <span class="nation-section__title">Places</span>
           <span id="js-places-count" class="nation-section__count"></span>
           <div class="layout-switcher" id="js-places-layout-switcher" style="margin-left:auto">
-            <button class="layout-switcher__btn" data-layout="list" type="button">☰ Liste</button>
-            <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
+            <button class="layout-switcher__btn" data-layout="list" type="button">☰ List</button>
+            <button class="layout-switcher__btn" data-layout="table" type="button">▦ Table</button>
           </div>
         </div>
         <p class="nation-section__note">
-          Andre stedregisterposter hvis koordinater falder inden for
-          denne nation (se <code>country_da</code> i
-          <code>mockup/data/places-extra.js</code>) — kun ca. 18 % af
-          Stedregistret har koordinater endnu, så listen er ufuldstændig.
+          Other place-register entries whose coordinates fall within
+          this nation (see <code>country_da</code> in
+          <code>mockup/data/places-extra.js</code>) — only about 18 % of
+          the Place Register has coordinates yet, so the list is incomplete.
         </p>
         <div id="js-places"></div>
         <div id="js-places-table" style="display:none"></div>
@@ -204,45 +204,47 @@
 
       <div class="nation-section">
         <div class="nation-section__header">
-          <span class="nation-section__title">Værker</span>
+          <span class="nation-section__title">Works</span>
           <span id="js-works-count" class="nation-section__count"></span>
         </div>
 
-        <div class="nation-subgroup__label">På dette sprog</div>
+        <div class="nation-subgroup__label">In this language</div>
         <p class="nation-section__note">
-          Værker hvis <em>titel er skrevet på sproget</em> — en anden
-          oplysning end de to lister nedenfor. Et tysksproget værk kan
-          udmærket have en dansk forfatter (og omvendt), så disse er
-          bevidst holdt adskilt fra »af kunstnere fra denne nation« og
-          aldrig lagt sammen med dem. Sproget er <strong>udledt</strong>
-          af titlen, ikke registreret af redaktørerne: værker mærket
-          <span class="lang-src lang-src--register">register</span> er
-          dem registret selv angav som oversættelser, mens
-          <span class="lang-src lang-src--derived">udledt</span> er
-          maskinbestemt — se
+          Works whose <em>title is written in the language</em> — a
+          different signal from the two lists below. A German-language
+          work can easily have a Danish author (and vice versa), so
+          these are deliberately kept separate from "by artists from
+          this nation" and never merged with them. The language is
+          <strong>derived</strong> from the title, not recorded by the
+          editors: works marked
+          <span class="lang-src lang-src--register">register</span> are
+          ones the register itself stated as translations, while
+          <span class="lang-src lang-src--derived">derived</span> is
+          machine-determined — see
           <code>scripts/build_mockup/detect_work_language.py</code>.
         </p>
         <div id="js-works-by-lang"></div>
 
-        <div class="nation-subgroup__label">Af kunstnere fra denne nation</div>
+        <div class="nation-subgroup__label">By artists from this nation</div>
         <div id="js-works-by-author"></div>
 
-        <div class="nation-subgroup__label">Med handling i denne nation</div>
+        <div class="nation-subgroup__label">Set in this nation</div>
         <div id="js-works-at-place"></div>
 
         <div class="nation-todo" style="margin-top:var(--sp5)">
-          <strong>Sådan er de tre lister fundet.</strong> »På dette sprog«
-          kommer fra <code>detect_work_language.py</code>, som kun mærker
-          en titel når den er lang nok og bestemmelsen er sikker nok —
-          1.250 af 3.708 værker er mærket, resten står bevidst umærkede
-          frem for at blive gættet forkert. »Af kunstnere« matcher
-          værkets <code>author</code>-felt mod personerne ovenfor (samme
-          navne-opløsning som <code>work.html</code> bruger). »Med
-          handling i« matcher kun værker hvis titel har en parentetisk
-          stedangivelse, der selv findes i Stedregistret (fx »Den
-          mediceiske Venus (Uffizi, Firenze)«). Et værk kan optræde i
-          flere af listerne — det er netop pointen med at holde dem
-          adskilt.
+          <strong>How the three lists are found.</strong> "In this
+          language" comes from <code>detect_work_language.py</code>,
+          which only tags a title when it is long enough and the
+          determination is confident enough — 1,250 of 3,708 works are
+          tagged, the rest are deliberately left untagged rather than
+          guessed wrong. "By artists" matches the work's
+          <code>author</code> field against the persons above (the same
+          name resolution <code>work.html</code> uses). "Set in" only
+          matches works whose title has a parenthetical place mention
+          that itself exists in the Place Register (e.g. »The Medici
+          Venus (Uffizi, Florence)«). A work can appear in more than one
+          of the lists — that's precisely the point of keeping them
+          separate.
         </div>
       </div>
 
@@ -253,9 +255,9 @@
 
 <footer class="site-footer">
   <div class="container">
-    Udarbejdet af citizen scientists i samarbejde med
-    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
-    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+    Developed by citizen scientists in collaboration with
+    <a href="https://www.sdu.dk/hca" style="color:inherit">the H. C. Andersen Centre, University of Southern Denmark, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Our sources</a>
   </div>
 </footer>
 
@@ -280,9 +282,9 @@
   var select = document.getElementById('js-nation-select');
 
   if (!NI) {
-    document.getElementById('js-h1').textContent = 'Data ikke bygget endnu';
+    document.getElementById('js-h1').textContent = 'Data not built yet';
     document.getElementById('js-sub').textContent =
-      'mockup/data/nation-index.js mangler. Kør scripts/build_mockup/build_nation_index.py.';
+      'mockup/data/nation-index.js is missing. Run scripts/build_mockup/build_nation_index.py.';
     return;
   }
 
@@ -296,6 +298,11 @@
     return n.persons_certain.length + n.persons_possible.length + n.places_in_country.length;
   }
 
+  // Nation/ethnicity labels stay in Danish (NATION_INDEX only carries
+  // label_da — no label_en exists in the source data yet). Per
+  // docs/i18n-policy.md, falling back to the Danish form on the English
+  // page is acceptable until a translation field is available; only the
+  // surrounding UI chrome is translated here.
   var keys = Object.keys(NI).sort(function (a, b) {
     return NI[a].label_da.localeCompare(NI[b].label_da, 'da');
   });
@@ -307,23 +314,23 @@
     opt.textContent = n.label_da + ' (' + total + ')';
     if (total < MIN_HITS) {
       opt.disabled = true;
-      opt.textContent += ' — for få træf';
+      opt.textContent += ' — too few hits';
     }
     select.appendChild(opt);
   });
 
-  // Tabel view for Personer/Steder — the same flat/sortable pattern as
+  // Table view for Persons/Places — the same flat/sortable pattern as
   // persons.html and places.html, kept to a single table each (persons_certain
   // and persons_possible stay in SEPARATE tables, never merged into one
-  // dataset — see the "ikke slået sammen" note above the possible-list, which
-  // the Tabel view honours just as the card view does).
+  // dataset — see the "not merged" note above the possible-list, which
+  // the Table view honours just as the card view does).
   var personsCertainTable = null, personsPossibleTable = null, placesTable = null;
   function renderPersonsTable(container, getCtrl, setCtrl, rids) {
     if (typeof TableView === 'undefined') return;
     var ctrl = getCtrl();
     if (!ctrl) {
       ctrl = TableView.create(container, [
-        { key: 'label', label: 'Navn',
+        { key: 'label', label: 'Name',
           html: function (rid) {
             var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
             return '<a class="data-table__id-link" href="persons.html?reg=' + esc(rid) + '">' +
@@ -333,7 +340,7 @@
             var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
             return p ? p.label : rid;
           } },
-        { key: 'desc', label: 'Beskrivelse',
+        { key: 'desc', label: 'Description',
           value: function (rid) {
             var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
             return p && p.description ? p.description : '';
@@ -352,7 +359,7 @@
     if (typeof TableView === 'undefined') return;
     if (!placesTable) {
       placesTable = TableView.create(document.getElementById('js-places-table'), [
-        { key: 'label', label: 'Navn',
+        { key: 'label', label: 'Name',
           html: function (rid) {
             var p = typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[rid];
             return '<a class="data-table__id-link" href="place.html?reg=' + esc(rid) + '">' +
@@ -362,7 +369,7 @@
             var p = typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[rid];
             return p ? p.label : rid;
           } },
-        { key: 'desc', label: 'Beskrivelse',
+        { key: 'desc', label: 'Description',
           value: function (rid) {
             var p = typeof PLACES_EXTRA !== 'undefined' && PLACES_EXTRA[rid];
             return p && p.description ? p.description : '';
@@ -380,7 +387,7 @@
   function personCard(rid) {
     var p = (typeof PERSONS_EXTRA !== 'undefined') ? PERSONS_EXTRA[rid] : null;
     var label = p ? p.label : rid;
-    var meta = p && p.description ? esc(p.description) : 'PERSON-REGISTER';
+    var meta = p && p.description ? esc(p.description) : 'PERSON REGISTER';
     return '<a href="persons.html?reg=' + esc(rid) + '" class="result-card">' +
       '<div class="result-card__body">' +
       '<div class="result-card__title">' + esc(label) + '</div>' +
@@ -391,7 +398,7 @@
   function placeCard(rid) {
     var p = (typeof PLACES_EXTRA !== 'undefined') ? PLACES_EXTRA[rid] : null;
     var label = p ? p.label : rid;
-    var meta = p && p.description ? esc(p.description) : 'STED-REGISTER';
+    var meta = p && p.description ? esc(p.description) : 'PLACE REGISTER';
     return '<a href="place.html?reg=' + esc(rid) + '" class="result-card">' +
       '<div class="result-card__body">' +
       '<div class="result-card__title">' + esc(label) + '</div>' +
@@ -406,7 +413,7 @@
     if (showLangSrc && w.langMethod) {
       var isReg = w.langMethod === 'register';
       badge = ' <span class="lang-src lang-src--' + (isReg ? 'register' : 'derived') + '">' +
-        (isReg ? 'register' : 'udledt') + '</span>';
+        (isReg ? 'register' : 'derived') + '</span>';
     }
     return '<a href="work.html?reg=' + esc(rid) + '" class="result-card">' +
       '<div class="result-card__body">' +
@@ -416,10 +423,10 @@
       '</div></a>';
   }
 
-  // Any card grid over FOLD_LIMIT folds behind a "Vis N flere" toggle rather
-  // than rendering in full — the goal is overview: a person scanning Fransk
+  // Any card grid over FOLD_LIMIT folds behind a "Show N more" toggle rather
+  // than rendering in full — the goal is overview: a person scanning French
   // should see ten certain persons and a clear "there's more", not 223 cards
-  // pushing Steder and Værker off the bottom of the screen. Folded by
+  // pushing Places and Works off the bottom of the screen. Folded by
   // default; expand/collapse toggles the hidden attribute in place, wired
   // once via delegation below rather than per render() call.
   var FOLD_LIMIT = 10;
@@ -429,12 +436,12 @@
       return '<div class="nation-grid">' + items.map(cardFn).join('') + '</div>';
     }
     var id = 'nf' + (foldSeq++);
-    var moreLabel = 'Vis ' + (items.length - FOLD_LIMIT) + ' flere';
+    var moreLabel = 'Show ' + (items.length - FOLD_LIMIT) + ' more';
     return '<div class="nation-grid">' + items.slice(0, FOLD_LIMIT).map(cardFn).join('') + '</div>' +
       '<div class="nation-grid" id="' + id + '" hidden>' +
       items.slice(FOLD_LIMIT).map(cardFn).join('') + '</div>' +
       '<button type="button" class="nation-fold-toggle" data-target="' + id + '" ' +
-      'data-more="' + esc(moreLabel) + '" data-less="Vis færre">' + esc(moreLabel) + '</button>';
+      'data-more="' + esc(moreLabel) + '" data-less="Show fewer">' + esc(moreLabel) + '</button>';
   }
   document.addEventListener('click', function (ev) {
     var btn = ev.target.closest('.nation-fold-toggle');
@@ -473,7 +480,7 @@
         .map(function (u) { return NI[u].label_da; });
       return '<div class="nation-sub"><span>' + esc(m.label) + '</span>' +
         '<span class="nation-sub__count">' + m[field].length + '</span>' +
-        (also.length ? '<span class="nation-sub__also">også under ' +
+        (also.length ? '<span class="nation-sub__also">also under ' +
           esc(also.join(', ')) + '</span>' : '') + '</div>' +
         foldableGrid(m[field], cardFn);
     }).join('');
@@ -490,12 +497,12 @@
 
     document.getElementById('js-h1').textContent = n.label_da;
     document.getElementById('js-sub').textContent =
-      'Personer, steder og værker forbundet med "' + n.label_da + '" (' + n.category + ').';
+      'Persons, places and works connected to "' + n.label_da + '" (' + n.category + ').';
 
     var memEl = document.getElementById('js-nation-members');
     var mem = (n.members || []).filter(function (m) { return m.key !== key; });
     memEl.innerHTML = mem.length
-      ? '<span style="font-size:0.72rem;opacity:0.7;align-self:center">Samler:</span>' +
+      ? '<span style="font-size:0.72rem;opacity:0.7;align-self:center">Combines:</span>' +
         mem.map(function (m) {
           return '<span class="nation-members__chip">' + esc(m.label) + '</span>';
         }).join('')
@@ -511,9 +518,9 @@
     }
 
     document.getElementById('js-persons-count').textContent =
-      n.persons_certain.length + ' sikre · ' + n.persons_possible.length + ' mulige';
+      n.persons_certain.length + ' certain · ' + n.persons_possible.length + ' possible';
     renderByMember(document.getElementById('js-persons-certain'), n, 'persons_certain',
-      personCard, 'Ingen personer fundet med denne beskrivelse som første ord.');
+      personCard, 'No persons found with this description as the first word.');
     renderPersonsTable(document.getElementById('js-persons-certain-table'),
       function () { return personsCertainTable; }, function (c) { personsCertainTable = c; },
       n.persons_certain);
@@ -530,13 +537,13 @@
       possibleWrap.style.display = 'none';
     }
 
-    document.getElementById('js-places-count').textContent = n.places_in_country.length + ' steder';
+    document.getElementById('js-places-count').textContent = n.places_in_country.length + ' places';
     renderByMember(document.getElementById('js-places'), n, 'places_in_country',
-      placeCard, 'Ingen andre geokodede steder fundet i denne nation endnu.');
+      placeCard, 'No other geocoded places found in this nation yet.');
     renderPlacesTable(n.places_in_country);
 
     // Works — best-effort client-side hooks via EntityRefs (see the
-    // "Åbent for udvidelse" note above for what these do and don't cover).
+    // "open for extension" note above for what these do and don't cover).
     // Works whose language is this nation's — an independent claim from
     // authorship, so it gets its own list and never merges with the others.
     var byLangEl = document.getElementById('js-works-by-lang');
@@ -544,9 +551,9 @@
     if (typeof WORKS_EXTRA !== 'undefined') {
       byLangCount = renderByMember(byLangEl, n, 'works_in_language', function (rid) {
         return WORKS_EXTRA[rid] ? workCard(rid, WORKS_EXTRA[rid], true) : '';
-      }, 'Ingen værker er sprogbestemt til denne nation.');
+      }, 'No works are language-matched to this nation.');
     } else {
-      byLangEl.innerHTML = '<div class="nation-empty">Kræver works-extra.js.</div>';
+      byLangEl.innerHTML = '<div class="nation-empty">Requires works-extra.js.</div>';
     }
 
     var byAuthorEl = document.getElementById('js-works-by-author');
@@ -561,7 +568,7 @@
       byAuthorCount = byAuthorRids.length;
       byAuthorEl.innerHTML = byAuthorRids.length
         ? foldableGrid(byAuthorRids, function (rid) { return workCard(rid, byAuthor[rid]); })
-        : '<div class="nation-empty">Ingen værker fundet med en forfatter fra denne nations personliste.</div>';
+        : '<div class="nation-empty">No works found with an author from this nation’s person list.</div>';
 
       var atPlace = {};
       var placeIds = n.places_in_country.slice();
@@ -573,14 +580,14 @@
       atPlaceCount = atPlaceRids.length;
       atPlaceEl.innerHTML = atPlaceRids.length
         ? foldableGrid(atPlaceRids, function (rid) { return workCard(rid, atPlace[rid]); })
-        : '<div class="nation-empty">Ingen værker fundet med en stedangivelse i titlen, der matcher denne nation.</div>';
+        : '<div class="nation-empty">No works found with a place mention in the title that matches this nation.</div>';
     } else {
-      byAuthorEl.innerHTML = '<div class="nation-empty">Kræver entity-refs.js og works-extra.js.</div>';
+      byAuthorEl.innerHTML = '<div class="nation-empty">Requires entity-refs.js and works-extra.js.</div>';
       atPlaceEl.innerHTML = '';
     }
     document.getElementById('js-works-count').textContent =
-      byLangCount + ' på sproget · ' + byAuthorCount + ' af kunstnere · ' +
-      atPlaceCount + ' med handling';
+      byLangCount + ' in the language · ' + byAuthorCount + ' by artists · ' +
+      atPlaceCount + ' set here';
 
     var url = new URL(window.location);
     url.searchParams.set('nat', key);
@@ -589,10 +596,10 @@
 
   select.addEventListener('change', function () { render(select.value); });
 
-  // Liste/Tabel switchers for Personer and Steder — independent of each
-  // other (Værker keeps its always-separate three-list card view; merging
-  // those into one flat table would violate the "aldrig lagt sammen" rule
-  // documented above the Værker section, so it has no Tabel toggle).
+  // List/Table switchers for Persons and Places — independent of each
+  // other (Works keeps its always-separate three-list card view; merging
+  // those into one flat table would violate the "never merged" rule
+  // documented above the Works section, so it has no Table toggle).
   function wireLayoutSwitcher(switcherId, storageKey, listEls, tableEls) {
     var el = document.getElementById(switcherId);
     if (!el) return;
