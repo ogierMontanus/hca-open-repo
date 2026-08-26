@@ -1,0 +1,2322 @@
+entity_id,label,category
+Reg0008290,Helsingør,City
+Reg0019620,Slagelse,City
+Reg0010590,Korsør,City
+Reg0002340,Bordeaux,City
+Reg0007040,Garonne,River
+Reg0007780,Göttingen,City
+Reg0007940,Hamburg,City
+Reg0010180,Kiel,City
+Reg0013610,Moskva,City
+Reg0013960,Narva,City
+Reg0018460,Sankt Petersborg,City
+Reg0009560,Italien,Country
+Reg0019900,Sorø,City
+Reg0014510,Norge,Country
+Reg0019520,Skelskør,City
+Reg0010880,København,City
+Reg0015130,Ordrup Kro,Property
+Reg0017580,Roskilde Kro,Property
+Reg0014830,Odense,City
+Reg0017570,Roskilde,City
+Reg0010610,Krebshuset Kro,Property
+Reg0006800,Fyn,Island
+Reg0002670,Bregninge Kirke,Church
+Reg0003950,Christiansminde,Region
+Reg0009060,Hvidkilde,Property
+Reg0009270,Iholm,Island
+Reg0012320,Maegaard,Property
+Reg0018420,Sankt Jørgens Gaard (ved Svendborg),Property
+Reg0020370,Strandhuse (ved Svendborg),Point of interest (POI)
+Reg0020580,Svendborg,City
+Reg0020590,Svendborg Sund,Sea
+Reg0022030,Taasinge (Thorseng),Island
+Reg0024010,Ærø,Island
+Reg0002830,Broholm,Property
+Reg0021340,Thurø,Island
+Reg0006090,Falster,Island
+Reg0008840,Holsten,Region
+Reg0013840,Møen,Island
+Reg0021720,Trave,River
+Reg0021730,Travemünde,City
+Reg0000360,Alsteren,River
+Reg0005460,Elben,River
+Reg0008000,Hannover,City
+Reg0012090,Lübeck,City
+Reg0018930,Schönberg (Mecklenburg),City
+Reg0023260,Wandsbeck,Region
+Reg0000380,Altona,City
+Reg0002620,Braunschweig,City
+Reg0005040,Dresden,City
+Reg0015310,Ottensen,City
+Reg0016440,Prag,City
+Reg0016590,Pöseldorf,Region
+Reg0001800,Bergedorf,Region
+Reg0002020,Bille,River
+Reg0004570,Danmark,Country
+Reg0022880,Vierlandene,Region
+Reg0012110,Lüneburg,City
+Reg0012120,Lüneburger Heide,Region
+Reg0023600,Winsen,City
+Reg0023820,Ülzen,City
+Reg0024180,Aachen,City
+Reg0011320,Leipzig,City
+Reg0002820,Brocken (Bloksbjerg),Mountain
+Reg0008060,Harzen,Region
+Reg0001580,Beinum,City
+Reg0002090,Blankenburg,City
+Reg0007430,Goslar,City
+Reg0009340,Immendorf,City
+Reg0016760,Rammelsberg,Mountain
+Reg0018210,Salzgitter,City
+Reg0018360,Sankt Croix (Vestindien),Island
+Reg0008050,Harzburg,Property
+Reg0014930,Okertal,Region
+Reg0005190,Eckerkrug,Point of interest (POI)
+Reg0009310,Ilse,River
+Reg0009320,Ilsenstein,Point of interest (POI)
+Reg0009330,Ilsethal,Region
+Reg0021970,Tyrol,Region
+Reg0012340,Magdeburg,City
+Reg0001460,Baumannshöhle,Point of interest (POI)
+Reg0005480,Elbingerode,City
+Reg0009590,Jacobsbruch,Region
+Reg0017790,Rübeland,City
+Reg0001990,Bielshöhle,Point of interest (POI)
+Reg0016610,Quedlinburg,City
+Reg0015250,Osterode (Harzen),City
+Reg0017600,Rosstrappe,Point of interest (POI)
+Reg0021150,Teufelsmauer,Mountain
+Reg0002110,Blechhütte,Point of interest (POI)
+Reg0002180,Bode,River
+Reg0000220,Alexisbad,City
+Reg0001830,Berlin,City
+Reg0007150,Gernrode,City
+Reg0008070,Harzgerode,City
+Reg0009630,Jena,City
+Reg0013810,Mägdesprung,City
+Reg0005390,Eisleben,City
+Reg0010340,Kloster-Mansfeld,Region
+Reg0010920,Königerode,City
+Reg0011310,Leimbach,City
+Reg0012500,Mansfeld,City
+Reg0007860,Halle,City
+Reg0020850,Saale,River
+Reg0003900,Christiania,City
+Reg0012980,Merseburg,City
+Reg0002730,Breslau,City
+Reg0010050,Kassel,City
+Reg0012910,Meissen,City
+Reg0015200,Oschatz,City
+Reg0003790,Charlottenlund,City
+Reg0016130,Plauenscher Grund (ved Dresden),Region
+Reg0012200,Lützen,City
+Reg0002450,Boston,City
+Reg0011480,Liebethaler Grund,Mountain
+Reg0011770,Lohmen,City
+Reg0016010,Pillnitz,Property
+Reg0017960,Sachsisk Schweiz,Mountain
+Reg0022190,Uttewalder Grund,Mountain
+Reg0001440,Bastei,Mountain
+Reg0002560,Brand,City
+Reg0008720,Hohnstein,Point of interest (POI)
+Reg0010720,Kuhstall,Point of interest (POI)
+Reg0018710,Schandau,City
+Reg0021140,Teufelsbrücke (i Sachsisk Schweiz),Point of interest (POI)
+Reg0003120,Bøhmen,Region
+Reg0008410,Herrnskretschen,City
+Reg0010270,Kirnitz,River
+Reg0016460,Prebischtor,Mountain
+Reg0023630,"Winterberg, Kleiner",Mountain
+Reg0010020,Karpaterne,Mountain
+Reg0016050,Pirna,City
+Reg0017230,Riesengebirge,Mountain
+Reg0019830,Sonnenstein,Property
+Reg0005600,Elsterwerda,City
+Reg0007610,Grossenhain,City
+Reg0008420,Herzberg (Sachsen),City
+Reg0009850,Jüterbog,City
+Reg0011470,"Liebenwerda, Bad",City
+Reg0023490,Wien,City
+Reg0016410,Potsdam,City
+Reg0004650,Darmstadt,City
+Reg0016490,Preussen,Region
+Reg0003770,charlottenburg,Property
+Reg0006680,Friesack,City
+Reg0010820,Kyritz,City
+Reg0013980,Nauen,City
+Reg0015750,Perleberg,City
+Reg0015830,Pessin,City
+Reg0019920,Spandau,City
+Reg0019990,Spree,River
+Reg0023710,Wusterhausen an der Dosse,City
+Reg0023720,Wustermark,City
+Reg0002260,Boizenburg,City
+Reg0007460,Grabow,City
+Reg0011190,Lauenburg,City
+Reg0011970,Ludwigslust,City
+Reg0012840,Mecklenburg,Region
+Reg0016930,Redefin,City
+Reg0017770,Rusland,Country
+Reg0019220,Sibirien,Region
+Reg0023280,Warnow,River
+Reg0006470,Frankrig,Country
+Reg0015230,Osnabrück,City
+Reg0007100,Genfersøen (Lac Léman),Lake
+Reg0000720,Antvorskov,Property
+Reg0005950,Etterbjerg,Point of interest (POI)
+Reg0019630,Slagelse Lystskov,Region
+Reg0014600,Nyborg,City
+Reg0000490,Amerika (De Forenede Stater),Country
+Reg0008020,Harburg,City
+Reg0003650,Celle,City
+Reg0008170,Heidelberg,City
+Reg0000230,Alfeld,City
+Reg0002890,Brüggen,City
+Reg0005350,Einbeck,City
+Reg0021290,Thiedenwiese,Property
+Reg0008030,Hardenberg,Property
+Reg0013760,Münden,City
+Reg0014550,Northeim,City
+Reg0016170,Plesse,Property
+Reg0023420,Werra,River
+Reg0013930,Napoli,City
+Reg0023570,Wilhelmshöhe,Property
+Reg0023170,Wabern,City
+Reg0003050,Butzbach,City
+Reg0006650,Friedberg,City
+Reg0007240,Giessen,City
+Reg0012540,Marburg,City
+Reg0002310,Bonn,City
+Reg0014910,Offenbach,City
+Reg0012370,Main,River
+Reg0017950,Sachsenhausen,Region
+Reg0012380,Mainz,City
+Reg0008680,Hochheim,City
+Reg0010060,Kastel,City
+Reg0017090,Rhinen,River
+Reg0020400,Strassburg,City
+Reg0001950,Biebrich,Region
+Reg0002040,Bingen,City
+Reg0002330,Boppard,City
+Reg0003630,Caub,City
+Reg0005280,Ehrenbreitstein,Property
+Reg0005510,Elfeld (Eltville),City
+Reg0010410,Koblenz,City
+Reg0019440,Sjælland,Island
+Reg0000610,Andernach,City
+Reg0008550,Hildesheim,City
+Reg0012680,Marne,River
+Reg0012830,Meaux,City
+Reg0015520,Paris,City
+Reg0000730,Antwerpen,City
+Reg0018900,Schweiz,Country
+Reg0019010,Seinen,River
+Reg0008120,"Havre, Le",City
+Reg0020260,Stockholm,City
+Reg0001010,Athen,City
+Reg0022620,Versailles,Property
+Reg0001900,Besançon,City
+Reg0004820,Dijon,City
+Reg0004840,Dôle,City
+Reg0013050,Milano,City
+Reg0019090,Sens,City
+Reg0003750,Champagnole,City
+Reg0007110,Genova,City
+Reg0009830,Jurabjergene,Mountain
+Reg0010550,Konstantinopel,City
+Reg0013320,Montblanc,Mountain
+Reg0016250,Poligny,City
+Reg0007090,Genève (Genf),City
+Reg0017750,Rumænien,Country
+Reg0000310,Alperne,Mountain
+Reg0017150,Rhônen,River
+Reg0019910,Sorø Sø,Lake
+Reg0000920,Arve,River
+Reg0014450,Nordkap,Region
+Reg0018130,Salève,Mountain
+Reg0011200,Lausanne,City
+Reg0012140,Lyon,City
+Reg0022750,Vevey,City
+Reg0004900,Donaueschingen,City
+Reg0004960,Doubs,River
+Reg0007500,Grandson,Property
+Reg0011760,"Locle, Le",City
+Reg0013470,Montpellier,City
+Reg0014100,Neuchâtel (By),City
+Reg0014120,Neuchâteller-Søen,Lake
+Reg0023850,Yverdon,City
+Reg0004370,Cul de Roches (den underjordiske Mølle),Point of interest (POI)
+Reg0002700,"Brenets, Les",City
+Reg0010000,Karlsruhe,City
+Reg0003820,Chaux de Fonds,City
+Reg0004970,Doubs-Faldet,Point of interest (POI)
+Reg0013310,Mont Pouillerel,Mountain
+Reg0023040,Vogeserne,Mountain
+Reg0002740,Brieg,City
+Reg0016080,Pissevache,Point of interest (POI)
+Reg0017140,Rhônedalen,Region
+Reg0018070,Saint-Maurice,City
+Reg0019390,Sion (Sitten),City
+Reg0005980,Europa,Continent
+Reg0019130,Sesto Calende,City
+Reg0019380,Simplon,Mountain
+Reg0004870,Domodossola,City
+Reg0011910,lselle,Point of interest (POI)
+Reg0001490,Baveno,City
+Reg0002420,"Borromeiske Øer, de",Island
+Reg0009540,Isola Bella,Island
+Reg0011040,Lago Maggiore,Lake
+Reg0019810,Somma Lombardo,City
+Reg0005140,"Dyrehaven (ved København), Dyrehavsbakken",Region
+Reg0013390,Monte Rosa,Mountain
+Reg0000750,Apenninerne,Mountain
+Reg0015630,Pavia,City
+Reg0016200,Po,River
+Reg0023050,Voghera,City
+Reg0017470,Ronco all' Adige,City
+Reg0013040,Middelhavet,Sea
+Reg0014580,Novi Ligure,City
+Reg0016810,Rapallo,City
+Reg0021980,Tyskland,Country
+Reg0002360,Borghetto (Ligurien),City
+Reg0003860,Chiavari,City
+Reg0004330,Corsica,Island
+Reg0019150,Sestri Levante,City
+Reg0003510,Carrara,City
+Reg0012350,"Magra, La",River
+Reg0016070,Pisa,City
+Reg0018620,Sarzana,City
+Reg0019950,Spezia-Bugten,Sea
+Reg0011940,Lucca,City
+Reg0012770,Massa,City
+Reg0015990,Pietrasanta,City
+Reg0000880,Arno,River
+Reg0009700,Jerusalem,City
+Reg0023980,Ægypten,Country
+Reg0005430,Elba,Island
+Reg0011690,Livorno,City
+Reg0019930,Spanien,Country
+Reg0006250,Firenze,City
+Reg0016880,Ravenna,City
+Reg0009360,Incisa Valdarno,City
+Reg0011430,Levane,City
+Reg0003580,Castiglion Fiorentino,City
+Reg0021700,Trasimener-Søen,Lake
+Reg0015800,Perugia,City
+Reg0000990,Assisi,City
+Reg0006350,Foligno,City
+Reg0019980,Spoleto,City
+Reg0021360,Tiberen,River
+Reg0014070,Nepi,City
+Reg0021090,Terni,City
+Reg0022460,Velino,River
+Reg0017430,Rom,City
+Reg0015930,Piacenza,City
+Reg0013400,Monte Soratte (Soracte),Mountain
+Reg0019850,Soracte,Mountain
+Reg0021370,Tiberøen,Island
+Reg0022770,Via Appia,Point of interest (POI)
+Reg0000150,Albanerbjergene,Mountain
+Reg0003310,Campagna di Roma,Region
+Reg0006480,Frascati,City
+Reg0015270,Ostia,City
+Reg0003660,Cenci,City
+Reg0007620,Grottaferrata,City
+Reg0013380,Monte Porzio,Mountain
+Reg0021910,Tusculum,Point of interest (POI)
+Reg0000160,Albaner-Søen,Lake
+Reg0000170,Albano Laziale,City
+Reg0000840,Ariccia,City
+Reg0007130,Genzano di Roma,City
+Reg0014050,Nemi,City
+Reg0014060,Nemi-Søen,Lake
+Reg0013330,Monte Cavo,Mountain
+Reg0016240,Polen,Country
+Reg0016310,Ponte Molle,Point of interest (POI)
+Reg0000700,Aniene,River
+Reg0021190,Teverone,Mountain
+Reg0021450,Tivoli (ved Rom),Region
+Reg0017650,Rotterdam,City
+Reg0019200,Sèvres,City
+Reg0022720,Vesuv,Mountain
+Reg0008980,"Hundegrotten (Grotta del Cane, Agnano)",Point of interest (POI)
+Reg0001050,Augsburg,City
+Reg0006200,Fidenæ,Region
+Reg0021490,Tomba di Nerone,Point of interest (POI)
+Reg0003320,Campiglione,City
+Reg0021100,Terracina,City
+Reg0022470,Velletri,City
+Reg0023080,Volsker-Bjergene,Mountain
+Reg0004060,Cisterna,Point of interest (POI)
+Reg0016330,"Pontinske Sumpe, de",Region
+Reg0006370,Fondi,City
+Reg0006390,Formia (Mola di Gaëta),City
+Reg0006900,Gaëta,City
+Reg0011930,ltri,City
+Reg0013190,Mola di Gaëta (Formia),City
+Reg0003480,Capua,City
+Reg0016280,Pompei,Point of interest (POI)
+Reg0003470,Capri,Island
+Reg0009500,Ischia,Island
+Reg0016400,Posillipo-Grotten,Point of interest (POI)
+Reg0019230,Sicilien,Island
+Reg0016500,Procida,City
+Reg0008340,Herculanum,Point of interest (POI)
+Reg0016360,Portici,City
+Reg0017020,Resina,City
+Reg0018270,San Giovanni a Teduccio,City
+Reg0005910,Etna,Mountain
+Reg0021540,Torre Annunziata,City
+Reg0015410,Pagani,City
+Reg0018120,Salerno,City
+Reg0003640,Cava de' Tirreni,City
+Reg0014400,Nocera Superiore,City
+Reg0015400,Paestum,Point of interest (POI)
+Reg0018530,Santa Maria Maggiore (ved Nocera Superiore),Church
+Reg0019020,Sele,River
+Reg0022900,Vietri sul mare,City
+Reg0000450,Amalfi,Region
+Reg0012390,Maiori,City
+Reg0013090,Minori,City
+Reg0016710,Raito,City
+Reg0004250,Conca Marini,City
+Reg0006950,"Galli, Li",Point of interest (POI)
+Reg0012640,Marina di Conca,City
+Reg0000570,Anacapri,City
+Reg0002170,"Blaa Grotte, den (Capri)",Point of interest (POI)
+Reg0007640,Grækenland,Country
+Reg0000080,Agnano-Søen,Lake
+Reg0016420,Pozzuoli,City
+Reg0019780,Solfatara,Point of interest (POI)
+Reg0001120,Averner-Søen,Lake
+Reg0001270,Baia,Point of interest (POI)
+Reg0011950,Lucriner-Søen,Lake
+Reg0013370,Monte Nuovo,Mountain
+Reg0003440,Capo di Miseno,Region
+Reg0018570,Sardinien,Island
+Reg0013360,"Monte della Misericordia, Ischia",Mountain
+Reg0005630,"Elyseiske Marker, de",Region
+Reg0002920,Brüssel (Bruxelles),City
+Reg0003540,Caserta,City
+Reg0018490,Santa Agata,City
+Reg0007030,Garigliano,River
+Reg0010130,Kehl,City
+Reg0011170,Lapland,Region
+Reg0013340,Monte Circeo (Circes Ø),Mountain
+Reg0015420,Palermo,City
+Reg0021510,Torino,City
+Reg0021560,Torre di tre Ponti,Point of interest (POI)
+Reg0001180,Baccano (Boccano?),City
+Reg0017460,Ronciglione,City
+Reg0002300,Bolsena-Søen,Lake
+Reg0022820,Vicenza,City
+Reg0023020,Viterbo,City
+Reg0002290,Bolsena,Lake
+Reg0013440,Montefiascone,City
+Reg0018280,San Lorenzo Nuovo,City
+Reg0000020,Acquapendente,City
+Reg0014570,Novella,City
+Reg0016210,Poderina,City
+Reg0016290,Ponte Centeno,City
+Reg0016670,Radicofani,City
+Reg0017180,Riccorsi,City
+Reg0018310,San Quirico d'Orcia,City
+Reg0019260,Siena,City
+Reg0021570,Torrenieri,City
+Reg0003030,Buonconvento,City
+Reg0016220,Poggibonsi,City
+Reg0020040,Staggia,City
+Reg0003590,Castiglioncello,City
+Reg0013460,Monteroni,City
+Reg0018240,San Casciano in Val di Pesa,City
+Reg0020990,Tavernelle,City
+Reg0006240,Finland,Country
+Reg0011140,Langesø,Lake
+Reg0002280,Bologna,City
+Reg0012470,Malta,Country
+Reg0013750,München,City
+Reg0000050,Adriaterhavet,Sea
+Reg0003180,Caffaggiolo,Property
+Reg0006220,Filigare,City
+Reg0010990,Laca,City
+Reg0013430,Montecarelli,City
+Reg0015980,Pietra Mala,City
+Reg0018680,Scaricalasino,City
+Reg0000250,Algier,City
+Reg0021880,Tunis,City
+Reg0006170,Ferrara,City
+Reg0015390,Padova,City
+Reg0017670,Rovigo,City
+Reg0002720,Brenta,Mountain
+Reg0004850,Dolo,City
+Reg0006780,Fusina,City
+Reg0022550,Venezia,City
+Reg0021780,Triest,City
+Reg0024140,Østrig,Country
+Reg0003350,Candia,City
+Reg0004420,Cypern,Country
+Reg0013510,Morea,Region
+Reg0013670,Murano,Island
+Reg0019160,Settecomuni,Region
+Reg0013420,Montebello,City
+Reg0022610,Verona,City
+Reg0022950,Villanuova,City
+Reg0000140,Ala,City
+Reg0002370,Borghetto all-'Adige,City
+Reg0005920,Etsch (Adige),River
+Reg0005930,Etsch-Dalen,Region
+Reg0017660,Rovereto,City
+Reg0019570,Skotland,Country
+Reg0002510,Bozen (Bolzano),City
+Reg0002590,Branzoll,Property
+Reg0005270,Egna,City
+Reg0005370,Eisack,River
+Reg0011220,Lavis,City
+Reg0014170,Neumarkt (Egna),City
+Reg0018150,Salorno (Salurn),City
+Reg0020900,Talfers,River
+Reg0021760,Trient (Trento),City
+Reg0009410,Innsbruck,City
+Reg0002790,Brixen,City
+Reg0010480,Kollmann,City
+Reg0014800,Ober-Mittewald,City
+Reg0020210,Sterzing,City
+Reg0021180,Teutschen,Region
+Reg0002710,Brenner,Mountain
+Reg0009390,Inn,River
+Reg0020190,Steinnach,City
+Reg0000480,Ambras,Property
+Reg0001740,Benediktbeuern,City
+Reg0009400,Inn-Dalen,Region
+Reg0010420,Kochelsee,Lake
+Reg0012750,Martinswand,Mountain
+Reg0013120,Mittenwald,Point of interest (POI)
+Reg0023200,Walchersee,Lake
+Reg0009480,Isar,River
+Reg0009490,Isar-Dalen,Region
+Reg0011800,Loisach,River
+Reg0019070,Sendling,Region
+Reg0022140,Untersendling,Region
+Reg0002220,Bogenhausen,Region
+Reg0005180,Ebersberg,City
+Reg0023520,Wiesbaden,City
+Reg0001260,Badgastein,City
+Reg0017250,Riga,City
+Reg0020180,Steinhöring,City
+Reg0023330,Wasserburg,City
+Reg0000430,Alz,River
+Reg0006430,Frabertsham,City
+Reg0020840,Saal,City
+Reg0018180,Salzach,River
+Reg0018190,Salzachthal,Region
+Reg0020160,Stein,City
+Reg0020970,Tasching-See,Lake
+Reg0021710,Traun,City
+Reg0018200,Salzburg,City
+Reg0001500,Bayern,Region
+Reg0008220,Hellbrunn,Property
+Reg0007400,Golling,Point of interest (POI)
+Reg0007880,Hallein,City
+Reg0010710,Kuchl,City
+Reg0014900,Ofen (Buda),City
+Reg0015580,Pass Lueg,Mountain
+Reg0011630,Linz,City
+Reg0014160,Neumark,City
+Reg0018780,Schlesien,Region
+Reg0019650,Slesvig (By),City
+Reg0023250,Wallersee,Lake
+Reg0023680,Woigwitz,City
+Reg0011080,Lambach,City
+Reg0018880,Schwanenstadt,City
+Reg0023160,Vöcklabruck,City
+Reg0023390,Wels,City
+Reg0004890,Donau,River
+Reg0005710,Enns,River
+Reg0000540,Amstetten,City
+Reg0005810,Erlauf,City
+Reg0020410,Strengberg,City
+Reg0023380,Weitenegg,Property
+Reg0023810,Ybbs,City
+Reg0014870,Oed,City
+Reg0015770,Perschling,City
+Reg0015960,Pielach,River
+Reg0017210,Ried,City
+Reg0019250,Sieghartskirchen,City
+Reg0006880,Gablitz,City
+Reg0016550,Purkersdorf,City
+Reg0018950,Schönbrunn,Property
+Reg0008530,Hietzing,Region
+Reg0001700,Belvedere (ved Wien),Property
+Reg0009870,Kahlenberg,Mountain
+Reg0009100,Hütteldorf,Region
+Reg0001220,Baden (Storhertugdømme),City
+Reg0015850,Petersgaard,Property
+Reg0004920,Donau-Sletten,Region
+Reg0010350,Klosterneuburg,City
+Reg0011240,Laxenburg,Property
+Reg0011400,Leopoldsberg,Mountain
+Reg0022130,Ungarn,Country
+Reg0023610,Winterberg (ved Wien),City
+Reg0012580,Maria-Zell,City
+Reg0001230,Baden (ved Wien),City
+Reg0014440,Norditalien,Region
+Reg0023780,Währing,Region
+Reg0016790,Randers,City
+Reg0012590,Maribo,City
+Reg0022450,Vejle,City
+Reg0024090,Øresund,Sea
+Reg0023500,Wien (Floden),River
+Reg0005750,Enzersdorf,City
+Reg0009740,Jooephsberg,Mountain
+Reg0010580,Korneuburg,City
+Reg0012430,Malebern,City
+Reg0020250,Stockerau,City
+Reg0008760,Hollabrunn (Ober-Hollabrunn),City
+Reg0009260,Iglau,City
+Reg0013820,Mähren,Region
+Reg0023880,Znaim,City
+Reg0002970,Budwitz,City
+Reg0004530,Dalmatien,Region
+Reg0006630,Freynersdorf,City
+Reg0016700,Ragusa,City
+Reg0018730,Schelletau,River
+Reg0020060,Stannern,City
+Reg0004780,Deutschbrod,City
+Reg0020130,Stecken,City
+Reg0001960,Biecowitz,Region
+Reg0003130,Böhmisch-Brod,Region
+Reg0004430,Czaslau,City
+Reg0009640,Jenikau,City
+Reg0010470,Kolin,City
+Reg0010800,Kuttenberg,City
+Reg0016110,Planian (Planen),City
+Reg0020200,Steinsdorf,City
+Reg0013200,Moldau,River
+Reg0021080,Teplitz,City
+Reg0021900,Turnau,City
+Reg0001730,Benátky,City
+Reg0002570,Brandeis,City
+Reg0011450,Liben,Region
+Reg0023400,Weltrus,City
+Reg0005120,Dux,City
+Reg0005250,Eger,River
+Reg0009970,Karlsbad,City
+Reg0011340,Leitmeritz,City
+Reg0011720,Lobositz,City
+Reg0021270,Theresienstadt,City
+Reg0020170,Steinbad (ved Teplitz),Property
+Reg0010750,Kulm,City
+Reg0000790,Arbesau,City
+Reg0007190,Gesindel,City
+Reg0010950,Königstein,City
+Reg0015870,Peterswalde,City
+Reg0017940,Sachsen (Kongerige),Region
+Reg0018800,Schneekoppe,Mountain
+Reg0001240,Baden-Baden,City
+Reg0021210,Tharandt,City
+Reg0005440,Elbdalen,Region
+Reg0013530,Moritzburg,Property
+Reg0001560,Beelitz,City
+Reg0008040,Hartmannsdorf,City
+Reg0021750,Treuenbrietzen,City
+Reg0023860,Zehlendorf,Region
+Reg0009800,Jungfrau,Mountain
+Reg0023930,Zürich,City
+Reg0012130,Lyngby,City
+Reg0005820,Escheburg,City
+Reg0009890,Kallebodstrand,Region
+Reg0010890,Køge,City
+Reg0011820,Lolland,Island
+Reg0017870,Rønnede,City
+Reg0008360,Herlufsholm,Property
+Reg0014730,Næstved,City
+Reg0020540,Susaaen,River
+Reg0017920,"Raadmandsskoven, Næstved",Region
+Reg0019880,"Sortebrødre, Hovedgaard ved Næstved",Property
+Reg0010030,Karrebæk,Point of interest (POI)
+Reg0001480,Bavelse Sø,Lake
+Reg0008270,Helsingborg,City
+Reg0009050,Hven,Island
+Reg0010080,Kattegat,Sea
+Reg0010690,Kronborg,Property
+Reg0012620,Marienlyst,Property
+Reg0020610,Sverrig,Country
+Reg0005680,Engelholm (Skaane),Property
+Reg0006060,Falkenberg,City
+Reg0006790,Fyllebro,Point of interest (POI)
+Reg0007910,Halmstad,City
+Reg0011020,Lagan,River
+Reg0011060,Laholm,City
+Reg0022350,Varberg,City
+Reg0007750,Göta-Elven,River
+Reg0007760,Göta-Kanalen,River
+Reg0007770,Göteborg,City
+Reg0010870,Kärra,Region
+Reg0021830,Trollhättan,City
+Reg0011510,Lilla Edet,City
+Reg0020680,Syrien,Country
+Reg0010240,Kinnekulle,Mountain
+Reg0011270,Leckö,Property
+Reg0022520,Venern,Lake
+Reg0022530,Venersborg,City
+Reg0002460,Bottensjön,Lake
+Reg0009980,Karlsborg,Property
+Reg0013620,Motala,City
+Reg0013630,Motala-Strømmen,River
+Reg0017680,Roxen,Lake
+Reg0022740,Vettern,Lake
+Reg0023120,Vreta Klosterkirke,Church
+Reg0012940,Mem,City
+Reg0015360,Oxelösund,City
+Reg0020150,Stegeborg,Point of interest (POI)
+Reg0020730,Sävo Sund (Sävsund),Sea
+Reg0024130,Østersøen,Sea
+Reg0004480,Dalarne,Region
+Reg0004830,Djurgården (Stockholm),Region
+Reg0013830,Mälaren,Lake
+Reg0014530,Norrköping,City
+Reg0011580,Limsta,Point of interest (POI)
+Reg0017520,Rosendal (ved Stockholm),Property
+Reg0022150,Uppsala,City
+Reg0004580,"Danmark, Sogn i Uppsala Len",Region
+Reg0006810,Fyrisån,River
+Reg0019290,Sigtuna,City
+Reg0019560,Skokloster,Property
+Reg0020490,Stäket,Property
+Reg0022210,Vaksala,Church
+Reg0006960,Gamla Uppsala,City
+Reg0013500,Mora,City
+Reg0008470,Hessingen (Essingen),City
+Reg0007810,Haga,Region
+Reg0009950,Karlberg,Property
+Reg0019790,Solna,City
+Reg0001660,Belle-Vue (Stockholm),Region
+Reg0003780,Charlottendal,Property
+Reg0004510,Dalkarlsbacka,Region
+Reg0005220,Edet,City
+Reg0005420,Ekolsund,Property
+Reg0005700,Enköping,City
+Reg0009450,Irstad,City
+Reg0010450,Kolbäck,City
+Reg0010960,Köping,City
+Reg0014640,Nykvarn,City
+Reg0022690,Vesterås,City
+Reg0005670,Enebackan,City
+Reg0008960,Hova,City
+Reg0010770,Kumla,City
+Reg0012160,Lyrastad,City
+Reg0012630,Mariestad,City
+Reg0016780,Ramundeboda,Point of interest (POI)
+Reg0023130,Vretstorp,City
+Reg0024080,Örebro,City
+Reg0007870,Halleberg,Mountain
+Reg0009000,Hunneberg,Mountain
+Reg0009020,Husaby,City
+Reg0010780,Kungelf,City
+Reg0011460,Lidköping,City
+Reg0007850,Hallandsås,Region
+Reg0016730,Ramlösa,City
+Reg0019610,Skaane,Region
+Reg0005870,Esrom Sø,Lake
+Reg0006490,Fredensborg,Property
+Reg0007720,Gurre,Point of interest (POI)
+Reg0005860,Esrom Kanal,River
+Reg0006500,Fredensborg Slot,Property
+Reg0006540,Frederiksborg (Hillerød),Property
+Reg0006550,Frederiksborg Slot,Property
+Reg0014740,Nøddebo,City
+Reg0009070,Hyby,Property
+Reg0012450,Malmö,City
+Reg0009110,Häckeberga,Property
+Reg0004520,Dallund,Property
+Reg0012000,Lund,City
+Reg0021580,Torup,Property
+Reg0003160,Börringe Kloster,Property
+Reg0019460,Skabersjö,Property
+Reg0000440,Amager,Island
+Reg0006160,Femern,Island
+Reg0010190,Kielerfjord,Sea
+Reg0002540,Bramstedt,City
+Reg0002680,Breitenburg,Property
+Reg0010140,Kellinghusen,City
+Reg0014180,Neumünster,City
+Reg0009570,Itzehoe,City
+Reg0014700,Nysø,Property
+Reg0023580,"Willenscharen, Holsten",City
+Reg0002100,Blankenese,Region
+Reg0007290,Glasgow,City
+Reg0020500,Stör,River
+Reg0002690,Bremen,City
+Reg0005380,Eisenach,City
+Reg0007820,Halberstadt,City
+Reg0023690,Wolfenbüttel,City
+Reg0008690,Hof,City
+Reg0010980,Köthen,Property
+Reg0004940,Donauwörth,City
+Reg0000370,Altenburg,City
+Reg0002380,Borna,City
+Reg0006820,Fürth,City
+Reg0014690,Nürnberg,City
+Reg0016120,Plauen (Vogtland),City
+Reg0016160,Pleisse,River
+Reg0016970,Reichenbach,City
+Reg0023920,Zwickau,City
+Reg0001520,Bayreuth,City
+Reg0001860,Berneck,City
+Reg0002030,Bindlocher,City
+Reg0006190,Fichtelgebirge,Mountain
+Reg0013740,Münchberg,City
+Reg0014820,"Ochsenkopf, das",Mountain
+Reg0014890,Oelschnitz,City
+Reg0008560,"Hiltpoltstein, ved Nürnberg",City
+Reg0015660,Pegnitz,City
+Reg0004810,Dietfurt,City
+Reg0004910,Donau-Main Kanalen,River
+Reg0005560,Ellingen,City
+Reg0013250,Monheim in Bayern,City
+Reg0016150,Pleinfeld,City
+Reg0017630,Roth,City
+Reg0017640,Rottenburg an der Laber,City
+Reg0018340,Sandsee Slot,Property
+Reg0018370,Sankt Gallen,City
+Reg0018850,Schwabach,City
+Reg0023350,"Weissenburg, Bayern",City
+Reg0008520,Heutingsheim,City
+Reg0015560,Partenkirchen,City
+Reg0023740,Würmsee (Starnberger See),Lake
+Reg0018940,Schönberg (Tyrol),City
+Reg0015530,Parma,City
+Reg0012510,Mantova,City
+Reg0022940,Villafranca,City
+Reg0006030,Faenza,City
+Reg0006380,Forlì,City
+Reg0013140,Modena,City
+Reg0011780,Loiano,City
+Reg0015970,Piémont,Region
+Reg0000820,Arezzo,City
+Reg0015590,Passignano,City
+Reg0018520,Santa Maria degli Angeli (ved Assisi),Region
+Reg0013950,Narni,City
+Reg0014080,Nera,River
+Reg0004080,Civita Castellana,City
+Reg0020330,"Storta, La",Region
+Reg0015140,Orienten,Continent
+Reg0017240,Rieti,City
+Reg0011030,Lago dei Tartari,Lake
+Reg0016300,Ponte Lucano,Point of interest (POI)
+Reg0022790,Via Tiburtina,Region
+Reg0022930,Villa Adriana,Point of interest (POI)
+Reg0023750,Württemberg,Region
+Reg0016320,Pontecorvo,City
+Reg0000210,Alexandria,City
+Reg0020670,Syra,Point of interest (POI)
+Reg0003200,Calabrien,Region
+Reg0003600,Catania,City
+Reg0003810,Charybdis,Point of interest (POI)
+Reg0013000,Messina,City
+Reg0018970,Scylla,City
+Reg0020430,Stromboli,Island
+Reg0021850,Tropea,City
+Reg0011840,London,City
+Reg0019410,Siracusa,City
+Reg0022300,"Valletta, La",City
+Reg0017130,Rhodos,Island
+Reg0011440,Libanon,Country
+Reg0003680,Cerigo,City
+Reg0014230,New York,City
+Reg0022380,Vasto,City
+Reg0003410,Cap Matapan,Point of interest (POI)
+Reg0004710,Delos,Island
+Reg0008370,"Hermupolis, Syra",City
+Reg0012990,Messenien,Region
+Reg0014010,Naxos,Island
+Reg0015550,Paros,Island
+Reg0016060,Piræus,City
+Reg0021410,Tinos,Island
+Reg0015710,Pennsylvanien,Region
+Reg0000130,Akropolis,Point of interest (POI)
+Reg0008330,Herat,City
+Reg0009090,Hymettos,Mountain
+Reg0018110,Salamis-Bugten,Sea
+Reg0010170,Khios,Island
+Reg0015540,Parnes-Bjergene,Mountain
+Reg0023970,Ægina (Aigina),Island
+Reg0010490,Kolonos,Region
+Reg0015610,Patras,City
+Reg0009550,Isthmen,Region
+Reg0010570,Korinth,City
+Reg0012530,Marathon,Point of interest (POI)
+Reg0014000,Nauplia,City
+Reg0010120,Kea,Island
+Reg0004630,Daphni,Property
+Reg0005500,Eleusis,Point of interest (POI)
+Reg0010210,Kifissos,River
+Reg0012860,Megara,City
+Reg0009280,Ilissos,River
+Reg0009990,Karlskrona,City
+Reg0010160,Khalkis,City
+Reg0000860,Arkaden,Region
+Reg0010200,Kifissia,Region
+Reg0012700,Maroussi (Amarousion),City
+Reg0000830,Argos,City
+Reg0005970,Euboia,Island
+Reg0015690,Peloponnesos,Region
+Reg0003720,Chalandri (Khalandhri),City
+Reg0015720,Pentelikon,Mountain
+Reg0015730,Pentelis,City
+Reg0000060,Afrika,Continent
+Reg0000940,Asien,Continent
+Reg0006930,Galatz (Galati),City
+Reg0021230,Theben (Grækenland),City
+Reg0003400,Cap Colonne (Kap Kolones),Point of interest (POI)
+Reg0014020,Nea Phocea (Nea Fokaia),City
+Reg0000010,Abydos,Point of interest (POI)
+Reg0004640,Dardanellerne,Mountain
+Reg0013800,Mytilene,Island
+Reg0019140,Sestos,Region
+Reg0020920,Tanger,City
+Reg0021820,Trojasletten,Point of interest (POI)
+Reg0006940,Galipoli,City
+Reg0012660,Marmara-Havet,Sea
+Reg0012670,Marmara-Øen,Island
+Reg0006920,Galata,Point of interest (POI)
+Reg0012710,Marseille,City
+Reg0015740,Pera,City
+Reg0013600,"Mosebackan, Stockholm",Point of interest (POI)
+Reg0021690,Trapezunt,City
+Reg0019600,Skutari,Point of interest (POI)
+Reg0002440,Bosporus,Sea
+Reg0003080,Büjük Dere,River
+Reg0003220,Calchedonia,Region
+Reg0017730,Rumelien,Region
+Reg0022230,Valakiet,Region
+Reg0010100,Kaukasus,Mountain
+Reg0003000,Bulgarien,Country
+Reg0015040,"Olymp, Bjerg i Lilleasien S.f. Brussa",Mountain
+Reg0012410,Makedonien,Region
+Reg0021280,Thessalien,Region
+Reg0000460,Amasra,City
+Reg0003190,Cairo,City
+Reg0010850,Küstendje (Costanta),City
+Reg0021660,Trajans Mur,Point of interest (POI)
+Reg0004440,Czernawoda,City
+Reg0009930,Karasu,City
+Reg0010840,Küstendil,City
+Reg0002980,Bukarest,City
+Reg0007270,Giurgevo (Giurgiu),City
+Reg0019320,Silistria,City
+Reg0021920,Tuturcan (Turtucaia),City
+Reg0017780,Rustschuk (Russe),City
+Reg0019430,Sistow (Svistov),City
+Reg0023270,Warden,City
+Reg0001310,Balkan-Bjergene,Mountain
+Reg0013850,Møens Klint,Point of interest (POI)
+Reg0014280,Nicopoli,Point of interest (POI)
+Reg0015110,Orava (Rahova),Property
+Reg0019370,Simnitza (Zimnicea),City
+Reg0023480,Widdin (Vidin),City
+Reg0011830,Lom-Palanka,City
+Reg0018830,Schumla,City
+Reg0002930,Brza,City
+Reg0006330,Florentin,City
+Reg0015290,Ostrova (Ostrov),Island
+Reg0016680,Radojevacz,City
+Reg0019100,Serbien,Country
+Reg0023460,Westfalen,Region
+Reg0004100,Cladova,City
+Reg0006180,Fetislan,Point of interest (POI)
+Reg0015190,Orsova,City
+Reg0019400,Sipp,City
+Reg0000660,Angora,City
+Reg0009680,Jernporten (Eisernes Thor),Region
+Reg0018840,Schupanek,City
+Reg0015370,Oxford,City
+Reg0015840,Pest,City
+Reg0007010,Ganges,River
+Reg0012870,Mehádia,City
+Reg0010110,Kazan,City
+Reg0016140,Plavisovicza,Mountain
+Reg0019050,Semlin (Zemun),Region
+Reg0004460,Dacien,Region
+Reg0005030,Drenkova,City
+Reg0020690,Széchenyi-Vejen,Point of interest (POI)
+Reg0021430,Tiszovicza,Point of interest (POI)
+Reg0021670,Trajans Tavle,Point of interest (POI)
+Reg0022730,Veteranis Hule,Point of interest (POI)
+Reg0001170,Babakaj,Point of interest (POI)
+Reg0009580,Izlas,City
+Reg0007410,Golubacz,Property
+Reg0008350,Herkules-Badene,Point of interest (POI)
+Reg0010700,Kubin,City
+Reg0013210,Moldava,Country
+Reg0015080,O-Palanka,City
+Reg0019040,Semendria (Smederevo),City
+Reg0001620,Belgrad,City
+Reg0015480,Pancsova (Pančevo),City
+Reg0018630,Sava (Sau),Church
+Reg0020700,Sztary-Szlankamen,City
+Reg0009960,Karlowicz (Karlovci),City
+Reg0012550,Maria-Frieden,Church
+Reg0014190,Neusatz (Novisad),City
+Reg0015880,Peterwardein (Petrovaradin),City
+Reg0017510,Rosenborg Slot,Property
+Reg0002400,Borova,City
+Reg0004540,Dálya,City
+Reg0005770,Erdöd,City
+Reg0009300,Ilok,City
+Reg0019420,Sirmien (Syrmien),Region
+Reg0023140,Vuka,River
+Reg0023150,Vukovar,City
+Reg0000740,Apatin,City
+Reg0001290,Baja (Ungarn),City
+Reg0013180,Mohács,City
+Reg0001200,Bács (Páks),City
+Reg0016510,Promontorium (Promontor),Property
+Reg0021960,Tyrkiet,Country
+Reg0002960,Budapest,City
+Reg0005010,Drau (Drava),River
+Reg0006120,Fatra,Mountain
+Reg0012780,Matra,Mountain
+Reg0020980,Tatra,Mountain
+Reg0018380,"Sankt Gerhardsbjerget (Szant Gellert hegy), Buda",Mountain
+Reg0013170,Mogyorod,City
+Reg0023190,Waizen (Vać),City
+Reg0007480,Gran (Esztergom),City
+Reg0010500,Komorn (Komárno),City
+Reg0022510,Venek,City
+Reg0016480,Pressburg (Bratislava),City
+Reg0017900,Raab,River
+Reg0001300,Balbek,Point of interest (POI)
+Reg0005240,Efesos,Point of interest (POI)
+Reg0005160,Döbling,Region
+Reg0009600,Japan,Country
+Reg0010230,Kina,Country
+Reg0010640,Kreta,Island
+Reg0014880,Oedenburg,Property
+Reg0003920,Christiansdal,Property
+Reg0016860,Raudnitz,City
+Reg0018810,Schreckenstein,Property
+Reg0001090,Aussig,City
+Reg0009840,Jylland,Region
+Reg0012820,Maxen,Property
+Reg0008210,Helgoland,Island
+Reg0009660,Jerichow,Property
+Reg0020930,Tangermünde,City
+Reg0023670,Wittenberge,City
+Reg0014420,Norden,Region
+Reg0024290,Aarøsund,Sea
+Reg0000350,Alssund,Sea
+Reg0000980,Assens,City
+Reg0006510,Fredericia,City
+Reg0007800,Haderslev,City
+Reg0010460,Kolding,City
+Reg0011130,Langenfelde (Holsten),Region
+Reg0019660,Slesvig (Hertugdømme),Region
+Reg0020810,Sønderborg,City
+Reg0023010,Vissenbjerg,City
+Reg0007350,Glorup,Property
+Reg0007260,Gisselfeld,Property
+Reg0006040,Fakse,City
+Reg0017550,Rosenthal (Rosendal) (ved Fakse),Property
+Reg0017340,Ringsted,City
+Reg0002650,Bregentved,Property
+Reg0005690,England,Country
+Reg0008870,Holtegaard,Property
+Reg0009730,Jomfruens Egede,Property
+Reg0022310,Vallø,Property
+Reg0022100,Ulse,Point of interest (POI)
+Reg0022110,Ulse Sø,Lake
+Reg0001060,Augustenborg,Property
+Reg0008790,Holmegaards Glasværk,Point of interest (POI)
+Reg0022490,Vemmetofte,Property
+Reg0004490,Dalby,City
+Reg0006050,Fakse Bugt,Sea
+Reg0009940,Karise,City
+Reg0005620,Elverhøj,Point of interest (POI)
+Reg0008260,Hellested,City
+Reg0009780,Juellinge (Stevns Herred),Property
+Reg0018430,"Sankt Marthes Kilde, Karise",Point of interest (POI)
+Reg0016470,Preetz,Property
+Reg0012170,Lystrup,Property
+Reg0009790,Juelsberg,Property
+Reg0020320,Storebelt,Sea
+Reg0007670,Graasten,Property
+Reg0011120,Langeland,Island
+Reg0012100,Lykkesholm,Property
+Reg0015350,Ovinehøj,Point of interest (POI)
+Reg0006730,Frørup,Property
+Reg0017810,Rygaard,Property
+Reg0007440,Gotha,Property
+Reg0024070,Ørbæklunde,Property
+Reg0001470,Bavelse,Property
+Reg0005260,Egeskov,Property
+Reg0009670,Jernit,Property
+Reg0010810,Kværndrup,City
+Reg0013650,Munkebo Bakke,Point of interest (POI)
+Reg0020230,Stiernholm Slot,Property
+Reg0022170,Urup,Property
+Reg0024200,Aakjær,Property
+Reg0017170,Riberhus,Point of interest (POI)
+Reg0019490,Skanderborg,City
+Reg0023070,Voldbjerg,Property
+Reg0008430,Hesselager,City
+Reg0008440,Hesselager Gaard,Property
+Reg0011540,Lillebelt,Sea
+Reg0021060,Temesvár,City
+Reg0023090,Vordingborg,City
+Reg0006320,"Flommen, Sorø",Region
+Reg0009520,Isefjorden,Sea
+Reg0001810,Bergen,City
+Reg0024170,Aabenraa,City
+Reg0006290,Flensborg,City
+Reg0013780,Münsterdorf,City
+Reg0016990,Remmels,City
+Reg0017000,Rendsborg,City
+Reg0010900,Köln,City
+Reg0000560,Amönenhöhe (ved ltzehoe),Point of interest (POI)
+Reg0005570,Elmshorn,City
+Reg0016020,Pinneberg,City
+Reg0001430,Bassum,City
+Reg0002250,Bohmte,City
+Reg0017620,Rotenburg in Hannover,City
+Reg0021590,Tostedt,City
+Reg0005150,Düsseldorf,City
+Reg0005660,Ems,River
+Reg0013730,Mülheim a.d. Ruhr,City
+Reg0013770,Münster,City
+Reg0016950,Regensburg,City
+Reg0012190,Lüttich (Liège),City
+Reg0013890,Maas (Meuse),River
+Reg0015240,Ostende,City
+Reg0012270,Löwen (Louvain),City
+Reg0013270,Mons,City
+Reg0016630,Quiévrain,City
+Reg0001610,Belgien,Country
+Reg0002470,Bouchain,City
+Reg0003280,Cambrai,City
+Reg0018030,Saint-Denis,City
+Reg0019080,Senlis,City
+Reg0022280,Valenciennes,City
+Reg0014960,Oldenburg,City
+Reg0012080,Luzern,City
+Reg0003730,Chalons-sur-Marne,City
+Reg0011850,Longchamp,City
+Reg0014150,Neuilly-sur-Seine,City
+Reg0008160,Heide,City
+Reg0009220,Haag,City
+Reg0023340,Weimar,City
+Reg0004880,Domremy-la-Pucelle,City
+Reg0012040,Lunéville,City
+Reg0013920,Nancy,City
+Reg0018640,Saverne,City
+Reg0021600,Toul,City
+Reg0019940,Speyer,City
+Reg0012490,Mannheim,City
+Reg0014040,Neckar,River
+Reg0021840,Trondhjem,City
+Reg0023700,Worms,City
+Reg0001000,Assmannshausen,City
+Reg0005470,Elberfeld,City
+Reg0009720,"Johannisberg, Schloss",Property
+Reg0013900,"Nahe, die",River
+Reg0017400,Rochus-Kapellet (ved Bingen),Church
+Reg0023410,Werden,City
+Reg0001190,Bacharach,City
+Reg0005070,Drusus-Broen (Bingen),Point of interest (POI)
+Reg0010330,"Klopp, Burg",Property
+Reg0011860,Lorch,City
+Reg0012070,Lurlei,Mountain
+Reg0013970,Nassau,City
+Reg0015890,Pfalz,Region
+Reg0017080,Rhin-Bayern,City
+Reg0017110,Rhin-Hessen,Region
+Reg0018390,Sankt Goar,City
+Reg0002610,Braubach,City
+Reg0012810,"Maus, die (Deurenburg)",Property
+Reg0004990,Drachenfels,Property
+Reg0017410,Rolandseck,Region
+Reg0019240,Siebengebirge,Mountain
+Reg0021940,Tübingen,City
+Reg0004700,Delmenhorst,City
+Reg0020020,Stade,City
+Reg0016190,Plön,City
+Reg0007370,Glückstadt,City
+Reg0005850,Espe,Property
+Reg0006620,Freudenthal (ved Itzehoe),Region
+Reg0017590,Rossdorf,City
+Reg0000340,Als,Island
+Reg0003390,Canton,City
+Reg0020660,Syke,City
+Reg0024260,Aarhus,City
+Reg0005790,Erfurt,City
+Reg0013990,Naumburg,City
+Reg0018760,Schilda,City
+Reg0023360,Weissenfels,City
+Reg0010600,Kowicz,Property
+Reg0016870,Rava,River
+Reg0001690,Belvedere (ved Weimar),Property
+Reg0005960,Ettersburg,Property
+Reg0007140,Gera,City
+Reg0023870,Ziegenhain (ved Jena),Region
+Reg0001850,Bernburg,Property
+Reg0005210,Eckersdorf,City
+Reg0010940,Königsplatz,Point of interest (POI)
+Reg0016640,Rabenau (ved Tharandt),City
+Reg0023370,Weisseritz (die wilde),River
+Reg0008600,Hindostan,Country
+Reg0011500,Lilienstein,Mountain
+Reg0011880,Lottchensitz (ved Maxen),Point of interest (POI)
+Reg0010790,Kurland,Region
+Reg0014500,Nordtyskland,Region
+Reg0023440,Wesenstein,Property
+Reg0020630,Sydamerika,Continent
+Reg0004760,Dessau,City
+Reg0023660,Wittenberg,City
+Reg0009610,Jatzske,Region
+Reg0014090,Neubrandenburg,City
+Reg0015570,Pasewalk,City
+Reg0020220,Stettin,City
+Reg0004470,Dagebøl,City
+Reg0006850,Før,Island
+Reg0011350,Lek,City
+Reg0020030,Stadum,City
+Reg0023730,Wyk,City
+Reg0007890,Halligerne,Island
+Reg0014940,Oland,Island
+Reg0014980,Oldesloe,City
+Reg0007650,Grønland,Country
+Reg0008770,Holland,Country
+Reg0000510,Amrum,Island
+Reg0019310,Sild,Island
+Reg0022660,Vesterhavet,Sea
+Reg0008610,Hindsgavl,Property
+Reg0001070,Augustenborg Fjord,Sea
+Reg0014750,Nør,Property
+Reg0019480,Skamlingsbanken,Point of interest (POI)
+Reg0007470,Gram,Property
+Reg0022070,Ulkebøl,Region
+Reg0017160,Ribe,City
+Reg0000650,Angel,Region
+Reg0008920,Horne,City
+Reg0019500,Skandinavien,Region
+Reg0007450,Gottorp,Property
+Reg0009140,"Høgebjerg, Als",Point of interest (POI)
+Reg0008780,Hollufgaard,Property
+Reg0011160,Langaa (Fyn),City
+Reg0018410,"Sankt Johannes Kloster, Slesvig",Property
+Reg0003940,Christianshavn,Region
+Reg0018670,Saxtorf,Property
+Reg0002490,Bov,City
+Reg0017350,Rinkenæs,City
+Reg0022320,Valparaiso,City
+Reg0005990,Eutin,Property
+Reg0017800,Rygen,Island
+Reg0009710,Jever,City
+Reg0009010,Hunte,River
+Reg0001080,Aurich,City
+Reg0014300,Nienburg,City
+Reg0011290,Lehrte,City
+Reg0015210,Oschenleben,City
+Reg0018960,Schöppenstedt,City
+Reg0021770,Trier,City
+Reg0007600,Grossbeeren,City
+Reg0013060,Minden,City
+Reg0014810,Ober-Weimar,City
+Reg0009290,Ilmenau,City
+Reg0023300,Wartburg,Property
+Reg0004160,Coburg,City
+Reg0003100,Bækkeskov,Property
+Reg0011670,Lissabon,City
+Reg0021120,Tetschen,City
+Reg0012020,Lundenburg,City
+Reg0015020,Olmütz,Property
+Reg0007330,Gloggnitz,City
+Reg0004040,Cilli,Region
+Reg0007530,Graz,City
+Reg0011070,Laibach,City
+Reg0013790,Mürzzuschlag,City
+Reg0014200,Neusiedler-Søen,Lake
+Reg0018450,Sankt Peter,City
+Reg0023510,Wiener Neustadt,City
+Reg0003460,Capodistria,City
+Reg0011370,Lemberg (Lwów),City
+Reg0000580,Ancona,City
+Reg0005230,Edinburgh,City
+Reg0015500,Parano,Region
+Reg0016040,Pirano,City
+Reg0011870,Loreto,City
+Reg0012280,Macerata,City
+Reg0013490,Monze,City
+Reg0021480,Tolentino,City
+Reg0022250,Valcimarra,Point of interest (POI)
+Reg0020480,Stuttgart,City
+Reg0003450,"Capo di Monte, Napoli",Property
+Reg0014370,Nisida,Island
+Reg0003570,Castellammare di Stabia,City
+Reg0003270,Camaldoli,Property
+Reg0004180,Cocumella,Property
+Reg0007390,Golfo di Napoli,Sea
+Reg0015940,Piano di Sorrento,Region
+Reg0000810,"Arco naturale, Capri",Point of interest (POI)
+Reg0022840,Vico Equense,City
+Reg0004090,Civitavecchia,City
+Reg0002480,Boulogne,City
+Reg0007210,Gibraltar,Region
+Reg0021610,Toulon,City
+Reg0001370,Barcelona,City
+Reg0001020,Atlanterhavet,Sea
+Reg0014250,Niagara,Point of interest (POI)
+Reg0003340,Canal de Bouc,River
+Reg0016520,Provence,Region
+Reg0003690,Cette (Sète),City
+Reg0015760,Perpignan,City
+Reg0022590,Vernet,City
+Reg0001920,Béziers,City
+Reg0005900,Étang de Thau,Lake
+Reg0013940,Narbonne,City
+Reg0016430,Prades,City
+Reg0016570,Pyrenæerne,Mountain
+Reg0004310,Cornelia,City
+Reg0018060,Saint-Martin,City
+Reg0003560,"Castel, Pyrenæerne",City
+Reg0014390,Nizza (Nice),City
+Reg0014990,Olette,City
+Reg0022270,Valencia,City
+Reg0022960,Villefranche (Pyrénées-Orientales),City
+Reg0021620,Toulouse,City
+Reg0001530,Beaucaire,City
+Reg0001140,Avignon,City
+Reg0022260,Valence,City
+Reg0013450,Montélimart,City
+Reg0013540,Mornas,Region
+Reg0015100,Orange,City
+Reg0004360,Crusol,Point of interest (POI)
+Reg0022400,Vaucluse,Region
+Reg0022870,Vienne,City
+Reg0001640,Bellegarde,City
+Reg0018660,Savoyen,Region
+Reg0022970,Villeneuve (ved Genfersøen),City
+Reg0001840,Bern,City
+Reg0003010,Bulle,City
+Reg0004410,Cuxhaven,City
+Reg0006640,Fribourg (Freiburg) (Schweiz),City
+Reg0020860,Saane (Sarine),River
+Reg0018590,Sarine (Saane),River
+Reg0024250,Aare,River
+Reg0009420,Interlaken,City
+Reg0011210,Lauterbrunnen,City
+Reg0014140,Neuhaus (Schweiz),Region
+Reg0021310,Thun,City
+Reg0005330,Eiger,Mountain
+Reg0007580,Grindelwald,City
+Reg0013880,"Mönch, der",Mountain
+Reg0019300,Silberhorn,Mountain
+Reg0020110,Staubbach,Point of interest (POI)
+Reg0021320,Thuner-Søen,Lake
+Reg0023470,Wetterhorn,Mountain
+Reg0014310,Niesen,Mountain
+Reg0019800,Solothurn,City
+Reg0018050,Saint-Louis,City
+Reg0005580,Elsass,Region
+Reg0013720,Mühlhausen,City
+Reg0019750,"Soden, Bad",City
+Reg0006610,Freiburg im Breisgau,City
+Reg0012030,Lundsgaard,Property
+Reg0005590,Elsfleth,City
+Reg0016830,Rastede,City
+Reg0000090,Ahlhorn,City
+Reg0000530,Amsterdam,City
+Reg0004140,Cloppenburg,City
+Reg0011600,Lingen,City
+Reg0012250,Löningen,City
+Reg0000870,Arnhem,City
+Reg0004790,Deventer,City
+Reg0008510,"Het Loo, Apeldoorn",Property
+Reg0014970,Oldenzaal,City
+Reg0022180,Utrecht,City
+Reg0011300,Leiden,City
+Reg0009240,Haarlem,City
+Reg0023910,Zuidersøen,Sea
+Reg0014490,Nordsøen,Sea
+Reg0018740,Scheveningen,Region
+Reg0004690,Delft,City
+Reg0018750,Schiedam,City
+Reg0002750,Brielle,City
+Reg0007520,Gravesend,City
+Reg0021250,Themsen,River
+Reg0010220,"Kilburn, Bransbury House",Property
+Reg0014320,Nilen,River
+Reg0021650,Trafalgar,Point of interest (POI)
+Reg0004620,Danzig,City
+Reg0022340,Van Diemens Land (=Tasmanien),Island
+Reg0019180,Seven Oaks,City
+Reg0010370,Knole House,Property
+Reg0004110,Clapton,Region
+Reg0004980,Dover,City
+Reg0007540,Greenwich,City
+Reg0012920,Mekka,City
+Reg0016560,Pyramiderne,Point of interest (POI)
+Reg0007990,Hampton Court Palace,Property
+Reg0017190,Richmond,City
+Reg0008570,Himalaya,Mountain
+Reg0015280,Ostindien,Region
+Reg0002780,Bristol,City
+Reg0009620,Java,Island
+Reg0012480,Manchester,City
+Reg0023540,Wight,Island
+Reg0000000,Abbotsford,Property
+Reg0002850,Bromley,City
+Reg0003850,Chevening,Property
+Reg0023830,York,City
+Reg0001890,Berwick,City
+Reg0014240,Newcastle,City
+Reg0021790,Trinity (ved Edinburgh),Region
+Reg0021930,Tweed,River
+Reg0016890,Ravenscraig Castle,Property
+Reg0019580,Skovshoved,City
+Reg0011330,Leith,City
+Reg0016910,Ravenswood,Point of interest (POI)
+Reg0015470,Palæstina,Country
+Reg0020240,Stirling,Property
+Reg0006260,Firth of Forth,Sea
+Reg0011740,Loch Laggan,Lake
+Reg0001360,Bannockburn,Region
+Reg0013700,Musselburgh,City
+Reg0003250,Callander,City
+Reg0005550,Ellens Ø,Island
+Reg0011730,Loch Katrine,Lake
+Reg0011750,Loch Lomond,Lake
+Reg0001720,Ben Lomond,Mountain
+Reg0006410,Fort William,City
+Reg0009430,Inverness,City
+Reg0017380,Rob Roy's Cave,Point of interest (POI)
+Reg0001320,Balloch,Property
+Reg0005090,Dumbarton,Property
+Reg0004150,Clyde,River
+Reg0011710,lnversnaid,Region
+Reg0019210,Sheffield,City
+Reg0021870,Tunbridge,City
+Reg0002800,Broadstairs,City
+Reg0016770,Ramsgate,City
+Reg0003210,Calais,City
+Reg0005100,Dunkerque,City
+Reg0012440,Malines,City
+Reg0005020,"Drei Gleichen, die",Region
+Reg0017360,Rio de Janeiro,City
+Reg0004610,Dannevirke,Point of interest (POI)
+Reg0008750,Holckenhavn,Property
+Reg0013030,Middelfart,City
+Reg0022710,Vestjylland,Region
+Reg0019740,Snoghøj,Region
+Reg0009040,Hvedholm,Property
+Reg0013640,Mullerup,Property
+Reg0006870,Faaborg,City
+Reg0016920,Ravnholt,Property
+Reg0005130,Dybbøl,Point of interest (POI)
+Reg0008890,Hoptrup,City
+Reg0014610,Nyborg Fjord,Sea
+Reg0024060,Ørbæk,City
+Reg0014630,"Nygård, Trollhättan",Property
+Reg0019840,Sophienlund,Property
+Reg0001420,Basnæs,Property
+Reg0019690,Slots-Bjergby Galgebakke,Point of interest (POI)
+Reg0020000,Sprogø,Island
+Reg0000630,"Andersens Højland (H.C. Andersens Bænk, Aasen, Silkeborg)",Region
+Reg0006980,Gammel Køgegaard,Property
+Reg0022040,Taastrup,City
+Reg0017760,Rungsted,City
+Reg0023650,Wismar,City
+Reg0008310,"Helvetes-Faldene, Trollhätta",Point of interest (POI)
+Reg0022050,Uddevalla,City
+Reg0020280,Stora Eken,Point of interest (POI)
+Reg0022920,Viken,City
+Reg0013660,Munkeboda,Point of interest (POI)
+Reg0020770,Södertelge,City
+Reg0008010,Haparanda,City
+Reg0023840,Ystad,City
+Reg0004590,Dannemora,City
+Reg0005200,Eckernførde,City
+Reg0019510,Skara,City
+Reg0002120,Blekhem,Property
+Reg0022680,Vestervik,City
+Reg0008140,Hedemora,City
+Reg0009130,Härfvsta,City
+Reg0010910,Kölva,Region
+Reg0018100,Sala,City
+Reg0020830,Sörby,City
+Reg0002870,Brunnbäck,City
+Reg0015010,Ol-Jonsdammen,Lake
+Reg0019360,Silvköparen,Lake
+Reg0001130,Avesta,City
+Reg0004500,Dal-Elven,River
+Reg0005520,Elfkarleby-Faldet,Point of interest (POI)
+Reg0006100,Falun,City
+Reg0007660,Grådö,City
+Reg0005530,Elfkarleö Bruk,Point of interest (POI)
+Reg0009230,Håkansbo,City
+Reg0024000,Älgsjön,Lake
+Reg0002130,Blekinge,Region
+Reg0004600,Dannemora-Søen (Grufsjön),Lake
+Reg0024120,Österby,City
+Reg0000620,Andersbo,Region
+Reg0018160,Salsta Slot,Property
+Reg0022390,Vattholma Bruk,Point of interest (POI)
+Reg0002950,Brännkyrka,Region
+Reg0009470,Isala,City
+Reg0016800,Rankhyttan,Property
+Reg0019280,Signhildsberg,Property
+Reg0022200,Vadstena,Property
+Reg0009860,Jönköping,City
+Reg0014670,Nyköping,City
+Reg0020600,Svensk Pommern,Region
+Reg0002070,Bjärka-Säby,Property
+Reg0011610,Linköping,City
+Reg0017010,Rengen,Lake
+Reg0017330,Ringsjön (Stora Rängen),Lake
+Reg0020470,Sturefors,Property
+Reg0001780,Berg,City
+Reg0002350,Boren,Lake
+Reg0011700,Ljung,City
+Reg0022060,Ulfåsa,Property
+Reg0014220,Neva,City
+Reg0008240,Hellekis,Property
+Reg0022650,Vestergötland,Region
+Reg0020530,Susenborg,Point of interest (POI)
+Reg0022010,Tåkern,Lake
+Reg0024050,Örbyhus,Property
+Reg0021520,Torpa,City
+Reg0006400,Forshem,City
+Reg0009200,Hönsäter,Property
+Reg0020550,Svaneberg,Property
+Reg0002160,Blomberg,Region
+Reg0017910,Råbäck (ved Kinnekulla),Property
+Reg0012760,Martorp,Point of interest (POI)
+Reg0003970,Christinehamn,City
+Reg0010670,Kristinehamn,City
+Reg0010860,Källtorp,Property
+Reg0024020,Ättestupa,Point of interest (POI)
+Reg0008500,Hestvad,Point of interest (POI)
+Reg0022580,Vermland,Region
+Reg0019590,"Skrædder-Klinten, Trollhätta",Point of interest (POI)
+Reg0015000,"Oliden, Trollhätta",Point of interest (POI)
+Reg0021500,"Toppö, Trollhättan",Point of interest (POI)
+Reg0021420,Tissø,Lake
+Reg0009920,Kalundborg,City
+Reg0016720,Raklev,City
+Reg0016940,Refsnæs,Property
+Reg0017880,Rørby,City
+Reg0018230,Samsø,Island
+Reg0022990,Visborg Ruin,Point of interest (POI)
+Reg0007700,Gudenaaen,River
+Reg0008580,Himmelbjerget,Point of interest (POI)
+Reg0013220,Mols,Region
+Reg0019330,Silkeborg,City
+Reg0019340,Silkeborg Langsø,Lake
+Reg0021400,"Tindebjerget, Silkeborg",Point of interest (POI)
+Reg0024300,"Aasen, Silkeborg",Point of interest (POI)
+Reg0008930,Horsens,City
+Reg0002940,Brædstrup,City
+Reg0019110,Serreslev (ved Horsens),City
+Reg0024210,Aalborg,City
+Reg0020420,Strib,City
+Reg0003610,Cathrineberg,Property
+Reg0007570,Gribsvad Kro,Property
+Reg0002520,Brahetrolleborg,Property
+Reg0015450,Palsgaard,Property
+Reg0000680,Anhof,Property
+Reg0008450,Hesselagerstenen,Point of interest (POI)
+Reg0011360,Lekkende,Property
+Reg0007930,"Halskov, Sjælland",Region
+Reg0008300,Helved Bakke,Point of interest (POI)
+Reg0010380,"Knudshoved, Fyn",Region
+Reg0019680,Slipshavn,Region
+Reg0019700,Slude Gaard,Property
+Reg0023110,Vresen,Island
+Reg0011920,lsted,Region
+Reg0006660,"Friedrichsberg, Slesvig",Region
+Reg0024160,Øvre Stolk,City
+Reg0017530,Rosendal ved Aarhus (Navnet vist misforstaaet),Property
+Reg0004320,Corselitze,Property
+Reg0007790,Gaabense,Region
+Reg0015330,Ourupgaard,Property
+Reg0007920,"Halskov Vænge, Falster",Region
+Reg0019670,Slien,Sea
+Reg0001340,Bandholm,City
+Reg0006590,Frederiksstad,City
+Reg0007360,Glücksborg,Property
+Reg0003980,Christinelund,Property
+Reg0003990,Christinelyst,Property
+Reg0010040,Karrebæksminde,City
+Reg0009810,Jungshoved,Region
+Reg0016530,Præstø,City
+Reg0016540,Præstø Fjord,Sea
+Reg0020300,Store Hestehave (ved Jungshoved),Point of interest (POI)
+Reg0006150,Feddet (ved Præstø Fjord),Point of interest (POI)
+Reg0019530,Skibbinge,City
+Reg0001670,"Bellevue, ved Beldringe",Property
+Reg0009900,Kallehave,Point of interest (POI)
+Reg0007690,Gudbjerg,City
+Reg0014270,Nicobarerne,Island
+Reg0022700,Vestindien (dansk),Region
+Reg0024030,Øksendrup,City
+Reg0020050,Stampfemühle (ved Slesvig By),Point of interest (POI)
+Reg0002630,Breda,City
+Reg0014130,Neuensalz,City
+Reg0017220,Riesa,City
+Reg0002990,Bukovina,City
+Reg0014290,Niedergrund,City
+Reg0010660,Krippen (ved Schandau),City
+Reg0016840,Rathen,City
+Reg0016660,"Rabenstein, ved Maxen",Property
+Reg0006230,Finckenfang,Mountain
+Reg0023530,Wiesenstein,Property
+Reg0023760,Würzburg,City
+Reg0002390,Bornholm,Island
+Reg0003060,Büchen,City
+Reg0013870,Mölln,City
+Reg0016850,Ratzeburger See,Lake
+Reg0001450,Batavia,Region
+Reg0018770,Schlangenbad,City
+Reg0021380,Tiefurt,Property
+Reg0011490,Lifland,Region
+Reg0010650,"Kreuznach, Bad",City
+Reg0001790,"Berg, Slot",Property
+Reg0020090,Starnberg,City
+Reg0020100,Starnberger See,Lake
+Reg0002200,Bodensøen,Lake
+Reg0007510,Graubünden,Region
+Reg0010150,Kempten,City
+Reg0011590,Lindau im Bodensee,City
+Reg0000400,Altstädten,City
+Reg0002660,Bregenz,City
+Reg0017490,Rorschach,City
+Reg0003870,Chiavenna,City
+Reg0004000,Chur,City
+Reg0019970,Splügen,Mountain
+Reg0022570,"Verlorne Loch, das",Point of interest (POI)
+Reg0022780,Via mala,Point of interest (POI)
+Reg0004210,Colico,City
+Reg0004220,Como,City
+Reg0004230,Como-Søen,Lake
+Reg0011260,Lecco-Bugten (Como-Søen),Lake
+Reg0003300,Camerlata,City
+Reg0012800,Matterhorn,Mountain
+Reg0013300,Mont Cenis,Mountain
+Reg0001680,Bellinzona,City
+Reg0006340,Flüelen,Point of interest (POI)
+Reg0011980,Luganer-Søen,Lake
+Reg0011990,Lugano,City
+Reg0002880,Brunnen,City
+Reg0008950,"Hospiz, St. Gotthard",Point of interest (POI)
+Reg0017830,Rütli,Mountain
+Reg0018400,Sankt Gotthard,Mountain
+Reg0021030,Tells Kapel,Church
+Reg0021110,Tessin (Ticino),Region
+Reg0021170,Teulelsbrücke (i Reuss-Dalen),Point of interest (POI)
+Reg0022890,Vierwaldstätter-Søen,Lake
+Reg0017030,Reuss,River
+Reg0017260,Rigi,Mountain
+Reg0023790,Waadt (Kanton),Region
+Reg0018700,Schaffhausen,City
+Reg0023890,Zug,City
+Reg0023900,Zugersee,Lake
+Reg0023940,Züricher-Søen,Lake
+Reg0017100,"Rhinfaldet, Schaffhausen",Point of interest (POI)
+Reg0002320,Bonndorf,City
+Reg0010280,Kissingen,City
+Reg0009160,"Höllenthal, das",Region
+Reg0008880,Homburg,City
+Reg0004130,Clausholm,Property
+Reg0017070,Rheinfels,Property
+Reg0020270,Stolzenfels,Property
+Reg0007970,Hamm,City
+Reg0016350,Porta Westphalica,City
+Reg0000030,Adamsthal,Point of interest (POI)
+Reg0002910,Brünn,City
+Reg0002860,Bruck,City
+Reg0019060,Semmering,City
+Reg0007020,Garda-Søen,Lake
+Reg0012960,Meran,City
+Reg0015820,Peschiera,City
+Reg0017370,Riva,City
+Reg0011640,"Lipariske Øer, de",Island
+Reg0002000,Biessenhofen,City
+Reg0008710,Hohenschwangau,Property
+Reg0006830,Füssen,City
+Reg0001040,Auf der Jugend (ved Hohensehwangau),Point of interest (POI)
+Reg0012610,Marienbrücke (ved Hohenschwangau),Point of interest (POI)
+Reg0000330,Alpsee (ved Hohenschwangau),Lake
+Reg0012930,Melbourne,City
+Reg0007740,Görlitz,City
+Reg0007300,Glashütte (Sachsen),City
+Reg0023590,Windsor,Property
+Reg0020650,Sydtyskland,Region
+Reg0020360,Stralsund,City
+Reg0023560,Wildbad,City
+Reg0022080,Ulm,City
+Reg0003260,Calw,City
+Reg0005740,"Enz, die",River
+Reg0008630,Hirsau,Property
+Reg0005110,Durlach,City
+Reg0008590,Himmelreich,City
+Reg0009170,"Höllenweg, der",City
+Reg0020570,Sveaborg,Property
+Reg0000910,Arth,City
+Reg0008900,Horgen,City
+Reg0010830,Küssnacht am Rigi,City
+Reg0016000,Pilatus,Mountain
+Reg0017270,Rigi-Kulm,Point of interest (POI)
+Reg0018920,Schwyz,City
+Reg0023770,Wäggis,City
+Reg0009350,Immensee,City
+Reg0017280,Rigi-Staffel,Point of interest (POI)
+Reg0006670,Friedrichshafen,City
+Reg0017440,Romanshorn,City
+Reg0023640,Winterthur,City
+Reg0008190,Heilbronn,City
+Reg0010970,"Kösen, Bad",City
+Reg0002410,Borreby,Property
+Reg0019720,Smaalandsfarvandet,Sea
+Reg0000070,Agersø,Island
+Reg0008820,Holsteinborg,Property
+Reg0006860,Førslevgaard,Property
+Reg0006750,Fuirendal,Property
+Reg0008730,Hoisteinborg Nor,Point of interest (POI)
+Reg0022240,Valby,Region
+Reg0000930,Aschersleben,City
+Reg0007950,Hameln,City
+Reg0017840,Röhrsdorf,City
+Reg0009380,Indien,Country
+Reg0013110,Mississippi,River
+Reg0020460,Struppen (ved Pirna),City
+Reg0020120,Stavanger,City
+Reg0017390,Rochester,City
+Reg0020440,Strood,City
+Reg0003230,Calcutta,City
+Reg0003380,Canterbury,Church
+Reg0004190,Cohham Hall,Property
+Reg0018000,Saint John's Wood,Region
+Reg0002600,Brasilien,Country
+Reg0014350,Ninive,Point of interest (POI)
+Reg0008090,Hastings,City
+Reg0012360,Maidstone,City
+Reg0000500,Amiens,City
+Reg0006360,Folkestone,City
+Reg0018010,Saint Patrick's Wood,Region
+Reg0005760,Épernay,City
+Reg0011960,Ludwigshafen,City
+Reg0007180,Gersdorf,Property
+Reg0010430,Kohlfurt,City
+Reg0024230,Aalesund,City
+Reg0010530,Kongsdal,Property
+Reg0006760,Fulda,City
+Reg0023450,Weser,River
+Reg0003240,Californien,Region
+Reg0015030,Olten,City
+Reg0000390,Altorf,City
+Reg0008940,Hospenthal,City
+Reg0000520,Amsteg,City
+Reg0000600,Andermatt,City
+Reg0021160,Teufelsstein (i Reuss-Dalen),Point of interest (POI)
+Reg0005360,Einsiedeln,City
+Reg0007280,Glarus,City
+Reg0011000,Lachen,City
+Reg0016690,Ragatz,City
+Reg0018580,Sargans,Property
+Reg0023240,Wallenstadter-Søen (Wallen-See),Lake
+Reg0023430,"Wesen, Schweiz",City
+Reg0020910,Tamina,River
+Reg0015910,"Pfäffers, Dorf",City
+Reg0023310,"Wartenstein, Ragatz",Property
+Reg0011620,Linth-Kanalen,River
+Reg0010560,Konstanz,City
+Reg0001330,Bamberg,City
+Reg0008100,Havana,City
+Reg0011890,Louisehøj (ved Silkeborg),Point of interest (POI)
+Reg0008380,Herning,City
+Reg0008390,Herningsholm,Property
+Reg0008810,Holstebro,City
+Reg0011380,Lemvig,City
+Reg0014770,Nørre Vosborg,Property
+Reg0017310,Ringkøbing,City
+Reg0014380,Nissum Fjord,Sea
+Reg0007830,Hald,City
+Reg0020340,Storaaen,River
+Reg0009030,Husby,City
+Reg0020010,Staby Folkehøjskole,Property
+Reg0006110,Fanø,Island
+Reg0012210,Lærkehøj (Ulvborg S.),Point of interest (POI)
+Reg0022120,Ulvborg,City
+Reg0008800,Holmsland,Region
+Reg0017320,Ringkøbing Fjord,Sea
+Reg0002500,Bovbjerg,Point of interest (POI)
+Reg0006270,Fjaltring,City
+Reg0007730,Gørding,City
+Reg0006020,Fabjerg,City
+Reg0007070,Gellerup,City
+Reg0016740,Ramme,City
+Reg0016750,Ramme-Dige,Point of interest (POI)
+Reg0017820,Rysensten,Property
+Reg0022670,Vestervig,City
+Reg0011570,Limfjorden,Sea
+Reg0020450,Struer,City
+Reg0021300,Thisted,City
+Reg0006560,Frederikshavn,City
+Reg0003150,Børglumkloster,Property
+Reg0014780,Nørresundby,City
+Reg0020310,Store Vildmose,Region
+Reg0003140,Børglum,Property
+Reg0012240,Løkken,City
+Reg0017700,Rubjerg Klitter,Point of interest (POI)
+Reg0019470,Skagen,City
+Reg0008660,Hjørring,City
+Reg0024310,Aastrup,Property
+Reg0024220,Aalbæk,City
+Reg0001350,Bangsbo,Property
+Reg0006280,Flade,City
+Reg0010360,Knivholt,Property
+Reg0006990,Gammel Skagen,City
+Reg0009690,Jerup,City
+Reg0008670,Hobro,City
+Reg0024040,"Øland, Limfjorden",Region
+Reg0012560,Mariager,City
+Reg0008640,Hjermind,City
+Reg0000960,Asmildkloster,Property
+Reg0022800,Viborg,City
+Reg0015460,Palstrup,Property
+Reg0006580,Frederikslund,Property
+Reg0014620,Nydam Mose,Point of interest (POI)
+Reg0005300,Eideren,River
+Reg0014470,Nordstemmen,City
+Reg0023180,"Wahrendorf, Holsten",City
+Reg0012890,Meiningen,City
+Reg0005800,Erlangen,City
+Reg0023230,Walhalla (ved Regensburg),Property
+Reg0004930,Donaustauf,City
+Reg0014790,Oberammergau,City
+Reg0019000,Seeshaupt,City
+Reg0005940,Ettal,City
+Reg0013690,Murnau,Property
+Reg0002530,Brakel,City
+Reg0015380,Paderborn,City
+Reg0017040,Rheder,Property
+Reg0017200,Richterswyl,City
+Reg0007170,Gersau,City
+Reg0010930,Königsberg,City
+Reg0001970,Biel (Bienne),City
+Reg0011100,Landeron,City
+Reg0020350,Stoss (ved Brunnen),City
+Reg0001980,Bielersøen,Lake
+Reg0014210,Neuveville,City
+Reg0013580,Morteau,City
+Reg0006310,Fleurier,City
+Reg0014110,Neuchâtel (Kanton),City
+Reg0022220,Val de Travers,Region
+Reg0022410,Vaud (Kanton),Region
+Reg0015320,Ouchy,Region
+Reg0018040,Sainte-Croix (Schweiz),City
+Reg0013480,Montreux,City
+Reg0006000,Evian,City
+Reg0004800,Diablerets,City
+Reg0021630,"Tour de Pelz, La",City
+Reg0004120,Clarens,City
+Reg0022600,Vernex,Region
+Reg0001410,Basingstoke,City
+Reg0013550,Mornaux,City
+Reg0014680,Nyon,City
+Reg0001910,Bex,City
+Reg0007050,Gavnø,Property
+Reg0013260,Monnetier,City
+Reg0013560,Mornex,City
+Reg0023220,Wales,Country
+Reg0003370,Cannstatt,Region
+Reg0016380,Portugal,Country
+Reg0014840,Odense Aa,River
+Reg0018560,Saônen,River
+Reg0000710,Antibes,City
+Reg0003360,Cannes,City
+Reg0013230,Monaco,Country
+Reg0012950,Menton (Mentone),City
+Reg0015060,Oneglia,City
+Reg0018650,Savona,City
+Reg0013350,Monte Cristo,Island
+Reg0021800,Tripolis,City
+Reg0017930,Sabinerbjergene,Mountain
+Reg0003550,Castel Gandolfo,City
+Reg0012650,Marino,City
+Reg0016090,Pistoia,City
+Reg0016450,Prato,City
+Reg0000890,Arona,City
+Reg0014560,Novara,City
+Reg0015430,Pallanza,City
+Reg0005080,Dublin,City
+Reg0007420,Gondo,City
+Reg0004740,Dent du Midi,Mountain
+Reg0000100,Aigle,City
+Reg0004730,Dent de Morcles,Mountain
+Reg0015180,Oron,City
+Reg0017450,Romont,Property
+Reg0017720,Rue,City
+Reg0002770,Brienzer-Søen,Lake
+Reg0018820,Schreckhorn,Mountain
+Reg0002760,Brienz,City
+Reg0002900,Brünig,Mountain
+Reg0007230,Giessbach,Point of interest (POI)
+Reg0009180,Hölzbach,Point of interest (POI)
+Reg0012060,Lungern-Søen,Lake
+Reg0018610,Sarner-Søen,Lake
+Reg0020070,Stans,City
+Reg0003020,Buochs,City
+Reg0015260,Osterode (Østpreussen),City
+Reg0003830,Chemnitz,City
+Reg0023210,Waldheim,City
+Reg0022830,Vichy,Point of interest (POI)
+Reg0020390,Strandvejen,Point of interest (POI)
+Reg0010510,"Kongens Have, København",Point of interest (POI)
+Reg0020290,Store Hedinge,City
+Reg0019860,Sorgenfri Slot,Property
+Reg0007710,Guinea,Country
+Reg0015640,Peblingesøen,Lake
+Reg0009530,Island,Country
+Reg0007380,Glænø,Property
+Reg0011410,Lerchenborg,Property
+Reg0017860,Rønnebæksholm,Property
+Reg0020800,Sølyst,Property
+Reg0000970,Asnæs,City
+Reg0021680,Trankebar,Region
+Reg0006770,Fulneck,City
+Reg0005640,Elze,City
+Reg0022160,Uri-Rothstock,Mountain
+Reg0001550,Beckenried,City
+Reg0012050,Lungern,Lake
+Reg0018600,sarnen,City
+Reg0020080,Stansstad,City
+Reg0012180,Lütschinen,River
+Reg0004350,Crin,City
+Reg0007310,Glion,City
+Reg0003740,Chambéry,City
+Reg0004390,Culoz,City
+Reg0012310,Madrid,City
+Reg0020940,Tarascon,City
+Reg0006210,Figueras,City
+Reg0007160,Gerona,City
+Reg0009820,"Junquera, La",Region
+Reg0003520,Cartagena,City
+Reg0013680,Murcia,City
+Reg0013280,Monserrat,Mountain
+Reg0012150,Lyoner-Bugten,Sea
+Reg0017980,Sagunto,Property
+Reg0000270,Alicante,City
+Reg0000290,Almansa,City
+Reg0019190,Sevilla,City
+Reg0005490,Elche,City
+Reg0015150,Orihuela,City
+Reg0012420,Málaga,City
+Reg0000300,Almeria,City
+Reg0007490,Granada,City
+Reg0000280,Almadén,City
+Reg0011810,Loja,City
+Reg0000260,Alhambra,Property
+Reg0015170,Orléans,City
+Reg0004660,Darro,River
+Reg0023800,Xenil,River
+Reg0007080,Generalife,Property
+Reg0003530,"Cartuja, La (ved Granada)",Property
+Reg0003170,Cadiz,City
+Reg0004300,Córdoba,City
+Reg0003700,Ceuta,City
+Reg0007220,Gibraltar-Strædet,Sea
+Reg0000240,Algeciras,City
+Reg0016900,Ravensrock (ved Tanger),Property
+Reg0020960,Tarifa,City
+Reg0001030,Atlasbjergene,Mountain
+Reg0009650,Jeres de la Frontera,City
+Reg0006530,Frederiksberg Slot,Property
+Reg0021130,Tetuan,City
+Reg0012690,Marokko,Country
+Reg0000200,"Alcázar, Sevilla",Property
+Reg0007680,Guadalquivir,River
+Reg0014850,Odessa,City
+Reg0019270,Sierra Morena,Mountain
+Reg0000190,Alcázar de San Juan,City
+Reg0000640,Andújar,City
+Reg0001280,Bailén,City
+Reg0003500,"Carolina, La",City
+Reg0018500,Santa Cruz de Mudela,City
+Reg0000780,Aranjuez,City
+Reg0018790,Schmerikon,City
+Reg0021470,Toledo,City
+Reg0020880,Tajo (Tejo),River
+Reg0005830,"Escorial, El",City
+Reg0003040,Búrgos,City
+Reg0014950,Olazagutia,City
+Reg0001510,Bayonne,City
+Reg0009460,Irun,City
+Reg0018320,San Sebastián,City
+Reg0001930,Biarritz,City
+Reg0004670,Dax,City
+Reg0000670,Angoulême,City
+Reg0016230,Poitiers,City
+Reg0021640,Tours,City
+Reg0011790,Loire,River
+Reg0002140,Blois,City
+Reg0017690,Rubjerg Kirke,Church
+Reg0003110,Bøget,Region
+Reg0002060,Bisserup,Property
+Reg0017420,Rolighed,Property
+Reg0001940,Bidstrup,Property
+Reg0006690,Frijsenborg,Property
+Reg0011650,Lippe-Detmold,Region
+Reg0021460,Tjæreby,City
+Reg0001100,Australien,Country
+Reg0006520,Frederiksberg,City
+Reg0012260,Løvenborg,Property
+Reg0005170,Eaglewood,City
+Reg0010520,Kongeaaen,River
+Reg0002810,Broager,City
+Reg0010680,Krogerup,Property
+Reg0007320,Glogau,City
+Reg0014330,Nil-Kanalen,River
+Reg0005610,Elvedgaard,Property
+Reg0008740,"Holbæk (og Holbæk Amt, Holbæk-Egnen)",City
+Reg0022850,Vidskølle,Property
+Reg0002430,Borup,City
+Reg0005050,Dronninggaard,Property
+Reg0008860,Holte,City
+Reg0020790,Søllerød,City
+Reg0020780,Søllerod Sø,Lake
+Reg0014710,Nærum,City
+Reg0009150,Højbjerg,Point of interest (POI)
+Reg0011110,Landskrona,City
+Reg0012230,Løgsø,Lake
+Reg0017710,Rudeskov,Region
+Reg0022430,Vedbæk,City
+Reg0024150,Øverød,Region
+Reg0001650,Bellevue (Klampenborg),Point of interest (POI)
+Reg0005780,Eremitagen,Property
+Reg0010290,Klampenborg,City
+Reg0019550,Skodsborg,Property
+Reg0020380,Strandmøllen,Property
+Reg0022020,Taarbæk,City
+Reg0019730,Snekkersten,City
+Reg0008230,Hellebæk,City
+Reg0004680,De Fattiges Dyrehave ved Kalkbrænderiet,Region
+Reg0004270,Conradineslyst,Property
+Reg0015650,Pedersborg,Point of interest (POI)
+Reg0024190,Aagaard,Property
+Reg0022420,Vedbygaard,Property
+Reg0014760,Nørager,City
+Reg0014460,Nordsleswig,Region
+Reg0001880,Bernstorff Slot,Property
+Reg0010740,Kulla Gunnarstorp,Property
+Reg0013910,Nakskov,City
+Reg0021740,Trekroner,Island
+Reg0011280,Leeds,City
+Reg0006140,Feddet (ved Basnæs Nor),Point of interest (POI)
+Reg0006130,Favrskov,Property
+Reg0008320,Hem,Church
+Reg0019030,Sem,Church
+Reg0002270,Boller,Property
+Reg0006700,Frijsendal,Property
+Reg0012730,Marsk Stigs Hule,Point of interest (POI)
+Reg0020750,Søbygaards Sø,Lake
+Reg0014520,Norring,City
+Reg0007980,Hammel,City
+Reg0012720,Marselisborg,Property
+Reg0003930,Christiansfeld,City
+Reg0011230,Lavrbjerg,City
+Reg0012570,Mariager Fjord,Sea
+Reg0013860,Møllerup,Property
+Reg0019540,Skive,City
+Reg0008620,Hinnerup,City
+Reg0001210,Badajoz,City
+Reg0018330,Sandefjord,Sea
+Reg0000420,Alvesta,City
+Reg0006080,Falköping,City
+Reg0010070,Katrineholm,City
+Reg0024270,Årsta,Property
+Reg0022090,Ulriksdal,Property
+Reg0008700,Hofmansgave,Property
+Reg0009910,Kalmar,City
+Reg0008480,Hessleholm,City
+Reg0013570,Mors,Island
+Reg0019640,Slangerup,City
+Reg0000550,Amur-Floden,River
+Reg0004550,Damager,Property
+Reg0015600,Passy,Region
+Reg0018540,Santander,City
+Reg0008830,Holsteinsminde,Property
+Reg0004170,Cochinchina,Region
+Reg0022000,Tønder,City
+Reg0003070,Bückeburg,City
+Reg0017060,Rheine,City
+Reg0015790,Peru,Country
+Reg0019760,Soest,City
+Reg0005000,Drammen,City
+Reg0009250,Haarlemer Meer,City
+Reg0007840,Halfweg,City
+Reg0010090,Katwijk,City
+Reg0010320,Kleef,City
+Reg0005880,Esschen,Region
+Reg0017480,Roosendaal,City
+Reg0018720,Schelde,River
+Reg0022980,Vincennes,Region
+Reg0007250,Gironde,River
+Reg0018980,Sebastopol,City
+Reg0002010,Bilbao,City
+Reg0013100,Miranda de Ebro,City
+Reg0022290,Valladolid,City
+Reg0020890,Talavera de la Reyna,City
+Reg0021860,Trujillo,City
+Reg0005730,Entroncamento,City
+Reg0015090,Oporto,City
+Reg0004050,Cintra,City
+Reg0019170,Setúbal,City
+Reg0014030,"Necessidades, Lissabon",Property
+Reg0001600,Belém,Region
+Reg0015440,Palmela,City
+Reg0021810,Troia (Cetobriga),Point of interest (POI)
+Reg0000900,Arrábida,Region
+Reg0001380,Barreiro,City
+Reg0015700,Pena,Property
+Reg0017970,Sado,River
+Reg0018300,San Pedro de Pena,City
+Reg0006010,Evora,City
+Reg0022540,Venetien,Region
+Reg0002050,Biscayiske Havbugt (Den spanske Sø),Sea
+Reg0004200,Coimbra,City
+Reg0001110,Aveiro,City
+Reg0001750,Benevente,City
+Reg0012790,Matta,Region
+Reg0016260,Pombal,City
+Reg0018170,Salvaterra,City
+Reg0018550,Santarem,City
+Reg0023100,Vouga,River
+Reg0013240,Mondego,River
+Reg0012330,Mafra,City
+Reg0016620,Queluz,Property
+Reg0021070,Tempe,Region
+Reg0018510,Santa Maria (ved Cintra),Church
+Reg0013290,Monserrate (Portugal),Mountain
+Reg0003430,Capo de Finisterre,Mountain
+Reg0003420,Cap Verde,Country
+Reg0015620,Pau,City
+Reg0000470,Amboise,Property
+Reg0014860,Odinshøj,Point of interest (POI)
+Reg0002240,Bogø,Island
+Reg0019120,Serridslev,City
+Reg0008130,Hedehusene,City
+Reg0010390,Knuthenborg,Property
+Reg0003960,Christianstad,City
+Reg0023060,Vojens,City
+Reg0023990,Ækvator,Region
+Reg0008150,Hegnsholt,Property
+Reg0008460,Hessen,Region
+Reg0021010,Teglgaarden,Property
+Reg0016370,Portsmouth,City
+Reg0013020,Mexico,Country
+Reg0014410,Nordamerika,Continent
+Reg0000690,Anholt,Island
+Reg0003290,Cambridge,City
+Reg0014260,Nibe,City
+Reg0017890,Røraas,Point of interest (POI)
+Reg0012010,Lundeborg,City
+Reg0005340,"Eilsen, Bad",City
+Reg0002150,Blokhus,City
+Reg0018480,Sankt Thomas,Island
+Reg0013010,Meudon,City
+Reg0015070,Oos,City
+Reg0017120,Rhinlandene,Region
+Reg0017610,Rostock,City
+Reg0008280,Helsingfors,City
+Reg0014540,Norrland,Region
+Reg0020140,Stege,City
+Reg0004560,Damaskus,City
+Reg0003490,Carlsberg,Point of interest (POI)
+Reg0002230,Bogense,City
+Reg0002580,"Brandholt, Gaard i Skovby S., Skovby H",Property
+Reg0023320,Washington,City
+Reg0001770,Bentheim,City
+Reg0004950,Dordrecht,City
+Reg0013160,Moerdijk,City
+Reg0011520,Lille,City
+Reg0004290,Coppet,Property
+Reg0011050,Lahn,River
+Reg0003090,Bäckaskog,Property
+Reg0024240,Aalsgaarde,City
+Reg0011420,Lethraborg,Property
+Reg0024100,Ørslev,City
+Reg0009440,Irland,Country
+Reg0011560,Lilliendal,Property
+Reg0016270,Pommern,Region
+Reg0009770,Juellinge (Halsted Kloster) (Lollands Nørre Herred),Property
+Reg0018090,Sakskøbing,City
+Reg0017990,Saint Helena,Island
+Reg0003880,Chicago,City
+Reg0002640,Brede,City
+Reg0015860,Petershøi,Property
+Reg0002840,Bromberg,City
+Reg0016390,Posen,Region
+Reg0012300,Madeira,Island
+Reg0021200,Texas,Region
+Reg0007590,Groningen,City
+Reg0015120,Ordrup,City
+Reg0001250,Badenweiler,City
+Reg0003800,Charlottenlund Slot,Property
+Reg0007560,"Greve, Høje Taastrup S",City
+Reg0022370,Vardøhus,Point of interest (POI)
+Reg0020520,Suez-Kanalen,River
+Reg0015510,Pardubitz,City
+Reg0019960,Spielberg (ved Brünn),Property
+Reg0009080,Hyères,City
+Reg0003890,Chiemsse,Lake
+Reg0012850,Mecklenburg-Schwerin,Region
+Reg0021890,Turbia (La Turbie),City
+Reg0010400,Kobelnick,City
+Reg0018910,Schwerin,City
+Reg0012290,Macon,City
+Reg0000110,Ajaccio,City
+Reg0004240,Compiègne,City
+Reg0022630,Verviers,City
+Reg0005720,Enrum (Vedbæk),Property
+Reg0015050,Omø,Island
+Reg0006070,Falkensten,Property
+Reg0018860,"Schwalbach, Bad",City
+Reg0006570,Frederiksholm,Region
+Reg0011680,Liverpool,City
+Reg0014360,Nishni Novgorod,City
+Reg0020870,Saarbrücken,City
+Reg0018990,Sedan,City
+Reg0012740,Marslev,City
+Reg0003330,Canada,Country
+Reg0023950,Æbelø,Island
+Reg0022910,Vig,City
+Reg0005540,Ellekilde,Region
+Reg0007960,Hamilton (Skotland),City
+Reg0013070,Minneapolis,City
+Reg0022560,"Ventegodt, Avlsgaard ved Løgten, København",Property
+Reg0006420,Fortunen,Point of interest (POI)
+Reg0009370,Indiana,Region
+Reg0013150,Modum,Region
+Reg0007550,Grenaa,City
+Reg0013080,Minnesota,Region
+Reg0008250,Hellerup,City
+Reg0005840,Eslöv,City
+Reg0009210,Höör,City
+Reg0011090,Lammhult,City
+Reg0020720,Säfsjö,City
+Reg0008400,Herrljunga,City
+Reg0008970,Hull,City
+Reg0010010,Karlstad,City
+Reg0011250,Laxå,City
+Reg0003760,Charlottenberg,City
+Reg0010300,Klara-Elven,River
+Reg0010540,Kongsvinger,City
+Reg0005320,Eidsvold,Property
+Reg0007340,Glommen,Sea
+Reg0011550,Lillestrøm,City
+Reg0003910,Christiania-Fjord,Sea
+Reg0011010,Ladegaardsøen (ved Christiania),Lake
+Reg0005400,"Ekeberg, Christiania",Region
+Reg0009190,Hønefos,City
+Reg0014430,Norderhov,Church
+Reg0017300,Ringerike,Region
+Reg0018350,Sandviken,Property
+Reg0021950,Tyrifjord,Sea
+Reg0016030,"Piperviken, Christiania",Region
+Reg0021990,"Tøien, Christiania",Point of interest (POI)
+Reg0001570,Beeren-Eiland (Bjørneøen),Island
+Reg0013130,Mjøsen,Lake
+Reg0001760,Bense-Brug (ved Christiania),Point of interest (POI)
+Reg0015920,Philadelphia,City
+Reg0005310,Eidskog,Region
+Reg0022760,Vexiö,City
+Reg0003710,Ceylon,Country
+Reg0018260,San Francisco,City
+Reg0021530,Torquay,City
+Reg0015490,"Panker, Lütjenburg",Property
+Reg0007630,"Grundet, Store",Property
+Reg0022440,Vedersø,City
+Reg0008850,Holstenshus,Property
+Reg0011180,Larvik,City
+Reg0009510,Ischl,City
+Reg0000800,Arco,City
+Reg0013520,Mori,City
+Reg0004750,Desenzano,City
+Reg0018140,Salò,City
+Reg0017540,Rosenheim,City
+Reg0022860,Vienenburg,City
+Reg0022330,Vamdrup,City
+Reg0015160,Oringe,Property
+Reg0006600,Frederiksværk,City
+Reg0007120,Gentofte,City
+Reg0020640,Sydfrankrig,Region
+Reg0000950,Askerlandet (ved Christiania),Region
+Reg0014720,Næsodden (Christiania),Region
+Reg0014480,Nord-Sverige,Region
+Reg0020950,Tarasp,Point of interest (POI)
+Reg0022640,Vest-Amerika,Region
+Reg0000770,Appenzell (Kanton),Region
+Reg0006910,Gais,City
+Reg0008180,Heiden,City
+Reg0024280,Aarup,City
+Reg0006720,Fruens Bøge,Region
+Reg0007000,Gamtofte,Church
+Reg0000760,Appenweier,City
+Reg0014920,Offenburg,City
+Reg0004450,Dachsen,City
+Reg0000320,Alpnach,City
+Reg0012900,Meiringen,City
+Reg0005290,Eiby Mølle,Point of interest (POI)
+Reg0023030,Viznau,City
+Reg0001150,Axenstein,Point of interest (POI)
+Reg0001160,Axenstrasse,Region
+Reg0021040,Tellsplatte,Region
+Reg0011900,Lowerzer-See,Lake
+Reg0016820,Rapperschwyl,City
+Reg0001630,Bellaggio,City
+Reg0000590,Andeer,City
+Reg0001870,Bernina-Bjergene,Mountain
+Reg0011660,Liro,River
+Reg0012400,Maira,Region
+Reg0012460,Maloja-Kulm,Property
+Reg0016100,Piz Bernina,Mountain
+Reg0017500,Roseg-Gletscher,Mountain
+Reg0018220,Samaden,City
+Reg0018440,Sankt Moritz,City
+Reg0019350,Silvaplana,City
+Reg0000180,Albula-Pas,Mountain
+Reg0000410,"Alveneu, Bad",City
+Reg0001820,Bergün,City
+Reg0011390,Lenz,City
+Reg0016340,Pontresina,City
+Reg0016180,"Plessur, die",River
+Reg0001540,Bebra,City
+Reg0016580,Pyrmont,City
+Reg0006740,Fuglsang (ved Fredericia),Region
+Reg0017740,Rumpenheim,Property
+Reg0015780,Persien,Country
+Reg0021020,Teheran,City
+Reg0006970,Gammel Estrup,Property
+Reg0004260,Connecticut,Region
+Reg0012600,"Marienborg, Møn",Property
+Reg0022500,Vendsyssel,Region
+Reg0005890,Estland,Country
+Reg0005650,Emden,City
+Reg0008080,Haslev,City
+Reg0019770,Sofiero,Property
+Reg0017850,Rønne,City
+Reg0011530,Lille Odinshøi,Point of interest (POI)
+Reg0017560,Rosenvold,Property
+Reg0007200,Geysir,Point of interest (POI)
+Reg0008650,Hjerting,City
+Reg0022360,Varde,City
+Reg0015680,Peking,City
+Reg0021390,Tifis,City
+Reg0020560,Svaneke,City
+Reg0015810,Pesaro,City
+Reg0006840,Færøerne,Country
+Reg0010440,Kolberg,City
+Reg0020820,Søndermarken,Region
+Reg0008910,Hornbæk,City

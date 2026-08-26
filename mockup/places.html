@@ -103,8 +103,28 @@
                  data-facet-empty-label="Uoplyst"></div>
           </div>
 
-          <!-- Stedstype skjult: vises i en senere fase efter menneskevalideret
-               reconciliation mod Wikidata / GeoNames. -->
+          <!-- Stedstype — live off PLACES_EXTRA.category, human-verified
+               (not a name-pattern guess) from raw/Steder_i_dagboegerne_
+               verificeret_udfyldt VER 1.0.xlsx; see docs/data-model/
+               steder-verificeret-category-mapping.md for the join
+               methodology (95.8% of the register matched by name) and
+               the Wikidata/GeoNames class each value maps to. 187 of
+               2.508 places have no verified category yet (unmatched
+               name variant, or a blank Category cell in the source) —
+               "Uklassificeret" makes that gap selectable rather than
+               dropping those places from the facet, same convention as
+               Land's "Uoplyst" bucket above. Raw values are the
+               English vocabulary as verified (City/Property/Region/…);
+               CATEGORY_LABELS_DA below is display-only translation, not
+               a second copy of the data — do not hand-write rows here,
+               FacetEngine renders them from PLACES_EXTRA. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Kategori <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body"
+                 data-facet-source="category"
+                 data-facet-limit="12"
+                 data-facet-empty-label="Uklassificeret"></div>
+          </div>
 
           <!-- Samtidige personer — live off PLACE_TOP_PERSONS (cooccurrence.js),
                labelled from PERSONS_EXTRA. Note the semantics: that index keeps
@@ -330,6 +350,7 @@
     return { rid: rid, label: p.label || rid, desc: p.description || '',
              refs: p.refs || 0, init: initialOf(p.label),
              country: p.country_da || null,
+             category: p.category || null,
              persons: top.map(function (t) { return t[0]; }) };
   });
 
@@ -580,14 +601,29 @@
     }
   }
 
+  // Raw PLACES_EXTRA.category values are the verified English vocabulary
+  // (see docs/data-model/steder-verificeret-category-mapping.md) --
+  // display-only Danish labels, not a second copy of the data. Falls
+  // back to the raw value for anything not in this table so a future
+  // category the source file might add still renders instead of
+  // silently disappearing.
+  var CATEGORY_LABELS_DA = {
+    'City': 'By', 'Property': 'Gods', 'Region': 'Region',
+    'Point of interest (POI)': 'Seværdighed', 'River': 'Flod',
+    'Mountain': 'Bjerg', 'Island': 'Ø', 'Lake': 'Sø', 'Country': 'Land',
+    'Sea': 'Hav', 'Church': 'Kirke', 'Continent': 'Kontinent'
+  };
+
   var facets = FacetEngine.create({
     panel: document.querySelector('.facet-panel'),
     items: ALL,
     accessors: {
-      country: function (p) { return p.country; },
-      person:  function (p) { return p.persons; }
+      country:  function (p) { return p.country; },
+      category: function (p) { return p.category; },
+      person:   function (p) { return p.persons; }
     },
     labels: {
+      category: function (v) { return CATEGORY_LABELS_DA[v] || v; },
       person: function (rid) {
         var p = typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[rid];
         return p ? p.label : rid;

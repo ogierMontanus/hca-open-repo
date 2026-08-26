@@ -40,12 +40,13 @@ import re
 import sys
 from collections import Counter
 
-ROOT     = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
-REFS     = os.path.join(ROOT, "data", "normalized", "references.csv")
-REJSER   = os.path.join(ROOT, "data", "normalized", "rejser.tsv")
-SV14     = os.path.join(ROOT, "data", "normalized", "sv14_places_reconciled.csv")
-OUT      = os.path.join(ROOT, "mockup", "data", "places-extra.js")
+ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
+REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
+REJSER     = os.path.join(ROOT, "data", "normalized", "rejser.tsv")
+SV14       = os.path.join(ROOT, "data", "normalized", "sv14_places_reconciled.csv")
+CATEGORIES = os.path.join(ROOT, "data", "normalized", "steder_verified_categories.csv")
+OUT        = os.path.join(ROOT, "mockup", "data", "places-extra.js")
 
 # Reuse the 33-country bounding-box gazetteer from build_web_data.py.
 # Each entry: (name_da, lat_min, lat_max, lon_min, lon_max). Designed to
@@ -164,6 +165,23 @@ def load_sv14_reconciled() -> dict[str, dict]:
     return geo
 
 
+def load_verified_categories() -> dict[str, str]:
+    """Returns {entity_id: category} from data/normalized/
+    steder_verified_categories.csv — see
+    scripts/build_mockup/reconcile_steder_categories.py and
+    docs/data-model/steder-verificeret-category-mapping.md. Degrades to
+    an empty dict when the file is absent (that reconciliation script
+    hasn't run yet), same pattern as load_sv14_reconciled() above."""
+    cats: dict[str, str] = {}
+    if not os.path.exists(CATEGORIES):
+        return cats
+    with open(CATEGORIES, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            if row.get("entity_id") and row.get("category"):
+                cats[row["entity_id"]] = row["category"]
+    return cats
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -189,6 +207,9 @@ def main() -> None:
     sv14_geo = load_sv14_reconciled()
     print(f"  SV14 reconciliation: {len(sv14_geo):,} entity-id matches")
 
+    categories = load_verified_categories()
+    print(f"  verified categories: {len(categories):,} entity-id matches")
+
     # Emit one entry per place, INCLUDING IDs that mockup/place.html
     # also curates. place.html's `ALL_PLACES = Object.assign({},
     # PLACES_EXTRA, PLACES)` still gives the hand-curated entries
@@ -205,6 +226,7 @@ def main() -> None:
             "label":       label,
             "description": (r.get("description") or "").strip() or None,
             "refs":        ref_count.get(rid, 0),
+            "category":    categories.get(rid),
         }
         g = geo.get(label.casefold())
         if g:
@@ -240,6 +262,11 @@ def main() -> None:
         f.write("// to HERRED_AMT_RE (country_da only, no coordinates) when the label itself states a\n")
         f.write("// Danish herred/amt, e.g. \"Sæby, Løve H., Holbæk A\". geo_source records which of\n")
         f.write("// the three supplied an entry's country/coordinates.\n")
+        f.write("// `category` (City/Property/Region/Point of interest (POI)/River/Mountain/Island/\n")
+        f.write("// Lake/Country/Sea/Church/Continent, or null) comes from data/normalized/\n")
+        f.write("// steder_verified_categories.csv — see reconcile_steder_categories.py and\n")
+        f.write("// docs/data-model/steder-verificeret-category-mapping.md. Raw English value as\n")
+        f.write("// verified; UI templates translate it for display, they don't get it pre-translated.\n")
         f.write("// The hand-curated PLACES object in place.html takes precedence (ALL_PLACES merge).\n")
         f.write("const PLACES_EXTRA = ")
         f.write(json.dumps(generated, ensure_ascii=False, separators=(",", ":")))
