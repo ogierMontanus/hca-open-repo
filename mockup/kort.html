@@ -71,11 +71,27 @@
       <div class="kort-meta" id="kort-meta">
         <span><strong id="kort-count">…</strong> steder med koordinater</span>
         <span>·</span>
+        <label style="display:flex;align-items:center;gap:6px">
+          Kategori:
+          <select id="kort-category-select"
+                  style="padding:4px 8px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.82rem">
+            <option value="">Alle kategorier</option>
+          </select>
+        </label>
+        <span>·</span>
         <span>Klyngerne brydes op, når du zoomer ind</span>
         <span style="margin-left:auto">
           <a href="places.html" style="color:var(--color-accent)">Tilbage til stedregistret</a>
         </span>
       </div>
+
+      <!-- Disclaimer — filled in by JS with the actual count of geocoded
+           places that carry no verified Category (see
+           docs/data-model/steder-verificeret-category-mapping.md). Only
+           2 of 454 today, but stated as a live number rather than a
+           hand-typed one so it can't silently go stale as more places
+           get geocoded or categorized. -->
+      <p id="kort-category-disclaimer" style="font-size:0.78rem;color:var(--color-text-muted);margin:0 0 var(--sp4);display:none"></p>
 
       <div id="kort-map" aria-label="Kort over geokodede steder i dagbogsregistret"></div>
 
@@ -129,6 +145,7 @@
         lat: p.lat,
         lon: p.lon,
         country: p.country_da || '',
+        category: p.category || '',
         refs: p.refs || 0
       });
     }
@@ -140,6 +157,48 @@
     emptyEl.style.display = '';
     return;
   }
+
+  // Same raw-vocabulary-stays-English, display-label-is-Danish split as
+  // places.html's CATEGORY_LABELS_DA — see docs/data-model/
+  // steder-verificeret-category-mapping.md. Kept in sync by hand since
+  // this page has no shared facet-label module; if that starts drifting,
+  // factor it out instead of duplicating a third time.
+  var CATEGORY_LABELS_DA = {
+    'City': 'By', 'Property': 'Gods', 'Region': 'Region',
+    'Point of interest (POI)': 'Seværdighed', 'River': 'Flod',
+    'Mountain': 'Bjerg', 'Island': 'Ø', 'Lake': 'Sø', 'Country': 'Land',
+    'Sea': 'Hav', 'Church': 'Kirke', 'Continent': 'Kontinent'
+  };
+
+  // Disclaimer: how many of the GEOCODED places (not the whole 2.508-
+  // place register — a reader on this page only cares about what's on
+  // the map) have no verified Category yet. Computed live so it can't
+  // drift out of date the way a hand-typed number would as more places
+  // get geocoded or categorized.
+  var uncategorized = geocoded.filter(function (p) { return !p.category; }).length;
+  var disclaimerEl = document.getElementById('kort-category-disclaimer');
+  if (uncategorized > 0 && disclaimerEl) {
+    disclaimerEl.textContent = uncategorized + ' af ' + geocoded.length +
+      ' geokodede steder mangler endnu en verificeret kategori og vises uanset ' +
+      'hvilken kategori der vælges herunder — se docs/data-model/' +
+      'steder-verificeret-category-mapping.md.';
+    disclaimerEl.style.display = '';
+  }
+
+  // Category dropdown — counts drive the sort (most common first), same
+  // as places.html's facet ordering.
+  var catCounts = {};
+  geocoded.forEach(function (p) {
+    if (p.category) catCounts[p.category] = (catCounts[p.category] || 0) + 1;
+  });
+  var catSelect = document.getElementById('kort-category-select');
+  Object.keys(catCounts).sort(function (a, b) { return catCounts[b] - catCounts[a]; })
+    .forEach(function (cat) {
+      var o = document.createElement('option');
+      o.value = cat;
+      o.textContent = (CATEGORY_LABELS_DA[cat] || cat) + ' (' + catCounts[cat] + ')';
+      catSelect.appendChild(o);
+    });
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -169,20 +228,40 @@
   // Keep marker references so a #reg=… hash can pan/open the right popup.
   var markersByRid = Object.create(null);
 
-  geocoded.forEach(function (p) {
-    var m = L.marker([p.lat, p.lon], { title: p.label });
-    var html = '<strong>' + esc(p.label) + '</strong>' +
-      (p.country ? '<br><span style="color:var(--color-text-muted)">' + esc(p.country) + '</span>' : '') +
-      '<br><a href="place.html?reg=' + esc(p.rid) + '">Åbn stedside →</a>' +
-      (p.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' + p.refs + ' refs.</span>' : '');
-    m.bindPopup(html);
-    cluster.addLayer(m);
-    markersByRid[p.rid] = m;
-  });
+  // Rebuilds the cluster layer for the given category ('' = all, INCLUDING
+  // the uncategorized places the disclaimer above describes — a filter
+  // choice, not a gap: picking a specific category is the only way to
+  // exclude them, matching how places.html's own facet leaves
+  // "Uklassificeret" as an explicit opt-in bucket rather than hiding it
+  // by default).
+  function renderMarkers(category) {
+    cluster.clearLayers();
+    markersByRid = Object.create(null);
+    var subset = category ? geocoded.filter(function (p) { return p.category === category; }) : geocoded;
+    subset.forEach(function (p) {
+      var m = L.marker([p.lat, p.lon], { title: p.label });
+      var html = '<strong>' + esc(p.label) + '</strong>' +
+        (p.country ? '<br><span style="color:var(--color-text-muted)">' + esc(p.country) + '</span>' : '') +
+        '<br><a href="place.html?reg=' + esc(p.rid) + '">Åbn stedside →</a>' +
+        (p.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' + p.refs + ' refs.</span>' : '');
+      m.bindPopup(html);
+      cluster.addLayer(m);
+      markersByRid[p.rid] = m;
+    });
+    countEl.textContent = subset.length.toLocaleString('da-DK');
+    return subset.length;
+  }
+
+  renderMarkers('');
   map.addLayer(cluster);
 
   // Fit to all markers, with a small padding so border points aren't clipped.
   map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
+
+  catSelect.addEventListener('change', function () {
+    var n = renderMarkers(catSelect.value);
+    if (n) map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
+  });
 
   // Deep-link via #reg=Reg0000100 → pan, zoom in enough to break the cluster
   // open, then open the popup. Used by the link from per-place pages.
