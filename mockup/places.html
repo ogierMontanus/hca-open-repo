@@ -88,18 +88,22 @@
             </div>
           </div>
 
-          <!-- Land — live off PLACES_EXTRA.country_da. Only 453 of 2.508 places
-               carry a country today (the value comes from rejser.tsv / the
-               SV14 reconciliation, which cover the travel itineraries rather
-               than the whole register), so the generated "Uoplyst" bucket
-               makes the gap selectable instead of silently dropping those
-               rows. Rows and counts are rendered by FacetEngine — do not
-               hand-write them here. -->
+          <!-- Land — live off PLACES_EXTRA.country_da, now the human-verified
+               country from Steder_i_dagboegerne VER 1.0 (2.399 of 2.508
+               places; see docs/data-model/steder-verificeret-category-mapping.md
+               §5), so England and Skotland show as separate values instead
+               of a bounding-box "Storbritannien". The generated "Uoplyst"
+               bucket makes the remaining 109-place gap selectable instead of
+               silently dropping those rows. 79 distinct countries exist —
+               limit=20 (not the 12 used elsewhere) so mid-frequency values
+               like Holland/Skotland aren't cut off the visible list. Rows
+               and counts are rendered by FacetEngine — do not hand-write
+               them here. -->
           <div class="facet-group">
             <div class="facet-group__header">Land <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body"
                  data-facet-source="country"
-                 data-facet-limit="12"
+                 data-facet-limit="20"
                  data-facet-empty-label="Uoplyst"></div>
           </div>
 
