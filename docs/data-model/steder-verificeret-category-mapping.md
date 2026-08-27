@@ -124,11 +124,103 @@ candidate with feature code `H.STM` — the same discipline
 candidates, never auto-write), extended here with a type constraint the
 works pipeline didn't need.
 
+## 5. Implementation: Category facet + verified Country override
+
+Status: implemented, 2026-08-26/27.
+
+`scripts/build_mockup/reconcile_steder_categories.py` was rewritten to
+extract **both** `Category` and `Country` (not just Category as §3
+proposed), using a three-tier match instead of the single exact-match
+pass §1 measured:
+
+1. Exact case-insensitive `RegistryTitle` ↔ `label`.
+2. Diacritic/orthography-normalized match (æ/ø/å folded, generic accents
+   NFD-stripped) — catches spelling-convention drift.
+3. Register `"se: X"` / `"se X"` redirect labels, resolved to their
+   target `X` and matched (steps 1–2) against that target instead of the
+   redirect stub's own label.
+
+This raised the join rate from §1's single-pass 2,332/2,433 (95.8%) to
+**2,400/2,433 matched** (2,326 exact + 28 normalized + 46 via redirect),
+output to `data/normalized/steder_verified_categories.csv`. Of those
+matched rows, 2,394 carry a non-blank `category` and 2,399 a non-blank
+`country` (a handful of xlsx rows have one field blank but not the
+other).
+
+**Why the xlsx's 2,433 and the register's 2,508 are different numbers,
+and why that's expected, not a bug:** the xlsx (`RawLoc`, this file) and
+`entities.csv`'s STED-REGISTER are two lists of different size and
+provenance — the xlsx is a newer, human-verified re-annotation that
+mostly but not entirely overlaps the older, larger register. Matching
+by name leaves the register's other **108 places** (2,508 − 2,400) with
+no verified `country_da`: the xlsx has no row for them at all (not a
+match failure). `places.html`/`kort.html` still list all 2,508 register
+places, as before — the join only fills in `country_da` for the 2,400
+it can identify, same "Uklassificeret"/"Uoplyst" fallback-bucket pattern
+already used for `category` and the older bounding-box `Land` facet.
+This 108 (not the 13 places initially expected) was accepted as the
+correct, current figure after investigation ruled out a same-scope fix
+(a deeper LocID-based ID migration against `raw/HCA REPOSITORY
+V0.92/LocationData-PQ-V0.92.xlsx`'s `DimLoc1` sheet could plausibly
+close more of the gap, but is out of scope for this pass).
+
+`scripts/build_mockup/build_places_extra.py`'s `load_verified_categories()`
+became `load_verified_categories_and_countries()`; the verified
+`country` **overrides** whatever `country_da` the existing
+rejser.tsv → SV14 → HERRED_AMT-label fallback chain produced (but
+coordinates and `geo_source` are left as that chain set them — only
+`country_da` is replaced). Effect on the `places.html`/`kort.html`
+Country facet: England and Skotland now appear as separate values (46
+and 26 places respectively) instead of being folded into one
+"Storbritannien" bucket, the bounding-box gazetteer's old behavior.
+
+### Nationality roll-up for nation.html
+
+`nation.html`'s per-nationality "places in this nation" mashup reads
+`country_da` through the coarser, pre-existing nationality vocabulary
+(`data/curated/ethnic_adjectives_da.csv`,
+`nation_place_labels_da.csv`, `nation_umbrellas_da.csv`) — which has no
+"Skotland"/"Irland" entries of its own, only a `britisk` umbrella
+pointing at "England". Left alone, the newly-granular `country_da`
+values would have made Skotland/Irland-tagged places invisible to
+`nation.html` (no umbrella member's own label is "Skotland" or
+"Irland"). `data/curated/steder_country_to_nation_da.csv` is a new
+crosswalk (xlsx country → nation-vocabulary place label) that
+`build_nation_index.py` applies **only** when consuming
+`places-extra.js` (`load_places_extra(path, country_to_nation)`) —
+`country_da` itself stays granular for places.html/kort.html; only
+nation.html's aggregation folds Skotland/Irland into the `britisk`
+umbrella's England bucket. 34 of the xlsx's ~60 countries have a
+nationality-vocabulary counterpart today; the rest (Tjekkiet, Kroatien,
+Marokko, the 5 continent values, ...) are left unmapped in the
+crosswalk with a documented reason, since no nationality key exists for
+them to roll up to.
+
+**Known limitation, not fixed in this pass:** for the `britisk`
+umbrella, the aggregate `places_in_country` union is correct (73 places,
+England+Skotland+Irland combined) but the *per-member* breakdown
+(`engelsk`/`skotsk`/`irsk`/`britisk`/`angelsaksisk`, meant to show which
+sub-identity a place came from) attributes all 73 to `engelsk` only,
+because each member's own `places_in_country` is still computed from
+its *own* individual label (`skotsk` → "Skotland") before umbrella
+clustering, and the crosswalk has already remapped every
+Skotland/Irland-tagged place's `country_da` to "England" by the time
+`build_nation_index.py` reads it — so `skotsk`'s own lookup finds
+nothing left under "Skotland". This is not a regression: before this
+change, GB places carried the bounding-box value "Storbritannien",
+which didn't match any individual member's label either, so the
+per-member breakdown was already empty for all of them (0/0/0/0/0
+rather than today's 0/73/0/0/0). Fixing it would mean computing
+per-member breakdowns after umbrella clustering, using the umbrella's
+own crosswalk-aware lookup — deferred as a follow-up.
+
 ## Not done here
 
-- The 101-row name-mismatch reconciliation (§1).
+- The residual 108-place Country gap (§5) and 108/2,508-place Category
+  gap (§3) — a LocID-based crosswalk against V0.92's `DimLoc1` sheet is
+  a plausible next step, not attempted.
 - Any actual Wikidata/GeoNames *entity* lookups for individual places —
   §4 maps the **category vocabulary** to classes, not any of the 2,332
   places to their own Wikidata/GeoNames items. That is the follow-on
   work §2/§4 set up, not attempted in this pass.
-- Wiring `category` into `build_places_extra.py` / `places.html` (§3).
+- Fixing the `britisk` umbrella per-member attribution limitation (§5).

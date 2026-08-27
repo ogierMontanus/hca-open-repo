@@ -56,6 +56,7 @@ ENTITIES       = os.path.join(ROOT, "data", "normalized", "entities.csv")
 PERSON_MATCHES = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
 WORK_LANGS     = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
 PLACES_EXTRA   = os.path.join(ROOT, "mockup", "data", "places-extra.js")
+COUNTRY_TO_NATION = os.path.join(ROOT, "data", "curated", "steder_country_to_nation_da.csv")
 OUT            = os.path.join(ROOT, "mockup", "data", "nation-index.js")
 
 # Which nationality key a work's LANGUAGE routes to. This is a language →
@@ -104,9 +105,37 @@ def load_place_labels(path):
     return labels
 
 
-def load_places_extra(path):
+def load_country_to_nation(path):
+    """Returns {xlsx_country: nation_place_label} from data/curated/
+    steder_verified_categories.csv's country column having become far
+    more granular than this file's own nationality vocabulary (England
+    and Skotland are now distinct country_da values, not one folded
+    "Storbritannien" — see docs/data-model/steder-verificeret-category-
+    mapping.md and build_places_extra.py). Rows with a blank
+    nation_place_label (Tjekkiet, Kroatien, the continents, ...) are
+    genuinely unmapped -- no corresponding nationality key exists yet --
+    and are skipped rather than guessed at; load_places_extra() below
+    falls back to the raw country_da unchanged for those and for any
+    country_da this crosswalk doesn't mention at all, so a value it
+    doesn't know about degrades to "use it as-is" rather than vanishing."""
+    out = {}
+    if not os.path.exists(path):
+        return out
+    with open(path, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            if row.get("xlsx_country") and row.get("nation_place_label"):
+                out[row["xlsx_country"]] = row["nation_place_label"]
+    return out
+
+
+def load_places_extra(path, country_to_nation):
     """Returns {entity_id: country_da} — degrades to {} if the generated
-    file is absent (fresh clone before Stage 4c has run)."""
+    file is absent (fresh clone before Stage 4c has run). Each country_da
+    is passed through country_to_nation (see load_country_to_nation) so
+    e.g. both "England" and "Skotland" places land in the "England"
+    bucket britisk's umbrella expects, without places.html/kort.html's
+    own (more granular) Country facet needing to change at all — that
+    facet reads country_da directly from places-extra.js, unmapped."""
     if not os.path.exists(path):
         print(f"  [!] {os.path.relpath(path, ROOT)} not found — run build_places_extra.py first. "
               f"Continuing with no places_in_country data.")
@@ -117,7 +146,8 @@ def load_places_extra(path):
     if not m:
         return {}
     data = json.loads(m.group(1))
-    return {rid: rec.get("country_da") for rid, rec in data.items() if rec.get("country_da")}
+    return {rid: country_to_nation.get(rec["country_da"], rec["country_da"])
+            for rid, rec in data.items() if rec.get("country_da")}
 
 
 def load_umbrellas(path):
@@ -180,8 +210,12 @@ def main():
     place_label_to_id = load_place_labels(ENTITIES)
     print(f"  {len(place_label_to_id):,} place labels")
 
+    print(f"Loading {os.path.relpath(COUNTRY_TO_NATION, ROOT)}…")
+    country_to_nation = load_country_to_nation(COUNTRY_TO_NATION)
+    print(f"  {len(country_to_nation):,} country -> nation-bucket mappings")
+
     print(f"Loading {os.path.relpath(PLACES_EXTRA, ROOT)}…")
-    place_country = load_places_extra(PLACES_EXTRA)
+    place_country = load_places_extra(PLACES_EXTRA, country_to_nation)
     print(f"  {len(place_country):,} places with a resolved country_da")
 
     print(f"Loading {os.path.relpath(PERSON_MATCHES, ROOT)}…")

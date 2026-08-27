@@ -165,21 +165,29 @@ def load_sv14_reconciled() -> dict[str, dict]:
     return geo
 
 
-def load_verified_categories() -> dict[str, str]:
-    """Returns {entity_id: category} from data/normalized/
-    steder_verified_categories.csv — see
+def load_verified_categories_and_countries() -> tuple[dict[str, str], dict[str, str]]:
+    """Returns ({entity_id: category}, {entity_id: country}) from
+    data/normalized/steder_verified_categories.csv — see
     scripts/build_mockup/reconcile_steder_categories.py and
     docs/data-model/steder-verificeret-category-mapping.md. Degrades to
-    an empty dict when the file is absent (that reconciliation script
-    hasn't run yet), same pattern as load_sv14_reconciled() above."""
+    two empty dicts when the file is absent (that reconciliation script
+    hasn't run yet), same pattern as load_sv14_reconciled() above.
+
+    The verified country is a RAW, more granular value than the old
+    bounding-box gazetteer (England and Skotland stay distinct, not
+    folded into one "Storbritannien" the way COUNTRIES above would) --
+    see main()'s precedence note on where it's applied."""
     cats: dict[str, str] = {}
+    countries: dict[str, str] = {}
     if not os.path.exists(CATEGORIES):
-        return cats
+        return cats, countries
     with open(CATEGORIES, encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
             if row.get("entity_id") and row.get("category"):
                 cats[row["entity_id"]] = row["category"]
-    return cats
+            if row.get("entity_id") and row.get("country"):
+                countries[row["entity_id"]] = row["country"]
+    return cats, countries
 
 
 def main() -> None:
@@ -207,8 +215,9 @@ def main() -> None:
     sv14_geo = load_sv14_reconciled()
     print(f"  SV14 reconciliation: {len(sv14_geo):,} entity-id matches")
 
-    categories = load_verified_categories()
+    categories, verified_countries = load_verified_categories_and_countries()
     print(f"  verified categories: {len(categories):,} entity-id matches")
+    print(f"  verified countries: {len(verified_countries):,} entity-id matches")
 
     # Emit one entry per place, INCLUDING IDs that mockup/place.html
     # also curates. place.html's `ALL_PLACES = Object.assign({},
@@ -219,6 +228,7 @@ def main() -> None:
     rejser_hits = 0
     sv14_hits = 0
     herred_amt_hits = 0
+    verified_country_hits = 0
     for r in places:
         rid = r["entity_id"]
         label = (r.get("label") or "").strip()
@@ -245,12 +255,26 @@ def main() -> None:
                 rec["herred"] = m.group("herred")
                 rec["amt"] = m.group("amt")
                 herred_amt_hits += 1
+
+        # Verified country OVERRIDES whatever the geo sources above set --
+        # it's human-verified and far more granular (England/Skotland stay
+        # distinct; the COUNTRIES gazetteer's bounding boxes would have
+        # folded both into one "Storbritannien"). Coordinates from rejser/
+        # SV14/herred_amt are kept regardless; only country_da is replaced.
+        # geo_source is left as whichever source supplied the coordinates
+        # (or unset) — it describes geo_source, not country_da's origin,
+        # so a place with rejser coordinates but a verified country now
+        # correctly has geo_source="rejser" and a verified country_da.
+        if rid in verified_countries:
+            rec["country_da"] = verified_countries[rid]
+            verified_country_hits += 1
         generated[rid] = rec
 
     geo_hits = rejser_hits + sv14_hits + herred_amt_hits
-    print(f"  generated {len(generated):,} entries ({geo_hits:,} with coordinates or "
-          f"an inferred country: {rejser_hits:,} rejser, {sv14_hits:,} SV14, "
-          f"{herred_amt_hits:,} herred/amt label match)")
+    print(f"  generated {len(generated):,} entries ({geo_hits:,} with coordinates from "
+          f"{rejser_hits:,} rejser, {sv14_hits:,} SV14, {herred_amt_hits:,} herred/amt; "
+          f"{verified_country_hits:,} with a verified country_da overriding/filling in "
+          f"beyond those)")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:

@@ -2,22 +2,36 @@
 """
 reconcile_steder_categories.py
 ---------------------------------
-Joins the human-verified `Category` column from
+Joins the human-verified `Category` and `Country` columns from
 raw/Steder_i_dagboegerne_verificeret_udfyldt VER 1.0.xlsx (sheet
-RawLoc) onto data/normalized/entities.csv's STED-REGISTER places, by
-exact case-insensitive RegistryTitle <-> label match — see
-docs/data-model/steder-verificeret-category-mapping.md §1 for the
-95.8% match-rate finding this reproduces (2,332/2,433 unique titles).
+RawLoc) onto data/normalized/entities.csv's STED-REGISTER places — see
+docs/data-model/steder-verificeret-category-mapping.md §1/§3 for the
+methodology and the Category numbers this reproduces.
 
-Only entities.csv rows with a name match AND a non-empty Category get
-written -- unmatched rows (spelling/punctuation variants, mostly) and
-blank-Category rows are logged but not guessed at, same propose-what-
-you-can-verify discipline as every other *_reconciled.csv in this
-pipeline.
+Matching, in order (each entity_id is only claimed once, by the first
+step that resolves it):
+
+  1. Exact case-insensitive RegistryTitle <-> label match.
+  2. Diacritic/orthography-normalized match (æ/ø/å folded the same way
+     as name_normalize.py, generic accents NFD-stripped) — catches
+     spelling-convention drift the exact match misses.
+  3. Register "se: X" / "se X" redirect labels (e.g. "Bruxelles, se:
+     Brüssel.") resolved to their target X, then matched (steps 1-2)
+     against the TARGET's name instead of the redirect stub's own label
+     -- these are register-internal aliases, not new places.
+
+Rows the xlsx itself leaves ambiguous (title matches more than one
+register label) or blank (no Category/Country cell) are skipped, not
+guessed at. A residual ~100-150 places stay unmatched after all three
+steps -- checked directly, these are mostly places whose entities.csv
+label carries an OCR-era spelling corruption not present in this
+cleaner, human-verified source (e.g. "Drottningholro" for
+Drottningholm) -- resolving those would need fuzzy/edit-distance
+matching with a real risk of a wrong match, so it isn't attempted here.
 
 Output: data/normalized/steder_verified_categories.csv (entity_id,
-label, category) -- read by build_places_extra.py (kept stdlib-only
-itself; this script is the one place openpyxl is needed).
+label, category, country) -- read by build_places_extra.py (kept
+stdlib-only itself; this script is the one place openpyxl is needed).
 
 Run before build_places_extra.py:
   python scripts/build_mockup/reconcile_steder_categories.py
@@ -25,7 +39,9 @@ Run before build_places_extra.py:
 
 import csv
 import os
+import re
 import sys
+import unicodedata
 
 try:
     import openpyxl
@@ -36,6 +52,16 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 XLSX = os.path.join(ROOT, "raw", "Steder_i_dagboegerne_verificeret_udfyldt VER 1.0.xlsx")
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 OUT = os.path.join(ROOT, "data", "normalized", "steder_verified_categories.csv")
+
+SEE_RE = re.compile(r"^(.*?),?\s*se:?\s+(.+?)\.?\s*$", re.I)
+
+
+def norm(s):
+    s = (s or "").strip().casefold()
+    s = s.replace("æ", "ae").replace("ø", "o").replace("å", "aa")
+    s = unicodedata.normalize("NFD", s)
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+    return re.sub(r"[^a-z0-9]+", " ", s).strip()
 
 
 def main():
@@ -50,12 +76,14 @@ def main():
         for r in csv.DictReader(f):
             if r["entity_type"] == "place":
                 places.append(r)
-    by_casefold = {}
+    by_exact, by_norm = {}, {}
     for r in places:
-        key = (r.get("label") or "").strip().casefold()
-        if key:
-            by_casefold.setdefault(key, []).append(r)
-    print(f"  {len(places):,} places, {len(by_casefold):,} distinct labels")
+        label = (r.get("label") or "").strip()
+        if not label:
+            continue
+        by_exact.setdefault(label.casefold(), []).append(r)
+        by_norm.setdefault(norm(label), []).append(r)
+    print(f"  {len(places):,} places")
 
     print(f"Loading {os.path.relpath(XLSX, ROOT)}…")
     wb = openpyxl.load_workbook(XLSX, data_only=True, read_only=True)
@@ -64,40 +92,71 @@ def main():
     header = next(rows)
     idx = {name: i for i, name in enumerate(header)}
 
-    matched, no_category, no_match, ambiguous = [], 0, [], []
-    seen_titles = set()
+    # xlsx RegistryTitle -> (category, country), first occurrence wins
+    # (duplicates are the same place repeated across diary pages).
+    xlsx_by_title, seen_titles = {}, set()
     for r in rows:
         title = (r[idx["RegistryTitle"]] or "").strip()
-        category = (r[idx["Category"]] or "").strip()
         if not title or title.casefold() in seen_titles:
             continue
         seen_titles.add(title.casefold())
-        if not category or category.lower() == "none":
-            no_category += 1
-            continue
-        candidates = by_casefold.get(title.casefold())
-        if not candidates:
-            no_match.append(title)
-            continue
-        if len(candidates) > 1:
-            ambiguous.append(title)
-            continue
-        matched.append({
-            "entity_id": candidates[0]["entity_id"],
-            "label": candidates[0]["label"],
-            "category": category,
-        })
+        category = (r[idx["Category"]] or "").strip()
+        country = (r[idx["Country"]] or "").strip()
+        if category.lower() == "none":
+            category = ""
+        if country.lower() == "none":
+            country = ""
+        xlsx_by_title[title] = (category, country)
 
-    print(f"  {len(matched):,} matched with a category")
-    print(f"  {no_category:,} rows with a blank/None category (skipped)")
-    print(f"  {len(no_match):,} rows with no matching register label (skipped)")
-    print(f"  {len(ambiguous):,} rows matching more than one register label (skipped)")
+    # Two lookup indexes into the xlsx data itself, mirroring the register
+    # indexes above, so a register "se: X" redirect can be resolved to X
+    # and then matched the same (exact/normalized) way.
+    xlsx_exact = {t.casefold(): v for t, v in xlsx_by_title.items()}
+    xlsx_norm = {}
+    for t, v in xlsx_by_title.items():
+        xlsx_norm.setdefault(norm(t), v)
+
+    matched = {}
+    stats = {"exact": 0, "normalized": 0, "redirect": 0}
+
+    def try_match(label):
+        cat_country = xlsx_exact.get(label.casefold())
+        if cat_country:
+            return cat_country, "exact"
+        cat_country = xlsx_norm.get(norm(label))
+        if cat_country:
+            return cat_country, "normalized"
+        return None, None
+
+    for r in places:
+        rid = r["entity_id"]
+        label = (r.get("label") or "").strip()
+        if not label:
+            continue
+        result, how = try_match(label)
+        if not result:
+            m = SEE_RE.match(label)
+            if m:
+                result, _ = try_match(m.group(2).strip())
+                how = "redirect" if result else None
+        if result and (result[0] or result[1]):
+            matched[rid] = {
+                "entity_id": rid, "label": label,
+                "category": result[0], "country": result[1],
+            }
+            stats[how] += 1
+
+    unmatched = len(places) - len(matched)
+    print(f"  {len(matched):,} matched ({stats['exact']:,} exact, "
+          f"{stats['normalized']:,} normalized, {stats['redirect']:,} via 'se:' redirect)")
+    print(f"  {unmatched:,} places unmatched (OCR-corrupted labels or genuinely absent "
+          f"from the xlsx — see module docstring)")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["entity_id", "label", "category"])
+        w = csv.DictWriter(f, fieldnames=["entity_id", "label", "category", "country"])
         w.writeheader()
-        w.writerows(matched)
+        w.writerows(matched.values())
     print(f"wrote {os.path.relpath(OUT, ROOT)}  ({len(matched):,} rows)")
 
 
