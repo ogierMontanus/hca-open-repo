@@ -397,12 +397,17 @@ body[data-section="hvor"] .page-hero {
 .facet-item--active .facet-item__label { color: var(--color-accent); font-weight: 500; }
 
 /* "Vis alle" / "Show all" — appended by FacetEngine when a field has more
-   distinct values than data-facet-limit. */
+   distinct values than data-facet-limit. Sticky to the bottom of the 260px
+   scroll well (below) so it's always in view — otherwise a reader would
+   have to scroll a small box to the very end just to discover it exists,
+   which defeats the point of adding it. */
 .facet-more-toggle {
   display: block; width: 100%; text-align: left;
   padding: 6px var(--sp5); margin-top: 2px;
   font-size: 0.78rem; font-weight: 600; color: var(--color-accent);
-  background: none; border: none; font-family: var(--font-sans); cursor: pointer;
+  background: var(--color-surface); border: none; border-top: 1px solid var(--color-border);
+  font-family: var(--font-sans); cursor: pointer;
+  position: sticky; bottom: -1px;
 }
 .facet-more-toggle:hover { text-decoration: underline; }
 
@@ -424,8 +429,8 @@ body[data-section="hvor"] .page-hero {
 }
 .facet-group--expanded .facet-item { break-inside: avoid; }
 .facet-group--expanded .facet-more-toggle {
-  columns: initial; break-inside: avoid;
-  background: var(--color-surface); border-bottom: 1px solid var(--color-border);
+  position: static; column-span: all; break-inside: avoid;
+  background: var(--color-surface); border-top: none; border-bottom: 1px solid var(--color-border);
   margin: 0 0 var(--sp2); padding-left: 0;
 }
 

@@ -294,11 +294,32 @@ window.FacetEngine = (function () {
       }
       host.innerHTML = html;
       if (group) group.classList.toggle('facet-group--expanded', expanded);
+      // The overlay covers most of the viewport, so mark it as a dialog for
+      // assistive tech — cleared again once folded back to a normal list.
+      if (expanded) {
+        var headerEl = group ? group.querySelector('.facet-group__header') : null;
+        host.setAttribute('role', 'dialog');
+        host.setAttribute('aria-modal', 'true');
+        if (headerEl) host.setAttribute('aria-label', headerEl.textContent.replace(/[▲▾]/g, '').trim());
+      } else {
+        host.removeAttribute('role');
+        host.removeAttribute('aria-modal');
+        host.removeAttribute('aria-label');
+      }
     }
 
     function renderSources() {
       var hosts = panel.querySelectorAll('[data-facet-source]');
       for (var h = 0; h < hosts.length; h++) renderHost(hosts[h]);
+    }
+
+    // Whichever direction the overlay just moved, focus lands on the toggle
+    // button that reappears in the freshly-rendered host — keyboard users
+    // never lose their place, regardless of whether a click, Escape, a
+    // backdrop click, or a selection triggered the fold-back.
+    function focusToggle(host) {
+      var btn = host.querySelector('[data-facet-more]');
+      if (btn) btn.focus();
     }
 
     function collapseExpanded() {
@@ -308,6 +329,7 @@ window.FacetEngine = (function () {
       renderHost(host);
       updateAvailability(liveGroups());
       if (backdropEl) backdropEl.setAttribute('hidden', '');
+      focusToggle(host);
     }
 
     function expandHost(host) {
@@ -316,6 +338,7 @@ window.FacetEngine = (function () {
       renderHost(host);
       updateAvailability(liveGroups());
       ensureBackdrop().removeAttribute('hidden');
+      focusToggle(host);
     }
 
     /* ── Availability ───────────────────────────────────────────────────── */
