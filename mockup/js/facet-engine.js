@@ -16,8 +16,20 @@
  *     <div class="facet-group__body"
  *          data-facet-source="country"      ← enumerate this field's values
  *          data-facet-limit="12"            ← show the top N (by count)
- *          data-facet-empty-label="Uoplyst"><!-- rows generated here --></div>
+ *          data-facet-empty-label="Uoplyst"
+ *          data-facet-more-label="Vis alle"    ← optional, defaults to "Show all"
+ *          data-facet-fewer-label="Vis færre"  ← optional, defaults to "Show fewer"
+ *          ><!-- rows generated here --></div>
  *   </div>
+ *
+ * When a field has more distinct values than data-facet-limit, a toggle row
+ * is appended ("Vis alle (79)"). Clicking it expands that one facet into an
+ * overlay covering most of the viewport, showing every value in a multi-
+ * column list, rather than growing the sidebar and pushing the facets below
+ * it off screen. A backdrop click, Escape, the toggle itself, or ticking an
+ * option all fold it back to the normal-size list — and a value ticked while
+ * expanded stays visible in the folded list afterwards even if it falls
+ * outside the top-N by frequency, so choosing it is never silently reversed.
  *
  * A generated row carries the predicate:
  *
@@ -175,59 +187,135 @@ window.FacetEngine = (function () {
 
     /* ── Option rendering ───────────────────────────────────────────────── */
 
-    // Fill every [data-facet-source] body with one row per distinct value of
+    // Only one facet body can be expanded into the overlay at a time, and a
+    // shared backdrop element is created lazily on first use.
+    var expandedHost = null;
+    var backdropEl   = null;
+
+    function ensureBackdrop() {
+      if (backdropEl) return backdropEl;
+      backdropEl = document.createElement('div');
+      backdropEl.className = 'facet-backdrop';
+      backdropEl.setAttribute('hidden', '');
+      document.body.appendChild(backdropEl);
+      backdropEl.addEventListener('click', collapseExpanded);
+      return backdropEl;
+    }
+
+    // Render one [data-facet-source] body: one row per distinct value of
     // that field, ordered by frequency. Counts are computed here and never
     // hand-typed, so a facet cannot drift out of sync with its data.
+    function renderHost(host) {
+      var group = host.closest ? host.closest('.facet-group') : null;
+      if (group && group.hasAttribute('data-facet-pending')) return;
+
+      var field = host.getAttribute('data-facet-source');
+      var limit = parseInt(host.getAttribute('data-facet-limit'), 10) || 0;
+      var emptyLabel = host.getAttribute('data-facet-empty-label');
+      var moreLabel  = host.getAttribute('data-facet-more-label') || 'Show all';
+      var fewerLabel = host.getAttribute('data-facet-fewer-label') || 'Show fewer';
+      var expanded = host === expandedHost;
+
+      // A re-render (toggling expand/collapse) rebuilds every checkbox from
+      // scratch, so read which values are currently ticked first — otherwise
+      // folding the overlay back down would silently untick the reader's own
+      // selection.
+      var checkedVals = {}, checkedEmpty = false;
+      var existing = host.querySelectorAll(BOX_SEL);
+      for (var e = 0; e < existing.length; e++) {
+        if (!existing[e].checked) continue;
+        if (existing[e].hasAttribute('data-facet-empty')) { checkedEmpty = true; continue; }
+        checkedVals[existing[e].getAttribute('data-match')] = true;
+      }
+
+      var counts = {}, empties = 0;
+      for (var i = 0; i < items.length; i++) {
+        var vals = VALS[i][field] || [];
+        if (!vals.length) { empties++; continue; }
+        for (var j = 0; j < vals.length; j++) {
+          counts[vals[j]] = (counts[vals[j]] || 0) + 1;
+        }
+      }
+
+      var labelOf = labels[field] || function (v) { return v; };
+      var keyOf   = sortKeys[field] || function (v) { return String(v); };
+      var rows = Object.keys(counts).map(function (v) {
+        return { value: v, label: String(labelOf(v) || v), n: counts[v] };
+      });
+      // Frequency first; on a tie fall back to the field's sort key, which
+      // for person fields is the surname (project convention — CLAUDE.md).
+      rows.sort(function (a, b) {
+        return b.n - a.n ||
+               String(keyOf(a.value)).localeCompare(String(keyOf(b.value)), 'da');
+      });
+
+      var total = rows.length;
+      var visibleRows = rows;
+      if (limit && !expanded) {
+        visibleRows = rows.slice(0, limit);
+        // A value ticked while the overlay was open must not vanish just
+        // because it falls outside the top-N once folded back down.
+        var shown = {};
+        for (var r = 0; r < visibleRows.length; r++) shown[visibleRows[r].value] = true;
+        for (var r2 = 0; r2 < rows.length; r2++) {
+          if (checkedVals[rows[r2].value] && !shown[rows[r2].value]) visibleRows.push(rows[r2]);
+        }
+      }
+
+      var rowsHtml = visibleRows.map(function (r) {
+        var checked = checkedVals[r.value] ? ' checked' : '';
+        return '<label class="facet-item"><input type="checkbox" data-facet="' +
+          esc(field) + '" data-match="' + esc(r.value) + '"' + checked + '>' +
+          '<span class="facet-item__label">' + esc(r.label) + '</span>' +
+          '<span class="facet-item__count">' + num(r.n) + '</span></label>';
+      }).join('');
+
+      // The "Uoplyst" bucket keeps a partially-covered field honest: the
+      // items with no value are selectable rather than silently absent.
+      if (emptyLabel && empties) {
+        var eChecked = checkedEmpty ? ' checked' : '';
+        rowsHtml += '<label class="facet-item"><input type="checkbox" data-facet="' +
+          esc(field) + '" data-facet-empty' + eChecked + '>' +
+          '<span class="facet-item__label">' + esc(emptyLabel) + '</span>' +
+          '<span class="facet-item__count">' + num(empties) + '</span></label>';
+      }
+
+      var html;
+      if (limit && total > limit) {
+        var toggle = expanded
+          ? '<button type="button" class="facet-more-toggle" data-facet-more>✕ ' + esc(fewerLabel) + '</button>'
+          : '<button type="button" class="facet-more-toggle" data-facet-more>' + esc(moreLabel) + ' (' + num(total) + ') ▾</button>';
+        // Expanded: the fold-back control leads, so it's reachable without
+        // scrolling past however many of the (up to) hundred-plus rows the
+        // reader has scrolled through. Collapsed: it trails the visible rows.
+        html = expanded ? toggle + rowsHtml : rowsHtml + toggle;
+      } else {
+        html = rowsHtml;
+      }
+      host.innerHTML = html;
+      if (group) group.classList.toggle('facet-group--expanded', expanded);
+    }
+
     function renderSources() {
       var hosts = panel.querySelectorAll('[data-facet-source]');
-      for (var h = 0; h < hosts.length; h++) {
-        var host  = hosts[h];
-        var group = host.closest ? host.closest('.facet-group') : null;
-        if (group && group.hasAttribute('data-facet-pending')) continue;
+      for (var h = 0; h < hosts.length; h++) renderHost(hosts[h]);
+    }
 
-        var field = host.getAttribute('data-facet-source');
-        var limit = parseInt(host.getAttribute('data-facet-limit'), 10) || 0;
-        var emptyLabel = host.getAttribute('data-facet-empty-label');
+    function collapseExpanded() {
+      if (!expandedHost) return;
+      var host = expandedHost;
+      expandedHost = null;
+      renderHost(host);
+      updateAvailability(liveGroups());
+      if (backdropEl) backdropEl.setAttribute('hidden', '');
+    }
 
-        var counts = {}, empties = 0;
-        for (var i = 0; i < items.length; i++) {
-          var vals = VALS[i][field] || [];
-          if (!vals.length) { empties++; continue; }
-          for (var j = 0; j < vals.length; j++) {
-            counts[vals[j]] = (counts[vals[j]] || 0) + 1;
-          }
-        }
-
-        var labelOf = labels[field] || function (v) { return v; };
-        var keyOf   = sortKeys[field] || function (v) { return String(v); };
-        var rows = Object.keys(counts).map(function (v) {
-          return { value: v, label: String(labelOf(v) || v), n: counts[v] };
-        });
-        // Frequency first; on a tie fall back to the field's sort key, which
-        // for person fields is the surname (project convention — CLAUDE.md).
-        rows.sort(function (a, b) {
-          return b.n - a.n ||
-                 String(keyOf(a.value)).localeCompare(String(keyOf(b.value)), 'da');
-        });
-        if (limit) rows = rows.slice(0, limit);
-
-        var html = rows.map(function (r) {
-          return '<label class="facet-item"><input type="checkbox" data-facet="' +
-            esc(field) + '" data-match="' + esc(r.value) + '">' +
-            '<span class="facet-item__label">' + esc(r.label) + '</span>' +
-            '<span class="facet-item__count">' + num(r.n) + '</span></label>';
-        }).join('');
-
-        // The "Uoplyst" bucket keeps a partially-covered field honest: the
-        // items with no value are selectable rather than silently absent.
-        if (emptyLabel && empties) {
-          html += '<label class="facet-item"><input type="checkbox" data-facet="' +
-            esc(field) + '" data-facet-empty>' +
-            '<span class="facet-item__label">' + esc(emptyLabel) + '</span>' +
-            '<span class="facet-item__count">' + num(empties) + '</span></label>';
-        }
-        host.innerHTML = html;
-      }
+    function expandHost(host) {
+      if (expandedHost && expandedHost !== host) collapseExpanded();
+      expandedHost = host;
+      renderHost(host);
+      updateAvailability(liveGroups());
+      ensureBackdrop().removeAttribute('hidden');
     }
 
     /* ── Availability ───────────────────────────────────────────────────── */
@@ -296,6 +384,12 @@ window.FacetEngine = (function () {
     function reset(silent) {
       var boxes = panel.querySelectorAll(BOX_SEL);
       for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
+      // Nothing is selected any more, so any facet showing a below-the-cutoff
+      // value only because it was ticked (or left expanded to the overlay)
+      // should fold back to its plain top-N state too.
+      expandedHost = null;
+      if (backdropEl) backdropEl.setAttribute('hidden', '');
+      renderSources();
       if (!silent) apply();
     }
 
@@ -305,7 +399,31 @@ window.FacetEngine = (function () {
     // without rebinding.
     panel.addEventListener('change', function (ev) {
       var t = ev.target;
-      if (t && t.matches && t.matches(BOX_SEL)) apply();
+      if (!(t && t.matches && t.matches(BOX_SEL))) return;
+      var host = t.closest ? t.closest('[data-facet-source]') : null;
+      apply();
+      // A selection made inside the overlay folds it back to the normal-size
+      // list — renderHost (inside collapseExpanded) already keeps the just-
+      // ticked value visible even below the top-N cutoff.
+      if (expandedHost && host === expandedHost) collapseExpanded();
+    });
+
+    // Expand/collapse toggle for facets with more values than their
+    // data-facet-limit. Delegated for the same reason as the change handler.
+    panel.addEventListener('click', function (ev) {
+      var t = ev.target;
+      var btn = t && t.closest ? t.closest('[data-facet-more]') : null;
+      if (!btn) return;
+      ev.preventDefault();
+      var host = btn.closest('[data-facet-source]');
+      if (!host) return;
+      if (host === expandedHost) collapseExpanded();
+      else expandHost(host);
+    });
+
+    // Escape closes the overlay the same way a backdrop click does.
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && expandedHost) collapseExpanded();
     });
 
     // Clear boxes first, then let the page drop its own prefilter state

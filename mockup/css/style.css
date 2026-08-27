@@ -396,6 +396,44 @@ body[data-section="hvor"] .page-hero {
 }
 .facet-item--active .facet-item__label { color: var(--color-accent); font-weight: 500; }
 
+/* "Vis alle" / "Show all" — appended by FacetEngine when a field has more
+   distinct values than data-facet-limit. */
+.facet-more-toggle {
+  display: block; width: 100%; text-align: left;
+  padding: 6px var(--sp5); margin-top: 2px;
+  font-size: 0.78rem; font-weight: 600; color: var(--color-accent);
+  background: none; border: none; font-family: var(--font-sans); cursor: pointer;
+}
+.facet-more-toggle:hover { text-decoration: underline; }
+
+/* Expanded facet body — a reader chasing a mid-frequency value (e.g. one of
+   79 countries) needs the whole list at a glance, not a 260px scroll well.
+   Expanding takes over most of the viewport rather than growing the
+   sidebar, which would push every facet below it off screen. A backdrop
+   click, Escape, the toggle itself, or ticking an option all fold it back
+   down (see facet-engine.js). */
+.facet-group--expanded { position: relative; z-index: 60; }
+.facet-group--expanded .facet-group__body[data-facet-source] {
+  position: fixed; top: 8vh; left: 50%; transform: translateX(-50%);
+  width: min(760px, 92vw); max-height: 82vh;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+  padding: var(--sp2) var(--sp2) var(--sp3) var(--sp5);
+  overflow-y: auto; z-index: 61;
+  columns: 220px 3; column-gap: var(--sp5);
+}
+.facet-group--expanded .facet-item { break-inside: avoid; }
+.facet-group--expanded .facet-more-toggle {
+  columns: initial; break-inside: avoid;
+  background: var(--color-surface); border-bottom: 1px solid var(--color-border);
+  margin: 0 0 var(--sp2); padding-left: 0;
+}
+
+.facet-backdrop {
+  position: fixed; inset: 0; background: rgba(15, 15, 20, 0.35); z-index: 59;
+}
+.facet-backdrop[hidden] { display: none; }
+
 /* Facets awaiting data. The group stays visible so the reader can see what
    the register will offer, but FacetEngine skips it entirely — it contributes
    no predicate and so cannot silently narrow the result set. Same visual
