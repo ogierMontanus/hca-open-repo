@@ -59,6 +59,11 @@ YEAR_RE = re.compile(r"\b\d{4}\b")
 YEAR_ONLY_RE = re.compile(r"^\d{4}(-\d{2,4})?$")
 OVERSAT_RE = re.compile(r",?\s*oversat\s+af\s+(.+)$", re.IGNORECASE)
 PSEUDONYM_RE = re.compile(r"^(.+?)[,\s]+Ͻ:\s*(.+)$")
+# "(ved A. Westrup)" -- an editor credit ("by/via A. Westrup"), same "ved"
+# marker parse_novels_plays_tales.py recognises; the name after it is the
+# real creator, so strip the particle rather than leaving "ved" glued to
+# the front of what becomes 06_creator.
+VED_PREFIX_RE = re.compile(r"^ved\s+", re.IGNORECASE)
 BRACKET_DVS_RE = re.compile(r"\s*\[Ͻ:\s*([^\]]+)\]")
 BRACKET_RE = re.compile(r"^\[([^\]]+)\](.*)", re.DOTALL)
 
@@ -110,6 +115,19 @@ def classify_paren(content: str) -> str:
     if YEAR_RE.search(s):
         return "source"
     return "creator"
+
+
+def looks_like_creator(s: str) -> bool:
+    """Screens a creator candidate the same way the parser's siblings do
+    (parse_novels_plays_tales.py's _looks_name_shaped, build_works_extra
+    .py's _looks_like_artist) -- a paren with no year isn't automatically
+    a name: "fransk Oversættelse" (a French-translation note, no
+    translator named) and "heri Amores Christiani IVti med Bilag" (a
+    content note -- what's included in this volume, not who wrote it)
+    both default to classify_paren()'s "creator" bucket for lack of a
+    year, but neither is one. A real name in this dataset is never
+    lowercase-led."""
+    return bool(s) and not s[0].islower()
 
 
 # ── Parser ───────────────────────────────────────────────────────────────────
@@ -210,7 +228,18 @@ def parse_entry(raw_label: str, reg_id: str) -> dict:
                     raw_creator = content[: om.start()].strip().rstrip(",")
                 else:
                     raw_creator = content
-                pseudonym, creator = split_pseudonym(raw_creator)
+                raw_creator = VED_PREFIX_RE.sub("", raw_creator).strip()
+                if looks_like_creator(raw_creator):
+                    pseudonym, creator = split_pseudonym(raw_creator)
+                else:
+                    # Not a name -- a content/language note that only
+                    # landed here for lack of a year to route it to
+                    # "source" instead. Keep it out of 06_creator; it's
+                    # still consumed (not left dangling in the title).
+                    # insert(0, ...), not append -- parens are walked
+                    # right-to-left here, same as the year_note branch
+                    # above, so this keeps note ordering left-to-right.
+                    note_parts.insert(0, content)
                 parens_to_strip.append(m)
                 idx_remaining.remove(idx)
                 current_end = m.start()

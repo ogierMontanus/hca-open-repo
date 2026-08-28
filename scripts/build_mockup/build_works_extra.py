@@ -506,6 +506,7 @@ def join_authors(authors):
 CREATOR_OVERRIDE_FILES = (
     "novels_plays_tales_parsed.tsv",
     "music_register_parsed.tsv",
+    "non_fiction_parsed.tsv",
 )
 
 

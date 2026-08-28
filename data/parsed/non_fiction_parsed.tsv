@@ -89,7 +89,7 @@ standardpost	False	NonFiction	Havet, dets Plante- og Dyreverden		Georg Hartwig		
 standardpost	False	NonFiction	Heimskringla		Snorre Sturluson					False		Reg001545
 standardpost	False	NonFiction	Heinrich Heine über Ludwig Börne		H. Heine					False		Reg001547
 standardpost	False	NonFiction	Hendschels Telegraph							False		Reg001557
-standardpost	False	NonFiction	Herrernes Noteringskalender 1873		ved A. Westrup					False		Reg001583
+standardpost	False	NonFiction	Herrernes Noteringskalender 1873		A. Westrup					False		Reg001583
 standardpost	False	NonFiction	Hinsidan Sundet. Danska epistlar af Orvar Odd		O. P. Sturzen-Becker					False		Reg001593
 standardpost	False	NonFiction	Hinsides Atlanterhavet		Robert Watt					False		Reg001594
 standardpost	False	NonFiction	Histoire de Jane Gray		J. M. Dargaud					False		Reg001597
@@ -106,7 +106,7 @@ standardpost	False	NonFiction	ltalienische Reise		J. W. von Goethe					False		Re
 standardpost	False	NonFiction	Jammers-Minde		Leonora Christina Ulfeldt					False		Reg001774
 standardpost	False	NonFiction	Jens Baggesens Biographie		August Baggesen					False		Reg001788
 standardpost	False	NonFiction	De jeugd van beroemde mannen	Agatha	Reinoudina de Goeje					False		Reg000642
-standardpost	False	NonFiction	Johannes-Evangeliet		fransk Oversættelse					False		Reg001817
+standardpost	False	NonFiction	Johannes-Evangeliet							False	fransk Oversættelse	Reg001817
 standardpost	False	NonFiction	Journey to Angora		William AinsPagth					False		Reg001828
 standardpost	False	NonFiction	Just Mathias Thiele		Nicolaj Bøgh		Ill. Tidende 22.11.1874			False		Reg001854
 krydshenvisning	False	NonFiction	Kabylerne						Arabere og Kabyler	False		Reg001864
@@ -143,7 +143,7 @@ standardpost	False	NonFiction	Neapel und die Neapolitaner		K. A. Mayer					False
 standardpost	False	NonFiction	Nogle Bemærkninger med Hensyn til Digteren H. C. Andersens Poesie		C. Hauch					False		Reg002519
 standardpost	False	NonFiction	Nogle Træk af Livet i Kjøbenhavn for en Menneskealder siden		J. Plenge					False		Reg002521
 standardpost	False	NonFiction	Het Noorden en het Oosten		J. van's Gravenweert					False		Reg001588
-standardpost	False	NonFiction	Nye Samlinger til den Danske Historie, udg. af P. F. Suhm l		heri Amores Christiani IVti med Bilag					False		Reg002564
+standardpost	False	NonFiction	Nye Samlinger til den Danske Historie, udg. af P. F. Suhm l							False	heri Amores Christiani IVti med Bilag	Reg002564
 standardpost	False	NonFiction	Odense og nærmeste Omegn i Billeder og med historisk beskrivende Text		J. Lauritzen					False		Reg002589
 standardpost	False	NonFiction	Om Hesteavl og Væddeløb		Stephan Széchenyi	Edv. Collin				False		Reg002605
 standardpost	False	NonFiction	Om Holger-Danske-Sagnet		Pauline Pagm					False		Reg002606
