@@ -134,6 +134,38 @@ window.EntityRefs = (function () {
     return k ? (_PERSON_KEY_REG[k] || null) : null;
   }
 
+  // Married-name resolution: a creator string sometimes carries a
+  // maiden-name form marked ", g. MarriedSurname" ("gift" = married) --
+  // e.g. "Therese A. L. von Jacob, g. Robinson" (Reg001555/Reg003469,
+  // the pseudonym "Talvj"). The person register files such a person
+  // under the MARRIED surname with the maiden name as a "f."
+  // (født/née) qualifier instead -- "Robinson, Therese A. L., f. von
+  // Jacob" -- so nameKey()'s plain surname-first parsing can't match a
+  // constructed "GivenNames MarriedSurname" guess against it: the
+  // register label's own key folds "f."/"von"/"Jacob" in as bogus
+  // initials too. Resolved directly instead: both the married surname
+  // (as the label's own leading surname) and the maiden surname (inside
+  // an "f." qualifier) must independently appear, so this can't
+  // accidentally match an unrelated same-surname person.
+  var _MARRIED_NAME_RE = /^(.+?),\s*g\.\s+(.+)$/i;
+  function marriedNameRid(name) {
+    var m = _MARRIED_NAME_RE.exec(name.trim());
+    if (!m || typeof PERSONS_EXTRA === 'undefined') return null;
+    var maidenToks = m[1].trim().split(/\s+/);
+    var maidenSurname = maidenToks[maidenToks.length - 1];
+    var marriedSurname = m[2].trim();
+    if (!maidenSurname || !marriedSurname) return null;
+    for (var rid in PERSONS_EXTRA) {
+      var lbl = PERSONS_EXTRA[rid] && PERSONS_EXTRA[rid].label;
+      if (!lbl) continue;
+      if (lbl.indexOf(marriedSurname + ',') === 0 &&
+          lbl.indexOf('f.') !== -1 && lbl.indexOf(maidenSurname) !== -1) {
+        return rid;
+      }
+    }
+    return null;
+  }
+
   function personRid(name) {
     if (!name) return null;
     var r = _PERSON_LABEL_REG[name] || _PERSON_PREFIX_REG[name];
@@ -142,6 +174,7 @@ window.EntityRefs = (function () {
       if (k) r = _PERSON_KEY_REG[k];
     }
     if (!r) r = genitiveStrippedRid(name);
+    if (!r) r = marriedNameRid(name);
     return r || null;
   }
   function placeRid(label) { return label ? (_PLACE_LABEL_REG[label] || null) : null; }

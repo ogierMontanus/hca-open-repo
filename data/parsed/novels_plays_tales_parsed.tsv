@@ -2,7 +2,7 @@
 standardpost	False	NovelsPlaysTales	Aaen og Havet		Thomas Lange				True			Reg000129
 standardpost	False	NovelsPlaysTales	Abdallah eller Firkløveret		E. Laboulaye				True			Reg000135
 standardpost	False	NovelsPlaysTales	Die Abderiten		C. M. Wieland				True			Reg000869
-standardpost	False	NovelsPlaysTales	Die Adoptivtochter		Karoline von Göhren Ͻ: Karoline von Zöllner				True			Reg000870
+standardpost	False	NovelsPlaysTales	Die Adoptivtochter		Karoline von Zöllner				True	Pseudonym: Karoline von Göhren		Reg000870
 standardpost	False	NovelsPlaysTales	Alice		Edward Bulwer				True			Reg000191
 standardpost	False	NovelsPlaysTales	Anna-Capri		L. Kruse				True			Reg000232
 standardpost	False	NovelsPlaysTales	Araberen i Constantinopel		B. S. Ingemann				True			Reg000257
@@ -30,7 +30,7 @@ standardpost	False	NovelsPlaysTales	Das Buch Le Grand		H. Heine				True			Reg000
 standardpost	False	NovelsPlaysTales	Bug-Jargal		V. Hugo				True			Reg000417
 standardpost	False	NovelsPlaysTales	Børnehistorier		J. Krohn				True			Reg000427
 krydshenvisning	False	NovelsPlaysTales	Cendrillon					Asschepoester	True			Reg000462
-standardpost	False	NovelsPlaysTales	Christian Wohlgemuth		Karoline von Göhren Ͻ: Karoline von Zöllner				True			Reg000494
+standardpost	False	NovelsPlaysTales	Christian Wohlgemuth		Karoline von Zöllner				True	Pseudonym: Karoline von Göhren		Reg000494
 standardpost	False	NovelsPlaysTales	A Christmas Carol		Charles Dickens				True			Reg000124
 standardpost	False	NovelsPlaysTales	Conanchet eller Grænsebeboerne		J. F. Cooper				True			Reg000538
 standardpost	False	NovelsPlaysTales	Corinne		Germaine de Staël-Holstein				True			Reg000543
@@ -45,12 +45,12 @@ standardpost	False	NovelsPlaysTales	Le Diable boiteux		Le Sage				True			Reg0020
 standardpost	False	NovelsPlaysTales	Diamantkorset		Ove Thomsen				True			Reg000858
 standardpost	False	NovelsPlaysTales	Dombey & Son		Charles Dickens				True			Reg000960
 standardpost	False	NovelsPlaysTales	Don Quijote		Cervantes				True			Reg000974
-standardpost	False	NovelsPlaysTales	Donna Louise		H. Arnaud Ͻ: Fanny Reybaud				True			Reg000978
+standardpost	False	NovelsPlaysTales	Donna Louise		Fanny Reybaud				True	Pseudonym: H. Arnaud		Reg000978
 standardpost	False	NovelsPlaysTales	Efterladte Eventyr og Fortællinger		B.S. Ingemann				True			Reg001017
 standardpost	False	NovelsPlaysTales	Eid und Gewissen und die Felsenbraut		L. Kruse				True			Reg001022
 standardpost	False	NovelsPlaysTales	Engeln Guldgod m.fl. sagor och berättelser af Lilla Nannas Pappa		Oscar von Knorring				True			Reg001149
 standardpost	False	NovelsPlaysTales	Enslingen på Johannisskäret		Emilie Flygare-Carlén				True			Reg001167
-standardpost	False	NovelsPlaysTales	Les Épaves		H. Amaud Ͻ: Fanny Reybaud				True			Reg002139
+standardpost	False	NovelsPlaysTales	Les Épaves		Fanny Reybaud				True	Pseudonym: H. Amaud		Reg002139
 standardpost	False	NovelsPlaysTales	Erindringer fra min Onkels Huus		M. Goldschmidt				True			Reg001182
 standardpost	False	NovelsPlaysTales	Ernst Maltravers		E. Bulwer				True			Reg001185
 standardpost	False	NovelsPlaysTales	Erzählungen und Bilder aus dem Volksleben der Schweiz		Jeremias Gotthelf				True			Reg001188
@@ -96,7 +96,7 @@ standardpost	False	NovelsPlaysTales	Hausschatz deutscher Prosa		Bernhard Wolff		
 standardpost	False	NovelsPlaysTales	Herremænd		Carit Etlar				True			Reg001582
 standardpost	False	NovelsPlaysTales	Das Heimchen am Herde		Ch. Dickens		The Cricket on the Hearth		True			Reg000594
 standardpost	False	NovelsPlaysTales	Heinrich von Ofterdingen		Novalis				True			Reg001548
-standardpost	False	NovelsPlaysTales	Heloise		Talvj Ͻ: Therese A. L. von Jacob, g. Robinson				True			Reg001555
+standardpost	False	NovelsPlaysTales	Heloise		Therese A. L. von Jacob, g. Robinson				True	Pseudonym: Talvj		Reg001555
 standardpost	False	NovelsPlaysTales	Herr und Diener		L. Kruse				True			Reg001580
 standardpost	False	NovelsPlaysTales	En Historie fra de fattige Steder		L. Budde				True			Reg001086
 standardpost	False	NovelsPlaysTales	En Historie om Vinden		L. Budde				True			Reg001087
@@ -468,7 +468,7 @@ standardpost	False	NovelsPlaysTales	Les Gardes du roi de Siam		Cormon; Grangé; 
 standardpost	False	NovelsPlaysTales	Garrick i Bristol		J. L. Deinhardstein				True			Reg001423
 standardpost	False	NovelsPlaysTales	Gaston van Frankrijk		Arnould; Fournier				True			Reg001425
 standardpost	False	NovelsPlaysTales	Die Gefangenen der Czarin		J. F. A. Bayard				True			Reg000878
-standardpost	False	NovelsPlaysTales	Die gefährliche Tante		Albini Ͻ: Albin von Meddlhammer				True			Reg000926
+standardpost	False	NovelsPlaysTales	Die gefährliche Tante		Albin von Meddlhammer				True	Pseudonym: Albini		Reg000926
 standardpost	False	NovelsPlaysTales	Das Gefängnis		Roderich Benedix				True			Reg000590
 standardpost	False	NovelsPlaysTales	Der geheime Agent		F. W. Hackländer				True			Reg000832
 standardpost	False	NovelsPlaysTales	Georges et Thérese		Louis Auvray				True			Reg001443
@@ -1081,7 +1081,7 @@ standardpost	False	NovelsPlaysTales	Hiawatha se: The Song of Hiawatha		H. W. Lon
 standardpost	False	NovelsPlaysTales	Holmens faste Stok		Adolph Recke				True			Reg001626
 standardpost	False	NovelsPlaysTales	Hr. Sverkel		Abrahamson; Nyerup; Rahbek: Udvalgte danske Viser fra Middelalderen Nr. CLV				True			Reg001638
 standardpost	False	NovelsPlaysTales	Hälsning till Danmark		Carl Fredrik Ridderstad				True			Reg001675
-standardpost	False	NovelsPlaysTales	Hundrede Digte efter det Engelske		Caralis Ͻ: C. Preetzmann				True			Reg001651
+standardpost	False	NovelsPlaysTales	Hundrede Digte efter det Engelske		C. Preetzmann				True	Pseudonym: Caralis		Reg001651
 standardpost	False	NovelsPlaysTales	Hyrden og Slangen		Rudolph Schmidt				True			Reg001671
 standardpost	False	NovelsPlaysTales	»l denne Bog, hvor alt et Hold -«:	I Wilhelmine Sonnleithners Stambog	Henrik Hertz				True	Tekst		Reg003682
 standardpost	False	NovelsPlaysTales	I Ny og Næ		Vilhelm Bergsøe				True			Reg001691
@@ -1219,7 +1219,7 @@ standardpost	False	NovelsPlaysTales	Venus and Adonis		W. Shakespeare				True			R
 standardpost	False	NovelsPlaysTales	»Vift stolt paa Codans Bølge -«		B.S. Ingemann				True			Reg003677
 standardpost	False	NovelsPlaysTales	»Vildt Göta störtade från fjällen -«		Esaias Tegnér				True	Tekst		Reg003679
 standardpost	False	NovelsPlaysTales	» Vintern rasat ut bland våra fjällar -«		Herman Sätherberg				True			Reg003591
-standardpost	False	NovelsPlaysTales	Volkslieder der Serben		Oversat af Talvj, Pseudonym for Therese A. L. von Jacob, g. Robinson				True			Reg003469
+standardpost	False	NovelsPlaysTales	Volkslieder der Serben		Therese A. L. von Jacob, g. Robinson				True	Pseudonym: Talvj		Reg003469
 standardpost	False	NovelsPlaysTales	Waldmeisters Brautfahrt		Otto Roquette				True			Reg003480
 standardpost	False	NovelsPlaysTales	Wanderungen durch den Markt des Lebens. Zweites Buch: Wanderung durch den Markt der Ehre		C. A. Tiedge				True			Reg003486
 standardpost	False	NovelsPlaysTales	Winde-Kelken		J. P. Hasebroek				True			Reg003511
@@ -1227,7 +1227,7 @@ standardpost	False	NovelsPlaysTales	Der Zauberlehrling		J. W. von Goethe				True
 standardpost	False	NovelsPlaysTales	Zigeuner-Mährchen		J. W. von Goethe				True			Reg003525
 standardpost	False	NovelsPlaysTales	Zwölf Gedichte		Alexej Tolstoj				True			Reg003532
 standardpost	False	NovelsPlaysTales	Ældre og nyere Digte		Rudolph Schmidt				True			Reg003688
-standardpost	False	NovelsPlaysTales	Ældre og nyere Digte		Vilhelm Ͻ: Wilhelm Moldenhawer				True			Reg003689
+standardpost	False	NovelsPlaysTales	Ældre og nyere Digte		Wilhelm Moldenhawer				True	Pseudonym: Vilhelm		Reg003689
 standardpost	False	NovelsPlaysTales	Æneiden		P. Vergilius Maro				True			Reg003691
 standardpost	False	NovelsPlaysTales	Øjeblikkets Børn		Martin Kok				True			Reg003698
 standardpost	False	NovelsPlaysTales	The Academy						True			Reg003199

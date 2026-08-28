@@ -75,6 +75,37 @@ AF_PAREN_RE = re.compile(
 
 PAREN_RE = re.compile(r"\(([^)]+)\)")
 
+# Pseudonym markers: "PenName Ͻ: RealName" (ported from parse_non_fiction
+# .py's own PSEUDONYM_RE -- same duplicate-with-attribution pattern as
+# extract_adaptation()) and the equivalent prose form "PenName, Pseudonym
+# for RealName". Checked directly: 8 of the 10 "Ͻ:" occurrences in this
+# genre's forms sit inside a round-paren creator candidate (the other 2
+# are inside square brackets -- a title-translation gloss and a two-person
+# "og"-joined case respectively -- and never reach `creator` at all, so
+# they're unaffected here). Real name, not pen name, becomes 06_creator --
+# the pen name is preserved in 11_Note instead, matching the WEMI "real
+# creator, not the name on the byline" framing used throughout this file.
+PSEUDONYM_RE = re.compile(r"^(.+?)[,\s]+Ͻ:\s*(.+)$")
+PSEUDONYM_FOR_RE = re.compile(r"^(.+?),?\s*Pseudonym\s+for\s+(.+)$", re.IGNORECASE)
+
+
+def split_pseudonym(creator: str) -> tuple[str, str]:
+    """Returns (pseudonym_or_empty, real_name). real_name is `creator`
+    unchanged when no marker is present."""
+    m = PSEUDONYM_RE.match(creator)
+    if m:
+        return m.group(1).strip(), m.group(2).strip()
+    m = PSEUDONYM_FOR_RE.match(creator)
+    if m:
+        # Strip an incidental leading "Oversat af " left over from a
+        # translator marker this parser doesn't otherwise extract here
+        # ("Oversat af Talvj, Pseudonym for ..." -- Reg003469) -- cosmetic
+        # only, the real name (what matters for 06_creator) is unaffected
+        # either way.
+        pseudonym = re.sub(r"^oversat\s+af\s+", "", m.group(1).strip(), flags=re.IGNORECASE)
+        return pseudonym, m.group(2).strip()
+    return "", creator
+
 # Single-word generic terms and bare years → Note rather than original_title
 # (or, when this is the LAST parenthetical -- see parse_row -- rather than
 # creator). "Tekst" appears on hymn/song Digte entries formatted "Title
@@ -360,6 +391,9 @@ def parse_row(raw_label: str, reg_id: str) -> list[dict]:
     # -- so it runs identically regardless of which path set `creator`.
     adapted_from_creator = ""
     if creator:
+        pseudonym, creator = split_pseudonym(creator)
+        if pseudonym:
+            note_parts.append(f"Pseudonym: {pseudonym}")
         creator, adapted_from = extract_adaptation(creator)
         if adapted_from:
             adapted_from_creator = adapted_from
