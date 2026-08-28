@@ -425,63 +425,120 @@
     return parts[parts.length - 1];
   }
 
-  // Populate dynamic facet bodies before wiring change listeners. A
-  // wing page declares e.g. <div class="facet-group__body"
-  // data-facet-source="author"> and this fills it with one row per
-  // distinct author in the wing (data-author=…), sorted by works
-  // descending. Same pattern can later carry data-facet-source="h3" /
-  // "rid" if a page wants every value enumerated automatically.
-  document.querySelectorAll('.facet-panel [data-facet-source="author"]').forEach(function (host) {
-    var counts = {};
-    ALL.forEach(function (w) {
-      if (!w.author) return;
-      // Skip wing fallthroughs — the literal H2 strings the parser
-      // leaves behind when no individual author can be extracted.
-      if (w.author === w.h2) return;
-      counts[w.author] = (counts[w.author] || 0) + 1;
-    });
-    var rows = Object.keys(counts)
-      .map(function (a) { return [a, counts[a], surnameKey(a)]; })
-      .sort(function (a, b) {
-        // Primary: works descending. Secondary: surname collation (da).
-        return b[1] - a[1] || a[2].localeCompare(b[2], 'da');
-      });
-    host.innerHTML = rows.map(function (r) {
-      var a = esc(r[0]);
-      return '<label class="facet-item"><input type="checkbox" data-author="' + a +
-        '"><span class="facet-item__label">' + a +
-        '</span><span class="facet-item__count">' + r[1] + '</span></label>';
-    }).join('');
-  });
+  // Shared by the author/place blocks below: caps a sorted row list at
+  // FACET_LIMIT and hands off to FacetOverlay (js/facet-overlay.js) for the
+  // "Vis alle" -> full-viewport-overlay treatment once a wing has more
+  // distinct values than that — bibliotek.html alone has 331 authors, all
+  // shown unbounded before this, same problem places.html's Land facet had
+  // with 79 countries. rows: [{value, label, count}], already sorted; a
+  // value ticked while the overlay was open stays visible in the folded
+  // list afterwards even below the cutoff, same guarantee facet-engine.js
+  // makes.
+  var FACET_LIMIT = 20;
+  function buildCappedFacetHtml(host, dataAttr, rows, expanded) {
+    var checkedVals = {};
+    var existing = host.querySelectorAll('input[' + dataAttr + ']');
+    for (var e = 0; e < existing.length; e++) {
+      if (existing[e].checked) checkedVals[existing[e].getAttribute(dataAttr)] = true;
+    }
 
-  // Sted — data-facet-source="place", populated from WORKS_EXTRA.place
-  // (build_works_extra.py's place_from_billedkunst_title() /
-  // place_from_teater_title() — "City" or "City — Venue"). Sorted purely
-  // alphabetically (da collator) on the label itself, per CLAUDE.md-adjacent
-  // convention set for this facet: because every value starts with its
-  // city, a plain alphabetical sort already clusters every venue directly
-  // under its city ("Firenze" next to "Firenze — Uffizi" next to
-  // "Firenze — Pitti", then "München", …) with no separate city/venue sort
-  // key needed — unlike Kunstner/Komponist above, this is NOT ranked by
-  // count.
+    var total = rows.length;
+    var visibleRows = rows;
+    if (!expanded && total > FACET_LIMIT) {
+      visibleRows = rows.slice(0, FACET_LIMIT);
+      var shown = {};
+      for (var r = 0; r < visibleRows.length; r++) shown[visibleRows[r].value] = true;
+      for (var r2 = 0; r2 < rows.length; r2++) {
+        if (checkedVals[rows[r2].value] && !shown[rows[r2].value]) visibleRows.push(rows[r2]);
+      }
+    }
+
+    var html = visibleRows.map(function (row) {
+      var v = esc(row.value);
+      var checked = checkedVals[row.value] ? ' checked' : '';
+      return '<label class="facet-item"><input type="checkbox" ' + dataAttr + '="' + v + '"' + checked + '>' +
+        '<span class="facet-item__label">' + esc(row.label) +
+        '</span><span class="facet-item__count">' + row.count + '</span></label>';
+    }).join('');
+
+    if (total > FACET_LIMIT) {
+      var toggle = expanded
+        ? '<button type="button" class="facet-more-toggle" data-facet-more>✕ Vis færre</button>'
+        : '<button type="button" class="facet-more-toggle" data-facet-more>Vis alle (' + total + ') ▾</button>';
+      html = expanded ? toggle + html : html + toggle;
+    }
+    return html;
+  }
+
   var placeCollator = (typeof Intl !== 'undefined' && Intl.Collator)
     ? new Intl.Collator('da') : null;
-  document.querySelectorAll('.facet-panel [data-facet-source="place"]').forEach(function (host) {
-    var counts = {};
-    ALL.forEach(function (w) {
-      if (!w.place) return;
-      counts[w.place] = (counts[w.place] || 0) + 1;
+
+  // Renders both dynamic facet lists from the current DOM checked state.
+  // Called once at setup, and again by the Nulstil handler below *after* it
+  // clears every checkbox — re-rendering is what actually drops a value
+  // that was only shown past the top-20 cutoff because it was ticked (see
+  // buildCappedFacetHtml); calling FacetOverlay.collapseAll() alone is not
+  // enough, since that repaints from whatever is *still* checked at the
+  // moment it runs.
+  function renderFacetLists() {
+    // Forfatter/Kunstner/Komponist — data-facet-source="author", one row
+    // per distinct author in the wing (data-author=…), sorted by works
+    // descending. Same pattern can later carry data-facet-source="h3" /
+    // "rid" if a page wants every value enumerated automatically.
+    document.querySelectorAll('.facet-panel [data-facet-source="author"]').forEach(function (host) {
+      var counts = {};
+      ALL.forEach(function (w) {
+        if (!w.author) return;
+        // Skip wing fallthroughs — the literal H2 strings the parser
+        // leaves behind when no individual author can be extracted.
+        if (w.author === w.h2) return;
+        counts[w.author] = (counts[w.author] || 0) + 1;
+      });
+      var rows = Object.keys(counts)
+        .map(function (a) { return { value: a, label: a, count: counts[a], sk: surnameKey(a) }; })
+        .sort(function (a, b) {
+          // Primary: works descending. Secondary: surname collation (da).
+          return b.count - a.count || a.sk.localeCompare(b.sk, 'da');
+        });
+      FacetOverlay.attach(
+        host,
+        function (expanded) { return buildCappedFacetHtml(host, 'data-author', rows, expanded); },
+        updateFacetAvailability
+      );
     });
-    var rows = Object.keys(counts).sort(function (a, b) {
-      return placeCollator ? placeCollator.compare(a, b) : (a < b ? -1 : a > b ? 1 : 0);
+
+    // Sted — data-facet-source="place", populated from WORKS_EXTRA.place
+    // (build_works_extra.py's place_from_billedkunst_title() /
+    // place_from_teater_title() — "City" or "City — Venue"). Sorted purely
+    // alphabetically (da collator) on the label itself, per CLAUDE.md-adjacent
+    // convention set for this facet: because every value starts with its
+    // city, a plain alphabetical sort already clusters every venue directly
+    // under its city ("Firenze" next to "Firenze — Uffizi" next to
+    // "Firenze — Pitti", then "München", …) with no separate city/venue sort
+    // key needed — unlike Kunstner/Komponist above, this is NOT ranked by
+    // count, so the top-20-before-"Vis alle" cutoff is the first 20
+    // alphabetically rather than the 20 most-used places.
+    document.querySelectorAll('.facet-panel [data-facet-source="place"]').forEach(function (host) {
+      var counts = {};
+      ALL.forEach(function (w) {
+        if (!w.place) return;
+        counts[w.place] = (counts[w.place] || 0) + 1;
+      });
+      var rows = Object.keys(counts)
+        .map(function (p) { return { value: p, label: p, count: counts[p] }; })
+        .sort(function (a, b) {
+          return placeCollator ? placeCollator.compare(a.value, b.value)
+                                : (a.value < b.value ? -1 : a.value > b.value ? 1 : 0);
+        });
+      FacetOverlay.attach(
+        host,
+        function (expanded) { return buildCappedFacetHtml(host, 'data-place', rows, expanded); },
+        updateFacetAvailability
+      );
     });
-    host.innerHTML = rows.map(function (p) {
-      var esc_p = esc(p);
-      return '<label class="facet-item"><input type="checkbox" data-place="' + esc_p +
-        '"><span class="facet-item__label">' + esc_p +
-        '</span><span class="facet-item__count">' + counts[p] + '</span></label>';
-    }).join('');
-  });
+  }
+
+  renderFacetLists();
 
   // Cross-page/URL-hash facet activation — e.g. billedkunst.html's own
   // subsection cards link to "#h3-skulptur", and a bare visit to that URL
@@ -512,21 +569,35 @@
     '.browse-layout > div > .results-header, .browse-layout > div > .result-grid'
   );
 
-  // Wire facet checkboxes for live filtering.
-  var facetBoxes = document.querySelectorAll(
-    '.facet-panel input[type=checkbox][data-h2], ' +
-    '.facet-panel input[type=checkbox][data-h3], ' +
-    '.facet-panel input[type=checkbox][data-author], ' +
-    '.facet-panel input[type=checkbox][data-rid], ' +
-    '.facet-panel input[type=checkbox][data-place]'
-  );
-  facetBoxes.forEach(function (cb) { cb.addEventListener('change', apply); });
+  // Wire facet checkboxes for live filtering. Delegated on .facet-panel
+  // (rather than bound once per checkbox) because the author/place bodies
+  // below are re-rendered by FacetOverlay whenever their "Vis alle" toggle
+  // fires — a one-time NodeList.forEach binding would only ever cover the
+  // checkboxes that existed at page load, silently going dead on every row
+  // FacetOverlay redraws afterwards.
+  var facetPanel = document.querySelector('.facet-panel');
+  if (facetPanel) {
+    facetPanel.addEventListener('change', function (ev) {
+      if (ev.target && ev.target.matches && ev.target.matches(FACET_SEL)) apply();
+      var host = ev.target.closest ? ev.target.closest('[data-facet-source]') : null;
+      if (host) FacetOverlay.collapseIfExpanded(host);
+    });
+  }
 
   // Wire the Nulstil button to clear all facet checkboxes + reset to "Alle".
+  // Queried fresh (not the stale NodeList a one-time querySelectorAll would
+  // give) for the same reason the change listener above is delegated.
   var clearBtn = document.querySelector('.facet-panel__clear');
   if (clearBtn) {
     clearBtn.addEventListener('click', function () {
-      facetBoxes.forEach(function (cb) { cb.checked = false; });
+      FacetOverlay.collapseAll();
+      (facetPanel ? facetPanel.querySelectorAll(FACET_SEL) : []).forEach(function (cb) { cb.checked = false; });
+      // Re-render the capped lists now that nothing is checked, so a value
+      // only shown past the top-20 cutoff because it was ticked (see
+      // buildCappedFacetHtml) actually drops out again — collapseAll()
+      // above already repainted once, but from whatever was *still*
+      // checked at that point, before this uncheck loop ran.
+      renderFacetLists();
       letter = null;
       if (bar) {
         bar.querySelectorAll('a.chip').forEach(function (x, i) {

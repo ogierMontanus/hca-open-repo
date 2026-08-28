@@ -187,34 +187,16 @@ window.FacetEngine = (function () {
 
     /* ── Option rendering ───────────────────────────────────────────────── */
 
-    // Only one facet body can be expanded into the overlay at a time, and a
-    // shared backdrop element is created lazily on first use.
-    var expandedHost = null;
-    var backdropEl   = null;
-
-    function ensureBackdrop() {
-      if (backdropEl) return backdropEl;
-      backdropEl = document.createElement('div');
-      backdropEl.className = 'facet-backdrop';
-      backdropEl.setAttribute('hidden', '');
-      document.body.appendChild(backdropEl);
-      backdropEl.addEventListener('click', collapseExpanded);
-      return backdropEl;
-    }
-
-    // Render one [data-facet-source] body: one row per distinct value of
-    // that field, ordered by frequency. Counts are computed here and never
-    // hand-typed, so a facet cannot drift out of sync with its data.
-    function renderHost(host) {
-      var group = host.closest ? host.closest('.facet-group') : null;
-      if (group && group.hasAttribute('data-facet-pending')) return;
-
+    // Build the full innerHTML for one [data-facet-source] body at a given
+    // expand state. A pure function: FacetOverlay (js/facet-overlay.js) owns
+    // actually painting it, plus the expand/collapse/backdrop/focus/ARIA
+    // mechanics shared with category-catalogue.js's own capped facets.
+    function buildHostHtml(host, expanded) {
       var field = host.getAttribute('data-facet-source');
       var limit = parseInt(host.getAttribute('data-facet-limit'), 10) || 0;
       var emptyLabel = host.getAttribute('data-facet-empty-label');
       var moreLabel  = host.getAttribute('data-facet-more-label') || 'Show all';
       var fewerLabel = host.getAttribute('data-facet-fewer-label') || 'Show fewer';
-      var expanded = host === expandedHost;
 
       // A re-render (toggling expand/collapse) rebuilds every checkbox from
       // scratch, so read which values are currently ticked first — otherwise
@@ -280,7 +262,6 @@ window.FacetEngine = (function () {
           '<span class="facet-item__count">' + num(empties) + '</span></label>';
       }
 
-      var html;
       if (limit && total > limit) {
         var toggle = expanded
           ? '<button type="button" class="facet-more-toggle" data-facet-more>✕ ' + esc(fewerLabel) + '</button>'
@@ -288,70 +269,30 @@ window.FacetEngine = (function () {
         // Expanded: the fold-back control leads, so it's reachable without
         // scrolling past however many of the (up to) hundred-plus rows the
         // reader has scrolled through. Collapsed: it trails the visible rows.
-        html = expanded ? toggle + rowsHtml : rowsHtml + toggle;
-      } else {
-        html = rowsHtml;
+        return expanded ? toggle + rowsHtml : rowsHtml + toggle;
       }
-      host.innerHTML = html;
-      if (group) group.classList.toggle('facet-group--expanded', expanded);
-      // The overlay covers most of the viewport, so mark it as a dialog for
-      // assistive tech — cleared again once folded back to a normal list.
-      if (expanded) {
-        var headerEl = group ? group.querySelector('.facet-group__header') : null;
-        host.setAttribute('role', 'dialog');
-        host.setAttribute('aria-modal', 'true');
-        if (headerEl) host.setAttribute('aria-label', headerEl.textContent.replace(/[▲▾]/g, '').trim());
-      } else {
-        host.removeAttribute('role');
-        host.removeAttribute('aria-modal');
-        host.removeAttribute('aria-label');
-      }
+      return rowsHtml;
+    }
+
+    // Render one [data-facet-source] body: one row per distinct value of
+    // that field, ordered by frequency. Counts are computed here and never
+    // hand-typed, so a facet cannot drift out of sync with its data.
+    function renderHost(host) {
+      var group = host.closest ? host.closest('.facet-group') : null;
+      if (group && group.hasAttribute('data-facet-pending')) return;
+      FacetOverlay.attach(
+        host,
+        function (expanded) { return buildHostHtml(host, expanded); },
+        // Runs after every repaint, including ones triggered by
+        // FacetOverlay's own toggle/backdrop/Escape handling — refreshes
+        // dimming/counts for whatever rows just appeared.
+        function () { updateAvailability(liveGroups()); }
+      );
     }
 
     function renderSources() {
       var hosts = panel.querySelectorAll('[data-facet-source]');
       for (var h = 0; h < hosts.length; h++) renderHost(hosts[h]);
-    }
-
-    // Whichever direction the overlay just moved, focus lands on the toggle
-    // button that reappears in the freshly-rendered host — keyboard users
-    // never lose their place, regardless of whether a click, Escape, a
-    // backdrop click, or a selection triggered the fold-back.
-    function focusToggle(host) {
-      var btn = host.querySelector('[data-facet-more]');
-      if (btn) btn.focus();
-    }
-
-    function collapseExpanded() {
-      if (!expandedHost) return;
-      var host = expandedHost;
-      expandedHost = null;
-      renderHost(host);
-      updateAvailability(liveGroups());
-      panel.classList.remove('facet-panel--overlay-open');
-      if (backdropEl) backdropEl.setAttribute('hidden', '');
-      focusToggle(host);
-    }
-
-    function expandHost(host) {
-      if (expandedHost && expandedHost !== host) collapseExpanded();
-      expandedHost = host;
-      renderHost(host);
-      updateAvailability(liveGroups());
-      // .facet-panel is position:sticky, which (per spec) always opens its
-      // own stacking context; the backdrop's positive z-index otherwise
-      // beats it regardless of any z-index set *inside* that context (a
-      // z-index:auto ancestor always loses to a positive-z-index sibling,
-      // no matter what its descendants declare) — reparenting the host out
-      // to <body> was tried and reverted: it breaks the change/click
-      // delegation this file relies on, since events would then bubble
-      // through <body> instead of through panel. Lifting the *panel's own*
-      // z-index above the backdrop's while a facet is expanded keeps host
-      // right where delegation expects it and fixes the stacking in one
-      // step, for every group under this panel at once.
-      panel.classList.add('facet-panel--overlay-open');
-      ensureBackdrop().removeAttribute('hidden');
-      focusToggle(host);
     }
 
     /* ── Availability ───────────────────────────────────────────────────── */
@@ -421,7 +362,7 @@ window.FacetEngine = (function () {
       // Fold back any open overlay first, so nothing is selected any more
       // once the boxes below are cleared, rather than only once the reader
       // next interacts with that particular facet.
-      collapseExpanded();
+      FacetOverlay.collapseAll();
       var boxes = panel.querySelectorAll(BOX_SEL);
       for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
       // Nothing is selected any more, so any facet showing a below-the-cutoff
@@ -434,34 +375,18 @@ window.FacetEngine = (function () {
     renderSources();
 
     // Delegated, so rows generated above (and any added later) are covered
-    // without rebinding.
+    // without rebinding. Expand/collapse (toggle click, backdrop, Escape) is
+    // handled by FacetOverlay itself (js/facet-overlay.js) — only the "fold
+    // back after a selection" behavior is specific to this engine.
     panel.addEventListener('change', function (ev) {
       var t = ev.target;
       if (!(t && t.matches && t.matches(BOX_SEL))) return;
       var host = t.closest ? t.closest('[data-facet-source]') : null;
       apply();
       // A selection made inside the overlay folds it back to the normal-size
-      // list — renderHost (inside collapseExpanded) already keeps the just-
-      // ticked value visible even below the top-N cutoff.
-      if (expandedHost && host === expandedHost) collapseExpanded();
-    });
-
-    // Expand/collapse toggle for facets with more values than their
-    // data-facet-limit. Delegated for the same reason as the change handler.
-    panel.addEventListener('click', function (ev) {
-      var t = ev.target;
-      var btn = t && t.closest ? t.closest('[data-facet-more]') : null;
-      if (!btn) return;
-      ev.preventDefault();
-      var host = btn.closest('[data-facet-source]');
-      if (!host) return;
-      if (host === expandedHost) collapseExpanded();
-      else expandHost(host);
-    });
-
-    // Escape closes the overlay the same way a backdrop click does.
-    document.addEventListener('keydown', function (ev) {
-      if (ev.key === 'Escape' && expandedHost) collapseExpanded();
+      // list — buildHostHtml already keeps the just-ticked value visible
+      // even below the top-N cutoff.
+      if (host) FacetOverlay.collapseIfExpanded(host);
     });
 
     // Clear boxes first, then let the page drop its own prefilter state
