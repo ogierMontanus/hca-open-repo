@@ -32,15 +32,17 @@
  * + aria-label source) inside a <div class="facet-panel"> (for the
  * stacking-context fix) — the same markup contract both engines already use.
  *
- * After handling a checkbox's own change event, callers should tell this
- * module to fold the overlay back down if that checkbox lives inside the
- * currently-expanded host:
+ * Ticking a checkbox inside the overlay does NOT close it — a reader
+ * narrowing down a 79-value list often wants to tick more than one before
+ * moving on, and re-opening "Vis alle" from scratch after every click would
+ * be worse than the original unbounded list. Only a backdrop click, the
+ * toggle itself ("Vis alle" / "✕ Vis færre"), or Escape close it (see the
+ * document-level listeners at the bottom of this file); a value ticked
+ * while it's open still stays visible in the folded list afterwards even
+ * below the top-N cutoff, same as before.
  *
- *   FacetOverlay.collapseIfExpanded(host);
- *
- * And before clearing every checkbox on a "Nulstil" reset (so a host that's
- * currently reparented-in-place-but-expanded returns to its plain state
- * first):
+ * Before clearing every checkbox on a "Nulstil" reset, callers should fold
+ * back any open overlay first, so nothing reopens re-checked:
  *
  *   FacetOverlay.collapseAll();
  */
@@ -135,10 +137,6 @@ window.FacetOverlay = (function () {
     repaint(host);
   }
 
-  function collapseIfExpanded(host) {
-    if (host === expandedHost) collapse();
-  }
-
   function isExpanded(host) {
     return host === expandedHost;
   }
@@ -161,7 +159,6 @@ window.FacetOverlay = (function () {
 
   return {
     attach: attach,
-    collapseIfExpanded: collapseIfExpanded,
     collapseAll: collapse,
     isExpanded: isExpanded
   };

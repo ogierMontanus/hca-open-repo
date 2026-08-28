@@ -92,19 +92,23 @@
                country from Steder_i_dagboegerne VER 1.0 (2.399 of 2.508
                places; see docs/data-model/steder-verificeret-category-mapping.md
                §5), so England and Skotland show as separate values instead
-               of a bounding-box "Storbritannien". The generated "Uoplyst"
-               bucket makes the remaining 109-place gap selectable instead of
-               silently dropping those rows. 79 distinct countries exist —
-               limit=20 (not the 12 used elsewhere) so mid-frequency values
-               like Holland/Skotland aren't cut off the visible list. Rows
-               and counts are rendered by FacetEngine — do not hand-write
-               them here. -->
+               of a bounding-box "Storbritannien". The generated
+               "Irrelevant eller uregistreret" bucket makes the remaining
+               109-place gap selectable instead of silently dropping those
+               rows (user preference 2026-08-28: "Uoplyst" read as too
+               generic here, since the gap is register places the verified
+               xlsx source has no row for at all, not a field left blank on
+               an existing one). 79 distinct countries exist — limit=20
+               (not the 12 used elsewhere) so mid-frequency values like
+               Holland/Skotland aren't cut off the visible list. Rows and
+               counts are rendered by FacetEngine — do not hand-write them
+               here. -->
           <div class="facet-group">
             <div class="facet-group__header">Land <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body"
                  data-facet-source="country"
                  data-facet-limit="20"
-                 data-facet-empty-label="Uoplyst"
+                 data-facet-empty-label="Irrelevant eller uregistreret"
                  data-facet-more-label="Vis alle"
                  data-facet-fewer-label="Vis færre"></div>
           </div>
@@ -119,7 +123,7 @@
                name variant, or a blank Category cell in the source) —
                "Uklassificeret" makes that gap selectable rather than
                dropping those places from the facet, same convention as
-               Land's "Uoplyst" bucket above. Raw values are the
+               Land's "Irrelevant eller uregistreret" bucket above. Raw values are the
                English vocabulary as verified (City/Property/Region/…);
                CATEGORY_LABELS_DA below is display-only translation, not
                a second copy of the data — do not hand-write rows here,
@@ -394,7 +398,7 @@
       html: function (p) { return '<a class="data-table__id-link" href="place.html?reg=' +
         esc(p.rid) + '">' + esc(p.rid) + '</a>'; } },
     { key: 'label', label: 'Navn', value: function (p) { return p.label; } },
-    { key: 'country', label: 'Land', value: function (p) { return p.country || 'Uoplyst'; } },
+    { key: 'country', label: 'Land', value: function (p) { return p.country || 'Irrelevant eller uregistreret'; } },
     { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;

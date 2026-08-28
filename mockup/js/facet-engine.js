@@ -376,17 +376,12 @@ window.FacetEngine = (function () {
 
     // Delegated, so rows generated above (and any added later) are covered
     // without rebinding. Expand/collapse (toggle click, backdrop, Escape) is
-    // handled by FacetOverlay itself (js/facet-overlay.js) — only the "fold
-    // back after a selection" behavior is specific to this engine.
+    // handled entirely by FacetOverlay itself (js/facet-overlay.js) — a
+    // selection inside the overlay does NOT close it, so narrowing down a
+    // long list can tick more than one value without reopening each time.
     panel.addEventListener('change', function (ev) {
       var t = ev.target;
-      if (!(t && t.matches && t.matches(BOX_SEL))) return;
-      var host = t.closest ? t.closest('[data-facet-source]') : null;
-      apply();
-      // A selection made inside the overlay folds it back to the normal-size
-      // list — buildHostHtml already keeps the just-ticked value visible
-      // even below the top-N cutoff.
-      if (host) FacetOverlay.collapseIfExpanded(host);
+      if (t && t.matches && t.matches(BOX_SEL)) apply();
     });
 
     // Clear boxes first, then let the page drop its own prefilter state

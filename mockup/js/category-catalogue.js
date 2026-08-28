@@ -579,8 +579,6 @@
   if (facetPanel) {
     facetPanel.addEventListener('change', function (ev) {
       if (ev.target && ev.target.matches && ev.target.matches(FACET_SEL)) apply();
-      var host = ev.target.closest ? ev.target.closest('[data-facet-source]') : null;
-      if (host) FacetOverlay.collapseIfExpanded(host);
     });
   }
 
