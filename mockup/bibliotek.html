@@ -333,8 +333,17 @@
   </div>
 </footer>
 
-<!-- Full work catalogue for this wing (gitignored data; CI regenerates). -->
+<!-- Full work catalogue for this wing (gitignored data; CI regenerates).
+     persons/places-extra.js + entity-refs.js: category-catalogue.js's
+     Forfatter facet uses EntityRefs.personRid()/workRid() to group
+     spelling variants of the same person onto one row and to keep a
+     source citation ("Geijer og Afzelius: Svenska folkvisor Nr. 26") out
+     of the facet entirely -- same 4-script load order persons.html/
+     work.html/places.html already use. -->
+<script src="data/persons-extra.js" onerror="void 0"></script>
 <script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
 <script>window.CATEGORY_WING='bibliotek.html';window.CATEGORY_LABEL='Bibliotek';</script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>

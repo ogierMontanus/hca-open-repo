@@ -63,14 +63,31 @@
     return '#';
   }
 
+  // A person's resolved rid when EntityRefs can find one, the raw name
+  // string otherwise — used to group/filter the Forfatter facet by
+  // IDENTITY rather than exact string, so spelling variants that already
+  // resolve to the same person via EntityRefs.personRid()'s own
+  // diacritic-fold/genitive/married-name fallbacks ("Bj. Bjørnson" / "Bj.
+  // Björnson") collapse into one facet row instead of two, each only
+  // ever matching the works that happen to spell the name that one way.
+  function authorKey(name) {
+    if (typeof EntityRefs !== 'undefined') {
+      var r = EntityRefs.personRid(name);
+      if (r) return r;
+    }
+    return name;
+  }
+
   var ALL = Object.keys(WORKS_EXTRA).reduce(function (acc, rid) {
     var w = WORKS_EXTRA[rid];
     if (w.wing !== wing) return acc;
+    var authors = w.authors && w.authors.length ? w.authors : (w.author ? [w.author] : []);
     acc.push({
       rid: rid, title: w.title || rid,
       meta: [w.author, w.h3, w.year].filter(Boolean).join(' · '),
       refs: w.refs || 0, init: initialOf(w.title),
       h2: w.h2 || '', h3: w.h3 || '', author: w.author || '',
+      authors: authors, authorKeys: authors.map(authorKey),
       place: w.place || ''
     });
     return acc;
@@ -99,7 +116,7 @@
   function matchesPred(w, p) {
     return (p.h2 == null || w.h2 === p.h2) &&
            (p.h3 == null || w.h3 === p.h3) &&
-           (p.author == null || w.author === p.author) &&
+           (p.author == null || w.authorKeys.indexOf(p.author) !== -1) &&
            (p.rid == null || w.rid === p.rid) &&
            (p.place == null || w.place === p.place);
   }
@@ -510,20 +527,44 @@
     // descending. Same pattern can later carry data-facet-source="h3" /
     // "rid" if a page wants every value enumerated automatically.
     document.querySelectorAll('.facet-panel [data-facet-source="author"]').forEach(function (host) {
-      var counts = {};
+      // Grouped by authorKey (resolved rid, or the raw string when
+      // unresolved — see authorKey() above), NOT by the raw name itself:
+      // "E. G. Geijer og A. A. Afzelius" contributes two separate,
+      // independently clickable rows instead of one joined one that only
+      // ever matches a work crediting BOTH of them together, AND a
+      // resolvable spelling variant ("Bj. Bjørnson" / "Bj. Björnson")
+      // collapses onto the same row as its sibling instead of splitting
+      // its count across two. labelCounts tracks every raw spelling seen
+      // per group so the most-used one can be shown, rather than
+      // whichever happened to be seen first.
+      var groups = {};
       ALL.forEach(function (w) {
-        if (!w.author) return;
-        // Skip wing fallthroughs — the literal H2 strings the parser
-        // leaves behind when no individual author can be extracted.
-        if (w.author === w.h2) return;
-        counts[w.author] = (counts[w.author] || 0) + 1;
-      });
-      var rows = Object.keys(counts)
-        .map(function (a) { return { value: a, label: a, count: counts[a], sortKey: surnameKey(a) }; })
-        .sort(function (a, b) {
-          // Primary: works descending. Secondary: surname collation (da).
-          return b.count - a.count || a.sortKey.localeCompare(b.sortKey, 'da');
+        w.authors.forEach(function (a, i) {
+          // Skip wing fallthroughs — the literal H2 strings the parser
+          // leaves behind when no individual author can be extracted —
+          // and a value that's actually a work's own title, not a person
+          // (e.g. "Geijer og Afzelius: Svenska folkvisor Nr. 26", a
+          // source-publication citation the parser mis-captured as a
+          // creator rather than a source note; caught generically by
+          // checking whether the string resolves as a real work title).
+          if (!a || a === w.h2) return;
+          if (typeof EntityRefs !== 'undefined' && EntityRefs.workRid(a)) return;
+          var key = w.authorKeys[i];
+          var g = groups[key] || (groups[key] = { count: 0, labelCounts: {} });
+          g.count++;
+          g.labelCounts[a] = (g.labelCounts[a] || 0) + 1;
         });
+      });
+      var rows = Object.keys(groups).map(function (key) {
+        var g = groups[key], bestLabel = null, bestN = -1;
+        for (var lbl in g.labelCounts) {
+          if (g.labelCounts[lbl] > bestN) { bestLabel = lbl; bestN = g.labelCounts[lbl]; }
+        }
+        return { value: key, label: bestLabel, count: g.count, sortKey: surnameKey(bestLabel) };
+      }).sort(function (a, b) {
+        // Primary: works descending. Secondary: surname collation (da).
+        return b.count - a.count || a.sortKey.localeCompare(b.sortKey, 'da');
+      });
       FacetOverlay.attach(
         host,
         function (expanded, sortMode) { return buildCappedFacetHtml(host, 'data-author', rows, expanded, sortMode); },
