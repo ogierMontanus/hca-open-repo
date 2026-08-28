@@ -328,7 +328,19 @@ def author_from(genre_h2, h3, title, person_derived, place_labels, tsv_creator=N
     # priority even over a non-empty person_derived, not just fills gaps.
     if tsv_creator:
         return tsv_creator
-    if person_derived and person_derived.strip():
+    # H. C. ANDERSEN's own genre never trusts person_derived as an author
+    # override -- checked directly: of 149 rows in this H2 with a non-empty
+    # value, the overwhelming majority name an illustrator (V. Pedersen,
+    # Lorenz Frølich), translator (H. Zeise, Karl Bäckman), or dedicatee
+    # (Dorothea Melchior), never a genuinely different creator -- Andersen
+    # wrote his own oeuvre by construction of the H2 itself. Left
+    # unguarded, e.g. Reg001312 "Fodreise fra Holmens Kanal til Østpynten
+    # af Amager" got person_derived = 'Østpynten af Amager' (a fragment of
+    # its own title, not a person at all) and that string displaced "H. C.
+    # Andersen" as this row's "author" -- visible directly in bibliotek
+    # .html's Forfatter facet. Falls through to the literal-H2 return below
+    # instead, same as every h2 with no person_derived at all.
+    if h2u != "H. C. ANDERSEN" and person_derived and person_derived.strip():
         # For BILLEDKUNST specifically: 65 works have a person_derived value
         # that is a prefix of their own title — i.e. the upstream step
         # copied the depicted subject into the attribution field instead of
@@ -506,8 +518,20 @@ def resolve_shared_surname(segments, person_keys):
     note above for why: the shared surname sits last in "Georg og Edvard
     Brandes" but first in "Dupeuty, Fontan og Davrigny"). Only ever
     upgrades a guess the register already confirms; a segment nothing
-    resolves for is returned unchanged, same as today."""
-    if len(segments) < 2:
+    resolves for is returned unchanged, same as today.
+
+    Restricted to exactly 2-element lists: a bare surname's own initial
+    letter is enough for the borrowed-surname candidate to accidentally
+    collide with a real, unrelated person once a THIRD name is in the
+    mix -- "Abrahamson; Nyerup; Rahbek" (three separate 18th/19th-century
+    scholars co-editing a ballad anthology, not siblings) upgraded the
+    unresolved bare "Rahbek" to "Rahbek Nyerup", which happens to satisfy
+    nameKey()'s surname-last parsing as "Nyerup, R." -- coincidentally
+    matching the real Rasmus Nyerup (Reg0097130) even though the two
+    have nothing to do with each other. The 2-sibling scenario this was
+    built for (Brandes brothers, Dupeuty siblings) never has this
+    problem since there's only ever one other segment to borrow from."""
+    if len(segments) != 2:
         return segments
     resolved = list(segments)
     for i, seg in enumerate(segments):
@@ -646,6 +670,19 @@ def main():
     print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
     with open(ENTITIES, encoding="utf-8") as f:
         all_rows = list(csv.DictReader(f))
+    # A handful of source titles carry a literal non-breaking space (U+00A0)
+    # instead of a plain one -- a copy-paste artifact in the original
+    # workbook, e.g. Reg000635 "De fire Aarstider (Fr.\xa0Albani), ..." --
+    # normalised here, once, for every entity, so every downstream string
+    # comparison (facet dedup, artist_from_billedkunst_title(), etc.) sees
+    # the same "Fr. Albani" a plain-space sibling title already produces.
+    # Every dedicated parser under scripts/parsers/ already does this same
+    # normalisation on its own raw label at load time; this file reads
+    # entities.csv directly instead, so it needs its own pass.
+    if any("\xa0" in (r.get("label") or "") for r in all_rows):
+        for r in all_rows:
+            if r.get("label"):
+                r["label"] = r["label"].replace("\xa0", " ")
     rows = [r for r in all_rows if r["entity_type"] == "work"]
     print(f"  {len(rows):,} works")
 
