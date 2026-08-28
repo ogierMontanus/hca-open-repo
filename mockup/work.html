@@ -460,6 +460,11 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   const seeAlsoRefs = (w.seeAlso && w.seeAlso.length) ? w.seeAlso : (wx && wx.seeAlso) || [];
   const partOfRef = w.partOf || (wx && wx.partOf) || null;
   const containsRefs = (w.contains && w.contains.length) ? w.contains : (wx && wx.contains) || [];
+  // adaptedFrom is descriptive only (see extract_adaptation() in
+  // parse_novels_plays_tales.py / parse_music_register.py) -- the source
+  // creator is not itself linked to a person entity, so this renders as
+  // plain text rather than through refRow()'s chip-link pattern.
+  const adaptedFrom = w.adaptedFrom || (wx && wx.adaptedFrom) || null;
 
   document.title = w.title + ' — HCA Open Repository';
 
@@ -518,13 +523,14 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   // breadcrumb, and the ref count is in the diary-mentions intro below.
   // Only the fields with no other home on the page remain: author,
   // language, date. See docs/data-model/detail-page-redundancy.md.
-  if (w.author || w.lang || dispDate || dispYear) {
+  if (w.author || w.lang || dispDate || dispYear || adaptedFrom) {
     sb += `<div class="sidebar-box"><div class="sidebar-box__title">Registeroplysninger</div><dl class="register-dl">`;
     if (w.author) {
       sb += `<dt>person</dt><dd>${authorLinks(w)}`;
       if (w.authorWd) sb += ` ${wdBadge(w.authorWd, w.author)}`;
       sb += `</dd>`;
     }
+    if (adaptedFrom) sb += `<dt>Bearbejdet efter</dt><dd>${adaptedFrom}</dd>`;
     if (w.lang) sb += `<dt>Originalsprog</dt><dd>${w.lang}</dd>`;
     if (dispDate) {
       sb += `<dt>Dateret</dt><dd>${dispDate}</dd>`;

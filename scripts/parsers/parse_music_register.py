@@ -44,12 +44,7 @@ OPUS_EMBEDDED = re.compile(r",?\s*(op\.\s*\d+[a-z]?(?:\s+nr\.\s*\d+)?)\s*$", re.
 # " og " is reliably splittable (a bare comma list risks being one
 # person's name-plus-title, not two people); a leading "Udg."/"Red." role
 # label joined by "og" to a second role label ("Udg. og Red.: X") is one
-# person with two roles, not two people, so it's stripped first. Smaller
-# scope here than the sibling parser -- MUSIK's own creator field rarely
-# carries the "efter"/"bearbejdet af" adaptation-credit shape that parser
-# handles (checked directly: 12 of 407 creators contain " og ", none of
-# the messier compound ones -- left unsplit, same "ask, don't guess"
-# discipline).
+# person with two roles, not two people, so it's stripped first.
 _ROLE_LABEL_RE = re.compile(
     r"^(?:Udg\.|Red\.)(?:\s+og\s+(?:Udg\.|Red\.))?\s*:\s*", re.IGNORECASE,
 )
@@ -62,6 +57,112 @@ def split_creators(creator: str) -> str:
     head, last = creator.rsplit(" og ", 1)
     parts = [p.strip() for p in head.split(",") if p.strip()] + [last.strip()]
     return "; ".join(parts)
+
+
+# ── Adaptation-marker extraction ────────────────────────────────────────────
+# Ported verbatim from parse_novels_plays_tales.py's extract_adaptation()
+# (parsers don't import each other -- see split_creators()/_ROLE_LABEL_RE
+# above for the same duplicate-with-attribution precedent). The sibling
+# parser's own docstring originally scoped this out ("MUSIK's own creator
+# field rarely carries the adaptation-credit shape... checked directly: 12
+# of 407 creators contain ' og ', none of the messier compound ones"). A
+# 2026-08-28 re-check of the current TSV found that no longer holds: 3
+# real rows do carry it (Reg000570 "P. Larcher efter F. Taglioni",
+# Reg002733, Reg000554 -- see docs/data-model/ note for the full trace),
+# so the sibling machinery is ported in now that it's needed.
+_ADAPT_MARKER_RE = re.compile(
+    r",?\s*(?:frit\s+bearbejdet\s+af|bearbejdet\s+af|bearb\.\s*af|"
+    r"frit\s+oversat\s+af|oversat\s+af|ved|af)\s+",
+    re.IGNORECASE,
+)
+
+
+def _clean_bare_name(x: str) -> str:
+    return re.split(r"[:»]", x)[0].strip().rstrip(".,")
+
+
+def _looks_name_shaped(x: str) -> bool:
+    if not x or any(ch.isdigit() for ch in x):
+        return False
+    if x[0].islower():
+        return False
+    if len(x.split()) > 8:
+        return False
+    return True
+
+
+def extract_adaptation(creator: str) -> tuple[str, str | None]:
+    """Returns (cleaned_creator, adapted_from_creator_or_None). See
+    parse_novels_plays_tales.py's own copy of this function for the full
+    WEMI rationale and rule-by-rule commentary -- unchanged here."""
+    s = creator.strip()
+    if not s:
+        return s, None
+
+    m = re.match(r"^efter\s+(.+)$", s, re.IGNORECASE)
+    if m:
+        rest = m.group(1)
+        marker_matches = list(_ADAPT_MARKER_RE.finditer(rest))
+        if marker_matches:
+            mm = marker_matches[-1]
+            source = _clean_bare_name(rest[: mm.start()].strip().rstrip(","))
+            adapter = rest[mm.end() :].strip()
+            if source and adapter:
+                return adapter, source
+        return _clean_bare_name(rest), None
+
+    m = re.search(r",?\s+efter\s+", s, re.IGNORECASE)
+    if m:
+        adapter = s[: m.start()].strip()
+        source = _clean_bare_name(s[m.end() :])
+        if adapter and "," not in adapter and source:
+            if adapter.lower().startswith("lokaliseret af "):
+                adapter = adapter[len("lokaliseret af ") :].strip()
+            return adapter, source
+
+    m = re.search(
+        r"^(.*?),\s*(?:frit\s+)?(?:bearbejdet\s+af|bearb\.\s*af|oversat\s+af)\s+(.+)$",
+        s, re.IGNORECASE,
+    )
+    if m:
+        source, adapter = m.group(1).strip(), m.group(2).strip()
+        if source and adapter:
+            return adapter, source
+
+    m = re.search(r"^(.*?),\s*bearbejdet\s+efter\s+(.+)$", s, re.IGNORECASE)
+    if m:
+        adapter, source = m.group(1).strip(), m.group(2).strip()
+        if adapter and source:
+            return adapter, source
+
+    m = re.search(r"\s+ved\s+", s, re.IGNORECASE)
+    if m:
+        source = s[: m.start()].strip().rstrip(",")
+        adapter = s[m.end() :].strip()
+        if _looks_name_shaped(source) and _looks_name_shaped(adapter):
+            return adapter, source
+
+    return s, None
+
+
+# Danish libretto convention: "Tekst af NAME" names the text-writer,
+# distinct from (and usually following) a composer/genre preamble --
+# "Operette med Musik af forskellige Komponister, Tekst af Erik Bøgh
+# efter H. Chivot og A. Duru" (Reg002733). Confirmed a single-occurrence
+# pattern across all 456 MUSIK rows (checked directly), not general
+# enough to risk a looser match -- the literal marker text is required.
+_TEKST_AF_RE = re.compile(r"^(.*?),?\s*Tekst\s+af\s+(.+)$", re.IGNORECASE | re.DOTALL)
+
+# Rows where a single clause names 3+ unrelated role-credits with no
+# clean single creator to extract (Reg000554: "Syngestykke, indrettet af
+# N. T. Bruun, Musiken af Mozart, Méhul og Paër, Teksten efter
+# Hauteroche" -- arranger, 3 composers, and a text-source all in one
+# clause). person_derived is already correct here ("N. T. Bruun"); no
+# override is emitted so build_works_extra.py's fallback to it wins
+# instead of the naive split's fake "Syngestykke" author. WEMI rule 8,
+# "ask, don't guess" -- add here only after confirming person_derived is
+# right and no rule above recovers the row.
+_KNOWN_UNSPLITTABLE = {"Reg000554"}
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -154,8 +255,19 @@ def assign_parens(r, parens):
             remaining.append(p)
 
     if remaining and is_composer(remaining[-1]):
-        r["creator"] = split_creators(remaining.pop())
-        r["creator_is_human"] = "True"
+        raw = remaining.pop()
+        if r["RegistryTitelID"] in _KNOWN_UNSPLITTABLE:
+            r["note"] = (r["note"] + " | " if r["note"] else "") + f"({raw})"
+        else:
+            tm = _TEKST_AF_RE.match(raw)
+            if tm:
+                pre, raw = tm.group(1).strip().rstrip(","), tm.group(2).strip()
+                if pre:
+                    r["note"] = (r["note"] + " | " if r["note"] else "") + pre
+            cleaned, adapted_from = extract_adaptation(raw)
+            r["creator"] = split_creators(cleaned)
+            r["adapted_from_creator"] = adapted_from or ""
+            r["creator_is_human"] = "True"
 
     if remaining and not r["original_title"]:
         r["original_title"] = remaining.pop(0)
@@ -182,6 +294,7 @@ def parse(raw, reg_id=""):
         original_title="",
         creator="",
         creator_is_human="",
+        adapted_from_creator="",
         opus="",
         part_of="",
         kryds="",
@@ -236,6 +349,12 @@ FIELDNAMES = [
     "08_part_of",
     "09_Krydshenvisning_til",
     "10_Note",
+    # Literal name, not the next sequential number -- build_works_extra.py's
+    # load_parsed_creator_overrides() reads this exact column name from
+    # every CREATOR_OVERRIDE_FILES entry (see
+    # parse_novels_plays_tales.py's own 12_adapted_from_creator column),
+    # so no downstream change is needed to pick this up here too.
+    "12_adapted_from_creator",
     "RegistryTitelID",
 ]
 
@@ -292,17 +411,19 @@ def run(xlsx: pathlib.Path, dst: pathlib.Path, *, forms: list[str] = None) -> pa
                     "08_part_of": r["part_of"],
                     "09_Krydshenvisning_til": r["kryds"],
                     "10_Note": r["note"],
+                    "12_adapted_from_creator": r["adapted_from_creator"],
                     "RegistryTitelID": r["RegistryTitelID"],
                 }
             )
 
     pt = Counter(r["Posttype"] for r in results)
+    n_adapted = sum(1 for r in results if r["adapted_from_creator"])
     print(f"Source: {xlsx.name}  (genre: MUSIK)")
     print(f"   To:  {dst}")
     for form, std_n, creator_n in per_form_counts:
         pct = f"{creator_n / std_n:.0%}" if std_n else "n/a"
         print(f"   {form:<50s} {std_n:5d} rows, {creator_n:5d} with a human creator ({pct})")
-    print(f" Rows:  {len(results)}  |  {dict(pt)}")
+    print(f" Rows:  {len(results)}  |  {dict(pt)}  |  {n_adapted} with an adapted_from source")
     return dst
 
 
