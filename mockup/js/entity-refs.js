@@ -166,6 +166,32 @@ window.EntityRefs = (function () {
     return null;
   }
 
+  // "f." (født = born/née) resolution: the mirror-image case from
+  // marriedNameRid() above -- a creator string already in "GivenNames
+  // MarriedSurname, f. MaidenSurname" order (given-name-first, not the
+  // register's own surname-first label order) defeats nameKey()'s plain
+  // surname-first parsing the same way: the whole "GivenNames
+  // MarriedSurname" chunk before the comma gets read as one bogus
+  // "surname". Unlike marriedNameRid() this doesn't need a PERSONS_EXTRA
+  // search -- the married surname (the last token before the comma) and
+  // given names can be reassembled directly into the register's own
+  // "Surname, Given, f. Maiden" label order, which nameKey() already
+  // computes the right key for on its own (see the docstring above:
+  // "f."/"von"/etc. all fold into the initials soup either way, so
+  // reordering into the label's own shape reproduces its exact key).
+  var _NEE_RE = /^(.+?),\s*f\.\s+(.+)$/i;
+  function neeRid(name) {
+    var m = _NEE_RE.exec(name.trim());
+    if (!m) return null;
+    var preToks = m[1].trim().split(/\s+/);
+    var maidenSurname = m[2].trim();
+    if (preToks.length < 2 || !maidenSurname) return null;
+    var marriedSurname = preToks[preToks.length - 1];
+    var given = preToks.slice(0, -1).join(' ');
+    var k = nameKey(marriedSurname + ', ' + given + ', f. ' + maidenSurname);
+    return k ? (_PERSON_KEY_REG[k] || null) : null;
+  }
+
   function personRid(name) {
     if (!name) return null;
     var r = _PERSON_LABEL_REG[name] || _PERSON_PREFIX_REG[name];
@@ -174,6 +200,7 @@ window.EntityRefs = (function () {
       if (k) r = _PERSON_KEY_REG[k];
     }
     if (!r) r = genitiveStrippedRid(name);
+    if (!r) r = neeRid(name);
     if (!r) r = marriedNameRid(name);
     return r || null;
   }
