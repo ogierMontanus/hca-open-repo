@@ -435,7 +435,7 @@ standardpost	False	NovelsPlaysTales	Feiltagelserne		Oliver Goldsmith				True			R
 standardpost	False	NovelsPlaysTales	500000 Djævle						True			Reg000122
 standardpost	False	NovelsPlaysTales	Fiesco		Fr. von Schiller				True			Reg001286
 standardpost	False	NovelsPlaysTales	Le Fils de Giboyer		E. Augier				True			Reg002067
-standardpost	False	NovelsPlaysTales	La finta strega		W. Scott				True			Reg002014
+standardpost	False	NovelsPlaysTales	La finta strega		W. Scott				True	efter W. Scott: »Guy Mannering«, 12.6.1846, Teatro Fiorentini, Napoli		Reg002014
 standardpost	False	NovelsPlaysTales	Fiskeren		A. Oehlenschlæger				True			Reg001296
 standardpost	False	NovelsPlaysTales	En fix Idé		William Bloch; Nicolaj Bøgh				True			Reg001131
 standardpost	False	NovelsPlaysTales	Fjeldsøen		A. Munch				True			Reg001299
@@ -488,7 +488,7 @@ standardpost	False	NovelsPlaysTales	Das goldene Vliess		Fr. Grillpazer				True		
 standardpost	False	NovelsPlaysTales	Der Goldschmied von Ulm		S. H. Mosenthal				True			Reg000784
 standardpost	False	NovelsPlaysTales	Graf Essex		Heinrich Laube				True			Reg001474
 standardpost	False	NovelsPlaysTales	Grev Essex		J. C. Lange				True			Reg001485
-standardpost	False	NovelsPlaysTales	Die Grille		Charlotte Birch-Pfeiffer		En lille Heks		True		George Sand	Reg000881
+standardpost	False	NovelsPlaysTales	Die Grille		Charlotte Birch-Pfeiffer		En lille Heks		True	Charlotte Birch-Pfeiffer efter George Sand: La petite Fadette	George Sand	Reg000881
 standardpost	False	NovelsPlaysTales	Gringoire		Th. Bainville				True			Reg001489
 standardpost	False	NovelsPlaysTales	Griseldis		Fr. Halm				True			Reg001490
 standardpost	False	NovelsPlaysTales	Grisen		Labiche; Delacour				True			Reg001491
@@ -811,7 +811,7 @@ standardpost	False	NovelsPlaysTales	Das Schloss Limburg		Benott-Joseph Marsollie
 standardpost	False	NovelsPlaysTales	Der Schneider und sein Sohn		Thomas Morton				True			Reg000802
 standardpost	False	NovelsPlaysTales	School for Scandal		R. B. Sheridan		Bagtalelsens Skole og Die Lästerschule		True			Reg002968
 standardpost	False	NovelsPlaysTales	Die Schuld		A. Müllner				True			Reg000909
-standardpost	False	NovelsPlaysTales	Die Schule der Verliebten		Karl Blum				True		J. Sheridan Knowles	Reg000910
+standardpost	False	NovelsPlaysTales	Die Schule der Verliebten		Karl Blum				True	Karl Blum efter J. Sheridan Knowles: »The Love-Chase«	J. Sheridan Knowles	Reg000910
 standardpost	False	NovelsPlaysTales	Die Schule des Lebens		Ernst Raupach				True			Reg000911
 standardpost	False	NovelsPlaysTales	Die Schärpe und die Blume		Calderón de la Barca				True			Reg000913
 standardpost	False	NovelsPlaysTales	Seer Jer i Speil		Karl Töpfer		Nehmt ein Exempel dran!		True			Reg002977
@@ -1076,10 +1076,10 @@ standardpost	False	NovelsPlaysTales	Helge		A. Oehlenschlæger				True			Reg00155
 standardpost	False	NovelsPlaysTales	Den hemmelighedsfulde Port		B. S. Ingemann				True			Reg000727
 standardpost	False	NovelsPlaysTales	Henimod Aften ved Rom	Efter et Maleri af Küchler	H. Hertz				True			Reg001558
 standardpost	False	NovelsPlaysTales	»Herlige Hav -«		Havfruens første Sang af Fortællingen De Underjordiske, B. S. Ingemann				True			Reg003635
-standardpost	False	NovelsPlaysTales	Herr Karl eller klosterrovet		Geijer; Afzelius: Svenska folkvisor Nr. 26				True			Reg001579
+standardpost	False	NovelsPlaysTales	Herr Karl eller klosterrovet		Geijer; Afzelius				True	Geijer og Afzelius: Svenska folkvisor Nr. 26		Reg001579
 standardpost	False	NovelsPlaysTales	Hiawatha se: The Song of Hiawatha		H. W. Longfellow				True			Reg001591
 standardpost	False	NovelsPlaysTales	Holmens faste Stok		Adolph Recke				True			Reg001626
-standardpost	False	NovelsPlaysTales	Hr. Sverkel		Abrahamson; Nyerup; Rahbek: Udvalgte danske Viser fra Middelalderen Nr. CLV				True			Reg001638
+standardpost	False	NovelsPlaysTales	Hr. Sverkel		Abrahamson; Nyerup; Rahbek				True	Abrahamson, Nyerup og Rahbek: Udvalgte danske Viser fra Middelalderen Nr. CLV		Reg001638
 standardpost	False	NovelsPlaysTales	Hälsning till Danmark		Carl Fredrik Ridderstad				True			Reg001675
 standardpost	False	NovelsPlaysTales	Hundrede Digte efter det Engelske		C. Preetzmann				True	Pseudonym: Caralis		Reg001651
 standardpost	False	NovelsPlaysTales	Hyrden og Slangen		Rudolph Schmidt				True			Reg001671
@@ -1186,7 +1186,7 @@ standardpost	False	NovelsPlaysTales	Skriftemaalet		Henrik Hertz				True			Reg003
 standardpost	False	NovelsPlaysTales	Slaget ved Fredericia		Carl Ploug				True			Reg003033
 standardpost	False	NovelsPlaysTales	Slaven		Fr. Paludan-Mülller				True			Reg003036
 standardpost	False	NovelsPlaysTales	Smaadigte og Sange		M. Rosing				True			Reg003043
-standardpost	False	NovelsPlaysTales	»Solen gaar bag Aasen ned -«	Sole gaar bak Aasen ne	Aagots Sang af H. A. Bjerregaard: Fjeldeventyret				True			Reg003673
+standardpost	False	NovelsPlaysTales	»Solen gaar bag Aasen ned -«	Sole gaar bak Aasen ne	Aagots Sang af H. A. Bjerregaard				True	Aagots Sang af H. A. Bjerregaard: Fjeldeventyret		Reg003673
 standardpost	False	NovelsPlaysTales	The Song of Hiawatba		H. W. Longfellow				True			Reg003227
 standardpost	False	NovelsPlaysTales	Stellas Kunstindvielse		C. N. David				True			Reg003102
 standardpost	False	NovelsPlaysTales	Svenska folkvisor )		E. G. Geijer; A. A. Afzelius				True			Reg003142

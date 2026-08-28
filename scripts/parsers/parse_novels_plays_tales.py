@@ -391,9 +391,33 @@ def parse_row(raw_label: str, reg_id: str) -> list[dict]:
     # -- so it runs identically regardless of which path set `creator`.
     adapted_from_creator = ""
     if creator:
+        # strip_role_label() runs here too, not just inside split_creators()
+        # below -- a role-label prefix ("Red.: Georg og Edvard Brandes")
+        # has the exact same surface shape as a source citation ("Geijer
+        # og Afzelius: Svenska folkvisor Nr. 26") and MUST be told apart
+        # from one before the colon-citation check below runs, or "Red.:"
+        # gets mistaken for a citation-name prefix and the real names
+        # after it get discarded into Note instead. Calling it again
+        # inside split_creators() afterwards is a harmless no-op once
+        # it's already been stripped here.
+        creator = strip_role_label(creator)
         pseudonym, creator = split_pseudonym(creator)
         if pseudonym:
             note_parts.append(f"Pseudonym: {pseudonym}")
+        # A colon in what's left is usually a source citation glued onto
+        # the front, not part of a name -- "Geijer og Afzelius: Svenska
+        # folkvisor Nr. 26" (an anthology + item number), "Abrahamson,
+        # Nyerup og Rahbek: Udvalgte danske Viser fra Middelalderen Nr.
+        # CLV". No real name in this corpus contains a colon -- the one
+        # marker that legitimately does ("Ͻ:") has already been consumed
+        # by split_pseudonym() above -- so splitting on the first
+        # remaining colon and keeping only the part before it is safe.
+        # The full original string is kept in Note rather than discarded.
+        if ":" in creator:
+            pre = creator.split(":", 1)[0].strip().rstrip(",")
+            if pre:
+                note_parts.append(creator)
+                creator = pre
         creator, adapted_from = extract_adaptation(creator)
         if adapted_from:
             adapted_from_creator = adapted_from
