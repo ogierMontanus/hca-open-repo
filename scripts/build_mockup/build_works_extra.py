@@ -16,6 +16,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 import urllib.parse
 from collections import defaultdict
 
@@ -386,27 +387,144 @@ def load_wikidata_overlay():
     return out
 
 
-# Parsed TSVs whose 06_creator column is trusted as an author_from()
-# override -- each added only after its own output was spot-checked
-# row-by-row, not on the assumption that sharing the same column shape as
-# an already-trusted file makes it equally safe (novels_plays_tales's own
-# disagreements never surfaced a non-person value; an earlier attempt to
-# glob every data/parsed/*.tsv blindly did, for music_register and
-# non_fiction both -- see git history). non_fiction_parsed.tsv is
-# deliberately still absent from this list for exactly that reason: it
-# hasn't been checked yet.
+# ── Person-key matching (Python mirror of entity-refs.js's nameKey()) ──────
+# Needed here, not just client-side, for resolve_shared_surname() below: a
+# split co-author list sometimes has a bare given name whose surname is
+# only stated once, shared across the list ("Georg og Edvard Brandes" ->
+# ["Georg", "Edvard Brandes"] -- Georg and Edvard Brandes are two distinct,
+# real, separately-registered brothers; "Dupeuty, Fontan og Davrigny" has
+# the shared surname FIRST instead of last -- checked directly, neither
+# Dupeuty nor Fontan nor Davrigny exist in the register at all, so that
+# specific trio can't resolve yet regardless, but the mechanism itself is
+# validated against the Brandes case, which does). Keep this in exact sync
+# with nameKey() in mockup/js/entity-refs.js -- same diacritic fold (added
+# there specifically so "Oehlenschlaeger"-style German-vs-Danish spellings
+# key the same), same NFD-strip, same surname/initials split.
+_NAME_KEY_KEEP_RE = re.compile("[^a-zæøå]")
+_COMBINING_MARKS_RE = re.compile("[̀-ͯ]")
+
+
+def _person_name_fold(x):
+    x = (
+        x.replace("ä", "æ").replace("Ä", "Æ")   # ä->æ, Ä->Æ
+         .replace("ö", "ø").replace("Ö", "Ø")   # ö->ø, Ö->Ø
+         .replace("ü", "y").replace("Ü", "Y")             # ü->y, Ü->Y
+    )
+    x = unicodedata.normalize("NFD", x.lower())
+    return _COMBINING_MARKS_RE.sub("", x)
+
+
+def person_name_key(s):
+    """Mirrors mockup/js/entity-refs.js's nameKey(): 'surname|initials',
+    e.g. 'brandes|g' for both "Georg Brandes" and "Brandes, Georg (...)"."""
+    if not s:
+        return None
+    s = re.split(r"[(（\[]", s)[0].strip()
+    if not s:
+        return None
+    if "," in s:
+        parts = s.split(",")
+        surname, given = parts[0], " ".join(parts[1:])
+    else:
+        toks = s.split()
+        if not toks:
+            return None
+        surname, given = toks[-1], " ".join(toks[:-1])
+    sk = _NAME_KEY_KEEP_RE.sub("", _person_name_fold(surname))
+    if not sk:
+        return None
+    given_folded = _person_name_fold(given)
+    # Every initial, NOT deduplicated -- "E. E. Schmidt" -> "ee", matching
+    # nameKey()'s own .sort().join('') over the raw (non-Set) array.
+    inits = sorted(t[0] for t in re.split(r"[\s.]+", given_folded) if t)
+    return sk + "|" + "".join(inits)
+
+
+def build_person_keys(all_rows, ref_count):
+    """{nameKey: entity_id} from every PERSON-REGISTER row, mirroring
+    entity-refs.js's own _PERSON_KEY_REG: on a same-surname/same-initial
+    collision (several "Collin, H..." family members, say), the person
+    with more diary references wins -- a pre-existing, documented
+    limitation of that collision strategy, not something
+    resolve_shared_surname() introduces."""
+    out, out_refs = {}, {}
+    for r in all_rows:
+        if r["entity_type"] != "person":
+            continue
+        label = (r.get("label") or "").strip()
+        if not label:
+            continue
+        k = person_name_key(label)
+        if not k:
+            continue
+        refs = ref_count.get(r["entity_id"], 0)
+        if k not in out_refs or refs > out_refs[k]:
+            out[k] = r["entity_id"]
+            out_refs[k] = refs
+    return out
+
+
+def resolve_shared_surname(segments, person_keys):
+    """A bare single-word segment ("Georg") that doesn't resolve on its
+    own is retried as "<segment> <surname>" against every OTHER segment
+    in the same split list (checked both directions -- see the module
+    note above for why: the shared surname sits last in "Georg og Edvard
+    Brandes" but first in "Dupeuty, Fontan og Davrigny"). Only ever
+    upgrades a guess the register already confirms; a segment nothing
+    resolves for is returned unchanged, same as today."""
+    if len(segments) < 2:
+        return segments
+    resolved = list(segments)
+    for i, seg in enumerate(segments):
+        if " " in seg or "." in seg:
+            continue  # already more than a bare single word -- leave it
+        if person_name_key(seg) in person_keys:
+            continue  # resolves alone already
+        for j, other in enumerate(segments):
+            if j == i:
+                continue
+            other_toks = other.split()
+            if not other_toks:
+                continue
+            candidate = f"{seg} {other_toks[-1]}"
+            if person_name_key(candidate) in person_keys:
+                resolved[i] = candidate
+                break
+    return resolved
+
+
+def join_authors(authors):
+    """Danish list convention for redisplaying a split authors list --
+    "A, B og C", not "A og B og C" ("og" only before the last name)."""
+    if not authors:
+        return ""
+    if len(authors) == 1:
+        return authors[0]
+    return ", ".join(authors[:-1]) + " og " + authors[-1]
+
+
 CREATOR_OVERRIDE_FILES = (
     "novels_plays_tales_parsed.tsv",
     "music_register_parsed.tsv",
 )
 
 
-def load_parsed_creator_overrides():
-    """{entity_id: creator} from CREATOR_OVERRIDE_FILES above -- dedicated,
-    WEMI-rule-based section parsers (scripts/parsers/, see
-    docs/data-model/wemi-and-relations.md "Parsing rules summarised" §2:
-    the creator sits in the title's own parenthetical, e.g. "Grannarne
-    (Fredrika Bremer)" → creator "Fredrika Bremer").
+def load_parsed_creator_overrides(person_keys):
+    """{entity_id: {"authors": [name, ...], "adapted_from": name_or_None}}
+    from CREATOR_OVERRIDE_FILES above -- dedicated, WEMI-rule-based
+    section parsers (scripts/parsers/, see docs/data-model/
+    wemi-and-relations.md "Parsing rules summarised" §2: the creator sits
+    in the title's own parenthetical, e.g. "Grannarne (Fredrika Bremer)"
+    → creator "Fredrika Bremer"). Since the coverage-expansion-plan
+    follow-up (see git history, 2026-08-28), those parsers also isolate
+    individual co-authors ("P. C. Asbjørnsen; Jørgen Moe", "; "-joined in
+    06_creator) and, separately, an adaptation source into
+    12_adapted_from_creator -- both handled here into their own fields
+    rather than left as one raw string. resolve_shared_surname() (see its
+    own docstring) additionally upgrades a bare given-name segment to its
+    full "Given Surname" form when the person register confirms it, using
+    person_keys (build_person_keys()'s output — pass a fresh one built
+    from the same entities.csv/ref_count this run is already using).
 
     This exists because author_from() below falls back to the literal H2
     string (e.g. "ANDRE FORFATTERE") whenever entities.csv's own
@@ -444,6 +562,7 @@ def load_parsed_creator_overrides():
     either have no real RegistryTitelID or aren't a work in their own
     right). Returns {} if none of the files exist yet (fresh clone,
     parsers not run)."""
+    year_re = re.compile(r"\b(1[4-9]\d{2}|20\d{2})\b")
     out = {}
     for filename in CREATOR_OVERRIDE_FILES:
         path = os.path.join(PARSED_DIR, filename)
@@ -457,19 +576,30 @@ def load_parsed_creator_overrides():
                     continue
                 rid = (r.get("RegistryTitelID") or "").strip()
                 creator = (r.get("06_creator") or "").strip()
+                if not rid or not creator:
+                    continue
+                segments = [p.strip() for p in creator.split("; ") if p.strip()]
                 # Backstop against a publication/premiere citation slipping
                 # through as a "creator" (e.g. "Koldingposten 30.1.1866",
                 # "21.5.1854, Dresden") -- every bad value found by
                 # hand-reviewing these overrides' output contained a
                 # plausible year (1400-2099) somewhere, and no real
                 # creator name in this dataset does, so this is precise
-                # with no risk of excluding a legitimate one. Each
-                # parser's own DESCRIPTOR_RE/PREMIERE_DATE_RE /
-                # is_composer() already catch the more structured cases;
-                # this is the general backstop for whatever shape slips
-                # past those.
-                if rid and creator and not re.search(r"\b(1[4-9]\d{2}|20\d{2})\b", creator):
-                    out[rid] = creator
+                # with no risk of excluding a legitimate one. Checked per
+                # segment, not the joined string -- one bad element (e.g.
+                # a stray date fragment produced by splitting a garbled
+                # premiere-date-list on " og ") must not let its clean
+                # siblings through as a partial author list; the whole
+                # row is skipped instead, same conservative behaviour the
+                # single-string check already had. Each parser's own
+                # DESCRIPTOR_RE/PREMIERE_DATE_RE/is_composer() already
+                # catch the more structured cases; this is the general
+                # backstop for whatever shape slips past those.
+                if any(year_re.search(seg) for seg in segments):
+                    continue
+                segments = resolve_shared_surname(segments, person_keys)
+                adapted_from = (r.get("12_adapted_from_creator") or "").strip() or None
+                out[rid] = {"authors": segments, "adapted_from": adapted_from}
     return out
 
 
@@ -500,6 +630,12 @@ def main():
                 ref_count[r["entity_id"]] += 1
         print(f"  reference counts loaded for {len(ref_count):,} entities")
 
+    # Needed before load_parsed_creator_overrides() -- see
+    # resolve_shared_surname()'s docstring for what this is for.
+    person_keys = build_person_keys(all_rows, ref_count)
+    print(f"  {len(person_keys):,} person name-keys indexed for shared-surname "
+          f"co-author resolution")
+
     work_langs = load_languages()
     if work_langs:
         print(f"  languages loaded for {len(work_langs):,} works")
@@ -512,10 +648,14 @@ def main():
         print(f"  {len(wd_overlay):,} hand-verified Wikidata entries loaded from "
               f"{os.path.relpath(WD_OVERLAY, ROOT)}")
 
-    creator_overrides = load_parsed_creator_overrides()
+    creator_overrides = load_parsed_creator_overrides(person_keys)
     if creator_overrides:
         print(f"  {len(creator_overrides):,} creator(s) loaded from "
               f"{os.path.relpath(PARSED_DIR, ROOT)}/{{{', '.join(CREATOR_OVERRIDE_FILES)}}}")
+        n_multi = sum(1 for v in creator_overrides.values() if len(v["authors"]) > 1)
+        n_adapt = sum(1 for v in creator_overrides.values() if v["adapted_from"])
+        print(f"    {n_multi:,} with more than one co-author, "
+              f"{n_adapt:,} with a separated adaptation source")
         # Disagreements against entities.csv's own person_derived are worth a
         # human glance even though the TSV wins by default (see
         # load_parsed_creator_overrides()'s docstring) -- logged, not
@@ -524,7 +664,8 @@ def main():
         disagreements = []
         for r in rows:
             rid = r["entity_id"]
-            tsv_c = creator_overrides.get(rid)
+            override = creator_overrides.get(rid)
+            tsv_c = join_authors(override["authors"]) if override else None
             pd = (r.get("person_derived") or "").strip()
             if tsv_c and pd and pd.casefold() != tsv_c.casefold():
                 disagreements.append((rid, pd, tsv_c))
@@ -607,6 +748,9 @@ def main():
         elif wing == "teater-musik.html":
             place_city, place_venue = place_from_teater_title(r["label"], place_labels)
 
+        override = creator_overrides.get(rid)
+        tsv_creator_str = join_authors(override["authors"]) if override else None
+
         generated[rid] = {
             "title": r["label"].strip(),
             "h2": h2 or "ANDRE FORFATTERE",
@@ -614,7 +758,7 @@ def main():
             "wing": wing,
             "wingLabel": wing_label,
             "author": author_from(h2, h3, r["label"], r.get("person_derived", ""), place_labels,
-                                   tsv_creator=creator_overrides.get(rid)),
+                                   tsv_creator=tsv_creator_str),
             # Derived, not curated — langMethod carries the provenance so the
             # UI can say so. See detect_work_language.py.
             "lang": work_langs.get(rid, (None, None))[0],
@@ -642,6 +786,22 @@ def main():
             "coPlaces": [],
             "coWorks": [],
         }
+        # authors: individually-linkable co-authors (see entity-refs.js's
+        # worksByAuthor(), which now iterates this instead of the single
+        # "author" display string above) -- from the TSV override when one
+        # exists, else the single computed "author" string as a one-element
+        # list (or [] when there's no author at all), so every caller can
+        # rely on this field existing without a None/undefined check.
+        # adaptedFrom is the WEMI adaptation source (see
+        # extract_adaptation() in the novels/plays/tales parser) -- purely
+        # descriptive, not linked to a person entity.
+        if override:
+            generated[rid]["authors"] = override["authors"]
+            generated[rid]["adaptedFrom"] = override["adapted_from"]
+        else:
+            a = generated[rid]["author"]
+            generated[rid]["authors"] = [a] if a else []
+            generated[rid]["adaptedFrom"] = None
 
     print(f"  generated {len(generated)} entries across all {len(rows)} works")
 

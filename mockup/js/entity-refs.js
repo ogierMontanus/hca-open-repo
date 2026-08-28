@@ -154,8 +154,14 @@ window.EntityRefs = (function () {
   function placeHrefByRid(r) { return r ? 'place.html?reg='  + r : 'place.html';  }
   function workHrefByRid(r)  { return r ? 'work.html?reg='   + r : 'work.html';   }
 
-  /* Lazy index of works keyed by resolved-author person rid.
-     Walks WORKS_EXTRA once on first call. */
+  /* Lazy index of works keyed by resolved-author person rid. Walks
+     WORKS_EXTRA once on first call, over w.authors (an array — every
+     WORKS_EXTRA entry has one, build_works_extra.py falls back to a
+     one-element [w.author] for wings not covered by the co-author-
+     splitting override) rather than the single w.author display string,
+     so a co-authored work ("P. C. Asbjørnsen og Jørgen Moe") is
+     attributed to BOTH people, not just whichever name used to win by
+     being the last token nameKey() happened to parse. */
   var _worksByPersonRid = null;
   function worksByAuthor(personRidArg) {
     if (!personRidArg || typeof WORKS_EXTRA === 'undefined') return [];
@@ -163,11 +169,15 @@ window.EntityRefs = (function () {
       _worksByPersonRid = {};
       for (var rid in WORKS_EXTRA) {
         var w = WORKS_EXTRA[rid];
-        if (!w || !w.author) continue;
-        var pr = personRid(w.author);
-        if (!pr) continue;
-        var entry = Object.assign({ rid: rid }, w);
-        (_worksByPersonRid[pr] = _worksByPersonRid[pr] || []).push(entry);
+        if (!w) continue;
+        var names = w.authors || (w.author ? [w.author] : []);
+        var entry = null;
+        for (var i = 0; i < names.length; i++) {
+          var pr = personRid(names[i]);
+          if (!pr) continue;
+          if (!entry) entry = Object.assign({ rid: rid }, w);
+          (_worksByPersonRid[pr] = _worksByPersonRid[pr] || []).push(entry);
+        }
       }
     }
     return _worksByPersonRid[personRidArg] || [];

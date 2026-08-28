@@ -56,7 +56,8 @@ COLUMNS = [
     "01_Posttype", "02_by_Andersen", "03_genre",
     "04_main_title", "05_original_title", "06_creator",
     "07_part_of", "08_Se_ogsaa", "09_Krydshenvisning_til",
-    "10_cited_directly", "11_Note", "RegistryTitelID",
+    "10_cited_directly", "11_Note", "12_adapted_from_creator",
+    "RegistryTitelID",
 ]
 GENRE = "NovelsPlaysTales"
 
@@ -93,6 +94,151 @@ DESCRIPTOR_RE = re.compile(
 # parenthetical is premiere info, not an author.
 PREMIERE_DATE_RE = re.compile(r"^\d{1,2}\.")
 
+# ── Adaptation-marker extraction ────────────────────────────────────────────
+# A creator string is often two people conflated: the person who made THIS
+# register entry's Work, and the original the entry is credited as "efter"
+# (after)/"bearbejdet af" (adapted by)/"ved" (via) -- see
+# docs/data-model/wemi-and-relations.md's WEMI rule ("new creator -> new
+# Work"): the adapter is this row's real creator, the other name belongs in
+# a separate field, not folded into 06_creator. Column shape and role
+# assignment were worked out against every one of this parser's 55
+# efter/bearbejdet/ved/oversat rows by hand (2026-08-28 probe) before being
+# encoded here; each rule below is deliberately narrow -- a shape it
+# doesn't recognise is left completely unchanged rather than guessed at,
+# same "ask, don't guess" discipline as DESCRIPTOR_RE/PREMIERE_DATE_RE
+# above.
+_ADAPT_MARKER_RE = re.compile(
+    r",?\s*(?:frit\s+bearbejdet\s+af|bearbejdet\s+af|bearb\.\s*af|"
+    r"frit\s+oversat\s+af|oversat\s+af|ved|af)\s+",
+    re.IGNORECASE,
+)
+
+
+def _clean_bare_name(x: str) -> str:
+    # Strip a trailing colon/guillemet-quoted title reference ("W. Scott:
+    # »Guy Mannering«" -> "W. Scott"); a trailing genitive 's' is left in
+    # place for entity-refs.js's existing genitive fallback to resolve.
+    return re.split(r"[:»]", x)[0].strip().rstrip(".,")
+
+
+def _looks_name_shaped(x: str) -> bool:
+    if not x or any(ch.isdigit() for ch in x):
+        return False
+    if x[0].islower():
+        return False
+    if len(x.split()) > 8:
+        return False
+    return True
+
+
+def extract_adaptation(creator: str) -> tuple[str, str | None]:
+    """Returns (cleaned_creator, adapted_from_creator_or_None). See the
+    module comment above _ADAPT_MARKER_RE for the WEMI rationale."""
+    s = creator.strip()
+    if not s:
+        return s, None
+
+    # "efter X [af/ved/bearbejdet af/oversat af Y]" -- X is the source; if
+    # a Y is also present it's the adapter (this row's real creator) and
+    # wins the LAST such marker in X (so "efter det Spanske af Kong Ludwig
+    # I af Bayern, oversat af J. Both" correctly splits on ", oversat af",
+    # not the "af" embedded in the King's own title). With no second
+    # marker, X itself becomes the creator -- matches how entities.csv's
+    # own person_derived already treats a bare "Efter M. S. Schwartz" (its
+    # value there is just "M. S. Schwartz").
+    m = re.match(r"^efter\s+(.+)$", s, re.IGNORECASE)
+    if m:
+        rest = m.group(1)
+        marker_matches = list(_ADAPT_MARKER_RE.finditer(rest))
+        if marker_matches:
+            mm = marker_matches[-1]
+            source = _clean_bare_name(rest[: mm.start()].strip().rstrip(","))
+            adapter = rest[mm.end() :].strip()
+            if source and adapter:
+                return adapter, source
+        return _clean_bare_name(rest), None
+
+    # "X efter Y" (comma before "efter" optional) -- X is the adapter, Y
+    # the source. Rejected when X itself contains a comma: a real name
+    # doesn't, but a descriptive clause sometimes does ("Benjamin
+    # Feddersen, Intrigen efter ...") and that must not become creator
+    # "Benjamin Feddersen, Intrigen" -- left unchanged instead.
+    m = re.search(r",?\s+efter\s+", s, re.IGNORECASE)
+    if m:
+        adapter = s[: m.start()].strip()
+        source = _clean_bare_name(s[m.end() :])
+        if adapter and "," not in adapter and source:
+            if adapter.lower().startswith("lokaliseret af "):
+                adapter = adapter[len("lokaliseret af ") :].strip()
+            return adapter, source
+
+    # "X, bearbejdet af / frit bearbejdet af / bearb. af / oversat af Y" --
+    # opposite role from "efter": X (before the comma) is the source, Y
+    # the adapter.
+    m = re.search(
+        r"^(.*?),\s*(?:frit\s+)?(?:bearbejdet\s+af|bearb\.\s*af|oversat\s+af)\s+(.+)$",
+        s, re.IGNORECASE,
+    )
+    if m:
+        source, adapter = m.group(1).strip(), m.group(2).strip()
+        if source and adapter:
+            return adapter, source
+
+    # "X, bearbejdet efter Y" -- same role as the leading-"efter" rule
+    # above (X is the adapter), just introduced by a comma instead.
+    m = re.search(r"^(.*?),\s*bearbejdet\s+efter\s+(.+)$", s, re.IGNORECASE)
+    if m:
+        adapter, source = m.group(1).strip(), m.group(2).strip()
+        if adapter and source:
+            return adapter, source
+
+    # Standalone " ved " ("X, by way of/via Y") -- both sides must look
+    # name-shaped (no digits, capitalised, not absurdly long), since "ved"
+    # is also an ordinary Danish preposition ("sunget ved hans
+    # Bisættelse" = "sung AT his funeral", not an adapter credit at all).
+    m = re.search(r"\s+ved\s+", s, re.IGNORECASE)
+    if m:
+        source = s[: m.start()].strip().rstrip(",")
+        adapter = s[m.end() :].strip()
+        if _looks_name_shaped(source) and _looks_name_shaped(adapter):
+            return adapter, source
+
+    return s, None
+
+
+# A periodical entry's role label ("Udg." = Udgiver/publisher, "Red." =
+# Redaktør/editor) sometimes precedes the actual name(s), joined by " og "
+# when both roles are held by the same masthead line -- "Udg. og Red.:
+# Niels Lindberg" is ONE person with two roles, not two people named "Udg."
+# and "Red.". Left in place, split_creators() below would wrongly split on
+# that "og" and produce a bare "Udg." as a fake co-author. Strip it before
+# splitting; a role label followed by several REAL names ("Udg.: Bj.
+# Bjørnsen, Rasmus Nielsen og Rudolph Schmidt") is unaffected since there's
+# no "og" between the role and the first name there.
+_ROLE_LABEL_RE = re.compile(
+    r"^(?:Udg\.|Red\.)(?:\s+og\s+(?:Udg\.|Red\.))?\s*:\s*", re.IGNORECASE,
+)
+
+
+def strip_role_label(creator: str) -> str:
+    return _ROLE_LABEL_RE.sub("", creator, count=1)
+
+
+# ── Co-author splitting ─────────────────────────────────────────────────────
+# Applied to whatever extract_adaptation() leaves as the creator. Only
+# " og " is treated as reliably splittable -- a bare comma list with no
+# " og " anywhere ("Ángel de Saavedra, Hertug af Rivas") is at least as
+# likely to be one person's name-plus-title as it is two people, so it's
+# left as a single value rather than guessed at (2026-08-28 probe:
+# checked directly, that exact name is not two people).
+def split_creators(creator: str) -> list[str]:
+    creator = strip_role_label(creator)
+    if " og " not in creator:
+        return [creator]
+    head, last = creator.rsplit(" og ", 1)
+    return [p.strip() for p in head.split(",") if p.strip()] + [last.strip()]
+
+
 KNOWN_TITLES: set[str] = set()
 
 
@@ -109,6 +255,7 @@ def make_row(
     kryds_til: str = "",
     cited_directly: str = "True",
     note: str = "",
+    adapted_from_creator: str = "",
     reg_id: str = "",
 ) -> dict:
     return {
@@ -123,6 +270,7 @@ def make_row(
         "09_Krydshenvisning_til": kryds_til,
         "10_cited_directly": cited_directly,
         "11_Note": note,
+        "12_adapted_from_creator": adapted_from_creator,
         "RegistryTitelID": reg_id,
     }
 
@@ -205,6 +353,18 @@ def parse_row(raw_label: str, reg_id: str) -> list[dict]:
             else:
                 note_parts.append(content)
 
+    # Separate an adaptation credit's source from this row's real creator
+    # (see extract_adaptation's own comment), then split whatever's left
+    # into individual co-authors on " og " (see split_creators). Applied
+    # here, once, after `creator` is fully settled above -- not per-branch
+    # -- so it runs identically regardless of which path set `creator`.
+    adapted_from_creator = ""
+    if creator:
+        creator, adapted_from = extract_adaptation(creator)
+        if adapted_from:
+            adapted_from_creator = adapted_from
+        creator = "; ".join(split_creators(creator))
+
     main_title = strip_parens(label, remaining)
     note = "; ".join(note_parts)
 
@@ -217,6 +377,7 @@ def parse_row(raw_label: str, reg_id: str) -> list[dict]:
         se_ogsaa=se_ogsaa,
         cited_directly="True",
         note=note,
+        adapted_from_creator=adapted_from_creator,
         reg_id=reg_id,
     ))
 
