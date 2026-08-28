@@ -439,7 +439,18 @@ def load_parsed_creator_overrides():
                 continue
             rid = (r.get("RegistryTitelID") or "").strip()
             creator = (r.get("06_creator") or "").strip()
-            if rid and creator:
+            # Backstop against a publication/premiere citation slipping
+            # through as a "creator" (e.g. "Koldingposten 30.1.1866",
+            # "Gemeinnütziger Almanach auf das Jahr 1831") -- every one
+            # found by hand-reviewing this override's output contained a
+            # plausible year (1400-2099) somewhere, and no real creator
+            # name in this dataset does, so this is precise with no risk
+            # of excluding a legitimate one. The parser's own
+            # PREMIERE_DATE_RE/DESCRIPTOR_RE already catch the more
+            # structured cases (a bare date or "Tekst" as the sole/last
+            # parenthetical); this is the general backstop for whatever
+            # shape of year-bearing citation slips past those.
+            if rid and creator and not re.search(r"\b(1[4-9]\d{2}|20\d{2})\b", creator):
                 out[rid] = creator
     return out
 
