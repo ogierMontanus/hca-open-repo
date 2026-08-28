@@ -144,20 +144,20 @@ standardpost	False	VocalAndInstrumentalMusic	Aline, Königinn von Golconda			G. 
 standardpost	False	VocalAndInstrumentalMusic	L’Ambassadrice			D. F. E. Auber	True						Reg002223
 standardpost	False	VocalAndInstrumentalMusic	Apothekeren og Doktoren			Ditters von Dittersdorf	True						Reg000253
 standardpost	False	VocalAndInstrumentalMusic	Un ballo in maschera			G. Verdi	True						Reg003373
-standardpost	False	VocalAndInstrumentalMusic	Barbe-Bleue			J. Offenbach	True						Reg000307
+standardpost	False	VocalAndInstrumentalMusic	Barbe-Bleue			J. Offenbach	True				Se ogsaa: Rolf Blaaskjæg		Reg000307
 standardpost	False	VocalAndInstrumentalMusic	Barberen i Sevilla			G. Paësiello	True						Reg000309
 standardpost	False	VocalAndInstrumentalMusic	Barberen i Sevilla			G. Rossini	True						Reg000310
 standardpost	False	VocalAndInstrumentalMusic	Belisario			G. Donizetti	True						Reg000324
-standardpost	False	VocalAndInstrumentalMusic	La Belle Hélène			J. Offenbach	True						Reg001970
+standardpost	False	VocalAndInstrumentalMusic	La Belle Hélène			J. Offenbach	True				Se ogsaa: Den skjønne Helene		Reg001970
 standardpost	False	VocalAndInstrumentalMusic	Berühre nicht die Königinn			X. Boisselot	True						Reg000345
 standardpost	False	VocalAndInstrumentalMusic	Le Bouffe et le tailleur			P. Gaveaux	True						Reg002055
 standardpost	False	VocalAndInstrumentalMusic	Brama og Bayaderen			D. F. E. Auber	True						Reg000382
 standardpost	False	VocalAndInstrumentalMusic	Il bravo			S. Mercadante	True						Reg001717
-standardpost	False	VocalAndInstrumentalMusic	Les Brigands			J. Offenbach	True						Reg002110
+standardpost	False	VocalAndInstrumentalMusic	Les Brigands			J. Offenbach	True				Se ogsaa: Røverne		Reg002110
 standardpost	False	VocalAndInstrumentalMusic	Broncehesten			D. F. E. Auber	True						Reg000398
 standardpost	False	VocalAndInstrumentalMusic	Bruden fra Lammermoor			I. Bredal	True						Reg000402
 standardpost	False	VocalAndInstrumentalMusic	Bryggeren i Preston			A. Adam	True						Reg000409
-standardpost	False	VocalAndInstrumentalMusic	Buenas noches, Don Simon!		Bonsoir, monsieur Pantalon!	A. Grisar	True						Reg000416
+standardpost	False	VocalAndInstrumentalMusic	Buenas noches, Don Simon!		Bonsoir, monsieur Pantalon!	A. Grisar	True				Se ogsaa: God rolig Nat, Hr. Pantalon		Reg000416
 standardpost	False	VocalAndInstrumentalMusic	Califen i Bagdad			F. A. Boieldieu	True						Reg000435
 standardpost	False	VocalAndInstrumentalMusic	Le Capitaine Henriot			F. A. Gevaert	True						Reg002057
 standardpost	False	VocalAndInstrumentalMusic	I Capuletti e i Montecchi			V. Bellini	True						Reg001683
@@ -175,15 +175,15 @@ standardpost	False	VocalAndInstrumentalMusic	Così fan tutte			W. A. Mozart	True
 standardpost	False	VocalAndInstrumentalMusic	Crispino e la comare			Luigi; Federico Ricci	True						Reg000553
 standardpost	False	VocalAndInstrumentalMusic	Crispins Forvandlinger								(Syngestykke, indrettet af N. T. Bruun, Musiken af Mozart, Méhul og Paër, Teksten efter Hauteroche)		Reg000554
 standardpost	False	VocalAndInstrumentalMusic	Czar og Tømmermand			G. A. Lortzing	True						Reg000559
-standardpost	False	VocalAndInstrumentalMusic	La Dame blanche			F. A. Boieldieu	True						Reg001977
+standardpost	False	VocalAndInstrumentalMusic	La Dame blanche			F. A. Boieldieu	True				Se ogsaa: Den hvide Dame		Reg001977
 standardpost	False	VocalAndInstrumentalMusic	La Déesse et le berger			J. Duprato	True						Reg001981
 standardpost	False	VocalAndInstrumentalMusic	Les Deux gentilshommes			J. Cadaux	True						Reg002116
-standardpost	False	VocalAndInstrumentalMusic	Les Diamants de la couronne			D. F. E. Auber	True						Reg002118
+standardpost	False	VocalAndInstrumentalMusic	Les Diamants de la couronne			D. F. E. Auber	True				Se ogsaa: Kronjuvelerne		Reg002118
 standardpost	False	VocalAndInstrumentalMusic	Didon			Th. Blangini fils	True						Reg000867
-standardpost	False	VocalAndInstrumentalMusic	Dinorah		Le Pardon de Plöermel	G. Meyerbeer	True						Reg000946
+standardpost	False	VocalAndInstrumentalMusic	Dinorah		Le Pardon de Plöermel	G. Meyerbeer	True				Se ogsaa: Sp. 60		Reg000946
 standardpost	False	VocalAndInstrumentalMusic	Doktoren imod sin Villie			Ch. Gounod	True						Reg000959
 standardpost	False	VocalAndInstrumentalMusic	El dominó azul			Emilio Arrieta	True						Reg001043
-standardpost	False	VocalAndInstrumentalMusic	Le Domino noir			D. F. E. Auber	True						Reg002065
+standardpost	False	VocalAndInstrumentalMusic	Le Domino noir			D. F. E. Auber	True				Se ogsaa: Den sorte Domino		Reg002065
 standardpost	False	VocalAndInstrumentalMusic	Don Carlos			G. Verdi	True						Reg000969
 standardpost	False	VocalAndInstrumentalMusic	Don Juan			W. A. Mozart	True						Reg000971
 standardpost	False	VocalAndInstrumentalMusic	Don Pasquale			G. Donizetti	True						Reg000973
@@ -193,8 +193,8 @@ standardpost	False	VocalAndInstrumentalMusic	Der Dorfbarbier			Johann Schenk	Tru
 standardpost	False	VocalAndInstrumentalMusic	La Double échelle			A. Thomas	True						Reg001980
 standardpost	False	VocalAndInstrumentalMusic	I due sergenti			Luigi Ricci	True						Reg001702
 standardpost	False	VocalAndInstrumentalMusic	Elisa			Fr. Kuhlau	True						Reg001049
-standardpost	False	VocalAndInstrumentalMusic	Elisir d'amore			G. Donizetti	True						Reg001051
-standardpost	False	VocalAndInstrumentalMusic	Elskovsdrikken		Elisir d’amore	G. Donizetti	True						Reg001052
+standardpost	False	VocalAndInstrumentalMusic	Elisir d'amore			G. Donizetti	True				Se ogsaa: Elskovsdrikken		Reg001051
+standardpost	False	VocalAndInstrumentalMusic	Elskovsdrikken		Elisir d’amore	G. Donizetti	True				Se ogsaa: Elisir d'amore		Reg001052
 standardpost	False	VocalAndInstrumentalMusic	Elverhøi			Fr. Kuhlau	True						Reg001054
 standardpost	False	VocalAndInstrumentalMusic	Elverpigen			Emil Hartmann	True						Reg001057
 standardpost	False	VocalAndInstrumentalMusic	En las arcas del Foro		15.11.1862, Sevilla								Reg001137
@@ -209,20 +209,20 @@ krydshenvisning	False	VocalAndInstrumentalMusic	Le ferriere di Maremma							Pul
 standardpost	False	VocalAndInstrumentalMusic	Festen paa KenilPagth			C. E. F. Weyse	True						Reg001283
 standardpost	False	VocalAndInstrumentalMusic	Fidelio			L. van Beethoven	True						Reg001285
 standardpost	False	VocalAndInstrumentalMusic	Figaros Bryllup			W. A. Mozart	True						Reg001288
-standardpost	False	VocalAndInstrumentalMusic	La Fille du régiment			G. Donizetti	True						Reg001983
+standardpost	False	VocalAndInstrumentalMusic	La Fille du régiment			G. Donizetti	True				Se ogsaa: Regimentets Datter		Reg001983
 standardpost	False	VocalAndInstrumentalMusic	Den flyvende Hollænder			R. Wagner	True						Reg000701
 krydshenvisning	False	VocalAndInstrumentalMusic	La foresta d’Irminsul (Bellini)							Norma			Reg002015
 standardpost	False	VocalAndInstrumentalMusic	Le Forfait nocturne		18.1.1863, Tours								Reg002068
 standardpost	False	VocalAndInstrumentalMusic	La forza del destino			G. Verdi	True						Reg002016
 standardpost	False	VocalAndInstrumentalMusic	Fra Diavolo			D. F. E. Auber	True						Reg001344
-standardpost	False	VocalAndInstrumentalMusic	Der Freischutz			Carl Maria von Weber	True						Reg000781
-standardpost	False	VocalAndInstrumentalMusic	Der Freischutz		Carl Maria von Weber	med Recitativer af Berlioz	True						Reg000782
+standardpost	False	VocalAndInstrumentalMusic	Der Freischutz			Carl Maria von Weber	True				Se ogsaa: Jægerbruden		Reg000781
+standardpost	False	VocalAndInstrumentalMusic	Der Freischutz			Carl Maria von Weber	True				Se ogsaa: Jægerbruden(med Recitativer af Berlioz)		Reg000782
 standardpost	False	VocalAndInstrumentalMusic	Frère et mari			A. L. Clapisson	True						Reg001398
 standardpost	False	VocalAndInstrumentalMusic	Fritz og Lise			J. Offenbach	True						Reg001392
 standardpost	False	VocalAndInstrumentalMusic	Il furioso all’isola di S. Domingo			G. Donizetti	True						Reg001719
-standardpost	False	VocalAndInstrumentalMusic	La gazza ladra			G. Rossini	True						Reg002017
+standardpost	False	VocalAndInstrumentalMusic	La gazza ladra			G. Rossini	True				Se ogsaa: Skaden		Reg002017
 standardpost	False	VocalAndInstrumentalMusic	Gemma di Vergy			G. Donizetti	True						Reg001437
-standardpost	False	VocalAndInstrumentalMusic	God rolig Nat, Hr. Pantalon!			Albert Grisar	True						Reg001466
+standardpost	False	VocalAndInstrumentalMusic	God rolig Nat, Hr. Pantalon!			Albert Grisar	True				Se ogsaa: Buenas noches, Don Simon!		Reg001466
 standardpost	False	VocalAndInstrumentalMusic	La Grande Duchesse de Gerolstein			J. Offenbach	True						Reg001989
 standardpost	False	VocalAndInstrumentalMusic	Le Guerrillero			A. Thomas	True						Reg002070
 standardpost	False	VocalAndInstrumentalMusic	Guido und Ginevra			F. Halévy	True						Reg001499
@@ -232,7 +232,7 @@ standardpost	False	VocalAndInstrumentalMusic	Hans Heiling			H. Marschner	True			
 standardpost	False	VocalAndInstrumentalMusic	Haydie			D. F. E. Auber	True						Reg001542
 standardpost	False	VocalAndInstrumentalMusic	Hjalmar og Ingeborg			Asger Hammerich/Hamerik	True						Reg001607
 standardpost	False	VocalAndInstrumentalMusic	Hugenotterne			G. Meyerbeer	True						Reg001643
-standardpost	False	VocalAndInstrumentalMusic	Den hvide Dame			F. A. Boieldieu	True						Reg000728
+standardpost	False	VocalAndInstrumentalMusic	Den hvide Dame			F. A. Boieldieu	True				Se ogsaa: La Dame blanche		Reg000728
 standardpost	False	VocalAndInstrumentalMusic	Idomeneo			W. A. Mozart	True						Reg001710
 standardpost	False	VocalAndInstrumentalMusic	Iphigenia i Aulis			C. W. Gluck	True						Reg001752
 standardpost	False	VocalAndInstrumentalMusic	Iphigenia paa Tauris			C. W. Gluck	True						Reg001753
@@ -240,12 +240,12 @@ standardpost	False	VocalAndInstrumentalMusic	Italienerinden i Algier			G. Rossin
 standardpost	False	VocalAndInstrumentalMusic	Jessonda			L. Spohr	True						Reg001795
 standardpost	False	VocalAndInstrumentalMusic	Jocrisse			Eugène Gautier	True						Reg001804
 standardpost	False	VocalAndInstrumentalMusic	Joseph og hans Brødre			E. N. Méhul	True						Reg001824
-standardpost	False	VocalAndInstrumentalMusic	La Juive			F. Halévy	True						Reg001991
-standardpost	False	VocalAndInstrumentalMusic	Jægerbruden			C. M. von Weber	True						Reg001858
-standardpost	False	VocalAndInstrumentalMusic	Jødinden			F. Halévy	True						Reg001862
-standardpost	False	VocalAndInstrumentalMusic	Klerkevænget			F. Hérold	True						Reg001909
+standardpost	False	VocalAndInstrumentalMusic	La Juive			F. Halévy	True				Se ogsaa: Jødinden		Reg001991
+standardpost	False	VocalAndInstrumentalMusic	Jægerbruden			C. M. von Weber	True				Se ogsaa: Der Freischütz		Reg001858
+standardpost	False	VocalAndInstrumentalMusic	Jødinden			F. Halévy	True				Se ogsaa: La Juive		Reg001862
+standardpost	False	VocalAndInstrumentalMusic	Klerkevænget			F. Hérold	True				Se ogsaa: Le Pré aux clercs		Reg001909
 standardpost	False	VocalAndInstrumentalMusic	Korsikaneren			Emil Hartmann	True						Reg001940
-standardpost	False	VocalAndInstrumentalMusic	Kronjuvelerne			D. F. E. Auber	True						Reg001950
+standardpost	False	VocalAndInstrumentalMusic	Kronjuvelerne			D. F. E. Auber	True				Se ogsaa: Les Diamants de la couronne		Reg001950
 standardpost	False	VocalAndInstrumentalMusic	König und Pächter			Joh. Chr. Lobe	True						Reg001960
 standardpost	False	VocalAndInstrumentalMusic	Lalla-Roukh			Félicien David	True						Reg002031
 standardpost	False	VocalAndInstrumentalMusic	Lazarilla			Rudolph Bay	True						Reg002051
@@ -265,7 +265,7 @@ standardpost	False	VocalAndInstrumentalMusic	Le Mari de circonstances			C. H. Pl
 krydshenvisning	False	VocalAndInstrumentalMusic	Le Mari et l'amant							Le Mari de circonstances			Reg002076
 standardpost	False	VocalAndInstrumentalMusic	Marin Faliero			G. Donizetti	True						Reg002333
 standardpost	False	VocalAndInstrumentalMusic	Martha			Fr. von Flotow	True						Reg002340
-standardpost	False	VocalAndInstrumentalMusic	La masacrata			Studenterkomedie, Parodi paa italiensk Opera, Musik: C. J. Hansen, Tekst: Otto Zinck	True						Reg002019
+standardpost	False	VocalAndInstrumentalMusic	La masacrata			C. J. Hansen	True				Studenterkomedie, Parodi paa italiensk Opera | Tekst: Otto Zinck		Reg002019
 standardpost	False	VocalAndInstrumentalMusic	I masnadieri			G. Verdi	True						Reg001703
 standardpost	False	VocalAndInstrumentalMusic	Il matrimonio segreto			D. Cimarosa	True						Reg001720
 standardpost	False	VocalAndInstrumentalMusic	...de Medecis			?	True						Reg000121
@@ -279,8 +279,8 @@ standardpost	False	VocalAndInstrumentalMusic	Das Nachtlager in Granada			Konradi
 standardpost	False	VocalAndInstrumentalMusic	En Nat mellem Fjeldene			Emil Hartmann	True						Reg001105
 standardpost	False	VocalAndInstrumentalMusic	Les Noces de Jeannette			V. Massé	True						Reg002128
 standardpost	False	VocalAndInstrumentalMusic	Nonnerne			François Devienne	True						Reg002522
-standardpost	False	VocalAndInstrumentalMusic	Der Nordstern			C. Meyerbeer	True						Reg000798
-standardpost	False	VocalAndInstrumentalMusic	Nordstjernen		L'étoile du Nord	G. Meyerbeer	True						Reg002526
+standardpost	False	VocalAndInstrumentalMusic	Der Nordstern			C. Meyerbeer	True				Se ogsaa: Nordstjernen		Reg000798
+standardpost	False	VocalAndInstrumentalMusic	Nordstjernen		L'étoile du Nord	G. Meyerbeer	True				Se ogsaa: Der Nordstern		Reg002526
 standardpost	False	VocalAndInstrumentalMusic	Norma			V. Bellini	True						Reg002528
 standardpost	False	VocalAndInstrumentalMusic	I Normanni a Parigi			S. Mercadante	True						Reg001690
 standardpost	False	VocalAndInstrumentalMusic	Den nye Jordegodseier			F. A. Boieldieu	True						Reg000741
@@ -299,7 +299,7 @@ krydshenvisning	False	VocalAndInstrumentalMusic	Pipi og Titi							Prinds Pipi o
 standardpost	False	VocalAndInstrumentalMusic	Le Podstat			C. L. A. Vogel	True						Reg002083
 standardpost	False	VocalAndInstrumentalMusic	Poliuto			G. Donizetti	True						Reg002708
 standardpost	False	VocalAndInstrumentalMusic	Postillonen i Lonjumeau			A. Adam	True						Reg002722
-standardpost	False	VocalAndInstrumentalMusic	Le Pré aux clercs			F. Hérold	True						Reg002086
+standardpost	False	VocalAndInstrumentalMusic	Le Pré aux clercs			F. Hérold	True				Se ogsaa: Klerkevænget		Reg002086
 standardpost	False	VocalAndInstrumentalMusic	Preciosa			C. M. von Weber	True						Reg002728
 standardpost	False	VocalAndInstrumentalMusic	Le Premier jour de bonheur			D. F. E. Auber	True						Reg002085
 standardpost	False	VocalAndInstrumentalMusic	La prigione d'Edinburgo			Federigo Ricci	True						Reg002021
@@ -312,34 +312,34 @@ standardpost	False	VocalAndInstrumentalMusic	Pulcinella condannato alle ferriere
 standardpost	False	VocalAndInstrumentalMusic	I Puritani			V. Bellini	True						Reg001695
 standardpost	False	VocalAndInstrumentalMusic	Quien manda manda			Emilio Arrieta	True						Reg002757
 standardpost	False	VocalAndInstrumentalMusic	Ravnen			J. P. E. Hartmann	True						Reg002774
-standardpost	False	VocalAndInstrumentalMusic	Regimentets Datter			G. Donizetti	True						Reg002779
+standardpost	False	VocalAndInstrumentalMusic	Regimentets Datter			G. Donizetti	True				Se ogsaa: La Fille du régiment		Reg002779
 standardpost	False	VocalAndInstrumentalMusic	Les Rendez-vous bourgeois			Francois Hoffmann	True						Reg002133
 standardpost	False	VocalAndInstrumentalMusic	Richard Coeur-de-lion			A. Grétry	True						Reg002802
 standardpost	False	VocalAndInstrumentalMusic	Rienzi			R. Wagner	True						Reg002805
 standardpost	False	VocalAndInstrumentalMusic	Rigoletto			G. Verdi	True						Reg002806
-standardpost	False	VocalAndInstrumentalMusic	Robert af Normandiet			G. Meyerbeer	True						Reg002816
-standardpost	False	VocalAndInstrumentalMusic	Robert le Diable			G. Meyerbeer	True						Reg002817
+standardpost	False	VocalAndInstrumentalMusic	Robert af Normandiet			G. Meyerbeer	True				Se ogsaa: Robert le Diable		Reg002816
+standardpost	False	VocalAndInstrumentalMusic	Robert le Diable			G. Meyerbeer	True				Se ogsaa: Robert af Normandiet		Reg002817
 standardpost	False	VocalAndInstrumentalMusic	Roland à Roncevaux			A. Mermet	True						Reg002821
-standardpost	False	VocalAndInstrumentalMusic	Rolf Blaaskjæg			J. Offenbach	True						Reg002822
+standardpost	False	VocalAndInstrumentalMusic	Rolf Blaaskjæg			J. Offenbach	True				Se ogsaa: Barbe-Bleue		Reg002822
 standardpost	False	VocalAndInstrumentalMusic	Romeo og Julie			C. Gounod	True						Reg002844
 standardpost	False	VocalAndInstrumentalMusic	La rondella		8.4.1843, Variétés, Paris								Reg002023
 standardpost	False	VocalAndInstrumentalMusic	Rose et Colas			P. A. Monsigny	True						Reg002849
 standardpost	False	VocalAndInstrumentalMusic	Røverborgen			F. Kuhlau	True						Reg002865
-standardpost	False	VocalAndInstrumentalMusic	Røverne			J. Offenbach	True						Reg002866
+standardpost	False	VocalAndInstrumentalMusic	Røverne			J. Offenbach	True				Se ogsaa: Les Brigands		Reg002866
 standardpost	False	VocalAndInstrumentalMusic	Der Schatzgräber		Le Trésor supposé	E. N. Méhul	True						Reg000801
 standardpost	False	VocalAndInstrumentalMusic	Semiramis			G. Rossini	True						Reg002979
 standardpost	False	VocalAndInstrumentalMusic	La sentinella notturna			S. Agnello	True						Reg002024
-standardpost	False	VocalAndInstrumentalMusic	Skaden			G. Rossini	True						Reg003013
-standardpost	False	VocalAndInstrumentalMusic	Den skjønne Helene			J. Offenbach	True						Reg000751
+standardpost	False	VocalAndInstrumentalMusic	Skaden			G. Rossini	True				Se ogsaa: La gazza ladra		Reg003013
+standardpost	False	VocalAndInstrumentalMusic	Den skjønne Helene			J. Offenbach	True				Se ogsaa: La Belle Hélène		Reg000751
 standardpost	False	VocalAndInstrumentalMusic	Soireen i Laxegade			J. Offenbach	True						Reg003051
 standardpost	False	VocalAndInstrumentalMusic	Ein Sommernachtstraum			F. Mendelssohn-Bartholdy	True						Reg001030
-standardpost	False	VocalAndInstrumentalMusic	La sonnambula			V. Bellini	True						Reg002025
-standardpost	False	VocalAndInstrumentalMusic	Den sorte Domino			D. F. E. Auber	True						Reg000753
+standardpost	False	VocalAndInstrumentalMusic	La sonnambula			V. Bellini	True				Se ogsaa: Søvngjængersken		Reg002025
+standardpost	False	VocalAndInstrumentalMusic	Den sorte Domino			D. F. E. Auber	True				Se ogsaa: Le Domino noir		Reg000753
 standardpost	False	VocalAndInstrumentalMusic	Sovedrikken			C. E. F. Weyse	True						Reg003071
 krydshenvisning	False	VocalAndInstrumentalMusic	Stradella							Alessandro Stradella			Reg003117
 standardpost	False	VocalAndInstrumentalMusic	Den Stumme i Portici			D. F. E. Auber	True						Reg000681
 standardpost	False	VocalAndInstrumentalMusic	Syvsoverdag			J. P. E.Hartmann	True						Reg003159
-standardpost	False	VocalAndInstrumentalMusic	Søvngjængersken			V. Bellini	True						Reg003177
+standardpost	False	VocalAndInstrumentalMusic	Søvngjængersken			V. Bellini	True				Se ogsaa: La sonnambula		Reg003177
 standardpost	False	VocalAndInstrumentalMusic	Tancredo			G. Rossini	True						Reg003182
 standardpost	False	VocalAndInstrumentalMusic	Tannhäuser			R. Wagner	True						Reg003185
 standardpost	False	VocalAndInstrumentalMusic	Tempelherren og Jødinden			H. Marschner	True						Reg003196
@@ -347,14 +347,14 @@ standardpost	False	VocalAndInstrumentalMusic	Il templario			Otto Nicolai	True			
 standardpost	False	VocalAndInstrumentalMusic	La Tentation, Opéra-Ballet			F. Halévy; C. Gide	True						Reg002007
 standardpost	False	VocalAndInstrumentalMusic	En Times Ægteskab			N. Dalayrac	True						Reg001126
 standardpost	False	VocalAndInstrumentalMusic	Titus			W. A. Mozart	True						Reg003273
-standardpost	False	VocalAndInstrumentalMusic	De to Dage			L. Cherubini	True						Reg000656
+standardpost	False	VocalAndInstrumentalMusic	De to Dage			L. Cherubini	True				Se ogsaa: Der Wasserträger		Reg000656
 standardpost	False	VocalAndInstrumentalMusic	Tony			Hertug Ernst II af Sachsen-Coburg-Gotha	True						Reg003293
 standardpost	False	VocalAndInstrumentalMusic	Torquato Tasso			G. Donizetti	True						Reg003299
 standardpost	False	VocalAndInstrumentalMusic	La traviata			G. Verdi	True						Reg002026
 standardpost	False	VocalAndInstrumentalMusic	Tristan og Isolde			R. Wagner	True						Reg003321
-standardpost	False	VocalAndInstrumentalMusic	Troubaduren			G. Verdi	True						Reg003327
-standardpost	False	VocalAndInstrumentalMusic	Troubaduren		G. Verdi	Divertissement	True						Reg003328
-standardpost	False	VocalAndInstrumentalMusic	Il trovatore			G. Verdi	True						Reg001724
+standardpost	False	VocalAndInstrumentalMusic	Troubaduren			G. Verdi	True				Se ogsaa: Il trovatore		Reg003327
+standardpost	False	VocalAndInstrumentalMusic	Troubaduren			G. Verdi	True				Se ogsaa: Il trovatore (Divertissement)		Reg003328
+standardpost	False	VocalAndInstrumentalMusic	Il trovatore			G. Verdi	True				Se ogsaa: Troubaduren		Reg001724
 standardpost	False	VocalAndInstrumentalMusic	Tryllefløiten			W. A. Mozart	True						Reg003329
 standardpost	False	VocalAndInstrumentalMusic	Tutti in maschera			C. Pedrotti	True						Reg003336
 standardpost	False	VocalAndInstrumentalMusic	Undine			G. A. Lortzing	True						Reg003380
@@ -368,7 +368,7 @@ standardpost	False	VocalAndInstrumentalMusic	La Vie parisienne			J. Offenbach	Tr
 standardpost	False	VocalAndInstrumentalMusic	Villars Dragoner			L. Maillart	True						Reg003456
 standardpost	False	VocalAndInstrumentalMusic	Violettes Dukker			A. Adam	True						Reg003461
 standardpost	False	VocalAndInstrumentalMusic	Der Waffenschmied			G. A. Lortzing	True						Reg000819
-standardpost	False	VocalAndInstrumentalMusic	Der Wasserträger			L. Cherubini	True						Reg000821
+standardpost	False	VocalAndInstrumentalMusic	Der Wasserträger			L. Cherubini	True				Se ogsaa: De to Dage		Reg000821
 standardpost	False	VocalAndInstrumentalMusic	Der Wildschütz			G. A. Lortzing	True						Reg000824
 standardpost	False	VocalAndInstrumentalMusic	Wilhelm Tell			G. Rossini	True						Reg003505
 standardpost	False	VocalAndInstrumentalMusic	Zampa			F. Hérold	True						Reg003518

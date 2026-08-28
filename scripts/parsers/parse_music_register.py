@@ -39,6 +39,20 @@ AF_RE = re.compile(r"^af[: ]", re.I)
 GUILLEMET = re.compile(r"[»«](.+?)[«»]", re.S)
 OPUS_EMBEDDED = re.compile(r",?\s*(op\.\s*\d+[a-z]?(?:\s+nr\.\s*\d+)?)\s*$", re.I)
 
+# "- Se ogsaa: X" (WEMI cross-reference, e.g. an opera's Danish and
+# original-language titles pointing at each other) trails 39 MUSIK rows --
+# ported from parse_novels_plays_tales.py's own SE_OGSAA_RE, which this
+# parser never had at all. Left unhandled, the target text and any of
+# its OWN trailing parens get treated as more parens belonging to THIS
+# entry -- e.g. Reg003328 "Troubaduren (G. Verdi)- Se ogsaa: Il trovatore
+# (Divertissement)" was reading "(Divertissement)" (a dance-form note on
+# the CROSS-REFERENCED entry) as this row's own composer. No downstream
+# consumer reads a structured Se-ogsaa field for MUSIK yet (unlike
+# novels_plays_tales.py), so the extracted text is folded into Note
+# rather than a new column -- preserved, not lost, without building
+# infrastructure nothing reads.
+SE_OGSAA_RE = re.compile(r"\s*-\s*Se ogsaa:?\s*(.+?)\.?\s*$", re.IGNORECASE)
+
 # Co-author splitting, same rule and same rationale as
 # parse_novels_plays_tales.py's split_creators()/strip_role_label(): only
 # " og " is reliably splittable (a bare comma list risks being one
@@ -72,13 +86,29 @@ def split_creators(creator: str) -> str:
 # so the sibling machinery is ported in now that it's needed.
 _ADAPT_MARKER_RE = re.compile(
     r",?\s*(?:frit\s+bearbejdet\s+af|bearbejdet\s+af|bearb\.\s*af|"
-    r"frit\s+oversat\s+af|oversat\s+af|ved|af)\s+",
+    r"frit\s+oversat\s+af|oversat\s+af|overs\.\s*af|ved|af)\s+",
+    re.IGNORECASE,
+)
+
+# Same genitive-construction cleanup as parse_novels_plays_tales.py's own
+# copy of this function -- kept in sync even though no current MUSIK row
+# happens to trigger it, since both are meant to be the same ported logic.
+_GENRE_NOUN_RE = re.compile(
+    r"\s+(Roman|Digt|Digte|Fortælling|Fortællinger|Skuespil|Novelle)\b.*$",
     re.IGNORECASE,
 )
 
 
 def _clean_bare_name(x: str) -> str:
-    return re.split(r"[:»]", x)[0].strip().rstrip(".,")
+    trimmed = x.strip().rstrip(".,")
+    stripped_quote = re.split(r"[:»]", trimmed)[0].strip().rstrip(".,")
+    had_quote = stripped_quote != trimmed
+    stripped_genre = _GENRE_NOUN_RE.sub("", stripped_quote).strip()
+    had_genre = stripped_genre != stripped_quote
+    result = stripped_genre
+    if (had_quote or had_genre) and len(result) > 2 and result.endswith("s"):
+        result = result[:-1]
+    return result
 
 
 def _looks_name_shaped(x: str) -> bool:
@@ -121,7 +151,7 @@ def extract_adaptation(creator: str) -> tuple[str, str | None]:
             return adapter, source
 
     m = re.search(
-        r"^(.*?),\s*(?:frit\s+)?(?:bearbejdet\s+af|bearb\.\s*af|oversat\s+af)\s+(.+)$",
+        r"^(.*?),\s*(?:frit\s+)?(?:bearbejdet\s+af|bearb\.\s*af|oversat\s+af|overs\.\s*af)\s+(.+)$",
         s, re.IGNORECASE,
     )
     if m:
@@ -152,6 +182,44 @@ def extract_adaptation(creator: str) -> tuple[str, str | None]:
 # pattern across all 456 MUSIK rows (checked directly), not general
 # enough to risk a looser match -- the literal marker text is required.
 _TEKST_AF_RE = re.compile(r"^(.*?),?\s*Tekst\s+af\s+(.+)$", re.IGNORECASE | re.DOTALL)
+
+# A creator candidate can bury its actual attributions behind explicit
+# "Label: Name" role markers, with a long non-name preamble in front --
+# "Studenterkomedie, Parodi paa italiensk Opera, Musik: C. J. Hansen,
+# Tekst: Otto Zinck" (Reg002019) is a genre/plot description followed by
+# TWO separate credits, not a single garbled name -- is_composer() lets
+# it through (nothing in its exclusion list matches a long descriptive
+# clause) and every rule above leaves it unchanged (no "efter"/
+# "bearbejdet af"/etc. marker), so mechanically it would become 06_creator
+# wholesale. Detected here instead: "Musik:" names the composer -- the
+# ONLY thing that becomes 06_creator -- and every other labeled credit
+# ("Tekst: Otto Zinck") plus the preamble move to Note.
+_LABELED_ROLE_RE = re.compile(r"\b([A-ZÆØÅ][\wæøå.]*)\s*:\s*([^,;]+)")
+
+
+def extract_labeled_roles(s: str) -> tuple[str, list[str]]:
+    """Returns (new_creator_candidate, note_fragments) when s contains
+    embedded 'Label: Name' role markers -- the name after 'Musik:' becomes
+    the new candidate (empty string if no 'Musik:' marker is present, so
+    no composer is asserted when none is actually named), with the
+    preamble and every OTHER labeled credit in note_fragments. Returns
+    (s, []) -- a no-op -- when no labeled marker is found at all."""
+    matches = list(_LABELED_ROLE_RE.finditer(s))
+    if not matches:
+        return s, []
+    composer = ""
+    notes = []
+    preamble = s[: matches[0].start()].strip().rstrip(",")
+    if preamble:
+        notes.append(preamble)
+    for m in matches:
+        label, val = m.group(1).strip(), m.group(2).strip().rstrip(".")
+        if label.lower() == "musik" and not composer:
+            composer = val
+        else:
+            notes.append(f"{label}: {val}")
+    return composer, notes
+
 
 # Rows where a single clause names 3+ unrelated role-credits with no
 # clean single creator to extract (Reg000554: "Syngestykke, indrettet af
@@ -259,6 +327,9 @@ def assign_parens(r, parens):
         if r["RegistryTitelID"] in _KNOWN_UNSPLITTABLE:
             r["note"] = (r["note"] + " | " if r["note"] else "") + f"({raw})"
         else:
+            raw, label_notes = extract_labeled_roles(raw)
+            for note_text in label_notes:
+                r["note"] = (r["note"] + " | " if r["note"] else "") + note_text
             tm = _TEKST_AF_RE.match(raw)
             if tm:
                 pre, raw = tm.group(1).strip().rstrip(","), tm.group(2).strip()
@@ -316,6 +387,11 @@ def parse(raw, reg_id=""):
         return r
 
     r["Posttype"] = "standardpost"
+
+    se_m = SE_OGSAA_RE.search(entry)
+    if se_m:
+        r["note"] = f"Se ogsaa: {se_m.group(1).strip()}"
+        entry = entry[: se_m.start()].strip()
 
     sq = re.match(r"^\[([^\]]+)\](.*)", entry)
     if sq:
