@@ -510,11 +510,16 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   // ref.rid is null when a label (a "Se også" target, or a part_of parent
   // that's a bare language/edition group header like "Tyske" with no row
   // of its own) can't be resolved to a real register entry.
+  // .chip's own white-space:nowrap (style.css) is right for a short label
+  // but overflows the 290px sidebar column for a long krydshenvisning
+  // ("»Lille Clara, var ei vred paa mig«, se: Barnligheden..."). Overridden
+  // to wrap here, same fix already applied to .entity-sidebar's chips.
+  const CHIP_WRAP = "white-space:normal;word-break:break-word;overflow-wrap:break-word;";
   function refRow(ref, verb) {
     const inner = ref.rid
-      ? `<a href="work.html?reg=${ref.rid}" class="chip" style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${ref.label}</a>`
-      : `<span class="chip" style="font-size:0.78rem" title="Ingen registerpost fundet">${ref.label}</span>`;
-    return `<div style="display:flex;gap:6px;align-items:center"><span style="font-size:0.72rem;color:var(--color-text-muted);min-width:3.6em">${verb}</span>${inner}</div>`;
+      ? `<a href="work.html?reg=${ref.rid}" class="chip" style="${CHIP_WRAP}font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${ref.label}</a>`
+      : `<span class="chip" style="${CHIP_WRAP}font-size:0.78rem" title="Ingen registerpost fundet">${ref.label}</span>`;
+    return `<div style="display:flex;gap:6px;align-items:flex-start;min-width:0"><span style="font-size:0.72rem;color:var(--color-text-muted);min-width:3.6em;flex-shrink:0">${verb}</span>${inner}</div>`;
   }
 
   // 1. Registeroplysninger — ID/H1/H2/H3/refs-count are not repeated here:
@@ -549,7 +554,7 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   if (w.related && w.related.length) {
     sb += `<div class="sidebar-box"><div class="sidebar-box__title">Relaterede værker</div><div style="display:flex;flex-direction:column;gap:6px">`;
     for (const rw of w.related) {
-      sb += `<a href="work.html?reg=${rw.reg}" class="chip" style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${rw.title}</a>`;
+      sb += `<a href="work.html?reg=${rw.reg}" class="chip" style="${CHIP_WRAP}font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${rw.title}</a>`;
     }
     sb += `</div>`;
     if (w.author) sb += `<div style="margin-top:var(--sp3);font-size:0.78rem">← Alle værker af ${authorLinks(w)}</div>`;
