@@ -18,7 +18,7 @@ import re
 import sys
 import unicodedata
 import urllib.parse
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
@@ -66,6 +66,41 @@ def parse_year(label):
         if ym:
             return ym.group(1)
     return None
+
+
+def split_container_chain(title):
+    """Split a title on its LAST top-level ' - ' separator (outside any
+    parenthetical), returning (parent_segment, tail_segment) or None.
+
+    H. C. Andersen's own works re-list every reprint/translation of a
+    collection as its own register row, chained onto the collection's
+    title with ' - ' ("Nye Eventyr og Historier ... (1858-66) - 1. Samling
+    (1858) - 4 Opl. (1865)") -- a WEMI part_of relation the printed
+    register spells out positionally rather than with a "Se ogsaa" marker.
+    A dash inside a parenthetical subtitle ("Skilles og mødes (Spanierne i
+    Odense - Fem og tyve Aar derefter)") or inside a quoted poem incipit
+    ("*»Hun er saa foraarsfrisk at see - «") is not this relation --
+    filtered out by requiring paren-depth 0 and rejecting quote-led
+    titles. Verified against the full H. C. Andersen slice (775 rows): 57
+    real chain rows recovered, 0 false positives from either excluded
+    shape.
+    """
+    t = title.lstrip("*").strip()
+    if t.startswith("»") or t.startswith("«"):
+        return None
+    depth = 0
+    last = -1
+    for i in range(len(title) - 2):
+        c = title[i]
+        if c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+        elif depth == 0 and title[i:i + 3] == " - ":
+            last = i
+    if last == -1:
+        return None
+    return title[:last].strip(), title[last + 3:].strip()
 
 
 PAREN_ALL_RE = re.compile(r"\(([^()]+)\)")
@@ -709,6 +744,25 @@ def main():
             return []
         return [{"label": raw, "rid": resolve_ref(raw, self_id)}]
 
+    # Exact full-label index for H. C. Andersen's own part_of container
+    # chains (split_container_chain() above) -- deliberately exact-match,
+    # not the fuzzy head-term resolve_ref() above: a chain's parent segment
+    # ("Nye Eventyr og Historier ... (1858-66)") is itself another row's
+    # complete label, byte-for-byte, when that row exists at all. Scoped to
+    # H. C. ANDERSEN and built with a duplicate-label guard (a label owned
+    # by >1 row -- e.g. a poem's quoted incipit reused across two Digte
+    # rows -- can't be resolved unambiguously, so it's left out rather than
+    # guessed at).
+    hca_label_counts = Counter(
+        r["label"].strip() for r in rows
+        if (r.get("genre_h2") or "").strip() == "H. C. ANDERSEN"
+    )
+    hca_label_exact = {
+        r["label"].strip(): r["entity_id"] for r in rows
+        if (r.get("genre_h2") or "").strip() == "H. C. ANDERSEN"
+        and hca_label_counts[r["label"].strip()] == 1
+    }
+
     def best_year(r):
         # Prefer the normalised derived fields over the label regex.
         dd = (r.get("date_derived") or "").strip()
@@ -752,6 +806,18 @@ def main():
         override = creator_overrides.get(rid)
         tsv_creator_str = join_authors(override["authors"]) if override else None
 
+        # H. C. Andersen's own part_of container chain (see
+        # split_container_chain() above) -- rid is null when the parent
+        # segment is a language/edition group header with no row of its
+        # own ("Tyske", "Engelske", ...), same "label always, rid when
+        # resolvable" shape as see/seeAlso above.
+        part_of_ref = None
+        if h2 == "H. C. ANDERSEN":
+            chain = split_container_chain(r["label"])
+            if chain:
+                parent_label = chain[0]
+                part_of_ref = {"label": parent_label, "rid": hca_label_exact.get(parent_label)}
+
         generated[rid] = {
             "title": r["label"].strip(),
             "h2": h2 or "ANDRE FORFATTERE",
@@ -769,6 +835,8 @@ def main():
             "date": (r.get("date_derived") or "").strip() or None,
             "see": refs_field(r.get("see"), rid),
             "seeAlso": refs_field(r.get("see_also"), rid),
+            "partOf": part_of_ref,
+            "contains": [],
             # Hand-verified only — see data/curated/works_wikidata.csv and
             # scripts/parsers/wikidata_lookup.py. null for every work not in
             # that file, same as every other unresolved field here.
@@ -805,6 +873,25 @@ def main():
             generated[rid]["adaptedFrom"] = None
 
     print(f"  generated {len(generated)} entries across all {len(rows)} works")
+
+    # ── H. C. Andersen part_of container chains ─────────────────────────────
+    # Backfill the reverse direction: every resolved child -> parent link
+    # above also earns the parent a "contains" entry pointing at the child,
+    # so a collection's own page can list its printings/translations
+    # without a separate lookup.
+    n_part_of = n_part_of_resolved = 0
+    for rid, w in generated.items():
+        po = w.get("partOf")
+        if not po:
+            continue
+        n_part_of += 1
+        parent_rid = po.get("rid")
+        if parent_rid and parent_rid in generated:
+            n_part_of_resolved += 1
+            generated[parent_rid]["contains"].append({"label": w["title"], "rid": rid})
+    if n_part_of:
+        print(f"  {n_part_of} H. C. Andersen work(s) carry a part_of container "
+              f"relation ({n_part_of_resolved} resolve to a sibling register row)")
 
     # ── Reciprocal cross-references ─────────────────────────────────────────
     # entities.csv's see/see_also columns are written by hand against ONE

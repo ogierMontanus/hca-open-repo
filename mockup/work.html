@@ -458,6 +458,8 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   const dispDate = w.date || (wx && wx.date) || null;
   const seeRefs = (w.see && w.see.length) ? w.see : (wx && wx.see) || [];
   const seeAlsoRefs = (w.seeAlso && w.seeAlso.length) ? w.seeAlso : (wx && wx.seeAlso) || [];
+  const partOfRef = w.partOf || (wx && wx.partOf) || null;
+  const containsRefs = (w.contains && w.contains.length) ? w.contains : (wx && wx.contains) || [];
 
   document.title = w.title + ' — HCA Open Repository';
 
@@ -497,6 +499,17 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
   function authorLinks(w) {
     const names = w.authors && w.authors.length ? w.authors : (w.author ? [w.author] : []);
     return names.map(n => `<a href="${personHref(n)}" style="color:var(--color-accent)">${n}</a>`).join(' og ');
+  }
+
+  // Shared by both the Krydshenvisninger and Del af samlingen boxes below —
+  // ref.rid is null when a label (a "Se også" target, or a part_of parent
+  // that's a bare language/edition group header like "Tyske" with no row
+  // of its own) can't be resolved to a real register entry.
+  function refRow(ref, verb) {
+    const inner = ref.rid
+      ? `<a href="work.html?reg=${ref.rid}" class="chip" style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${ref.label}</a>`
+      : `<span class="chip" style="font-size:0.78rem" title="Ingen registerpost fundet">${ref.label}</span>`;
+    return `<div style="display:flex;gap:6px;align-items:center"><span style="font-size:0.72rem;color:var(--color-text-muted);min-width:3.6em">${verb}</span>${inner}</div>`;
   }
 
   // 1. Registeroplysninger — ID/H1/H2/H3/refs-count are not repeated here:
@@ -539,15 +552,23 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
 
   // 3b. Krydshenvisninger (see / see_also fra registret)
   if ((seeRefs && seeRefs.length) || (seeAlsoRefs && seeAlsoRefs.length)) {
-    const refRow = (ref, verb) => {
-      const inner = ref.rid
-        ? `<a href="work.html?reg=${ref.rid}" class="chip" style="font-size:0.78rem;background:var(--color-accent-light);border-color:var(--color-accent);color:var(--color-accent)">${ref.label}</a>`
-        : `<span class="chip" style="font-size:0.78rem" title="Ingen registerpost fundet">${ref.label}</span>`;
-      return `<div style="display:flex;gap:6px;align-items:center"><span style="font-size:0.72rem;color:var(--color-text-muted);min-width:3.6em">${verb}</span>${inner}</div>`;
-    };
     sb += `<div class="sidebar-box"><div class="sidebar-box__title">Krydshenvisninger</div><div style="display:flex;flex-direction:column;gap:6px">`;
     for (const r of (seeRefs || [])) sb += refRow(r, 'Se');
     for (const r of (seeAlsoRefs || [])) sb += refRow(r, 'Se også');
+    sb += `</div></div>`;
+  }
+
+  // 3c. Del af samlingen — H. C. Andersens egne værker genoptrykkes/
+  // oversættes gentagne gange, og registret lister hver genudgivelse som
+  // sin egen post kædet til samlingens titel med " - " (se
+  // split_container_chain() i build_works_extra.py). partOf.rid er null,
+  // når forælder-segmentet er en ren sprog-/udgavegruppe uden egen post
+  // ("Tyske", "Engelske") — vist som uklikbar chip, samme konvention som
+  // Krydshenvisninger ovenfor.
+  if (partOfRef || (containsRefs && containsRefs.length)) {
+    sb += `<div class="sidebar-box"><div class="sidebar-box__title">Del af samlingen</div><div style="display:flex;flex-direction:column;gap:6px">`;
+    if (partOfRef) sb += refRow(partOfRef, 'Del af');
+    for (const r of (containsRefs || [])) sb += refRow(r, 'Indeholder');
     sb += `</div></div>`;
   }
 
