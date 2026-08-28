@@ -53,8 +53,24 @@ window.EntityRefs = (function () {
       surname = toks[toks.length - 1];
       given = toks.slice(0, -1).join(' ');
     }
+    // ä→æ, ö→ø, ü→y (Danish convention; ü is articulated as y in Danish) —
+    // same fold already used for alphabet-bar bucketing (category-
+    // catalogue.js/places.html/persons.html's initialOf()), applied here
+    // too so an author string spelled the German way ("Adam
+    // Oehlenschläger", 2 works) still resolves to the person register's
+    // own "Oehlenschlæger, Adam" entry (spelled with æ throughout, ~60
+    // works). Must run BEFORE the NFD strip below: NFD decomposes ä into
+    // "a" + a combining diaeresis that the next line then deletes,
+    // collapsing it to plain "a" and missing the register's æ entirely —
+    // whereas æ itself has no NFD decomposition and passes through
+    // unchanged, so without this substitution the two spellings fold to
+    // different keys instead of the same one.
     var fold = function (x) {
-      return x.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+      return x
+        .replace(/ä/g, 'æ').replace(/Ä/g, 'Æ')
+        .replace(/ö/g, 'ø').replace(/Ö/g, 'Ø')
+        .replace(/ü/g, 'y').replace(/Ü/g, 'Y')
+        .toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
     };
     var sk = fold(surname).replace(/[^a-zæøå]/g, '');
     if (!sk) return null;
@@ -98,6 +114,26 @@ window.EntityRefs = (function () {
     }
   }
 
+  // WORKS_EXTRA.author sometimes carries a Danish genitive ("Dorothea
+  // Melchiors [Portræt]" -> the register's "Melchior, Dorothea") rather
+  // than the bare surname a BILLEDKUNST portrait credit usually gives —
+  // person_derived apparently kept the possessive form as written on 9
+  // works checked by hand (2026-08-28 probe), all portraits of named
+  // 19th-century Copenhagen family members, none a false match against
+  // an unrelated person. Only tried as a fallback, after every other
+  // lookup above has already failed, and only strips a trailing s from
+  // the LAST token (the surname position) — a genuinely s-ending surname
+  // (Dickens, Jones-style) still resolves normally on the first, unmodified
+  // attempt and never reaches this branch at all.
+  function genitiveStrippedRid(name) {
+    var toks = name.trim().split(/\s+/);
+    var last = toks[toks.length - 1];
+    if (last.length < 3 || !/s$/i.test(last)) return null;
+    var stripped = toks.slice(0, -1).concat(last.slice(0, -1)).join(' ');
+    var k = nameKey(stripped);
+    return k ? (_PERSON_KEY_REG[k] || null) : null;
+  }
+
   function personRid(name) {
     if (!name) return null;
     var r = _PERSON_LABEL_REG[name] || _PERSON_PREFIX_REG[name];
@@ -105,6 +141,7 @@ window.EntityRefs = (function () {
       var k = nameKey(name);
       if (k) r = _PERSON_KEY_REG[k];
     }
+    if (!r) r = genitiveStrippedRid(name);
     return r || null;
   }
   function placeRid(label) { return label ? (_PLACE_LABEL_REG[label] || null) : null; }
