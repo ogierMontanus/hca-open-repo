@@ -140,16 +140,39 @@ PREMIERE_DATE_RE = re.compile(r"^\d{1,2}\.")
 # above.
 _ADAPT_MARKER_RE = re.compile(
     r",?\s*(?:frit\s+bearbejdet\s+af|bearbejdet\s+af|bearb\.\s*af|"
-    r"frit\s+oversat\s+af|oversat\s+af|ved|af)\s+",
+    r"frit\s+oversat\s+af|oversat\s+af|overs\.\s*af|ved|af)\s+",
+    re.IGNORECASE,
+)
+
+# A trailing genre-noun after a source name -- "V. Hugos Roman [Bug
+# Jargal]" (Reg001190/Reg002169) -- is the same genitive construction as
+# a guillemet-quoted title ("Hugo's novel" vs. "Hugo's «Title»"); both
+# get stripped by _clean_bare_name() below, along with anything after
+# the genre-noun (a sub-title, as in "Roman Bug Jargal").
+_GENRE_NOUN_RE = re.compile(
+    r"\s+(Roman|Digt|Digte|Fortælling|Fortællinger|Skuespil|Novelle)\b.*$",
     re.IGNORECASE,
 )
 
 
 def _clean_bare_name(x: str) -> str:
-    # Strip a trailing colon/guillemet-quoted title reference ("W. Scott:
-    # »Guy Mannering«" -> "W. Scott"); a trailing genitive 's' is left in
-    # place for entity-refs.js's existing genitive fallback to resolve.
-    return re.split(r"[:»]", x)[0].strip().rstrip(".,")
+    """Strip a trailing colon/guillemet-quoted title reference ("W.
+    Scott: »Guy Mannering«" -> "W. Scott") or trailing genre-noun ("V.
+    Hugos Roman" -> "V. Hugo") from a source name. Both are genitive
+    constructions in Danish ("Hugo's novel" / "Hugo's «Title»") -- the
+    resulting trailing 's' is stripped too, but only when one of these
+    two markers actually fired; an ordinary s-ending surname (Thomas,
+    Andrews) reaching this function with neither marker present is left
+    untouched, same as before this fix."""
+    trimmed = x.strip().rstrip(".,")
+    stripped_quote = re.split(r"[:»]", trimmed)[0].strip().rstrip(".,")
+    had_quote = stripped_quote != trimmed
+    stripped_genre = _GENRE_NOUN_RE.sub("", stripped_quote).strip()
+    had_genre = stripped_genre != stripped_quote
+    result = stripped_genre
+    if (had_quote or had_genre) and len(result) > 2 and result.endswith("s"):
+        result = result[:-1]
+    return result
 
 
 def _looks_name_shaped(x: str) -> bool:
@@ -203,11 +226,14 @@ def extract_adaptation(creator: str) -> tuple[str, str | None]:
                 adapter = adapter[len("lokaliseret af ") :].strip()
             return adapter, source
 
-    # "X, bearbejdet af / frit bearbejdet af / bearb. af / oversat af Y" --
-    # opposite role from "efter": X (before the comma) is the source, Y
-    # the adapter.
+    # "X, bearbejdet af / frit bearbejdet af / bearb. af / oversat af /
+    # overs. af Y" -- opposite role from "efter": X (before the comma) is
+    # the source, Y the adapter. "overs. af" (Reg001035 "Ed. Brisebarre,
+    # overs. af Wilh. Friedrich") is the same "oversat af" marker,
+    # abbreviated -- this rule previously only recognised the unabbreviated
+    # form.
     m = re.search(
-        r"^(.*?),\s*(?:frit\s+)?(?:bearbejdet\s+af|bearb\.\s*af|oversat\s+af)\s+(.+)$",
+        r"^(.*?),\s*(?:frit\s+)?(?:bearbejdet\s+af|bearb\.\s*af|oversat\s+af|overs\.\s*af)\s+(.+)$",
         s, re.IGNORECASE,
     )
     if m:
@@ -253,6 +279,32 @@ _ROLE_LABEL_RE = re.compile(
 
 def strip_role_label(creator: str) -> str:
     return _ROLE_LABEL_RE.sub("", creator, count=1)
+
+
+# Two rows whose creator clause is too compound for any rule above to
+# safely untangle -- hand-verified (RegistryTitelID, creator,
+# adapted_from), not guessed at, per WEMI rule 8:
+#
+# Reg000831 "Der ewige Jude (Nach dem Roman des Eugen Sue für die
+# deutsche Bühne bearbeitet von Carlschmidt)" -- German phrasing this
+# parser has no marker rules for at all ("Nach dem Roman des X ...
+# bearbeitet von Y"); the two proper nouns are Eugen Sue (the novel's
+# author) and Carlschmidt (who adapted it for the German stage).
+#
+# Reg002457 "Naar Djævelen banker paa! (Benjamin Feddersen, Intrigen
+# efter Dupeutys, Dumersans og Gabriels »Victorine ou la nuit porte
+# conseil«)" -- Rule 2 above deliberately rejects an adapter-side comma
+# ("Benjamin Feddersen, Intrigen") to avoid exactly this kind of
+# descriptive clause becoming part of a name, so nothing recovers it
+# automatically. Real names: Benjamin Feddersen (this row's actual
+# creator) adapting Dupeuty, Dumersan and Gabriel's French play (each
+# genitive-marked in the source -- "Dupeutys", "Dumersans", "Gabriels" --
+# and the quoted title dropped, same as _clean_bare_name() does
+# elsewhere).
+_KNOWN_ADAPTATION_OVERRIDES = {
+    "Reg000831": ("Carlschmidt", "Eugen Sue"),
+    "Reg002457": ("Benjamin Feddersen", "Dupeuty, Dumersan og Gabriel"),
+}
 
 
 # ── Co-author splitting ─────────────────────────────────────────────────────
@@ -390,7 +442,9 @@ def parse_row(raw_label: str, reg_id: str) -> list[dict]:
     # here, once, after `creator` is fully settled above -- not per-branch
     # -- so it runs identically regardless of which path set `creator`.
     adapted_from_creator = ""
-    if creator:
+    if creator and reg_id in _KNOWN_ADAPTATION_OVERRIDES:
+        creator, adapted_from_creator = _KNOWN_ADAPTATION_OVERRIDES[reg_id]
+    elif creator:
         # strip_role_label() runs here too, not just inside split_creators()
         # below -- a role-label prefix ("Red.: Georg og Edvard Brandes")
         # has the exact same surface shape as a source citation ("Geijer
