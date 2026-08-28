@@ -352,6 +352,15 @@ body[data-section="hvor"] .page-hero {
   max-height: calc(100vh - var(--header-height) - 32px);
   overflow-y: auto;
 }
+/* While a facet is expanded into its overlay (js/facet-engine.js), lift the
+   whole sticky-positioned panel above the backdrop. position:sticky always
+   opens its own stacking context, so a z-index set only on the overlay
+   itself (nested inside that context) can never out-rank a sibling like
+   the backdrop that sits outside it — only raising the panel's own
+   z-index reaches far enough up the stacking chain to win. Scoped to this
+   class (rather than a permanent z-index) so the panel doesn't otherwise
+   compete with page content it isn't meant to sit above. */
+.facet-panel--overlay-open { z-index: 62; }
 .facet-panel__header {
   padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border);
   display: flex; align-items: center; justify-content: space-between;

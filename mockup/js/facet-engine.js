@@ -328,6 +328,7 @@ window.FacetEngine = (function () {
       expandedHost = null;
       renderHost(host);
       updateAvailability(liveGroups());
+      panel.classList.remove('facet-panel--overlay-open');
       if (backdropEl) backdropEl.setAttribute('hidden', '');
       focusToggle(host);
     }
@@ -337,6 +338,18 @@ window.FacetEngine = (function () {
       expandedHost = host;
       renderHost(host);
       updateAvailability(liveGroups());
+      // .facet-panel is position:sticky, which (per spec) always opens its
+      // own stacking context; the backdrop's positive z-index otherwise
+      // beats it regardless of any z-index set *inside* that context (a
+      // z-index:auto ancestor always loses to a positive-z-index sibling,
+      // no matter what its descendants declare) — reparenting the host out
+      // to <body> was tried and reverted: it breaks the change/click
+      // delegation this file relies on, since events would then bubble
+      // through <body> instead of through panel. Lifting the *panel's own*
+      // z-index above the backdrop's while a facet is expanded keeps host
+      // right where delegation expects it and fixes the stacking in one
+      // step, for every group under this panel at once.
+      panel.classList.add('facet-panel--overlay-open');
       ensureBackdrop().removeAttribute('hidden');
       focusToggle(host);
     }
@@ -405,13 +418,15 @@ window.FacetEngine = (function () {
     }
 
     function reset(silent) {
+      // Fold back any open overlay first, so nothing is selected any more
+      // once the boxes below are cleared, rather than only once the reader
+      // next interacts with that particular facet.
+      collapseExpanded();
       var boxes = panel.querySelectorAll(BOX_SEL);
       for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
       // Nothing is selected any more, so any facet showing a below-the-cutoff
-      // value only because it was ticked (or left expanded to the overlay)
-      // should fold back to its plain top-N state too.
-      expandedHost = null;
-      if (backdropEl) backdropEl.setAttribute('hidden', '');
+      // value only because it was ticked should fold back to its plain
+      // top-N state too.
       renderSources();
       if (!silent) apply();
     }
