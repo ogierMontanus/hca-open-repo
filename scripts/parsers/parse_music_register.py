@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
-"""Parse the vocal-and-instrumental-music slice of the canonical workbook
-into a structured 13-column TSV.
+"""Parse the MUSIK slices of the canonical workbook into a structured
+13-column TSV.
 
 See docs/pipeline/stages.md (Stage 2) for context, and
 docs/data-model/source-data-characteristics.md for the parenthetical
 conventions encoded in the parsing logic below.
 
-Default slice: RegistryCategory='VÆRK-REGISTER',
-WorkGenre='MUSIK', RegistryForm='Vokal- og Instrumentalmusik'.
+Default slice: RegistryCategory='VÆRK-REGISTER', WorkGenre='MUSIK', across
+the three RegistryForm values in DEFAULT_FORMS below (Vokal- og
+Instrumentalmusik, Operaer og Syngestykker/Skuespil med Musik, Balletter)
+-- originally just the first of these; the other two were added once their
+own creator column was checked for the same issues found in the ANDRE
+FORFATTERE forms (see build_works_extra.py's
+load_parsed_creator_overrides()). Pass one or more --form to parse only
+specific forms instead (repeatable; overrides the default list entirely).
 
 Usage:
-    python parse_music_register.py [--xlsx PATH] [--output PATH]
+    python parse_music_register.py [--xlsx PATH] [--output PATH] [--form FORM ...]
 """
 
 import argparse
@@ -65,7 +71,12 @@ def is_composer(s):
         or s.startswith("»")
         or s.startswith("«")
         or s.startswith("=")
-        or re.search(r"\d{2}\.\d{2}\.\d{4}", s)
+        # A premiere date+venue, common on Operaer/Balletter entries
+        # ("18.1.1863, Tours", "9.10.1833, Firenze") -- {1,2} not a fixed
+        # {2}, since the source often has a single-digit day or month
+        # ("8.4.1843") that a strict two-digit pattern misses, letting the
+        # date+venue fall through and get misread as the creator instead.
+        or re.search(r"\d{1,2}\.\d{1,2}\.\d{4}", s)
     )
 
 
@@ -205,15 +216,37 @@ FIELDNAMES = [
 ]
 
 
-def run(xlsx: pathlib.Path, dst: pathlib.Path) -> pathlib.Path:
-    slice_rows = load_registry_slice(
-        xlsx,
-        category="VÆRK-REGISTER",
-        genre="MUSIK",
-        form="Vokal- og Instrumentalmusik",
-    )
+# MUSIK forms this parser covers. Vokal- og Instrumentalmusik was the
+# original, sole slice; the other two were added once their own output was
+# checked for the same digit/year-in-creator defects the ANDRE FORFATTERE
+# forms had (see docs/pipeline/stages.md and
+# build_works_extra.py's load_parsed_creator_overrides()) -- both came back
+# clean, so no parser-logic fix was needed here the way parse_novels_
+# plays_tales.py's PREMIERE_DATE_RE/DESCRIPTOR_RE fix was.
+DEFAULT_FORMS = (
+    "Vokal- og Instrumentalmusik",
+    "Operaer og Syngestykker, Skuespil med Musik",
+    "Balletter",
+)
 
-    results = [parse(title, reg_id) for title, reg_id in slice_rows]
+
+def run(xlsx: pathlib.Path, dst: pathlib.Path, *, forms: list[str] = None) -> pathlib.Path:
+    forms = forms if forms else list(DEFAULT_FORMS)
+    results: list[dict] = []
+    per_form_counts: list[tuple[str, int, int]] = []  # (form, standardpost, with_creator)
+
+    for form in forms:
+        slice_rows = load_registry_slice(
+            xlsx,
+            category="VÆRK-REGISTER",
+            genre="MUSIK",
+            form=form,
+        )
+        form_results = [parse(title, reg_id) for title, reg_id in slice_rows]
+        results.extend(form_results)
+        std = [r for r in form_results if r["Posttype"] == "standardpost"]
+        with_creator = sum(1 for r in std if r["creator"] and r["creator_is_human"] != "False")
+        per_form_counts.append((form, len(std), with_creator))
 
     with open(dst, "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(
@@ -240,8 +273,11 @@ def run(xlsx: pathlib.Path, dst: pathlib.Path) -> pathlib.Path:
             )
 
     pt = Counter(r["Posttype"] for r in results)
-    print(f"Source: {xlsx.name}  (slice: MUSIK / Vokal- og Instrumentalmusik)")
+    print(f"Source: {xlsx.name}  (genre: MUSIK)")
     print(f"   To:  {dst}")
+    for form, std_n, creator_n in per_form_counts:
+        pct = f"{creator_n / std_n:.0%}" if std_n else "n/a"
+        print(f"   {form:<50s} {std_n:5d} rows, {creator_n:5d} with a human creator ({pct})")
     print(f" Rows:  {len(results)}  |  {dict(pt)}")
     return dst
 
@@ -260,10 +296,18 @@ def main() -> None:
         default=pathlib.Path("data/parsed/music_register_parsed.tsv"),
         help="Output TSV path (default: data/parsed/music_register_parsed.tsv)",
     )
+    ap.add_argument(
+        "--form",
+        action="append",
+        default=None,
+        help="RegistryForm to include; repeatable. Defaults to all three "
+             "forms in DEFAULT_FORMS above when omitted.",
+    )
     args = ap.parse_args()
     xlsx = args.xlsx or resolve_ground_truth_xlsx()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    run(xlsx, args.output)
+    forms = args.form if args.form else list(DEFAULT_FORMS)
+    run(xlsx, args.output, forms=forms)
 
 
 if __name__ == "__main__":

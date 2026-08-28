@@ -386,72 +386,90 @@ def load_wikidata_overlay():
     return out
 
 
+# Parsed TSVs whose 06_creator column is trusted as an author_from()
+# override -- each added only after its own output was spot-checked
+# row-by-row, not on the assumption that sharing the same column shape as
+# an already-trusted file makes it equally safe (novels_plays_tales's own
+# disagreements never surfaced a non-person value; an earlier attempt to
+# glob every data/parsed/*.tsv blindly did, for music_register and
+# non_fiction both -- see git history). non_fiction_parsed.tsv is
+# deliberately still absent from this list for exactly that reason: it
+# hasn't been checked yet.
+CREATOR_OVERRIDE_FILES = (
+    "novels_plays_tales_parsed.tsv",
+    "music_register_parsed.tsv",
+)
+
+
 def load_parsed_creator_overrides():
-    """{entity_id: creator} from novels_plays_tales_parsed.tsv — the
-    dedicated, WEMI-rule-based section parser for the "Andre Forfattere /
-    Romaner, Noveller, Eventyr" slice (scripts/parsers/, see
+    """{entity_id: creator} from CREATOR_OVERRIDE_FILES above -- dedicated,
+    WEMI-rule-based section parsers (scripts/parsers/, see
     docs/data-model/wemi-and-relations.md "Parsing rules summarised" §2:
     the creator sits in the title's own parenthetical, e.g. "Grannarne
     (Fredrika Bremer)" → creator "Fredrika Bremer").
 
     This exists because author_from() below falls back to the literal H2
     string (e.g. "ANDRE FORFATTERE") whenever entities.csv's own
-    person_derived column is empty for a row -- 136 of the 229 works in
-    this slice alone, as of this writing, none of them showing a real name.
-    This TSV recovers 124 of those.
+    person_derived column is empty for a row. For novels_plays_tales_parsed
+    .tsv's "Romaner, Noveller, Eventyr" slice that was 136 of 229 works, as
+    of this writing, none showing a real name; the TSV recovers 124 of
+    those. Checked against the 93 rows where person_derived is ALSO
+    already populated there: only 73 agree, and every disagreement
+    inspected by hand was the TSV correcting a defect already documented
+    elsewhere in this file -- person_derived's own newline-joined-values
+    problem (see author_from's docstring), an unresolved pseudonym ("M.
+    Rowel" vs. its real name "Valdemar Thisted"), or a truncated name ("P.
+    Chr" vs. "P. Chr. Asbjørnsen") -- never the reverse, so the TSV value
+    is trusted with priority over person_derived wherever both exist, not
+    just used to fill gaps. See the disagreement log this function's
+    caller prints for the full list to review, since a few (e.g.
+    Reg001878: "Paul Winther" vs. "Clara Andersen") are genuine conflicts
+    this script cannot itself resolve — WEMI doc rule #8: "when ambiguous,
+    ask, do not guess."
 
-    Checked against the 93 rows where person_derived is ALSO already
-    populated: only 73 agree. Every disagreement inspected by hand was the
-    TSV correcting a defect already documented elsewhere in this file --
-    person_derived's own newline-joined-values problem (see author_from's
-    docstring), an unresolved pseudonym ("M. Rowel" vs. its real name
-    "Valdemar Thisted"), or a truncated name ("P. Chr" vs. "P. Chr.
-    Asbjørnsen") -- never the reverse, so the TSV value is trusted with
-    priority over person_derived wherever both exist, not just used to
-    fill gaps. See the disagreement log this function's caller prints for
-    the full list to review, since a few (e.g. Reg001878: "Paul Winther"
-    vs. "Clara Andersen") are genuine conflicts this script cannot itself
-    resolve — WEMI doc rule #8: "when ambiguous, ask, do not guess."
-
-    Deliberately NOT extended to music_register_parsed.tsv or
-    non_fiction_parsed.tsv yet, even though all three share the same column
-    shape and were built/validated together (see the "transfer" commit) --
-    spot-checking those two turned up 06_creator values that are clearly
-    not a person at all for some rows ("Temple français", a venue; "heri
-    Amores Christiani IVti med Bilag", a bibliographic fragment), which
-    novels_plays_tales_parsed.tsv's own disagreements never did. Wiring
-    those two in needs the same row-by-row confidence this file already
-    has for the novels/plays/tales slice, not an assumption that "close
-    enough" methodology carries over untested — that's follow-up work, not
-    done here.
+    music_register_parsed.tsv's own three MUSIK forms were spot-checked
+    the same way before being added to CREATOR_OVERRIDE_FILES -- both
+    Operaer og Syngestykker and Balletter came back clean (0 flagged rows
+    after fixing a matching date-regex bug in parse_music_register.py's
+    own is_composer(), the same class of defect
+    PREMIERE_DATE_RE/DESCRIPTOR_RE below fixed for novels_plays_tales).
+    Rows flagged 06b_creator_is_human=False (a folk/traditional
+    attribution like "norsk Folkevise", not a person) are skipped --
+    author_from()'s contract is to name a creator EntityRefs.personRid()
+    can resolve, not a genre label; novels_plays_tales_parsed.tsv has no
+    such column, so .get() defaulting to None (never "False") is a no-op
+    for it.
 
     Only standardpost rows count (inferred_container/krydshenvisning rows
     either have no real RegistryTitelID or aren't a work in their own
-    right). Returns {} if the file doesn't exist yet (fresh clone, parser
-    not run)."""
+    right). Returns {} if none of the files exist yet (fresh clone,
+    parsers not run)."""
     out = {}
-    path = os.path.join(PARSED_DIR, "novels_plays_tales_parsed.tsv")
-    if not os.path.exists(path):
-        return out
-    with open(path, encoding="utf-8", newline="") as f:
-        for r in csv.DictReader(f, delimiter="\t"):
-            if r.get("01_Posttype") != "standardpost":
-                continue
-            rid = (r.get("RegistryTitelID") or "").strip()
-            creator = (r.get("06_creator") or "").strip()
-            # Backstop against a publication/premiere citation slipping
-            # through as a "creator" (e.g. "Koldingposten 30.1.1866",
-            # "Gemeinnütziger Almanach auf das Jahr 1831") -- every one
-            # found by hand-reviewing this override's output contained a
-            # plausible year (1400-2099) somewhere, and no real creator
-            # name in this dataset does, so this is precise with no risk
-            # of excluding a legitimate one. The parser's own
-            # PREMIERE_DATE_RE/DESCRIPTOR_RE already catch the more
-            # structured cases (a bare date or "Tekst" as the sole/last
-            # parenthetical); this is the general backstop for whatever
-            # shape of year-bearing citation slips past those.
-            if rid and creator and not re.search(r"\b(1[4-9]\d{2}|20\d{2})\b", creator):
-                out[rid] = creator
+    for filename in CREATOR_OVERRIDE_FILES:
+        path = os.path.join(PARSED_DIR, filename)
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f, delimiter="\t"):
+                if r.get("01_Posttype") != "standardpost":
+                    continue
+                if r.get("06b_creator_is_human") == "False":
+                    continue
+                rid = (r.get("RegistryTitelID") or "").strip()
+                creator = (r.get("06_creator") or "").strip()
+                # Backstop against a publication/premiere citation slipping
+                # through as a "creator" (e.g. "Koldingposten 30.1.1866",
+                # "21.5.1854, Dresden") -- every bad value found by
+                # hand-reviewing these overrides' output contained a
+                # plausible year (1400-2099) somewhere, and no real
+                # creator name in this dataset does, so this is precise
+                # with no risk of excluding a legitimate one. Each
+                # parser's own DESCRIPTOR_RE/PREMIERE_DATE_RE /
+                # is_composer() already catch the more structured cases;
+                # this is the general backstop for whatever shape slips
+                # past those.
+                if rid and creator and not re.search(r"\b(1[4-9]\d{2}|20\d{2})\b", creator):
+                    out[rid] = creator
     return out
 
 
@@ -497,8 +515,7 @@ def main():
     creator_overrides = load_parsed_creator_overrides()
     if creator_overrides:
         print(f"  {len(creator_overrides):,} creator(s) loaded from "
-              f"{os.path.relpath(PARSED_DIR, ROOT)}/novels_plays_tales_parsed.tsv "
-              f"(scripts/parsers/parse_novels_plays_tales.py)")
+              f"{os.path.relpath(PARSED_DIR, ROOT)}/{{{', '.join(CREATOR_OVERRIDE_FILES)}}}")
         # Disagreements against entities.csv's own person_derived are worth a
         # human glance even though the TSV wins by default (see
         # load_parsed_creator_overrides()'s docstring) -- logged, not
