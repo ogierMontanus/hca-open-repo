@@ -387,6 +387,24 @@
         });
         sbH += '</div></div></div>';
       }
+      // ── Nation-krydslink ─────────────────────────────────────────────────
+      // Below Biografiske opslag, in the sidebar rather than the main
+      // column (user preference 2026-08-28): from a German person, offer
+      // every German person *and* place in one view. A person can carry
+      // two nationalities (czekisk-dansk) — show one link per nationality
+      // rather than picking a winner. Emits nothing when the person has
+      // none, or when nation-index.js is absent. .nation-link's own CSS
+      // (style.css) is a flexible flex-row card that reflows fine at
+      // sidebar width — no separate compact variant needed.
+      if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
+        p.nationalities.forEach(function (key) {
+          var info = NationLink.byKey(key);
+          if (info) {
+            sbH += NationLink.html(info, esc(p.label) + ' er registreret som ' +
+              info.label.toLowerCase());
+          }
+        });
+      }
       sb.innerHTML = sbH;
     }
 
@@ -396,22 +414,6 @@
     if (p.description) {
       mainH += '<div><h2 class="section-title">Beskrivelse</h2>' +
         '<p style="font-size:0.92rem;line-height:1.75;max-width:640px">' + esc(p.description) + '</p></div>';
-    }
-
-    // ── Nation-krydslink ───────────────────────────────────────────────────
-    // Second block from the top, above Værker / Hyppigste steder: from a
-    // German person, offer every German person *and* place in one view. A
-    // person can carry two nationalities (czekisk-dansk) — show one link per
-    // nationality rather than picking a winner. Emits nothing when the person
-    // has none, or when nation-index.js is absent.
-    if (typeof NationLink !== 'undefined' && p.nationalities && p.nationalities.length) {
-      p.nationalities.forEach(function (key) {
-        var info = NationLink.byKey(key);
-        if (info) {
-          mainH += NationLink.html(info, esc(p.label) + ' er registreret som ' +
-            info.label.toLowerCase());
-        }
-      });
     }
 
     // Works by this person
