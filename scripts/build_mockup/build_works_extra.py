@@ -24,6 +24,7 @@ ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
 LANGS = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
 WD_OVERLAY = os.path.join(ROOT, "data", "curated", "works_wikidata.csv")
+PARSED_DIR = os.path.join(ROOT, "data", "parsed")
 OUT = os.path.join(ROOT, "mockup", "data", "works-extra.js")
 
 PUB_PAREN_RE = re.compile(r"\(([^()]+?)\)")
@@ -283,8 +284,14 @@ def _person_derived_is_title_subject(person_derived, title):
     return any(title.startswith(seg) for seg in (s.strip() for s in person_derived.split("\n")) if seg)
 
 
-def author_from(genre_h2, h3, title, person_derived, place_labels):
+def author_from(genre_h2, h3, title, person_derived, place_labels, tsv_creator=None):
     h2u = (genre_h2 or "").strip().upper()
+    # A dedicated, WEMI-rule-based parser (scripts/parsers/) has already
+    # extracted this row's creator from its own title parenthetical — see
+    # load_parsed_creator_overrides()'s docstring for why this takes
+    # priority even over a non-empty person_derived, not just fills gaps.
+    if tsv_creator:
+        return tsv_creator
     if person_derived and person_derived.strip():
         # For BILLEDKUNST specifically: 65 works have a person_derived value
         # that is a prefix of their own title — i.e. the upstream step
@@ -379,6 +386,64 @@ def load_wikidata_overlay():
     return out
 
 
+def load_parsed_creator_overrides():
+    """{entity_id: creator} from novels_plays_tales_parsed.tsv — the
+    dedicated, WEMI-rule-based section parser for the "Andre Forfattere /
+    Romaner, Noveller, Eventyr" slice (scripts/parsers/, see
+    docs/data-model/wemi-and-relations.md "Parsing rules summarised" §2:
+    the creator sits in the title's own parenthetical, e.g. "Grannarne
+    (Fredrika Bremer)" → creator "Fredrika Bremer").
+
+    This exists because author_from() below falls back to the literal H2
+    string (e.g. "ANDRE FORFATTERE") whenever entities.csv's own
+    person_derived column is empty for a row -- 136 of the 229 works in
+    this slice alone, as of this writing, none of them showing a real name.
+    This TSV recovers 124 of those.
+
+    Checked against the 93 rows where person_derived is ALSO already
+    populated: only 73 agree. Every disagreement inspected by hand was the
+    TSV correcting a defect already documented elsewhere in this file --
+    person_derived's own newline-joined-values problem (see author_from's
+    docstring), an unresolved pseudonym ("M. Rowel" vs. its real name
+    "Valdemar Thisted"), or a truncated name ("P. Chr" vs. "P. Chr.
+    Asbjørnsen") -- never the reverse, so the TSV value is trusted with
+    priority over person_derived wherever both exist, not just used to
+    fill gaps. See the disagreement log this function's caller prints for
+    the full list to review, since a few (e.g. Reg001878: "Paul Winther"
+    vs. "Clara Andersen") are genuine conflicts this script cannot itself
+    resolve — WEMI doc rule #8: "when ambiguous, ask, do not guess."
+
+    Deliberately NOT extended to music_register_parsed.tsv or
+    non_fiction_parsed.tsv yet, even though all three share the same column
+    shape and were built/validated together (see the "transfer" commit) --
+    spot-checking those two turned up 06_creator values that are clearly
+    not a person at all for some rows ("Temple français", a venue; "heri
+    Amores Christiani IVti med Bilag", a bibliographic fragment), which
+    novels_plays_tales_parsed.tsv's own disagreements never did. Wiring
+    those two in needs the same row-by-row confidence this file already
+    has for the novels/plays/tales slice, not an assumption that "close
+    enough" methodology carries over untested — that's follow-up work, not
+    done here.
+
+    Only standardpost rows count (inferred_container/krydshenvisning rows
+    either have no real RegistryTitelID or aren't a work in their own
+    right). Returns {} if the file doesn't exist yet (fresh clone, parser
+    not run)."""
+    out = {}
+    path = os.path.join(PARSED_DIR, "novels_plays_tales_parsed.tsv")
+    if not os.path.exists(path):
+        return out
+    with open(path, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            if r.get("01_Posttype") != "standardpost":
+                continue
+            rid = (r.get("RegistryTitelID") or "").strip()
+            creator = (r.get("06_creator") or "").strip()
+            if rid and creator:
+                out[rid] = creator
+    return out
+
+
 def main():
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -417,6 +482,29 @@ def main():
     if wd_overlay:
         print(f"  {len(wd_overlay):,} hand-verified Wikidata entries loaded from "
               f"{os.path.relpath(WD_OVERLAY, ROOT)}")
+
+    creator_overrides = load_parsed_creator_overrides()
+    if creator_overrides:
+        print(f"  {len(creator_overrides):,} creator(s) loaded from "
+              f"{os.path.relpath(PARSED_DIR, ROOT)}/novels_plays_tales_parsed.tsv "
+              f"(scripts/parsers/parse_novels_plays_tales.py)")
+        # Disagreements against entities.csv's own person_derived are worth a
+        # human glance even though the TSV wins by default (see
+        # load_parsed_creator_overrides()'s docstring) -- logged, not
+        # silently resolved, per WEMI doc rule #8 ("when ambiguous: ask, do
+        # not guess").
+        disagreements = []
+        for r in rows:
+            rid = r["entity_id"]
+            tsv_c = creator_overrides.get(rid)
+            pd = (r.get("person_derived") or "").strip()
+            if tsv_c and pd and pd.casefold() != tsv_c.casefold():
+                disagreements.append((rid, pd, tsv_c))
+        if disagreements:
+            print(f"  {len(disagreements)} disagree with person_derived "
+                  f"(TSV value used; review if any look wrong):")
+            for rid, pd, tsv_c in disagreements:
+                print(f"    {rid}: person_derived={pd!r}  tsv={tsv_c!r}")
 
     # Index work labels for resolving `see` / `see_also` cross-references to
     # real register IDs. Most targets are the head term of a fuller label
@@ -497,7 +585,8 @@ def main():
             "h3": h3 or "—",
             "wing": wing,
             "wingLabel": wing_label,
-            "author": author_from(h2, h3, r["label"], r.get("person_derived", ""), place_labels),
+            "author": author_from(h2, h3, r["label"], r.get("person_derived", ""), place_labels,
+                                   tsv_creator=creator_overrides.get(rid)),
             # Derived, not curated — langMethod carries the provenance so the
             # UI can say so. See detect_work_language.py.
             "lang": work_langs.get(rid, (None, None))[0],
@@ -578,6 +667,20 @@ def main():
         with_place = sum(1 for w in teater if w["place"])
         print(f"  TEATER & MUSIK Sted coverage: {with_place}/{len(teater)} "
               f"({with_place / len(teater):.0%})")
+
+    # "Real name" vs. the literal H2 group string ("ANDRE FORFATTERE", "H. C.
+    # ANDERSEN") author_from() falls back to when nothing better is
+    # available — the gap load_parsed_creator_overrides() exists to close,
+    # and what's left is exactly what a new scripts/parsers/parse_*.py slice
+    # (see docs/pipeline/stages.md) would need to cover next.
+    generic_h2_labels = {"ANDRE FORFATTERE", "H. C. ANDERSEN"}
+    non_billedkunst = [w for w in generated.values() if w["h2"].upper() != "BILLEDKUNST"]
+    if non_billedkunst:
+        generic = sum(1 for w in non_billedkunst if w["author"] in generic_h2_labels)
+        real = sum(1 for w in non_billedkunst if w["author"] and w["author"] not in generic_h2_labels)
+        print(f"  Non-BILLEDKUNST author coverage: {real:,}/{len(non_billedkunst):,} real "
+              f"({real / len(non_billedkunst):.0%}), {generic:,} still fall back to the "
+              f"literal H2 group label")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
