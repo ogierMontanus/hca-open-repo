@@ -47,10 +47,17 @@
  *                                  highlight under `root` (default: document)
  *                                  from current cart state — call after any
  *                                  render that inserts fresh cards
- *   mountBadge(el)                fills el with a live "Kurv (N)" link
+ *   mountBadge(el)                fills el with a live "🛒 Kurv (N)" /
+ *                                   "🛒 Cart (N)" link — cart.html or
+ *                                   cart_en.html, read from
+ *                                   document.documentElement.lang (see
+ *                                   isEnglish() below), so every page shows
+ *                                   the badge in its own interface language
+ *                                   without needing to say so itself
  *   mountToggle(el, type, rid,    fills el with a live "+ Tilføj til kurv" /
- *               label)             "✓ I kurven" button — for detail pages
- *                                   with one entity and no result list
+ *               label)             "✓ I kurven" ("+ Add to cart" / "✓ In
+ *                                   cart" in English) button — for detail
+ *                                   pages with one entity and no result list
  *
  * ── Markup contract ─────────────────────────────────────────────────────
  *   <div class="result-row">
@@ -190,12 +197,22 @@ window.Cart = (function () {
     });
   }
 
+  // cart.js itself is shared, unlocalized markup/logic loaded by every
+  // page; the *_en.html pages set <html lang="en">, which is the one
+  // reliable, already-present signal for which language mountBadge/
+  // mountToggle should paint in — no separate flag needed from callers.
+  function isEnglish() {
+    return document.documentElement.lang === 'en';
+  }
+
   function mountBadge(el) {
     if (!el) return;
     function paint() {
       var n = count();
-      el.innerHTML = '<a href="cart.html" class="cart-badge' + (n ? ' cart-badge--active' : '') + '">' +
-        '🛒 Kurv' + (n ? ' <span class="cart-badge__count">' + n + '</span>' : '') + '</a>';
+      var en = isEnglish();
+      el.innerHTML = '<a href="' + (en ? 'cart_en.html' : 'cart.html') + '" class="cart-badge' +
+        (n ? ' cart-badge--active' : '') + '">' +
+        (en ? '🛒 Cart' : '🛒 Kurv') + (n ? ' <span class="cart-badge__count">' + n + '</span>' : '') + '</a>';
     }
     subscribe(paint);
     paint();
@@ -209,9 +226,12 @@ window.Cart = (function () {
     if (!el) return;
     function paint() {
       var inCart = has(type, rid);
+      var en = isEnglish();
       el.innerHTML = '<button type="button" class="cart-toggle-btn' +
         (inCart ? ' cart-toggle-btn--active' : '') + '">' +
-        (inCart ? '✓ I kurven' : '+ Tilføj til kurv') + '</button>';
+        (en
+          ? (inCart ? '✓ In cart' : '+ Add to cart')
+          : (inCart ? '✓ I kurven' : '+ Tilføj til kurv')) + '</button>';
       el.querySelector('button').addEventListener('click', function () {
         toggle(type, rid, label);
       });
