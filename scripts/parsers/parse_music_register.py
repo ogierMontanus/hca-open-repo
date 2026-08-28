@@ -301,7 +301,12 @@ def parse(raw, reg_id=""):
         note="",
         RegistryTitelID=reg_id,
     )
-    entry = raw.strip().rstrip(".")
+    # A non-breaking space (U+00A0) in the source ("Fr.\xa0Schubert") reads
+    # as a different string than its plain-space sibling, splitting one
+    # composer across two facet entries downstream -- every sibling parser
+    # under scripts/parsers/ already normalises this on its own raw label;
+    # this one didn't.
+    entry = raw.replace("\xa0", " ").strip().rstrip(".")
 
     m = re.match(r"^(.+),\s*\nse:\s*(.+)$", entry, re.DOTALL | re.I)
     if m:
