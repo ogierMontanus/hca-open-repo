@@ -39,6 +39,30 @@ AF_RE = re.compile(r"^af[: ]", re.I)
 GUILLEMET = re.compile(r"[»«](.+?)[«»]", re.S)
 OPUS_EMBEDDED = re.compile(r",?\s*(op\.\s*\d+[a-z]?(?:\s+nr\.\s*\d+)?)\s*$", re.I)
 
+# Co-author splitting, same rule and same rationale as
+# parse_novels_plays_tales.py's split_creators()/strip_role_label(): only
+# " og " is reliably splittable (a bare comma list risks being one
+# person's name-plus-title, not two people); a leading "Udg."/"Red." role
+# label joined by "og" to a second role label ("Udg. og Red.: X") is one
+# person with two roles, not two people, so it's stripped first. Smaller
+# scope here than the sibling parser -- MUSIK's own creator field rarely
+# carries the "efter"/"bearbejdet af" adaptation-credit shape that parser
+# handles (checked directly: 12 of 407 creators contain " og ", none of
+# the messier compound ones -- left unsplit, same "ask, don't guess"
+# discipline).
+_ROLE_LABEL_RE = re.compile(
+    r"^(?:Udg\.|Red\.)(?:\s+og\s+(?:Udg\.|Red\.))?\s*:\s*", re.IGNORECASE,
+)
+
+
+def split_creators(creator: str) -> str:
+    creator = _ROLE_LABEL_RE.sub("", creator, count=1)
+    if " og " not in creator:
+        return creator
+    head, last = creator.rsplit(" og ", 1)
+    parts = [p.strip() for p in head.split(",") if p.strip()] + [last.strip()]
+    return "; ".join(parts)
+
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -130,7 +154,7 @@ def assign_parens(r, parens):
             remaining.append(p)
 
     if remaining and is_composer(remaining[-1]):
-        r["creator"] = remaining.pop()
+        r["creator"] = split_creators(remaining.pop())
         r["creator_is_human"] = "True"
 
     if remaining and not r["original_title"]:

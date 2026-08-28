@@ -172,8 +172,8 @@ standardpost	False	VocalAndInstrumentalMusic	Christina di Svezia			Jacobo Foroni
 standardpost	False	VocalAndInstrumentalMusic	Clotilde			Carlo Coccia	True					Reg000532
 standardpost	False	VocalAndInstrumentalMusic	Le Comte Ory			G. Rossini	True					Reg002063
 standardpost	False	VocalAndInstrumentalMusic	Così fan tutte			W. A. Mozart	True					Reg000549
-standardpost	False	VocalAndInstrumentalMusic	Crispino e la comare			Luigi og Federico Ricci	True					Reg000553
-standardpost	False	VocalAndInstrumentalMusic	Crispins Forvandlinger			Syngestykke, indrettet af N. T. Bruun, Musiken af Mozart, Méhul og Paër, Teksten efter Hauteroche	True					Reg000554
+standardpost	False	VocalAndInstrumentalMusic	Crispino e la comare			Luigi; Federico Ricci	True					Reg000553
+standardpost	False	VocalAndInstrumentalMusic	Crispins Forvandlinger			Syngestykke; indrettet af N. T. Bruun; Musiken af Mozart; Méhul; Paër, Teksten efter Hauteroche	True					Reg000554
 standardpost	False	VocalAndInstrumentalMusic	Czar og Tømmermand			G. A. Lortzing	True					Reg000559
 standardpost	False	VocalAndInstrumentalMusic	La Dame blanche			F. A. Boieldieu	True					Reg001977
 standardpost	False	VocalAndInstrumentalMusic	La Déesse et le berger			J. Duprato	True					Reg001981
@@ -256,7 +256,7 @@ standardpost	False	VocalAndInstrumentalMusic	Lohengrin			R. Wagner	True					Reg0
 standardpost	False	VocalAndInstrumentalMusic	Lucia di Lammermoor			G. Donizetti	True					Reg002182
 standardpost	False	VocalAndInstrumentalMusic	Lucrezia Borgia			G. Donizetti	True					Reg002188
 krydshenvisning	False	VocalAndInstrumentalMusic	Ludovic (Emil Hartmann)							Korsikaneren		Reg002191
-standardpost	False	VocalAndInstrumentalMusic	Ludovie			F. Herold og F. Halévy	True					Reg002192
+standardpost	False	VocalAndInstrumentalMusic	Ludovie			F. Herold; F. Halévy	True					Reg002192
 standardpost	False	VocalAndInstrumentalMusic	De lystige Koner i Windsor			Otto Nicolai	True					Reg000645
 standardpost	False	VocalAndInstrumentalMusic	Maître Pathelin			F. Bazin	True					Reg002355
 standardpost	False	VocalAndInstrumentalMusic	Le Mannequin de Bergame			F. J. Fétis	True					Reg002073
@@ -304,7 +304,7 @@ standardpost	False	VocalAndInstrumentalMusic	Preciosa			C. M. von Weber	True				
 standardpost	False	VocalAndInstrumentalMusic	Le Premier jour de bonheur			D. F. E. Auber	True					Reg002085
 standardpost	False	VocalAndInstrumentalMusic	La prigione d'Edinburgo			Federigo Ricci	True					Reg002021
 standardpost	False	VocalAndInstrumentalMusic	La Princesse de Trebizonde			J. Offenbach	True					Reg002001
-standardpost	False	VocalAndInstrumentalMusic	Prinds Pipi og Frøken Titi			Operette med Musik af forskellige Komponister, Tekst af Erik Bøgh efter H. Chivot og A. Duru	True					Reg002733
+standardpost	False	VocalAndInstrumentalMusic	Prinds Pipi og Frøken Titi			Operette med Musik af forskellige Komponister; Tekst af Erik Bøgh efter H. Chivot; A. Duru	True					Reg002733
 standardpost	False	VocalAndInstrumentalMusic	Propheten			G. Meyerbeer	True					Reg002744
 standardpost	False	VocalAndInstrumentalMusic	La prova d'un opera seria			Fr. Gnecco	True					Reg002022
 standardpost	False	VocalAndInstrumentalMusic	Le Puits d'amour			M. W. Balfe	True					Reg002087
@@ -344,7 +344,7 @@ standardpost	False	VocalAndInstrumentalMusic	Tancredo			G. Rossini	True					Reg0
 standardpost	False	VocalAndInstrumentalMusic	Tannhäuser			R. Wagner	True					Reg003185
 standardpost	False	VocalAndInstrumentalMusic	Tempelherren og Jødinden			H. Marschner	True					Reg003196
 standardpost	False	VocalAndInstrumentalMusic	Il templario			Otto Nicolai	True					Reg001721
-standardpost	False	VocalAndInstrumentalMusic	La Tentation, Opéra-Ballet			F. Halévy og C. Gide	True					Reg002007
+standardpost	False	VocalAndInstrumentalMusic	La Tentation, Opéra-Ballet			F. Halévy; C. Gide	True					Reg002007
 standardpost	False	VocalAndInstrumentalMusic	En Times Ægteskab			N. Dalayrac	True					Reg001126
 standardpost	False	VocalAndInstrumentalMusic	Titus			W. A. Mozart	True					Reg003273
 standardpost	False	VocalAndInstrumentalMusic	De to Dage			L. Cherubini	True					Reg000656
@@ -404,15 +404,15 @@ standardpost	False	VocalAndInstrumentalMusic	Flick und Flock			Paul Taglioni	Tru
 standardpost	False	VocalAndInstrumentalMusic	Et Folkesagn			A. Bournonville	True					Reg001205
 standardpost	False	VocalAndInstrumentalMusic	Frantzia		4.1.1863, Bordeaux							Reg001367
 standardpost	False	VocalAndInstrumentalMusic	Galopade af Phantasiens Ø			A. Bournonville	True					Reg001412
-standardpost	False	VocalAndInstrumentalMusic	Giselle			J. H. de Saint-Georges, Théophile Gautier og Jean Coralli	True					Reg001454
+standardpost	False	VocalAndInstrumentalMusic	Giselle			J. H. de Saint-Georges; Théophile Gautier; Jean Coralli	True					Reg001454
 standardpost	False	VocalAndInstrumentalMusic	Giuditta regina di Francia		21.9.1833, La Scala, Milano							Reg001456
-standardpost	False	VocalAndInstrumentalMusic	Graziosa			J. Derley og L. Petipa	True					Reg001482
+standardpost	False	VocalAndInstrumentalMusic	Graziosa			J. Derley; L. Petipa	True					Reg001482
 standardpost	False	VocalAndInstrumentalMusic	Hertugen af Vendômes Pager			J. P. Aumer	True					Reg001585
 standardpost	False	VocalAndInstrumentalMusic	De Hinde in het Bosch, of Het Koningrijk der Toovergodin, Balletpantomime efter La Biche au Bois			A. P. Voitus van Hamme	True					Reg000624
 standardpost	False	VocalAndInstrumentalMusic	Holberg. Tableau ved Det kgl. Teaters Aabningsforestilling 15.10.1874			A. Bournonville	True					Reg001618
 standardpost	False	VocalAndInstrumentalMusic	Isola d'amore		23.4.1861, Teatro Carlo Felice, Torino							Reg001757
 krydshenvisning	False	VocalAndInstrumentalMusic	Jocko							Danina		Reg001803
-standardpost	False	VocalAndInstrumentalMusic	La Jolie fille de Gand			J. H. de Saint-Georges og Albert	True					Reg001990
+standardpost	False	VocalAndInstrumentalMusic	La Jolie fille de Gand			J. H. de Saint-Georges; Albert	True					Reg001990
 standardpost	False	VocalAndInstrumentalMusic	Kermessen i Brügge			A. Bournonville	True					Reg001890
 standardpost	False	VocalAndInstrumentalMusic	Kjærligheds-Spaadommen			A. Bournonville	True					Reg001902
 standardpost	False	VocalAndInstrumentalMusic	La Lithauienne			A. Bournonville	True					Reg001993
@@ -420,7 +420,7 @@ standardpost	False	VocalAndInstrumentalMusic	Livjægerne paa Amager			A. Bournon
 standardpost	False	VocalAndInstrumentalMusic	La malagueña		spansk Dans						(8.4.1843. Variétés, Paris)	Reg002018
 standardpost	False	VocalAndInstrumentalMusic	Des Malers Traumbild			Jules Perrot	True					Reg000839
 standardpost	False	VocalAndInstrumentalMusic	Mandarinens Døttre			A. Bournonville	True					Reg002293
-standardpost	False	VocalAndInstrumentalMusic	Le Marché des innocents			M. Petipa og L. Petipa	True					Reg002074
+standardpost	False	VocalAndInstrumentalMusic	Le Marché des innocents			M. Petipa; L. Petipa	True					Reg002074
 standardpost	False	VocalAndInstrumentalMusic	Mefistofeles, Dansedivertissement af Tryllespillet Le pied de mouton			Folketeatret 31.8.1865	False					Reg002364
 standardpost	False	VocalAndInstrumentalMusic	Napoli eller Fiskeren og hans Brud			A. Bournonville	True					Reg002474
 standardpost	False	VocalAndInstrumentalMusic	Die nebelgehüllten Mädchen		24.11.1840, München							Reg000929
@@ -441,13 +441,13 @@ standardpost	False	VocalAndInstrumentalMusic	Die schöne Arsene oder die neue Am
 standardpost	False	VocalAndInstrumentalMusic	Sennora Pepita dandsende El Ole. Imitation, udføres af Hr. Edström		Casino 23.9.1864							Reg002981
 standardpost	False	VocalAndInstrumentalMusic	Skandinavisk Qvadrille			A. Bournonville	True					Reg003016
 standardpost	False	VocalAndInstrumentalMusic	Soldat og Bonde			A. Bournonville	True					Reg003054
-standardpost	False	VocalAndInstrumentalMusic	La Source			Chr. Nuittier og Saint-Léon	True					Reg002004
+standardpost	False	VocalAndInstrumentalMusic	La Source			Chr. Nuittier; Saint-Léon	True					Reg002004
 krydshenvisning	False	VocalAndInstrumentalMusic	La Sourde							La Source		Reg002005
-standardpost	False	VocalAndInstrumentalMusic	Den standhaftige Hajdukke, Fiske-Ballet			Carl og Conrad Møller o.fl.	True					Reg000754
+standardpost	False	VocalAndInstrumentalMusic	Den standhaftige Hajdukke, Fiske-Ballet			Carl; Conrad Møller o.fl.	True					Reg000754
 standardpost	False	VocalAndInstrumentalMusic	Stellina, Dansedivertissement			A. Gredelue	True					Reg003103
 standardpost	False	VocalAndInstrumentalMusic	Steyrisk Dans			A. Bournonville	True					Reg003105
 standardpost	False	VocalAndInstrumentalMusic	Sylfiden			A. Bournonville	True					Reg003148
-standardpost	False	VocalAndInstrumentalMusic	Søvngjængersken			Aumer og Scribe	True					Reg003176
+standardpost	False	VocalAndInstrumentalMusic	Søvngjængersken			Aumer; Scribe	True					Reg003176
 standardpost	False	VocalAndInstrumentalMusic	Thrymskviden			A. Bournonville	True					Reg003242
 standardpost	False	VocalAndInstrumentalMusic	Toreadoren			A. Bournonville	True					Reg003297
 standardpost	False	VocalAndInstrumentalMusic	Valkyrien			A. Bournonville	True					Reg003399
