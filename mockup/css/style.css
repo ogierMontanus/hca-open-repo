@@ -442,15 +442,36 @@ body[data-section="hvor"] .page-hero {
   columns: 220px 3; column-gap: var(--sp5);
 }
 .facet-group--expanded .facet-item { break-inside: avoid; }
-.facet-group--expanded .facet-more-toggle {
-  /* column-span:all takes it out of the multi-column flow into the body's
-     own normal block flow, so position:sticky sticks it against the
-     body's own overflow-y:auto scrolling — it would otherwise scroll away
-     with the first column the moment the reader scrolls past it. */
-  position: sticky; top: 0; z-index: 1;
-  column-span: all; break-inside: avoid;
-  background: var(--color-surface); border-top: none; border-bottom: 1px solid var(--color-border);
-  margin: 0 0 var(--sp2); padding-left: 0;
+
+/* Expanded-only header bar: the "✕ Vis færre" toggle plus the count/A-Å
+   sort switch (see facet-overlay.js's sortMode). column-span:all takes it
+   out of the multi-column flow into the body's own normal block flow, so
+   position:sticky sticks it against the body's own overflow-y:auto
+   scrolling — it would otherwise scroll away with the first column the
+   moment the reader scrolls past it. Not shown while collapsed: the
+   top-N view is always count-sorted (a "top 20 alphabetically" isn't
+   useful), so there's nothing to switch there. */
+.facet-overlay-header {
+  column-span: all; break-inside: avoid; position: sticky; top: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp3);
+  background: var(--color-surface); border-bottom: 1px solid var(--color-border);
+  margin: 0 0 var(--sp2);
+}
+.facet-overlay-header .facet-more-toggle {
+  position: static; flex: 1; min-width: 0;
+  border: none; margin: 0; padding: 6px 0 6px var(--sp5);
+}
+.facet-sort-toggle {
+  display: flex; gap: 2px; flex-shrink: 0; padding: 4px var(--sp2) 4px 0;
+}
+.facet-sort-toggle__btn {
+  font-size: 0.72rem; font-family: var(--font-sans); cursor: pointer;
+  padding: 3px 9px; border-radius: 999px;
+  border: 1px solid var(--color-border); background: var(--color-surface-2);
+  color: var(--color-text-muted);
+}
+.facet-sort-toggle__btn--active {
+  background: var(--color-accent); border-color: var(--color-accent); color: #fff;
 }
 
 .facet-backdrop {

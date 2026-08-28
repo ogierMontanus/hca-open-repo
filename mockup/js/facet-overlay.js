@@ -14,12 +14,18 @@
  *
  * ── Usage ─────────────────────────────────────────────────────────────────
  *
- *   FacetOverlay.attach(host, function (expanded) {
- *     // Return the full innerHTML for that state: rows, plus a
- *     // <button data-facet-more>Vis alle (N)</button> toggle when there
- *     // are more values than the caller's own limit. Call attach() again
- *     // (e.g. after the underlying data or checked state changes) to
- *     // repaint host at its current expand state.
+ *   FacetOverlay.attach(host, function (expanded, sortMode) {
+ *     // Return the full innerHTML for that state: rows sorted by count
+ *     // (sortMode === 'count', the default) or alphabetically (sortMode
+ *     // === 'alpha'), plus a <button data-facet-more>Vis alle (N)</button>
+ *     // toggle when there are more values than the caller's own limit,
+ *     // and — only while expanded — two small
+ *     // <button data-facet-sort="count"|"alpha"> pills so the reader can
+ *     // switch between them (sortMode only ever matters expanded; the
+ *     // collapsed top-N view stays count-sorted always, since "top 20
+ *     // alphabetically" isn't a top-N in any useful sense). Call attach()
+ *     // again (e.g. after the underlying data or checked state changes)
+ *     // to repaint host at its current expand/sort state.
  *     return html;
  *   }, function () {
  *     // Optional: called after every repaint (from attach() itself, or
@@ -31,6 +37,12 @@
  * host must sit inside a <div class="facet-group"> (for the expanded class
  * + aria-label source) inside a <div class="facet-panel"> (for the
  * stacking-context fix) — the same markup contract both engines already use.
+ *
+ * The sort mode picked for a facet persists across close/reopen (it's
+ * per-host state, not reset on collapse) since a reader who switched to
+ * alphabetical probably wants it again next time they open that facet —
+ * it's a browsing preference, independent of which values are ticked, so
+ * "Nulstil" (which clears ticked values) leaves it alone too.
  *
  * Ticking a checkbox inside the overlay does NOT close it — a reader
  * narrowing down a 79-value list often wants to tick more than one before
@@ -92,7 +104,8 @@ window.FacetOverlay = (function () {
 
   function repaint(host) {
     var expanded = host === expandedHost;
-    host.innerHTML = host._facetOverlayRender(expanded);
+    var sortMode = host._facetSortMode || 'count';
+    host.innerHTML = host._facetOverlayRender(expanded, sortMode);
     applyChrome(host, expanded);
     if (host._facetOverlayAfterRender) host._facetOverlayAfterRender();
   }
@@ -128,9 +141,10 @@ window.FacetOverlay = (function () {
     focusToggle(host);
   }
 
-  // Render (or re-render) host at its current expand state. renderFn(bool)
-  // must return the full innerHTML, toggle button included. afterRenderFn,
-  // if given, runs after every repaint regardless of what triggered it.
+  // Render (or re-render) host at its current expand/sort state.
+  // renderFn(expanded, sortMode) must return the full innerHTML, toggle
+  // button included. afterRenderFn, if given, runs after every repaint
+  // regardless of what triggered it.
   function attach(host, renderFn, afterRenderFn) {
     host._facetOverlayRender = renderFn;
     host._facetOverlayAfterRender = afterRenderFn || null;
@@ -144,13 +158,23 @@ window.FacetOverlay = (function () {
   // Delegated on the document, not a panel, since exactly one facet-panel
   // exists per page across every caller of this module.
   document.addEventListener('click', function (ev) {
-    var btn = ev.target && ev.target.closest ? ev.target.closest('[data-facet-more]') : null;
-    if (!btn) return;
-    var host = btn.closest('[data-facet-source]');
-    if (!host) return;
-    ev.preventDefault();
-    if (host === expandedHost) collapse();
-    else expand(host);
+    var moreBtn = ev.target && ev.target.closest ? ev.target.closest('[data-facet-more]') : null;
+    if (moreBtn) {
+      var host = moreBtn.closest('[data-facet-source]');
+      if (!host) return;
+      ev.preventDefault();
+      if (host === expandedHost) collapse();
+      else expand(host);
+      return;
+    }
+    var sortBtn = ev.target && ev.target.closest ? ev.target.closest('[data-facet-sort]') : null;
+    if (sortBtn) {
+      var sortHost = sortBtn.closest('[data-facet-source]');
+      if (!sortHost) return;
+      ev.preventDefault();
+      sortHost._facetSortMode = sortBtn.getAttribute('data-facet-sort');
+      repaint(sortHost);
+    }
   });
 
   document.addEventListener('keydown', function (ev) {

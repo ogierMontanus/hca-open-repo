@@ -430,12 +430,16 @@
   // "Vis alle" -> full-viewport-overlay treatment once a wing has more
   // distinct values than that — bibliotek.html alone has 331 authors, all
   // shown unbounded before this, same problem places.html's Land facet had
-  // with 79 countries. rows: [{value, label, count}], already sorted; a
-  // value ticked while the overlay was open stays visible in the folded
-  // list afterwards even below the cutoff, same guarantee facet-engine.js
-  // makes.
+  // with 79 countries. rows: [{value, label, count, sortKey}], already
+  // sorted in the caller's own default order (used as-is for which N are
+  // visible when collapsed — author's is count-ranked, place's is
+  // alphabetical, and that choice stays exactly as before); a value ticked
+  // while the overlay was open stays visible in the folded list afterwards
+  // even below the cutoff, same guarantee facet-engine.js makes. sortKey
+  // defaults to label when the caller doesn't need a different one (e.g.
+  // author's own surname-based key).
   var FACET_LIMIT = 20;
-  function buildCappedFacetHtml(host, dataAttr, rows, expanded) {
+  function buildCappedFacetHtml(host, dataAttr, rows, expanded, sortMode) {
     var checkedVals = {};
     var existing = host.querySelectorAll('input[' + dataAttr + ']');
     for (var e = 0; e < existing.length; e++) {
@@ -453,7 +457,18 @@
       }
     }
 
-    var html = visibleRows.map(function (row) {
+    // sortMode only ever changes the *display order* of whichever rows
+    // were already selected above (see the count/alpha toggle in the
+    // expanded header below) — never which ones, and it's a no-op while
+    // collapsed, same as facet-engine.js's own capped facets.
+    var renderRows = visibleRows;
+    if (expanded && sortMode) {
+      renderRows = visibleRows.slice().sort(sortMode === 'alpha'
+        ? function (a, b) { return String(a.sortKey || a.label).localeCompare(String(b.sortKey || b.label), 'da') || b.count - a.count; }
+        : function (a, b) { return b.count - a.count || String(a.sortKey || a.label).localeCompare(String(b.sortKey || b.label), 'da'); });
+    }
+
+    var html = renderRows.map(function (row) {
       var v = esc(row.value);
       var checked = checkedVals[row.value] ? ' checked' : '';
       return '<label class="facet-item"><input type="checkbox" ' + dataAttr + '="' + v + '"' + checked + '>' +
@@ -461,13 +476,22 @@
         '</span><span class="facet-item__count">' + row.count + '</span></label>';
     }).join('');
 
-    if (total > FACET_LIMIT) {
-      var toggle = expanded
-        ? '<button type="button" class="facet-more-toggle" data-facet-more>✕ Vis færre</button>'
-        : '<button type="button" class="facet-more-toggle" data-facet-more>Vis alle (' + total + ') ▾</button>';
-      html = expanded ? toggle + html : html + toggle;
+    if (total <= FACET_LIMIT) return html;
+
+    if (!expanded) {
+      return html + '<button type="button" class="facet-more-toggle" data-facet-more>Vis alle (' + total + ') ▾</button>';
     }
-    return html;
+    var sortToggle =
+      '<div class="facet-sort-toggle">' +
+        '<button type="button" class="facet-sort-toggle__btn' +
+          (sortMode === 'alpha' ? '' : ' facet-sort-toggle__btn--active') +
+          '" data-facet-sort="count">Antal</button>' +
+        '<button type="button" class="facet-sort-toggle__btn' +
+          (sortMode === 'alpha' ? ' facet-sort-toggle__btn--active' : '') +
+          '" data-facet-sort="alpha">A-Å</button>' +
+      '</div>';
+    var fewerToggle = '<button type="button" class="facet-more-toggle" data-facet-more>✕ Vis færre</button>';
+    return '<div class="facet-overlay-header">' + fewerToggle + sortToggle + '</div>' + html;
   }
 
   var placeCollator = (typeof Intl !== 'undefined' && Intl.Collator)
@@ -495,14 +519,14 @@
         counts[w.author] = (counts[w.author] || 0) + 1;
       });
       var rows = Object.keys(counts)
-        .map(function (a) { return { value: a, label: a, count: counts[a], sk: surnameKey(a) }; })
+        .map(function (a) { return { value: a, label: a, count: counts[a], sortKey: surnameKey(a) }; })
         .sort(function (a, b) {
           // Primary: works descending. Secondary: surname collation (da).
-          return b.count - a.count || a.sk.localeCompare(b.sk, 'da');
+          return b.count - a.count || a.sortKey.localeCompare(b.sortKey, 'da');
         });
       FacetOverlay.attach(
         host,
-        function (expanded) { return buildCappedFacetHtml(host, 'data-author', rows, expanded); },
+        function (expanded, sortMode) { return buildCappedFacetHtml(host, 'data-author', rows, expanded, sortMode); },
         updateFacetAvailability
       );
     });
@@ -532,7 +556,7 @@
         });
       FacetOverlay.attach(
         host,
-        function (expanded) { return buildCappedFacetHtml(host, 'data-place', rows, expanded); },
+        function (expanded, sortMode) { return buildCappedFacetHtml(host, 'data-place', rows, expanded, sortMode); },
         updateFacetAvailability
       );
     });

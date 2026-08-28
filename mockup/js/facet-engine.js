@@ -188,15 +188,18 @@ window.FacetEngine = (function () {
     /* ── Option rendering ───────────────────────────────────────────────── */
 
     // Build the full innerHTML for one [data-facet-source] body at a given
-    // expand state. A pure function: FacetOverlay (js/facet-overlay.js) owns
-    // actually painting it, plus the expand/collapse/backdrop/focus/ARIA
-    // mechanics shared with category-catalogue.js's own capped facets.
-    function buildHostHtml(host, expanded) {
+    // expand/sort state. A pure function: FacetOverlay (js/facet-overlay.js)
+    // owns actually painting it, plus the expand/collapse/backdrop/focus/
+    // ARIA/sort-toggle mechanics shared with category-catalogue.js's own
+    // capped facets.
+    function buildHostHtml(host, expanded, sortMode) {
       var field = host.getAttribute('data-facet-source');
       var limit = parseInt(host.getAttribute('data-facet-limit'), 10) || 0;
       var emptyLabel = host.getAttribute('data-facet-empty-label');
       var moreLabel  = host.getAttribute('data-facet-more-label') || 'Show all';
       var fewerLabel = host.getAttribute('data-facet-fewer-label') || 'Show fewer';
+      var countSortLabel = host.getAttribute('data-facet-sort-count-label') || 'Count';
+      var alphaSortLabel = host.getAttribute('data-facet-sort-alpha-label') || 'A–Z';
 
       // A re-render (toggling expand/collapse) rebuilds every checkbox from
       // scratch, so read which values are currently ticked first — otherwise
@@ -224,8 +227,11 @@ window.FacetEngine = (function () {
       var rows = Object.keys(counts).map(function (v) {
         return { value: v, label: String(labelOf(v) || v), n: counts[v] };
       });
-      // Frequency first; on a tie fall back to the field's sort key, which
-      // for person fields is the surname (project convention — CLAUDE.md).
+      // Always compute the count order first — it's what decides *which*
+      // values are the top-N when collapsed, regardless of sortMode (an
+      // alphabetical top-N wouldn't be "top" in any useful sense). On a
+      // tie fall back to the field's sort key, which for person fields is
+      // the surname (project convention — CLAUDE.md).
       rows.sort(function (a, b) {
         return b.n - a.n ||
                String(keyOf(a.value)).localeCompare(String(keyOf(b.value)), 'da');
@@ -244,7 +250,18 @@ window.FacetEngine = (function () {
         }
       }
 
-      var rowsHtml = visibleRows.map(function (r) {
+      // sortMode only ever changes the *display order* of whichever rows
+      // were already selected above — never which ones. It's a no-op
+      // while collapsed (see facet-overlay.js: the sort toggle only shows
+      // up expanded).
+      var renderRows = visibleRows;
+      if (expanded && sortMode === 'alpha') {
+        renderRows = visibleRows.slice().sort(function (a, b) {
+          return String(keyOf(a.value)).localeCompare(String(keyOf(b.value)), 'da') || b.n - a.n;
+        });
+      }
+
+      var rowsHtml = renderRows.map(function (r) {
         var checked = checkedVals[r.value] ? ' checked' : '';
         return '<label class="facet-item"><input type="checkbox" data-facet="' +
           esc(field) + '" data-match="' + esc(r.value) + '"' + checked + '>' +
@@ -254,6 +271,7 @@ window.FacetEngine = (function () {
 
       // The "Uoplyst" bucket keeps a partially-covered field honest: the
       // items with no value are selectable rather than silently absent.
+      // Always last, regardless of sortMode.
       if (emptyLabel && empties) {
         var eChecked = checkedEmpty ? ' checked' : '';
         rowsHtml += '<label class="facet-item"><input type="checkbox" data-facet="' +
@@ -262,27 +280,42 @@ window.FacetEngine = (function () {
           '<span class="facet-item__count">' + num(empties) + '</span></label>';
       }
 
-      if (limit && total > limit) {
-        var toggle = expanded
-          ? '<button type="button" class="facet-more-toggle" data-facet-more>✕ ' + esc(fewerLabel) + '</button>'
-          : '<button type="button" class="facet-more-toggle" data-facet-more>' + esc(moreLabel) + ' (' + num(total) + ') ▾</button>';
-        // Expanded: the fold-back control leads, so it's reachable without
-        // scrolling past however many of the (up to) hundred-plus rows the
-        // reader has scrolled through. Collapsed: it trails the visible rows.
-        return expanded ? toggle + rowsHtml : rowsHtml + toggle;
+      if (!(limit && total > limit)) return rowsHtml;
+
+      if (!expanded) {
+        // Trails the visible rows, so the fixed top-N list isn't pushed
+        // down by a control most readers won't need every time.
+        return rowsHtml + '<button type="button" class="facet-more-toggle" data-facet-more>' +
+          esc(moreLabel) + ' (' + num(total) + ') ▾</button>';
       }
-      return rowsHtml;
+      // Expanded: fold-back control and sort switch lead together, in a
+      // sticky header, so both stay reachable without scrolling past
+      // however many of the (up to) hundred-plus rows the reader has
+      // scrolled through.
+      var sortToggle =
+        '<div class="facet-sort-toggle">' +
+          '<button type="button" class="facet-sort-toggle__btn' +
+            (sortMode === 'alpha' ? '' : ' facet-sort-toggle__btn--active') +
+            '" data-facet-sort="count">' + esc(countSortLabel) + '</button>' +
+          '<button type="button" class="facet-sort-toggle__btn' +
+            (sortMode === 'alpha' ? ' facet-sort-toggle__btn--active' : '') +
+            '" data-facet-sort="alpha">' + esc(alphaSortLabel) + '</button>' +
+        '</div>';
+      var fewerToggle = '<button type="button" class="facet-more-toggle" data-facet-more>✕ ' +
+        esc(fewerLabel) + '</button>';
+      return '<div class="facet-overlay-header">' + fewerToggle + sortToggle + '</div>' + rowsHtml;
     }
 
     // Render one [data-facet-source] body: one row per distinct value of
-    // that field, ordered by frequency. Counts are computed here and never
-    // hand-typed, so a facet cannot drift out of sync with its data.
+    // that field, ordered by frequency (or alphabetically once expanded —
+    // see buildHostHtml). Counts are computed here and never hand-typed,
+    // so a facet cannot drift out of sync with its data.
     function renderHost(host) {
       var group = host.closest ? host.closest('.facet-group') : null;
       if (group && group.hasAttribute('data-facet-pending')) return;
       FacetOverlay.attach(
         host,
-        function (expanded) { return buildHostHtml(host, expanded); },
+        function (expanded, sortMode) { return buildHostHtml(host, expanded, sortMode); },
         // Runs after every repaint, including ones triggered by
         // FacetOverlay's own toggle/backdrop/Escape handling — refreshes
         // dimming/counts for whatever rows just appeared.
