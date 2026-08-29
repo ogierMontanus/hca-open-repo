@@ -85,6 +85,12 @@
 <script src="data/nation-index.js" onerror="void 0"></script>
 <script src="js/nation-link.js"></script>
 <script src="js/cart.js"></script>
+<!-- Dagbogsreferencer defaults to layout:'table' when no localStorage
+     preference exists yet (see the diary-wire.js wiring below); without
+     this script TableView is undefined, table mode silently falls back
+     to the list renderer but the "Vis alle" button still thinks
+     everything is already shown and stays hidden forever. -->
+<script src="js/table-view.js"></script>
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -230,24 +236,32 @@ function escAttr(s) { return String(s == null ? '' : s)
       '<p style="font-size:0.83rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
       myWorks.length + ' værk' + (myWorks.length === 1 ? '' : 'er') +
       ' i registret er stedfæstet til ' + escAttr(pl.label) + '.</p>';
+    // Every item is rendered up front (not fetched on demand); items past
+    // the 12-cap just start hidden, revealed by the delegated click
+    // handler below in one click — was previously inert "+ N yderligere"
+    // text with no way to actually see the rest.
+    let werkerGroupIdx = 0;
     for (const h3 of groups) {
       const items = byH3[h3];
+      const gid = 'w' + (werkerGroupIdx++);
       block += '<div style="margin-bottom:var(--sp5)">' +
         '<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;' +
         'letter-spacing:0.08em;color:var(--color-text-muted);margin-bottom:8px">' +
         escAttr(h3) + ' <span style="opacity:0.7">(' + items.length + ')</span></div>' +
         '<ul style="list-style:none;padding:0;margin:0;display:grid;' +
         'grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 16px;font-size:0.88rem">';
-      const visible = items.slice(0, 12);
-      for (const w of visible) {
-        block += '<li><a href="' + escAttr(EntityRefs.workHrefByRid(w.rid)) +
+      items.forEach((w, i) => {
+        const hiddenAttrs = i >= 12 ? ' style="display:none" data-werker-extra="' + gid + '"' : '';
+        block += '<li' + hiddenAttrs + '><a href="' + escAttr(EntityRefs.workHrefByRid(w.rid)) +
           '" style="color:var(--color-text)">' + escAttr(w.title) + '</a>' +
           (w.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' +
             w.refs + ' ref.</span>' : '') + '</li>';
-      }
-      if (items.length > visible.length) {
-        block += '<li style="color:var(--color-text-muted);font-style:italic">' +
-          '+ ' + (items.length - visible.length) + ' yderligere</li>';
+      });
+      if (items.length > 12) {
+        block += '<li data-werker-more="' + gid + '"><button type="button" ' +
+          'style="background:none;border:none;padding:0;color:var(--color-accent);' +
+          'cursor:pointer;font:inherit;text-decoration:underline">Vis alle (' +
+          (items.length - 12) + ' flere) →</button></li>';
       }
       block += '</ul></div>';
     }
@@ -312,6 +326,20 @@ function escAttr(s) { return String(s == null ? '' : s)
   }
 
   document.getElementById('js-main').innerHTML = main;
+
+  // Værker "Vis alle" — one click reveals every remaining item in that
+  // H3 group (see the block-building loop above); delegated since the
+  // buttons are part of the innerHTML just assigned above, not yet in
+  // the DOM when this script runs otherwise.
+  document.addEventListener('click', function (ev) {
+    const li = ev.target.closest('[data-werker-more]');
+    if (!li) return;
+    const gid = li.getAttribute('data-werker-more');
+    document.querySelectorAll('[data-werker-extra="' + gid + '"]').forEach(function (el) {
+      el.style.display = '';
+    });
+    li.remove();
+  });
 
   // Paginate the inbound group rather than capping it in the data: the cap
   // is what orphaned these links in the first place, so truncating here

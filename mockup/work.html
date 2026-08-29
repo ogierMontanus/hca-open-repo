@@ -121,6 +121,12 @@
 <script src="data/diary-refs.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
 <script src="js/cart.js"></script>
+<!-- Dagbogsreferencer defaults to layout:'table' when no localStorage
+     preference exists yet (see the diary-wire.js wiring below); without
+     this script TableView is undefined, table mode silently falls back
+     to the list renderer but the "Vis alle" button still thinks
+     everything is already shown and stays hidden forever. -->
+<script src="js/table-view.js"></script>
 <script>
 const WORKS = {
   // ── BILLEDKUNST ───────────────────────────────────────────────────────────

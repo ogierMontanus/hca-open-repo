@@ -229,7 +229,13 @@ window.DiaryWire = (function () {
       if (typeof Cart !== 'undefined') Cart.syncCheckboxes(container);
       if (opts.onCount) opts.onCount(shown, rec.n, rec.e.length);
       if (opts.moreBtn) {
-        opts.moreBtn.style.display = (layout === 'table' || shown >= rec.e.length) ? 'none' : '';
+        var remaining = rec.e.length - shown;
+        opts.moreBtn.style.display = (layout === 'table' || remaining <= 0) ? 'none' : '';
+        // "Vis alle (N)", not "Vis flere" -- clicking it below jumps
+        // straight to every remaining reference in one go, not another
+        // page of `step` (a diary-heavy place/person could sit behind
+        // several page-sized clicks otherwise; see the click handler).
+        if (remaining > 0) opts.moreBtn.textContent = 'Vis alle (' + remaining.toLocaleString('da-DK') + ')';
       }
     }
 
@@ -237,7 +243,7 @@ window.DiaryWire = (function () {
 
     if (opts.moreBtn) {
       opts.moreBtn.addEventListener('click', function () {
-        render(Math.min(shown + step, rec.e.length));
+        render(rec.e.length);
       });
     }
 
