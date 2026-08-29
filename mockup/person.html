@@ -247,6 +247,23 @@ function escAttr(s) { return String(s == null ? '' : s)
     main += block;
   }
 
+  // Dagbogsreferencer — populated by DiaryWire below. Above Hyppigste
+  // steder: the diary pages that actually mention this person are the
+  // primary evidence, so they come before derived co-occurrence stats
+  // (2026-08-29 layout preference, applies to every reg=-page's
+  // Dagbogsreferencer block).
+  main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
+    '<div class="results-header">' +
+    '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
+    '<div class="layout-switcher" id="person-diary-switcher">' +
+    '<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>' +
+    '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>' +
+    '</div></div>' +
+    '<div class="result-grid" id="person-diary"></div>' +
+    '<div style="text-align:center;margin-top:var(--sp5)">' +
+    '<button id="person-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
+    '</div></div>';
+
   // ── Hyppigste steder ─────────────────────────────────────────────────────
   // Top places that co-occur with this person on the same diary page,
   // from cooccurrence.js (PERSON_TOP_PLACES). Section hides if empty.
@@ -265,19 +282,6 @@ function escAttr(s) { return String(s == null ? '' : s)
     block += '</div></div>';
     main += block;
   }
-
-  // Dagbogsreferencer — populated by DiaryWire below.
-  main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
-    '<div class="results-header">' +
-    '<p id="person-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
-    '<div class="layout-switcher" id="person-diary-switcher">' +
-    '<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>' +
-    '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>' +
-    '</div></div>' +
-    '<div class="result-grid" id="person-diary"></div>' +
-    '<div style="text-align:center;margin-top:var(--sp5)">' +
-    '<button id="person-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
-    '</div></div>';
 
   document.getElementById('js-main').innerHTML = main;
 

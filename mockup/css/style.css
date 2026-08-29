@@ -359,12 +359,18 @@ body[data-section="hvor"] .page-hero {
    the backdrop that sits outside it — only raising the panel's own
    z-index reaches far enough up the stacking chain to win. Scoped to this
    class (rather than a permanent z-index) so the panel doesn't otherwise
-   compete with page content it isn't meant to sit above. Also suppresses
-   the panel's own overflow-y:auto scrollbar for the duration — otherwise
-   it stays visible (and scrollable) right behind the overlay, which reads
-   as a second, unrelated scroll affordance fighting for attention with
-   the overlay's own. */
-.facet-panel--overlay-open { z-index: 62; overflow: hidden; }
+   compete with page content it isn't meant to sit above. Hides the
+   panel's own scrollbar for the duration (otherwise visible/scrollable
+   right behind the overlay, a second unrelated scroll affordance) via
+   scrollbar-width/::-webkit-scrollbar rather than overflow:hidden --
+   on iOS Safari, a position:sticky ancestor combined with ANY
+   non-visible overflow value becomes an unintended containing block for
+   position:fixed descendants, clipping the expanded facet body to the
+   panel's own bounds instead of the viewport (reported directly: the
+   overlay cut off right after the filter column, hidden past the panel's
+   right edge). This keeps overflow-y:auto itself untouched. */
+.facet-panel--overlay-open { z-index: 62; scrollbar-width: none; }
+.facet-panel--overlay-open::-webkit-scrollbar { display: none; }
 .facet-panel__header {
   padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border);
   display: flex; align-items: center; justify-content: space-between;

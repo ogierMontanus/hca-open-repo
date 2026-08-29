@@ -255,6 +255,23 @@ function escAttr(s) { return String(s == null ? '' : s)
     main += block;
   }
 
+  // ── Dagbogsreferencer ────────────────────────────────────────────────────
+  // Above Hyppigste personer / Nævnt sammen med: the diary pages that
+  // actually mention this place are the primary evidence, so they come
+  // before derived co-occurrence stats (2026-08-29 layout preference,
+  // applies to every reg=-page's Dagbogsreferencer block).
+  main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
+    '<div class="results-header">' +
+    '<p id="place-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
+    '<div class="layout-switcher" id="place-diary-switcher">' +
+    '<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>' +
+    '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>' +
+    '</div></div>' +
+    '<div class="result-grid" id="place-diary"></div>' +
+    '<div style="text-align:center;margin-top:var(--sp5)">' +
+    '<button id="place-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
+    '</div></div>';
+
   // ── Hyppigste personer ──────────────────────────────────────────────────
   // Top persons that co-occur with this place on the same diary page.
   const topPersons = (typeof PLACE_TOP_PERSONS !== 'undefined' && PLACE_TOP_PERSONS[reg]) || [];
@@ -293,18 +310,6 @@ function escAttr(s) { return String(s == null ? '' : s)
       '<button id="place-inbound-more" class="layout-switcher__btn" style="padding:7px 20px">Vis flere</button>' +
       '</div></div>';
   }
-
-  main += '<div><h2 class="section-title">Dagbogsreferencer</h2>' +
-    '<div class="results-header">' +
-    '<p id="place-diary-summary" style="font-size:0.83rem;color:var(--color-text-muted);margin:0;flex:1">Indlæser…</p>' +
-    '<div class="layout-switcher" id="place-diary-switcher">' +
-    '<button class="layout-switcher__btn" data-layout="list">☰ Liste</button>' +
-    '<button class="layout-switcher__btn layout-switcher__btn--active" data-layout="table">▦ Tabel</button>' +
-    '</div></div>' +
-    '<div class="result-grid" id="place-diary"></div>' +
-    '<div style="text-align:center;margin-top:var(--sp5)">' +
-    '<button id="place-diary-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Vis flere</button>' +
-    '</div></div>';
 
   document.getElementById('js-main').innerHTML = main;
 
