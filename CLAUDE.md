@@ -167,3 +167,24 @@ Claude Design (projekt "HCA Dagbogsregister") og
 `scripts/design_sync/apply_component.py`. Fuld arbejdsgang, projekt-ID,
 komponentliste og kendte quirks: se skill `design-sync`
 (`.claude/skills/design-sync/SKILL.md`).
+
+---
+
+## CSS-faldgrube: `position: fixed` fanget af `position: sticky` + `overflow` på iOS Safari
+
+**Bekræftet 2026-08-29** (rapporteret direkte fra en iPad): en
+`position: fixed`-efterkommer af et `position: sticky`-element bliver på
+iOS Safari klippet til det sticky-elementets egne grænser i stedet for
+viewport'et, **hvis** det sticky-element også har en `overflow`-værdi
+forskellig fra `visible` (selv `hidden`/`auto`). Ramte
+`.facet-panel--overlay-open` (den udvidede facet-overlay i
+`mockup/js/facet-overlay.js` — se dens egen kommentar i
+`mockup/css/style.css`), da `overflow: hidden` blev tilføjet for at skjule
+panelets egen scrollbar bag overlayet.
+
+**Følg denne regel i kode:** tilføj aldrig en `overflow`-værdi (heller
+ikke `hidden`) til `.facet-panel` eller andre `position: sticky`-elementer,
+der har en `position: fixed`-efterkommer et andet sted i koden. Skjul en
+scrollbar i stedet via `scrollbar-width: none` +
+`::-webkit-scrollbar { display: none }` — det ændrer ikke
+`overflow`-værdien og udløser derfor ikke fælden.
