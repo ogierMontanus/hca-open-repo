@@ -341,16 +341,17 @@ function escAttr(s) { return String(s == null ? '' : s)
     li.remove();
   });
 
-  // Paginate the inbound group rather than capping it in the data: the cap
-  // is what orphaned these links in the first place, so truncating here
-  // would just move the problem into the UI.
+  // Initial render is capped to IN_PAGE for scan-ability (same convention
+  // as Dagbogsreferencer's/Værker's own initial caps), but the button
+  // itself is a one-click "show all" — not incremental pagination, so a
+  // hub place's full inbound list never sits behind several clicks.
   if (inbound.length) {
     const inGrid = document.getElementById('place-inbound');
     const inMore = document.getElementById('place-inbound-more');
     const IN_PAGE = 40;
     let inShown = 0;
-    const renderInbound = () => {
-      const next = inbound.slice(inShown, inShown + IN_PAGE);
+    const renderInbound = (count) => {
+      const next = inbound.slice(inShown, inShown + count);
       inGrid.insertAdjacentHTML('beforeend', next.map(([prid, n]) => {
         const lab = (typeof PERSONS_EXTRA !== 'undefined' && PERSONS_EXTRA[prid] && PERSONS_EXTRA[prid].label) || prid;
         return '<a href="' + escAttr(EntityRefs.personHrefByRid(prid)) +
@@ -358,11 +359,12 @@ function escAttr(s) { return String(s == null ? '' : s)
           escAttr(lab) + ' <span style="opacity:0.7;font-size:0.74rem">· ' + n + '</span></a>';
       }).join(''));
       inShown += next.length;
-      inMore.style.display = inShown < inbound.length ? '' : 'none';
-      inMore.textContent = 'Vis flere (' + (inbound.length - inShown).toLocaleString('da-DK') + ' tilbage)';
+      const remaining = inbound.length - inShown;
+      inMore.style.display = remaining > 0 ? '' : 'none';
+      if (remaining > 0) inMore.textContent = 'Vis alle (' + remaining.toLocaleString('da-DK') + ')';
     };
-    inMore.addEventListener('click', renderInbound);
-    renderInbound();
+    inMore.addEventListener('click', function () { renderInbound(inbound.length - inShown); });
+    renderInbound(IN_PAGE);
   }
 
   // Leaflet init when geocoded — CARTO Voyager tiles per CLAUDE.md.
