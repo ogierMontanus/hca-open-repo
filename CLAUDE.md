@@ -1,83 +1,20 @@
 # Claude Code — Projektregler for hca-open-repo
 
-## Faktakontrol og selvkritik
+## Faktakontrol — Wikidata/DBpedia/VIAF
 
 **Krav:** Efterprøv altid faktuelle oplysninger hentet fra det semantiske web
-(Wikidata, DBpedia, VIAF, osv.) via live opslag inden output. Udfør selvkritik
-på egne resultater, før de skrives til en fil eller præsenteres for brugeren.
-
-**Baggrund:** I en tidlig session producerede modellen 6 forkerte Wikidata Q-numre
-ud af 8 forsøg (fejlrate 75 %) ved ren hukommelsesbaseret gæt. Kun Q5686
-(Charles Dickens) og Q84 (London) var korrekte.
-
-### Procedure for Wikidata-opslag
-
-1. Brug `WebSearch` med domænefilter `wikidata.org` for hvert enkelt entitet.
-2. Læs det faktiske URL fra søgeresultatet — det indeholder det korrekte Q-nummer.
-3. Verificer at entitetsnavnet i URL-titlen matcher det forventede.
-4. Erstat aldrig et bekræftet Q-nummer med et ubekræftet hukommelsesbaseret bud.
-
-### Kendte korrekte Q-numre (verificeret)
-
-| Entitet | Q-nummer | Verificeret |
-|---------|----------|-------------|
-| Charles Dickens | Q5686 | ✓ søgning |
-| London | Q84 | ✓ søgning |
-| Bleak House (roman, 1853) | Q883305 | ✓ søgning |
-| A Christmas Carol (1843) | Q62879 | ✓ søgning |
-| Nicholas Nickleby (roman) | Q847642 | ✓ søgning |
-| Little Dorrit (roman) | Q565638 | ✓ søgning |
-| Odense (by, Danmark) | Q25331 | ✓ søgning |
-| Gad's Hill Place (Dickens' hjem) | Q5516441 | ✓ bruger |
-| Den gode Hyrde (Murillo, Prado) | Q11694421 | ✓ søgning |
-| Den hellige Familie med Fuglen (Murillo, Prado) | Q16627776 | ✓ søgning |
-| Den ubesmittede Undfangelse "La Colosal" (Murillo, Sevilla) | Q22120723 | ✓ søgning |
-| Jeune mendiant (Murillo, Louvre) | Q5659824 | ✓ søgning |
-| La Virgen de la Servilleta (Murillo) | Q2880218 | ✓ søgning |
-| Moses slaar Vand af Klippen "La Sed" (Murillo, Caridad) | Q109535214 | ✓ søgning |
-| S. S. Justa y Rufina (Murillo) | Q6120755 | ✓ søgning |
-
-For værk-Wikidata/hero-billeder i stor skala: se
-`scripts/parsers/wikidata_lookup.py` (foreslår kandidater — skriver aldrig
-selv til `data/curated/works_wikidata.csv`) og
-`docs/data-model/wikidata-hero-images.md`. Samme regel gælder der: en live
-opslag kan stadig ramme det forkerte MALERI af den rigtige kunstner (en
-kunstner malede ofte samme motiv flere gange til forskellige samlinger) —
-bekræft altid samlingen/lokaliteten, ikke kun Q-nummeret.
-
-### Kendte forkerte Q-numre (må ikke genbruges)
-
-| Entitet | Forkert Q | Årsag |
-|---------|-----------|-------|
-| Bleak House | Q219420 | Ukendt entitet |
-| A Christmas Carol | Q200773 | Ukendt entitet |
-| Nicholas Nickleby | Q527099 | Ukendt entitet |
-| Little Dorrit | Q327788 | Ukendt entitet |
-| Odense | Q3650 | Ukendt entitet |
-| Gad's Hill Place | Q5517152 | Forkert sted |
+(Wikidata, DBpedia, VIAF, osv.) via live opslag inden output — aldrig fra
+hukommelsen. Procedure, verificerede Q-numre og kendte forkerte gæt: se
+skill `wikidata-verify` (`.claude/skills/wikidata-verify/SKILL.md`).
 
 ---
 
 ## Verificering af "fix"-commits
 
 **Krav:** Tag ikke en fix-commits egen commit-besked som bevis for at den
-virker. Genudled fejlens beskrevne mekanisme mod koden, *som den er efter
-ændringen* — linje for linje — før den betragtes som løst.
-
-**Baggrund:** En commit på `facet-panel--overlay-open` diagnosticerede
-korrekt at iOS Safari fanger `position:fixed`-efterkommere, når en
-`position:sticky`-forfader har en hvilken som helst ikke-`visible`
-overflow-værdi. Commit'en fjernede derfor `overflow:hidden` fra
-`.facet-panel--overlay-open` — men `.facet-panel`s grundregel satte
-allerede `overflow-y: auto` ubetinget, uafhængigt af den klasse, så
-fælden stod stadig åben. Diagnosen var rigtig; ændringen ramte bare det
-forkerte sted. Fejlen blev først fanget ved eksplicit at blive bedt om at
-"doublecheck" — ikke ved almindelig selvkritik efter commit.
-
-**Procedure:** Efter enhver fix af en beskrevet rod-årsag (CSS, race
-conditions, off-by-one, osv.): find alle steder i den *nuværende* kode,
-der uafhængigt kan udløse samme mekanisme, ikke kun det sted der blev
-rettet. En rigtig diagnose garanterer ikke en fuldstændig rettelse.
+virker — genudled fejlens beskrevne mekanisme mod koden som den er efter
+ændringen. Procedure og et konkret eksempel (facet-panel/iOS-fælden): se
+skill `verify-fix-commit` (`.claude/skills/verify-fix-commit/SKILL.md`).
 
 ---
 
@@ -225,78 +162,8 @@ mangler).
 
 ## Claude Design — komponent-dropzone og pipeline (2026-07-01)
 
-### Konceptet
-
-UI-komponenter vedligeholdes som rene HTML-preview-filer i `design/`.
-De uploades til projektet **"HCA Dagbogsregister"** på `claude.ai/design`
-via `DesignSync`-værktøjet. Brugeren kan redigere dem visuelt i browseren
-og downloade opdaterede versioner. Den downloadede fil (pakket ind i en
-bundler-wrapper) droppes et vilkårligt sted på disk, og pipeline-scriptet
-udpakker og analyserer ændringerne.
-
-### Projektstruktur
-
-| Sti | Indhold |
-|-----|---------|
-| `design/` | Kanoniske, rene HTML-komponent-filer (commited, tracket) |
-| `scripts/design_sync/apply_component.py` | Pipeline-script |
-
-**Claude Design projekt-ID:** `782f6333-b090-40f0-a7cb-5dfae3ca588a`
-
-Komponenter (6 stk., alle grupper i Design-panelet):
-
-| Fil | Gruppe |
-|-----|--------|
-| `chips.html` | Chips & Tags |
-| `result-card.html` | Cards |
-| `facet-panel.html` | Facet Panel |
-| `page-hero.html` | Page Hero |
-| `info-block.html` | Info Block |
-| `entity-layout.html` | Entity Layout |
-
-### Design-redigerings-loop
-
-1. Åbn `claude.ai/design` → HCA Dagbogsregister → rediger en komponent
-2. Download den opdaterede HTML (filen ankommer pakket i bundler-wrapper)
-3. Drop filen et vilkårligt sted på disk
-4. Kør pipeline-scriptet (Windows PowerShell):
-   ```
-   python -X utf8 scripts/design_sync/apply_component.py sti\til\info-block.html --list-usages
-   ```
-5. Scriptet printer: CSS-variabel-ændringer, klasse-ændringer, markup-diff,
-   berørte mockup-filer
-6. Tilføj `--apply` for at skrive CSS-variabel-ændringer direkte til
-   `mockup/css/style.css`
-7. `git diff design/` viser det fulde markup-diff til manuel propagering
-8. Propagér label/markup-ændringer til de berørte mockup-sider i hånden
-
-### Hvad pipeline-scriptet gør
-
-- **Unwrapper** Claude Design bundler-format → ren HTML
-- **CSS-variabel-diff**: sammenligner `:root`-blokken med `style.css`
-  og rapporterer ændrede værdier (kan patches med `--apply`)
-- **Klasse-diff**: sammenligner komponent-klasseregler med `style.css`
-  (falske positiver kan forekomme ved kompakte CSS-one-liners i komponenten
-  — ignorer disse og validér mod `git diff style.css` i stedet)
-- **Markup-diff**: unified diff af HTML-strukturen (ekskl. `<style>`-blokken)
-  mod den committede baseline i `design/`
-- **`--list-usages`**: lister mockup-sider der bruger komponentens CSS-klasser
-
-### Kendte quirks
-
-- `--font-sans` optræder som "ændret" fordi komponent-CSS bruger en kortere
-  fallback-liste end `style.css`. Det er et skrive-artefakt, ikke en
-  designbeslutning — ignorer det med mindre du bevidst forkorter font-stakken.
-- DOMParser i browseren tilføjer `<tbody>` og kollapser whitespace — disse
-  vises i markup-diff'en men er harmløse HTML-normaliseringer.
-- `<!-- @dsCard group="…" -->` kommentaren fjernes af bundleren — det er
-  forventet adfærd.
-
-### Upload af nye/opdaterede komponenter til Claude Design
-
-Kør i en Claude Code-session (kræver DesignSync-værktøj):
-
-```
-DesignSync list_projects               → find projectId
-DesignSync finalize_plan + write_files → push opdaterede design/-filer
-```
+UI-komponenter i `design/` synkroniseres med `mockup/css/style.css` via
+Claude Design (projekt "HCA Dagbogsregister") og
+`scripts/design_sync/apply_component.py`. Fuld arbejdsgang, projekt-ID,
+komponentliste og kendte quirks: se skill `design-sync`
+(`.claude/skills/design-sync/SKILL.md`).
