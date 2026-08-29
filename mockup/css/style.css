@@ -359,18 +359,25 @@ body[data-section="hvor"] .page-hero {
    the backdrop that sits outside it — only raising the panel's own
    z-index reaches far enough up the stacking chain to win. Scoped to this
    class (rather than a permanent z-index) so the panel doesn't otherwise
-   compete with page content it isn't meant to sit above. Hides the
-   panel's own scrollbar for the duration (otherwise visible/scrollable
-   right behind the overlay, a second unrelated scroll affordance) via
-   scrollbar-width/::-webkit-scrollbar rather than overflow:hidden --
-   on iOS Safari, a position:sticky ancestor combined with ANY
-   non-visible overflow value becomes an unintended containing block for
-   position:fixed descendants, clipping the expanded facet body to the
-   panel's own bounds instead of the viewport (reported directly: the
+   compete with page content it isn't meant to sit above.
+
+   overflow-y switches to visible (not just its scrollbar hidden) for the
+   duration: on iOS Safari, a position:sticky ancestor combined with ANY
+   non-visible overflow value -- auto, hidden, scroll, or clip -- becomes
+   an unintended containing block for position:fixed descendants, which
+   clips the expanded facet body (position:fixed, see
+   .facet-group--expanded .facet-group__body below) to the panel's own
+   bounds instead of the viewport (reported directly on an iPad: the
    overlay cut off right after the filter column, hidden past the panel's
-   right edge). This keeps overflow-y:auto itself untouched. */
-.facet-panel--overlay-open { z-index: 62; scrollbar-width: none; }
-.facet-panel--overlay-open::-webkit-scrollbar { display: none; }
+   right edge). .facet-panel's base rule keeps overflow-y:auto so the
+   panel's own unexpanded content still scrolls internally the rest of
+   the time; only while a facet is expanded -- when the backdrop covers
+   the panel's own content anyway -- does that need to give way to let
+   the fixed overlay escape to the viewport. Since overflow:visible has
+   no scrollbar of its own, the earlier scrollbar-width/::-webkit-scrollbar
+   suppression (needed only for the old overflow:hidden approach) is
+   no longer necessary. */
+.facet-panel--overlay-open { z-index: 62; overflow-y: visible; }
 .facet-panel__header {
   padding: var(--sp3) var(--sp5); border-bottom: 1px solid var(--color-border);
   display: flex; align-items: center; justify-content: space-between;
