@@ -597,6 +597,27 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     sb += `</div></div>`;
   }
 
+  // 4b. GND Explorer — søgelink, ikke en identifikation, samme mønster som
+  // Biografiske opslag på personsiderne (persons.html): kun udfyldt når
+  // værket IKKE allerede har et bekræftet autoritetslink (wd) ovenfor. Se
+  // bio_search_links()/GND Explorer-skabelonen i build_persons_extra.py og
+  // docs/data-model/person-bio-search-links.md — samme term+rows URL-
+  // skabelon, her forespurgt på værkets titel + ophavsperson(er) i stedet
+  // for en persons navn+årstal.
+  if (!w.wd) {
+    const gndNames = w.authors && w.authors.length ? w.authors : (w.author ? [w.author] : []);
+    const gndQuery = [w.title].concat(gndNames).join(' ');
+    const gndUrl = 'https://explore.gnd.network/en/search?term=' +
+      encodeURIComponent(gndQuery) + '&rows=25';
+    sb += `<div class="info-block info-block--enriched"><div class="info-block__header">Autoritetssøgning<span class="info-block__tag">tilføjet</span></div>` +
+      `<div class="info-block__body"><p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">` +
+      `Søgelink til GND Explorer ud fra værkets titel og ophavsperson(er) — ikke en bekræftet identifikation af værket.</p>` +
+      `<div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">` +
+      `<a class="external-link" href="${gndUrl}" target="_blank" rel="noopener noreferrer">Søg i GND Explorer` +
+      `<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (åbner i nyt faneblad)</span></a>` +
+      `</div></div></div>`;
+  }
+
   // 5. Hyppigst samtidige steder
   if (coPlaces && coPlaces.length) {
     sb += `<div class="sidebar-box"><div class="sidebar-box__title">Hyppigst samtidige steder</div><div style="display:flex;flex-direction:column;gap:6px">`;
