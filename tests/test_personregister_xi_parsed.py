@@ -36,10 +36,16 @@ def rows():
 def test_row_count_in_expected_range(rows):
     # Not a fixed count -- the source PDF could be re-OCR'd -- but a
     # sudden large drop/spike signals the splitter broke, not a benign
-    # change (measured at 9306 during development).
-    assert 9000 <= len(rows) <= 9600, (
-        f"entry count {len(rows)} is far from the ~9306 measured baseline; "
-        "check for a splitter regression (see script docstring)"
+    # change. Originally measured at 9306; the ceiling was raised to
+    # 10400 after ~300 entries that the column-reflow splitter had
+    # fused were split apart, each confirmed against an independent
+    # source (xlsx DimPer, and the pre-segmented
+    # "Personer _ HCA_tsv.txt", which lists 10228 person rows -- so the
+    # true entry count is expected to approach that figure, not 9306).
+    assert 9000 <= len(rows) <= 10400, (
+        f"entry count {len(rows)} is outside the expected range; the register has "
+        "~10200 people per the independent reference transcription -- a count far "
+        "below that means fused entries, far above means a splitter regression"
     )
 
 

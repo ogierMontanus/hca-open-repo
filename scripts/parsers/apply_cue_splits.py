@@ -2,9 +2,19 @@
 """
 apply_cue_splits.py
 ---------------------
-Applies ONLY the rows suggest_cue_splits.py marked SAFE -- those where
-xlsx DimPer independently confirms every fragment as its own entry.
-MANUAL rows are never touched.
+Applies the rows a human marked "yes" in the review file's "split?"
+column. That column is authoritative: it overrides this pipeline's own
+SAFE/MANUAL verdict in both directions, since a person reading the
+register can confirm a boundary the scoring could not (and can reject
+one it scored highly).
+
+The review file is hand-edited, so its columns are not trusted to line
+up: n_fragments can be stale after a manual join, and fragments may
+outnumber xlsx_matches. Fragments are therefore paired to matches by
+similarity rather than by position, and a fragment that is only a page-
+reference run (e.g. "VI 128.", left over from joining split references)
+is folded back into the preceding fragment instead of becoming an
+entry of its own.
 
 Each SAFE row becomes N rows: the first keeps the original surname and
 the original row's years/description/references; each later fragment
@@ -36,6 +46,8 @@ XL_YEARS = re.compile(
     r"|(?P<b>\d{3,4})\s*[–—-]\s*(?:efter\s*)?(?P<d>\d{3,4}))\)"
 )
 PARTICLES = {"von", "van", "de", "der", "di", "le", "la", "f", "g", "kaldet", "senere"}
+# A fragment that is nothing but a reference run, e.g. "VI 128."
+REF_ONLY = re.compile(r"(?:(?:I{1,3}|IV|VI{0,3}|IX|X)\s[\d\s\-]*\d\.?\s*)+")
 REF_RUN = re.compile(r"((?:I{1,3}|IV|VI{0,3}|IX|X)\s[\d\s\-]*\d)\.\s*$")
 
 
@@ -84,6 +96,39 @@ def split_name_desc(frag: str):
     return name_text, desc, refs_raw
 
 
+def pair_matches(frags, matches):
+    """Assign each fragment its xlsx match, so a hand-edited row with
+    fewer matches than fragments still lines up. Pairs are taken in
+    order of confidence across the WHOLE row, not fragment by fragment:
+    a long leading fragment often mentions a later entry's name in its
+    description ("Gregoire ... Gregor VII ..."), so first-come matching
+    would let it steal that entry's match. Scoring the fragment's name
+    head rather than its full text, and settling the most confident
+    pairs first, keeps each name with its own entry."""
+    import difflib
+
+    scored = []
+    for fi, f in enumerate(frags):
+        head = f.split(",")[0].strip().lower()
+        for mi, m in enumerate(matches):
+            m_head = m.split(",")[0].strip().lower()
+            scored.append((
+                difflib.SequenceMatcher(None, head, m_head).ratio(),
+                fi, mi,
+            ))
+    scored.sort(reverse=True)
+
+    out = [""] * len(frags)
+    used_f, used_m = set(), set()
+    for _, fi, mi in scored:
+        if fi in used_f or mi in used_m:
+            continue
+        out[fi] = matches[mi]
+        used_f.add(fi)
+        used_m.add(mi)
+    return out
+
+
 def parse_refs(raw: str):
     """'VII 343 347 349- 51.' -> ('VII 343 347 349-51.', 'VII:343;...')"""
     out = []
@@ -104,7 +149,10 @@ def parse_refs(raw: str):
 
 def main():
     with open(REVIEW_TSV, encoding="utf-8") as f:
-        safe = [r for r in csv.DictReader(f, delimiter="\t") if r["verdict"] == "SAFE"]
+        review = list(csv.DictReader(f, delimiter="\t"))
+    if "split?" not in review[0]:
+        raise SystemExit("review file has no 'split?' column -- nothing to apply")
+    safe = [r for r in review if r["split?"].strip().lower() == "yes"]
 
     with open(PARSED_TSV, encoding="utf-8") as f:
         rows = list(csv.DictReader(f, delimiter="\t"))
@@ -119,8 +167,23 @@ def main():
             out.append(row)
             continue
 
-        frags = spec["fragments"].split(" || ")
-        matches = spec["xlsx_matches"].split(" || ")
+        frags = [f.strip() for f in spec["fragments"].split(" || ") if f.strip()]
+        matches = [m.strip() for m in spec["xlsx_matches"].split(" || ") if m.strip()]
+
+        # Fold a reference-only fragment back into the entry it belongs
+        # to: it is a continuation of that entry's page references, not
+        # a person.
+        merged = []
+        for f in frags:
+            if merged and REF_ONLY.fullmatch(f):
+                merged[-1] = f"{merged[-1]} {f}"
+            else:
+                merged.append(f)
+        frags = merged
+
+        # Pair each fragment with its best xlsx match rather than by
+        # position -- hand edits leave the two columns unaligned.
+        matches = pair_matches(frags, matches)
 
         # Field ownership in a fused row: the parser matched the year
         # parenthesis of the LAST entry, so 06/07 (years), 09
@@ -188,7 +251,7 @@ def main():
         w.writeheader()
         w.writerows(out)
 
-    print(f"applied {len(safe)} SAFE splits -> {n_new} new entries")
+    print(f"applied {len(safe)} split?=yes rows -> {n_new} new entries")
     print(f"rows: {len(rows)} -> {len(out)}")
 
 
