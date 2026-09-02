@@ -151,7 +151,12 @@ NAME_HEAD_NOCOMMA = (
     r"(?:[A-ZÆØÅÖÜ][a-zæøåöäü]+)"
     r"(?:\s(?=[IVX]+,|\[|\((?:ca\.\s*)?d?\.?\s*\d{3,4})"
     r"|\s[A-ZÆØÅÖÜ][a-zæøåöäü]+\s(?=\((?:ca\.\s*)?\d{3,4})"
-    r"|\s(?:af|von|van|de|der|di|le|la)\s[A-ZÆØÅÖÜ][a-zæøåöäü]+\s(?=\((?:ca\.\s*)?d?\.?\s*\d{3,4}))"
+    r"|\s(?:af|von|van|de|der|di|le|la)\s[A-ZÆØÅÖÜ][a-zæøåöäü]+\s(?=\((?:ca\.\s*)?d?\.?\s*\d{3,4})"
+    # "Agrippina d.Æ. (død 33)" -- a generational suffix (den Ældre /
+    # den Yngre) between the name and its year-parenthesis. The year
+    # here may be introduced by a spelled-out "død", not just the
+    # abbreviated "d.", and may be as short as 2 digits (year 33).
+    r"|\s+d\.\s?[ÆY]\.?\s*(?=\((?:ca\.\s*)?(?:d\.|død)?\s*\d{2,4}))"
 )
 NAME_HEAD = r"(?:" + NAME_HEAD_COMMA + r"|" + NAME_HEAD_NOCOMMA + r")"
 
@@ -234,7 +239,7 @@ SUBENTRY_RE = re.compile(r"^[–—\-]\s*")  # leading en/em-dash or hyphen: con
 # closing paren) was read as the whole surname.
 NAME_COMMA_RE = re.compile(
     r"^(?P<surname>[^,(]+?)"
-    r"(?:,\s*(?P<rest>.*)$|\s*(?=\((?:ca\.\s*)?\d{3,4})(?P<rest2>.*)$)"
+    r"(?:,\s*(?P<rest>.*)$|\s*(?=\((?:ca\.\s*)?(?:d\.|død)?\s*\d{2,4})(?P<rest2>.*)$)"
 )
 # The year-parenthesis does not always sit directly after the surname
 # comma -- given names/titles/lengthy noble styling can come first
@@ -250,7 +255,7 @@ NAME_COMMA_RE = re.compile(
 # expanded via the same abbreviation rule as references (see
 # expand_range), not treated as a literal small number.
 YEAR_RE = re.compile(
-    r"^(?P<lead>.{0,260}?)\(\s*(?:d\.\s*(?P<death_only>\d{3,4})"
+    r"^(?P<lead>.{0,260}?)\(\s*(?:(?:d\.|død)\s*(?P<death_only>\d{2,4})"
     r"|(?:ca\.\s*)?(?P<birth>\d{3,4})\s*[–—\-]\s*(?P<death>\d{2,4}|\?)"
     r"|(?P<birth_only>\d{3,4}))\s*(?P<fchr>f\.\s*Chr\.)?\)\s*,?\s*"
 )
