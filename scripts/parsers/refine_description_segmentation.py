@@ -49,7 +49,7 @@ PARSED_TSV = os.path.join(ROOT, "data", "parsed", "personregister_xi_parsed.tsv"
 # A genuine life span: a range, an explicit death, or a BC year.
 LIFE = (
     r"\(\s*(?P<inner>"
-    r"(?:d\.|død)\s*(?P<dy>\d{3,4})(?P<age>,\s*\d{1,3}\s*[åa]r\s*gl\.?)?"
+    r"(?:d\.|død)\s*(?P<dy>\d{3,4})(?P<age>,\s*\d{1,3}\s*(?:år|Aa?r)\s*g[li]\.?)?"
     r"|(?:ca\.\s*)?(?P<b>\d{3,4})(?P<bfrac>/\d{2,4})?\s*(?:\(\?\))?\s*"
     r"[–—-]\s*(?:ca\.\s*|efter\s*)?(?P<d>\d{2,4})"
     r"|(?:ca\.\s*)?(?P<bc>\d{3,4})\s*f\.\s*Chr\."
