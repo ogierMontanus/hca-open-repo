@@ -208,5 +208,13 @@ def test_column_sequence_mostly_increasing_within_volume(rows):
 def test_no_leading_section_divider_in_raw_text(rows):
     # Regression guard for the "A. Åberg" bug: a lone alphabet-section
     # marker must never survive as part of an entry's own text.
-    bad = [r["01_entry_id"] for r in rows if re.match(r"^[A-ZÆØÅ]\.\s", r["13_raw_text"])]
+    #
+    # An entry whose given names START with initials is not this bug --
+    # "Nørgaard, E. A. (død 1891)" is filed under N and legitimately
+    # begins "E. A.". Only a single initial followed by a real word (the
+    # divider letter plus the surname it introduced) counts.
+    bad = [
+        r["01_entry_id"] for r in rows
+        if re.match(r"^[A-ZÆØÅ]\.\s+[A-ZÆØÅÖÜ][a-zæøåöäü]", r["13_raw_text"])
+    ]
     assert not bad, f"entries still carry a leading section-divider: {bad[:10]}"
