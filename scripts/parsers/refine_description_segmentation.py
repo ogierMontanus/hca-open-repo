@@ -56,7 +56,11 @@ LIFE = (
     r")\s*(?P<fchr>f\.\s*Chr\.)?\s*\)"
 )
 LIFE_AT_START = re.compile(r"^" + LIFE)
-NAME_THEN_LIFE = re.compile(r"^(?P<name>[A-ZÆØÅÖÜ][^,()]{0,60}?)\s(?P<life>" + LIFE + r")")
+# The name part may itself contain commas -- Danish register names carry
+# a maiden name ("Elisa, f. Hallady") or a title ("Maria Elizabeth,
+# Lady, f. Grevinde ...") before the life span. Stop at the first
+# parenthesis instead of at the first comma.
+NAME_THEN_LIFE = re.compile(r"^(?P<name>[A-ZÆØÅÖÜ][^()]{0,70}?)\s(?P<life>" + LIFE + r")")
 GIVEN_LIFE = re.compile(LIFE)
 
 # Leading phrases that are titles/roles, never given names.
@@ -71,8 +75,22 @@ SIBLING_GROUP = re.compile(r"\(\d{3,4}\s*[–—-]\s*\d{2,4}\)[^()]*\(\d{3,4}\s*
 
 
 def looks_like_title(phrase: str) -> bool:
-    words = [w.strip(".,").lower() for w in phrase.split()]
-    return any(w in TITLE_WORDS for w in words)
+    """True only when the phrase is a bare title/role with no personal
+    name in it ("Tysk-romersk Kejser", "Fyrste"). A real name followed
+    by a title or a maiden name is NOT a title -- "Elisa, f. Hallady"
+    and "Maria Elizabeth, Lady, f. Grevinde ..." are given-name fields,
+    so only the FIRST comma-unit is examined."""
+    # A relation clause ("Datter af Heinrich Z.", "Søn af Hans P.")
+    # describes the person, it does not name them.
+    if re.match(r"^(?:datter|søn|broder|søster|enke|hustru|moder|fader)\s+(?:af|efter)\b",
+                phrase.strip(), re.IGNORECASE):
+        return True
+    first_unit = phrase.split(",")[0]
+    words = [w.strip(".,").lower() for w in first_unit.split()]
+    return bool(words) and all(
+        w in TITLE_WORDS or not w.isalpha() or w in ("af", "til", "von", "den", "det")
+        for w in words
+    )
 
 
 def years_from(m) -> tuple:
