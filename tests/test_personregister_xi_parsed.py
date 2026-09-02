@@ -42,10 +42,15 @@ def test_row_count_in_expected_range(rows):
     # source (xlsx DimPer, and the pre-segmented
     # "Personer _ HCA_tsv.txt", which lists 10228 person rows -- so the
     # true entry count is expected to approach that figure, not 9306).
-    assert 9000 <= len(rows) <= 10400, (
-        f"entry count {len(rows)} is outside the expected range; the register has "
-        "~10200 people per the independent reference transcription -- a count far "
-        "below that means fused entries, far above means a splitter regression"
+    # Upper bound raised again after importing the 958 people the
+    # reference transcription lists and this parse lacked. Our count now
+    # legitimately EXCEEDS the reference's 10228, because we additionally
+    # carry ~390 "se:" cross-reference rows as entries of their own,
+    # which the reference does not.
+    assert 9000 <= len(rows) <= 10800, (
+        f"entry count {len(rows)} is outside the expected range; expected roughly "
+        "10200 people plus ~390 cross-reference rows -- far below means fused "
+        "entries, far above means a splitter regression"
     )
 
 
