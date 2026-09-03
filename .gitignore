@@ -21,6 +21,12 @@ mockup/data/timeline-index.js
 # build_*_extra.py scripts. work.html / person.html / place.html fall
 # back to their curated WORKS / PERSONS / PLACES dicts (and a sensible
 # default Reg) when these are absent.
+#
+# persons-extra.js stays ignored deliberately (4 MB, regenerated in
+# seconds). Regressions in it are caught by tests/test_persons_extra_gate.py
+# instead — it asserts the entityType gate still keeps families, firms and
+# the register's dog out of the person facets, and that the population has
+# not collapsed. See docs/data-model/person-consolidation-run-2026-09-03b.md.
 mockup/data/works-extra.js
 mockup/data/persons-extra.js
 mockup/data/places-extra.js

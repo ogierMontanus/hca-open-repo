@@ -777,9 +777,22 @@ body[data-section="hvor"] .page-hero {
 .entity-sidebar .entity-ref-item .chip { white-space: normal; }
 
 /* === Entity Page Layout === */
+/* Margin is an explicit 5vw rather than `auto`: the grid sits inside a
+   .container that is already centred, so `auto` collapsed to 0 and the
+   entity columns ran flush to the container padding. A viewport-relative
+   inset keeps the same breathing room at every width. */
+/* Main column is capped at 65ch rather than left as 1fr: the prose could
+   otherwise run past a comfortable reading measure on wide/laptop screens.
+   Capping the whole grid's width instead (e.g. via max-width on
+   .entity-layout) backfires — the fixed 290px sidebar eats a bigger share
+   of a narrower grid, so the *text* column would shrink hardest exactly
+   where the grid is capped, the opposite of the goal. minmax(0, 65ch) (not
+   a bare 65ch) keeps the track from overflowing the grid on narrow
+   viewports before it hands off to the stacked layout. */
 .entity-layout {
-  display: grid; grid-template-columns: 1fr 290px;
+  display: grid; grid-template-columns: minmax(0, 65ch) 290px;
   gap: var(--sp8); align-items: start;
+  margin: 0 5vw;
 }
 .entity-main { display: flex; flex-direction: column; gap: var(--sp8); }
 .entity-sidebar {
