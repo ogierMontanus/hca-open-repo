@@ -37,6 +37,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 import urllib.parse
 from collections import Counter
 
@@ -48,6 +49,7 @@ ADJECTIVES = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
 UMBRELLAS  = os.path.join(ROOT, "data", "curated", "nation_umbrellas_da.csv")
 GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
 ROLE       = os.path.join(ROOT, "data", "normalized", "person_role.csv")
+ENTITY_TYPES = os.path.join(ROOT, "data", "curated", "person_entity_types.tsv")
 WIKIDATA   = os.path.join(ROOT, "data", "curated", "persons_wikidata.csv")
 BREVE      = os.path.join(ROOT, "data", "curated", "breve_person_crosswalk.csv")
 OUT        = os.path.join(ROOT, "mockup", "data", "persons-extra.js")
@@ -359,17 +361,70 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     return links
 
 
+def _entity_key(label: str) -> str:
+    """Normalised label, for matching entities.csv against master2.
+
+    The two sources have incompatible id spaces (entities.csv uses Reg…,
+    master2 uses positional PerXI…, and BOTH renumber), so the label is
+    what they share. Years are dropped because the two transcriptions
+    punctuate them differently.
+    """
+    s = "".join(c for c in unicodedata.normalize("NFKD", label)
+                if not unicodedata.combining(c))
+    s = re.sub(r"\([^)]*\)", "", s.lower())
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s]", " ", s)).strip()
+
+
+def load_non_individuals() -> dict:
+    """{normalised label: entityType} for every master2 row that is NOT an
+    individual — families, firms, groups, the register's one dog.
+
+    Assigning a gender or a nationality to `Collin, Familien` is a category
+    error, not a hard edge case, so those rows must not reach the person
+    facets. The gate lives in the enrichment repo (see
+    classify_entity_type.py); this is the consumer side of it.
+
+    Degrades to {} when master2 is absent, matching how the other optional
+    enrichments behave — but says so loudly, because a silently missing
+    gate looks exactly like a working one.
+    """
+    if not os.path.exists(ENTITY_TYPES):
+        return {}
+    out = {}
+    with open(ENTITY_TYPES, encoding="utf-8") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            kind = (r.get("29_entityType") or "").strip()
+            if kind and kind != "individual":
+                key = _entity_key(r.get("RegistryTitle", ""))
+                if key:
+                    out[key] = kind
+    return out
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
 
     print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
-    persons = []
+    non_individuals = load_non_individuals()
+    persons, gated = [], []
     with open(ENTITIES, encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            if r["entity_type"] == "person":
-                persons.append(r)
+            if r["entity_type"] != "person":
+                continue
+            kind = non_individuals.get(_entity_key(r.get("label", "")))
+            if kind:
+                gated.append((r.get("label", ""), kind))
+                continue
+            persons.append(r)
     print(f"  {len(persons):,} persons")
+    if gated:
+        print(f"  {len(gated)} excluded as non-individuals (29_entityType):")
+        for label, kind in gated:
+            print(f"    {label}  [{kind}]")
+    elif not non_individuals:
+        print("  [!] no entityType data — non-individuals are NOT gated "
+              "(see docs/data-model/person-master-files.md)")
 
     ref_count: Counter[str] = Counter()
     if os.path.exists(REFS):
