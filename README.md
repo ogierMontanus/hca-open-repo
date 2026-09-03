@@ -1,4 +1,4 @@
-# Cultural Entity Navigation Platform
+# Andersen's Who - What - Where? An enriched digitized version of indexes to Hans Christian Andersen's diaries (1825-75)
 
 **Live mockup:** https://ogiermontanus.github.io/hca-open-repo/
 
