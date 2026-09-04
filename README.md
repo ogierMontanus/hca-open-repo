@@ -95,7 +95,7 @@ Version 1 af *Andersen's* *Hvem Hvad Hvor* har modtaget gavmild støtte fra Sve
 
 ## Sådan citerer du udgaven
 
-**Berg, Holger, Søren Dal Hansen og Ole Lebech.** ***Andersen's Hvem Hvad Hvor*****.** **H.C. Andersen Centret, Syddansk Universitet, Odense, 2026.**
+**Berg, Holger, Søren Dal Hansen og Ole Lebech.** ***Andersen's Hvem Hvad Hvor*****.** **H.C. Andersen Centret, Syddansk Universitet, Odense, 2026. Version 0.9: https://ogiermontanus.github.io/hca-open-repo/mockup/index.html**
 
 En beriget udgave af:
 
