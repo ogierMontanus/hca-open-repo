@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About HCA Open Repository — Our Sources</title>
+  <title>Andersen's Hvem Hvad Hvor — About the Project</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -30,11 +30,11 @@
       <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
         <a href="index_en.html">Home</a>
         <span class="breadcrumb__sep">›</span>
-        <span class="breadcrumb__current">Our Sources</span>
+        <span class="breadcrumb__current">About</span>
       </nav>
-      <h1>Our Sources</h1>
+      <h1>Andersen's Hvem Hvad Hvor</h1>
       <div class="page-hero__meta">
-        <span>About the project — reproduced from README.md in the repository</span>
+        <span>About the project, source material and method</span>
       </div>
     </div>
   </div>
@@ -43,129 +43,239 @@
     <div class="container">
       <div style="max-width:760px">
 
-        <p style="font-size:0.82rem;color:var(--color-text-muted);margin-bottom:var(--sp5)">
-          This page reproduces the project's
-          <code style="font-size:0.85em">README.md</code> and is updated whenever the source text changes.
-          <a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/README.md"
-             target="_blank" rel="noopener noreferrer">View README.md on GitHub<span
-             class="external-link__icon" aria-hidden="true">↗</span><span
-             class="sr-only"> (opens in a new tab)</span></a>
-        </p>
-
-        <!-- About the project -->
+        <!-- Intro -->
         <div style="background:linear-gradient(135deg,var(--color-accent-light),var(--color-surface));border:1px solid var(--color-accent);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
-          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3);color:var(--color-accent)">Cultural Entity Navigation Platform</h2>
           <p style="font-size:0.9rem;line-height:1.7;margin-bottom:var(--sp3)">
-            A modular web platform for exploring named entities across cultural collections —
-            museums, libraries, archives, theaters, and film collections — through institutionally
-            familiar navigation and semantically rich cross-linking.
+            <strong>Andersen's Hvem Hvad Hvor</strong> ("Andersen's Who What Where") registers
+            proper names in H.C. Andersen's works. Its foundation is the people, artworks and
+            places Andersen himself mentions:
           </p>
-          <p style="font-size:0.9rem;line-height:1.7;margin:0">
-            <a class="external-link" href="https://ogiermontanus.github.io/hca-open-repo/"
-               target="_blank" rel="noopener noreferrer">View the live mockup<span
-               class="external-link__icon" aria-hidden="true">↗</span><span
-               class="sr-only"> (opens in a new tab)</span></a>
-          </p>
+          <ul style="font-size:0.9rem;line-height:1.8;margin:0;padding-left:1.2em">
+            <li>the people he meets (<strong>who</strong> — <em>hvem</em>)</li>
+            <li>the artworks he mentions (<strong>what</strong> — <em>hvad</em>)</li>
+            <li>the places he describes (<strong>where</strong> — <em>hvor</em>)</li>
+          </ul>
         </div>
 
-        <!-- Vision -->
+        <!-- Version 1 -->
         <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
-          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Vision</h2>
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Version 1</h2>
           <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
-            Cultural heritage is institutionally fragmented, but researchers think across
-            boundaries. This platform preserves the recognizable structures of individual
-            institutions while enabling semantic traversal through shared named entities
-            (persons, places, works, events, themes).
+            Version 1 of <em>Andersen's Hvem Hvad Hvor</em> registers mentions in H.C. Andersen's
+            diaries. The project builds on the ten diary volumes published in print between
+            <strong>1971–1977</strong>, together with the two accompanying index volumes:
+          </p>
+          <ul style="font-size:0.9rem;line-height:1.8;color:var(--color-text-muted);margin-bottom:var(--sp3);padding-left:1.2em">
+            <li><strong>Volume XI</strong>, <em>Personregister</em> (Index of Persons), 1977</li>
+            <li><strong>Volume XII</strong>, <em>Værk-, sag- og stedregister</em> (Index of Works, Subjects and Places), 1976</li>
+          </ul>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            The index volumes are central, because they gather and systematize the named-entity
+            material from the ten diary volumes. Below, the project's setting, source material and
+            purpose are described under the headings <strong>where</strong>, <strong>what</strong>
+            and <strong>why</strong>. The description is supplemented with information on
+            <strong>how</strong> the material has been digitized.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            As noted, Version 1 builds on the diaries. Similar indexes exist for, among other
+            things, Andersen's correspondence and his printed works, published in 18 volumes by
+            the Danish Society for Language and Literature (Det Danske Sprog- og
+            Litteraturselskab). These works, too, are packed with information about people,
+            personal names, place names and artworks.
           </p>
           <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin:0">
-            Architecture evolves iteratively: <strong>CSV-first → relational → semantic graph</strong>.
+            At present, researchers interested in a given place or a particular artist must
+            therefore turn to quite a number of different sources to build up their knowledge.
+            Digitization can hopefully connect these data silos in the longer term, making it
+            possible to search across the various indexes and groups of works.
           </p>
         </div>
 
-        <!-- Repository structure -->
+        <!-- 1. Where? -->
         <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
-          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Repository Structure</h2>
-          <div style="overflow-x:auto">
-            <pre style="font-family:monospace;font-size:0.78rem;line-height:1.6;color:var(--color-text-muted);background:var(--color-bg);border-radius:var(--radius-md);padding:var(--sp4);margin:0;white-space:pre">ai-context/                   # Context files for AI coding agents and project continuity
-  coding_agent_plan.md        # Technical architecture and implementation guidance
-  project_memory_recap.md     # Project history, intellectual foundation, long-term vision
-
-docs/                         # Human-facing documentation
-  roadmap.md                  # Phased implementation roadmap (phases 1–5)
-  data-model/                 # WEMI/FRBR rationale, relation tables, source-data conventions
-  pipeline/                   # Five-stage conversion pipeline from raw register to normalized CSV
-  inspiration/
-    sampo-analysis.md         # Analysis of the Finnish SAMPO ecosystem as design reference
-
-data/                         # Editorial data (raw, normalized, derived, vocabularies)
-scripts/                      # Normalization, ingestion, and export scripts
-schemas/                      # JSON schemas, CSV field specs, entity/relation definitions
-backend/                      # API layer
-frontend/                     # Web interface
-tests/</pre>
-          </div>
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">1. Where?</h2>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            The work is carried out at the <strong>Hans Christian Andersen Centre, University of
+            Southern Denmark, Odense</strong>.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            <strong>Holger Berg</strong> is principally responsible for the digitization.
+            Assisting him are <strong>Søren Dall-Hansen</strong> and <strong>Ole Lebech</strong>.
+            The two citizen scientists work as volunteers and have backgrounds as, respectively, a
+            surveyor and an IT consultant.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin:0">
+            The project is thus anchored in a research environment, while also drawing on skills
+            in digitization and broad accessibility. This combination is necessary to turn the
+            printed indexes and diaries into material that can be searched and cross-linked.
+          </p>
         </div>
 
-        <!-- Key documents -->
+        <!-- 2. What? -->
         <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
-          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Key Documents</h2>
-          <div style="overflow-x:auto">
-            <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
-              <tbody>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/ai-context/coding_agent_plan.md" target="_blank" rel="noopener noreferrer">ai-context/coding_agent_plan.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Architecture, data model, tech stack, guiding principles for coding agents</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/ai-context/project_memory_recap.md" target="_blank" rel="noopener noreferrer">ai-context/project_memory_recap.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Origin, intellectual problem, conceptual evolution</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/roadmap.md" target="_blank" rel="noopener noreferrer">docs/roadmap.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Phased roadmap from data encoding through frontend prototype</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/inspiration/sampo-analysis.md" target="_blank" rel="noopener noreferrer">docs/inspiration/sampo-analysis.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">UI/UX patterns drawn from the Finnish SAMPO portals</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/inspiration/query-builder-survey.md" target="_blank" rel="noopener noreferrer">docs/inspiration/query-builder-survey.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Survey of open-source query-builder modules (GLAM/SAMPO, SPARQL/SQL GUIs, relational, library APIs) with ranked picks for Phase A and Phase B</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/star-schema.md" target="_blank" rel="noopener noreferrer">docs/data-model/star-schema.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Star-schema target — dimensions, facts, the Power Pivot MVP, and the road to a Postgres warehouse</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/postgresql-migration.md" target="_blank" rel="noopener noreferrer">docs/data-model/postgresql-migration.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Signpost: the PostgreSQL schema draft has moved to <a class="external-link" style="display:inline" href="https://github.com/ogiermontanus/nosql-hca-open-repo" target="_blank" rel="noopener noreferrer">nosql-hca-open-repo</a> for continued drafting</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/wemi-and-relations.md" target="_blank" rel="noopener noreferrer">docs/data-model/wemi-and-relations.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Work / Expression boundary, alias vs. relation, hybrid relational + JSONB design</td>
-                </tr>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/source-data-characteristics.md" target="_blank" rel="noopener noreferrer">docs/data-model/source-data-characteristics.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Printed-index conventions a parser must handle (parens, names, "se:" / "Se ogsaa:", special tokens)</td>
-                </tr>
-                <tr>
-                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/pipeline/stages.md" target="_blank" rel="noopener noreferrer">docs/pipeline/stages.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
-                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Six-stage conversion pipeline from "raw/HCA-Repository V*.xlsx" to normalized CSVs and on to the star-schema model</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">2. What?</h2>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            Andersen's surviving diaries are held at the <strong>Royal Danish Library</strong>
+            (Det Kongelige Bibliotek). The project's primary basis is the twelve volumes published
+            by the <strong>Danish Society for Language and Literature, G.E.C. Gads Forlag</strong>.
+          </p>
 
-        <!-- Core principles -->
-        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6)">
-          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Core Principles</h2>
-          <ul style="font-size:0.9rem;line-height:1.9;color:var(--color-text-muted);margin:0;padding-left:1.2em">
-            <li><strong>Institution-first navigation</strong>: users enter through familiar cultural institutions, not abstract ontology</li>
-            <li><strong>Entity-centered semantics</strong>: named entities are the connective layer beneath the institutional surface</li>
-            <li><strong>Gradual enrichment</strong>: start CSV-simple, evolve toward graph-oriented infrastructure</li>
-            <li><strong>AI-assisted development</strong>: repository and documentation are designed for collaboration with coding agents</li>
+          <h3 style="font-size:0.95rem;margin-bottom:var(--sp2)">The printed edition</h3>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            <em>H.C. Andersens dagbøger I–X</em> (H.C. Andersen's Diaries I–X), together with the
+            two index volumes <em>XI</em> and <em>XII</em>, were published between
+            <strong>1971–1977</strong> by the Danish Society for Language and Literature at G.E.C.
+            Gads Forlag. A photographic reprint was published in paperback in 1995–96.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            The transcription of the original diary manuscripts, held at the Royal Danish Library,
+            and the preparation of the notes etc., were carried out by <strong>Tue Gad</strong>
+            and <strong>Kirsten Weber</strong> of the Royal Danish Library's Department of
+            Manuscripts, together with <strong>Helga Vang Lauridsen</strong>, who was likewise
+            employed there. The two index volumes were compiled by <strong>Helge
+            Topsøe-Jensen</strong>.
+          </p>
+
+          <h3 style="font-size:0.95rem;margin-bottom:var(--sp2)">The Royal Danish Library's digital edition</h3>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            The first digital edition was published in <strong>2004</strong>. This, too, was the
+            result of a larger collaboration and was led by <strong>Bruno Svindborg</strong> of
+            the Department of Manuscripts.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            The current digital edition, from <strong>2024</strong>, is a reissue of the
+            technically outdated 2004 digital edition and contains the ten proper diary volumes as
+            digital text together with facsimiles and illustrations. The project was led by
+            <strong>Bo Krantz Simonsen</strong>. The two index volumes were included, untranscribed,
+            in the 2004 edition, but were left out of the 2024 edition.
+          </p>
+
+          <h3 style="font-size:0.95rem;margin-bottom:var(--sp2)">Rønlev's digitization</h3>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            Around 2022, all twelve volumes were scanned for the Danish Society for Language and
+            Literature by <strong>Claus Rønlev</strong>. Rønlev's digitizations are available as
+            PDF files.
+          </p>
+          <ul style="list-style:none;margin:0 0 var(--sp4);padding:0;display:grid;gap:6px">
+            <li><a class="external-link" href="https://www.ronlev.dk/bibliotek/3408.pdf" target="_blank" rel="noopener noreferrer">Volume XI – Personregister, 1977 – Rønlev<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+            <li><a class="external-link" href="https://www.ronlev.dk/bibliotek/3409.pdf" target="_blank" rel="noopener noreferrer">Volume XII – Værk-, sag- og stedregister, 1976 – Rønlev<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
           </ul>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            The same volumes are also available as facsimiles on Tekstnet:
+          </p>
+          <ul style="list-style:none;margin:0 0 var(--sp4);padding:0;display:grid;gap:6px">
+            <li><a class="external-link" href="https://tekstnet.dk/facs/andersen-hc_dagboeger_11/andersen-hc_dagboeger_11.pdf" target="_blank" rel="noopener noreferrer">Volume XI – Personregister, 1977 – Tekstnet<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+            <li><a class="external-link" href="https://tekstnet.dk/facs/andersen-hc_dagboeger_12/andersen-hc_dagboeger_12.pdf" target="_blank" rel="noopener noreferrer">Volume XII – Værk-, sag- og stedregister, 1976 – Tekstnet<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></li>
+          </ul>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            Thorough OCR recognition was carried out, and Rønlev's material thus forms the basis
+            for an improved digital edition of index volumes XI and XII. As part of the project,
+            the OCR text has been reviewed and corrected.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            For the ten diary volumes, we use the Royal Danish Library's two versions together
+            with versions that <strong>Dan Andersen of Odense City Museums</strong> has prepared
+            for his own use and made available.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin:0">
+            The digitization thus builds on several layers of source material: the printed
+            volumes, the Royal Danish Library's digital edition, Rønlev's scans and OCR
+            processing, and the subsequent manual corrections. The purpose of gathering and
+            processing this material is to create a more reliable and usable basis for
+            registering the people, artworks and places in Andersen's diaries.
+          </p>
+        </div>
+
+        <!-- 3. Why? -->
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">3. Why?</h2>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            The index volumes were compiled by the distinguished H.C. Andersen scholar
+            <strong>Henrik Topsøe Jensen</strong>. We do not reproduce everything from the index
+            volumes and therefore do not include his articles, among them <em>En
+            registerarbejder siger farvel</em> ("An Index-Maker Says Farewell"). Also omitted are
+            the preface, the subject index and the family trees.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            In Volume XII, Topsøe-Jensen regretted that the financial costs and his advanced age
+            prevented the preparation of definitive annotations for the ten-volume edition. The
+            index was therefore meant to serve as a kind of running commentary on the named-entity
+            material. Our presentation of the diaries brings that material together with each
+            page.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            In the printed edition, there are considerable costs attached to every lookup. For
+            that reason, Jensen italicized the page numbers he judged most significant. In the
+            digital edition, the italics have been omitted, because the information can be found
+            directly and connected with a single click. That is one of the main purposes of the
+            digitization: to make the material easier to search and to shorten the distance
+            between individual pieces of information.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            The digitization also makes it possible to connect different types of named-entity
+            material across the volumes. A user interested in an artist such as
+            <strong>Michelangelo</strong> can, for example, cross-reference the artworks Andersen
+            saw and mentioned in Volume XII with the places where Michelangelo is mentioned as a
+            person in Volume XI.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin:0">
+            In this way, <em>Andersen's Hvem Hvad Hvor</em> carries forward the original purpose
+            of the indexes, while extending it with digital possibilities for searching, linking
+            and comparison. Visualizations of places with known geocoordinates are one such
+            targeted attempt. The digitized version consistently distinguishes between the
+            index's original content and our enrichments, corrections and cross-links.
+          </p>
+        </div>
+
+        <!-- 4. Who? -->
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">4. Who?</h2>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            Our work builds on the many major efforts made over the years by <strong>Henrik
+            Topsøe Jensen</strong>, the <strong>Danish Society for Language and
+            Literature</strong>, the <strong>Royal Danish Library</strong>, and volunteers
+            including <strong>Claus Rønlev</strong>, <strong>Ane Grum-Svendsen</strong> and
+            <strong>Dan Andersen</strong>.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            We thank everyone who has contributed to the foundation of this edition. We publish
+            our work under the <strong>Creative Commons Attribution (CC BY)</strong> licence. This
+            allows future researchers and users to build on the material, easing and enriching
+            further research.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin:0">
+            Version 1 of <em>Andersen's Hvem Hvad Hvor</em> has received generous support from the
+            Svend Grundtvig and Axel Olrik Foundation (Svend Grundtvigs og Axel Olriks Legat).
+          </p>
+        </div>
+
+        <!-- Citation -->
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">How to cite this edition</h2>
+          <p style="font-size:0.9rem;line-height:1.7;margin-bottom:var(--sp4)">
+            <strong>Berg, Holger, Søren Dall-Hansen and Ole Lebech. <em>Andersen's Hvem Hvad
+            Hvor</em>. H.C. Andersen Centre, University of Southern Denmark, Odense, 2026.</strong>
+          </p>
+          <p style="font-size:0.85rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp2)">
+            An enriched edition of:
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            <strong>Topsøe Jensen, H. <em>Personregister</em>, bind XI, 1977, samt <em>Værk-,
+            sag- og stedregister</em>, bind XII, 1976. Copenhagen: Det Danske Sprog- og
+            Litteraturselskab.</strong>
+          </p>
+          <p style="font-size:0.85rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp2)">
+            The edition also draws on the Royal Danish Library's digital edition of:
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp4)">
+            <strong>H.C. Andersens dagbøger I–X. Det Kongelige Bibliotek. First digital edition,
+            2004. Reissued as EPUB3, 2024.</strong>
+          </p>
+          <p style="font-size:0.85rem;line-height:1.7;color:var(--color-text-muted);margin:0">
+            It further draws on Rønlev's digitizations of the printed indexes and the other
+            volumes, as well as the text and facsimile editions made available by the Danish
+            Society for Language and Literature via Tekstnet.dk.
+          </p>
         </div>
 
       </div>
@@ -177,9 +287,9 @@ tests/</pre>
 <footer class="site-footer">
   <div class="container" style="display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp3)">
     <span>
-      Prepared by citizen scientists in collaboration with
-      <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, University of Southern Denmark, Odense</a>
-      &nbsp;·&nbsp; <a href="om_en.html" style="color:inherit">Our Sources</a>
+      Prepared by citizen scientists in collaboration with the
+      <a href="https://www.sdu.dk/hca" style="color:inherit">Hans Christian Andersen Centre, University of Southern Denmark, Odense</a>
+      &nbsp;·&nbsp; <a href="om_en.html" style="color:inherit">About</a>
     </span>
     <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer"
        style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;opacity:0.85" title="Creative Commons Attribution 4.0 International">
