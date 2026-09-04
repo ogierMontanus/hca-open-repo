@@ -140,7 +140,10 @@ def emit_resolved(master_rows, ok):
             desc = f"{wording} {target}"
             printed = row["09_description"].strip().rstrip(".")
             if printed:
-                desc += f'. Registret: »{printed}«'
+                # A target ending in an initial ("Hasebroek, J. P.") already
+                # carries its own period; don't double it.
+                sep = "" if desc.endswith(".") else "."
+                desc += f'{sep} Registret: »{printed}«'
             desc += f". Rettet efter {surname_change['source']}, {surname_change['date']}."
 
             xref = {c: "" for c in fieldnames}

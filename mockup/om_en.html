@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About HCA Open Repository — Our Sources</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="om.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="om_en.html" class="active">EN</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index_en.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Our Sources</span>
+      </nav>
+      <h1>Our Sources</h1>
+      <div class="page-hero__meta">
+        <span>About the project — reproduced from README.md in the repository</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div style="max-width:760px">
+
+        <p style="font-size:0.82rem;color:var(--color-text-muted);margin-bottom:var(--sp5)">
+          This page reproduces the project's
+          <code style="font-size:0.85em">README.md</code> and is updated whenever the source text changes.
+          <a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/README.md"
+             target="_blank" rel="noopener noreferrer">View README.md on GitHub<span
+             class="external-link__icon" aria-hidden="true">↗</span><span
+             class="sr-only"> (opens in a new tab)</span></a>
+        </p>
+
+        <!-- About the project -->
+        <div style="background:linear-gradient(135deg,var(--color-accent-light),var(--color-surface));border:1px solid var(--color-accent);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3);color:var(--color-accent)">Cultural Entity Navigation Platform</h2>
+          <p style="font-size:0.9rem;line-height:1.7;margin-bottom:var(--sp3)">
+            A modular web platform for exploring named entities across cultural collections —
+            museums, libraries, archives, theaters, and film collections — through institutionally
+            familiar navigation and semantically rich cross-linking.
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;margin:0">
+            <a class="external-link" href="https://ogiermontanus.github.io/hca-open-repo/"
+               target="_blank" rel="noopener noreferrer">View the live mockup<span
+               class="external-link__icon" aria-hidden="true">↗</span><span
+               class="sr-only"> (opens in a new tab)</span></a>
+          </p>
+        </div>
+
+        <!-- Vision -->
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Vision</h2>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin-bottom:var(--sp3)">
+            Cultural heritage is institutionally fragmented, but researchers think across
+            boundaries. This platform preserves the recognizable structures of individual
+            institutions while enabling semantic traversal through shared named entities
+            (persons, places, works, events, themes).
+          </p>
+          <p style="font-size:0.9rem;line-height:1.7;color:var(--color-text-muted);margin:0">
+            Architecture evolves iteratively: <strong>CSV-first → relational → semantic graph</strong>.
+          </p>
+        </div>
+
+        <!-- Repository structure -->
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Repository Structure</h2>
+          <div style="overflow-x:auto">
+            <pre style="font-family:monospace;font-size:0.78rem;line-height:1.6;color:var(--color-text-muted);background:var(--color-bg);border-radius:var(--radius-md);padding:var(--sp4);margin:0;white-space:pre">ai-context/                   # Context files for AI coding agents and project continuity
+  coding_agent_plan.md        # Technical architecture and implementation guidance
+  project_memory_recap.md     # Project history, intellectual foundation, long-term vision
+
+docs/                         # Human-facing documentation
+  roadmap.md                  # Phased implementation roadmap (phases 1–5)
+  data-model/                 # WEMI/FRBR rationale, relation tables, source-data conventions
+  pipeline/                   # Five-stage conversion pipeline from raw register to normalized CSV
+  inspiration/
+    sampo-analysis.md         # Analysis of the Finnish SAMPO ecosystem as design reference
+
+data/                         # Editorial data (raw, normalized, derived, vocabularies)
+scripts/                      # Normalization, ingestion, and export scripts
+schemas/                      # JSON schemas, CSV field specs, entity/relation definitions
+backend/                      # API layer
+frontend/                     # Web interface
+tests/</pre>
+          </div>
+        </div>
+
+        <!-- Key documents -->
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6);margin-bottom:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Key Documents</h2>
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+              <tbody>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/ai-context/coding_agent_plan.md" target="_blank" rel="noopener noreferrer">ai-context/coding_agent_plan.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Architecture, data model, tech stack, guiding principles for coding agents</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/ai-context/project_memory_recap.md" target="_blank" rel="noopener noreferrer">ai-context/project_memory_recap.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Origin, intellectual problem, conceptual evolution</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/roadmap.md" target="_blank" rel="noopener noreferrer">docs/roadmap.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Phased roadmap from data encoding through frontend prototype</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/inspiration/sampo-analysis.md" target="_blank" rel="noopener noreferrer">docs/inspiration/sampo-analysis.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">UI/UX patterns drawn from the Finnish SAMPO portals</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/inspiration/query-builder-survey.md" target="_blank" rel="noopener noreferrer">docs/inspiration/query-builder-survey.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Survey of open-source query-builder modules (GLAM/SAMPO, SPARQL/SQL GUIs, relational, library APIs) with ranked picks for Phase A and Phase B</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/star-schema.md" target="_blank" rel="noopener noreferrer">docs/data-model/star-schema.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Star-schema target — dimensions, facts, the Power Pivot MVP, and the road to a Postgres warehouse</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/postgresql-migration.md" target="_blank" rel="noopener noreferrer">docs/data-model/postgresql-migration.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Signpost: the PostgreSQL schema draft has moved to <a class="external-link" style="display:inline" href="https://github.com/ogiermontanus/nosql-hca-open-repo" target="_blank" rel="noopener noreferrer">nosql-hca-open-repo</a> for continued drafting</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/wemi-and-relations.md" target="_blank" rel="noopener noreferrer">docs/data-model/wemi-and-relations.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Work / Expression boundary, alias vs. relation, hybrid relational + JSONB design</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/data-model/source-data-characteristics.md" target="_blank" rel="noopener noreferrer">docs/data-model/source-data-characteristics.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Printed-index conventions a parser must handle (parens, names, "se:" / "Se ogsaa:", special tokens)</td>
+                </tr>
+                <tr>
+                  <td style="padding:var(--sp2) var(--sp3) var(--sp2) 0;vertical-align:top;white-space:nowrap"><a class="external-link" href="https://github.com/ogiermontanus/hca-open-repo/blob/main/docs/pipeline/stages.md" target="_blank" rel="noopener noreferrer">docs/pipeline/stages.md<span class="external-link__icon" aria-hidden="true">↗</span></a></td>
+                  <td style="padding:var(--sp2) 0;color:var(--color-text-muted)">Six-stage conversion pipeline from "raw/HCA-Repository V*.xlsx" to normalized CSVs and on to the star-schema model</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Core principles -->
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp6)">
+          <h2 style="font-size:1.1rem;margin-bottom:var(--sp3)">Core Principles</h2>
+          <ul style="font-size:0.9rem;line-height:1.9;color:var(--color-text-muted);margin:0;padding-left:1.2em">
+            <li><strong>Institution-first navigation</strong>: users enter through familiar cultural institutions, not abstract ontology</li>
+            <li><strong>Entity-centered semantics</strong>: named entities are the connective layer beneath the institutional surface</li>
+            <li><strong>Gradual enrichment</strong>: start CSV-simple, evolve toward graph-oriented infrastructure</li>
+            <li><strong>AI-assisted development</strong>: repository and documentation are designed for collaboration with coding agents</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container" style="display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp3)">
+    <span>
+      Prepared by citizen scientists in collaboration with
+      <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, University of Southern Denmark, Odense</a>
+      &nbsp;·&nbsp; <a href="om_en.html" style="color:inherit">Our Sources</a>
+    </span>
+    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer"
+       style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;opacity:0.85" title="Creative Commons Attribution 4.0 International">
+      <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="CC BY 4.0" style="height:20px;width:auto;display:block">
+      <span class="sr-only">CC BY 4.0 (opens in a new tab)</span>
+    </a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>

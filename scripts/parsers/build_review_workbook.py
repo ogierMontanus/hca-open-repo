@@ -219,8 +219,12 @@ def main():
         legend.column_dimensions[col].width = w
 
     os.makedirs(os.path.dirname(OUT_XLSX), exist_ok=True)
-    wb.save(OUT_XLSX)
 
+    # The TSV is master1 — the machine-readable source the rest of the
+    # pipeline reads. Write it FIRST: the .xlsx is only the review surface,
+    # and having it open in Excel locks the file on Windows. Writing the
+    # workbook first meant a spreadsheet left open silently blocked the
+    # master from being rebuilt at all.
     with open(OUT_TSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=out_cols, delimiter="\t")
         w.writeheader()
@@ -229,8 +233,17 @@ def main():
     print(f"rows: {len(rows)}   flagged rows: {n_flagged_rows}")
     for k in sorted(flag_census):
         print(f"  {k:42s} {flag_census[k]}")
-    print(f"wrote {os.path.relpath(OUT_XLSX, ROOT)}")
     print(f"wrote {os.path.relpath(OUT_TSV, ROOT)}")
+
+    try:
+        wb.save(OUT_XLSX)
+        print(f"wrote {os.path.relpath(OUT_XLSX, ROOT)}")
+    except PermissionError:
+        print(f"[!] kunne IKKE skrive {os.path.relpath(OUT_XLSX, ROOT)} "
+              "— filen er åben i Excel. TSV'en er opdateret; luk regnearket "
+              "og kør igen for at opdatere gennemsynsarket.")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
