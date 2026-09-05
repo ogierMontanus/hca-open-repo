@@ -1,5 +1,19 @@
 # Data model
 
+> **Scripts named in these pages.** The methodology pages below cite the
+> script that produced each dataset. Everything under `scripts/parsers/`,
+> `scripts/normalization/`, `scripts/correspondence/`, `scripts/place_typology/`
+> and `scripts/migration/`, plus `parse_rejser_htm.py`,
+> `reconcile_sv14_geo.py`, `detect_work_language.py`, `build_kb_links.py`
+> and `reconcile_steder_categories.py`, now lives in
+> [HCA-Diary-data-cleaning](https://github.com/ogierMontanus/HCA-Diary-data-cleaning).
+> The paths are unchanged there except for those last five, which sit in
+> `scripts/enrichment/`. The pages are left as written: they record how the
+> data was derived, and that history did not change when the code moved.
+> See [`docs/pipeline/README.md`](../pipeline/README.md).
+
+
+
 Methodology notes for the entity-centred data model used by this project. These documents distill the conventions developed against the H.C. Andersen diary registers and translate them into a form usable across the wider cultural-entity platform.
 
 The current core schema (tables, fields, relationship vocabulary) lives in [`ai-context/coding_agent_plan.md`](../../ai-context/coding_agent_plan.md) §4. The docs in this folder explain the **rationale** behind it: why Works and Expressions are split the way they are, how the printed-index conventions encode relations, and how to extend the schema when new register types arrive.

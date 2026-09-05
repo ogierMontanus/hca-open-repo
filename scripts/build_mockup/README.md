@@ -1,6 +1,8 @@
 # Mockup build scripts
 
-Generators that turn the normalized CSVs in `data/normalized/` into the
+Generators that turn the **prepared** CSVs under `data/` — published by
+[HCA-Diary-data-cleaning](https://github.com/ogierMontanus/HCA-Diary-data-cleaning),
+see [`docs/pipeline/README.md`](../../docs/pipeline/README.md) — into the
 data the static mockup under `mockup/` consumes. The mockup is designed
 to open straight from the filesystem (`file://`), where the browser
 blocks `fetch()` of JSON — so every generated artifact is either a
@@ -19,7 +21,15 @@ static HTML file or a `*.js` file that defines a global via a plain
 | `build_search_index.py`  | `entities.csv`, `references.csv`                            | `mockup/data/search-index.js`  (~16,400 entities, ref-sorted) | **no — gitignored** |
 | `build_cooccurrence.py`  | `entities.csv`, `references.csv`                            | `mockup/data/cooccurrence.js` (top-12 peers per person/place, count ≥ 2) | **no — gitignored** |
 
-All six outputs are fully derived from the normalised CSVs, so they
+Four scripts that once sat in this folder have moved to the cleaning
+repo, because they derived data rather than building anything:
+`reconcile_sv14_geo.py`, `detect_work_language.py`, `build_kb_links.py`
+and `reconcile_steder_categories.py`. Their outputs now arrive as
+prepared CSVs. Two builders not in the table above —
+`build_nation_index.py` (stage 4f) and `build_timeline_index.py`
+(stage 5) — round out the set.
+
+All of these outputs are fully derived from the prepared CSVs, so they
 are excluded from git. The committed mockup pages **degrade
 gracefully**: when the generated data is absent they fall back to the
 hand-curated `WORKS` / `PERSONS` / `PLACES` dicts in

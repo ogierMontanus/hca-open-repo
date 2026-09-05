@@ -52,6 +52,35 @@ Se `mockup/irrelevant/README.md` for indholdet og begrundelsen pr. fil.
 
 ---
 
+## Repo-opdeling — bygning her, rensning i det andet repo
+
+**Dette repo bygger og publicerer. Det forbereder ikke sine egne data.**
+
+Rensning, forbehandling, segmentering, normalisering og berigelse hører
+hjemme i **HCA-Diary-data-cleaning**, som udgiver de forberedte filer
+dette build læser:
+
+```
+råkilder → HCA-Diary-data-cleaning → data/normalized/ + data/parsed/
+                                     + data/curated/ → dette repo → mockup/ + web/
+```
+
+**Følg denne regel i kode:** tilføj ikke et script her, der *udleder en
+kendsgerning om data* — en koordinat, et sprog, en nationalitet, en
+segmentering, en kategori, et link. Det hører til i renserepoet, også
+selvom det ville være bekvemt at lægge det i `scripts/build_mockup/`.
+Scripts her må kun forme allerede forberedte data til et
+præsentationsartefakt (HTML-side, JS-kortobjekt, denormaliseret JSON).
+
+Filerne under `data/` er **modtagne** data. Ret dem i renserepoet og
+genudgiv (`python scripts/publish.py --into ../hca-open-repo`) — aldrig
+på plads her. Fuld beskrivelse: `docs/pipeline/README.md`.
+
+Bygget er **kun stdlib**. Tilføj ikke `openpyxl`, `lingua` eller andre
+afhængigheder her; de fulgte med de stadier, der flyttede ud.
+
+---
+
 ## Arbejdsbranch
 
 Udviklingsarbejde sker på branchen `claude/youthful-carson-XIZ5I`.

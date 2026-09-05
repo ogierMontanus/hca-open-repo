@@ -14,7 +14,8 @@ Each entry is a 5-tuple stored as an object for clarity:
 slug for works (bibliotek / billedkunst / teater-musik). Persons and
 places don't need a wing.
 
-Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py.
+Stdlib only. Reads the prepared entities.csv / references.csv published
+by HCA-Diary-data-cleaning (see docs/pipeline/README.md).
 """
 
 import csv
@@ -24,6 +25,10 @@ import sys
 from collections import Counter
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+# Shown when a prepared input is absent: this repo does not produce them.
+HINT = ("the cleaning repo publishes it — run scripts/publish.py in a "
+        "HCA-Diary-data-cleaning checkout (see docs/pipeline/README.md)")
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
 OUT = os.path.join(ROOT, "mockup", "data", "search-index.js")
@@ -44,7 +49,7 @@ def wing_for(h2: str, h3: str) -> str:
 
 def main() -> None:
     if not os.path.exists(ENTITIES):
-        sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
+        sys.exit(f"Missing {ENTITIES} — {HINT}")
 
     ref_count: Counter[str] = Counter()
     if os.path.exists(REFS):

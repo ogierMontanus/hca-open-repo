@@ -28,9 +28,9 @@ precedence over all three; PLACES_EXTRA fills every other gap so any
 ?reg=… link to place.html resolves to real metadata instead of a blank
 page.
 
-Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py,
-scripts/build_web/parse_rejser_htm.py and
-scripts/build_mockup/reconcile_sv14_geo.py.
+Stdlib only. Reads the prepared CSVs published by HCA-Diary-data-cleaning
+— entities.csv, rejser.tsv, sv14_places_reconciled.csv and
+steder_verified_categories.csv. See docs/pipeline/README.md.
 """
 
 import csv
@@ -41,6 +41,10 @@ import sys
 from collections import Counter
 
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+# Shown when a prepared input is absent: this repo does not produce them.
+HINT = ("the cleaning repo publishes it — run scripts/publish.py in a "
+        "HCA-Diary-data-cleaning checkout (see docs/pipeline/README.md)")
 ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
 REJSER     = os.path.join(ROOT, "data", "normalized", "rejser.tsv")
@@ -192,7 +196,7 @@ def load_verified_categories_and_countries() -> tuple[dict[str, str], dict[str, 
 
 def main() -> None:
     if not os.path.exists(ENTITIES):
-        sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
+        sys.exit(f"Missing {ENTITIES} — {HINT}")
 
     print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
     places = []

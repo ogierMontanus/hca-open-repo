@@ -27,9 +27,10 @@ load_person_wikidata()) and `bioLinks` (a broad, non-asserting biographical
 search link for Lex.dk/Deutsche Biographie/VIAF, added only when `wd` is
 absent — see docs/data-model/person-bio-search-links.md for the full rule).
 
-Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py. Degrades
-gracefully — nationalities stay empty and NATIONALITY_LABELS stays empty
-if parse_person_ethnic_descriptors.py hasn't been run.
+Stdlib only. Reads the prepared CSVs published by HCA-Diary-data-cleaning
+(see docs/pipeline/README.md). Degrades gracefully — nationalities stay
+empty and NATIONALITY_LABELS stays empty when the prepared
+person_ethnic_descriptors.csv is absent.
 """
 
 import csv
@@ -42,6 +43,10 @@ import urllib.parse
 from collections import Counter
 
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+# Shown when a prepared input is absent: this repo does not produce them.
+HINT = ("the cleaning repo publishes it — run scripts/publish.py in a "
+        "HCA-Diary-data-cleaning checkout (see docs/pipeline/README.md)")
 ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
 ETHNIC     = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
@@ -403,7 +408,7 @@ def load_non_individuals() -> dict:
 
 def main() -> None:
     if not os.path.exists(ENTITIES):
-        sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
+        sys.exit(f"Missing {ENTITIES} — {HINT}")
 
     print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
     non_individuals = load_non_individuals()
@@ -441,18 +446,18 @@ def main() -> None:
     gender_by_person = load_gender()
     if gender_by_person:
         print(f"  {len(gender_by_person):,} persons with a gender classification "
-              f"(scripts/parsers/parse_person_gender.py)")
+              f"(prepared by the cleaning repo)")
     else:
         print("  no person_gender.csv — gender facet stays empty "
-              "(run scripts/parsers/parse_person_gender.py)")
+              "(publish it from the cleaning repo)")
 
     roles_by_person = load_roles()
     if roles_by_person:
         print(f"  {len(roles_by_person):,} persons with a Rolle/Erhverv classification "
-              f"(scripts/parsers/parse_person_role.py)")
+              f"(prepared by the cleaning repo)")
     else:
         print("  no person_role.csv — role facet stays empty "
-              "(run scripts/parsers/parse_person_role.py)")
+              "(publish it from the cleaning repo)")
 
     wd_by_person = load_person_wikidata()
     breve_by_person = load_breve_crosswalk()
