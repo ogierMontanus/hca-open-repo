@@ -825,6 +825,18 @@ document.addEventListener('DOMContentLoaded', function () {
   function apply() { diaryCtrl.applyFilter(filter.value.trim(), yearSel.value); }
   filter.addEventListener('input', apply);
   yearSel.addEventListener('change', apply);
+
+  // Deep-link support: index.html's "Hvornår" landing card points here with
+  // ?layout=timeline so a reader lands straight in the Tidslinje view
+  // instead of the default diary list. Triggered last (after every pane
+  // above has set its own default display) and reuses the click handler's
+  // own pane-switching logic rather than duplicating it.
+  var initialLayout = new URLSearchParams(location.search).get('layout');
+  if (initialLayout) {
+    var initialBtn = document.querySelector(
+      '.layout-switcher__btn[data-layout="' + initialLayout + '"]');
+    if (initialBtn) initialBtn.click();
+  }
 });
 </script>
 <script src="js/nav.js"></script>

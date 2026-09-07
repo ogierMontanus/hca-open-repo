@@ -591,6 +591,12 @@ body[data-section="hvor"] .page-hero {
 }
 .data-table__id-link:hover { color: var(--color-accent); border-bottom-color: var(--color-accent); }
 
+/* Secondary line under a table cell's primary value -- e.g. the printed
+   "Bind, side" citation shown under a diary reference's date, only when it
+   differs from the date (see diary-wire.js's rowData/headingFor). Same
+   muted-meta convention as .result-card__meta. */
+.data-table__subline { font-size: 0.76rem; color: var(--color-text-muted); margin-top: 2px; }
+
 /* === Result Grid === */
 .result-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp4);
