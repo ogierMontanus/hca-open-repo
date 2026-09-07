@@ -32,10 +32,12 @@ kræver en registreret nationalitet.
 `load_person_wikidata()` læser en (endnu ikke-eksisterende)
 `data/curated/persons_wikidata.csv`, samme facon som
 `data/curated/works_wikidata.csv`. Ingen af registrets 10.228 personer har
-i dag et `wd`-felt sat via denne vej — kun `mockup/person.html`s egen lille
-håndkuraterede demo-post (Dickens, `wd: 'Q5686'`) har ét, og den side er
-ikke den, der linkes til fra det levende register (`persons.html?reg=…`
-er). Loaderen findes alligevel nu, så reglen er fremtidssikret: tilføjes en
+i dag et `wd`-felt sat via denne vej. (Indtil 2026-09-07 havde
+`mockup/person.html` — en ubrugt legacy-visning, siden slettet, se
+`docs/data-model/detail-page-redundancy.md` — sin egen lille
+håndkuraterede demo-post med ét, Dickens/`wd: 'Q5686'`; den var aldrig en
+del af `PERSONS_EXTRA` og forsvandt derfor uden virkning her.) Loaderen
+findes alligevel nu, så reglen er fremtidssikret: tilføjes en
 `persons_wikidata.csv` senere, holder `bio_search_links()` automatisk op
 med at foreslå et søgelink for de personer — ingen kodeændring nødvendig.
 

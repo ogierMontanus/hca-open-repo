@@ -21,10 +21,11 @@ static HTML file or a `*.js` file that defines a global via a plain
 
 All six outputs are fully derived from the normalised CSVs, so they
 are excluded from git. The committed mockup pages **degrade
-gracefully**: when the generated data is absent they fall back to the
-hand-curated `WORKS` / `PERSONS` / `PLACES` dicts in
-`mockup/{work,person,place}.html` and the static sample cards on the
-listing pages.
+gracefully**: `work.html` and `place.html` fall back to their own
+hand-curated `WORKS`/`PLACES` dicts when the generated data is absent;
+`persons.html` and the listing pages fall back to their static sample
+cards instead (`persons.html` has no hand-curated override dict of its
+own — see the data-flow diagram below).
 
 ## One-time local build
 
@@ -47,11 +48,11 @@ The wrapper covers all ten stages — Stage 1a (xlsx → CSV), Stage 1b
 (rejser geocodes, optional), Stage 2 (web JSON), Stage 3a/3b (diary
 pages + index), Stage 4a/4b/4c (works/persons/places extras), Stage 4d
 (search index for the landing typeahead), Stage 4e (co-occurrence
-index for the reciprocal-link sections on person.html / place.html).
+index for the reciprocal-link sections on persons.html / place.html).
 Stage 1b's failure is non-fatal, mirroring CI.
 
 Then open `mockup/diaries.html`, `mockup/work.html?reg=Reg001260`,
-`mockup/person.html?reg=Reg0052440`, `mockup/place.html?reg=Reg0017430`,
+`mockup/persons.html?reg=Reg0052440`, `mockup/place.html?reg=Reg0017430`,
 etc. from disk.
 
 Need to run a single builder by hand? See the script paths in the
@@ -73,22 +74,28 @@ data/normalized/*.csv
         └── cooccurrence.js             (build_cooccurrence.py)
                 │
                 ▼
-        ┌───────────────────────────────────────────────────────┐
-        │ ?reg=… detail pages   ← read ALL_{WORKS|PERSONS|PLACES} │
-        │   work.html, person.html, place.html                  │
-        │ Diary cards (DiaryWire) ← read DIARY_INDEX/DIARY_REFS │
-        │   diaries.html + the sections embedded in work/person/place │
-        │ Diary pages (static HTML) ← link to ?reg=… per entity │
-        │ Landing typeahead (js/landing-search.js) ← SEARCH_INDEX │
-        │   index.html — focus-on-load + live ?reg=… autocomplete │
-        └───────────────────────────────────────────────────────┘
+        ┌─────────────────────────────────────────────────────────────────┐
+        │ ?reg=… detail pages                                             │
+        │   work.html, place.html ← ALL_{WORKS|PLACES} (hand-curated      │
+        │     WORKS/PLACES object takes precedence over the *_EXTRA data) │
+        │   persons.html ← PERSONS_EXTRA directly, no override object     │
+        │ Diary cards (DiaryWire) ← read DIARY_INDEX/DIARY_REFS           │
+        │   diaries.html + the sections embedded in work/persons/place    │
+        │ Diary pages (static HTML) ← link to ?reg=… per entity           │
+        │ Landing typeahead (js/landing-search.js) ← SEARCH_INDEX         │
+        │   index.html — focus-on-load + live ?reg=… autocomplete         │
+        └─────────────────────────────────────────────────────────────────┘
 ```
 
-`ALL_WORKS`, `ALL_PERSONS`, `ALL_PLACES` are `Object.assign({},
-*_EXTRA, *)` — generated data first, then any hand-curated entry from
-the curated dict at the top of the page overrides it. So a 3,717-work
-catalog comes "for free" from the CSV, and bespoke entries (Sixtinske
-Madonna, Dickens, Rom …) still control the rich card content.
+`ALL_WORKS` and `ALL_PLACES` (work.html, place.html) are
+`Object.assign({}, *_EXTRA, *)` — generated data first, then any
+hand-curated entry from the curated dict at the top of the page
+overrides it. So a 3,717-work catalog comes "for free" from the CSV,
+and bespoke entries (Sixtinske Madonna, Rom …) still control the rich
+card content. `persons.html` has no equivalent `ALL_PERSONS`/`PERSONS`
+pair — that pattern lived only in `person.html`, an unreferenced legacy
+page deleted 2026-09-07 (see docs/data-model/detail-page-redundancy.md);
+`persons.html` reads `PERSONS_EXTRA` directly.
 
 ## Continuous integration
 

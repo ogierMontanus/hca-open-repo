@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Lint check: no source file may link to the old person.html detail page.
 
-The singular person.html was superseded by persons.html, which now serves
-both the full register list and individual-person detail views (?reg=…).
-All href / link targets and JS string literals must use persons.html.
+mockup/person.html was superseded by persons.html (which serves both the
+full register list and individual-person detail views, ?reg=…) and was
+deleted outright once real navigation confirmed nothing in the live site
+still pointed at it. All href / link targets and JS string literals must
+use persons.html.
 
 Checked locations:
   mockup/**/*.{html,js}   — source pages and scripts (diary-pages/ excluded:
@@ -15,7 +17,6 @@ The test flags two patterns:
   'person.html'  /  "person.html"             as JS / Python string literals
 
 Known false positives avoided:
-  - The redirect stub mockup/person.html itself
   - Lines whose only content is a code comment (// … or # …)
   - Documentation files (.md, .txt, .yml)
 
@@ -24,6 +25,10 @@ Example violation caught by this test:
   "← Alle værker af Raffael" pointing to person.html?reg=Reg003567 via
   entity-refs.js:personHref(). Fixed in entity-refs.js by renaming the
   target to persons.html.
+
+This test now doubles as a regression guard against person.html reappearing:
+since the file is gone, any href or string literal still naming it is
+necessarily a dead link, not merely a stale-but-working one.
 """
 import re
 import sys
@@ -35,9 +40,8 @@ REPO = Path(__file__).parent.parent
 _HREF_RE = re.compile(r"""href\s*=\s*['"]person\.html""")
 _STR_LIT_RE = re.compile(r"""(['"])person\.html\1""")
 
-# Paths that are allowed to contain "person.html" (the page itself, this test)
+# Paths that are allowed to contain "person.html" (this test's own source)
 _SKIP = {
-    REPO / 'mockup' / 'person.html',
     Path(__file__),
 }
 

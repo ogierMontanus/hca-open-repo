@@ -36,14 +36,18 @@ site, Danish and English pages alike.
 |---|---|---|---|
 | `work.html` | 689 | yes | Linked from every work-related card/chip on every translated page today |
 | `place.html` | 402 | yes | Same, for places — including places_en.html's own card links |
-| `person.html` | 351 | yes | Note: `persons_en.html` already self-hosts an English `?reg=` detail view, so this is the *secondary/legacy* detail page — lower urgency than work.html/place.html, which have no such duplicate |
 | `entry.html` | 194 | no (static) | One diary-page detail view; linked from every diary result card |
+
+(`person.html`, the secondary/legacy person detail page, was deleted
+2026-09-07 rather than translated — `persons_en.html` already self-hosts
+the real English `?reg=` detail view. See
+docs/data-model/detail-page-redundancy.md.)
 
 **Recommended next priority: `work.html` and `place.html`.** A reader
 clicking through from `works_en.html`/`places_en.html`/`diaries_en.html`
 today lands on a fully Danish detail page — the single biggest remaining
-seam in the English experience, since these two have no partial
-workaround the way `person.html` does.
+seam in the English experience; unlike the person side, there is no
+partial workaround for either.
 
 ### Wing / category pages (Work Register sub-divisions)
 

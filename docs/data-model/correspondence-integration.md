@@ -378,9 +378,12 @@ files at `C:\Users\nh\Documents\GitHub\breve-data` and
    `works_wikidata.csv` is built, with a `verified_via`/`notes` column
    pair.
 3. **Phase 2 — Per-person correspondence links (§4).** Wire the verified
-   crosswalk into `person.html` as a `Brevveksling` sidebar box; link out
-   using the confirmed `pid=` URL, live-check the `breve=sendt` semantics
-   first.
+   crosswalk into `persons.html`'s `?reg=…` detail view (`person.html`,
+   named when this plan was written, was deleted 2026-09-07 as an
+   unreferenced legacy page — see
+   docs/data-model/detail-page-redundancy.md) as a `Brevveksling` sidebar
+   box; link out using the confirmed `pid=` URL, live-check the
+   `breve=sendt` semantics first.
 4. **Phase 3 — Broader date-join, once more diary volumes are dated.**
    Re-run the Bremer-style exact/near-date match at full scale as
    `plan-live-facets.md`'s external date supply lands for volumes I–V,

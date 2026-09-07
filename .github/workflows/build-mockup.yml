@@ -88,7 +88,7 @@ jobs:
         run: python scripts/build_mockup/build_diary_index.py
 
       # Stage 4 — per-entity card data. These three feed the ?reg=…
-      # detail pages (work.html / person.html / place.html) for all
+      # detail pages (work.html / persons.html / place.html) for all
       # 3,717 works · 10,228 persons · 2,508 places. Outputs are
       # gitignored; CI regenerates them every build.
       - name: Stage 4a — works-extra.js (all works)
@@ -107,7 +107,7 @@ jobs:
         run: python scripts/build_mockup/build_search_index.py
 
       # Stage 4e — co-occurrence index for the reciprocal-link sections
-      # ("Hyppigste steder/personer") on person.html and place.html.
+      # ("Hyppigste steder/personer") on persons.html and place.html.
       # Joins references.csv on (vol, page) and emits top-12 peers per
       # entity, count >= 2.
       - name: Stage 4e — cooccurrence.js (reciprocal links)

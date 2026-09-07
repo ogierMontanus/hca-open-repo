@@ -1,4 +1,4 @@
-/* entity-refs.js — cross-entity lookups shared by work.html, person.html,
+/* entity-refs.js — cross-entity lookups shared by work.html, persons.html,
  * place.html (and any future detail page that needs to navigate between
  * entity types). Builds reverse indexes from the global *_EXTRA dicts
  * loaded by the per-entity-data scripts.
