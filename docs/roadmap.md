@@ -39,37 +39,80 @@ amended.
   JavaScript. Full page-by-page state and data-coverage numbers:
   `docs/plan-live-facets.md`.
 
-## Near-term (next to pick up)
+## Quick items — resolved 2026-09-07
 
-Ordered by what's both scoped and already documented elsewhere — each
-line links to where the detail lives.
+The two decisions from the previous pass, closed out:
 
-1. **Finish English parity for the detail pages.** `work.html` and
-   `place.html` are the single biggest remaining seam: every translated
-   list page (`works_en.html`, `places_en.html`, `diaries_en.html`) links
-   through to a fully Danish detail page today. See `docs/i18n-todo.md`
-   for the recommended order.
-2. **Extend live faceting past the wing pages**, starting where data
-   coverage already supports it (diaries: 100% coverage on place/person/
-   work mentions and volume) rather than where the facet already exists
-   in hardcoded form. `docs/plan-live-facets.md` has the coverage table
-   and names the extraction from `category-catalogue.js` into a
-   reusable engine as the actual work, not new design.
-3. **Close the data-coverage gaps that block faceting**, in
-   HCA-Diary-data-cleaning, not here: nationality and role/profession for
-   persons (0/10,228 today), work language (0/3,708), and place country
-   (18% today). These are enrichment facts, so per the repo split they
-   are that repo's work, published back through `scripts/publish.py`.
-4. **Decide on `persons_wikidata.csv`.** The facet it feeds is currently
-   empty because the file is absent (`build_all.py --check-inputs`
-   reports it as optional-and-missing). Verify any Wikidata IDs added
-   for it via the `wikidata-verify` skill before publishing, per
-   `CLAUDE.md`.
-5. **Decide on `timeline-index.js`.** `build_mockup/build_timeline_index.py`
-   already builds it from `data/normalized_v092/timeline.csv`, but it has
-   never been wired into `build_all.py` or CI, so the deployed site has
-   never carried it (`docs/pipeline/README.md`). Wiring it in is a
-   publishing decision, separate from the code already existing.
+- **`timeline-index.js`: wired in.** Added as build stage 4g in
+  `scripts/build_all.py` and as its own `continue-on-error` step in
+  `.github/workflows/build-mockup.yml`, matching how 4f (nation-index.js)
+  is already optional. The frontend (`mockup/js/timeline-wire.js`,
+  `diaries.html`) already handled the file's absence gracefully, so this
+  was purely additive. Verified: `build_all.py --only 4g` produces 1,446
+  events; a full `--skip-pages` build and the test suite pass; loaded
+  `diaries.html` in a headless browser and confirmed `TIMELINE_INDEX` is
+  populated and the Tidslinje tab renders real data.
+- **`persons_wikidata.csv`: no code change needed.** Inspected
+  `build_persons_extra.py`'s `load_person_wikidata()` — it already
+  degrades correctly when the file is absent. Authoring the actual
+  Wikidata IDs is enrichment work (deriving a fact about the data), which
+  per the repo split belongs in HCA-Diary-data-cleaning, not here.
+  Nothing to stub out locally.
+
+## Design choices for the larger items
+
+These three remain open. Each already has enough documented investigation
+to start from — the point of this section is to name the concrete design
+each would follow, not to re-litigate whether to do them.
+
+### 1. English parity for the detail pages
+
+**Approach:** continue the pattern already used for the six done pages —
+a full duplicate `_en.html` file per page (`docs/i18n-policy.md`'s
+decision, not a runtime lang-toggle), translating UI chrome and static
+copy while leaving register data (names, nationality vocabulary) Danish
+per policy. Order: `work.html` and `place.html` first — every translated
+list page already links to them, so they're the biggest live seam — then
+the three wing pages, then the utility pages (`om.html` earliest among
+those, since every `_en.html` footer links to it today regardless of
+language). The 4,544 generated diary pages are explicitly out of scope
+for hand translation; an English mode belongs in
+`build_diary_pages.py` (e.g. `--lang en`) as a separate decision on
+output shape (parallel tree vs. `_en` suffix) when that's picked up.
+Full page inventory and rationale: `docs/i18n-todo.md`.
+
+### 2. Extending live faceting past the wing pages
+
+**Approach:** extract `mockup/js/category-catalogue.js`'s existing
+faceting logic (already correct: OR-within-group, AND-across-groups,
+adaptive availability, alphabet-bar sync) into a standalone
+`mockup/js/facet-engine.js`, then wire pages to it in order of data
+coverage rather than UI familiarity — diaries first (100% coverage on
+place/person/work mentions and volume), not persons/places/search where
+the underlying facets are currently invented or absent. Standardise
+markup on the `data-facet`/`data-match` convention `romaner.html` already
+uses. Two additions beyond what `category-catalogue.js` has today:
+multi-valued fields (a diary page mentions many places) and a defined
+"awaiting data" facet state — visible, disabled, dimmed, with a `title`
+explaining what will switch it on — generalised from the existing
+disabled "Begivenhedsdatoer" pill, for facets like nationality that are
+correct in concept but have no backing data yet. No new dependency: the
+mockup is opened over `file://`, which already rules out `fetch()`, hence
+plain `<script>`-tag globals over an in-memory array. Full architecture,
+including the `FacetEngine.create()` API shape: `docs/plan-live-facets.md`.
+
+### 3. Closing the data-coverage gaps that block faceting
+
+**Approach:** this is HCA-Diary-data-cleaning's work, not this repo's —
+nationality and role/profession for persons (0/10,228 today), work
+language (0/3,708), and place country (18% today) are all derived facts,
+which the repo split assigns there. The one design choice that is this
+repo's to make once that data lands is how to *not* ship it as fabricated
+in the meantime: `docs/plan-live-facets.md` §2 already flags that the
+nationality counts currently on `persons.html` (e.g. "Dansk 4.218") are
+invented and must come off before any live facet ships, per the
+fact-check rule in `CLAUDE.md` — visible-but-inert beats
+plausible-but-wrong.
 
 ## Ongoing hygiene
 
