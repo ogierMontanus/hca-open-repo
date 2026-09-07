@@ -7,8 +7,8 @@ Stage 2 of the October mockup pipeline (see docs/data-model/october-pipeline.md)
 Reads star-shaped CSVs from data/normalized/ and emits denormalised JSON
 artifacts to web/data/ that the static mockup can fetch directly.
 
-Inputs (produced by scripts/normalization/hca_xlsx_to_csv.py and
-scripts/build_web/parse_rejser_htm.py):
+Inputs — the prepared files published by HCA-Diary-data-cleaning
+(see docs/pipeline/README.md):
   data/normalized/entities.csv
   data/normalized/diary.csv
   data/normalized/references.csv
@@ -40,8 +40,14 @@ from collections import defaultdict
 from datetime import datetime, timezone
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+# Shown when a prepared input is absent: this repo does not produce them.
+HINT = ("the cleaning repo publishes it — run scripts/publish.py in a "
+        "HCA-Diary-data-cleaning checkout (see docs/pipeline/README.md)")
 NORMALIZED_DIR = os.path.join(ROOT, "data", "normalized")
 RAW_DIR = os.path.join(ROOT, "data", "raw")
+# Provenance published alongside the prepared CSVs by the cleaning repo.
+SOURCE_JSON = os.path.join(ROOT, "data", "normalized", "_source.json")
 OUT_DIR = os.path.join(ROOT, "web", "data")
 
 SNIPPET_CHARS = 220
@@ -184,6 +190,42 @@ def latest_xlsx(raw_dir):
         return None
     candidates.sort()
     return candidates[-1]
+
+
+def source_provenance():
+    """Name and fingerprint the raw sources this build descends from.
+
+    The cleaning repo (HCA-Diary-data-cleaning) publishes the prepared CSVs
+    together with data/normalized/_source.json, which records each raw
+    source's filename and SHA-256. That is the normal path: this repo builds
+    from prepared data and no longer holds the workbooks.
+
+    A local data/raw/ still wins when it is present, so a checkout that does
+    carry the sources reports what it actually read rather than what it was
+    handed. Returns (xlsx_name, xlsx_sha256, rejser_name, rejser_sha256).
+    """
+    xlsx_fn = latest_xlsx(RAW_DIR)
+    if xlsx_fn:
+        xlsx_path = os.path.join(RAW_DIR, xlsx_fn)
+        rejser_path = os.path.join(RAW_DIR, "Rejser_HCA_X.htm")
+        has_rejser = os.path.exists(rejser_path)
+        return (xlsx_fn, sha256_of(xlsx_path),
+                "Rejser_HCA_X.htm" if has_rejser else None,
+                sha256_of(rejser_path) if has_rejser else None)
+
+    if os.path.exists(SOURCE_JSON):
+        with open(SOURCE_JSON, encoding="utf-8") as f:
+            sources = (json.load(f) or {}).get("sources") or {}
+
+        def pair(key):
+            entry = sources.get(key)
+            if not entry:
+                return (None, None)
+            return (entry.get("name"), entry.get("sha256"))
+
+        return pair("source_xlsx") + pair("source_rejser_htm")
+
+    return (None, None, None, None)
 
 
 def write_json(name, payload):
@@ -432,15 +474,13 @@ def build(verbose=False):
         "legs_by_place_id": legs_by_place_id,
     }
 
-    xlsx_fn = latest_xlsx(RAW_DIR)
-    source_xlsx_path = os.path.join(RAW_DIR, xlsx_fn) if xlsx_fn else None
-    rejser_htm_path = os.path.join(RAW_DIR, "Rejser_HCA_X.htm")
+    xlsx_fn, xlsx_sha, rejser_fn, rejser_sha = source_provenance()
     manifest = {
         "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source_xlsx": xlsx_fn,
-        "source_xlsx_sha256": sha256_of(source_xlsx_path) if source_xlsx_path else None,
-        "source_rejser_htm": "Rejser_HCA_X.htm" if os.path.exists(rejser_htm_path) else None,
-        "source_rejser_sha256": sha256_of(rejser_htm_path) if os.path.exists(rejser_htm_path) else None,
+        "source_xlsx_sha256": xlsx_sha,
+        "source_rejser_htm": rejser_fn,
+        "source_rejser_sha256": rejser_sha,
         "counts": {
             "places": len(places_payload),
             "places_geocoded": matched,
@@ -480,7 +520,7 @@ def main():
     except FileNotFoundError as e:
         sys.exit(
             f"Missing input: {e.filename}\n"
-            f"Run scripts/normalization/hca_xlsx_to_csv.py first."
+            f"{HINT}"
         )
 
 

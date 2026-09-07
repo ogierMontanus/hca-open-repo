@@ -1,0 +1,18 @@
+{
+  "prepared_by": "HCA-Diary-data-cleaning",
+  "prepared_at": "2026-09-05T10:19:55+00:00",
+  "sources": {
+    "source_xlsx": {
+      "name": "HCA-Repository V0.82.xlsx",
+      "sha256": "19b1e857fab52cba0149235092f1b4347bdf562922ff0880c6a0014605a00f9f"
+    },
+    "source_rejser_htm": {
+      "name": "Rejser_HCA_X.htm",
+      "sha256": "11586bb64f90ca33bc7c63eec11b2bb7d534777134127b0782c23e2fa0ebfc4c"
+    },
+    "source_sv14_xml": {
+      "name": "SV14_places.xml",
+      "sha256": "fecc9b6f024f756ca7db983692d55dbf190a59492f697f18d6caac36aef223d5"
+    }
+  }
+}

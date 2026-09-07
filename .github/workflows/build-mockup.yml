@@ -4,11 +4,13 @@ on:
   push:
     branches: [main]
     paths:
-      - 'data/raw/**'
+      # The prepared data published by HCA-Diary-data-cleaning …
       - 'data/normalized/**'
-      - 'scripts/normalization/**'
-      - 'scripts/build_web/**'
-      - 'scripts/build_mockup/**'
+      - 'data/normalized_v092/**'
+      - 'data/parsed/**'
+      - 'data/curated/**'
+      # … and the build that turns it into the site.
+      - 'scripts/**'
       - 'web/**'
       - 'mockup/**'
       - '.github/workflows/build-mockup.yml'
@@ -38,49 +40,21 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f scripts/parsers/requirements.txt ]; then
-            pip install -r scripts/parsers/requirements.txt
-          fi
-          pip install openpyxl
+      # The build is stdlib-only. openpyxl and lingua were needed by the
+      # ingest and enrichment stages, which now run in
+      # HCA-Diary-data-cleaning; this workflow reads the CSVs it published.
 
-      - name: Stage 1a — xlsx to normalised CSVs
-        run: python scripts/normalization/hca_xlsx_to_csv.py
-
-      - name: Stage 1b — parse Rejser HTM add-on
-        run: python scripts/build_web/parse_rejser_htm.py
-        continue-on-error: true
-
-      - name: Stage 1c — reconcile SV14 place geocodes
-        run: python scripts/build_mockup/reconcile_sv14_geo.py
-        continue-on-error: true
-
-      # Stage 1d — probable language per work title, for nation.html's
-      # "På dette sprog" list. Needs `lingua` from
-      # scripts/parsers/requirements.txt; without it the script still emits
-      # the register-stated languages, so this step is non-fatal either way.
-      - name: Stage 1d — detect work languages
-        run: python scripts/build_mockup/detect_work_language.py
-        continue-on-error: true
-
-      # Stage 1e — ethnic/national adjectives per person, feeding both
-      # persons-extra.js's Nationalitet facet (4b) and the nation index (4f).
-      # Reads the V0.82 workbook directly, so it does not depend on Stage 1a.
-      # Its output CSV is committed, so a failure here leaves the previous
-      # extraction in place rather than emptying the facet.
-      - name: Stage 1e — person ethnic descriptors
-        run: python scripts/parsers/parse_person_ethnic_descriptors.py
-        continue-on-error: true
-
-      - name: Stage 2 — CSVs to web JSON
+      # Stage 2 — the prepared CSVs become the web JSON the site fetches.
+      # Everything upstream of here (ingest, cleaning, segmentation,
+      # enrichment) happens in HCA-Diary-data-cleaning and arrives as the
+      # committed files under data/. See docs/pipeline/README.md.
+      - name: Stage 2 — prepared CSVs to web JSON
         run: python scripts/build_web/build_web_data.py
 
       # Stage 3 — diary layer for the mockup. Both builders read the
-      # normalised CSVs from Stage 1a (references.csv, diary.csv,
-      # entities.csv). Their outputs are gitignored, so CI must regenerate
-      # them to ship the diary pages and index in the deployed site.
+      # prepared CSVs (references.csv, diary.csv, entities.csv). Their
+      # outputs are gitignored, so CI must regenerate them to ship the
+      # diary pages and index in the deployed site.
       - name: Stage 3a — generate diary pages
         run: python scripts/build_mockup/build_diary_pages.py
 
@@ -116,8 +90,8 @@ jobs:
       # Stage 4f — nation.html mashup index, including the umbrella
       # clustering from data/curated/nation_umbrellas_da.csv (91 nationality
       # keys -> 36 pickable groups, sub-identities kept visible). Depends on
-      # Stage 4c's places-extra.js, Stage 1d's work languages and Stage 1e's
-      # person descriptors — all of which run above.
+      # Stage 4c's places-extra.js plus the prepared work_languages.csv and
+      # person_ethnic_descriptors.csv.
       - name: Stage 4f — nation-index.js (nation mashup)
         run: python scripts/build_mockup/build_nation_index.py
         continue-on-error: true

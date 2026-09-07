@@ -1,20 +1,110 @@
-# Conversion pipeline
+# Pipeline — how prepared data becomes the published site
 
-How a digitised printed register becomes a normalised row in `data/normalized/entities.csv`.
+This repository **builds and publishes**. It does not prepare its own data.
+Cleaning, preprocessing, segmentation and enrichment live in
+**[HCA-Diary-data-cleaning](https://github.com/ogierMontanus/HCA-Diary-data-cleaning)**,
+which publishes the prepared files this build reads.
 
-The platform's data model is documented in [`docs/data-model/`](../data-model/). This folder describes the **process** that produces that data: the stages, their inputs and outputs, the constraints that every stage must respect, and where each implementation lives.
+```
+data/raw sources  →  HCA-Diary-data-cleaning  →  data/normalized/
+                                                 data/parsed/       →  this repo  →  mockup/ + web/
+                     clean · parse · segment     data/curated/          build           published site
+                     normalise · enrich
+```
 
-## Documents
+The rule that keeps the two apart: **nothing here re-derives anything, and
+nothing there renders anything.** A build in this repo reads the files the
+cleaning repo publishes and nothing else.
 
-| File | Purpose |
+## What arrives from the cleaning repo
+
+The prepared files under `data/` are committed here, so a clone builds
+without a second checkout. They are *received* data — edit them in the
+cleaning repo and re-publish, never in place here.
+
+| Directory | Contents |
 |---|---|
-| [`stages.md`](stages.md) | Six-stage pipeline: slice → parse → OpenRefine → normalized CSV → star-schema model (Power Query / Power Pivot MVP) → optional Postgres warehouse. Inputs, outputs, scripts, and constraints per stage |
+| `data/normalized/` | the star-shaped CSVs (`entities`, `diary`, `references`) and the enrichment layers built on them |
+| `data/normalized_v092/` | `timeline.csv`, the Tidstavle events behind the Tidslinje view |
+| `data/parsed/` | the segmented registers the works build reads for creator overrides |
+| `data/curated/` | the hand-curated authority tables the build reads directly |
+| `data/normalized/_source.json` | provenance — each raw source's filename and SHA-256, folded into `web/data/manifest.json` |
 
-The target data model that Stage 5 builds and Stage 6 promotes into a database is documented separately in [`docs/data-model/star-schema.md`](../data-model/star-schema.md).
+The file-by-file contract, and what each file feeds, is
+[`docs/interface.md`](https://github.com/ogierMontanus/HCA-Diary-data-cleaning/blob/main/docs/interface.md)
+in the cleaning repo; the authoritative list is `INTERFACE` in its
+`scripts/publish.py`.
 
-## Where things live
+## Refreshing the inputs
 
-- **Canonical source** — `raw/HCA-Repository V[X.YY].xlsx`. A single consolidated workbook; the version in brackets increments over time. Always use the highest version available.
-- **Parsers** — `scripts/parsers/`. Each parser reads a slice of the canonical workbook (filtered by `RegistryCategory` / `WorkGenre` / `RegistryForm`) and produces a structured TSV.
-- **Normalisation** — `scripts/normalization/hca_xlsx_to_csv.py`. Folds parsed TSVs into the entity-centric CSVs.
-- **Outputs** — `data/normalized/entities.csv`, `data/normalized/diary.csv`, `data/normalized/references.csv`.
+From a checkout of the cleaning repo, with this repo as a sibling:
+
+```
+python scripts/run_pipeline.py
+python scripts/publish.py --into ../hca-open-repo
+```
+
+`python scripts/publish.py --check --into ../hca-open-repo` reports drift
+without changing anything. On this side,
+`python scripts/build_all.py --check-inputs` reports what is present and
+what a missing optional file would cost.
+
+## Building
+
+```
+python scripts/build_all.py                 # full build
+python scripts/build_all.py --skip-pages    # skip the 4,500-file diary HTML stage
+python scripts/build_all.py --only 4a       # one stage
+```
+
+The build is **stdlib-only** — `openpyxl` and `lingua` were needed by the
+ingest and enrichment stages and moved out with them. Stages:
+
+| Stage | Script | Produces |
+|---|---|---|
+| 2 | `build_web/build_web_data.py` | `web/data/*.json` — the denormalised view artifacts the site fetches, plus `manifest.json` |
+| 3a | `build_mockup/build_diary_pages.py` | `mockup/diary-pages/*.html` — one page per diary page (~4,500) |
+| 3b | `build_mockup/build_diary_index.py` | `diary-index.js`, `diary-refs.js` — the diary list and the reverse index |
+| 4a | `build_mockup/build_works_extra.py` | `works-extra.js` |
+| 4b | `build_mockup/build_persons_extra.py` | `persons-extra.js`, `NATIONALITY_LABELS` |
+| 4c | `build_mockup/build_places_extra.py` | `places-extra.js` |
+| 4d | `build_mockup/build_search_index.py` | `search-index.js` — the landing-page typeahead |
+| 4e | `build_mockup/build_cooccurrence.py` | `cooccurrence.js` — the reciprocal-link sections |
+| 4f | `build_mockup/build_nation_index.py` | `nation-index.js` — the nation mashup |
+
+All of these outputs are gitignored and regenerated by CI on every build.
+
+`build_mockup/build_timeline_index.py` builds `timeline-index.js` from the
+prepared `data/normalized_v092/timeline.csv`, but is not a stage: it has
+never been wired into `build_all.py` or CI, so the deployed site has never
+carried it. Run it by hand. Wiring it in would change what gets published,
+which is a separate decision from where the code lives.
+
+## What counts as build logic, and what does not
+
+The line the migration drew: a stage stays here if it **shapes prepared
+data into a presentation artifact** — an HTML page, a JS card object, a
+denormalised JSON view. It moved out if it **derives a fact about the
+data** — a coordinate, a language, a nationality, a segmentation, a
+category, a link.
+
+By that rule, four scripts left `build_mockup/` despite the folder they sat
+in: `reconcile_sv14_geo.py`, `detect_work_language.py`, `build_kb_links.py`
+and `reconcile_steder_categories.py` all derive facts, and none of them
+built anything. `parse_rejser_htm.py` left `build_web/` for the same
+reason.
+
+Transformations that are inherently part of rendering stay: the co-occurrence
+counting in 4e, the country bounding-boxes in stage 2, the label and wing
+derivation in 4d, the caps and pagination shapes throughout. They exist to
+serve a view, produce nothing another consumer would want, and would have to
+be recomputed anyway.
+
+## The data model
+
+The platform's data model is documented in
+[`docs/data-model/`](../data-model/). The target schema is
+[`docs/data-model/star-schema.md`](../data-model/star-schema.md).
+[`stages.md`](stages.md) describes the six-stage conversion process from
+printed register to normalised row — that process now runs in the cleaning
+repo; the page is kept here for the model and constraints it records.

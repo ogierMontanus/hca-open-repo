@@ -1,5 +1,14 @@
 # Pipeline stages
 
+> **Where this runs now.** Stages 1–4 below are the conversion from printed
+> register to normalised CSV. That work moved to
+> [HCA-Diary-data-cleaning](https://github.com/ogierMontanus/HCA-Diary-data-cleaning);
+> the scripts named here live in that repository, under the same names
+> (`scripts/parsers/`, `scripts/normalization/`). This page is kept because
+> the model, the constraints and the parenthetical conventions it records
+> still govern the data this repo builds from. See
+> [`README.md`](README.md) for the interface between the two.
+
 Five stages take a printed register from `raw/` to the normalised CSVs in `data/normalized/`. Each stage has an explicit input, an explicit output, and a small set of constraints that hold across the whole pipeline.
 
 ## Cross-cutting constraints

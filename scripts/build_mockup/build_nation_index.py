@@ -178,7 +178,7 @@ def load_works_by_language(path):
     out = {}
     if not os.path.exists(path):
         print(f"  [!] {os.path.relpath(path, ROOT)} not found — run "
-              f"detect_work_language.py first. Continuing with no works-by-language data.")
+              f"the cleaning repo. Continuing with no works-by-language data.")
         return out
     with open(path, encoding="utf-8", newline="") as f:
         for r in csv.DictReader(f):

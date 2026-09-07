@@ -8,7 +8,8 @@ one entry per work in data/normalized/entities.csv. The hand-curated
 fills every other gap so any ?reg=… link resolves to real metadata
 instead of an "Ukendt værk" page.
 
-Run after `scripts/normalization/hca_xlsx_to_csv.py`. Stdlib only.
+Reads the prepared CSVs published by HCA-Diary-data-cleaning (see
+docs/pipeline/README.md). Stdlib only.
 """
 
 import csv
@@ -21,6 +22,10 @@ import urllib.parse
 from collections import Counter, defaultdict
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+# Shown when a prepared input is absent: this repo does not produce them.
+HINT = ("the cleaning repo publishes it — run scripts/publish.py in a "
+        "HCA-Diary-data-cleaning checkout (see docs/pipeline/README.md)")
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
 LANGS = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
@@ -665,7 +670,7 @@ def load_parsed_creator_overrides(person_keys):
 
 def main():
     if not os.path.exists(ENTITIES):
-        sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
+        sys.exit(f"Missing {ENTITIES} — {HINT}")
 
     print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
     with open(ENTITIES, encoding="utf-8") as f:
@@ -714,7 +719,7 @@ def main():
         print(f"  languages loaded for {len(work_langs):,} works")
     else:
         print("  no work_languages.csv — lang stays null "
-              "(run scripts/build_mockup/detect_work_language.py)")
+              "(publish work_languages.csv from the cleaning repo)")
 
     wd_overlay = load_wikidata_overlay()
     if wd_overlay:
