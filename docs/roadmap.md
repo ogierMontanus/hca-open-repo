@@ -1,583 +1,98 @@
-# Next-Step Implementation Roadmap
-
-## Cultural Entity Navigation Platform
-
-This roadmap assumes the current conceptual state of the project and prepares the transition toward:
-
-* executable prototype infrastructure;
-* collaborative repository development;
-* and integration with AI coding agents.
-
----
-
-# Phase 1 — Encoding and Data Infrastructure
-
-## Goal
-
-Create a stable, machine-readable, migration-friendly editorial layer before major frontend work begins.
-
-This phase is foundational.
-
-> **Status:** the methodology layer for this phase is now in place — see [`data-model/`](data-model/) and [`pipeline/`](pipeline/) for the documented schema rationale and conversion stages, plus `scripts/parsers/` for the section-specific parsers that consume `raw/HCA-Repository V*.xlsx`.
-
----
-
-## 1.1 Encoding Strategy
-
-The project currently assumes:
-
-* CSV;
-* Excel;
-* PowerQuery-derived joins.
-
-The next step is to formalize encoding standards.
-
-### Recommended Principle
-
-Use:
-
-* lightweight normalized tabular data;
-* plus optional TEI-compatible export paths later.
-
-Avoid:
-
-* premature RDF complexity;
-* ontology overengineering;
-* excessive XML dependence during MVP stage.
-
----
-
-## 1.2 Core Encoding Targets
-
-### Entities
-
-Normalize:
-
-* persons;
-* places;
-* institutions;
-* works;
-* events;
-* motifs/themes.
-
-### Stable IDs
-
-Every entity requires:
-
-* persistent internal identifier;
-* stable slug;
-* optional external authority mappings.
-
-Example:
-
-```text
-person_000123
-place_000456
-work_000891
-```
-
----
-
-## 1.3 Authority Integration
-
-Future-compatible fields:
-
-* VIAF
-* Wikidata
-* Getty ULAN
-* GeoNames
-* Library authority IDs
-
-These may initially remain optional columns.
-
----
-
-## 1.4 Relationship Encoding
-
-A lightweight relationship table should be introduced early.
-
-Example:
-
-```csv
-source_entity,target_entity,relation_type
-work_001,person_009,depicts
-diary_012,place_088,mentions
-opera_011,work_001,adapts
-```
-
-This becomes the bridge toward later graph modeling.
-
----
-
-## 1.5 Controlled Vocabularies
-
-Introduce controlled values for:
-
-* artwork types;
-* institution types;
-* relationship types;
-* periods;
-* genres;
-* movements.
-
-This prevents future normalization problems.
-
----
-
-# Phase 2 — GitHub Repository Architecture
-
-## Goal
-
-Establish a repository structure explicitly designed for:
-
-* collaborative humanities work;
-* AI-assisted coding;
-* reproducible builds;
-* modular evolution.
-
----
-
-# 2.1 Repository Philosophy
-
-The repository should separate:
-
-* editorial data;
-* transformation scripts;
-* application code;
-* generated artifacts;
-* documentation.
-
-Avoid monolithic structure.
-
----
-
-# 2.2 Recommended Repository Layout
-
-```text
-cultural-entity-platform/
-
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── docs/
-│
-├── data/
-│   ├── raw/
-│   ├── normalized/
-│   ├── derived/
-│   └── vocabularies/
-│
-├── scripts/
-│   ├── normalization/
-│   ├── ingestion/
-│   └── exports/
-│
-├── backend/
-│
-├── frontend/
-│
-├── schemas/
-│
-├── tests/
-│
-├── examples/
-│
-└── ai-context/
-    ├── project_memory_recap.md
-    ├── coding_agent_plan.md
-    ├── ontology_notes.md
-    └── prompts/
-```
-
----
-
-# 2.3 Essential Early Files
-
-## README.md
-
-Must explain:
-
-* project vision;
-* architecture;
-* setup instructions;
-* roadmap.
-
----
-
-## CONTRIBUTING.md
-
-Critical for AI-assisted collaboration.
-
-Define:
-
-* naming conventions;
-* folder logic;
-* branching workflow;
-* metadata standards;
-* commit message conventions.
-
----
-
-## schemas/
-
-Store:
-
-* JSON schemas;
-* CSV field specifications;
-* entity definitions;
-* relation vocabularies.
-
----
-
-# 2.4 Git Strategy
-
-Recommended:
-
-* trunk-based development initially;
-* feature branches later.
-
-Suggested branches:
-
-```text
-main
-dev
-frontend
-backend
-data-model
-experimental
-```
-
----
-
-# 2.5 Licensing
-
-Strongly recommended:
-
-* MIT for code;
-* CC-BY or CC0 for metadata;
-* explicit separation between code license and cultural datasets.
-
----
-
-# Phase 3 — Integration with AI Coding Agents
-
-## Goal
-
-Design repository and workflows explicitly for collaboration with:
-
-* OpenAI Codex-style systems;
-* Claude Code;
-* future autonomous coding agents.
-
-This should be treated as a first-class architectural concern.
-
----
-
-# 3.1 Core Principle
-
-AI agents work best when:
-
-* repository structure is explicit;
-* conventions are stable;
-* context files are centralized;
-* schemas are documented;
-* task boundaries are modular.
-
-The repository should therefore become:
-
-* machine-readable for humans;
-* and human-readable for machines.
-
----
-
-# 3.2 Shared AI Context Folder
-
-Critical recommendation:
-
-Create:
-
-```text
-/ai-context/
-```
-
-Contents:
-
-* project summaries;
-* architectural philosophy;
-* glossary;
-* entity model;
-* terminology;
-* roadmap;
-* prompt templates.
-
-This dramatically improves coding-agent continuity.
-
----
-
-# 3.3 Agent Instruction Files
-
-Recommended files:
-
-```text
-CLAUDE.md
-CODEX.md
-```
-
-Purpose:
-
-* define coding conventions;
-* architectural constraints;
-* preferred frameworks;
-* forbidden patterns;
-* workflow expectations.
-
----
-
-## Example Topics
-
-### CLAUDE.md
-
-* avoid overengineering;
-* prefer readable code;
-* preserve modularity;
-* maintain CSV compatibility.
-
-### CODEX.md
-
-* strict typing requirements;
-* testing expectations;
-* schema validation;
-* migration rules.
-
----
-
-# 3.4 Permissions and Access Control
-
-## Recommended Setup
-
-### Human Collaborators
-
-Use:
-
-* GitHub Teams;
-* branch protection;
-* pull-request workflow.
-
----
-
-## AI Coding Agents
-
-AI agents should:
-
-* never push directly to `main`;
-* work through feature branches or PR generation;
-* require review before merge.
-
----
-
-## Recommended GitHub Permissions
-
-### Maintainers
-
-* full write/admin
-
-### Contributors
-
-* write access
-
-### AI Service Accounts
-
-* restricted write
-* PR-only workflow preferred
-
----
-
-# 3.5 Repository Features to Enable
-
-Recommended GitHub settings:
-
-* branch protection;
-* required PR reviews;
-* issue templates;
-* discussion boards;
-* GitHub Actions;
-* Dependabot;
-* code owners.
-
----
-
-# 3.6 GitHub Actions
-
-Recommended early automation:
-
-## Validation
-
-* CSV schema validation;
-* linting;
-* type checks.
-
-## Build
-
-* frontend build checks;
-* API tests.
-
-## Documentation
-
-* auto-generate schema docs.
-
----
-
-# 3.7 AI-Agent-Friendly Documentation
-
-Critical principle:
-
-Every major directory should contain:
-
-```text
-README.md
-```
-
-Explaining:
-
-* purpose;
-* expected files;
-* workflows;
-* constraints.
-
-AI agents perform significantly better with localized contextual documentation.
-
----
-
-# Phase 4 — Shareable Colleague Artifact
-
-## Goal
-
-Produce a concise but high-level project introduction for collaborators.
-
-This artifact should:
-
-* explain vision;
-* explain architecture;
-* explain AI-assisted workflow;
-* and reduce onboarding friction.
-
----
-
-# Recommended Deliverables
-
-## 4.1 Project Brief PDF
-
-Contents:
-
-* conceptual overview;
-* screenshots/mockups later;
-* repository structure;
-* roadmap;
-* institutional model;
-* semantic model.
-
----
-
-## 4.2 GitHub Onboarding Guide
-
-Short collaborator guide:
-
-* how to clone repo;
-* branch workflow;
-* where data lives;
-* where documentation lives;
-* how AI agents are integrated.
-
----
-
-## 4.3 AI Collaboration Policy
-
-Important for institutional trust.
-
-Clarify:
-
-* AI-generated code review expectations;
-* authorship policy;
-* verification requirements;
-* provenance tracking.
-
----
-
-# Phase 5 — Immediate Tactical Next Steps
-
-## Recommended Order
-
-### Step 1
-
-Formalize encoding conventions.
-
-Deliverables:
-
-* entity schema;
-* relation schema;
-* controlled vocabularies.
-
----
-
-### Step 2
-
-Create GitHub repository.
-
-Deliverables:
-
-* folder structure;
-* README;
-* licenses;
-* contribution guide.
-
----
-
-### Step 3
-
-Add AI integration layer.
-
-Deliverables:
-
-* `/ai-context/`
-* `CLAUDE.md`
-* `CODEX.md`
-
----
-
-### Step 4
-
-Build ingestion pipeline.
-
-Deliverables:
-
-* CSV normalization scripts;
-* schema validation;
-* test datasets.
-
----
-
-### Step 5
-
-Prototype frontend.
-
-Deliverables:
-
-* institution browsing;
-* entity pages;
-* filtering system;
-* timeline filtering.
-
----
-
-# Long-Term Strategic Direction
-
-The project is evolving toward a hybrid between:
-
-* cultural knowledge graph;
-* semantic catalogue;
-* institutional discovery platform;
-* and humanities navigation engine.
-
-The key architectural insight remains:
-
-> Preserve recognizable cultural structures at the interface layer while enabling increasingly rich semantic interconnection underneath.
+# Roadmap
+
+Status: current · 2026-09-07 — rewritten after the preprocessing/build
+split landed (see `docs/pipeline/README.md` and `HANDOVER.md`). The
+previous version of this file was written before the repository existed
+and described a generic, hypothetical bootstrap (creating the repo,
+choosing CSV vs. RDF, writing a `CONTRIBUTING.md`). None of that reflects
+where the project actually is now, so it has been replaced rather than
+amended.
+
+## Where the project actually stands
+
+- **Two repositories, one pipeline.** Cleaning, segmentation,
+  normalisation and enrichment live in
+  [HCA-Diary-data-cleaning](https://github.com/ogierMontanus/HCA-Diary-data-cleaning).
+  This repo only builds and publishes: it reads the prepared files under
+  `data/normalized/`, `data/parsed/` and `data/curated/`, and turns them
+  into `mockup/` and `web/`. The full contract is
+  `docs/pipeline/README.md`; the rule for where new code goes is in
+  `CLAUDE.md`.
+- **The build is stdlib-only** and produces, from committed prepared
+  data: 4,544 diary detail pages plus 8 generated `*.js` view artifacts
+  and 6 `*.json` artifacts (`scripts/build_all.py`, stages 2–4f).
+  `scripts/build_all.py --check-inputs` reports what prepared data is
+  present without running a build.
+- **The live site** covers persons, places, works (three wings:
+  billedkunst, teater-musik, bibliotek), diaries, and a nation mashup,
+  with cross-linking and a working co-occurrence index
+  (`mockup/data/cooccurrence.js`).
+- **English translation** is partial by design (full duplicate `_en.html`
+  pages, not a runtime toggle — `docs/i18n-policy.md`). Six high-traffic
+  pages are done; the entity detail pages (`work.html`, `place.html`,
+  `entry.html`) and the three wing pages are not. Tracked in
+  `docs/i18n-todo.md`.
+- **Facet filtering** is live and data-backed on the three wing pages via
+  `mockup/js/category-catalogue.js`. It is not yet wired on `persons.html`,
+  `places.html`, `diaries.html`, `search.html` or `romaner.html` — and for
+  several of those pages the blocker is missing source data, not missing
+  JavaScript. Full page-by-page state and data-coverage numbers:
+  `docs/plan-live-facets.md`.
+
+## Near-term (next to pick up)
+
+Ordered by what's both scoped and already documented elsewhere — each
+line links to where the detail lives.
+
+1. **Finish English parity for the detail pages.** `work.html` and
+   `place.html` are the single biggest remaining seam: every translated
+   list page (`works_en.html`, `places_en.html`, `diaries_en.html`) links
+   through to a fully Danish detail page today. See `docs/i18n-todo.md`
+   for the recommended order.
+2. **Extend live faceting past the wing pages**, starting where data
+   coverage already supports it (diaries: 100% coverage on place/person/
+   work mentions and volume) rather than where the facet already exists
+   in hardcoded form. `docs/plan-live-facets.md` has the coverage table
+   and names the extraction from `category-catalogue.js` into a
+   reusable engine as the actual work, not new design.
+3. **Close the data-coverage gaps that block faceting**, in
+   HCA-Diary-data-cleaning, not here: nationality and role/profession for
+   persons (0/10,228 today), work language (0/3,708), and place country
+   (18% today). These are enrichment facts, so per the repo split they
+   are that repo's work, published back through `scripts/publish.py`.
+4. **Decide on `persons_wikidata.csv`.** The facet it feeds is currently
+   empty because the file is absent (`build_all.py --check-inputs`
+   reports it as optional-and-missing). Verify any Wikidata IDs added
+   for it via the `wikidata-verify` skill before publishing, per
+   `CLAUDE.md`.
+5. **Decide on `timeline-index.js`.** `build_mockup/build_timeline_index.py`
+   already builds it from `data/normalized_v092/timeline.csv`, but it has
+   never been wired into `build_all.py` or CI, so the deployed site has
+   never carried it (`docs/pipeline/README.md`). Wiring it in is a
+   publishing decision, separate from the code already existing.
+
+## Ongoing hygiene
+
+- `mockup/irrelevant/` stays frozen — see `CLAUDE.md` and
+  `mockup/irrelevant/README.md`. Don't propagate design, i18n, or
+  facet-panel changes into it.
+- External links keep following `docs/external-links.md` (new tab,
+  discreet placement) as new pages gain provenance links.
+- Any new script that derives a fact about the data (a coordinate, a
+  language, a nationality, a segmentation, a category, a link) belongs in
+  HCA-Diary-data-cleaning, not here — see the repo-split rule in
+  `CLAUDE.md`. Only presentation-shaping code (HTML pages, JS card
+  objects, denormalised JSON) belongs in this repo's `scripts/`.
+
+## Longer-term direction
+
+The two-repo split is the structural decision the earlier version of this
+document was gesturing at (separating editorial data from transformation
+scripts from application code) — it has now actually happened, driven by
+what the pipeline needed rather than decided up front. From here, the
+platform's growth is additive within that shape: more entity coverage,
+more live facets, full bilingual parity, and — as `docs/onboarding-ole.md`
+and `docs/genAi-query.md` anticipate — easier collaborator onboarding and
+richer query surfaces on top of the same normalized star schema
+(`docs/data-model/star-schema.md`). No architectural rework is anticipated
+unless the data model itself needs to change.
