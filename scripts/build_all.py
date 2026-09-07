@@ -26,6 +26,7 @@ Exit code is non-zero on the first failing stage, except the stages marked
 optional below, which mirror CI's continue-on-error on the same steps:
 
   4f  nation index / umbrellas
+  4g  timeline index (Tidslinje view)
 
 Every consumer degrades gracefully when an optional prepared input is
 absent, so a build still produces a complete mockup from whatever the
@@ -51,14 +52,8 @@ STAGES = [
     ("4d", "search-index.js (typeahead)",    "scripts/build_mockup/build_search_index.py", False),
     ("4e", "cooccurrence.js (reciprocal)",   "scripts/build_mockup/build_cooccurrence.py", False),
     ("4f", "nation-index.js (nation mashup)", "scripts/build_mockup/build_nation_index.py", True),
+    ("4g", "timeline-index.js (Tidslinje)",   "scripts/build_mockup/build_timeline_index.py", True),
 ]
-
-# Not a stage: scripts/build_mockup/build_timeline_index.py builds
-# mockup/data/timeline-index.js from the prepared
-# data/normalized_v092/timeline.csv, but has never been wired into this
-# pipeline or into CI, so the deployed site has never carried it. Run it by
-# hand; wiring it in is a change to what gets published, not part of the
-# repository split.
 
 # Prepared inputs, as published by HCA-Diary-data-cleaning. Required ones
 # have no graceful degradation: the build cannot run without them.

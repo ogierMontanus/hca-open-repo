@@ -38,7 +38,7 @@ OUT_FILE  = OUT_DIR / "timeline-index.js"
 def main() -> None:
     if not SRC.exists():
         print(f"Source not found: {SRC}")
-        print("Run scripts/migration/migrate_tidstavle_sql.py first.")
+        print("Optional input, published by HCA-Diary-data-cleaning — see docs/pipeline/README.md.")
         return
 
     rows = []
