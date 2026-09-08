@@ -61,7 +61,10 @@ funktion ud over at gentage brødkrummen, er fjernet.
 - `mockup/persons.html` — brødkrumme, hero-chips/-meta, sidebar
 - `mockup/place.html` — brødkrumme, hero-chips/-meta, sidebar
 - `mockup/work.html` — brødkrumme, hero-chips/-meta, sidebar
-- `mockup/person.html` — **ikke** ændret i denne omgang; siden er en
-  ubrugt legacy-visning (kort til `persons.html?reg=…`, ikke
-  `person.html?reg=…` — se `docs/data-model/person-bio-search-links.md`),
-  så den er lavere prioritet end de tre live sider.
+- `mockup/person.html` — **slettet** (2026-09-07): siden var en ubrugt
+  legacy-visning (intet i det levende register linkede nogensinde til
+  den — `entity-refs.js`s `personHref()` peger altid på
+  `persons.html?reg=…`, aldrig `person.html?reg=…`), bekræftet ved
+  gennemklikning af den rigtige navigation, ikke ved gæt på URL-mønstre.
+  Se `docs/data-model/person-bio-search-links.md` for demo-posten den
+  bar med sig.

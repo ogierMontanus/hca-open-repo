@@ -80,10 +80,11 @@ manglende tag er selve normen, kun undtagelserne markeres.
 | Tag | intet | `info-block__tag`: `--color-surface`-baggrund, `--color-border`-kant, `--color-text-muted`-tekst |
 
 **Anvendt på:** `persons.html` (Autoritetslinks + Biografiske opslag),
-`person.html` (Autoritetslinks, den ubrugte legacy-side — se
-`docs/data-model/person-bio-search-links.md`), `place.html`
-(Autoritetslinks). `entry.html`s "Bladr i dagbøgerne"-blok er **ikke**
-markeret — det er intern navigation, ikke eksternt tilføjet data.
+`place.html` (Autoritetslinks). `entry.html`s "Bladr i dagbøgerne"-blok er
+**ikke** markeret — det er intern navigation, ikke eksternt tilføjet data.
+(`person.html` bar tidligere det samme Autoritetslinks-mønster, men var en
+ubrugt legacy-side og blev slettet 2026-09-07 — se
+`docs/data-model/detail-page-redundancy.md`.)
 
 **Begrundelse for farvevalg.** Samme princip som `nation.html`s
 `.lang-src--register`/`.lang-src--derived`-badges (se

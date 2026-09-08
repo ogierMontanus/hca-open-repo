@@ -283,11 +283,12 @@ were worth wiring; the reasoning for the rest:
   technically possible but low value: popups are transient, the country
   is already one line of a two-line popup, and the map is itself the
   "see everything geographically" view. *Not wired.*
-- **`person.html`** — carries the same "Hyppigste steder" structure and
-  would qualify, but it is orphaned: nothing in the mockup links to it
-  any more (`persons.html` superseded it, and
-  `tests/test_no_stale_person_refs.py` enforces that). Wiring a dead
-  page would be misleading maintenance. *Not wired.*
+- **`person.html`** — carried the same "Hyppigste steder" structure and
+  would have qualified, but it was orphaned: nothing in the mockup linked
+  to it any more (`persons.html` superseded it). Deleted outright
+  (2026-09-07, see docs/data-model/detail-page-redundancy.md) rather than
+  wired — `tests/test_no_stale_person_refs.py` now guards against the
+  filename reappearing as a link target at all.
 - **`romaner.html` and `work.html`** — both carry a **Sprog** facet
   (`data-facet="lang"`, values `de` / `Tysk`). The **semantic** caution
   here still stands and is now built into the design rather than used

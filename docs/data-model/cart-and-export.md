@@ -341,7 +341,9 @@ falls back to **`'table'`** if storage is unavailable or unset).
 
 **Brugerpræference (2026-08-19):** every Liste/Gitter toggle on the site
 (persons.html's and place.html's and work.html's diary-reference sections,
-the legacy person.html) had its Gitter option dropped in favor of the same
+plus the legacy person.html, since deleted — see
+docs/data-model/detail-page-redundancy.md) had its Gitter option dropped
+in favor of the same
 Liste/Tabel pattern cart.html already used — Tabel replaces Gitter, not
 Liste, and Tabel is now the *default* view everywhere a reader hasn't
 already saved a preference. `billedkunst.html` is the one deliberate

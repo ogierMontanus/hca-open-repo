@@ -1,170 +1,210 @@
-# Håndovering — personregister XI segmentering (2026-09-02)
+# Håndovering — UI declutter (branch `claude/ui-declutter-fixes`)
 
-Session-status ved afslutning: alt commit'et (`2c6dfde wrangling`), working
-tree ren, 13/13 tests grønne. `data/parsed/personregister_xi_parsed.tsv`:
-**10.136 rækker** (9.725 standardposter, 394 krydshenvisninger, 17 underposter).
+Status ved afslutning: 2 commits, begge pushet, working tree ren, 19/19
+tests grønne. Branchet fra `main` (commit `2b8fa68`), **uafhængigt** af
+pipeline-separationsarbejdet på `claude/hca-preprocessing-separation-iobj59`
+— ingen data-/pipeline-filer rørt her, og omvendt.
 
-## Reelt overskud/underskud lige nu
+```
+git fetch origin
+git checkout claude/ui-declutter-fixes
+python -m pytest tests/ -q   # 19 passed
+```
 
-Rå rækketal er misvisende (de to kilder tæller krydshenvisninger forskelligt).
-Sammenlignet på **personposter** mod `data/raw/Personer _ HCA_tsv.txt`
-(uafhængig præ-segmenteret transskription, 10.228 rækker, 699 er
-krydshenvisninger → 9.529 personer):
+## Baggrund
 
-| | Antal |
-|---|---|
-| Vores personposter | 9.742 |
-| Referencens personer | 9.529 |
-| **Rå person-overskud** | **+213** |
-| — heraf blot stavevariant (samme sidehenvisnings-signatur) | 330 af 344 "kun hos os" |
-| — heraf blot stavevariant (samme sidehenvisnings-signatur) | 170 af 171 "kun i ref" |
-| **Reelt nettooverskud** | **~10 poster** (11 reelt ukendte hos os − 1 reelt ukendt i ref) |
+Opgaven startede som en klik-igennem af hele mockup'en (Playwright, ikke
+kun kodelæsning) for at finde gentagelser og rod. Reviewet fandt en lang
+liste — se "Ting der IKKE er lavet endnu" nedenfor for den fulde,
+uafkortede liste. Denne branch implementerer kun den første, mest
+velbegrundede delmængde: fire konkrete UI-fejl plus én filsletning, alle
+verificeret ved rigtig navigation og genopbygget output, ikke kun
+kodelæsning.
 
-Konklusion: de to kilder er nu praktisk talt dækningslige på personniveau.
-Målemetoden (se nedenfor) er selv skrøbelig — næste session bør genbekræfte
-tallet efter enhver ny batch-ændring.
+**Den vigtigste arbejdsmetode-lektie fra denne branch:** det første udkast
+til reviewet klikkede sig frem via gættede URL'er (`person.html?reg=…`)
+snarere end ved at klikke på rigtige links. Det viste sig at være en
+**død, ubrugt legacy-side** — intet i det levende site linker til den.
+Al efterfølgende verifikation i denne branch skete derfor via
+Playwright-klik fra `index.html` og fremad, aldrig ved at skrive en URL i
+adresselinjen, og ved at genopbygge og inspicere det faktiske output
+(HTML/JS), ikke kun ved at læse kildekoden.
 
-**Målemetode** (genbrugt gennem hele sessionen, ingen færdig scriptfil):
-1. Normalisér navn: NFKD-strip diakritika, fjern ALLE årstalsparenteser
-   (ikke kun den sidste — det var en tidlig bug), fold tegnsætning væk.
-2. `core(navn)`-sæt-differencer mellem vores personposter og referencens.
-3. For "kun hos os"/"kun i ref": slå op om den anden sides
-   sidehenvisnings-signatur (fuldt ekspanderet `VOL:PAGE`-sæt) matcher en
-   post på den modsatte side — matcher den, er det samme person med
-   forskellig stavemåde, ikke et reelt overskud.
+## Commit 1 — `91b35a1`: fire bekræftede fejl
 
-## Hvad der er gjort i denne session (kronologisk)
+**1. Dublerede kolonner i dagbogsreference-tabellen** (`mockup/js/diary-wire.js`).
+`headingFor()` falder allerede tilbage til bind/side-strengen når en side
+ikke har en dato — sandt for 83 % af siderne (kun bind VI–VII er daterede
+i dag) — så "Dato / reference" og "Bind, side" var identisk tekst på de
+fleste rækker. Slået sammen til én kolonne; bind/side vises kun som
+underlinje når den faktisk siger noget datoen ikke gør, samme mønster
+`cardList()` allerede brugte.
 
-1. **Beskrivelses-fusion** (`suggest_description_fusion_splits.py` →
-   `apply_description_fusion_splits.py`): 46 rækker splittet hvor
-   `09_description` skjulte en ny person efter romertal+arabertal-henvisning
-   eller tankestreg+efternavn-forbogstav.
-2. **Embedded name+year** (`suggest_embedded_name_splits.py` →
-   `apply_embedded_name_splits.py`): 132 rækker splittet hvor et
-   "Efternavn, Fornavn (år)," var begravet midt i en lang beskrivelse
-   (Melchior-familien, Hauch, Wulff, Collin).
-3. **Ekstern reference-harvest** (`harvest_segmentation_from_tsv.py` →
-   `apply_tsv_harvest_splits.py`): opdagede at
-   `data/raw/Personer _ HCA_tsv.txt` er en uafhængig, allerede
-   person-pr-række transskription (10.228 rækker). 70 fusionerede rækker →
-   82 nye poster, med navn/år/beskrivelse/sidehenvisning hentet direkte
-   derfra.
-4. **Import af 958 manglende personer**
-   (`import_reference_missing_candidates.py`): personer i referencen uden
-   modstykke hos os, indsat på alfabetisk plads UDEN at omsortere hele
-   filen (registret selv afviger fra ren sortering ~600 steder — partikler,
-   tilnavne). Én ortografisk rettelse anvendt (Û→Ü i Üxküll).
-5. **Navnediff-gennemsyn** (bruger-godkendt liste): 132 "our_name" beholdt,
-   45 markeret "skæv parring" → 6 manuelle splits
-   (`apply_reviewed_name_diff_splits.py`: Kohle/Kok, Morsing/Mortensen/
-   Mortier de Fontaine, Power Ellen+Marguerite, Schram/Skram, Seidelin/Seidl,
-   Skovgaard/Schougaard) + 38 reelt manglende importeret.
-6. **13 tankestregs-underposter koblet til ophav**
-   (`link_dash_subentries_to_parents.py`): "— Hans Datter" havde mistet sin
-   forælder ved alfabetisk sortering (tankestreg sorterer før bogstaver).
-   Genfundet via referencens bevarede trykrækkefølge, matchet på
-   sidehenvisning. Injiceret i `09_description` OG `12_see_also`.
-7. **Dublet-opdagelse og -fjernelse** — den STØRSTE fejlkilde i sessionen:
-   - `dedupe_imported_twins.py`: 958-importen matchede på navnetekst, så
-     tomme/anderledes-stavede fornavne hos os fik referencens person
-     importeret som "ny" — 393 dubletgrupper, 453 rækker fjernet
-     (fuld sidehenvisnings-signatur + årstal som nøgle).
-   - `merge_particle_and_refless_twins.py`: en ANDEN dublettype samme
-     dedupe ikke fangede — par hvor kun den ene side har
-     sidehenvisninger, og/eller efternavnet afviger med en ledende
-     partikel (`d'Auchamp` vs `Auchamp`). 26 yderligere fusioneret.
-   - Begge scripts prioriterer VORES stavemåde ved konflikt — referencen
-     har en systematisk C→G-OCR-fejl (`Cornelis`→`Gornelis`,
-     `Puggaard, C.`→`Puggaard, G.`, `Riegels, H.C.`→`H.G.`), bekræftet
-     ved stikprøve før reglen blev sat.
-8. **3 fusionsrester rettet manuelt** (`fix_three_fusion_remnants.py`,
-   senere overhalet af punkt 7's dublet-opdagelse — Gerdislaw og
-   Glücksborg viste sig at være dubletter, ikke bare defekte; kun Hansen-
-   raden var reelt et selvstændigt fix).
-9. **Feltsegmentering internt i `09_description`**
-   (`refine_description_segmentation.py`, `merge_particle_and_refless_twins.py`
-   er separate): tre mønstre hvor beskrivelsen stadig indeholdt navn/år:
-   - **A**: beskrivelse begynder direkte med egen levetidsparentes
-     (`Tiziano Vecellio | "(1476/77-1576), italiensk Maler."`)
-   - **B**: beskrivelse begynder med fornavn(e) + levetid
-     (`Titov | "Vladimir Pavlovič (død 1891), russisk Diplomat..."`)
-   - **G**: levetid dublereret inde i `04_given_names`
-     (`"Carl (ca. 1820-ca.1876)"`)
-   Bevidst IKKE rørt: mødedatoer (`Amerikansk Beundrer (1871)` er ikke en
-   levetid), rene titler (`Tysk-romersk Kejser` bliver IKKE til et
-   fornavn), søskendegrupper med flere levetider i én beskrivelse.
-   Udvidet undervejs til at acceptere komma i navnedelen
-   (`Elisa, f. Hallady`, `Maria Elizabeth, Lady, f. Grevinde ...`) med
-   værn mod at fange slægtskabsled (`Datter af Heinrich Z.`) som navn.
+**2. Selv-chip i egen referencetabel** (samme fil). `chipsFor(pag)` lister
+alle entiteter på en dagbogsside, inklusive den entitet hvis egen
+referencetabel bliver vist — så en persons eget navn optrådte i deres
+egne rækker, bekræftet på ~20 % af rækkerne i det oprindelige review,
+og optog altid en af kun tre synlige chip-pladser. Filtreret via en ny
+`chipsForOther(pag)`-wrapper, scopet til `refs()` (den generelle
+dagbogsgennemsyning i `list()` viser fortsat alle — der er intet "selv"
+der).
 
-## Åbne tråde — bruger stillede 7 punkter i sidste besked, ALLE besvaret
+**3. Gammelt projektnavn** ("H.C. Andersen(s) Dagbogsregister") erstattet
+med "HCA Open Repository" på `works.html`/`works_en.html` (nås fra
+forsidens "Hvad"-kort) og `cart.html` (nås fra kurv-badge'n i headeren på
+enhver side) — begge viste det aktuelle header-logo og det forældede navn
+i samme viewport. Rettet også i `build_diary_pages.py`s side-skabelon, så
+alle 4.544 genererede dagbogssider bærer det korrekte navn (titel,
+header-logo, footer-attribution).
 
-Alle 7 punkter fra brugerens sidste instruktion (Auchamp/Ohsson-
-alfabetisering, Alton/Aubert/Avezac-dubletter, Drewsen Elisa-segmentering,
-Drewsen J.C., Puggaard C./G., Riegels H.C./H.G.) er verificeret løst i
-punkt 7 og 9 ovenfor. **Ingen kendte åbne punkter fra brugerens direkte
-instruktioner.**
+**4. Dødt "Hvornår"-link** (`index.html`/`index_en.html`), fundet
+undervejs ved rigtig navigation: pegede på `href="#"`. Peget nu på
+`diaries.html?layout=timeline` / `diaries_en.html?layout=timeline`, med
+en lille deep-link-bootstrap tilføjet til begge dagbogssider, der læser
+`?layout=` ved indlæsning og klikker den matchende
+layout-switcher-knap — genbruger dens eksisterende pane-skift-logik
+frem for at duplikere den. End-to-end-verificeret: lander på
+Tidslinje/Timeline-fanen med både fanen og navigations-rebet markeret
+aktivt, og med 1.446 rigtige begivenheder rendered når
+`build_timeline_index.py`s data er til stede.
 
-## Kendte svagheder / bør tjekkes i næste session
+**Én planlagt fix blev droppet efter verifikation:** `person.html`s
+"Registerdata"-sidebar-kort duplikerer sin hero, men rigtig navigation
+når aldrig `person.html` — se næste afsnit.
 
-1. **Dublet-jagten er sandsynligvis ikke udtømt.** To dublet-klasser blev
-   fundet reaktivt (bruger pegede på konkrete eksempler), ikke ved
-   systematisk scanning. En tredje klasse kan eksistere — f.eks. par hvor
-   BEGGE sider har sidehenvisninger, men til delvist overlappende (ikke
-   identiske) sider, eller hvor efternavnet afviger på andet end en
-   ledende partikel. Værd at køre en bredere similarity-baseret scanning
-   (fx difflib på `(efternavn, fornavn)`-par med delvist overlappende
-   referencer) i næste session.
-2. **`refine_description_segmentation.py`'s mønster A/G er kun kørt på
-   rækker uden ÅRSTAL i 06/07.** Der kan være rækker der HAR årstal, men
-   hvor `09_description` alligevel indeholder en overflødig ekstra
-   parentes (linjeskift-fragment, dobbelt-OCR) som mønsteret aldrig så,
-   fordi det tjekkede `if r["06_birth_year"] or r["07_death_year"]: continue`.
-3. **Ingen automatiseret regressionstest for dublet-frihed.** De 453 + 26
-   fjernede dubletter blev fundet og fjernet manuelt her; der er intet i
-   `tests/test_personregister_xi_parsed.py`, der fanger en fremtidig
-   gentagelse (fx hvis en ny import-runde laves). Overvej en test der
-   flager grupper med identisk (efternavn, fuld sidehenvisnings-signatur).
-4. **`test_row_count_in_expected_range`** blev hævet flere gange under
-   sessionen (senest til `9000 ≤ n ≤ 10800`, se
-   `tests/test_personregister_xi_parsed.py`). Grænsen er bevidst løs og bør
-   ikke strammes uden at genmåle mod referencen.
-5. **`data/curated/personregister_xi_review_full.xlsx`** er sidst
-   genereret FØR punkt 7-9's rettelser i denne session (`build_review_workbook.py`
-   blev kørt, men kontrollér tidsstemplet mod seneste `parsed`-ændring —
-   kør scriptet igen hvis der er tvivl, inden nogen læser arket).
-6. **Reference-scriptets C→G-antagelse er ikke systematisk verificeret
-   ud over de konkrete rækker brugeren pegede på.** Hvis flere C/G-
-   forvekslinger findes i referencen fremover, er reglen i
-   `merge_particle_and_refless_twins.py` allerede generisk nok til at
-   fange dem (den prøver `ga.replace('g','c') == gb.replace('g','c')`),
-   men er ikke testet bredt.
+## Commit 2 — `7fbdf8c`: sletning af `mockup/person.html`
 
-## Snapshots til rollback (i scratchpad, IKKE i git)
+Bekræftet død ved klik-igennem: intet i det levende site linker til den.
+`entity-refs.js`s `personHref()` peger altid på `persons.html?reg=…`,
+aldrig `person.html?reg=…`; `persons.html` overtog både liste- og
+detaljevisning (`?reg=`), og havde allerede siden's eneste reelle
+forskel (Autoritetslinks/Biografiske opslag-sidebaren) implementeret
+uafhængigt. Brugeren godkendte sletningen eksplicit ("I will restore
+from git history if need be").
 
-`C:\Users\nh\AppData\Local\Temp\claude\c--Users-nh-Documents-GitHub-hca-open-repo\cb83abfb-0574-45c0-8da0-6baff51e3858\scratchpad\`:
-`parsed_before_split_yes.tsv`, `parsed_before_cue_splits.tsv`,
-`parsed_before_desc_fusion.tsv`, `parsed_before_embedded_name.tsv`,
-`parsed_before_tsv_harvest.tsv`, `parsed_before_import958.tsv`,
-`parsed_before_namediff.tsv`, `parsed_before_skew38.tsv`,
-`parsed_before_dashlink.tsv`, `parsed_before_3fix.tsv`,
-`parsed_before_dedupe.tsv`, `parsed_before_twins2.tsv`,
-`parsed_before_refine.tsv`, `parsed_before_refine2.tsv`.
-Disse forsvinder med scratchpad-oprydning — kopiér til `data/curated/` hvis
-langtidsopbevaring ønskes.
+Derudover rettet **hver** reference i repoet der beskrev filen som
+levende, så intet peger en fremtidig læser eller build mod en side der
+ikke længere findes:
 
-## Scripts skrevet denne session (alle i `scripts/parsers/`, alle tracked)
+- `tests/test_no_stale_person_refs.py` — fjernet den nu-overflødige
+  skip-undtagelse; testen bevarer sit formål, skærpet: enhver
+  `href`/streng-literal der nævner `person.html` er nu nødvendigvis et
+  dødt link, ikke bare et forældet-men-virkende ét.
+- `scripts/build_mockup/build_persons_extra.py`,
+  `build_cooccurrence.py` — to af de rettede kommentarer skrives
+  ordret ind i genererede artefakter (`persons-extra.js`,
+  `cooccurrence.js`); efterladt urettet ville hver build fortsat
+  udsende en falsk påstand om det levende sites egen mekanik. Begge
+  regenereret og inspiceret direkte for at bekræfte rettelsen slår
+  igennem.
+- `scripts/build_mockup/README.md` — tre indholdsmæssige fejl rettet,
+  ikke kun filnavnet: fallback-beskrivelsen ("hand-curated dicts i
+  `mockup/{work,person,place}.html`" — `persons.html` har ingen sådan
+  dict), `ALL_WORKS`/`ALL_PERSONS`/`ALL_PLACES`-forklaringen (kun
+  `work.html` og `place.html` har det mønster), og data-flow-diagrammet
+  (tegnet om og talt tegn-for-tegn så boksen stadig flugter efter
+  rettelsen — et naivt filnavns-bytte havde efterladt den én kolonne
+  skæv).
+- `.github/workflows/build-mockup.yml`, `mockup/js/entity-refs.js`,
+  `mockup/persons_en.html` — kommentarer der navngav `person.html` som
+  forbruger eller søskende, rettet til `persons.html`.
+- 7 dokumenter under `docs/` — opdateret hvor de beskrev siden som
+  aktuel, eller foreslog at koble en fremtidig funktion til den
+  (`correspondence-integration.md`s roadmap-punkt peger nu på
+  `persons.html` i stedet). **Bevidst urørt:** to træf i
+  `correspondence-integration.md` og ét i `docs/data-model/README.md`
+  der navngiver den **eksterne** `andersen.sdu.dk/brevbase/person.html`
+  — et andet websteds URL-mønster, ikke vores.
 
-`suggest_description_fusion_splits.py`, `apply_description_fusion_splits.py`,
-`split_wendell_chain.py`, `build_review_workbook.py` (udvidet),
-`suggest_embedded_name_splits.py`, `apply_embedded_name_splits.py`,
-`harvest_segmentation_from_tsv.py`, `apply_tsv_harvest_splits.py`,
-`import_reference_missing_candidates.py`, `apply_reviewed_name_diff_splits.py`,
-`link_dash_subentries_to_parents.py`, `fix_three_fusion_remnants.py`,
-`dedupe_imported_twins.py`, `merge_particle_and_refless_twins.py`,
-`refine_description_segmentation.py`, `calibrate_names_from_reference.py`,
-`clean_year_parentheses_in_names.py`.
+## Verifikation udført
 
-Kør i denne rækkefølge for at reproducere status fra bunden af en ældre
-snapshot — men i praksis er alt allerede anvendt og commit'et; disse er
-til reference/audit, ikke til genkørsel.
+- 19/19 tests grønne efter begge commits.
+- Playwright-smoke-test over 14 sider (desktop, alle fire registre,
+  begge sprog, én genereret dagbogsside, søgning, kurv) — nul
+  konsol-/side-fejl, både før og efter sletningen.
+- Kolonnesammenlægning og selv-chip-filter bekræftet direkte mod
+  rigtigt renderet output (Collin, Edvard, `Reg0048570`), ikke kun
+  kodelæsning.
+- `GET /person.html` → 404 bekræftet direkte; `GET
+  /persons.html?reg=…` → 200 uændret.
+- Repo-bred grep efter `\bperson\.html\b` efter commit 2 viser intet
+  tilbage der beskriver filen som levende (bortset fra de bevidst
+  urørte eksterne Brevbase-referencer og denne håndoverings egen
+  historik-tekst).
+- En util­sigtet side-effekt blev fanget og reverteret undervejs:
+  `python scripts/build_all.py` (kørt for smoke-test) regenererede også
+  fire `data/normalized*`-filer med CRLF-/lingua-konfidens-støj — reverteret
+  før commit, så branchen holdes strengt UI-scoped.
+
+## Ting der IKKE er lavet endnu (fra det oprindelige review)
+
+Disse blev identificeret i det første klik-igennem-review, men er
+bevidst ikke rørt i denne branch — enten fordi de er større,
+designkrævende ændringer, eller fordi de ligger uden for "fjern
+gentagelser og rod":
+
+1. **Søgefeltet virker ikke.** Både landing-søgefeltet
+   (`onsubmit="return false"`) og header-søgefeltet på indersider gør
+   intet ved Enter. Typeahead'en (klik på et forslag) virker fint og er
+   bygget over hele `SEARCH_INDEX` (16.444 poster) — men der er ingen
+   søgeresultat-side bag et almindeligt tekst-Enter. `search.html` er i
+   dag 190 linjer hardcoded markup for netop forespørgslen "Rom".
+2. **Tre overlappende facetter på samme taksonomi** på `search.html`:
+   *Kildetype* (Stedregister, Dagbogsider, …), *Registertype (H1)*
+   (PERSON-REGISTER, STED-REGISTER, VÆRK-REGISTER), og *Kategori
+   (H2/H3)* samtidig — "Stedregister" og "STED-REGISTER" er samme filter
+   under to stavemåder.
+3. **Interne skemanavne i brugerfladen**: `H1 = PERSON-REGISTER — …` på
+   `persons.html`/`persons_en.html`/`places.html`/`places_en.html`;
+   `Registertype (H1)`/`Kategori (H2/H3)` på begge søgesider; "Ikke
+   geokodet — dette sted findes ikke i hcax.dk Rejser-tabellen" på
+   `place.html` nævner en intern pipeline-kilde direkte.
+4. **To forsider**: `index.html` og `works.html`s "Registeroversigt" er
+   reelt to udgaver af samme landingsside/navigation
+   (Hvem/Hvad/Hvor/Hvornår findes tre steder: landingskortene,
+   `works.html`s egen nav-blok, og den lodrette sticky-rail på
+   `persons.html`).
+5. **Hardcodede totaler gentaget i ti filer** — `10.228` (18 forekomster
+   i 10 filer), `2.508` (21 i 11 filer), `39.361` (14 i 10 filer).
+   `persons.html` viser selv `10.228` fire steder, mens JS'en (den
+   korrekte entityType-gate) faktisk renderer **10.103** — samme skærm,
+   modstridende tal fire gange.
+6. **Facet-panel "Vis alle"-overlap-bug**: "Vis alle (68)" renderes
+   oven på sidste synlige facet-række, skjuler fx "Hollandsk 55" — på
+   begge navneregistre.
+7. **Intet kollapser på mobil.** Ved 390 px bredde: `persons.html`
+   (listevisning) 1147 px bred; den nu slettede `person.html?reg=…`
+   målte 1475 px, men det tal er ikke genmålt på den faktiske
+   `persons.html?reg=…`-detaljevisning. Hver side scroller sidelæns,
+   inklusive forsiden.
+8. **Ingen paginering nogen steder** — `persons.html` renderer alle
+   10.103 rækker i én 774.219 px høj DOM; `places.html` 121.704 px;
+   `bibliotek.html` 116.758 px.
+9. **Landingskortenes selvmodsigende navngivning** — *Hvad*-kortet
+   lister "Teater & Musik / Malerier & Billedkunst / Bøger & Digte",
+   footeren under lister samme tre destinationer under tre andre navne
+   ("Billedkunst · Teater & Musik · Bibliotek").
+
+Punkt 5–6 er småfixes i samme stil som denne branch og et naturligt
+næste skridt. Punkt 1–2 og 7–8 er reelle funktions-/designopgaver, ikke
+oprydning, og bør nok diskuteres separat før implementering.
+
+## Relation til pipeline-branchen
+
+`claude/hca-preprocessing-separation-iobj59` (repo-separation,
+`data/`-flytning til `HCA-Diary-data-cleaning`) er en separat linje fra
+samme `main`-punkt. De to branches **overlapper på 3 filer**:
+`.github/workflows/build-mockup.yml`, `scripts/build_mockup/README.md`,
+`scripts/build_mockup/build_persons_extra.py` — pipeline-branchen
+omskriver dem substantielt (fjerner ingest-/enrichment-stadier,
+tilføjer prepared-data-forklaringer), denne branch retter kun
+`person.html`-referencer i dem.
+
+**Testet i en isoleret klon** (`git merge --no-commit --no-ff` fra
+`ui-declutter-fixes` mod pipeline-branchen): alle tre filer
+auto-merger rent, ingen konfliktmarkører. De kan altså merges i
+vilkårlig rækkefølge — men efter et faktisk merge bør
+`build_persons_extra.py`s to person.html-relaterede kommentarrettelser
+fra denne branch tjekkes mod pipeline-branchens egne ændringer i samme
+fil, da et rent auto-merge ikke er det samme som at begge sæt hensigter
+stadig giver mening sammen.

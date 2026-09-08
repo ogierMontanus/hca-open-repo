@@ -18,7 +18,7 @@ Writes (gitignored — generated locally, like mockup/diary-pages/):
   mockup/data/diary-refs.js   — const DIARY_META = { pag: {v,p,d,y,pl}, ... }
                                 const DIARY_REFS = { regId: {n, e:[pag,...]}, }
                                 reverse index → powers the "Dagbogsreferencer"
-                                section on place.html / person.html / work.html
+                                section on place.html / persons.html / work.html
 
 Run from the repo root:
   python3 scripts/build_mockup/build_diary_index.py

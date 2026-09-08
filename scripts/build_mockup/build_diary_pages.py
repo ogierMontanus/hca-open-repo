@@ -268,14 +268,14 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title_str} — H.C. Andersen Dagbogsregister</title>
+  <title>{title_str} — HCA Open Repository</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
-    <a href="../index.html" class="site-logo">H.C. Andersen Dagbogsregister</a>
+    <a href="../index.html" class="site-logo">HCA Open Repository</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
@@ -362,7 +362,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: H.C. Andersen Dagbogsregister — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="../om.html" style="color:inherit">Vores kilder</a>
+    Prototype v0.2 &nbsp;·&nbsp; Data: HCA Open Repository — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="../om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
 

@@ -122,6 +122,15 @@ window.DiaryWire = (function () {
     var step = opts.pageSize || 24;
     var layout = opts.layout || 'list';  // 'list' | 'grid' | 'table'
 
+    // The entity whose own reference list this is never needs its own chip
+    // repeated back at it -- chipsFor(pag) lists every entity on that page,
+    // regId included, so filter regId out here rather than in chipsFor
+    // itself (list()'s general diary browsing below has no "self" and must
+    // keep showing everyone).
+    function chipsForOther(pag) {
+      return (chipsFor(pag) || []).filter(function (c) { return c.r !== regId; });
+    }
+
     /* Table row data for one diary page. Fields that already went through
      * esc() (heading, vp -- see headingFor/titleFor) are handed to TableView
      * via a column's html() so they are not escaped a second time; `place`
@@ -135,7 +144,7 @@ window.DiaryWire = (function () {
       var digits = pag.replace(/\D/g, '');
       return {
         pag: pag, heading: heading, vp: vp, place: m.pl || '',
-        chipHtml: (chipsFor(pag) || []).slice(0, 3).map(chipHtml).join(''),
+        chipHtml: chipsForOther(pag).slice(0, 3).map(chipHtml).join(''),
         sortKey: digits ? parseInt(digits, 10) : 0
       };
     }
@@ -143,6 +152,14 @@ window.DiaryWire = (function () {
     // Same TableView the wing catalogues and register overviews already use
     // (js/table-view.js) -- degrades to null (table mode falls back to list,
     // see render() below) if the caller's page hasn't loaded that script.
+    //
+    // "Dato / reference" and "Bind, side" used to be two separate columns,
+    // but headingFor() already falls back to titleFor() (the "Bind, side"
+    // string) whenever a page has no date -- true for 83% of pages today
+    // (only vols VI-VII carry dates) -- so the two columns were identical
+    // text on most rows. Merged into one: the bibliographic reference only
+    // gets its own line when it says something the date doesn't, matching
+    // the sub-line rule cardList() below already used for the same reason.
     var tableView = (typeof TableView !== 'undefined') ? TableView.create(container, [
       { key: 'select', label: '', sortable: false,
         html: function (r) { return selectBox(r.pag, r.heading); } },
@@ -150,9 +167,9 @@ window.DiaryWire = (function () {
         html: function (r) { return '<a class="data-table__id-link" href="' +
           PAGES_DIR + esc(r.pag) + '.html">' + esc(r.pag) + '</a>'; } },
       { key: 'heading', label: 'Dato / reference',
-        html: function (r) { return r.heading; }, sortValue: function (r) { return r.sortKey; } },
-      { key: 'vp', label: 'Bind, side',
-        html: function (r) { return r.vp; }, sortValue: function (r) { return r.sortKey; } },
+        html: function (r) { return r.heading === r.vp ? r.heading :
+          r.heading + '<div class="data-table__subline">' + r.vp + '</div>'; },
+        sortValue: function (r) { return r.sortKey; } },
       { key: 'place', label: 'Sted', value: function (r) { return r.place; } },
       { key: 'chips', label: 'Registerposter', sortable: false,
         html: function (r) { return r.chipHtml || '—'; } }
@@ -221,7 +238,7 @@ window.DiaryWire = (function () {
         shown = rec.e.length;
       } else {
         var html = rec.e.slice(0, limit).map(function (p) {
-          return layout === 'grid' ? cardGrid(p) : cardList(p, chipsFor(p));
+          return layout === 'grid' ? cardGrid(p) : cardList(p, chipsForOther(p));
         }).join('');
         container.innerHTML = html;
         shown = Math.min(limit, rec.e.length);
