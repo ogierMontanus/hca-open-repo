@@ -161,23 +161,17 @@
             </div>
           </div>
 
+          <!-- Connection to the WORK REGISTER — derived facet, live off
+               PERSONS_EXTRA.worksRegistryCreator (source A in
+               scripts/parsers/parse_person_role.py). Rows and counts are
+               rendered by FacetEngine — do not hand-write them here.
+               (Previously hardcoded figures here — 9,485/743 — were never
+               wired to any filter; the checkboxes were inert decoration.) -->
           <div class="facet-group">
             <div class="facet-group__header">Connection to the WORK REGISTER <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Diary entries only</span><span class="facet-item__count">9,485</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Also creator of registered works</span><span class="facet-item__count">743</span></label>
-            </div>
-          </div>
-
-          <div class="facet-group">
-            <div class="facet-group__header">Co-occurring places <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Copenhagen</span><span class="facet-item__count">2,847</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">412</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Vienna</span><span class="facet-item__count">318</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">London</span><span class="facet-item__count">287</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rome</span><span class="facet-item__count">214</span></label>
-            </div>
+            <div class="facet-group__body"
+                 data-facet-source="worksRegistry"
+                 data-facet-empty-label="Diary entries only"></div>
           </div>
 
           <!-- Year-by-mention slider deliberately omitted on persons.html: a person's
@@ -629,7 +623,8 @@
     var p = PERSONS_EXTRA[rid];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
              refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [],
-             gender: p.gender || null, role: p.roles || [] };
+             gender: p.gender || null, role: p.roles || [],
+             worksRegistry: p.worksRegistryCreator ? 'creator' : null };
   });
 
   var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
@@ -888,10 +883,12 @@
     accessors: {
       nationality: function (p) { return p.nationality; },
       gender: function (p) { return p.gender; },
-      role: function (p) { return p.role; }
+      role: function (p) { return p.role; },
+      worksRegistry: function (p) { return p.worksRegistry; }
     },
     labels: {
-      nationality: function (k) { return natLabels[k] || k; }
+      nationality: function (k) { return natLabels[k] || k; },
+      worksRegistry: function () { return 'Also creator of registered works'; }
     },
     sortKeys: {
       nationality: function (k) { return natLabels[k] || k; },

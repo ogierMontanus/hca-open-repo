@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Leaflet 1.9.4 (same version as place.html) -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin="">
+  <!-- Leaflet.markercluster 1.5.3 — bundles cluster CSS + default theme + JS. -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <style>
+    /* The map should fill the viewport below the header, minus a small footer.
+       320 px on the per-place card is fine for context, but the all-places
+       map wants the screen. */
+    .kort-shell { padding: 0; }
+    #kort-map {
+      height: calc(100vh - 220px);
+      min-height: 480px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    .kort-meta {
+      display: flex; flex-wrap: wrap; gap: var(--sp4); align-items: baseline;
+      font-size: 0.82rem; color: var(--color-text-muted);
+      margin: var(--sp3) 0 var(--sp4);
+    }
+    .kort-meta strong { color: var(--color-text); }
+    /* Slightly tighter popup so the link doesn't wrap. */
+    .leaflet-popup-content { margin: 8px 12px; font-size: 0.86rem; line-height: 1.5; }
+    .leaflet-popup-content a { color: var(--color-accent); }
+  </style>
+</head>
+<body data-section="hvor">
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="kort.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="kort_en.html" class="active">EN</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index_en.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Map</span>
+      </nav>
+      <h1>Map</h1>
+      <p>Every geocoded place from the diary register, plotted on one map.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container kort-shell">
+      <div class="kort-meta" id="kort-meta">
+        <span><strong id="kort-count">…</strong> places with coordinates</span>
+        <span>·</span>
+        <label style="display:flex;align-items:center;gap:6px">
+          Category:
+          <select id="kort-category-select"
+                  style="padding:4px 8px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.82rem">
+            <option value="">All categories</option>
+          </select>
+        </label>
+        <span>·</span>
+        <span>Clusters break apart as you zoom in</span>
+        <span style="margin-left:auto">
+          <a href="places_en.html" style="color:var(--color-accent)">Back to the Place Register</a>
+        </span>
+      </div>
+
+      <!-- Disclaimer — filled in by JS with the actual count of geocoded
+           places that carry no verified Category (see
+           docs/data-model/steder-verificeret-category-mapping.md). Only
+           2 of 454 today, but stated as a live number rather than a
+           hand-typed one so it can't silently go stale as more places
+           get geocoded or categorized. -->
+      <p id="kort-category-disclaimer" style="font-size:0.78rem;color:var(--color-text-muted);margin:0 0 var(--sp4);display:none"></p>
+
+      <div id="kort-map" aria-label="Map of geocoded places in the diary register"></div>
+
+      <!-- No-data fallback shown when places-extra.js is missing or carries
+           no coordinates (fresh clone before CI build). -->
+      <div id="kort-empty" style="display:none;padding:var(--sp6);text-align:center;color:var(--color-text-muted);font-style:italic">
+        No geocoded places found. Run the CI pipeline to generate
+        <code>data/places-extra.js</code>.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container" style="display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp3)">
+    <span>
+      Developed by citizen scientists in collaboration with
+      <a href="https://www.sdu.dk/hca" style="color:inherit">the H.C. Andersen Centre, University of Southern Denmark, Odense</a>
+      &nbsp;·&nbsp; <a href="om_en.html" style="color:inherit">Our sources</a>
+    </span>
+    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer"
+       style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;opacity:0.85" title="Creative Commons Attribution 4.0 International">
+      <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="CC BY 4.0" style="height:20px;width:auto;display:block">
+      <span class="sr-only"> CC BY 4.0 (opens in a new tab)</span>
+    </a>
+  </div>
+</footer>
+
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+(function () {
+  'use strict';
+  var mapEl = document.getElementById('kort-map');
+  var emptyEl = document.getElementById('kort-empty');
+  var countEl = document.getElementById('kort-count');
+
+  if (typeof PLACES_EXTRA === 'undefined' || typeof L === 'undefined') {
+    mapEl.style.display = 'none';
+    emptyEl.style.display = '';
+    countEl.textContent = '0';
+    return;
+  }
+
+  // Build the geocoded subset once.
+  var geocoded = [];
+  for (var rid in PLACES_EXTRA) {
+    var p = PLACES_EXTRA[rid];
+    if (p && typeof p.lat === 'number' && typeof p.lon === 'number') {
+      geocoded.push({
+        rid: rid,
+        label: p.label || rid,
+        lat: p.lat,
+        lon: p.lon,
+        country: p.country_da || '',
+        category: p.category || '',
+        refs: p.refs || 0
+      });
+    }
+  }
+  countEl.textContent = geocoded.length.toLocaleString('en-US');
+
+  if (!geocoded.length) {
+    mapEl.style.display = 'none';
+    emptyEl.style.display = '';
+    return;
+  }
+
+  // Raw PLACES_EXTRA.category values are already the verified English
+  // vocabulary (see docs/data-model/steder-verificeret-category-mapping.md),
+  // so the English page needs only the same small display-tweak table as
+  // places_en.html's CATEGORY_LABELS_EN — most values pass through unchanged.
+  var CATEGORY_LABELS_EN = { 'Point of interest (POI)': 'Point of interest' };
+
+  // Disclaimer: how many of the GEOCODED places (not the whole 2,508-
+  // place register — a reader on this page only cares about what's on
+  // the map) have no verified Category yet. Computed live so it can't
+  // drift out of date the way a hand-typed number would as more places
+  // get geocoded or categorized.
+  var uncategorized = geocoded.filter(function (p) { return !p.category; }).length;
+  var disclaimerEl = document.getElementById('kort-category-disclaimer');
+  if (uncategorized > 0 && disclaimerEl) {
+    disclaimerEl.textContent = uncategorized + ' of ' + geocoded.length +
+      ' geocoded places still lack a verified category and are shown regardless ' +
+      'of which category is selected below — see docs/data-model/' +
+      'steder-verificeret-category-mapping.md.';
+    disclaimerEl.style.display = '';
+  }
+
+  // Category dropdown — counts drive the sort (most common first), same
+  // as places_en.html's facet ordering.
+  var catCounts = {};
+  geocoded.forEach(function (p) {
+    if (p.category) catCounts[p.category] = (catCounts[p.category] || 0) + 1;
+  });
+  var catSelect = document.getElementById('kort-category-select');
+  Object.keys(catCounts).sort(function (a, b) { return catCounts[b] - catCounts[a]; })
+    .forEach(function (cat) {
+      var o = document.createElement('option');
+      o.value = cat;
+      o.textContent = (CATEGORY_LABELS_EN[cat] || cat) + ' (' + catCounts[cat] + ')';
+      catSelect.appendChild(o);
+    });
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // CARTO Voyager tiles per CLAUDE.md (osm tile policy blocks file:// loads).
+  var map = L.map('kort-map', { worldCopyJump: true });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
+    referrerPolicy: 'strict-origin-when-cross-origin'
+  }).addTo(map);
+
+  // Cluster group with default Leaflet.markercluster behaviour: numerals
+  // indicate the count, and clicking a cluster zooms in until its members
+  // separate. We also lower the spiderfy distance threshold so coincident
+  // points (same coordinate on two registers) don't collapse together.
+  var cluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    maxClusterRadius: 50
+  });
+
+  // Keep marker references so a #reg=… hash can pan/open the right popup.
+  var markersByRid = Object.create(null);
+
+  // Rebuilds the cluster layer for the given category ('' = all, INCLUDING
+  // the uncategorized places the disclaimer above describes — a filter
+  // choice, not a gap: picking a specific category is the only way to
+  // exclude them, matching how places_en.html's own facet leaves
+  // "Unclassified" as an explicit opt-in bucket rather than hiding it
+  // by default).
+  function renderMarkers(category) {
+    cluster.clearLayers();
+    markersByRid = Object.create(null);
+    var subset = category ? geocoded.filter(function (p) { return p.category === category; }) : geocoded;
+    subset.forEach(function (p) {
+      var m = L.marker([p.lat, p.lon], { title: p.label });
+      var html = '<strong>' + esc(p.label) + '</strong>' +
+        (p.country ? '<br><span style="color:var(--color-text-muted)">' + esc(p.country) + '</span>' : '') +
+        '<br><a href="place.html?reg=' + esc(p.rid) + '">Open place page →</a>' +
+        (p.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' + p.refs + ' refs.</span>' : '');
+      m.bindPopup(html);
+      cluster.addLayer(m);
+      markersByRid[p.rid] = m;
+    });
+    countEl.textContent = subset.length.toLocaleString('en-US');
+    return subset.length;
+  }
+
+  renderMarkers('');
+  map.addLayer(cluster);
+
+  // Fit to all markers, with a small padding so border points aren't clipped.
+  map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
+
+  catSelect.addEventListener('change', function () {
+    var n = renderMarkers(catSelect.value);
+    if (n) map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
+  });
+
+  // Deep-link via #reg=Reg0000100 → pan, zoom in enough to break the cluster
+  // open, then open the popup. Used by the link from per-place pages.
+  function focusFromHash() {
+    var h = (location.hash || '').replace(/^#/, '');
+    var m = /(?:^|&)reg=([A-Za-z0-9]+)/.exec(h);
+    if (!m) return;
+    var marker = markersByRid[m[1]];
+    if (!marker) return;
+    // zoomToShowLayer reveals the marker even if it's currently in a cluster.
+    cluster.zoomToShowLayer(marker, function () {
+      marker.openPopup();
+    });
+  }
+  focusFromHash();
+  window.addEventListener('hashchange', focusFromHash);
+})();
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

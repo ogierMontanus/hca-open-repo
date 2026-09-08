@@ -131,23 +131,31 @@ def load_gender() -> dict:
     return out
 
 
-def load_roles() -> dict:
+def load_roles() -> tuple[dict, set]:
     """{entity_id: [bucket, ...]} fra parse_person_role.py — VÆRK-REGISTER-
     optræden kombineret med en høstet klassificering af beskrivelsesfeltet
     (se docs/data-model/person-role-facet.md). Ligesom Køn er dette en
     AFLEDT facet-værdi: en person uden match får en tom liste, hvilket
     FacetEngine viser som "ingen rolle fundet" snarere end en fejl.
 
-    Tom, hvis parseren ikke er kørt."""
-    out = {}
+    Returnerer også et sæt entity_id'er hvis `kilde_vaerk`-kolonnen ikke er
+    tom — dvs. personen er matchet som skaber af mindst ét registreret værk
+    (source A i parse_person_role.py). Dette sæt driver persons.html's
+    "Tilknytning til VÆRK-REGISTER" facet.
+
+    Begge tomme, hvis parseren ikke er kørt."""
+    roller_by_person = {}
+    creators = set()
     if not os.path.exists(ROLE):
-        return out
+        return roller_by_person, creators
     with open(ROLE, encoding="utf-8", newline="") as f:
         for r in csv.DictReader(f):
             roller = [x for x in (r.get("roller") or "").split(";") if x]
             if roller:
-                out[r["entity_id"]] = roller
-    return out
+                roller_by_person[r["entity_id"]] = roller
+            if (r.get("kilde_vaerk") or "").strip():
+                creators.add(r["entity_id"])
+    return roller_by_person, creators
 
 
 def load_person_wikidata() -> dict:
@@ -448,7 +456,7 @@ def main() -> None:
         print("  no person_gender.csv — gender facet stays empty "
               "(run scripts/parsers/parse_person_gender.py)")
 
-    roles_by_person = load_roles()
+    roles_by_person, work_creators = load_roles()
     if roles_by_person:
         print(f"  {len(roles_by_person):,} persons with a Rolle/Erhverv classification "
               f"(scripts/parsers/parse_person_role.py)")
@@ -505,6 +513,11 @@ def main() -> None:
             "gender":       gender_by_person.get(rid, (None, None))[0],
             "genderConf":   gender_by_person.get(rid, (None, None))[1],
             "roles":        roles,
+            # True when parse_person_role.py matched this person as the
+            # creator of at least one registered værk (source A — see
+            # load_roles() above). Drives persons.html's "Tilknytning til
+            # VÆRK-REGISTER" facet; absent/false means diary mentions only.
+            "worksRegistryCreator": rid in work_creators,
             "wd":           wd,
             "bioLinks":     bio_links,
             "breve":        breve,

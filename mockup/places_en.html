@@ -658,6 +658,16 @@
     onChange: render
   });
 
+  // Cross-page facet activation — e.g. index_en.html's "Where › Cities/
+  // Countries/Rivers" links go to places_en.html?category=City/Country/
+  // River. Same pattern as persons_en.html's ?gender= wiring.
+  var urlCategory = new URLSearchParams(location.search).get('category');
+  if (urlCategory) {
+    var categoryBox = document.querySelector(
+      '.facet-panel input[data-facet="category"][data-match="' + urlCategory.replace(/"/g, '') + '"]');
+    if (categoryBox) categoryBox.checked = true;
+  }
+
   facets.apply();
 })();
 </script>

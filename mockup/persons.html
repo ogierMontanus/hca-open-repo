@@ -130,23 +130,19 @@
             </div>
           </div>
 
+          <!-- Tilknytning til VÆRK-REGISTER — AFLEDT facet, live off
+               PERSONS_EXTRA.worksRegistryCreator (source A i
+               scripts/parsers/parse_person_role.py: personen er matchet som
+               skaber af mindst ét registreret værk, via samme nameKey()
+               surname+initials-matching som entity-refs.js' worksByAuthor()).
+               Rows og tal genereres af FacetEngine — skriv dem ikke i hånden.
+               (Tidligere hardcodede tal her — 9.485/743 — var aldrig koblet
+               til noget filter; boksene var inaktive pynt.) -->
           <div class="facet-group">
             <div class="facet-group__header">Tilknytning til VÆRK-REGISTER <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Kun poster i dagbøgerne</span><span class="facet-item__count">9.485</span></label>
-              <label class="facet-item"><input type="checkbox" checked><span class="facet-item__label">Også skaber af registrerede værker</span><span class="facet-item__count">743</span></label>
-            </div>
-          </div>
-
-          <div class="facet-group">
-            <div class="facet-group__header">Samtidige steder <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">København</span><span class="facet-item__count">2.847</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">412</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Wien</span><span class="facet-item__count">318</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">London</span><span class="facet-item__count">287</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rom</span><span class="facet-item__count">214</span></label>
-            </div>
+            <div class="facet-group__body"
+                 data-facet-source="worksRegistry"
+                 data-facet-empty-label="Kun poster i dagbøgerne"></div>
           </div>
 
           <!-- Year-by-mention slider deliberately omitted on persons.html: a person's
@@ -556,7 +552,8 @@
     var p = PERSONS_EXTRA[rid];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
              refs: p.refs || 0, init: initialOf(p.label), nationality: p.nationalities || [],
-             gender: p.gender || null, role: p.roles || [] };
+             gender: p.gender || null, role: p.roles || [],
+             worksRegistry: p.worksRegistryCreator ? 'creator' : null };
   });
 
   var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
@@ -811,10 +808,12 @@
     accessors: {
       nationality: function (p) { return p.nationality; },
       gender: function (p) { return p.gender; },
-      role: function (p) { return p.role; }
+      role: function (p) { return p.role; },
+      worksRegistry: function (p) { return p.worksRegistry; }
     },
     labels: {
-      nationality: function (k) { return natLabels[k] || k; }
+      nationality: function (k) { return natLabels[k] || k; },
+      worksRegistry: function () { return 'Også skaber af registrerede værker'; }
     },
     sortKeys: {
       nationality: function (k) { return natLabels[k] || k; },

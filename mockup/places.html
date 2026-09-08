@@ -667,6 +667,20 @@
     onChange: render
   });
 
+  // Cross-page facet activation — e.g. index.html's "Hvor › Byer/Lande/Floder"
+  // links go to places.html?category=City/Country/River. The category
+  // checkboxes are rendered synchronously inside FacetEngine.create()
+  // (renderSources()), so they already exist in the DOM by this point;
+  // checking one here before the first apply() means the page opens already
+  // filtered, without an extra unfiltered render+refilter round-trip. Same
+  // pattern as persons.html's ?gender= wiring.
+  var urlCategory = new URLSearchParams(location.search).get('category');
+  if (urlCategory) {
+    var categoryBox = document.querySelector(
+      '.facet-panel input[data-facet="category"][data-match="' + urlCategory.replace(/"/g, '') + '"]');
+    if (categoryBox) categoryBox.checked = true;
+  }
+
   facets.apply();
 })();
 </script>
