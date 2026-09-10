@@ -605,22 +605,142 @@
 
   renderFacetLists();
 
-  // Cross-page/URL-hash facet activation — e.g. billedkunst.html's own
-  // subsection cards link to "#h3-skulptur", and a bare visit to that URL
-  // should land with the Skulptur H3 facet already ticked, not just an
-  // inert scroll target. window.CATEGORY_H3_SLUGS (declared per-page,
-  // alongside CATEGORY_WING/CATEGORY_LABEL) maps each slug to the exact H3
-  // facet value it should check — the slugs aren't a mechanical transform
-  // of the H3 label (teater-musik.html's are hand-picked short names), so
-  // this is a lookup table, not a slugify function.
+  // Cross-page/URL-hash facet activation — the subsection cards (and
+  // bibliotek.html's H2/H3 overview rows) link to "#h3-skulptur" and the
+  // like, and both a bare visit to that URL *and* a click on the card
+  // should land with the matching H3 facet ticked, not just scroll.
+  // window.CATEGORY_H3_SLUGS (declared per-page, alongside
+  // CATEGORY_WING/CATEGORY_LABEL) maps each slug to the facet it names —
+  // the slugs aren't a mechanical transform of the H3 label (they're
+  // hand-picked short names), so this is a lookup table, not a slugify
+  // function. A value is either the H3 label on its own, or {h2, h3} where
+  // the label alone is ambiguous (bibliotek.html carries "Digte" and
+  // "Samlede og blandede Skrifter" under both H2s).
   var h3Slugs = window.CATEGORY_H3_SLUGS;
-  if (h3Slugs && location.hash) {
-    var h3Label = h3Slugs[location.hash.replace(/^#/, '')];
-    if (h3Label) {
-      var h3Box = document.querySelector(
-        '.facet-panel input[data-h3="' + h3Label.replace(/"/g, '') + '"]');
-      if (h3Box) h3Box.checked = true;
+
+  function boxForSlug(slug) {
+    var v = h3Slugs && h3Slugs[slug];
+    if (!v) return null;
+    var h3 = (typeof v === 'string') ? v : v.h3;
+    var h2 = (typeof v === 'string') ? null : v.h2;
+    var sel = '.facet-panel input[data-h3="' + String(h3).replace(/"/g, '') + '"]';
+    if (h2) sel += '[data-h2="' + String(h2).replace(/"/g, '') + '"]';
+    return document.querySelector(sel);
+  }
+
+  // The subsection cards, and bibliotek.html's H2/H3 overview, quote their
+  // own subtotals above the catalogue. Those were hand-typed and had drifted
+  // from the data — the overview claimed 288 Eventyr where WORKS_EXTRA holds
+  // 286, and both its H2 group totals were out by dozens — so they are
+  // filled from the same array the facets count, for the same reason facet
+  // counts are never typed by hand: a number that can drift, will.
+  //
+  //   <span data-count-for="h3-eventyr">        ← slug, via CATEGORY_H3_SLUGS
+  //     <strong data-count="works">286</strong> poster ·
+  //     <span data-count="refs">2.804</span> refs.
+  //   </span>
+  //   <span data-count-for-h2="H. C. ANDERSEN">  ← a whole H2, for a header
+  //   <div data-count-for-wing>                  ← the wing total, for the hero
+  //
+  // Only the numerals are replaced: the wording around them stays in the
+  // markup, per page and per language, and the numbers committed there are
+  // the no-JS fallback.
+  function countsFor(h2, h3) {
+    var works = 0, refs = 0;
+    for (var i = 0; i < ALL.length; i++) {
+      if (h2 && ALL[i].h2 !== h2) continue;
+      if (h3 && ALL[i].h3 !== h3) continue;
+      works++;
+      refs += ALL[i].refs;
     }
+    return { works: works, refs: refs };
+  }
+
+  function renderStaticCounts() {
+    var sel = '[data-count-for], [data-count-for-h2], [data-count-for-wing]';
+    document.querySelectorAll(sel).forEach(function (host) {
+      var wingWide = host.hasAttribute('data-count-for-wing');
+      var h2 = host.getAttribute('data-count-for-h2');
+      var h3 = null;
+      var slug = host.getAttribute('data-count-for');
+      if (slug) {
+        var v = h3Slugs && h3Slugs[slug];
+        if (!v) return;                       // unknown slug: leave the fallback alone
+        h3 = (typeof v === 'string') ? v : v.h3;
+        h2 = (typeof v === 'string') ? null : v.h2;
+      }
+      // No h2 and no h3 means "every work in this wing" — but only when the
+      // page asked for that, not because a hook was left empty by mistake.
+      if (!wingWide && !h2 && !h3) return;
+      var c = countsFor(h2, h3);
+      var wEl = host.querySelector('[data-count="works"]');
+      var rEl = host.querySelector('[data-count="refs"]');
+      if (wEl) wEl.textContent = c.works.toLocaleString('da-DK');
+      if (rEl) rEl.textContent = c.refs.toLocaleString('da-DK');
+    });
+  }
+
+  renderStaticCounts();
+
+  // Same clearing the Nulstil button does, minus the letter reset — pulled
+  // out so a card click can reuse it (see activateSlug).
+  function clearFacetBoxes() {
+    FacetOverlay.collapseAll();
+    (facetPanel ? facetPanel.querySelectorAll(FACET_SEL) : []).forEach(function (cb) { cb.checked = false; });
+    // Re-render the capped lists so a value only on screen because it was
+    // ticked (see buildCappedFacetHtml) drops back out of the top-N.
+    renderFacetLists();
+  }
+
+  // Ticks the facet a slug names. `replace` clears every other ticked facet
+  // first: clicking a subsection card means "show me this subcategory", not
+  // "add it to whatever I already had ticked". An unrecognised slug changes
+  // nothing at all — checked before the clear, so a stray hash can't wipe
+  // the reader's filters.
+  function activateSlug(slug, replace) {
+    if (!boxForSlug(slug)) return false;
+    if (replace) clearFacetBoxes();
+    // Re-resolved after the clear: clearFacetBoxes() repaints the capped
+    // facet bodies, which would leave a pre-clear reference detached.
+    var box = boxForSlug(slug);
+    if (box) box.checked = true;
+    return !!box;
+  }
+
+  // Activate, re-filter, and bring the reader down to the results the click
+  // was asking for. (The slugs have no matching element id on the page, so
+  // the browser's own fragment scroll is a no-op — this is what moves.)
+  function runSlug(slug) {
+    if (!activateSlug(slug, true)) return;
+    apply();
+    var target = document.getElementById('js-cat-results');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  if (h3Slugs && location.hash) activateSlug(location.hash.replace(/^#/, ''), false);
+
+  if (h3Slugs) {
+    // Clicking a card while already on the page only changes the hash — no
+    // reload — so the load-time activation above never runs again. That is
+    // why those cards did nothing when clicked from the page's own overview.
+    window.addEventListener('hashchange', function () {
+      runSlug(location.hash.replace(/^#/, ''));
+    });
+
+    // ...and a click on the card for the hash already in the URL changes
+    // nothing, so no hashchange fires at all. That is a live dead-click
+    // (open #h3-balletter, press Nulstil, click Balletter again), so handle
+    // it here. Clicks that *do* change the hash are left to the listener
+    // above rather than being handled twice.
+    document.addEventListener('click', function (ev) {
+      var a = ev.target.closest ? ev.target.closest('a[href^="#h3-"]') : null;
+      if (!a) return;
+      var slug = a.getAttribute('href').slice(1);
+      if (!boxForSlug(slug)) return;
+      if (location.hash.replace(/^#/, '') !== slug) return;
+      ev.preventDefault();
+      runSlug(slug);
+    });
   }
 
   // The curated showcase sits directly inside the browse-layout main column,
@@ -653,14 +773,7 @@
   var clearBtn = document.querySelector('.facet-panel__clear');
   if (clearBtn) {
     clearBtn.addEventListener('click', function () {
-      FacetOverlay.collapseAll();
-      (facetPanel ? facetPanel.querySelectorAll(FACET_SEL) : []).forEach(function (cb) { cb.checked = false; });
-      // Re-render the capped lists now that nothing is checked, so a value
-      // only shown past the top-20 cutoff because it was ticked (see
-      // buildCappedFacetHtml) actually drops out again — collapseAll()
-      // above already repainted once, but from whatever was *still*
-      // checked at that point, before this uncheck loop ran.
-      renderFacetLists();
+      clearFacetBoxes();
       letter = null;
       if (bar) {
         bar.querySelectorAll('a.chip').forEach(function (x, i) {

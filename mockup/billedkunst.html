@@ -47,9 +47,9 @@
         <h1>Billedkunst</h1>
       </div>
       <p>H2 = BILLEDKUNST · Malerier, tegninger, skulpturer og museumsamlinger</p>
-      <div class="page-hero__meta">
-        <span>941 registerposter</span>
-        <span>1.436 poster i dagbøgerne</span>
+      <div class="page-hero__meta" data-count-for-wing>
+        <span><span data-count="works">941</span> registerposter</span>
+        <span><span data-count="refs">1.436</span> poster i dagbøgerne</span>
         <span>3 underkategorier</span>
       </div>
     </div>
@@ -68,7 +68,7 @@
             Sixtinske Madonna (Rafael) · Den hellige Nat (Correggio) ·
             Jerusalems Ødelæggelse (Kaulbach) · Niels Ebbesen og Grev Gert (Bloch) …
           </p>
-          <div class="subsection-card__stats">587 poster · 758 poster i dagbøgerne</div>
+          <div class="subsection-card__stats" data-count-for="h3-malerier"><span data-count="works">587</span> poster · <span data-count="refs">758</span> poster i dagbøgerne</div>
         </a>
 
         <a href="#h3-skulptur" class="subsection-card">
@@ -77,7 +77,7 @@
             Den mediceiske Venus (Uffizi) · Laokoon-Gruppen (Vatikanet) ·
             Apollo di Belvedere · Schweizer-Løven (Thorvaldsen, Luzern) …
           </p>
-          <div class="subsection-card__stats">315 poster · 489 poster i dagbøgerne</div>
+          <div class="subsection-card__stats" data-count-for="h3-skulptur"><span data-count="works">315</span> poster · <span data-count="refs">489</span> poster i dagbøgerne</div>
         </a>
 
       </div>
@@ -184,7 +184,7 @@
 
         <div>
           <div class="results-header">
-            <span class="results-count" id="js-hero-count"><strong>941</strong> poster i Billedkunst</span>
+            <span class="results-count" id="js-hero-count" data-count-for-wing><strong data-count="works">941</strong> poster i Billedkunst</span>
           </div>
 
           <!-- Illustrerede eksempler. Datadrevet (js/hero-examples.js): kun
@@ -262,8 +262,9 @@
   window.CATEGORY_WING='billedkunst.html';
   window.CATEGORY_LABEL='Billedkunst';
   // #h3-malerier / #h3-skulptur (linked from the subsection cards above)
-  // check the matching H3 facet on load — see category-catalogue.js's
-  // CATEGORY_H3_SLUGS handling.
+  // tick the matching H3 facet — both on a direct visit to the URL and on a
+  // click from the cards. See category-catalogue.js's CATEGORY_H3_SLUGS
+  // handling.
   window.CATEGORY_H3_SLUGS = {
     'h3-malerier': 'Malerier og Tegninger',
     'h3-skulptur': 'Skulptur'
@@ -282,7 +283,10 @@
   var r = HeroExamples.render(box, { wing: window.CATEGORY_WING, limit: 8, onEmpty: showEmpty });
   if (!r || !r.shown) { showEmpty(); return; }
   if (count) {
-    count.innerHTML = '<strong>941</strong> poster i Billedkunst &nbsp;' +
+    // The numeral is a fallback only: #js-hero-count carries
+    // data-count-for-wing, and category-catalogue.js (loaded after this
+    // script) replaces it with the live count from WORKS_EXTRA.
+    count.innerHTML = '<strong data-count="works">941</strong> poster i Billedkunst &nbsp;' +
       '<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">' +
       '— viser ' + r.shown + ' af ' + r.total + ' med billede' +
       '; fedmarkeret kort = eksempel pr. underkategori</span>';

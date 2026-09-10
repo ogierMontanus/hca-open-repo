@@ -47,9 +47,9 @@
         <h1>Teater &amp; Musik</h1>
       </div>
       <p>H2 = MUSIK · Skuespil (H3 under ANDRE FORFATTERE og H. C. ANDERSEN)</p>
-      <div class="page-hero__meta">
-        <span>1.257 registerposter</span>
-        <span>3.711 poster i dagbøgerne</span>
+      <div class="page-hero__meta" data-count-for-wing>
+        <span><span data-count="works">1.257</span> registerposter</span>
+        <span><span data-count="refs">3.711</span> poster i dagbøgerne</span>
         <span>5 underkategorier</span>
       </div>
     </div>
@@ -67,7 +67,7 @@
             Faust (C. Gounod) · Den Stumme i Portici (Auber) · Ravnen (J. P. E. Hartmann) ·
             Liden Kirsten (J. P. E. Hartmann) · Barberen i Sevilla (Rossini) …
           </p>
-          <div class="subsection-card__stats">241 poster · 1.041 poster i dagbøgerne</div>
+          <div class="subsection-card__stats" data-count-for="h3-operaer"><span data-count="works">239</span> poster · <span data-count="refs">1.039</span> poster i dagbøgerne</div>
         </a>
 
         <a href="#h3-skuespil-andre" class="subsection-card">
@@ -76,7 +76,7 @@
             Faust I (Goethe) · Hakon Jarl (Oehlenschlæger) · Jeppe paa Bjerget (Holberg) ·
             Alferne (Heiberg) · Elverhøi (Heiberg) …
           </p>
-          <div class="subsection-card__stats">747 poster · 1.479 poster i dagbøgerne</div>
+          <div class="subsection-card__stats" data-count-for="h3-skuespil-andre"><span data-count="works">747</span> poster · <span data-count="refs">1.479</span> poster i dagbøgerne</div>
         </a>
 
         <a href="#h3-skuespil-hca" class="subsection-card">
@@ -85,7 +85,7 @@
             Mulatten · Fuglen i Pæretræet · Lykkens Blomst ·
             Dramatiske Planer og Ideer til Skuespil …
           </p>
-          <div class="subsection-card__stats">57 poster · 681 poster i dagbøgerne</div>
+          <div class="subsection-card__stats" data-count-for="h3-skuespil-hca"><span data-count="works">56</span> poster · <span data-count="refs">683</span> poster i dagbøgerne</div>
         </a>
 
         <a href="#h3-balletter" class="subsection-card">
@@ -94,7 +94,7 @@
             Waldemar (A. Bournonville) · Thrymskviden (Bournonville) ·
             Et Eventyr i Billeder (Bournonville) · Et Folkesagn · Valkyrien …
           </p>
-          <div class="subsection-card__stats">80 poster · 292 poster i dagbøgerne</div>
+          <div class="subsection-card__stats" data-count-for="h3-balletter"><span data-count="works">80</span> poster · <span data-count="refs">292</span> poster i dagbøgerne</div>
         </a>
 
         <a href="#h3-vokalmusik" class="subsection-card">
@@ -103,7 +103,7 @@
             Sange med Klaverakkompagnement · Musik til Digte af HCA ·
             Symfonier og Ouverturer · Kirkemusik …
           </p>
-          <div class="subsection-card__stats">135 poster · 218 poster i dagbøgerne</div>
+          <div class="subsection-card__stats" data-count-for="h3-vokalmusik"><span data-count="works">135</span> poster · <span data-count="refs">218</span> poster i dagbøgerne</div>
         </a>
 
       </div>
@@ -244,9 +244,9 @@
   window.CATEGORY_LABEL='Teater & Musik';
   // #h3-operaer etc. (linked from the subsection cards above) used to be
   // anchor IDs on the now-removed static example grid; category-catalogue.js's
-  // CATEGORY_H3_SLUGS handling (see billedkunst.html) checks the matching H3
-  // facet on load instead. Slugs are hand-picked short names, not a
-  // mechanical transform of the H3 label.
+  // CATEGORY_H3_SLUGS handling ticks the matching H3 facet instead — both on
+  // a direct visit to the URL and on a click from the cards above. Slugs are
+  // hand-picked short names, not a mechanical transform of the H3 label.
   window.CATEGORY_H3_SLUGS = {
     'h3-operaer': 'Operaer og Syngestykker, Skuespil med Musik',
     'h3-skuespil-andre': 'Skuespil',

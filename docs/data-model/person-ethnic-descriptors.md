@@ -38,7 +38,7 @@ Categories:
 |---|---|---|
 | `national` | modern nation-state demonym | dansk, tysk, fransk, svensk, italiensk, amerikansk |
 | `german_state` | pre-1871 German polity (Germany wasn't unified until 1871, well inside the diary period) | preussisk (74 hits — the most frequent single form after the "big five"), sachsisk, bayersk/bayrisk, hannoveransk, oldenburgsk/oldenborgsk, mecklenburgsk, westfalsk, württembergsk, thüringsk |
-| `border_region` | the contested Schleswig-Holstein(-Lauenburg) duchies — central to the wars of 1848–51 and 1864 | slesvigsk, nordslesvigsk, sønderjydsk, slesvig-holstensk, holsten-lauenborgsk |
+| `border_region` | the contested Schleswig-Holstein(-Lauenburg) duchies — central to the wars of 1848–51 and 1864; every key here belongs to **both** the Dansk and Tysk umbrellas | slesvigsk, nordslesvigsk, sydslesvigsk, sønderjydsk, holstensk, lauenborgsk, slesvig-holstensk, holsten-lauenborgsk |
 | `regional_danish` | Danish regional/city demonym, not a foreign nationality | jysk/jydsk, sjællandsk, fynsk, københavnsk/kjøbenhavnsk |
 | `colonial` | Danish colonial-era territorial demonym | dansk-vestindisk (Danish West Indies), grønlandsk |
 | `historical_polity` | a historical (often ancient) polity, not a modern nation | romersk, østromersk, angelsaksisk, attisk/atheniensisk, bøhmisk, veneziansk, neapolitansk |
@@ -482,12 +482,12 @@ sub-identity's grid is judged on its own count.
 
 ### Multiple membership is the point, not an edge case
 
-12 keys sit under more than one umbrella, and the page says so inline
+16 keys sit under more than one umbrella, and the page says so inline
 ("Holstensk 17 — også under Dansk"):
 
 | Key | Umbrellas | Why |
 |---|---|---|
-| holstensk, slesvigsk, slesvigholstensk, holstenlauenborgsk | Dansk + Tysk | The duchies were the contested ground of the 1848–51 and 1864 wars. Forcing them into one nation would take a side the register does not take. |
+| every `border_region` key: slesvigsk, nordslesvigsk, sydslesvigsk, sønderjydsk, holstensk, lauenborgsk, slesvigholstensk, holstenlauenborgsk | Dansk + Tysk | The duchies were the contested ground of the 1848–51 and 1864 wars. Forcing them into one nation would take a side the register does not take. The rule covers the sub-regions too: nordslesvigsk was Danish-majority and sydslesvigsk German-majority, but both were claimed by both crowns — majority is not membership. The two umbrellas therefore carry an identical border_region set. |
 | kurlandsk | Tysk + Russisk | Baltic-German ruling class and German-speaking elite; annexed by Russia in 1795. |
 | finlandssvensk | Svensk + Finsk | That duality is precisely the identity the word names. |
 | østromersk | Græsk + Tyrkisk | Greek-speaking Byzantium, on territory that became Ottoman. |
