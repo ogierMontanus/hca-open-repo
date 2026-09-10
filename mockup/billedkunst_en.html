@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Art — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-section="hvad">
+
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="billedkunst.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="billedkunst_en.html" class="active">EN</a>
+    </div>
+    <!-- Filled by Cart.mountBadge() — js/cart.js. -->
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index_en.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Visual Art</span>
+      </nav>
+      <div class="page-hero__head">
+        <span class="page-hero__icon">
+          <span class="icon-cluster">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-sculpture"></use></svg>
+          </span>
+        </span>
+        <h1>Visual Art</h1>
+      </div>
+      <p>H2 = BILLEDKUNST · Paintings, drawings, sculptures and museum collections</p>
+      <div class="page-hero__meta" data-count-for-wing>
+        <span><span data-count="works">941</span> register entries</span>
+        <span><span data-count="refs">1,436</span> diary refs.</span>
+        <span>3 subcategories</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- H3 sub-section cards -->
+      <h2 class="section-title">Subcategories (H3)</h2>
+      <div class="subsection-grid" style="margin-bottom:var(--sp10)">
+
+        <a href="#h3-malerier" class="subsection-card">
+          <h3>Paintings and Drawings</h3>
+          <p class="subsection-card__example">
+            Sistine Madonna (Raphael) · The Holy Night (Correggio) ·
+            The Destruction of Jerusalem (Kaulbach) · Niels Ebbesen and Count Gert (Bloch) …
+          </p>
+          <div class="subsection-card__stats" data-count-for="h3-malerier"><span data-count="works">587</span> entries · <span data-count="refs">758</span> diary refs.</div>
+        </a>
+
+        <a href="#h3-skulptur" class="subsection-card">
+          <h3>Sculpture</h3>
+          <p class="subsection-card__example">
+            Venus de' Medici (Uffizi) · Laocoön Group (Vatican) ·
+            Apollo Belvedere · The Lion of Lucerne (Thorvaldsen, Lucerne) …
+          </p>
+          <div class="subsection-card__stats" data-count-for="h3-skulptur"><span data-count="works">315</span> entries · <span data-count="refs">489</span> diary refs.</div>
+        </a>
+
+      </div>
+
+      <!-- Browse layout -->
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filter</span>
+            <button class="facet-panel__clear">Reset</button>
+          </div>
+
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11.
+               "Mention dates" = diary period (1825–1875). "Event dates"
+               = when the work was created or first exhibited — comes from year_derived but
+               not yet structured as entity_event; disabled. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
+            <div class="facet-group__header">Date category <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Years Andersen mentioned this work in the diaries">Mention dates</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Event dates (created · exhibited) activate once the entity_event table is populated.">Event dates</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                The year filter uses <em>mention dates</em> — when Andersen mentioned the work in the diaries. Event dates (created, exhibited) activate once structured entity dates are loaded.
+              </div>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Subcategory (H3) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" data-h3="Malerier og Tegninger"><span class="facet-item__label">Paintings and Drawings</span><span class="facet-item__count">587</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Skulptur"><span class="facet-item__label">Sculpture</span><span class="facet-item__count">315</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Museer og Samlinger"><span class="facet-item__label">Museums and Collections</span><span class="facet-item__count">39</span></label>
+            </div>
+          </div>
+
+          <!-- Artist — data-driven from WORKS_EXTRA.author for this wing,
+               same data-facet-source="author" mechanism as bibliotek.html's
+               Forfatter facet and teater-musik.html's Komponist/Forfatter
+               facet (populated by category-catalogue.js, ranked by works
+               descending with surname as tiebreak — see CLAUDE.md's
+               surname-sorting rule).
+
+               Coverage: build_works_extra.py's author_from() recovers an
+               attribution from the title's own "(Artist, Collection, City)"
+               parenthetical for BILLEDKUNST works with no curated
+               person_derived — 791 of 941 works (84%), up from 269 (29%)
+               before that extraction existed. The remaining 16% is titles
+               with no parseable attribution at all (bare collection/
+               institution entries under "Museums and Collections", or a
+               parenthetical this heuristic can't confidently resolve to a
+               name — see the extraction function's docstring for exactly
+               what it does and doesn't attempt). -->
+          <div class="facet-group">
+            <div class="facet-group__header">Artist <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="author"></div>
+          </div>
+
+          <!-- Place — data-driven from WORKS_EXTRA.place, populated by
+               category-catalogue.js (data-facet-source="place"). One entry
+               per distinct "City" or "City — Gallery/Venue" value recovered from
+               EVERY billedkunst title's own parenthetical (Paintings and
+               Drawings and Sculpture alike, not just Museums and Collections),
+               via place_from_billedkunst_title() in build_works_extra.py —
+               see docs/data-model/billedkunst-artist-extraction.md for the
+               shared "group whose last piece is a real place" heuristic
+               this reuses. Sorted alphabetically (not by count, unlike
+               Artist above) so every city and its galleries land next to
+               each other — "Firenze", "Firenze — Uffizi", "Firenze — Pitti",
+               then "München", … — per CLAUDE.md's alphabetisation note
+               (place VALUES stay Danish/period-spelling; only the chrome
+               here is translated). -->
+          <div class="facet-group">
+            <div class="facet-group__header">Place <span class="facet-group__toggle">▲</span></div>
+            <p class="facet-note">City (and gallery, where named) mentioned in the work's own title — 19th-century place names.</p>
+            <div class="facet-group__body" data-facet-source="place"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Mention year <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="From year">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="To year">
+              </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
+            </div>
+          </div>
+        </aside>
+
+        <div>
+          <div class="results-header">
+            <span class="results-count" id="js-hero-count" data-count-for-wing><strong data-count="works">941</strong> entries in Visual Art</span>
+          </div>
+
+          <!-- Illustrated examples. Data-driven (js/hero-examples.js): only
+               works with a curated hero image appear here, and a card that
+               can't load its image removes itself. -->
+          <div class="result-grid result-grid--hero" id="js-hero-examples"></div>
+          <p id="js-hero-empty" style="display:none;font-size:0.85rem;color:var(--color-text-muted);
+             background:var(--color-surface-2);border:1px dashed var(--color-border);
+             border-radius:var(--radius);padding:var(--sp5);text-align:center">
+            No works in Visual Art have a curated image yet.
+            See the full register below.
+          </p>
+
+          <!-- Full register — complete data-driven catalogue (js/category-catalogue.js).
+               Sits inside the browse-layout main column so the sticky facet-panel
+               stays aligned with the catalogue when scrolling. -->
+          <div class="cat-block" style="margin-top:var(--sp10)">
+            <h2 class="section-title" style="margin-bottom:var(--sp3)">Full register</h2>
+            <div class="results-header">
+              <span class="results-count" id="js-cat-count"></span>
+              <label class="results-header__select-all">
+                <input type="checkbox" id="js-cat-select-all"> Select all
+              </label>
+              <div class="layout-switcher" id="js-cat-layout-switcher">
+                <button class="layout-switcher__btn" data-layout="list" type="button">☰ List</button>
+                <button class="layout-switcher__btn" data-layout="table" type="button">▦ Table</button>
+              </div>
+            </div>
+            <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
+              <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Letter:</span>
+            </div>
+            <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+            <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+              <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Show more</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container" style="display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp3)">
+    <span>
+      Developed by citizen scientists in collaboration with
+      <a href="https://www.sdu.dk/hca" style="color:inherit">the H.C. Andersen Centre, University of Southern Denmark, Odense</a>
+      &nbsp;·&nbsp; <a href="om_en.html" style="color:inherit">Our sources</a>
+    </span>
+    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer"
+       style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;opacity:0.85" title="Creative Commons Attribution 4.0 International">
+      <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="CC BY 4.0" style="height:20px;width:auto;display:block">
+      <span class="sr-only"> CC BY 4.0 (opens in a new tab)</span>
+    </a>
+  </div>
+</footer>
+
+<!-- Full work catalogue for this wing (gitignored data; CI regenerates).
+     persons/places-extra.js + entity-refs.js: category-catalogue.js's
+     Forfatter/Kunstner facet uses EntityRefs.personRid()/workRid() to
+     group spelling variants of the same person onto one row and to keep
+     a source citation out of the facet entirely -- same 4-script load
+     order persons_en.html/work.html/places_en.html already use. -->
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
+<script>
+  window.CATEGORY_WING='billedkunst.html';
+  window.CATEGORY_LABEL='Visual Art';
+  // #h3-malerier / #h3-skulptur (linked from the subsection cards above)
+  // tick the matching H3 facet — both on a direct visit to the URL and on a
+  // click from the cards. See category-catalogue.js's CATEGORY_H3_SLUGS
+  // handling. Values are the underlying data-h3 strings, still Danish —
+  // this maps a slug to the exact facet to check, it isn't UI copy.
+  window.CATEGORY_H3_SLUGS = {
+    'h3-malerier': 'Malerier og Tegninger',
+    'h3-skulptur': 'Skulptur'
+  };
+  // UI-copy overrides for category-catalogue.js — see that file's own
+  // CATEGORY_I18N doc comment for the full key list and Danish defaults.
+  window.CATEGORY_I18N = {
+    locale: 'en-US',
+    colTitle: 'Title', colAuthor: 'Author', colCategory: 'Category', colPlace: 'Place', colRefs: 'Refs.',
+    confirmAddAll: 'Add all {n} works to the cart?',
+    emptyTitle: 'No results match the selected filters.',
+    emptyBody: 'Try removing one of the filters — or reset to see the full {label} register.',
+    emptyResetBtn: 'Reset all filters',
+    noReachOtherFilters: 'No results under the other filters',
+    noReachFacets: 'No results under the selected facets',
+    letterNote: 'letter {letter}',
+    facetCountOne: '{n} facet', facetCountMany: '{n} facets',
+    resultsIn: 'entries in {label}',
+    allChip: 'All',
+    facetMore: 'Show all ({n}) ▾', facetFewer: 'Show fewer',
+    facetSortCount: 'Count', facetSortAlpha: 'A–Z'
+  };
+</script>
+<script src="js/hero-examples.js"></script>
+<script>
+(function () {
+  var box = document.getElementById('js-hero-examples');
+  var empty = document.getElementById('js-hero-empty');
+  var count = document.getElementById('js-hero-count');
+  function showEmpty() {
+    if (box) box.style.display = 'none';
+    if (empty) empty.style.display = '';
+  }
+  var r = HeroExamples.render(box, { wing: window.CATEGORY_WING, limit: 8, onEmpty: showEmpty });
+  if (!r || !r.shown) { showEmpty(); return; }
+  if (count) {
+    // The numeral is a fallback only: #js-hero-count carries
+    // data-count-for-wing, and category-catalogue.js (loaded after this
+    // script) replaces it with the live count from WORKS_EXTRA.
+    count.innerHTML = '<strong data-count="works">941</strong> entries in Visual Art &nbsp;' +
+      '<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">' +
+      '— showing ' + r.shown + ' of ' + r.total + ' with an image' +
+      '; bold card = one example per subcategory</span>';
+  }
+})();
+</script>
+<script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
+<script src="js/facet-overlay.js"></script>
+<script src="js/category-catalogue.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

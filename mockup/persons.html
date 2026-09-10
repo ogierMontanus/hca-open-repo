@@ -828,17 +828,29 @@
   });
 
   // Cross-page facet activation — e.g. index.html's "Hvem › Kvinder" link
-  // goes to persons.html?gender=Kvindelig. The gender checkboxes are
-  // rendered synchronously inside FacetEngine.create() (renderSources()),
-  // so they already exist in the DOM by this point; checking one here
-  // before the first apply() means the page opens already filtered,
-  // without an extra unfiltered render+refilter round-trip.
-  var urlGender = new URLSearchParams(location.search).get('gender');
-  if (urlGender) {
-    var genderBox = document.querySelector(
-      '.facet-panel input[data-facet="gender"][data-match="' + urlGender.replace(/"/g, '') + '"]');
-    if (genderBox) genderBox.checked = true;
-  }
+  // goes to persons.html?gender=Kvindelig, and "Kunstnere"/"Kongelige &
+  // adelige" go to persons.html?role=<bucket>[,<bucket>…]. The facet
+  // checkboxes are rendered synchronously inside FacetEngine.create()
+  // (renderSources()), so they already exist in the DOM by this point;
+  // checking them here before the first apply() means the page opens
+  // already filtered, without an extra unfiltered render+refilter
+  // round-trip. `role` accepts several comma-separated bucket names —
+  // ticking more than one box within the same facet group is an OR
+  // (FacetEngine's own semantics), which is what lets "Kunstnere" span
+  // Kunstner/Billedkunst + Musiker/Scenekunst + Forfatter/Digter as one
+  // link rather than needing a fourth, narrower role bucket of its own.
+  var urlParams = new URLSearchParams(location.search);
+  ['gender', 'role'].forEach(function (field) {
+    var raw = urlParams.get(field);
+    if (!raw) return;
+    raw.split(',').forEach(function (val) {
+      val = val.trim();
+      if (!val) return;
+      var box = document.querySelector(
+        '.facet-panel input[data-facet="' + field + '"][data-match="' + val.replace(/"/g, '') + '"]');
+      if (box) box.checked = true;
+    });
+  });
 
   facets.apply();
 })();

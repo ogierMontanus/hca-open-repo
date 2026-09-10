@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Compact H2/H3 overview table replacing the old subsection-card grid */
+    .h2h3-overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp4);
+      margin-bottom: var(--sp8);
+    }
+    .h2h3-group {
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .h2h3-group__header {
+      background: var(--color-surface-2);
+      padding: var(--sp3) var(--sp5);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .h2h3-group__total {
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+    .h2h3-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 6px var(--sp5);
+      border-top: 1px solid var(--color-border);
+      font-size: 0.83rem;
+      color: var(--color-text);
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    a.h2h3-row:hover {
+      background: var(--color-accent-light);
+      text-decoration: none;
+    }
+    .h2h3-row__counts {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      margin-left: var(--sp4);
+    }
+    .h2h3-row__counts strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    @media (max-width: 640px) {
+      .h2h3-overview { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-section="hvad">
+
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="bibliotek.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="bibliotek_en.html" class="active">EN</a>
+    </div>
+    <!-- Filled by Cart.mountBadge() — js/cart.js. -->
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index_en.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Library</span>
+      </nav>
+      <div class="page-hero__head">
+        <span class="page-hero__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg></span>
+        <h1>Library</h1>
+      </div>
+      <p>Printed and literary works — H.C. Andersen and other authors</p>
+      <div class="page-hero__meta" data-count-for-wing>
+        <span><span data-count="works">1,510</span> register entries</span>
+        <span><span data-count="refs">6,048</span> diary refs.</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- H2/H3 overview — subtotals for all categories -->
+      <div class="h2h3-overview">
+
+        <div class="h2h3-group">
+          <div class="h2h3-group__header">
+            H. C. Andersen
+            <span class="h2h3-group__total" data-count-for-h2="H. C. ANDERSEN"><span data-count="works">712</span> entries · <span data-count="refs">4,671</span> refs.</span>
+          </div>
+          <a href="#h3-eventyr" class="h2h3-row">
+            Fairy Tales
+            <span class="h2h3-row__counts" data-count-for="h3-eventyr"><strong data-count="works">286</strong> entries · <span data-count="refs">2,804</span> refs.</span>
+          </a>
+          <a href="#h3-digte-hca" class="h2h3-row">
+            Poems
+            <span class="h2h3-row__counts" data-count-for="h3-digte-hca"><strong data-count="works">338</strong> entries · <span data-count="refs">750</span> refs.</span>
+          </a>
+          <a href="#h3-romaner-hca" class="h2h3-row">
+            Novels and Short Stories
+            <span class="h2h3-row__counts" data-count-for="h3-romaner-hca"><strong data-count="works">33</strong> entries · <span data-count="refs">417</span> refs.</span>
+          </a>
+          <a href="#h3-rejse" class="h2h3-row">
+            Travelogues
+            <span class="h2h3-row__counts" data-count-for="h3-rejse"><strong data-count="works">21</strong> entries · <span data-count="refs">245</span> refs.</span>
+          </a>
+          <a href="#h3-afhandlinger" class="h2h3-row">
+            Essays, Articles etc.
+            <span class="h2h3-row__counts" data-count-for="h3-afhandlinger"><strong data-count="works">19</strong> entries · <span data-count="refs">214</span> refs.</span>
+          </a>
+          <a href="#h3-selvbio" class="h2h3-row">
+            Autobiographies
+            <span class="h2h3-row__counts" data-count-for="h3-selvbio"><strong data-count="works">10</strong> entries · <span data-count="refs">196</span> refs.</span>
+          </a>
+          <a href="#h3-samlede-hca" class="h2h3-row">
+            Collected and Mixed Writings
+            <span class="h2h3-row__counts" data-count-for="h3-samlede-hca"><strong data-count="works">5</strong> entries · <span data-count="refs">45</span> refs.</span>
+          </a>
+        </div>
+
+        <div class="h2h3-group">
+          <div class="h2h3-group__header">
+            Other Authors
+            <span class="h2h3-group__total" data-count-for-h2="ANDRE FORFATTERE"><span data-count="works">798</span> entries · <span data-count="refs">1,377</span> refs.</span>
+          </div>
+          <a href="#h3-romaner-andre" class="h2h3-row">
+            Novels, Short Stories, Fairy Tales
+            <span class="h2h3-row__counts" data-count-for="h3-romaner-andre"><strong data-count="works">229</strong> entries · <span data-count="refs">338</span> refs.</span>
+          </a>
+          <a href="#h3-digte-andre" class="h2h3-row">
+            Poems
+            <span class="h2h3-row__counts" data-count-for="h3-digte-andre"><strong data-count="works">250</strong> entries · <span data-count="refs">341</span> refs.</span>
+          </a>
+          <a href="#h3-faglitteratur" class="h2h3-row">
+            Non-fiction
+            <span class="h2h3-row__counts" data-count-for="h3-faglitteratur"><strong data-count="works">216</strong> entries · <span data-count="refs">347</span> refs.</span>
+          </a>
+          <a href="#h3-periodica" class="h2h3-row">
+            Journals and Yearbooks (Periodica)
+            <span class="h2h3-row__counts" data-count-for="h3-periodica"><strong data-count="works">84</strong> entries · <span data-count="refs">318</span> refs.</span>
+          </a>
+          <a href="#h3-samlede-andre" class="h2h3-row">
+            Collected and Mixed Writings
+            <span class="h2h3-row__counts" data-count-for="h3-samlede-andre"><strong data-count="works">19</strong> entries · <span data-count="refs">33</span> refs.</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Browse layout: facets + results -->
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filter</span>
+            <button class="facet-panel__clear">Reset</button>
+          </div>
+
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11.
+               "Mention year" slider = mention dates (1825–1875 diary period). "Event dates"
+               = publication year / reprint — comes from year_derived but not yet structured
+               as entity_event; disabled. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
+            <div class="facet-group__header">Date category <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Years Andersen mentioned this work in the diaries">Mention dates</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Event dates (published · reprinted) activate once the entity_event table is populated.">Event dates</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                The year filter uses <em>mention dates</em> — when Andersen mentioned the work in the diaries. Event dates (published, reprinted) activate once structured entity dates are loaded.
+              </div>
+            </div>
+          </div>
+
+          <!-- H2 -->
+          <div class="facet-group">
+            <div class="facet-group__header">Author group (H2) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN"><span class="facet-item__label">H. C. Andersen</span><span class="facet-item__count">712</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE"><span class="facet-item__label">Other Authors</span><span class="facet-item__count">798</span></label>
+            </div>
+          </div>
+
+          <!-- H3 — combined list; data-h2 + data-h3 on each checkbox means
+               selecting a form here AND an author group above narrows correctly. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Form (H3) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Afhandlinger, Artikler m.m."><span class="facet-item__label">Essays, Articles etc.</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Digte"><span class="facet-item__label">Poems</span><span class="facet-item__count">340</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Digte"><span class="facet-item__label">Poems (Other)</span><span class="facet-item__count">250</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Eventyr"><span class="facet-item__label">Fairy Tales (HCA)</span><span class="facet-item__count">284</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Faglitteratur"><span class="facet-item__label">Non-fiction</span><span class="facet-item__count">216</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Rejseskildringer"><span class="facet-item__label">Travelogues</span><span class="facet-item__count">21</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Romaner, Noveller, Eventyr" id="facet-romaner-andre"><span class="facet-item__label">Novels, Short Stories, Fairy Tales (Other)</span><span class="facet-item__count">229</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Romaner og Noveller" id="facet-romaner-hca"><span class="facet-item__label">Novels and Short Stories (HCA)</span><span class="facet-item__count">33</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Collected and Mixed Writings</span><span class="facet-item__count">5</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Samlede og blandede Skrifter"><span class="facet-item__label">Collected and Mixed Writings (Other)</span><span class="facet-item__count">19</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Selvbiografier"><span class="facet-item__label">Autobiographies</span><span class="facet-item__count">10</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Tidsskrifter og aarbøger, ugeblade, vittighedsblade (Periodica)"><span class="facet-item__label">Journals and Yearbooks</span><span class="facet-item__count">84</span></label>
+            </div>
+          </div>
+
+          <!-- Author — populated at load time by category-catalogue.js from
+               every distinct WORKS_EXTRA.author in this wing, ranked by works
+               descending, surname as the tiebreak (CLAUDE.md). Same mechanism
+               as teater-musik.html's "Composer / Author" facet; the body's
+               own max-height keeps the long list scrollable rather than pushing
+               the rest of the panel off-screen.
+
+               Coverage is partial and that is a property of the source, not a
+               bug here: only 455 of this wing's 1,510 works (30%) name an
+               individual author. The other 1,055 carry author == the H2 group
+               itself ("H. C. ANDERSEN"), which the module deliberately skips —
+               HCA's own works are already reachable through the Author group
+               facet above, so listing him here too would just duplicate it.
+               Consequence worth knowing: the HCA "Novels and Short Stories" H3 is
+               almost entirely invisible to this facet (2 of 33 works), while
+               "Novels, Short Stories, Fairy Tales" (Other) is well covered (93 of 229). -->
+          <div class="facet-group">
+            <div class="facet-group__header">Author <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="author"></div>
+          </div>
+
+          <!-- Mention year -->
+          <div class="facet-group">
+            <div class="facet-group__header">Mention year <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:8px 16px 14px">
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="From year">
+                <span style="color:var(--color-text-muted)">—</span>
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
+                       aria-label="To year">
+              </div>
+              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Result area -->
+        <div>
+          <!-- Was a link to romaner.html, a hand-authored static page with no
+               connection to WORKS_EXTRA (moved to mockup/irrelevant/, see that
+               folder's README). Now ticks both Novels facets on the live
+               catalogue below instead — same entries, real data, cart-enabled. -->
+          <div style="margin-top:var(--sp5);font-size:0.82rem;color:var(--color-text-muted)">
+            To browse the full Novels and Short Stories list:
+            <a href="#" class="js-facet-jump" data-facet-ids="facet-romaner-hca facet-romaner-andre"
+               style="color:var(--color-accent)">Show all novels in the register →</a>
+            &ensp;(33 HCA + 229 Other Authors)
+          </div>
+
+          <!-- Full register — complete data-driven catalogue (js/category-catalogue.js).
+               Sits inside the browse-layout main column so the sticky facet-panel
+               stays aligned with the catalogue when scrolling. -->
+          <div class="cat-block" style="margin-top:var(--sp10)">
+            <h2 class="section-title" style="margin-bottom:var(--sp3)">Full register</h2>
+            <div class="results-header">
+              <span class="results-count" id="js-cat-count"></span>
+              <label class="results-header__select-all">
+                <input type="checkbox" id="js-cat-select-all"> Select all
+              </label>
+              <div class="layout-switcher" id="js-cat-layout-switcher">
+                <button class="layout-switcher__btn" data-layout="list" type="button">☰ List</button>
+                <button class="layout-switcher__btn" data-layout="table" type="button">▦ Table</button>
+              </div>
+            </div>
+            <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
+              <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Letter:</span>
+            </div>
+            <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+            <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+              <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Show more</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container" style="display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp3)">
+    <span>
+      Developed by citizen scientists in collaboration with
+      <a href="https://www.sdu.dk/hca" style="color:inherit">the H.C. Andersen Centre, University of Southern Denmark, Odense</a>
+      &nbsp;·&nbsp; <a href="om_en.html" style="color:inherit">Our sources</a>
+    </span>
+    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer"
+       style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;opacity:0.85" title="Creative Commons Attribution 4.0 International">
+      <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="CC BY 4.0" style="height:20px;width:auto;display:block">
+      <span class="sr-only"> CC BY 4.0 (opens in a new tab)</span>
+    </a>
+  </div>
+</footer>
+
+<!-- Full work catalogue for this wing (gitignored data; CI regenerates).
+     persons/places-extra.js + entity-refs.js: category-catalogue.js's
+     Forfatter facet uses EntityRefs.personRid()/workRid() to group
+     spelling variants of the same person onto one row and to keep a
+     source citation ("Geijer og Afzelius: Svenska folkvisor Nr. 26") out
+     of the facet entirely -- same 4-script load order persons_en.html/
+     work.html/places_en.html already use. -->
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
+<script>
+  window.CATEGORY_WING='bibliotek.html';
+  window.CATEGORY_LABEL='Library';
+  // Slugs for the H2/H3 overview rows above (#h3-eventyr etc.) —
+  // category-catalogue.js ticks the matching facet both on a bare visit to
+  // the URL and on a click from the overview. Every entry here needs its H2
+  // as well: "Digte" and "Samlede og blandede Skrifter" each exist under
+  // both H. C. ANDERSEN and ANDRE FORFATTERE, so the H3 label alone would
+  // resolve to whichever checkbox happens to come first in the panel.
+  // Values are the underlying data-h2/data-h3 strings, still Danish — this
+  // maps a slug to the exact facet to check, it isn't UI copy.
+  window.CATEGORY_H3_SLUGS = {
+    'h3-eventyr':       { h2: 'H. C. ANDERSEN',   h3: 'Eventyr' },
+    'h3-digte-hca':     { h2: 'H. C. ANDERSEN',   h3: 'Digte' },
+    'h3-romaner-hca':   { h2: 'H. C. ANDERSEN',   h3: 'Romaner og Noveller' },
+    'h3-rejse':         { h2: 'H. C. ANDERSEN',   h3: 'Rejseskildringer' },
+    'h3-afhandlinger':  { h2: 'H. C. ANDERSEN',   h3: 'Afhandlinger, Artikler m.m.' },
+    'h3-selvbio':       { h2: 'H. C. ANDERSEN',   h3: 'Selvbiografier' },
+    'h3-samlede-hca':   { h2: 'H. C. ANDERSEN',   h3: 'Samlede og blandede Skrifter' },
+    'h3-romaner-andre': { h2: 'ANDRE FORFATTERE', h3: 'Romaner, Noveller, Eventyr' },
+    'h3-digte-andre':   { h2: 'ANDRE FORFATTERE', h3: 'Digte' },
+    'h3-faglitteratur': { h2: 'ANDRE FORFATTERE', h3: 'Faglitteratur' },
+    'h3-periodica':     { h2: 'ANDRE FORFATTERE', h3: 'Tidsskrifter og aarbøger, ugeblade, vittighedsblade (Periodica)' },
+    'h3-samlede-andre': { h2: 'ANDRE FORFATTERE', h3: 'Samlede og blandede Skrifter' }
+  };
+  // UI-copy overrides for category-catalogue.js — see that file's own
+  // CATEGORY_I18N doc comment for the full key list and Danish defaults.
+  window.CATEGORY_I18N = {
+    locale: 'en-US',
+    colTitle: 'Title', colAuthor: 'Author', colCategory: 'Category', colPlace: 'Place', colRefs: 'Refs.',
+    confirmAddAll: 'Add all {n} works to the cart?',
+    emptyTitle: 'No results match the selected filters.',
+    emptyBody: 'Try removing one of the filters — or reset to see the full {label} register.',
+    emptyResetBtn: 'Reset all filters',
+    noReachOtherFilters: 'No results under the other filters',
+    noReachFacets: 'No results under the selected facets',
+    letterNote: 'letter {letter}',
+    facetCountOne: '{n} facet', facetCountMany: '{n} facets',
+    resultsIn: 'entries in {label}',
+    allChip: 'All',
+    facetMore: 'Show all ({n}) ▾', facetFewer: 'Show fewer',
+    facetSortCount: 'Count', facetSortAlpha: 'A–Z'
+  };
+</script>
+<script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
+<script src="js/facet-overlay.js"></script>
+<script src="js/category-catalogue.js"></script>
+<script>
+// The "Show all novels" shortcut ticks BOTH Novels facets (HCA and Other)
+// and scrolls to the live catalogue. It used to link to romaner.html — a
+// hand-authored static page with no connection to WORKS_EXTRA, now retired to
+// mockup/irrelevant/. Dispatching a real 'change' event rather than only
+// setting .checked is what makes category-catalogue.js re-filter: it listens
+// for change, and assigning the property alone fires nothing.
+//
+// The single-facet rows in the H2/H3 overview above no longer come through
+// here: they are plain #h3-… links resolved by CATEGORY_H3_SLUGS in
+// category-catalogue.js, the same mechanism the other two wing pages use.
+// This handler stays for the one link that needs *two* facets at once, which
+// a single slug can't express.
+(function () {
+  'use strict';
+  document.addEventListener('click', function (ev) {
+    var link = ev.target.closest('.js-facet-jump');
+    if (!link) return;
+    ev.preventDefault();
+    var ids = (link.getAttribute('data-facet-ids') || '').split(/\s+/).filter(Boolean);
+    var clear = document.querySelector('.facet-panel__clear');
+    if (clear) clear.click();            // start from a clean slate
+    ids.forEach(function (id) {
+      var cb = document.getElementById(id);
+      if (!cb) return;
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    var target = document.getElementById('js-cat-results');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+<script src="js/nav.js"></script>
+</body>
+</html>

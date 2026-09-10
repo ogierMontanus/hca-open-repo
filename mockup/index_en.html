@@ -411,26 +411,30 @@
           <div class="landing-card__heading"><span class="w">W</span>ho</div>
           <div class="landing-card__count">10,228 persons · 39,361 diary refs.</div>
           <ul class="landing-card__list">
-            <li>Artists</li>
+            <li><a href="persons_en.html?role=Kunstner%2FBilledkunst,Musiker%2FScenekunst,Forfatter%2FDigter" class="landing-card__link-item">Artists</a></li>
             <li><a href="persons_en.html?gender=Kvindelig" class="landing-card__link-item">Women</a></li>
-            <li>Royalty &amp; nobility</li>
+            <li><a href="persons_en.html?role=Adel%2FKongelig%2FHof" class="landing-card__link-item">Royalty &amp; nobility</a></li>
           </ul>
           <div class="landing-card__examples">Edvard Collin · Jenny Lind</div>
           <span class="landing-card__arrow">→</span>
         </div>
 
-        <!-- 2. What -->
-        <a href="works_en.html" class="landing-card landing-card--hvad">
+        <!-- 2. What — a <div>, not an <a>, for the same reason as "Who"
+             and "Where": all three list items link straight to their own
+             wing page, and an <a> can't nest inside another <a>. Same
+             overlay technique (.landing-card__link / .landing-card__link-item). -->
+        <div class="landing-card landing-card--hvad">
+          <a href="works_en.html" class="landing-card__link" aria-label="What"></a>
           <div class="landing-card__heading"><span class="w">W</span>hat</div>
           <div class="landing-card__count">3,708 register entries · 11,195 diary refs.</div>
           <ul class="landing-card__list">
-            <li>Theatre &amp; Music</li>
-            <li>Paintings &amp; Visual Art</li>
-            <li>Books &amp; Poetry</li>
+            <li><a href="teater-musik_en.html" class="landing-card__link-item">Theatre &amp; Music</a></li>
+            <li><a href="billedkunst_en.html" class="landing-card__link-item">Paintings &amp; Visual Art</a></li>
+            <li><a href="bibliotek_en.html" class="landing-card__link-item">Books &amp; Poetry</a></li>
           </ul>
           <div class="landing-card__examples">Visual Art · Theatre &amp; Music · Library — Fairy tales, Ballets, Operas, Sculptures …</div>
           <span class="landing-card__arrow">→</span>
-        </a>
+        </div>
 
         <!-- 3. Where -->
         <div class="landing-card landing-card--hvor">

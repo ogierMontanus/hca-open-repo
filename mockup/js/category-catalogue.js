@@ -6,6 +6,15 @@
  *   window.CATEGORY_WING   — 'billedkunst.html' | 'teater-musik.html' | 'bibliotek.html'
  *   window.CATEGORY_LABEL  — human label for the result count ('Billedkunst', …)
  *
+ * Optional: window.CATEGORY_I18N overrides the UI-copy strings this file
+ * generates at runtime (confirm dialogs, empty state, table headers, facet
+ * overlay controls, …) — everything that ISN'T already sitting in the
+ * page's own markup and therefore isn't fixed by translating the HTML
+ * alone. Same per-page-override pattern as CATEGORY_H3_SLUGS. Danish
+ * defaults below reproduce today's three pages byte-for-byte when the
+ * global is absent; the three _en.html wing pages set it before this file
+ * loads. See I18N/t() just below for the exact key list.
+ *
  * It expects these containers somewhere on the page:
  *   #js-cat-alpha-bar  — alphabet bar (chips generated here)
  *   #js-cat-results    — list container
@@ -25,6 +34,19 @@
   var grid = document.getElementById('js-cat-results');
   var wing = window.CATEGORY_WING;
   if (!grid || !wing || typeof WORKS_EXTRA === 'undefined') return;
+
+  // {placeholder} substitution, e.g. t('emptyBody', {label: 'Bibliotek'}).
+  var I18N = window.CATEGORY_I18N || {};
+  var LOCALE = I18N.locale || 'da-DK';
+  function t(key, fallback, vars) {
+    var s = I18N[key] != null ? I18N[key] : fallback;
+    if (vars) {
+      for (var k in vars) if (vars.hasOwnProperty(k)) {
+        s = s.replace('{' + k + '}', vars[k]);
+      }
+    }
+    return s;
+  }
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -209,12 +231,12 @@
     { key: 'rid', label: 'ID',
       html: function (w) { return '<a class="data-table__id-link" href="work.html?reg=' +
         esc(w.rid) + '">' + esc(w.rid) + '</a>'; } },
-    { key: 'title', label: 'Titel', value: function (w) { return w.title; } },
-    { key: 'author', label: 'Forfatter', value: function (w) { return w.author || ''; },
+    { key: 'title', label: t('colTitle', 'Titel'), value: function (w) { return w.title; } },
+    { key: 'author', label: t('colAuthor', 'Forfatter'), value: function (w) { return w.author || ''; },
       sortValue: function (w) { return surnameKey(w.author || ''); } },
-    { key: 'category', label: 'Kategori', value: function (w) { return w.h3 || w.h2 || ''; } },
-    { key: 'place', label: 'Sted', value: function (w) { return w.place || ''; } },
-    { key: 'refs', label: 'Refs.', numeric: true, value: function (w) { return w.refs; } }
+    { key: 'category', label: t('colCategory', 'Kategori'), value: function (w) { return w.h3 || w.h2 || ''; } },
+    { key: 'place', label: t('colPlace', 'Sted'), value: function (w) { return w.place || ''; } },
+    { key: 'refs', label: t('colRefs', 'Refs.'), numeric: true, value: function (w) { return w.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
 
@@ -255,7 +277,8 @@
     selectAllCb.addEventListener('change', function () {
       if (selectAllCb.checked) {
         if (filtered.length > 100 &&
-            !confirm('Tilføj alle ' + filtered.length.toLocaleString('da-DK') + ' værker til kurven?')) {
+            !confirm(t('confirmAddAll', 'Tilføj alle {n} værker til kurven?',
+              { n: filtered.length.toLocaleString(LOCALE) }))) {
           selectAllCb.checked = false;
           return;
         }
@@ -274,12 +297,14 @@
   function emptyStateHtml() {
     return '<div class="empty-state" style="padding:var(--sp7) var(--sp5);text-align:center;' +
       'background:var(--color-surface-2);border:1px dashed var(--color-border);border-radius:var(--radius)">' +
-      '<div style="font-size:1.05rem;font-weight:500;margin-bottom:var(--sp3)">Ingen resultater matcher de valgte filtre.</div>' +
+      '<div style="font-size:1.05rem;font-weight:500;margin-bottom:var(--sp3)">' +
+      esc(t('emptyTitle', 'Ingen resultater matcher de valgte filtre.')) + '</div>' +
       '<div style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:var(--sp4)">' +
-      'Prøv at fjerne et af filtrene — eller nulstil for at se hele ' + esc(label) + '-registret.</div>' +
+      esc(t('emptyBody', 'Prøv at fjerne et af filtrene — eller nulstil for at se hele {label}-registret.', { label: label })) +
+      '</div>' +
       '<button type="button" class="chip" id="js-empty-reset" ' +
       'style="cursor:pointer;background:var(--color-accent);color:#fff;border-color:var(--color-accent);padding:6px 14px">' +
-      'Nulstil alle filtre</button></div>';
+      esc(t('emptyResetBtn', 'Nulstil alle filtre')) + '</button></div>';
   }
 
   // For each facet checkbox: count items that pass the letter filter AND all
@@ -314,7 +339,7 @@
         if (item) {
           item.style.opacity = dim ? '0.4' : '';
           item.style.cursor = dim ? 'not-allowed' : '';
-          item.title = dim ? 'Ingen resultater under de øvrige filtre' : '';
+          item.title = dim ? t('noReachOtherFilters', 'Ingen resultater under de øvrige filtre') : '';
         }
       });
     });
@@ -337,7 +362,7 @@
       var has = !!counts[l];
       chip.style.opacity = has ? '' : '0.35';
       chip.style.pointerEvents = has ? '' : 'none';
-      chip.title = has ? '' : 'Ingen resultater under de valgte facetter';
+      chip.title = has ? '' : t('noReachFacets', 'Ingen resultater under de valgte facetter');
     });
   }
 
@@ -353,9 +378,13 @@
     showcaseEls.forEach(function (el) { el.style.display = anyActive ? 'none' : ''; });
     if (countEl) {
       var note = '';
-      if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— bogstav ' + letter + '</span>';
-      if (activeFacets) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' + activeFacets + ' facet' + (activeFacets === 1 ? '' : 'ter') + '</span>';
-      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString('da-DK') + '</strong> poster i ' + esc(label) + note;
+      if (letter) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' +
+        esc(t('letterNote', 'bogstav {letter}', { letter: letter })) + '</span>';
+      if (activeFacets) note += ' &nbsp;<span style="font-weight:400;font-size:0.8rem;color:var(--color-text-muted)">— ' +
+        esc(t(activeFacets === 1 ? 'facetCountOne' : 'facetCountMany', activeFacets === 1 ? '{n} facet' : '{n} facetter',
+          { n: activeFacets })) + '</span>';
+      countEl.innerHTML = '<strong>' + filtered.length.toLocaleString(LOCALE) + '</strong> ' +
+        esc(t('resultsIn', 'poster i {label}', { label: label })) + note;
     }
     grid.innerHTML = '';
     shown = 0;
@@ -385,7 +414,7 @@
     var present = {};
     ALL.forEach(function (w) { present[w.init] = true; });
     var order = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ#'.split('').filter(function (l) { return present[l]; });
-    var chips = [{ l: null, t: 'Alle' }].concat(order.map(function (l) { return { l: l, t: l }; }));
+    var chips = [{ l: null, t: t('allChip', 'Alle') }].concat(order.map(function (l) { return { l: l, t: l }; }));
     chips.forEach(function (ch) {
       var a = document.createElement('a');
       a.href = '#';
@@ -496,18 +525,20 @@
     if (total <= FACET_LIMIT) return html;
 
     if (!expanded) {
-      return html + '<button type="button" class="facet-more-toggle" data-facet-more>Vis alle (' + total + ') ▾</button>';
+      return html + '<button type="button" class="facet-more-toggle" data-facet-more>' +
+        esc(t('facetMore', 'Vis alle ({n}) ▾', { n: total })) + '</button>';
     }
     var sortToggle =
       '<div class="facet-sort-toggle">' +
         '<button type="button" class="facet-sort-toggle__btn' +
           (sortMode === 'alpha' ? '' : ' facet-sort-toggle__btn--active') +
-          '" data-facet-sort="count">Antal</button>' +
+          '" data-facet-sort="count">' + esc(t('facetSortCount', 'Antal')) + '</button>' +
         '<button type="button" class="facet-sort-toggle__btn' +
           (sortMode === 'alpha' ? ' facet-sort-toggle__btn--active' : '') +
-          '" data-facet-sort="alpha">A-Å</button>' +
+          '" data-facet-sort="alpha">' + esc(t('facetSortAlpha', 'A-Å')) + '</button>' +
       '</div>';
-    var fewerToggle = '<button type="button" class="facet-more-toggle" data-facet-more>✕ Vis færre</button>';
+    var fewerToggle = '<button type="button" class="facet-more-toggle" data-facet-more>✕ ' +
+      esc(t('facetFewer', 'Vis færre')) + '</button>';
     return '<div class="facet-overlay-header">' + fewerToggle + sortToggle + '</div>' + html;
   }
 
@@ -675,8 +706,8 @@
       var c = countsFor(h2, h3);
       var wEl = host.querySelector('[data-count="works"]');
       var rEl = host.querySelector('[data-count="refs"]');
-      if (wEl) wEl.textContent = c.works.toLocaleString('da-DK');
-      if (rEl) rEl.textContent = c.refs.toLocaleString('da-DK');
+      if (wEl) wEl.textContent = c.works.toLocaleString(LOCALE);
+      if (rEl) rEl.textContent = c.refs.toLocaleString(LOCALE);
     });
   }
 

@@ -382,26 +382,30 @@
           <div class="landing-card__heading">Hvem</div>
           <div class="landing-card__count">10.228 personer · 39.361 poster i dagbøgerne</div>
           <ul class="landing-card__list">
-            <li>Kunstnere</li>
+            <li><a href="persons.html?role=Kunstner%2FBilledkunst,Musiker%2FScenekunst,Forfatter%2FDigter" class="landing-card__link-item">Kunstnere</a></li>
             <li><a href="persons.html?gender=Kvindelig" class="landing-card__link-item">Kvinder</a></li>
-            <li>Kongelige &amp; adelige</li>
+            <li><a href="persons.html?role=Adel%2FKongelig%2FHof" class="landing-card__link-item">Kongelige &amp; adelige</a></li>
           </ul>
           <div class="landing-card__examples">Collin, Edvard · Lind, Jenny</div>
           <span class="landing-card__arrow">→</span>
         </div>
 
-        <!-- 2. Hvad -->
-        <a href="works.html" class="landing-card landing-card--hvad">
+        <!-- 2. Hvad — a <div>, not an <a>, for the same reason as "Hvem"
+             and "Hvor": all three list items link straight to their own
+             wing page, and an <a> can't nest inside another <a>. Same
+             overlay technique (.landing-card__link / .landing-card__link-item). -->
+        <div class="landing-card landing-card--hvad">
+          <a href="works.html" class="landing-card__link" aria-label="Hvad"></a>
           <div class="landing-card__heading">Hvad</div>
           <div class="landing-card__count">3.708 registerposter · 11.195 poster i dagbøgerne</div>
           <ul class="landing-card__list">
-            <li>Teater &amp; Musik</li>
-            <li>Malerier &amp; Billedkunst</li>
-            <li>Bøger &amp; Digte</li>
+            <li><a href="teater-musik.html" class="landing-card__link-item">Teater &amp; Musik</a></li>
+            <li><a href="billedkunst.html" class="landing-card__link-item">Malerier &amp; Billedkunst</a></li>
+            <li><a href="bibliotek.html" class="landing-card__link-item">Bøger &amp; Digte</a></li>
           </ul>
           <div class="landing-card__examples">Billedkunst · Teater &amp; Musik · Bibliotek — Eventyr, Balletter, Operaer, Skulpturer …</div>
           <span class="landing-card__arrow">→</span>
-        </a>
+        </div>
 
         <!-- 3. Hvor — a <div>, not an <a>, for the same reason as "Hvem"
              above: three of its list items (Byer/Lande/Floder) need their

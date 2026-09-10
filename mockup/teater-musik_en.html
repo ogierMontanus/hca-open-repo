@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theatre &amp; Music — HCA Open Repository</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-section="hvad">
+
+<div id="icon-sprite"></div>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <form class="search-form" role="search" onsubmit="return false">
+      <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
+      <button type="submit" class="search-btn">Search</button>
+    </form>
+    <div class="lang-switch">
+      <a href="teater-musik.html">DA</a>
+      <span style="color:var(--color-border)">|</span>
+      <a href="teater-musik_en.html" class="active">EN</a>
+    </div>
+    <!-- Filled by Cart.mountBadge() — js/cart.js. -->
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index_en.html">Home</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Theatre &amp; Music</span>
+      </nav>
+      <div class="page-hero__head">
+        <span class="page-hero__icon">
+          <span class="icon-cluster">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-mask"></use></svg>
+          </span>
+        </span>
+        <h1>Theatre &amp; Music</h1>
+      </div>
+      <p>H2 = MUSIK · Skuespil (H3 under ANDRE FORFATTERE and H. C. ANDERSEN)</p>
+      <div class="page-hero__meta" data-count-for-wing>
+        <span><span data-count="works">1,257</span> register entries</span>
+        <span><span data-count="refs">3,711</span> diary refs.</span>
+        <span>5 subcategories</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <h2 class="section-title">Subcategories (H3)</h2>
+      <div class="subsection-grid" style="margin-bottom:var(--sp10)">
+
+        <a href="#h3-operaer" class="subsection-card">
+          <h3>Operas and Singspiele, Plays with Music</h3>
+          <p class="subsection-card__example">
+            Faust (C. Gounod) · The Mute Girl of Portici (Auber) · The Raven (J. P. E. Hartmann) ·
+            Little Kirsten (J. P. E. Hartmann) · The Barber of Seville (Rossini) …
+          </p>
+          <div class="subsection-card__stats" data-count-for="h3-operaer"><span data-count="works">239</span> entries · <span data-count="refs">1,039</span> diary refs.</div>
+        </a>
+
+        <a href="#h3-skuespil-andre" class="subsection-card">
+          <h3>Plays — Other Authors</h3>
+          <p class="subsection-card__example">
+            Faust I (Goethe) · Hakon Jarl (Oehlenschläger) · Jeppe of the Hill (Holberg) ·
+            The Elves (Heiberg) · Elverhøi (Heiberg) …
+          </p>
+          <div class="subsection-card__stats" data-count-for="h3-skuespil-andre"><span data-count="works">747</span> entries · <span data-count="refs">1,479</span> diary refs.</div>
+        </a>
+
+        <a href="#h3-skuespil-hca" class="subsection-card">
+          <h3>Plays and Opera Librettos — H.C. Andersen</h3>
+          <p class="subsection-card__example">
+            The Mulatto · The Bird in the Pear Tree · Fortune's Flower ·
+            Dramatic Plans and Ideas for Plays …
+          </p>
+          <div class="subsection-card__stats" data-count-for="h3-skuespil-hca"><span data-count="works">56</span> entries · <span data-count="refs">683</span> diary refs.</div>
+        </a>
+
+        <a href="#h3-balletter" class="subsection-card">
+          <h3>Ballets</h3>
+          <p class="subsection-card__example">
+            Valdemar (A. Bournonville) · The Lay of Thrym (Bournonville) ·
+            A Folk Tale in Pictures (Bournonville) · A Folk Tale · The Valkyrie …
+          </p>
+          <div class="subsection-card__stats" data-count-for="h3-balletter"><span data-count="works">80</span> entries · <span data-count="refs">292</span> diary refs.</div>
+        </a>
+
+        <a href="#h3-vokalmusik" class="subsection-card">
+          <h3>Vocal and Instrumental Music</h3>
+          <p class="subsection-card__example">
+            Songs with Piano Accompaniment · Music for Poems by HCA ·
+            Symphonies and Overtures · Church Music …
+          </p>
+          <div class="subsection-card__stats" data-count-for="h3-vokalmusik"><span data-count="works">135</span> entries · <span data-count="refs">218</span> diary refs.</div>
+        </a>
+
+      </div>
+
+      <!-- Browse layout -->
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filter</span>
+            <button class="facet-panel__clear">Reset</button>
+          </div>
+
+          <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md §11.
+               "Event dates" = premiere / performance — comes from year_derived but
+               not yet structured as entity_event; disabled. No year slider is wired
+               on this page yet; both modes are informational for now. -->
+          <div class="facet-group" id="temporal-mode" data-active="mention" style="display:none">
+            <div class="facet-group__header">Date category <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" style="padding:10px 12px 12px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="chip"
+                        data-mode="mention"
+                        aria-pressed="true"
+                        style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);cursor:default;font-size:0.78rem"
+                        title="Years Andersen mentioned this work in the diaries">Mention dates</button>
+                <button type="button" class="chip"
+                        data-mode="entity"
+                        aria-pressed="false"
+                        disabled
+                        style="opacity:0.45;cursor:not-allowed;font-size:0.78rem"
+                        title="Event dates (premiere · performance) activate once the entity_event table is populated.">Event dates</button>
+              </div>
+              <div style="font-size:0.72rem;color:var(--color-text-muted);margin-top:8px;line-height:1.45">
+                Search and browsing use <em>mention dates</em> — when Andersen mentioned the work in the diaries. Event dates (premiere, performance) activate once structured entity dates are loaded.
+              </div>
+            </div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Subcategory (H3) <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body">
+              <label class="facet-item"><input type="checkbox" data-h3="Operaer og Syngestykker, Skuespil med Musik"><span class="facet-item__label">Operas and Singspiele</span><span class="facet-item__count">240</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE" data-h3="Skuespil"><span class="facet-item__label">Plays — Other Authors</span><span class="facet-item__count">747</span></label>
+              <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN" data-h3="Skuespil og Operatekster"><span class="facet-item__label">Plays and Opera Librettos — HCA</span><span class="facet-item__count">55</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Balletter"><span class="facet-item__label">Ballets</span><span class="facet-item__count">80</span></label>
+              <label class="facet-item"><input type="checkbox" data-h3="Vokal- og Instrumentalmusik"><span class="facet-item__label">Vocal and Instrumental Music</span><span class="facet-item__count">135</span></label>
+            </div>
+          </div>
+
+          <!-- Composer / Author — populated at load time by
+               category-catalogue.js from every distinct WORKS_EXTRA.author
+               in this wing, ranked by works descending. The body's own
+               max-height keeps the long list from pushing the rest of
+               the panel below the viewport — see .facet-group__body in
+               css/style.css. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Composer / Author <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="author"></div>
+          </div>
+
+          <!-- Place — data-driven from WORKS_EXTRA.place (data-facet-source="place",
+               same mechanism and "City" / "City — Venue" convention as
+               billedkunst.html's Place facet), populated by
+               place_from_teater_title() in build_works_extra.py from
+               titles that state a premiere ("Il Bandocani (19.1.1834,
+               Teatro Fiano, Rom)") — only ~3% of titles carry this (most
+               just name the composer/playwright), so this facet is sparse
+               by nature, not a bug. Sorted alphabetically so every city and
+               its venues land together, same as billedkunst.html. Place
+               VALUES stay Danish/period-spelling; only the chrome here is
+               translated. -->
+          <div class="facet-group">
+            <div class="facet-group__header">Place <span class="facet-group__toggle">▲</span></div>
+            <p class="facet-note">City (and venue, where named) mentioned at the work's own premiere in the title.</p>
+            <div class="facet-group__body" data-facet-source="place"></div>
+          </div>
+        </aside>
+
+        <div>
+          <!-- Full register — complete data-driven catalogue (js/category-catalogue.js).
+               Sits inside the browse-layout main column so the sticky facet-panel
+               stays aligned with the catalogue when scrolling. -->
+          <div class="cat-block" style="margin-top:var(--sp10)">
+            <h2 class="section-title" style="margin-bottom:var(--sp3)">Full register</h2>
+            <div class="results-header">
+              <span class="results-count" id="js-cat-count"></span>
+              <label class="results-header__select-all">
+                <input type="checkbox" id="js-cat-select-all"> Select all
+              </label>
+              <div class="layout-switcher" id="js-cat-layout-switcher">
+                <button class="layout-switcher__btn" data-layout="list" type="button">☰ List</button>
+                <button class="layout-switcher__btn" data-layout="table" type="button">▦ Table</button>
+              </div>
+            </div>
+            <div id="js-cat-alpha-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:var(--sp4) 0">
+              <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);align-self:center;margin-right:4px">Letter:</span>
+            </div>
+            <div class="result-list" id="js-cat-results" style="display:flex;flex-direction:column;gap:var(--sp3)"></div>
+            <div style="display:flex;justify-content:center;margin-top:var(--sp8)">
+              <button id="js-cat-more" class="layout-switcher__btn" style="display:none;padding:7px 20px">Show more</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container" style="display:flex;align-items:center;flex-wrap:wrap;gap:var(--sp3)">
+    <span>
+      Developed by citizen scientists in collaboration with
+      <a href="https://www.sdu.dk/hca" style="color:inherit">the H.C. Andersen Centre, University of Southern Denmark, Odense</a>
+      &nbsp;·&nbsp; <a href="om_en.html" style="color:inherit">Our sources</a>
+    </span>
+    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer"
+       style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;opacity:0.85" title="Creative Commons Attribution 4.0 International">
+      <img src="https://licensebuttons.net/l/by/4.0/88x31.png" alt="CC BY 4.0" style="height:20px;width:auto;display:block">
+      <span class="sr-only"> CC BY 4.0 (opens in a new tab)</span>
+    </a>
+  </div>
+</footer>
+
+<!-- Full work catalogue for this wing (gitignored data; CI regenerates).
+     persons/places-extra.js + entity-refs.js: category-catalogue.js's
+     Forfatter/Komponist facet uses EntityRefs.personRid()/workRid() to
+     group spelling variants of the same person onto one row and to keep
+     a source citation out of the facet entirely -- same 4-script load
+     order persons_en.html/work.html/places_en.html already use. -->
+<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="js/entity-refs.js"></script>
+<script>
+  window.CATEGORY_WING='teater-musik.html';
+  window.CATEGORY_LABEL='Theatre & Music';
+  // #h3-operaer etc. (linked from the subsection cards above) tick the
+  // matching H3 facet — both on a direct visit to the URL and on a click
+  // from the cards above. See category-catalogue.js's CATEGORY_H3_SLUGS
+  // handling. Values are the underlying data-h3 strings, still Danish —
+  // this maps a slug to the exact facet to check, it isn't UI copy.
+  window.CATEGORY_H3_SLUGS = {
+    'h3-operaer': 'Operaer og Syngestykker, Skuespil med Musik',
+    'h3-skuespil-andre': 'Skuespil',
+    'h3-skuespil-hca': 'Skuespil og Operatekster',
+    'h3-balletter': 'Balletter',
+    'h3-vokalmusik': 'Vokal- og Instrumentalmusik'
+  };
+  // UI-copy overrides for category-catalogue.js — see that file's own
+  // CATEGORY_I18N doc comment for the full key list and Danish defaults.
+  window.CATEGORY_I18N = {
+    locale: 'en-US',
+    colTitle: 'Title', colAuthor: 'Author', colCategory: 'Category', colPlace: 'Place', colRefs: 'Refs.',
+    confirmAddAll: 'Add all {n} works to the cart?',
+    emptyTitle: 'No results match the selected filters.',
+    emptyBody: 'Try removing one of the filters — or reset to see the full {label} register.',
+    emptyResetBtn: 'Reset all filters',
+    noReachOtherFilters: 'No results under the other filters',
+    noReachFacets: 'No results under the selected facets',
+    letterNote: 'letter {letter}',
+    facetCountOne: '{n} facet', facetCountMany: '{n} facets',
+    resultsIn: 'entries in {label}',
+    allChip: 'All',
+    facetMore: 'Show all ({n}) ▾', facetFewer: 'Show fewer',
+    facetSortCount: 'Count', facetSortAlpha: 'A–Z'
+  };
+</script>
+<script src="js/cart.js"></script>
+<script src="js/table-view.js"></script>
+<script src="js/facet-overlay.js"></script>
+<script src="js/category-catalogue.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>
