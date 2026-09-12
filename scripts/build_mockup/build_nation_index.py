@@ -48,6 +48,12 @@ import os
 import re
 import sys
 
+# This script's summary output contains "key→umbrella". On Windows the console
+# defaults to cp1252, which cannot encode U+2192, so that print raised
+# UnicodeEncodeError. Stage 4f is optional in build_all.py, so the failure was
+# swallowed and nation-index.js was simply absent from a local Windows build.
+sys.stdout.reconfigure(encoding="utf-8")
+
 ROOT           = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ADJECTIVES     = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
 NATION_LABELS  = os.path.join(ROOT, "data", "curated", "nation_place_labels_da.csv")

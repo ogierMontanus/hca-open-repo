@@ -48,6 +48,11 @@ import os
 import sys
 from collections import Counter, defaultdict
 
+# This script's progress output contains "person→place". On Windows the
+# console defaults to cp1252, which cannot encode U+2192, so the print below
+# raised UnicodeEncodeError and the stage died after doing all of its work.
+sys.stdout.reconfigure(encoding="utf-8")
+
 ROOT     = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS     = os.path.join(ROOT, "data", "normalized", "references.csv")
