@@ -28,6 +28,11 @@ Output keeps the existing diary.csv shape — one row per entry segment per
 page, text lines stamped "PPP-LL" — plus `notes` and `illustrations`.
 A page without text (a full-page drawing) still gets one row.
 
+Alongside it, diary_html.csv (vol, page, html) keeps each page's own markup
+— indentation classes, verse lines, headings, margin line numbers, notes —
+as a sanitised HTML fragment for the diary pages, styled by
+mockup/css/edition-text.css. See EditionHTML for the tag mapping.
+
 Usage (PowerShell on Windows):
   python scripts/normalization/epub_diary_to_csv.py
   python scripts/normalization/epub_diary_to_csv.py --epub raw/hcadag-20240911.epub
@@ -47,6 +52,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_EPUB = ROOT / "raw" / "hcadag-20240911 - Copy.epub"
 DEFAULT_OUT = ROOT / "data" / "normalized" / "diary.csv"
+DEFAULT_HTML_OUT = ROOT / "data" / "normalized" / "diary_html.csv"
 
 FIELDS = ["vol", "page", "date", "month", "year", "heading", "text",
           "notes", "illustrations"]
@@ -260,6 +266,78 @@ class PageParser(HTMLParser):
             self.heading_capture.append(data)
 
 
+class EditionHTML(HTMLParser):
+    """<main> of one page → an HTML fragment that is safe to embed.
+
+    Allow-list serialiser. The EPUB is XHTML, where <p> may contain <div>,
+    <ul> and <aside>; an HTML parser would close the <p> at those and lose
+    the indentation class, so every <p> becomes <div class="p …">. <header>
+    becomes <div class="hdr …"> (no stray landmarks inside the page), and
+    the line-number attribute n becomes data-n. Unknown tags are dropped
+    but their text kept.
+    """
+
+    RENAME = {"p": ("div", "p"), "header": ("div", "hdr")}
+    KEEP = {"div", "i", "br", "ul", "li", "table", "tr", "td", "span",
+            "aside", "figure", "figcaption"}
+    VOID = {"br"}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.out = []
+        self.in_main = False
+        self.stack = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "main":
+            self.in_main = True
+            return
+        if not self.in_main:
+            return
+        a = dict(attrs)
+        name, base_cls = self.RENAME.get(tag, (tag, ""))
+        if name not in self.KEEP:
+            self.stack.append(None)
+            return
+        cls = " ".join(dict.fromkeys(filter(None, [base_cls, *re.findall(r"[\w-]+", a.get("class") or "")])))
+        out = []
+        if cls:
+            out.append(f'class="{cls}"')
+        if DATE_ID.match(a.get("id") or ""):
+            out.append(f'id="{a["id"]}"')
+        n = (a.get("n") or "").strip()
+        if n.isdigit() and tag in ("i", "header"):
+            out.append(f'data-n="{n}"')
+        if tag == "span" and a.get("title"):
+            out.append(f'title="{html.escape(a["title"])}" tabindex="0"')
+        if tag == "aside" and a.get("role") == "note":
+            out.append('role="note"')
+        self.out.append(f"<{name}{' ' if out else ''}{' '.join(out)}>")
+        if tag not in self.VOID:
+            self.stack.append(name)
+
+    def handle_endtag(self, tag):
+        if tag == "main":
+            self.in_main = False
+            return
+        if not self.in_main or tag in self.VOID or not self.stack:
+            return
+        name = self.stack.pop()
+        if name:
+            self.out.append(f"</{name}>")
+
+    def handle_data(self, data):
+        if self.in_main:
+            self.out.append(html.escape(data, quote=False))
+
+
+def page_html(xhtml):
+    p = EditionHTML()
+    p.feed(xhtml)
+    p.close()
+    return re.sub(r"\n\s*\n", "\n", "".join(p.out)).strip()
+
+
 def _month_name(date):
     m = date[5:7]
     return MONTHS[int(m) - 1] if m.isdigit() and 1 <= int(m) <= 12 else ""
@@ -339,12 +417,25 @@ def build_rows(source: Path = DEFAULT_EPUB):
     return rows, stats
 
 
-def write_rows(rows, out: Path):
+def build_page_html(source: Path = DEFAULT_EPUB):
+    """[{vol, page, html}] — one sanitised markup fragment per diary page."""
+    return [{"vol": ROMAN[vol], "page": str(page), "html": page_html(read())}
+            for vol, page, read in _page_files(source)]
+
+
+def write_rows(rows, out: Path, fields=FIELDS):
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=FIELDS)
+        w = csv.DictWriter(f, fieldnames=fields)
         w.writeheader()
         w.writerows(rows)
+
+
+def _rel(path: Path):
+    try:
+        return path.relative_to(ROOT)
+    except ValueError:
+        return path
 
 
 def main():
@@ -352,20 +443,22 @@ def main():
     ap.add_argument("--epub", type=Path, default=DEFAULT_EPUB,
                     help="unzipped EPUB folder or packed .epub file")
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    ap.add_argument("--html-out", type=Path, default=DEFAULT_HTML_OUT,
+                    help="per-page markup fragments for the diary pages")
     args = ap.parse_args()
 
     rows, stats = build_rows(args.epub)
     write_rows(rows, args.out)
+    html_rows = build_page_html(args.epub)
+    write_rows(html_rows, args.html_out, ["vol", "page", "html"])
 
     pages = {(r["vol"], r["page"]) for r in rows}
     print(f"Read {stats['pages']} pages from {args.epub.name}")
     print(f"  diary.csv: {len(rows)} rows on {len(pages)} pages")
+    print(f"  diary_html.csv: {len(html_rows)} pages")
     print(f"  pages with illustrations only (no text): {', '.join(stats['textless']) or '-'}")
     print(f"  line-number markers that forced a resync: {stats['mismatch']}")
-    try:
-        print(f"Wrote {args.out.relative_to(ROOT)}")
-    except ValueError:
-        print(f"Wrote {args.out}")
+    print(f"Wrote {_rel(args.out)} and {_rel(args.html_out)}")
 
 
 if __name__ == "__main__":

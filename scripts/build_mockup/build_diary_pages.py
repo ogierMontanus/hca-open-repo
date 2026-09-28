@@ -30,6 +30,7 @@ REFS_CSV  = REPO_ROOT / "data" / "normalized" / "references.csv"
 DIARY_CSV = REPO_ROOT / "data" / "normalized" / "diary.csv"
 ENTS_CSV  = REPO_ROOT / "data" / "normalized" / "entities.csv"
 KB_CSV    = REPO_ROOT / "data" / "normalized" / "kb_diary_links.csv"
+HTML_CSV  = REPO_ROOT / "data" / "normalized" / "diary_html.csv"
 OUT_DIR   = REPO_ROOT / "mockup" / "diary-pages"
 
 VOL_NUM = {
@@ -88,6 +89,16 @@ def load_diary() -> dict:
         for row in csv.DictReader(f):
             d[(row["vol"], row["page"])].append(row)
     return d
+
+
+def load_page_markup() -> dict:
+    """(vol, page) -> the page's own markup from the EPUB edition, already
+    sanitised by scripts/normalization/epub_diary_to_csv.py. Styled by
+    css/edition-text.css. Optional: without it the flattened text is shown."""
+    if not HTML_CSV.exists():
+        return {}
+    with HTML_CSV.open(newline="", encoding="utf-8") as f:
+        return {(r["vol"], r["page"]): r["html"] for r in csv.DictReader(f)}
 
 
 def load_kb_links() -> dict:
@@ -190,7 +201,8 @@ def date_range(diary_rows: list) -> str:
 
 
 def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
-                all_pages: list, idx: int, kb_links: dict) -> str:
+                all_pages: list, idx: int, kb_links: dict,
+                page_markup: dict) -> str:
     vp = (vol, page)
     entity_ids = refs.get(vp, [])
     diary_rows = diary.get(vp, [])
@@ -255,12 +267,15 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 
     # Diary text section
     if diary_rows:
-        txt = diary_text_html(diary_rows)
+        markup = page_markup.get(vp)
+        txt = (f'<div class="entry-text edition-text">{markup}</div>' if markup
+               else f'<div class="entry-text">{diary_text_html(diary_rows)}</div>'
+               if has_text else "")
         if txt:
             diary_section = f'''
           <div>
             <h2 class="section-title">Dagbogstext <small style="font-weight:400;font-size:0.75rem;color:var(--color-text-muted)">(bind {html.escape(vol)})</small></h2>
-            <div class="entry-text">{txt}</div>
+            {txt}
           </div>'''
         else:
             diary_section = ""
@@ -299,6 +314,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title_str} — HCA Open Repository</title>
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/edition-text.css">
 </head>
 <body>
 
@@ -414,6 +430,7 @@ def main():
     diary = load_diary()
     refs  = load_references()
     kb    = load_kb_links()
+    markup = load_page_markup()
 
     all_pages = sorted_pages(refs, diary)
     total = len(all_pages)
@@ -431,7 +448,7 @@ def main():
             continue
         pid = page_id(vol, page)
         out_path = OUT_DIR / f"{pid}.html"
-        html_content = render_page(vol, page, ents, diary, refs, all_pages, idx, kb)
+        html_content = render_page(vol, page, ents, diary, refs, all_pages, idx, kb, markup)
         out_path.write_text(html_content, encoding="utf-8")
         written += 1
         if written % 500 == 0:

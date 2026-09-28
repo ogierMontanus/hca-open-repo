@@ -1,0 +1,109 @@
+/* Diary text in the layout of the digital edition of H.C. Andersens Dagbøger.
+
+   Ported from the edition's own stylesheet (EPUB/css/main.css, Bo Krantz
+   Simonsen, Det Kgl. Bibliotek, 2024) — only the rules that shape the text:
+   headings, indentation, verse, margin line numbers, tables, the
+   text-critical notes. Chrome for the edition's own reader (banner,
+   facsimile columns, modals, tooltip library) is left out.
+
+   Scoped to .edition-text, which wraps the markup from
+   data/normalized/diary_html.csv. The markup is renamed on the way in
+   (scripts/normalization/epub_diary_to_csv.py, EditionHTML):
+     <p class="X">       → <div class="p X">
+     <header class="X">  → <div class="hdr X">
+     n="N"               → data-n="N"
+   Typeface, size and colours come from the site (.entry-text), not the
+   edition. */
+
+.edition-text {
+  --indent1: 1.2rem;
+  --indent2: 2.4rem;
+  position: relative;          /* anchors the margin line numbers */
+  padding-left: 3rem;          /* room for them */
+  line-height: 1.6;
+}
+
+/* Headings: year (div1), month and dated day headings */
+.edition-text .hdr {
+  text-align: center;
+  margin-bottom: .5em;
+  font-size: 1.08em;
+}
+.edition-text .hdr.div1 {
+  font-size: 1.23em;
+  font-weight: bold;
+}
+.edition-text > * + .hdr { margin-top: 2em; }
+
+/* Paragraphs; a dated entry's leading day heading is indented */
+.edition-text > .p { margin-top: .5em; margin-bottom: 0; }
+.edition-text > .p:first-child { margin-top: 0; }
+.edition-text > .p[id] > i:first-child { margin-left: var(--indent1); }
+
+/* Indentation (verse, quotations) */
+.edition-text .in0 { margin-left: 0; text-indent: 0 !important; }
+.edition-text .in1 { margin-left: var(--indent1); }
+.edition-text .in2 { margin-left: var(--indent2); }
+.edition-text .center { text-align: center; }
+.edition-text .caps { font-variant: small-caps; }
+
+/* Line numbers in the left margin, every fifth line as in print */
+.edition-text i[data-n]::before,
+.edition-text .hdr[data-n]::before {
+  position: absolute;
+  left: .4rem;
+  width: 1.8rem;
+  text-align: right;
+  padding-top: .3em;
+  font-size: 70%;
+  font-style: normal;
+  font-weight: normal;
+  color: var(--color-text-muted, #5c5c72);
+  content: attr(data-n);
+}
+
+/* Lists without bullets; nested lists indent */
+.edition-text ul { list-style-type: none; margin: 0; padding-left: 0; }
+.edition-text ul ul { margin-left: 2em; }
+
+/* Tables (e.g. name lists copied into the diary) */
+.edition-text table { width: 100%; border-collapse: collapse; }
+.edition-text table table { width: auto; }
+.edition-text table + table { margin-top: 1.2em; }
+.edition-text td {
+  vertical-align: top;
+  text-align: left;
+  padding: .2em 1em .3em 0;
+}
+.edition-text td:nth-child(2) { padding-right: 0; }
+
+/* Drawings reproduced in the text */
+.edition-text figure {
+  margin: 1em 0;
+  text-align: center;
+  font-style: italic;
+  color: var(--color-text-muted, #5c5c72);
+}
+.edition-text figcaption { font-size: 90%; }
+
+/* Readings where the edition corrected the OCR — original in the tooltip */
+.edition-text span[title] {
+  text-decoration: underline wavy #5f5;
+  cursor: help;
+}
+
+/* Text-critical notes at the foot of the page */
+.edition-text aside[role=note] {
+  margin-top: 2rem;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  padding: .5em 0;
+  font-size: 80%;
+}
+.edition-text aside[role=note] + aside { margin-top: 0; border-top: none; padding-top: 0; }
+
+@media (max-width: 480px) {
+  .edition-text { padding-left: 2.2rem; }
+  .edition-text i[data-n]::before,
+  .edition-text .hdr[data-n]::before { left: 0; }
+}
