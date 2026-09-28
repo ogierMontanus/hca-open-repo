@@ -16,7 +16,7 @@ python scripts\normalization\hca_v092_to_csv.py
 | File | Rows | Notes |
 |---|---:|---|
 | `entities.csv` | 11,352 | 8,917 persons + 2,435 places. Works are absent from V0.92 — keep using `data/normalized/entities.csv` for them. |
-| `diary.csv` | 2,176 | Vol VI and VII. Same scope as the V0.82 baseline. |
+| `diary.csv` | 12,407 | Vols I–X, 4,413 pages. Parsed from the XHTML pages of the EPUB edition (`raw/hcadag-20240911 - Copy.epub/`) by `epub_diary_to_csv.py` — not from the workbook's `DiaryTextLines`. Extra columns `notes` (apparatus) and `illustrations` (JSON). |
 | `references.csv` | 32,961 | Person + place mentions per diary page (`FactDiaPerPag` + `FactDiaLocPag`). Excludes work references — V0.82's `references.csv` still owns those. |
 
 ## ID scheme

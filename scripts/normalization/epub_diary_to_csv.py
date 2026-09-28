@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
-epub_diary_to_csv.py — build data/normalized/diary.csv from the digital
-edition of H.C. Andersens Dagbøger I–X (raw/hcadag-20240911.epub).
+epub_diary_to_csv.py — build diary.csv from the XHTML page files of the
+digital edition of H.C. Andersens Dagbøger I–X.
 
-Replaces the earlier diary-text source (the Diary sheet in the V0.82
-workbook, which only covered vols VI + VII, and the DiaryVol*.docx files).
+Source: the unzipped EPUB folder raw/hcadag-20240911 - Copy.epub/ (the
+packed .epub is accepted too via --epub). Replaces the earlier diary-text
+sources: DiaryTextLines in the V0.82/V0.92 workbooks, which only covered
+vols VI + VII, and the DiaryVol*.docx files. hca_v092_to_csv.py imports
+build_rows() from here, so both pipelines share one parser.
 
 The EPUB has one XHTML file per printed page, named
 hcadag{VV}_{seq}_{page}.xhtml. Only pages with an Arabic page number are
@@ -17,17 +20,24 @@ Inside a page:
   - <header class="div1"> is a year heading, other <header>s month/other
   - <i n="N"> / <br n="N"> / <header n="N"> mark printed line numbers
   - <aside role="note"> holds the text-critical apparatus (→ notes column)
+  - <figure><figcaption> and the #illusModal panel (drawings, portraits,
+    manuscript facsimiles on img.kb.dk) → illustrations column: a JSON
+    list of {"caption", "url"} on the page's first row
 
 Output keeps the existing diary.csv shape — one row per entry segment per
-page, text lines stamped "PPP-LL" — plus a `notes` column.
+page, text lines stamped "PPP-LL" — plus `notes` and `illustrations`.
+A page without text (a full-page drawing) still gets one row.
 
 Usage (PowerShell on Windows):
   python scripts/normalization/epub_diary_to_csv.py
   python scripts/normalization/epub_diary_to_csv.py --epub raw/hcadag-20240911.epub
+  python scripts/normalization/epub_diary_to_csv.py --out data/normalized_v092/diary.csv
 """
 
 import argparse
 import csv
+import html
+import json
 import re
 import sys
 import zipfile
@@ -35,10 +45,11 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_EPUB = ROOT / "raw" / "hcadag-20240911.epub"
+DEFAULT_EPUB = ROOT / "raw" / "hcadag-20240911 - Copy.epub"
 DEFAULT_OUT = ROOT / "data" / "normalized" / "diary.csv"
 
-FIELDS = ["vol", "page", "date", "month", "year", "heading", "text", "notes"]
+FIELDS = ["vol", "page", "date", "month", "year", "heading", "text",
+          "notes", "illustrations"]
 
 ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"]
 
@@ -48,7 +59,8 @@ MONTH_PREFIX = {m[:3].lower(): i + 1 for i, m in enumerate(MONTHS)}
 MONTH_PREFIX["maj"] = 5
 MONTH_PREFIX["okt"] = MONTH_PREFIX["oct"] = 10
 
-PAGE_FILE = re.compile(r"EPUB/hcadag(\d\d)_\d+_(\d+)\.xhtml$")
+PAGE_FILE = re.compile(r"(?:^|/)hcadag(\d\d)_\d+_(\d+)\.xhtml$")
+MODAL_ITEM = re.compile(r'<div>([^<]*)</div>\s*<a href="([^"]+)"')
 DATE_ID = re.compile(r"^d(\d{4})-(\d\d)-(\d\d)$")
 BLOCKS = {"p", "header", "div", "li", "tr", "ul", "table", "figcaption"}
 
@@ -92,6 +104,8 @@ class PageParser(HTMLParser):
         self.line_no = 1             # number the next flushed line gets
         self.marker_mismatch = 0
         self.skip = 0               # depth inside <figure>
+        self.figures = []           # figcaption texts
+        self.caption = None         # list while inside <figcaption>
         self.note = None            # list while inside <aside>
         self.in_main = False
         self.header = None          # (is_year, [text]) while inside <header>
@@ -138,6 +152,10 @@ class PageParser(HTMLParser):
             self.skip += 1
             return
         if self.skip:
+            if tag == "figcaption":
+                self.caption = []
+            elif tag == "br" and self.caption is not None:
+                self.caption.append(" ")
             return
         if tag == "aside":
             self._flush()
@@ -190,6 +208,11 @@ class PageParser(HTMLParser):
             self.skip = max(0, self.skip - 1)
             return
         if self.skip:
+            if tag == "figcaption" and self.caption is not None:
+                txt = re.sub(r"\s+", " ", "".join(self.caption)).strip()
+                if txt:
+                    self.figures.append(txt)
+                self.caption = None
             return
         if tag == "aside":
             if self.note is not None:
@@ -219,7 +242,11 @@ class PageParser(HTMLParser):
             self.await_heading = False
 
     def handle_data(self, data):
-        if not self.in_main or self.skip:
+        if not self.in_main:
+            return
+        if self.skip:
+            if self.caption is not None:
+                self.caption.append(data)
             return
         if self.note is not None:
             self.note.append(data)
@@ -231,6 +258,20 @@ class PageParser(HTMLParser):
             self.header[1].append(data)
         if self.heading_capture is not None:
             self.heading_capture.append(data)
+
+
+def _month_name(date):
+    m = date[5:7]
+    return MONTHS[int(m) - 1] if m.isdigit() and 1 <= int(m) <= 12 else ""
+
+
+def _illustrations(parser, xhtml):
+    items = [{"caption": c, "url": ""} for c in parser.figures]
+    if 'id="illusModal"' in xhtml:
+        modal = xhtml.split('id="illusModal"', 1)[1]
+        items += [{"caption": html.unescape(c).strip(), "url": u}
+                  for c, u in MODAL_ITEM.findall(modal)]
+    return items
 
 
 def page_rows(vol, page, xhtml, state, stats):
@@ -245,56 +286,81 @@ def page_rows(vol, page, xhtml, state, stats):
                 rows[-1]["notes"] += " | " + " | ".join(seg["notes"])
             continue
         date = seg["date"]
-        month = ""
-        if len(date) >= 7 and date[5:7].isdigit():
-            month = MONTHS[int(date[5:7]) - 1]
         rows.append({
             "vol": ROMAN[vol],
             "page": str(page),
             "date": date,
-            "month": month,
+            "month": _month_name(date),
             "year": date[:4],
             "heading": seg["heading"],
             "text": "\n".join(f"{page:03d}-{ln:02d}     {t}" for ln, t in seg["lines"]),
             "notes": " | ".join(seg["notes"]),
+            "illustrations": "",
         })
+    if not rows:
+        rows.append({"vol": ROMAN[vol], "page": str(page), "date": state.date,
+                     "month": _month_name(state.date), "year": state.year,
+                     "heading": state.heading, "text": "", "notes": "",
+                     "illustrations": ""})
+        stats["textless"].append(f"{ROMAN[vol]}/{page}")
+    illus = _illustrations(p, xhtml)
+    if illus:
+        rows[0]["illustrations"] = json.dumps(illus, ensure_ascii=False)
     return rows
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
-    ap.add_argument("--epub", type=Path, default=DEFAULT_EPUB)
-    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
-    args = ap.parse_args()
+def _page_files(source: Path):
+    """[(vol, page, read)] for every Arabic-numbered page in book order.
+    `source` is the unzipped EPUB folder or the packed .epub file."""
+    if source.is_dir():
+        found = [(PAGE_FILE.search(f.as_posix()), f) for f in source.rglob("*.xhtml")]
+        return sorted((int(m.group(1)), int(m.group(2)),
+                       lambda f=f: f.read_text(encoding="utf-8"))
+                      for m, f in found if m)
+    z = zipfile.ZipFile(source)
+    found = [(PAGE_FILE.search(n), n) for n in z.namelist()]
+    return sorted((int(m.group(1)), int(m.group(2)),
+                   lambda n=n: z.read(n).decode("utf-8"))
+                  for m, n in found if m)
 
-    if not args.epub.exists():
-        sys.exit(f"EPUB not found: {args.epub}")
 
-    with zipfile.ZipFile(args.epub) as z:
-        pages = []
-        for name in z.namelist():
-            m = PAGE_FILE.match(name)
-            if m:
-                pages.append((int(m.group(1)), int(m.group(2)), name))
-        pages.sort()
+def build_rows(source: Path = DEFAULT_EPUB):
+    """Parse every diary page of the edition → (rows, stats)."""
+    if not source.exists():
+        sys.exit(f"EPUB not found: {source}")
+    rows = []
+    stats = {"pages": 0, "mismatch": 0, "textless": []}
+    state, cur_vol = None, None
+    for vol, page, read in _page_files(source):
+        if vol != cur_vol:
+            state, cur_vol = DateState(), vol
+        rows.extend(page_rows(vol, page, read(), state, stats))
+        stats["pages"] += 1
+    return rows, stats
 
-        rows = []
-        stats = {"mismatch": 0}
-        state, cur_vol = None, None
-        for vol, page, name in pages:
-            if vol != cur_vol:
-                state, cur_vol = DateState(), vol
-            rows.extend(page_rows(vol, page, z.read(name).decode("utf-8"), state, stats))
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    with args.out.open("w", newline="", encoding="utf-8") as f:
+def write_rows(rows, out: Path):
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with out.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
         w.writerows(rows)
 
-    vols = sorted({(r["vol"], r["page"]) for r in rows})
-    print(f"Read {len(pages)} pages from {args.epub.name}")
-    print(f"  diary.csv: {len(rows)} rows on {len(vols)} pages")
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
+    ap.add_argument("--epub", type=Path, default=DEFAULT_EPUB,
+                    help="unzipped EPUB folder or packed .epub file")
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    args = ap.parse_args()
+
+    rows, stats = build_rows(args.epub)
+    write_rows(rows, args.out)
+
+    pages = {(r["vol"], r["page"]) for r in rows}
+    print(f"Read {stats['pages']} pages from {args.epub.name}")
+    print(f"  diary.csv: {len(rows)} rows on {len(pages)} pages")
+    print(f"  pages with illustrations only (no text): {', '.join(stats['textless']) or '-'}")
     print(f"  line-number markers that forced a resync: {stats['mismatch']}")
     try:
         print(f"Wrote {args.out.relative_to(ROOT)}")

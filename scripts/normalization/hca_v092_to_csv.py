@@ -3,7 +3,10 @@ three normalized CSVs that hca_xlsx_to_csv.py produces from V0.82.
 
 V0.92 ships Calendar, Persons, Places (Steder) and Diaries; the Works
 register is still V0.82-only. This script therefore emits **persons +
-places** into entities.csv and the V0.92 diary into diary.csv/references.csv.
+places** into entities.csv and the V0.92 page references into
+references.csv. diary.csv (the diary text itself) is NOT taken from the
+workbook's DiaryTextLines column any more — it is parsed from the XHTML
+pages of the EPUB edition (vols I–X) by epub_diary_to_csv.build_rows().
 Run the V0.82 ingester in parallel until Works land in a future V0.9x.
 
 Output goes to data/normalized_v092/ so the V0.82 outputs at
@@ -28,6 +31,9 @@ import re
 import sys
 import warnings
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from epub_diary_to_csv import DEFAULT_EPUB, FIELDS as DIARY_FIELDS, build_rows  # noqa: E402
 
 warnings.filterwarnings("ignore")
 
@@ -71,7 +77,6 @@ ENTITY_FIELDS = [
     "form_h3", "subform_h4", "label", "description",
     "see", "see_also", "year_derived", "date_derived", "person_derived",
 ]
-DIARY_FIELDS = ["vol", "page", "date", "month", "year", "heading", "text"]
 REF_FIELDS = ["page_id", "entity_id", "entity_label", "vol", "page", "seq"]
 
 
@@ -146,23 +151,6 @@ def page_handle(vol_ref, page_ref) -> str:
     return f"Pag{v:02d}{p:04d}"
 
 
-def normalize_date(year, month_no, day_no):
-    """Render YYYY-MM-DD with X stand-ins where the parts are missing.
-    Matches the V0.82 'YYYY-XX-XX' convention seen in diary.csv."""
-    y = s(year) or "XXXX"
-    try:
-        mo = int(month_no)
-        m = f"{mo:02d}"
-    except (TypeError, ValueError):
-        m = "XX"
-    try:
-        d = int(day_no)
-        dd = f"{d:02d}"
-    except (TypeError, ValueError):
-        dd = "XX"
-    return f"{y}-{m}-{dd}"
-
-
 # ----------------------------------------------------------------------------
 
 def build_entities():
@@ -231,37 +219,6 @@ def build_entities():
 
     return out
 
-
-def build_diary():
-    """DimDiaPag2 → diary.csv shape. One row per diary page."""
-    out = []
-    for r in sheet_rows(FILES["factdim"], "DimDiaPag2"):
-        if not r.get("DiaPagID"):
-            continue
-        v_int = vol_to_int(r.get("VolRef"))
-        # Existing diary.csv uses 'I', 'VII' Roman numerals in vol — preserve
-        roman = s(r.get("VolRef"))
-        # Date pieces
-        # V0.92 has a single 'Date' cell (datetime), Month and Year cols
-        d = r.get("Date")
-        if hasattr(d, "year"):
-            date_str = d.strftime("%Y-%m-%d")
-            month_str = f"{d.month:02d}"
-            year_str = str(d.year)
-        else:
-            month_str = s(r.get("Month"))
-            year_str = s(r.get("Year"))
-            date_str = normalize_date(year_str, month_str, None)
-        out.append({
-            "vol":     roman,
-            "page":    s(r.get("PageRef")),
-            "date":    date_str,
-            "month":   month_str,
-            "year":    year_str,
-            "heading": s(r.get("DiaryDayHeading")),
-            "text":    s(r.get("DiaryTextLines")),
-        })
-    return out
 
 
 def build_references():
@@ -340,6 +297,9 @@ def main():
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT,
                     help="output directory for the normalized CSVs "
                          f"(default: {DEFAULT_OUT.relative_to(ROOT)})")
+    ap.add_argument("--epub", type=Path, default=DEFAULT_EPUB,
+                    help="unzipped EPUB folder (or .epub) holding the diary text "
+                         f"(default: {DEFAULT_EPUB.relative_to(ROOT)})")
     args = ap.parse_args()
 
     SRC_DIR = args.source.resolve()
@@ -360,9 +320,10 @@ def main():
     write_csv(OUT_DIR / "entities.csv", ENTITY_FIELDS, ents)
     print(f"  entities.csv: {len(ents):>6} rows  ({persons} persons + {places} places)")
 
-    diary = build_diary()
+    diary, stats = build_rows(args.epub.resolve())
     write_csv(OUT_DIR / "diary.csv", DIARY_FIELDS, diary)
-    print(f"  diary.csv:    {len(diary):>6} rows")
+    print(f"  diary.csv:    {len(diary):>6} rows  "
+          f"({stats['pages']} pages, vols I–X, from {args.epub.name})")
 
     refs = build_references()
     write_csv(OUT_DIR / "references.csv", REF_FIELDS, refs)

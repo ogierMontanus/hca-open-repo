@@ -136,6 +136,10 @@ def main():
             ent_seen[eid].add(p)
             ent_pages[eid].append(p)
 
+    # Pages with diary text but no register entries still get a row.
+    for vol, page in dates:
+        page_volpg.setdefault(pid(vol, page), (vol, page))
+
     all_pages = sorted(page_volpg.keys(), key=lambda p: vp_sort_key(page_volpg[p]))
     print(f"  {len(all_pages)} diary pages · {len(ent_pages)} entities with refs")
 

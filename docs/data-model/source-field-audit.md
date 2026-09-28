@@ -127,6 +127,41 @@ spelling aliases that are not in the register (USA, Sverige, København),
 while this section covers *existing* register aliases whose link is just
 stored in the wrong column.
 
+## Page references without a diary page (outstanding)
+
+Since diary text comes from the EPUB edition (vols I–X, 4,413 pages), every
+`references.csv` row can be checked against a real page. **138 page keys /
+329 rows** have no page. They are listed in
+[`diary-missing-page-refs.md`](diary-missing-page-refs.md) (2026-09-28), in
+two blocks.
+
+**Task — correct the 82 erroneous page references (block B, 273 rows) in the
+register source** (`RefInDiaryPage` in the V0.82 workbook, or its successor),
+then regenerate `references.csv`. Do not patch the CSV by hand; the fix has to
+survive the next ingest.
+
+- [ ] **B1 — 77 pages beyond the volume's last page (81 rows).** Check each
+  against the printed register / the EPUB. The report's *Suggestion* column
+  gives pages one keystroke away that contain the entity's name (54 of 81 rows
+  have one); treat these as leads, not corrections. IX 222123 is plainly
+  garbled.
+- [ ] **B2 — 5 keys with vol or page missing (192 rows).**
+  - 117 rows with neither vol nor page are all `se:` redirect stubs, not
+    mentions — drop them from the page references and handle them with the
+    alias pass in [Inline `se:` cross-references](#inline-se-cross-references).
+  - 72 rows of `Reg001363` *Fantaisies danoises* in vol IV have no page
+    number — recover the page numbers from the printed register.
+  - 3 single rows (`Reg0033260` vol V, no page; `Reg0034690` p. 20 and
+    `Reg0125150` p. 418, no vol) — look up in the printed register.
+- [ ] **Block A — 56 rows “vol XI”, all `Reg0072990` Hornemann, Emil.**
+  Although this is not one of the 82, it is almost certainly a mis-keyed vol X.
+  All 56 page numbers have “Hornemann” in vol X, and the entity has no other
+  vol X references. Change the volume to X in the same pass.
+
+When done, regenerate the report with
+`python scripts/normalization/report_missing_page_refs.py` and check that no
+unexplained page references remain.
+
 ## Re-deriving these numbers
 
 ```

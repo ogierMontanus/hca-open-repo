@@ -117,12 +117,12 @@ def load_references() -> dict:
     return refs
 
 
-def sorted_pages(refs: dict) -> list:
-    """Return all vol+page keys sorted by (vol_num, page_num)."""
+def sorted_pages(refs: dict, diary: dict) -> list:
+    """Every vol+page with register entries or diary text, in book order."""
     def sort_key(vp):
         vol, pg = vp
         return (VOL_NUM.get(vol, 99), int(pg) if pg.isdigit() else 0)
-    return sorted(refs.keys(), key=sort_key)
+    return sorted(set(refs) | set(diary), key=sort_key)
 
 
 def diary_text_html(diary_rows: list) -> str:
@@ -146,6 +146,34 @@ def diary_text_html(diary_rows: list) -> str:
     if not paragraphs:
         return ""
     return "\n".join(f"<p>{p}</p>" for p in paragraphs)
+
+
+def illustrations_html(diary_rows: list) -> str:
+    """Drawings, portraits and facsimiles from the EPUB edition. Links to the
+    image at img.kb.dk are external — see docs/external-links.md."""
+    items = []
+    for row in diary_rows:
+        if row.get("illustrations"):
+            items += json.loads(row["illustrations"])
+    if not items:
+        return ""
+    lis = []
+    for it in items:
+        cap = html.escape(it.get("caption") or "Illustration")
+        url = it.get("url") or ""
+        if url:
+            lis.append(
+                f'<li>{cap} <a class="external-link" href="{html.escape(url)}" '
+                f'target="_blank" rel="noopener noreferrer">Se billedet hos Det Kgl. Bibliotek'
+                f'<span class="external-link__icon" aria-hidden="true">↗</span>'
+                f'<span class="sr-only"> (åbner i nyt faneblad)</span></a></li>')
+        else:
+            lis.append(f"<li>{cap}</li>")
+    return f'''
+          <div>
+            <h2 class="section-title">Illustrationer</h2>
+            <ul class="entry-illustrations">{"".join(lis)}</ul>
+          </div>'''
 
 
 def date_range(diary_rows: list) -> str:
@@ -182,7 +210,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
         f'<span class="sr-only"> (åbner i nyt faneblad)</span></a>'
         if kb_url else ""
     )
-    has_text = bool(diary_rows)
+    has_text = any(r.get("text", "").strip() for r in diary_rows)
     # Same heading rule as js/diary-wire.js's headingFor(): the date wins
     # when there is one, otherwise the volume/page reference. Used as the
     # cart label — see Cart.mountToggle() call near the closing </body>.
@@ -226,7 +254,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
     refs_html = "\n".join(ref_blocks) if ref_blocks else '<p class="muted">Ingen registerposter.</p>'
 
     # Diary text section
-    if has_text:
+    if diary_rows:
         txt = diary_text_html(diary_rows)
         if txt:
             diary_section = f'''
@@ -236,6 +264,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
           </div>'''
         else:
             diary_section = ""
+        diary_section += illustrations_html(diary_rows)
     else:
         diary_section = f'''
           <div>
@@ -322,7 +351,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
               <tr><td>Bind</td><td>{html.escape(vol)}</td></tr>
               <tr><td>Side</td><td>{html.escape(page)}</td></tr>
               <tr><td>Dato</td><td>{html.escape(date_str)}</td></tr>
-              <tr><td>Tekst</td><td>{"Ja" if has_text else "Ikke transskriberet"}</td></tr>
+              <tr><td>Tekst</td><td>{"Ja" if has_text else ("Kun illustration" if diary_rows else "Ikke transskriberet")}</td></tr>
               <tr><td>Registerposter</td><td>{len(entity_ids)}</td></tr>
             </table>
           </div>
@@ -386,7 +415,7 @@ def main():
     refs  = load_references()
     kb    = load_kb_links()
 
-    all_pages = sorted_pages(refs)
+    all_pages = sorted_pages(refs, diary)
     total = len(all_pages)
     print(f"  {total} unique diary pages to generate")
     print(f"  {len([p for p in all_pages if p in diary])} pages with transcribed text")

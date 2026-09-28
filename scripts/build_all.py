@@ -33,7 +33,7 @@ on the same steps:
   1c  SV14 place reconciliation
   1d  work-language detection      — needs the optional `lingua` package
   1e  person ethnic descriptors    — reads the V0.82 workbook directly
-  1f  diary text (diary.csv)       — reads raw/hcadag-20240911.epub
+  1f  diary text (diary.csv)       — reads the unzipped EPUB in raw/
   4f  nation index / umbrellas
 
 Each of these writes a CSV under data/normalized/ that IS committed to
