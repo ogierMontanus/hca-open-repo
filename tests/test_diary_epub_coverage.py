@@ -61,3 +61,22 @@ def test_every_epub_page_is_in_diary_csv(epub_pages, diary_csv):
 
     differ = [k for k, src in epub_pages.items() if src != text[k]]
     assert not differ, f"{len(differ)} pages whose text differs from the EPUB: {differ[:10]}"
+
+
+def test_diary_html_keeps_every_page_and_only_allowed_markup(epub_pages):
+    rows = {}
+    with (ROOT / "data" / "normalized" / "diary_html.csv").open(encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            rows[(r["vol"], r["page"])] = r["html"]
+
+    missing = sorted(set(epub_pages) - set(rows))
+    assert not missing, f"{len(missing)} EPUB pages absent from diary_html.csv: {missing[:10]}"
+
+    tags = {t.lower() for h in rows.values() for t in re.findall(r"</?([a-zA-Z]+)", h)}
+    assert tags <= {"div", "i", "br", "ul", "li", "table", "tr", "td", "span",
+                    "aside", "figure", "figcaption"}, tags
+    assert not any(re.search(r"\son\w+=|javascript:", h, re.I) for h in rows.values())
+
+    for k, h in rows.items():
+        body = re.sub(r"<aside.*?</aside>|<figure.*?</figure>", "", h, flags=re.S)
+        assert _squash(html.unescape(re.sub(r"<[^>]+>", "", body))) == epub_pages[k], k
