@@ -372,18 +372,20 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
             </table>
           </div>
 
-          <div>
-            <h2 class="section-title">Bladr i dagbøgerne</h2>
-            <div style="display:flex;flex-direction:column;gap:8px;font-size:0.83rem">
-              {prev_link}
-              {next_link}
-              <a href="../diaries.html" style="margin-top:6px;font-size:0.8rem;color:var(--color-text-muted)">Alle dagbogsider</a>
-            </div>
-          </div>
-
         </div>
 
         <aside class="entity-sidebar">
+
+          <div class="info-block">
+            <div class="info-block__header">Bladr i dagbøgerne</div>
+            <div class="info-block__body">
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:0.83rem">
+                {prev_link}
+                {next_link}
+                <a href="../diaries.html" style="margin-top:6px;font-size:0.8rem;color:var(--color-text-muted)">Alle dagbogsider</a>
+              </div>
+            </div>
+          </div>
 
           <div class="info-block">
             <div class="info-block__header">Registerposter</div>
