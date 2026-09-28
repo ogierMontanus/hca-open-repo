@@ -3,10 +3,10 @@
 hca_xlsx_to_csv.py
 ------------------
 Reads HCA-Repository V0.82.xlsx (or equivalent CSV exports) and writes
-normalized CSVs to data/normalized/:
+normalized CSVs to data/normalized/ (diary.csv is built from the EPUB
+edition by epub_diary_to_csv.py, not from the workbook's Diary sheet):
 
   entities.csv    — persons, places, works from Registry sheet
-  diary.csv       — diary entries from Diary sheet
   references.csv  — diary-page → entity joins from RefInDiaryPage sheet
 
 Usage:
@@ -58,9 +58,6 @@ def resolve_input(inp):
 #   WorRegSubCat.RegistryForm (H3), WorRegSubCat.WorkSubForm (H4),
 #   RegistryTitle, RegistryDescription, SeeTitle, SeeAlsoTittle,
 #   YearDerived, DateDerived, PersonDerived
-
-# Diary sheet columns (row 1 = header):
-#   VolRef, Date, Month, Year, PageRef, DiaryDayHeading, DiaryTextLines
 
 # RefInDiaryPage sheet columns (row 1 = header):
 #   PKRegistryPageID, FKRegistryTitelID, RegistryTitel, VolRef, PageRef, BookSeqNo
@@ -157,30 +154,6 @@ def normalize_registry(rows):
     return out
 
 
-def normalize_diary(rows):
-    """Diary sheet → diary.csv"""
-    out = []
-    seen = set()
-    for r in rows:
-        vol  = r.get("VolRef", "")
-        page = r.get("PageRef", "")
-        key  = (vol, page)
-        if not vol and not page:
-            continue
-        if key not in seen:
-            seen.add(key)
-        out.append({
-            "vol":       str(vol).strip() if vol else "",
-            "page":      str(page).strip() if page else "",
-            "date":      (r.get("Date") or "").strip(),
-            "month":     (r.get("Month") or "").strip(),
-            "year":      str(r.get("Year") or "").strip(),
-            "heading":   (r.get("DiaryDayHeading") or "").strip(),
-            "text":      (r.get("DiaryTextLines") or "").strip(),
-        })
-    return out
-
-
 def normalize_refs(rows):
     """RefInDiaryPage → references.csv"""
     out = []
@@ -232,17 +205,6 @@ def main():
         )
     else:
         print("  Warning: 'Registry' sheet not found — skipping entities.csv")
-
-    # diary.csv
-    if "Diary" in sheets:
-        rows = normalize_diary(sheets["Diary"])
-        write_csv(
-            os.path.join(args.out, "diary.csv"),
-            ["vol", "page", "date", "month", "year", "heading", "text"],
-            rows,
-        )
-    else:
-        print("  Warning: 'Diary' sheet not found — skipping diary.csv")
 
     # references.csv
     if "RefInDiaryPage" in sheets:

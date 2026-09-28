@@ -4,7 +4,7 @@ Build static diary-page HTML files for the HCA mockup.
 
 Reads:
   data/normalized/references.csv  — entity occurrences per diary page
-  data/normalized/diary.csv       — transcribed text (vol VI + VII only)
+  data/normalized/diary.csv       — diary text, vols I–X (from the EPUB edition)
   data/normalized/entities.csv    — entity metadata (label, type, h1 category)
 
 Writes:

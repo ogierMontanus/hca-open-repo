@@ -9,7 +9,7 @@ constants loaded with a plain <script> tag.
 
 Reads:
   data/normalized/references.csv  — entity occurrences per diary page
-  data/normalized/diary.csv       — transcribed text (vols VI + VII): dates
+  data/normalized/diary.csv       — diary text, vols I–X: dates
   data/normalized/entities.csv    — entity type + label
 
 Writes (gitignored — generated locally, like mockup/diary-pages/):
@@ -69,7 +69,7 @@ def load_entities():
 
 
 def load_dates():
-    """vol+page → (date, year) from the transcribed vols (VI + VII only)."""
+    """vol+page → (date, year) (vols I–X; vol XI has no text)."""
     dates = {}
     with DIARY_CSV.open(newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):

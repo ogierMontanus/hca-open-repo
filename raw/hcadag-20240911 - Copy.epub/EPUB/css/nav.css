@@ -1,0 +1,42 @@
+body{
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14pt;
+	padding: 0 1rem 1rem 1rem;
+}
+h1 {
+	font-size: 120%;
+	text-align: center;
+}
+a {
+	color: #2168cd;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+nav#toc ol {
+	list-style-type:none;
+	margin-left: 0;
+	padding-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+nav#toc ol ol {
+	margin-left: 1.5em;
+}
+nav#toc li {
+	padding-top: .3em; 
+}
+nav#toc li.info {
+	padding-top: 1em; 
+}
+nav#toc > ol > li.info {
+	font-weight: bold;
+}
+nav#toc li li.info {
+	font-style: italic;
+}
+nav#toc > ol > li:last-child {
+	padding-top: 1em; /* last page link */
+}

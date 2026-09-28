@@ -33,6 +33,7 @@ on the same steps:
   1c  SV14 place reconciliation
   1d  work-language detection      — needs the optional `lingua` package
   1e  person ethnic descriptors    — reads the V0.82 workbook directly
+  1f  diary text (diary.csv)       — reads raw/hcadag-20240911.epub
   4f  nation index / umbrellas
 
 Each of these writes a CSV under data/normalized/ that IS committed to
@@ -61,6 +62,7 @@ RAW_DIR = REPO_ROOT / "data" / "raw"
 # by source.
 STAGES_AFTER_INGEST = [
     # (id, label, path-relative-to-repo-root, optional?)
+    ("1f", "diary text from EPUB (vols I-X)", "scripts/normalization/epub_diary_to_csv.py", True),
     ("1b", "parse Rejser HTM (geocodes)",  "scripts/build_web/parse_rejser_htm.py",     True),
     ("1c", "reconcile SV14 places (geocodes)", "scripts/build_mockup/reconcile_sv14_geo.py", True),
     ("1d", "detect work languages",         "scripts/build_mockup/detect_work_language.py", True),
