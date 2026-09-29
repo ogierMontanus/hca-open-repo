@@ -64,6 +64,7 @@ MONTHS = ["Januar", "Februar", "Marts", "April", "Mai", "Juni", "Juli",
 MONTH_PREFIX = {m[:3].lower(): i + 1 for i, m in enumerate(MONTHS)}
 MONTH_PREFIX["maj"] = 5
 MONTH_PREFIX["okt"] = MONTH_PREFIX["oct"] = 10
+MONTH_VARIANTS = {"maj", "martz", "october", "oct", "sept"}
 
 PAGE_FILE = re.compile(r"(?:^|/)hcadag(\d\d)_\d+_(\d+)\.xhtml$")
 MODAL_ITEM = re.compile(r'<div>([^<]*)</div>\s*<a href="([^"]+)"')
@@ -89,15 +90,46 @@ class DateState:
         return self.date[:4] if self.date else ""
 
     def from_header(self, text, is_year):
-        years = re.findall(r"1[89]\d\d", text)
-        if is_year and years:
-            self.date = _date_parts(years[0], None, None)
+        """Date a header that carries no date id from its own text.
+
+        An editorial correction ("Mai [ɔ: April]", "1874. [ɔ: 1875.]") wins
+        over the manuscript reading; a year or "den 25 August" written in
+        the heading wins over the carried-over state."""
+        parts = re.split(r"\[\s*[ɔo]:", text, maxsplit=1)
+        main, corr = parts[0], (parts[1] if len(parts) > 1 else "")
+        y_c, m_c, d_c = _parse_header_date(corr)
+        y, m, d = _parse_header_date(main)
+        year = y_c or y or self.year
+        month, day = (m_c, d_c) if m_c else (m, d)
+        # A year alone re-dates only a year heading (div1), not e.g.
+        # "Indvielse 1867" inside a running month.
+        if not year or not (month or (is_year and (y_c or y))):
             return
-        word = re.sub(r"[^\wæøå]", " ", text.lower()).split()
-        for w in word:
-            if w[:3] in MONTH_PREFIX and self.year:
-                self.date = _date_parts(self.year, f"{MONTH_PREFIX[w[:3]]:02d}", None)
-                return
+        self.date = _date_parts(year, f"{month:02d}" if month else None,
+                                f"{day:02d}" if month and day else None)
+
+
+def _month_of(word):
+    """Month number for a Danish month word (incl. Maj/Oct/Martz variants
+    and abbreviations), else None — so "Margaretha" is not March."""
+    for k, n in MONTH_PREFIX.items():
+        if word.startswith(k) and (MONTHS[n - 1].lower().startswith(word)
+                                   or word in MONTH_VARIANTS):
+            return n
+    return None
+
+
+def _parse_header_date(text):
+    """(year, month, day) found in a header text; missing parts are None."""
+    words = re.sub(r"[^\wæøå]", " ", text.lower()).split()
+    year = next((w for w in words if re.fullmatch(r"1[89]\d\d", w)), None)
+    for i, w in enumerate(words):
+        month = _month_of(w)
+        if month:
+            prev = words[i - 1] if i else ""
+            day = int(prev) if prev.isdigit() and 1 <= int(prev) <= 31 else None
+            return year, month, day
+    return year, None, None
 
 
 class PageParser(HTMLParser):
@@ -114,7 +146,7 @@ class PageParser(HTMLParser):
         self.caption = None         # list while inside <figcaption>
         self.note = None            # list while inside <aside>
         self.in_main = False
-        self.header = None          # (is_year, [text]) while inside <header>
+        self.header = None          # (is_year, has_id, [text]) inside <header>
         self.heading_capture = None  # list while capturing a leading <i>
         self.await_heading = False
         self.i_depth = 0
@@ -178,7 +210,7 @@ class PageParser(HTMLParser):
             if m:
                 self.state.date = _date_parts(*m.groups())
             self._new_segment()
-            self.header = (a.get("class") == "div1", [])
+            self.header = (a.get("class") == "div1", bool(m), [])
         elif m:
             date = _date_parts(*m.groups())
             # The edition repeats the entry's date id on the first paragraph
@@ -235,11 +267,15 @@ class PageParser(HTMLParser):
                 self.heading_capture = None
             return
         if tag == "header" and self.header is not None:
-            is_year, parts = self.header
+            is_year, has_id, parts = self.header
             text = re.sub(r"\s+", " ", "".join(parts)).strip()
             seg = self._seg()
             seg["heading"] = self.state.heading = text
-            if not seg["date"] or not DATE_ID.match("d" + seg["date"]):
+            # A header without its own date id opens a new period: date it
+            # from its text, never from the carried-over state — else a
+            # year heading after a gap (IV 157: "1855 Reist til Udlandet")
+            # inherits the last entry before the gap (1854-07-01).
+            if not has_id:
                 self.state.from_header(text, is_year)
                 seg["date"] = self.state.date
             self.header = None
@@ -261,7 +297,7 @@ class PageParser(HTMLParser):
             self.await_heading = False
         self.buf.append(data)
         if self.header is not None:
-            self.header[1].append(data)
+            self.header[2].append(data)
         if self.heading_capture is not None:
             self.heading_capture.append(data)
 
