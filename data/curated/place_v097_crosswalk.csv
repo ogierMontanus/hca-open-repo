@@ -1,0 +1,2469 @@
+loc_id_v097,label_v097,entity_id_v092,label_v092,match,score
+LOC1000000,Abbotsford,L110050,Abbotsford,exact,1.0
+LOC1000050,Abydos,L110200,Abydos,exact,1.0
+LOC1000100,Acquapendente,L110250,Acquapendente,exact,1.0
+LOC1000150,Adamsthal,L110300,Adamsthal,exact,1.0
+LOC1000250,Adriaterhavet,L110450,Adriaterhavet,exact,1.0
+LOC1000300,Afrika,L110900,Afrika,exact,1.0
+LOC1000350,Agersø,L111950,Agersø,exact,1.0
+LOC1000400,Agnano-Søen,L112000,Agnano-Søen,exact,1.0
+LOC1000450,Ahlhorn,L112050,Ahlhorn,exact,1.0
+LOC1000500,Aigle,L112100,Aigle,exact,1.0
+LOC1000550,Ajaccio,L112150,Ajaccio,exact,1.0
+LOC1000600,Akropolis,L112200,Akropolis,exact,1.0
+LOC1000650,Ala,L112900,Ala,exact,1.0
+LOC1000700,Albanerbjergene,L113050,Albanerbjergene,exact,1.0
+LOC1000750,Albaner-Søen,L113200,Albaner-Søen,exact,1.0
+LOC1000800,Albano Laziale,L113300,Albano Laziale,exact,1.0
+LOC1000850,Albula-Pas,L113800,Albula-Pas,exact,1.0
+LOC1000900,Alcázar de San Juan,L114200,Alcázar de San Juan,exact,1.0
+LOC1000950,"Alcázar, Sevilla",L113850,"Alcázar, Sevilla",exact,1.0
+LOC1001000,Alexandria,L114250,Alexandria,exact,1.0
+LOC1001050,Alexisbad,L114450,Alexisbad,exact,1.0
+LOC1001100,Alfeld,L114500,Alfeld,exact,1.0
+LOC1001150,Algeciras,L114550,Algeciras,exact,1.0
+LOC1001200,Algier,L114600,Algier,exact,1.0
+LOC1001250,Alhambra,L116050,Alhambra,exact,1.0
+LOC1001300,Alicante,L117100,Alicante,exact,1.0
+LOC1001350,Almadén,L117550,Almadén,exact,1.0
+LOC1001400,Almansa,L117600,Almansa,exact,1.0
+LOC1001450,Almeria,L117650,Almeria,exact,1.0
+LOC1001500,Alperne,L117700,Alperne,exact,1.0
+LOC1001550,Alpnach,L120000,Alpnach,exact,1.0
+LOC1001600,Alpsee (ved Hohenschwangau),L120100,Alpsee (ved Hohenschwangau),exact,1.0
+LOC1001650,Als,L120150,Als,exact,1.0
+LOC1001700,Alssund,L121600,Alssund,exact,1.0
+LOC1001750,Alsteren,L121750,Alsteren,exact,1.0
+LOC1001800,Altenburg,L122250,Altenburg,exact,1.0
+LOC1001850,Altona,L122450,Altona,exact,1.0
+LOC1001900,Altorf,L126850,Altorf,exact,1.0
+LOC1001950,Altstädten,L127050,Altstädten,exact,1.0
+LOC1002000,"Alveneu, Bad",L127100,"Alveneu, Bad",exact,1.0
+LOC1002050,Alvesta,L127200,Alvesta,exact,1.0
+LOC1002100,Alz,L127350,Alz,exact,1.0
+LOC1002150,Amager,L127400,Amager,exact,1.0
+LOC1002200,Amalfi,L127950,Amalfi,exact,1.0
+LOC1002250,Amasra,L128300,Amasra,exact,1.0
+LOC1002300,Amboise,L128350,Amboise,exact,1.0
+LOC1002350,Ambras,L128400,Ambras,exact,1.0
+LOC1002400,Amerika (De Forenede Stater),L128450,Amerika (De Forenede Stater),exact,1.0
+LOC1002450,Amiens,L135200,Amiens,exact,1.0
+LOC1002500,Amrum,L135300,Amrum,exact,1.0
+LOC1002550,Amsteg,L135400,Amsteg,exact,1.0
+LOC1002600,Amsterdam,L135500,Amsterdam,exact,1.0
+LOC1002650,Amstetten,L140300,Amstetten,exact,1.0
+LOC1002700,Amur-Floden,L140350,Amur-Floden,exact,1.0
+LOC1002750,Amönenhöhe (ved ltzehoe),L140400,Amönenhöhe (ved ltzehoe),exact,1.0
+LOC1002800,Anacapri,L140600,Anacapri,exact,1.0
+LOC1002850,Ancona,L140950,Ancona,exact,1.0
+LOC1002900,Andeer,L141100,Andeer,exact,1.0
+LOC1002950,Andermatt,L141150,Andermatt,exact,1.0
+LOC1003000,Andernach,L141250,Andernach,exact,1.0
+LOC1003050,Andersbo,L141300,Andersbo,exact,1.0
+LOC1003100,"Andersens Højland (H.C. Andersens Bænk, Aasen, Silkeborg)",L141350,"Andersens Højland (H.C. Andersens Bænk, Aasen, Silkeborg)",exact,1.0
+LOC1003150,Andújar,L141400,Andújar,exact,1.0
+LOC1003200,Angel,L141450,Angel,exact,1.0
+LOC1003250,Angora,L141650,Angora,exact,1.0
+LOC1003300,Angoulême,L141750,Angoulême,exact,1.0
+LOC1003350,Anhof,L141850,Anhof,exact,1.0
+LOC1003400,Anholt,L141900,Anholt,exact,1.0
+LOC1003450,Aniene,L141950,Aniene,exact,1.0
+LOC1003500,Antibes,L142150,Antibes,exact,1.0
+LOC1003550,Antvorskov,L142300,Antvorskov,exact,1.0
+LOC1003600,Antwerpen,L142350,Antwerpen,exact,1.0
+LOC1003650,Apatin,L143000,Apatin,exact,1.0
+LOC1003700,Apenninerne,L143050,Apenninerne,exact,1.0
+LOC1003750,Appenweier,L143500,Appenweier,exact,1.0
+LOC1003800,Appenzell (Kanton),L143600,Appenzell (Kanton),exact,1.0
+LOC1003850,Aranjuez,L143700,Aranjuez,exact,1.0
+LOC1003900,Arbesau,L143800,Arbesau,exact,1.0
+LOC1003950,Arco,L143850,Arco,exact,1.0
+LOC1004000,"Arco naturale, Capri",L143900,"Arco naturale, Capri",exact,1.0
+LOC1004050,Arezzo,L143950,Arezzo,exact,1.0
+LOC1004100,Argos,L144000,Argos,exact,1.0
+LOC1004150,Ariccia,L144050,Ariccia,exact,1.0
+LOC1004200,Arkaden,L144400,Arkaden,exact,1.0
+LOC1004300,Arnhem,L144700,Arnhem,exact,1.0
+LOC1004350,Arno,L145250,Arno,exact,1.0
+LOC1004400,Arona,L145800,Arona,exact,1.0
+LOC1004450,Arrábida,L145850,Arrábida,exact,1.0
+LOC1004500,Arth,L146150,Arth,exact,1.0
+LOC1004550,Arve,L146300,Arve,exact,1.0
+LOC1004600,Aschersleben,L146400,Aschersleben,exact,1.0
+LOC1004650,Asien,L146450,Asien,exact,1.0
+LOC1004700,Askerlandet (ved Christiania),L146950,Askerlandet (ved Christiania),exact,1.0
+LOC1004750,Asmildkloster,L147000,Asmildkloster,exact,1.0
+LOC1004800,Asnæs,L147150,Asnæs,exact,1.0
+LOC1004850,Assens,L147250,Assens,exact,1.0
+LOC1004900,Assisi,L147700,Assisi,exact,1.0
+LOC1004950,Assmannshausen,L147850,Assmannshausen,exact,1.0
+LOC1005000,Athen,L147900,Athen,exact,1.0
+LOC1005050,Atlanterhavet,L150500,Atlanterhavet,exact,1.0
+LOC1005100,Atlasbjergene,L152400,Atlasbjergene,exact,1.0
+LOC1005150,Auf der Jugend (ved Hohensehwangau),L152500,Auf der Jugend (ved Hohensehwangau),exact,1.0
+LOC1005200,Augsburg,L152550,Augsburg,exact,1.0
+LOC1005250,Augustenborg,L153850,Augustenborg,exact,1.0
+LOC1005300,Augustenborg Fjord,L154900,Augustenborg Fjord,exact,1.0
+LOC1005350,Aurich,L155050,Aurich,exact,1.0
+LOC1005400,Aussig,L155100,Aussig,exact,1.0
+LOC1005450,Australien,L155300,Australien,exact,1.0
+LOC1005500,Aveiro,L155400,Aveiro,exact,1.0
+LOC1005550,Averner-Søen,L155500,Averner-Søen,exact,1.0
+LOC1005600,Avesta,L155550,Avesta,exact,1.0
+LOC1005650,Avignon,L155600,Avignon,exact,1.0
+LOC1005700,Axenstein,L156100,Axenstein,exact,1.0
+LOC1005750,Axenstrasse,L156350,Axenstrasse,exact,1.0
+LOC1005800,Babakaj,L156550,Babakaj,exact,1.0
+LOC1005850,Baccano (Boccano?),L157000,Baccano (Boccano?),exact,1.0
+LOC1005900,Bacharach,L157100,Bacharach,exact,1.0
+LOC1005950,Bács (Páks),L157150,Bács (Páks),exact,1.0
+LOC1006000,Badajoz,L156650,Badajoz,exact,1.0
+LOC1006050,Baden (Storhertugdømme),L157200,Baden (Storhertugdømme),exact,1.0
+LOC1006100,Baden (ved Wien),L157550,Baden (ved Wien),exact,1.0
+LOC1006150,Baden-Baden,L157800,Baden-Baden,exact,1.0
+LOC1006200,Badenweiler,L158350,Badenweiler,exact,1.0
+LOC1006250,Badgastein,L158450,Badgastein,exact,1.0
+LOC1006300,Baia,L158600,Baia,exact,1.0
+LOC1006350,Bailén,L158800,Bailén,exact,1.0
+LOC1006400,Baja (Ungarn),L158850,Baja (Ungarn),exact,1.0
+LOC1006450,Balbek,L158900,Balbek,exact,1.0
+LOC1006500,Balkan-Bjergene,L158950,Balkan-Bjergene,exact,1.0
+LOC1006550,Balloch,L159000,Balloch,exact,1.0
+LOC1006600,Bamberg,L159050,Bamberg,exact,1.0
+LOC1006650,Bandholm,L159300,Bandholm,exact,1.0
+LOC1006700,Bangsbo,L159350,Bangsbo,exact,1.0
+LOC1006750,Bannockburn,L159400,Bannockburn,exact,1.0
+LOC1006800,Barcelona,L159450,Barcelona,exact,1.0
+LOC1006850,Barreiro,L160950,Barreiro,exact,1.0
+LOC1006950,Basiasch (Bazías),L162600,Basiasch (Bazias),folded,1.0
+LOC1007000,Basingstoke,L162650,Basingstoke,exact,1.0
+LOC1007050,Basnæs,L162700,Basnæs,exact,1.0
+LOC1007100,Bassum,L174000,Bassum,exact,1.0
+LOC1007150,Bastei,L174050,Bastei,exact,1.0
+LOC1007200,Batavia,L174300,Batavia,exact,1.0
+LOC1007250,Baumannshöhle,L174350,Baumannshöhle,exact,1.0
+LOC1007300,Bavelse,L174500,Bavelse,exact,1.0
+LOC1007350,Bavelse Sø,L174550,Bavelse Sø,exact,1.0
+LOC1007400,Baveno,L174600,Baveno,exact,1.0
+LOC1007450,Bayern,L174650,Bayern,exact,1.0
+LOC1007500,Bayonne,L175050,Bayonne,exact,1.0
+LOC1007550,Bayreuth,L175450,Bayreuth,exact,1.0
+LOC1007600,Beaucaire,L175600,Beaucaire,exact,1.0
+LOC1007650,Bebra,L175650,Bebra,exact,1.0
+LOC1007700,Beckenried,L175700,Beckenried,exact,1.0
+LOC1007750,Beelitz,L175850,Beelitz,exact,1.0
+LOC1007800,Beeren-Eiland (Bjørneøen),L175900,Beeren-Eiland (Bjørneøen),exact,1.0
+LOC1007850,Beinum,L176000,Beinum,exact,1.0
+LOC1007900,"Beldringe, Baarse S., Præstø A",L176050,"Beldringe Baarse S., Præstø A",folded,1.0
+LOC1007950,Belém,L176100,Belém,exact,1.0
+LOC1008000,Belgien,L176200,Belgien,exact,1.0
+LOC1008050,Belgrad,L176550,Belgrad,exact,1.0
+LOC1008100,Bellaggio,L176650,Bellaggio,exact,1.0
+LOC1008150,Bellegarde,L176700,Bellegarde,exact,1.0
+LOC1008200,Bellevue (Klampenborg),L176950,Bellevue (Klampenborg),exact,1.0
+LOC1008250,Belle-Vue (Stockholm),L177200,Belle-Vue (Stockholm),exact,1.0
+LOC1008300,"Bellevue, ved Beldringe",L176900,"Bellevue, ved Beldringe",exact,1.0
+LOC1008350,Bellinzona,L177250,Bellinzona,exact,1.0
+LOC1008400,Belvedere (ved Weimar),L177300,Belvedere (ved Weimar),exact,1.0
+LOC1008450,Belvedere (ved Wien),L177950,Belvedere (ved Wien),exact,1.0
+LOC1008550,Ben Lomond,L178200,Ben Lomond,exact,1.0
+LOC1008600,Benátky,L178300,Benátky,exact,1.0
+LOC1008650,Benediktbeuern,L178350,Benediktbeuern,exact,1.0
+LOC1008700,Benevente,L178400,Benevente,exact,1.0
+LOC1008750,Bense-Brug (ved Christiania),L178450,Bense-Brug (ved Christiania),exact,1.0
+LOC1008800,Bentheim,L178500,Bentheim,exact,1.0
+LOC1008850,Berg,L178550,Berg,exact,1.0
+LOC1008900,"Berg, Slot",L178600,"Berg, Slot",exact,1.0
+LOC1008950,Bergedorf,L178800,Bergedorf,exact,1.0
+LOC1009000,Bergen,L178900,Bergen,exact,1.0
+LOC1009050,Bergün,L179350,Bergün,exact,1.0
+LOC1009100,Berlin,L179400,Berlin,exact,1.0
+LOC1009150,Bern,L187350,Bern,exact,1.0
+LOC1009200,Bernburg,L188650,Bernburg,exact,1.0
+LOC1009250,Berneck,L188700,Berneck,exact,1.0
+LOC1009300,Bernina-Bjergene,L188750,Bernina-Bjergene,exact,1.0
+LOC1009350,Bernstorff Slot,L188800,Bernstorff Slot,exact,1.0
+LOC1009400,Berwick,L189450,Berwick,exact,1.0
+LOC1009450,Besançon,L189550,Besançon,exact,1.0
+LOC1009500,Bex,L189650,Bex,exact,1.0
+LOC1009550,Béziers,L190000,Béziers,exact,1.0
+LOC1009600,Biarritz,L190100,Biarritz,exact,1.0
+LOC1009650,Bidstrup,L190450,Bidstrup,exact,1.0
+LOC1009700,Biebrich,L190300,Biebrich,exact,1.0
+LOC1009750,Biecowitz,L190500,Biecowitz,exact,1.0
+LOC1009800,Biel (Bienne),L190550,Biel (Bienne),exact,1.0
+LOC1009850,Bielersøen,L190800,Bielersøen,exact,1.0
+LOC1009900,Bielshöhle,L190900,Bielshöhle,exact,1.0
+LOC1009950,Biessenhofen,L190950,Biessenhofen,exact,1.0
+LOC1010000,Bilbao,L191050,Bilbao,exact,1.0
+LOC1010050,Bille,L191100,Bille,exact,1.0
+LOC1010100,Bindlocher,L191150,Bindlocher,exact,1.0
+LOC1010150,Bingen,L191200,Bingen,exact,1.0
+LOC1010200,Biscayiske Havbugt (Den spanske Sø),L191500,Biscayiske Havbugt (Den spanske Sø),exact,1.0
+LOC1010250,Bisserup,L191600,Bisserup,exact,1.0
+LOC1010300,Bjärka-Säby,L191650,Bjärka-Säby,exact,1.0
+LOC1010400,Blankenburg,L192500,Blankenburg,exact,1.0
+LOC1010450,Blankenese,L192700,Blankenese,exact,1.0
+LOC1010500,Blechhütte,L192850,Blechhütte,exact,1.0
+LOC1010550,Blekhem,L192950,Blekhem,exact,1.0
+LOC1010600,Blekinge,L193000,Blekinge,exact,1.0
+LOC1010650,Blois,L193100,Blois,exact,1.0
+LOC1010700,Blokhus,L193350,Blokhus,exact,1.0
+LOC1010750,Blomberg,L193400,Blomberg,exact,1.0
+LOC1010800,"Blaa Grotte, den (Capri)",L192000,"Blaa Grotte, den (Capri)",exact,1.0
+LOC1010900,Bode,L193700,Bode,exact,1.0
+LOC1011000,Bodensøen,L193950,Bodensøen,exact,1.0
+LOC1011050,Bogenhausen,L194350,Bogenhausen,exact,1.0
+LOC1011100,Bogense,L194550,Bogense,exact,1.0
+LOC1011150,Bogø,L194700,Bogø,exact,1.0
+LOC1011200,Bohmte,L194800,Bohmte,exact,1.0
+LOC1011250,Boizenburg,L194900,Boizenburg,exact,1.0
+LOC1011300,Boller,L195000,Boller,exact,1.0
+LOC1011350,Bologna,L195100,Bologna,exact,1.0
+LOC1011400,Bolsena,L195650,Bolsena,exact,1.0
+LOC1011450,Bolsena-Søen,L195750,Bolsena-Søen,exact,1.0
+LOC1011500,Bonn,L195850,Bonn,exact,1.0
+LOC1011550,Bonndorf,L196400,Bonndorf,exact,1.0
+LOC1011600,Boppard,L196500,Boppard,exact,1.0
+LOC1011650,Bordeaux,L196600,Bordeaux,exact,1.0
+LOC1011700,Boren,L199500,Boren,exact,1.0
+LOC1011750,Borghetto (Ligurien),L199550,Borghetto (Ligurien),exact,1.0
+LOC1011800,Borghetto all-'Adige,L199600,Borghetto all-'Adige,exact,1.0
+LOC1011850,Borna,L199650,Borna,exact,1.0
+LOC1011900,Bornholm,L199700,Bornholm,exact,1.0
+LOC1011950,Borova,L200100,Borova,exact,1.0
+LOC1012000,Borreby,L200150,Borreby,exact,1.0
+LOC1012050,"Borromeiske Øer, de",L203150,"Borromeiske Øer, de",exact,1.0
+LOC1012100,Borup,L203200,Borup,exact,1.0
+LOC1012150,Bosporus,L203350,Bosporus,exact,1.0
+LOC1012200,Boston,L203550,Boston,exact,1.0
+LOC1012250,Bottensjön,L204100,Bottensjön,exact,1.0
+LOC1012300,Bouchain,L204150,Bouchain,exact,1.0
+LOC1012350,Boulogne,L204200,Boulogne,exact,1.0
+LOC1012400,Bov,L204350,Bov,exact,1.0
+LOC1012450,Bovbjerg,L204400,Bovbjerg,exact,1.0
+LOC1012500,Bozen (Bolzano),L204550,Bozen (Bolzano),exact,1.0
+LOC1012550,Brahetrolleborg,L205150,Brahetrolleborg,exact,1.0
+LOC1012600,Brakel,L205250,Brakel,exact,1.0
+LOC1012650,Bramstedt,L205300,Bramstedt,exact,1.0
+LOC1012700,"Brancanes, Øde-Kloster ved Setúbal",L205400,"Brancanes, Øde-Kloster ved Setubal",folded,1.0
+LOC1012750,Brand,L205850,Brand,exact,1.0
+LOC1012800,Brandeis,L205900,Brandeis,exact,1.0
+LOC1012850,"Brandholt, Gaard i Skovby S., Skovby H",L206000,"Brandholt, Gaard i Skovby S., Skovby H",exact,1.0
+LOC1012900,Branzoll,L206050,Branzoll,exact,1.0
+LOC1012950,Brasilien,L206100,Brasilien,exact,1.0
+LOC1013000,Braubach,L206400,Braubach,exact,1.0
+LOC1013050,Braunschweig,L206450,Braunschweig,exact,1.0
+LOC1013100,Breda,L208600,Breda,exact,1.0
+LOC1013150,Brede,L208650,Brede,exact,1.0
+LOC1013200,Bregentved,L208700,Bregentved,exact,1.0
+LOC1013250,Bregenz,L212550,Bregenz,exact,1.0
+LOC1013300,Bregninge Kirke,L212600,Bregninge Kirke,exact,1.0
+LOC1013350,Breitenburg,L212650,Breitenburg,exact,1.0
+LOC1013400,Bremen,L213750,Bremen,exact,1.0
+LOC1013450,"Brenets, Les",L215050,"Brenets, Les",exact,1.0
+LOC1013500,Brenner,L215400,Brenner,exact,1.0
+LOC1013550,Brenta,L215750,Brenta,exact,1.0
+LOC1013600,Breslau,L215800,Breslau,exact,1.0
+LOC1013650,Brieg,L216800,Brieg,exact,1.0
+LOC1013700,Brielle,L217250,Brielle,exact,1.0
+LOC1013750,Brienz,L217300,Brienz,exact,1.0
+LOC1013800,Brienzer-Søen,L217500,Brienzer-Søen,exact,1.0
+LOC1013850,Bristol,L217700,Bristol,exact,1.0
+LOC1013900,Brixen,L217750,Brixen,exact,1.0
+LOC1013950,Broadstairs,L218000,Broadstairs,exact,1.0
+LOC1014000,Broager,L218100,Broager,exact,1.0
+LOC1014050,Brocken (Bloksbjerg),L218650,Brocken (Bloksbjerg),exact,1.0
+LOC1014100,Broholm,L219350,Broholm,exact,1.0
+LOC1014150,Bromberg,L219800,Bromberg,exact,1.0
+LOC1014200,Bromley,L219850,Bromley,exact,1.0
+LOC1014250,Bruck,L219950,Bruck,exact,1.0
+LOC1014300,Brunnbäck,L220000,Brunnbäck,exact,1.0
+LOC1014350,Brunnen,L220050,Brunnen,exact,1.0
+LOC1014400,Brüggen,L222050,Brüggen,exact,1.0
+LOC1014450,Brünig,L222100,Brünig,exact,1.0
+LOC1014500,Brünn,L222300,Brünn,exact,1.0
+LOC1014550,Brüssel (Bruxelles),L222500,Brüssel (Bruxelles),exact,1.0
+LOC1014600,Brza,L223550,Brza,exact,1.0
+LOC1014650,Brædstrup,L223600,Brædstrup,exact,1.0
+LOC1014700,Brännkyrka,L223700,Brännkyrka,exact,1.0
+LOC1014750,Budapest,L223750,Budapest,exact,1.0
+LOC1014800,Budwitz,L223950,Budwitz,exact,1.0
+LOC1014850,Bukarest,L224000,Bukarest,exact,1.0
+LOC1014900,Bukovina,L224050,Bukovina,exact,1.0
+LOC1014950,Bulgarien,L224100,Bulgarien,exact,1.0
+LOC1015000,Bulle,L224350,Bulle,exact,1.0
+LOC1015050,Buochs,L224450,Buochs,exact,1.0
+LOC1015100,Buonconvento,L224500,Buonconvento,exact,1.0
+LOC1015150,Búrgos,L224600,Búrgos,exact,1.0
+LOC1015200,Butzbach,L224800,Butzbach,exact,1.0
+LOC1015250,Büchen,L224850,Büchen,exact,1.0
+LOC1015300,Bückeburg,L225000,Bückeburg,exact,1.0
+LOC1015350,Büjük Dere,L225100,Büjük Dere,exact,1.0
+LOC1015400,Bäckaskog,L225200,Bäckaskog,exact,1.0
+LOC1015450,Bækkeskov,L225300,Bækkeskov,exact,1.0
+LOC1015500,Bøget,L225350,Bøget,exact,1.0
+LOC1015550,Bøhmen,L225550,Bøhmen,exact,1.0
+LOC1015600,Böhmisch-Brod,L225850,Böhmisch-Brod,exact,1.0
+LOC1015650,Børglum,L225900,Børglum,exact,1.0
+LOC1015700,Børglumkloster,L226200,Børglumkloster,exact,1.0
+LOC1015750,Börringe Kloster,L226700,Börringe Kloster,exact,1.0
+LOC1015800,Cadiz,L226800,Cadiz,exact,1.0
+LOC1015850,Caffaggiolo,L227100,Caffaggiolo,exact,1.0
+LOC1015900,Cairo,L227150,Cairo,exact,1.0
+LOC1015950,Calabrien,L227450,Calabrien,exact,1.0
+LOC1016000,Calais,L227500,Calais,exact,1.0
+LOC1016050,Calchedonia,L227650,Calchedonia,exact,1.0
+LOC1016100,Calcutta,L227700,Calcutta,exact,1.0
+LOC1016150,Californien,L227950,Californien,exact,1.0
+LOC1016200,Callander,L228250,Callander,exact,1.0
+LOC1016250,Calw,L228300,Calw,exact,1.0
+LOC1016300,Camaldoli,L228350,Camaldoli,exact,1.0
+LOC1016350,Cambrai,L228400,Cambrai,exact,1.0
+LOC1016400,Cambridge,L228450,Cambridge,exact,1.0
+LOC1016450,Camerlata,L228500,Camerlata,exact,1.0
+LOC1016500,Campagna di Roma,L228600,Campagna di Roma,exact,1.0
+LOC1016550,Campiglione,L229900,Campiglione,exact,1.0
+LOC1016600,Canada,L229950,Canada,exact,1.0
+LOC1016650,Canal de Bouc,L230050,Canal de Bouc,exact,1.0
+LOC1016700,Candia,L230100,Candia,exact,1.0
+LOC1016750,Cannes,L230150,Cannes,exact,1.0
+LOC1016800,Cannstatt,L230500,Cannstatt,exact,1.0
+LOC1016850,Canterbury,L230700,Canterbury,exact,1.0
+LOC1016900,Canton,L230750,Canton,exact,1.0
+LOC1016950,Cap Colonne (Kap Kolones),L230800,Cap Colonne (Kap Kolones),exact,1.0
+LOC1017000,Cap Matapan,L230850,Cap Matapan,exact,1.0
+LOC1017050,Cap Verde,L230900,Cap Verde,exact,1.0
+LOC1017100,Capo de Finisterre,L230950,Capo de Finisterre,exact,1.0
+LOC1017150,Capo di Miseno,L231000,Capo di Miseno,exact,1.0
+LOC1017200,"Capo di Monte, Napoli",L231350,"Capo di Monte, Napoli",exact,1.0
+LOC1017250,Capodistria,L231450,Capodistria,exact,1.0
+LOC1017300,Capri,L231500,Capri,exact,1.0
+LOC1017350,Capua,L232300,Capua,exact,1.0
+LOC1017400,Carlsberg,L232550,Carlsberg,exact,1.0
+LOC1017450,"Carolina, La",L232650,"Carolina, La",exact,1.0
+LOC1017500,Carrara,L232700,Carrara,exact,1.0
+LOC1017550,Cartagena,L232850,Cartagena,exact,1.0
+LOC1017600,"Cartuja, La (ved Granada)",L233200,"Cartuja, La (ved Granada)",exact,1.0
+LOC1017650,Caserta,L233250,Caserta,exact,1.0
+LOC1017700,Castel Gandolfo,L233400,Castel Gandolfo,exact,1.0
+LOC1017750,"Castel, Pyrenæerne",L233350,"Castel, Pyrenæerne",exact,1.0
+LOC1017800,Castellammare di Stabia,L233450,Castellammare di Stabia,exact,1.0
+LOC1017850,Castiglion Fiorentino,L233650,Castiglion Fiorentino,exact,1.0
+LOC1017900,Castiglioncello,L233750,Castiglioncello,exact,1.0
+LOC1017950,Catania,L233800,Catania,exact,1.0
+LOC1018000,Cathrineberg,L233900,Cathrineberg,exact,1.0
+LOC1018100,Caub,L234000,Caub,exact,1.0
+LOC1018150,Cava de' Tirreni,L234100,Cava de' Tirreni,exact,1.0
+LOC1018200,Celle,L234150,Celle,exact,1.0
+LOC1018250,Cenci,L234550,Cenci,exact,1.0
+LOC1018300,Cerigo,L234600,Cerigo,exact,1.0
+LOC1018350,Cette (Sète),L234650,Cette (Sète),exact,1.0
+LOC1018400,Ceuta,L235100,Ceuta,exact,1.0
+LOC1018450,Ceylon,L235250,Ceylon,exact,1.0
+LOC1018500,Chalandri (Khalandhri),L235350,Chalandri (Khalandhri),exact,1.0
+LOC1018550,Chalons-sur-Marne,L235450,Chalons-sur-Marne,exact,1.0
+LOC1018600,Chambéry,L235600,Chambéry,exact,1.0
+LOC1018650,Champagnole,L235650,Champagnole,exact,1.0
+LOC1018700,Charlottenberg,L235700,Charlottenberg,exact,1.0
+LOC1018750,Charlottenburg,L235800,charlottenburg,folded,1.0
+LOC1018800,Charlottendal,L235900,Charlottendal,exact,1.0
+LOC1018850,Charlottenlund,L235950,Charlottenlund,exact,1.0
+LOC1018900,Charlottenlund Slot,L236300,Charlottenlund Slot,exact,1.0
+LOC1018950,Charybdis,L236450,Charybdis,exact,1.0
+LOC1019050,Chaux de Fonds,L236550,Chaux de Fonds,exact,1.0
+LOC1019100,Chemnitz,L236950,Chemnitz,exact,1.0
+LOC1019150,Chêne-Thônex (ved Genève),L237000,Chëne-Thônex (ved Genève),folded,1.0
+LOC1019200,Chevening,L237100,Chevening,exact,1.0
+LOC1019250,Chiavari,L237150,Chiavari,exact,1.0
+LOC1019300,Chiavenna,L237200,Chiavenna,exact,1.0
+LOC1019350,Chicago,L237400,Chicago,exact,1.0
+LOC1019400,Chiemsse,L237650,Chiemsse,exact,1.0
+LOC1019500,Christiania,L238400,Christiania,exact,1.0
+LOC1019550,Christiania-Fjord,L242400,Christiania-Fjord,exact,1.0
+LOC1019600,Christiansdal,L242800,Christiansdal,exact,1.0
+LOC1019650,Christiansfeld,L242950,Christiansfeld,exact,1.0
+LOC1019700,Christianshavn,L243250,Christianshavn,exact,1.0
+LOC1019750,Christiansminde,L243850,Christiansminde,exact,1.0
+LOC1019800,Christianstad,L244000,Christianstad,exact,1.0
+LOC1019850,Christinehamn,L244050,Christinehamn,exact,1.0
+LOC1019900,Christinelund,L244150,Christinelund,exact,1.0
+LOC1019950,Christinelyst,L246750,Christinelyst,exact,1.0
+LOC1020000,Chur,L246800,Chur,exact,1.0
+LOC1020050,Cibrus,L247300,Cibrus,exact,1.0
+LOC1020100,Cilli,L247350,Cilli,exact,1.0
+LOC1020150,Cintra,L247400,Cintra,exact,1.0
+LOC1020200,Cisterna,L248700,Cisterna,exact,1.0
+LOC1020250,Città vecchia (Malta) (= Mdina),L248850,Città vecchia (Malta) (=Mdina),folded,1.0
+LOC1020300,Civita Castellana,L248900,Civita Castellana,exact,1.0
+LOC1020350,Civitavecchia,L249000,Civitavecchia,exact,1.0
+LOC1020400,Cladova,L249200,Cladova,exact,1.0
+LOC1020450,Clapton,L249250,Clapton,exact,1.0
+LOC1020500,Clarens,L249450,Clarens,exact,1.0
+LOC1020550,Clausholm,L249800,Clausholm,exact,1.0
+LOC1020600,Cloppenburg,L249850,Cloppenburg,exact,1.0
+LOC1020650,Clyde,L249900,Clyde,exact,1.0
+LOC1020700,Coburg,L250000,Coburg,exact,1.0
+LOC1020750,Cochinchina,L250150,Cochinchina,exact,1.0
+LOC1020800,Cocumella,L250200,Cocumella,exact,1.0
+LOC1020850,Cohham Hall,L249950,Cohham Hall,exact,1.0
+LOC1020900,Coimbra,L250350,Coimbra,exact,1.0
+LOC1020950,Colico,L250850,Colico,exact,1.0
+LOC1021000,Como,L251000,Como,exact,1.0
+LOC1021050,Como-Søen,L251150,Como-Søen,exact,1.0
+LOC1021100,Compiègne,L251400,Compiègne,exact,1.0
+LOC1021150,Conca Marini,L251450,Conca Marini,exact,1.0
+LOC1021200,Connecticut,L251500,Connecticut,exact,1.0
+LOC1021250,Conradineslyst,L251550,Conradineslyst,exact,1.0
+LOC1021300,Coppet,L251850,Coppet,exact,1.0
+LOC1021350,Córdoba,L251900,Córdoba,exact,1.0
+LOC1021400,Cornelia,L252300,Cornelia,exact,1.0
+LOC1021450,Corselitze,L252400,Corselitze,exact,1.0
+LOC1021500,Corsica,L252700,Corsica,exact,1.0
+LOC1021550,Côte d'Or,L253050,COte d'Or,folded,1.0
+LOC1021600,Crin,L253100,Crin,exact,1.0
+LOC1021650,Crusol,L253150,Crusol,exact,1.0
+LOC1021700,Cul de Roches (den underjordiske Mølle),L253200,Cul de Roches (den underjordiske Mølle),exact,1.0
+LOC1021750,Culoz,L253350,Culoz,exact,1.0
+LOC1021800,Cuxhaven,L253400,Cuxhaven,exact,1.0
+LOC1021850,Cypern,L253450,Cypern,exact,1.0
+LOC1021900,Czaslau,L253500,Czaslau,exact,1.0
+LOC1021950,Czernawoda,L253600,Czernawoda,exact,1.0
+LOC1022000,Dachsen,L253650,Dachsen,exact,1.0
+LOC1022050,Dacien,L253700,Dacien,exact,1.0
+LOC1022100,Dagebøl,L253750,Dagebøl,exact,1.0
+LOC1022150,Dalarne,L253900,Dalarne,exact,1.0
+LOC1022200,Dalby,L254450,Dalby,exact,1.0
+LOC1022250,Dal-Elven,L254500,Dal-Elven,exact,1.0
+LOC1022300,Dalkarlsbacka,L254550,Dalkarlsbacka,exact,1.0
+LOC1022350,Dallund,L254600,Dallund,exact,1.0
+LOC1022400,Dalmatien,L254650,Dalmatien,exact,1.0
+LOC1022450,Dálya,L254800,Dálya,exact,1.0
+LOC1022500,Damager,L254850,Damager,exact,1.0
+LOC1022550,Damaskus,L254900,Damaskus,exact,1.0
+LOC1022600,Danmark,L254950,Danmark,exact,1.0
+LOC1022650,"Danmark, Sogn i Uppsala Len",L264450,"Danmark, Sogn i Uppsala Len",exact,1.0
+LOC1022700,Dannemora,L264600,Dannemora,exact,1.0
+LOC1022750,Dannemora-Søen (Grufsjön),L264900,Dannemora-Søen (Grufsjön),exact,1.0
+LOC1022800,Dannevirke,L264950,Dannevirke,exact,1.0
+LOC1022850,Danzig,L265550,Danzig,exact,1.0
+LOC1022900,Daphni,L265600,Daphni,exact,1.0
+LOC1022950,Dardanellerne,L265700,Dardanellerne,exact,1.0
+LOC1023000,Darmstadt,L265850,Darmstadt,exact,1.0
+LOC1023050,Darro,L266400,Darro,exact,1.0
+LOC1023100,Dax,L266800,Dax,exact,1.0
+LOC1023150,De Fattiges Dyrehave ved Kalkbrænderiet,L314350,De Fattiges Dyrehave ved Kalkbrænderiet,exact,1.0
+LOC1023200,Delft,L266900,Delft,exact,1.0
+LOC1023250,Delmenhorst,L266950,Delmenhorst,exact,1.0
+LOC1023300,Delos,L267100,Delos,exact,1.0
+LOC1023400,Dent de Morcles,L267200,Dent de Morcles,exact,1.0
+LOC1023450,Dent du Midi,L267250,Dent du Midi,exact,1.0
+LOC1023500,Desenzano,L267500,Desenzano,exact,1.0
+LOC1023550,Dessau,L267600,Dessau,exact,1.0
+LOC1023600,Deutschbrod,L267750,Deutschbrod,exact,1.0
+LOC1023700,Deventer,L268100,Deventer,exact,1.0
+LOC1023750,Diablerets,L268150,Diablerets,exact,1.0
+LOC1023800,Dietfurt,L268200,Dietfurt,exact,1.0
+LOC1023850,Dijon,L268250,Dijon,exact,1.0
+LOC1023900,Djurgården (Stockholm),L268700,Djurgården (Stockholm),exact,1.0
+LOC1023950,Dôle,L269050,Dôle,exact,1.0
+LOC1024000,Dolo,L269200,Dolo,exact,1.0
+LOC1024050,Domodossola,L269250,Domodossola,exact,1.0
+LOC1024100,Domremy-la-Pucelle,L269450,Domremy-la-Pucelle,exact,1.0
+LOC1024150,Donau,L269500,Donau,exact,1.0
+LOC1024200,Donaueschingen,L272300,Donaueschingen,exact,1.0
+LOC1024250,Donau-Main Kanalen,L272150,Donau-Main Kanalen,exact,1.0
+LOC1024300,Donau-Sletten,L272250,Donau-Sletten,exact,1.0
+LOC1024350,Donaustauf,L272350,Donaustauf,exact,1.0
+LOC1024400,Donauwörth,L272400,Donauwörth,exact,1.0
+LOC1024450,Dordrecht,L272500,Dordrecht,exact,1.0
+LOC1024550,Doubs,L272600,Doubs,exact,1.0
+LOC1024600,Doubs-Faldet,L272900,Doubs-Faldet,exact,1.0
+LOC1024650,Dover,L273000,Dover,exact,1.0
+LOC1024700,Drachenfels,L273150,Drachenfels,exact,1.0
+LOC1024750,Drammen,L273200,Drammen,exact,1.0
+LOC1024800,Drau (Drava),L273350,Drau (Drava),exact,1.0
+LOC1024850,"Drei Gleichen, die",L273450,"Drei Gleichen, die",exact,1.0
+LOC1024900,Drenkova,L273500,Drenkova,exact,1.0
+LOC1024950,Dresden,L273600,Dresden,exact,1.0
+LOC1025000,Dronninggaard,L285000,Dronninggaard,exact,1.0
+LOC1025100,Drusus-Broen (Bingen),L285200,Drusus-Broen (Bingen),exact,1.0
+LOC1025150,Dublin,L285250,Dublin,exact,1.0
+LOC1025200,Dumbarton,L285400,Dumbarton,exact,1.0
+LOC1025250,Dunkerque,L285500,Dunkerque,exact,1.0
+LOC1025300,Durlach,L285550,Durlach,exact,1.0
+LOC1025350,Dux,L285650,Dux,exact,1.0
+LOC1025400,Dybbøl,L285700,Dybbøl,exact,1.0
+LOC1025450,"Dyrehaven (ved København), Dyrehavsbakken",L286650,"Dyrehaven (ved København), Dyrehavsbakken",exact,1.0
+LOC1025500,Düsseldorf,L286950,Düsseldorf,exact,1.0
+LOC1025550,Döbling,L287700,Döbling,exact,1.0
+LOC1025600,Eaglewood,L287900,Eaglewood,exact,1.0
+LOC1025650,Ebersberg,L287950,Ebersberg,exact,1.0
+LOC1025700,Eckerkrug,L288000,Eckerkrug,exact,1.0
+LOC1025750,Eckernførde,L288050,Eckernførde,exact,1.0
+LOC1025800,Eckersdorf,L288250,Eckersdorf,exact,1.0
+LOC1025850,Edet,L288300,Edet,exact,1.0
+LOC1025900,Edinburgh,L288350,Edinburgh,exact,1.0
+LOC1025950,Efesos,L289100,Efesos,exact,1.0
+LOC1026000,Eger,L289150,Eger,exact,1.0
+LOC1026050,Egeskov,L289200,Egeskov,exact,1.0
+LOC1026100,Egna,L289450,Egna,exact,1.0
+LOC1026150,Ehrenbreitstein,L289500,Ehrenbreitstein,exact,1.0
+LOC1026200,Eiby Mølle,L289750,Eiby Mølle,exact,1.0
+LOC1026250,Eideren,L289800,Eideren,exact,1.0
+LOC1026300,Eidskog,L289950,Eidskog,exact,1.0
+LOC1026350,Eidsvold,L290000,Eidsvold,exact,1.0
+LOC1026400,Eiger,L290050,Eiger,exact,1.0
+LOC1026450,"Eilsen, Bad",L290250,"Eilsen, Bad",exact,1.0
+LOC1026500,Einbeck,L290300,Einbeck,exact,1.0
+LOC1026550,Einsiedeln,L290400,Einsiedeln,exact,1.0
+LOC1026600,Eisack,L290800,Eisack,exact,1.0
+LOC1026650,Eisenach,L290950,Eisenach,exact,1.0
+LOC1026700,Eisleben,L291900,Eisleben,exact,1.0
+LOC1026750,"Ekeberg, Christiania",L292000,"Ekeberg, Christiania",exact,1.0
+LOC1026800,Ekehy Kvarn,L292100,Ekehy Kvarn,exact,1.0
+LOC1026850,Ekolsund,L292150,Ekolsund,exact,1.0
+LOC1026900,Elba,L292200,Elba,exact,1.0
+LOC1026950,Elbdalen,L292400,Elbdalen,exact,1.0
+LOC1027050,Elben,L292650,Elben,exact,1.0
+LOC1027100,Elberfeld,L295400,Elberfeld,exact,1.0
+LOC1027150,Elbingerode,L295550,Elbingerode,exact,1.0
+LOC1027200,Elche,L295650,Elche,exact,1.0
+LOC1027250,Eleusis,L295700,Eleusis,exact,1.0
+LOC1027300,Elfeld (Eltville),L295750,Elfeld (Eltville),exact,1.0
+LOC1027350,Elfkarleby-Faldet,L295850,Elfkarleby-Faldet,exact,1.0
+LOC1027400,Elfkarleö Bruk,L295950,Elfkarleö Bruk,exact,1.0
+LOC1027450,Ellekilde,L296050,Ellekilde,exact,1.0
+LOC1027500,Ellens Ø,L296700,Ellens Ø,exact,1.0
+LOC1027550,Ellingen,L296750,Ellingen,exact,1.0
+LOC1027600,Elmshorn,L296800,Elmshorn,exact,1.0
+LOC1027650,Elsass,L296900,Elsass,exact,1.0
+LOC1027700,Elsfleth,L297150,Elsfleth,exact,1.0
+LOC1027750,Elsterwerda,L297200,Elsterwerda,exact,1.0
+LOC1027800,Elvedgaard,L297400,Elvedgaard,exact,1.0
+LOC1027850,Elverhøj,L297450,Elverhøj,exact,1.0
+LOC1027900,"Elyseiske Marker, de",L297550,"Elyseiske Marker, de",exact,1.0
+LOC1027950,Elze,L297700,Elze,exact,1.0
+LOC1028000,Emden,L297750,Emden,exact,1.0
+LOC1028050,Ems,L297800,Ems,exact,1.0
+LOC1028100,Enebackan,L298900,Enebackan,exact,1.0
+LOC1028150,Engelholm (Skaane),L298950,Engelholm (Skaane),exact,1.0
+LOC1028200,England,L299050,England,exact,1.0
+LOC1028250,Enköping,L304000,Enköping,exact,1.0
+LOC1028300,Enns,L304050,Enns,exact,1.0
+LOC1028350,Enrum (Vedbæk),L304200,Enrum (Vedbæk),exact,1.0
+LOC1028400,Entroncamento,L304250,Entroncamento,exact,1.0
+LOC1028450,"Enz, die",L304350,"Enz, die",exact,1.0
+LOC1028500,Enzersdorf,L304400,Enzersdorf,exact,1.0
+LOC1028550,Épernay,L304450,Épernay,exact,1.0
+LOC1028600,Erdöd,L304600,Erdöd,exact,1.0
+LOC1028650,Eremitagen,L304700,Eremitagen,exact,1.0
+LOC1028700,Erfurt,L304750,Erfurt,exact,1.0
+LOC1028750,Erlangen,L305300,Erlangen,exact,1.0
+LOC1028800,Erlauf,L305450,Erlauf,exact,1.0
+LOC1028850,Escheburg,L305500,Escheburg,exact,1.0
+LOC1028900,"Escorial, El",L305550,"Escorial, El",exact,1.0
+LOC1028950,Eslöv,L305650,Eslöv,exact,1.0
+LOC1029000,Espe,L305750,Espe,exact,1.0
+LOC1029050,Esrom Kanal,L309200,Esrom Kanal,exact,1.0
+LOC1029100,Esrom Sø,L309250,Esrom Sø,exact,1.0
+LOC1029150,Esschen,L309400,Esschen,exact,1.0
+LOC1029200,Estland,L309450,Estland,exact,1.0
+LOC1029250,Étang de Thau,L309500,Étang de Thau,exact,1.0
+LOC1029300,Etna,L309600,Etna,exact,1.0
+LOC1029350,Etsch (Adige),L309750,Etsch (Adige),exact,1.0
+LOC1029400,Etsch-Dalen,L310000,Etsch-Dalen,exact,1.0
+LOC1029450,Ettal,L310100,Ettal,exact,1.0
+LOC1029500,Etterbjerg,L310200,Etterbjerg,exact,1.0
+LOC1029550,Ettersburg,L310250,Ettersburg,exact,1.0
+LOC1029600,Euboia,L311200,Euboia,exact,1.0
+LOC1029650,Europa,L311250,Europa,exact,1.0
+LOC1029700,Eutin,L312050,Eutin,exact,1.0
+LOC1029750,Evian,L312100,Evian,exact,1.0
+LOC1029800,Evora,L312200,Evora,exact,1.0
+LOC1029850,Fabjerg,L312650,Fabjerg,exact,1.0
+LOC1029900,Faenza,L312700,Faenza,exact,1.0
+LOC1029950,Fakse,L312800,Fakse,exact,1.0
+LOC1030000,Fakse Bugt,L313050,Fakse Bugt,exact,1.0
+LOC1030050,Falkenberg,L313100,Falkenberg,exact,1.0
+LOC1030100,Falkensten,L313250,Falkensten,exact,1.0
+LOC1030150,Falköping,L313300,Falköping,exact,1.0
+LOC1030200,Falster,L313550,Falster,exact,1.0
+LOC1030250,Falun,L314100,Falun,exact,1.0
+LOC1030300,Fanø,L314200,Fanø,exact,1.0
+LOC1030350,Fatra,L314300,Fatra,exact,1.0
+LOC1030400,Favrskov,L314450,Favrskov,exact,1.0
+LOC1030450,Feddet (ved Basnæs Nor),L314550,Feddet (ved Basnæs Nor),exact,1.0
+LOC1030500,Feddet (ved Præstø Fjord),L314700,Feddet (ved Præstø Fjord),exact,1.0
+LOC1030550,Femern,L314750,Femern,exact,1.0
+LOC1030600,Ferrara,L314850,Ferrara,exact,1.0
+LOC1030650,Fetislan,L314900,Fetislan,exact,1.0
+LOC1030700,Fichtelgebirge,L314950,Fichtelgebirge,exact,1.0
+LOC1030750,Fidenæ,L315000,Fidenæ,exact,1.0
+LOC1030800,Figueras,L315050,Figueras,exact,1.0
+LOC1030850,Filigare,L315100,Filigare,exact,1.0
+LOC1030900,Finckenfang,L315150,Finckenfang,exact,1.0
+LOC1030950,Finland,L315350,Finland,exact,1.0
+LOC1031000,Firenze,L316050,Firenze,exact,1.0
+LOC1031050,Firth of Forth,L318500,Firth of Forth,exact,1.0
+LOC1031100,Fjaltring,L318550,Fjaltring,exact,1.0
+LOC1031150,Flade,L318650,Flade,exact,1.0
+LOC1031200,Flensborg,L318700,Flensborg,exact,1.0
+LOC1031300,Fleurier,L321550,Fleurier,exact,1.0
+LOC1031350,"Flommen, Sorø",L321600,"Flommen, Sorø",exact,1.0
+LOC1031400,Florentin,L321700,Florentin,exact,1.0
+LOC1031450,Flüelen,L321750,Flüelen,exact,1.0
+LOC1031500,Foligno,L322250,Foligno,exact,1.0
+LOC1031550,Folkestone,L322450,Folkestone,exact,1.0
+LOC1031600,Fondi,L322500,Fondi,exact,1.0
+LOC1031650,Forlì,L322600,Forlì,exact,1.0
+LOC1031700,Formia (Mola di Gaëta),L322650,Formia (Mola di Gaëta),exact,1.0
+LOC1031750,Forshem,L322950,Forshem,exact,1.0
+LOC1031800,Fort William,L323000,Fort William,exact,1.0
+LOC1031850,Fortunen,L323050,Fortunen,exact,1.0
+LOC1031900,Frabertsham,L323100,Frabertsham,exact,1.0
+LOC1032000,Frankfurt a.d.O.,L326150,Frankfurt a.d.O,folded,1.0
+LOC1032050,Frankfurt a.M.,L323200,Frankfurt a.M,folded,1.0
+LOC1032100,Frankrig,L326250,Frankrig,exact,1.0
+LOC1032150,Frascati,L329000,Frascati,exact,1.0
+LOC1032200,Fredensborg,L329200,Fredensborg,exact,1.0
+LOC1032250,Fredensborg Slot,L330850,Fredensborg Slot,exact,1.0
+LOC1032300,Fredericia,L331750,Fredericia,exact,1.0
+LOC1032350,Frederiksberg,L333600,Frederiksberg,exact,1.0
+LOC1032400,Frederiksberg Slot,L334850,Frederiksberg Slot,exact,1.0
+LOC1032450,Frederiksborg (Hillerød),L335400,Frederiksborg (Hillerød),exact,1.0
+LOC1032500,Frederiksborg Slot,L336100,Frederiksborg Slot,exact,1.0
+LOC1032550,Frederikshavn,L336700,Frederikshavn,exact,1.0
+LOC1032600,Frederiksholm,L337200,Frederiksholm,exact,1.0
+LOC1032650,Frederikslund,L337250,Frederikslund,exact,1.0
+LOC1032700,Frederiksstad,L337550,Frederiksstad,exact,1.0
+LOC1032750,Frederiksværk,L337800,Frederiksværk,exact,1.0
+LOC1032800,Freiburg im Breisgau,L337850,Freiburg im Breisgau,exact,1.0
+LOC1032850,Freudenthal (ved Itzehoe),L338550,Freudenthal (ved Itzehoe),exact,1.0
+LOC1032900,Freynersdorf,L338650,Freynersdorf,exact,1.0
+LOC1032950,Fribourg (Freiburg) (Schweiz),L338700,Fribourg (Freiburg) (Schweiz),exact,1.0
+LOC1033000,Friedberg,L339150,Friedberg,exact,1.0
+LOC1033050,"Friedrichsberg, Slesvig",L339200,"Friedrichsberg, Slesvig",exact,1.0
+LOC1033100,Friedrichshafen,L339300,Friedrichshafen,exact,1.0
+LOC1033150,Friesack,L339400,Friesack,exact,1.0
+LOC1033200,Frijsenborg,L339450,Frijsenborg,exact,1.0
+LOC1033250,Frijsendal,L342150,Frijsendal,exact,1.0
+LOC1033350,Fruens Bøge,L342350,Fruens Bøge,exact,1.0
+LOC1033400,Frørup,L342400,Frørup,exact,1.0
+LOC1033450,Fuglsang (ved Fredericia),L342900,Fuglsang (ved Fredericia),exact,1.0
+LOC1033500,Fuirendal,L342950,Fuirendal,exact,1.0
+LOC1033550,Fulda,L343100,Fulda,exact,1.0
+LOC1033600,Fulneck,L343150,Fulneck,exact,1.0
+LOC1033650,Fusina,L343250,Fusina,exact,1.0
+LOC1033700,Fyllebro,L343350,Fyllebro,exact,1.0
+LOC1033750,Fyn,L343400,Fyn,exact,1.0
+LOC1033800,Fyrisån,L346750,Fyrisån,exact,1.0
+LOC1033850,Fürth,L347000,Fürth,exact,1.0
+LOC1033900,Füssen,L347150,Füssen,exact,1.0
+LOC1033950,Færøerne,L347250,Færøerne,exact,1.0
+LOC1034000,Før,L347300,Før,exact,1.0
+LOC1034050,Førslevgaard,L348500,Førslevgaard,exact,1.0
+LOC1034100,Faaborg,L312300,Faaborg,exact,1.0
+LOC1034150,Gablitz,L348800,Gablitz,exact,1.0
+LOC1034250,Gaëta,L349550,Gaëta,exact,1.0
+LOC1034300,Gais,L349700,Gais,exact,1.0
+LOC1034350,Galata,L349750,Galata,exact,1.0
+LOC1034400,Galatz (Galati),L350150,Galatz (Galati),exact,1.0
+LOC1034450,Galipoli,L350300,Galipoli,exact,1.0
+LOC1034500,"Galli, Li",L350350,"Galli, Li",exact,1.0
+LOC1034550,Gamla Uppsala,L350400,Gamla Uppsala,exact,1.0
+LOC1034600,Gammel Estrup,L350600,Gammel Estrup,exact,1.0
+LOC1034650,Gammel Køgegaard,L350750,Gammel Køgegaard,exact,1.0
+LOC1034700,Gammel Skagen,L350800,Gammel Skagen,exact,1.0
+LOC1034750,Gamtofte,L350900,Gamtofte,exact,1.0
+LOC1034800,Ganges,L351000,Ganges,exact,1.0
+LOC1034850,Garda-Søen,L351050,Garda-Søen,exact,1.0
+LOC1034900,Garigliano,L351350,Garigliano,exact,1.0
+LOC1034950,Garonne,L351400,Garonne,exact,1.0
+LOC1035000,Gavnø,L351550,Gavnø,exact,1.0
+LOC1035050,Gefle,L351850,Gefle,exact,1.0
+LOC1035100,Gellerup,L351900,Gellerup,exact,1.0
+LOC1035150,Generalife,L351950,Generalife,exact,1.0
+LOC1035200,Genève (Genf),L352200,Genève (Genf),exact,1.0
+LOC1035250,Genfersøen (Lac Léman),L356100,Genfersøen (Lac Léman),exact,1.0
+LOC1035300,Genova,L358700,Genova,exact,1.0
+LOC1035400,Gentofte,L360800,Gentofte,exact,1.0
+LOC1035450,Genzano di Roma,L360900,Genzano di Roma,exact,1.0
+LOC1035500,Gera,L361100,Gera,exact,1.0
+LOC1035550,Gernrode,L361150,Gernrode,exact,1.0
+LOC1035600,Gerona,L361200,Gerona,exact,1.0
+LOC1035650,Gersau,L361300,Gersau,exact,1.0
+LOC1035700,Gersdorf,L361400,Gersdorf,exact,1.0
+LOC1035750,Gesindel,L361600,Gesindel,exact,1.0
+LOC1035800,Geysir,L361650,Geysir,exact,1.0
+LOC1035850,Gibraltar,L361700,Gibraltar,exact,1.0
+LOC1035900,Gibraltar-Strædet,L362250,Gibraltar-Strædet,exact,1.0
+LOC1035950,Giessbach,L362400,Giessbach,exact,1.0
+LOC1036000,Giessen,L362750,Giessen,exact,1.0
+LOC1036050,Gironde,L362950,Gironde,exact,1.0
+LOC1036100,Gisselfeld,L363150,Gisselfeld,exact,1.0
+LOC1036150,Giurgevo (Giurgiu),L363700,Giurgevo (Giurgiu),exact,1.0
+LOC1036200,Glarus,L363750,Glarus,exact,1.0
+LOC1036250,Glasgow,L363900,Glasgow,exact,1.0
+LOC1036300,Glashütte (Sachsen),L364150,Glashütte (Sachsen),exact,1.0
+LOC1036350,Glion,L364200,Glion,exact,1.0
+LOC1036400,Glogau,L365550,Glogau,exact,1.0
+LOC1036450,Gloggnitz,L365750,Gloggnitz,exact,1.0
+LOC1036500,Glommen,L365800,Glommen,exact,1.0
+LOC1036550,Glorup,L365850,Glorup,exact,1.0
+LOC1036600,Glücksborg,L372250,Glücksborg,exact,1.0
+LOC1036650,Glückstadt,L372400,Glückstadt,exact,1.0
+LOC1036700,Glænø,L372500,Glænø,exact,1.0
+LOC1036750,Golfo di Napoli,L372650,Golfo di Napoli,exact,1.0
+LOC1036800,Golling,L372700,Golling,exact,1.0
+LOC1036850,Golubacz,L372800,Golubacz,exact,1.0
+LOC1036900,Gondo,L372850,Gondo,exact,1.0
+LOC1037000,Goslar,L372950,Goslar,exact,1.0
+LOC1037050,Gotha,L373350,Gotha,exact,1.0
+LOC1037100,Gottorp,L373800,Gottorp,exact,1.0
+LOC1037150,Grabow,L374500,Grabow,exact,1.0
+LOC1037200,Gram,L374600,Gram,exact,1.0
+LOC1037250,Gran (Esztergom),L374650,Gran (Esztergom),exact,1.0
+LOC1037300,Granada,L374750,Granada,exact,1.0
+LOC1037350,Grandson,L377000,Grandson,exact,1.0
+LOC1037400,Graubünden,L377050,Graubünden,exact,1.0
+LOC1037450,Gravesend,L377250,Gravesend,exact,1.0
+LOC1037500,Graz,L377500,Graz,exact,1.0
+LOC1037550,Greenwich,L377600,Greenwich,exact,1.0
+LOC1037600,Grenaa,L377650,Grenaa,exact,1.0
+LOC1037650,"Greve, Høje Taastrup S",L377700,"Greve, Høje Taastrup S",exact,1.0
+LOC1037700,Gribsvad Kro,L377750,Gribsvad Kro,exact,1.0
+LOC1037750,Grindelwald,L377800,Grindelwald,exact,1.0
+LOC1037800,Groningen,L378050,Groningen,exact,1.0
+LOC1037850,Grossbeeren,L378150,Grossbeeren,exact,1.0
+LOC1037900,Grossenhain,L378200,Grossenhain,exact,1.0
+LOC1037950,Grottaferrata,L378350,Grottaferrata,exact,1.0
+LOC1038000,"Grundet, Store",L378450,"Grundet, Store",exact,1.0
+LOC1038050,Grækenland,L378500,Grækenland,exact,1.0
+LOC1038100,Grønland,L380700,Grønland,exact,1.0
+LOC1038150,Grådö,L374000,Grådö,exact,1.0
+LOC1038200,Graasten,L374050,Graasten,exact,1.0
+LOC1038250,Guadalquivir,L381050,Guadalquivir,exact,1.0
+LOC1038300,Gudbjerg,L381400,Gudbjerg,exact,1.0
+LOC1038350,Gudenaaen,L381500,Gudenaaen,exact,1.0
+LOC1038400,Guinea,L382000,Guinea,exact,1.0
+LOC1038550,Gurre,L382350,Gurre,exact,1.0
+LOC1038600,Gørding,L382400,Gørding,exact,1.0
+LOC1038650,Görlitz,L382450,Görlitz,exact,1.0
+LOC1038700,Göta-Elven,L382650,Göta-Elven,exact,1.0
+LOC1038750,Göta-Kanalen,L383000,Göta-Kanalen,exact,1.0
+LOC1038800,Göteborg,L383700,Göteborg,exact,1.0
+LOC1038850,Göttingen,L385250,Göttingen,exact,1.0
+LOC1038900,Gaabense,L348700,Gaabense,exact,1.0
+LOC1038950,Haderslev,L387600,Haderslev,exact,1.0
+LOC1039000,Haga,L388600,Haga,exact,1.0
+LOC1039050,Halberstadt,L388750,Halberstadt,exact,1.0
+LOC1039100,Hald,L388900,Hald,exact,1.0
+LOC1039150,Halfweg,L389050,Halfweg,exact,1.0
+LOC1039200,Hallandsås,L389100,Hallandsås,exact,1.0
+LOC1039250,Halle,L389150,Halle,exact,1.0
+LOC1039300,Halleberg,L390100,Halleberg,exact,1.0
+LOC1039350,Hallein,L390350,Hallein,exact,1.0
+LOC1039400,Halligerne,L390500,Halligerne,exact,1.0
+LOC1039500,Halmstad,L390800,Halmstad,exact,1.0
+LOC1039550,"Halskov Vænge, Falster",L391000,"Halskov Vænge, Falster",exact,1.0
+LOC1039600,"Halskov, Sjælland",L390950,"Halskov, Sjælland",exact,1.0
+LOC1039650,Hamburg,L391050,Hamburg,exact,1.0
+LOC1039700,Hameln,L400700,Hameln,exact,1.0
+LOC1039750,Hamilton (Skotland),L400750,Hamilton (Skotland),exact,1.0
+LOC1039800,Hamm,L400900,Hamm,exact,1.0
+LOC1039850,Hammel,L401050,Hammel,exact,1.0
+LOC1039900,Hampton Court Palace,L401100,Hampton Court Palace,exact,1.0
+LOC1039950,Hannover,L401200,Hannover,exact,1.0
+LOC1040000,Haparanda,L408950,Haparanda,exact,1.0
+LOC1040050,Harburg,L409000,Harburg,exact,1.0
+LOC1040100,Hardenberg,L410750,Hardenberg,exact,1.0
+LOC1040150,Hartmannsdorf,L410800,Hartmannsdorf,exact,1.0
+LOC1040200,Harzburg,L410850,Harzburg,exact,1.0
+LOC1040250,Harzen,L411000,Harzen,exact,1.0
+LOC1040300,Harzgerode,L411800,Harzgerode,exact,1.0
+LOC1040350,Haslev,L411900,Haslev,exact,1.0
+LOC1040400,Hastings,L412050,Hastings,exact,1.0
+LOC1040450,Havana,L412150,Havana,exact,1.0
+LOC1040550,"Havre, Le",L412350,"Havre, Le",exact,1.0
+LOC1040600,Hedehusene,L412450,Hedehusene,exact,1.0
+LOC1040650,Hedemora,L412500,Hedemora,exact,1.0
+LOC1040700,Hegnsholt,L412650,Hegnsholt,exact,1.0
+LOC1040750,Heide,L412700,Heide,exact,1.0
+LOC1040800,Heidelberg,L412800,Heidelberg,exact,1.0
+LOC1040850,Heiden,L413650,Heiden,exact,1.0
+LOC1040900,Heilbronn,L413800,Heilbronn,exact,1.0
+LOC1041000,Helgoland,L414000,Helgoland,exact,1.0
+LOC1041050,Hellbrunn,L414350,Hellbrunn,exact,1.0
+LOC1041100,Hellebæk,L414550,Hellebæk,exact,1.0
+LOC1041150,Hellekis,L418250,Hellekis,exact,1.0
+LOC1041200,Hellerup,L418350,Hellerup,exact,1.0
+LOC1041250,Hellested,L418400,Hellested,exact,1.0
+LOC1041300,Helsingborg,L418500,Helsingborg,exact,1.0
+LOC1041350,Helsingfors,L419350,Helsingfors,exact,1.0
+LOC1041400,Helsingør,L419400,Helsingør,exact,1.0
+LOC1041450,Helved Bakke,L422050,Helved Bakke,exact,1.0
+LOC1041500,"Helvetes-Faldene, Trollhätta",L422150,"Helvetes-Faldene, Trollhätta",exact,1.0
+LOC1041550,Hem,L422350,Hem,exact,1.0
+LOC1041600,Herat,L422650,Herat,exact,1.0
+LOC1041650,Herculanum,L422700,Herculanum,exact,1.0
+LOC1041700,Herkules-Badene,L423100,Herkules-Badene,exact,1.0
+LOC1041750,Herlufsholm,L423150,Herlufsholm,exact,1.0
+LOC1041800,"Hermupolis, Syra",L424350,"Hermupolis, Syra",exact,1.0
+LOC1041850,Herning,L424450,Herning,exact,1.0
+LOC1041900,Herningsholm,L424600,Herningsholm,exact,1.0
+LOC1041950,Herrljunga,L424300,Herrljunga,exact,1.0
+LOC1042000,Herrnskretschen,L424650,Herrnskretschen,exact,1.0
+LOC1042050,Herzberg (Sachsen),L424850,Herzberg (Sachsen),exact,1.0
+LOC1042100,Hesselager,L424950,Hesselager,exact,1.0
+LOC1042150,Hesselager Gaard,L425200,Hesselager Gaard,exact,1.0
+LOC1042200,Hesselagerstenen,L425550,Hesselagerstenen,exact,1.0
+LOC1042250,Hessen,L425650,Hessen,exact,1.0
+LOC1042300,Hessingen (Essingen),L425700,Hessingen (Essingen),exact,1.0
+LOC1042350,Hessleholm,L425750,Hessleholm,exact,1.0
+LOC1042450,Hestvad,L425900,Hestvad,exact,1.0
+LOC1042500,"Het Loo, Apeldoorn",L636150,"Het Loo, Apeldoorn",exact,1.0
+LOC1042550,Heutingsheim,L425950,Heutingsheim,exact,1.0
+LOC1042600,Hietzing,L426000,Hietzing,exact,1.0
+LOC1042700,Hildesheim,L426750,Hildesheim,exact,1.0
+LOC1042750,"Hiltpoltstein, ved Nürnberg",L426950,"Hiltpoltstein, ved Nürnberg",exact,1.0
+LOC1042800,Himalaya,L427000,Himalaya,exact,1.0
+LOC1042850,Himmelbjerget,L427050,Himmelbjerget,exact,1.0
+LOC1042900,Himmelreich,L427500,Himmelreich,exact,1.0
+LOC1042950,Hindostan,L427550,Hindostan,exact,1.0
+LOC1043000,Hindsgavl,L427650,Hindsgavl,exact,1.0
+LOC1043050,Hinnerup,L427700,Hinnerup,exact,1.0
+LOC1043100,Hirsau,L427800,Hirsau,exact,1.0
+LOC1043150,Hjermind,L427850,Hjermind,exact,1.0
+LOC1043200,Hjerting,L428050,Hjerting,exact,1.0
+LOC1043250,Hjørring,L428100,Hjørring,exact,1.0
+LOC1043300,Hobro,L428600,Hobro,exact,1.0
+LOC1043350,Hochheim,L429300,Hochheim,exact,1.0
+LOC1043400,Hof,L429350,Hof,exact,1.0
+LOC1043450,Hofmansgave,L429800,Hofmansgave,exact,1.0
+LOC1043500,Hohenschwangau,L430100,Hohenschwangau,exact,1.0
+LOC1043550,Hohnstein,L430550,Hohnstein,exact,1.0
+LOC1043600,Hoisteinborg Nor,L441400,Hoisteinborg Nor,exact,1.0
+LOC1043650,"Holbæk (og Holbæk Amt, Holbæk-Egnen)",L430600,"Holbæk (og Holbæk Amt, Holbæk-Egnen)",exact,1.0
+LOC1043700,Holckenhavn,L430900,Holckenhavn,exact,1.0
+LOC1043750,Hollabrunn (Ober-Hollabrunn),L431150,Hollabrunn (Ober-Hollabrunn),exact,1.0
+LOC1043800,Holland,L431200,Holland,exact,1.0
+LOC1043850,Hollufgaard,L432950,Hollufgaard,exact,1.0
+LOC1043900,Holmegaards Glasværk,L433000,Holmegaards Glasværk,exact,1.0
+LOC1043950,Holmsland,L433050,Holmsland,exact,1.0
+LOC1044000,Holstebro,L433100,Holstebro,exact,1.0
+LOC1044050,Holsteinborg,L433300,Holsteinborg,exact,1.0
+LOC1044100,Holsteinsminde,L441850,Holsteinsminde,exact,1.0
+LOC1044150,Holsten,L441950,Holsten,exact,1.0
+LOC1044200,Holstenshus,L442650,Holstenshus,exact,1.0
+LOC1044250,Holte,L442700,Holte,exact,1.0
+LOC1044300,Holtegaard,L443000,Holtegaard,exact,1.0
+LOC1044350,Homburg,L443100,Homburg,exact,1.0
+LOC1044400,Hoptrup,L443200,Hoptrup,exact,1.0
+LOC1044450,Horgen,L443400,Horgen,exact,1.0
+LOC1044500,Hornbæk,L443500,Hornbæk,exact,1.0
+LOC1044550,Horne,L443550,Horne,exact,1.0
+LOC1044600,Horsens,L443600,Horsens,exact,1.0
+LOC1044650,Hospenthal,L444150,Hospenthal,exact,1.0
+LOC1044700,"Hospiz, St. Gotthard",L444250,"Hospiz, St. Gotthard",exact,1.0
+LOC1044750,Hova,L444350,Hova,exact,1.0
+LOC1044800,Hull,L444400,Hull,exact,1.0
+LOC1044850,"Hundegrotten (Grotta del Cane, Agnano)",L444450,"Hundegrotten (Grotta del Cane, Agnano)",exact,1.0
+LOC1044900,"Hundstrup, Salling H., Svendborg A.",L444550,"Hundstrup, Salling H., Svendborg A",folded,1.0
+LOC1044950,Hunneberg,L444600,Hunneberg,exact,1.0
+LOC1045000,Hunte,L444750,Hunte,exact,1.0
+LOC1045050,Husaby,L444800,Husaby,exact,1.0
+LOC1045100,Husby,L445050,Husby,exact,1.0
+LOC1045150,Hvedholm,L445200,Hvedholm,exact,1.0
+LOC1045200,Hven,L445350,Hven,exact,1.0
+LOC1045250,Hvidkilde,L445700,Hvidkilde,exact,1.0
+LOC1045300,Hyby,L445850,Hyby,exact,1.0
+LOC1045350,Hyères,L446250,Hyères,exact,1.0
+LOC1045400,Hymettos,L446300,Hymettos,exact,1.0
+LOC1045450,Hütteldorf,L446600,Hütteldorf,exact,1.0
+LOC1045500,Häckeberga,L446800,Häckeberga,exact,1.0
+LOC1045550,Hällebrunn,L446850,Hällebrunn,exact,1.0
+LOC1045600,Härfvsta,L446900,Härfvsta,exact,1.0
+LOC1045650,"Høgebjerg, Als",L446950,"Høgebjerg, Als",exact,1.0
+LOC1045700,Højbjerg,L447000,Højbjerg,exact,1.0
+LOC1045750,"Höllenthal, das",L447050,"Höllenthal, das",exact,1.0
+LOC1045800,"Höllenweg, der",L447150,"Höllenweg, der",exact,1.0
+LOC1045850,Hölzbach,L447200,Hölzbach,exact,1.0
+LOC1045900,Hønefos,L447250,Hønefos,exact,1.0
+LOC1045950,Hönsäter,L447350,Hönsäter,exact,1.0
+LOC1046000,Höör,L447550,Höör,exact,1.0
+LOC1046050,Haag,L386250,Haag,exact,1.0
+LOC1046100,Håkansbo,L387350,Håkansbo,exact,1.0
+LOC1046150,Haarlem,L387400,Haarlem,exact,1.0
+LOC1046200,Haarlemer Meer,L387550,Haarlemer Meer,exact,1.0
+LOC1046250,Iglau,L447650,Iglau,exact,1.0
+LOC1046300,Iholm,L447800,Iholm,exact,1.0
+LOC1046350,Ilissos,L447850,Ilissos,exact,1.0
+LOC1046400,Ilmenau,L447900,Ilmenau,exact,1.0
+LOC1046450,Ilok,L447950,Ilok,exact,1.0
+LOC1046500,Ilse,L448000,Ilse,exact,1.0
+LOC1046550,Ilsenstein,L448100,Ilsenstein,exact,1.0
+LOC1046600,Ilsethal,L448150,Ilsethal,exact,1.0
+LOC1046650,Immendorf,L448250,Immendorf,exact,1.0
+LOC1046700,Immensee,L448300,Immensee,exact,1.0
+LOC1046750,Incisa Valdarno,L448350,Incisa Valdarno,exact,1.0
+LOC1046800,Indiana,L448400,Indiana,exact,1.0
+LOC1046850,Indien,L448450,Indien,exact,1.0
+LOC1046900,Inn,L448700,Inn,exact,1.0
+LOC1046950,Inn-Dalen,L449000,Inn-Dalen,exact,1.0
+LOC1047000,Innsbruck,L449150,Innsbruck,exact,1.0
+LOC1047050,Interlaken,L449950,Interlaken,exact,1.0
+LOC1047100,Inverness,L451250,Inverness,exact,1.0
+LOC1047150,Irland,L451350,Irland,exact,1.0
+LOC1047200,Irstad,L451400,Irstad,exact,1.0
+LOC1047250,Irun,L451450,Irun,exact,1.0
+LOC1047300,Isala,L451550,Isala,exact,1.0
+LOC1047350,Isar,L451600,Isar,exact,1.0
+LOC1047400,Isar-Dalen,L452100,Isar-Dalen,exact,1.0
+LOC1047450,Ischia,L452150,Ischia,exact,1.0
+LOC1047500,Ischl,L453300,Ischl,exact,1.0
+LOC1047550,Isefjorden,L453350,Isefjorden,exact,1.0
+LOC1047600,Island,L453600,Island,exact,1.0
+LOC1047650,Isola Bella,L454300,Isola Bella,exact,1.0
+LOC1047700,Isthmen,L454750,Isthmen,exact,1.0
+LOC1047750,Italien,L454800,Italien,exact,1.0
+LOC1047800,Itzehoe,L461300,Itzehoe,exact,1.0
+LOC1047850,Izlas,L462500,Izlas,exact,1.0
+LOC1047900,Jacobsbruch,L462600,Jacobsbruch,exact,1.0
+LOC1047950,Japan,L462650,Japan,exact,1.0
+LOC1048000,Jatzske,L463000,Jatzske,exact,1.0
+LOC1048050,Java,L463050,Java,exact,1.0
+LOC1048100,Jena,L463200,Jena,exact,1.0
+LOC1048150,Jenikau,L464100,Jenikau,exact,1.0
+LOC1048200,Jeres de la Frontera,L464150,Jeres de la Frontera,exact,1.0
+LOC1048250,Jerichow,L464750,Jerichow,exact,1.0
+LOC1048300,Jernit,L464800,Jernit,exact,1.0
+LOC1048350,Jernporten (Eisernes Thor),L464850,Jernporten (Eisernes Thor),exact,1.0
+LOC1048400,Jerup,L464900,Jerup,exact,1.0
+LOC1048450,Jerusalem,L464950,Jerusalem,exact,1.0
+LOC1048500,Jever,L465400,Jever,exact,1.0
+LOC1048550,"Johannisberg, Schloss",L465450,"Johannisberg, Schloss",exact,1.0
+LOC1048600,Jomfruens Egede,L465500,Jomfruens Egede,exact,1.0
+LOC1048650,Jooephsberg,L465750,Jooephsberg,exact,1.0
+LOC1048750,Jotnahem,L465950,Jotnahem,exact,1.0
+LOC1048800,Juellinge (Halsted Kloster) (Lollands Nørre Herred),L466000,Juellinge (Halsted Kloster) (Lollands Nørre Herred),exact,1.0
+LOC1048850,Juellinge (Stevns Herred),L466050,Juellinge (Stevns Herred),exact,1.0
+LOC1048900,Juelsberg,L466250,Juelsberg,exact,1.0
+LOC1048950,Jungfrau,L466350,Jungfrau,exact,1.0
+LOC1049000,Jungshoved,L466950,Jungshoved,exact,1.0
+LOC1049050,"Junquera, La",L467000,"Junquera, La",exact,1.0
+LOC1049100,Jurabjergene,L467050,Jurabjergene,exact,1.0
+LOC1049150,Jylland,L468200,Jylland,exact,1.0
+LOC1049200,Jüterbog,L470850,Jüterbog,exact,1.0
+LOC1049250,Jönköping,L471000,Jönköping,exact,1.0
+LOC1049300,Kahlenberg,L471650,Kahlenberg,exact,1.0
+LOC1049400,Kallebodstrand,L471800,Kallebodstrand,exact,1.0
+LOC1049450,Kallehave,L471850,Kallehave,exact,1.0
+LOC1049500,Kalmar,L471900,Kalmar,exact,1.0
+LOC1049550,Kalundborg,L471950,Kalundborg,exact,1.0
+LOC1049600,Karasu,L472250,Karasu,exact,1.0
+LOC1049650,Karise,L472300,Karise,exact,1.0
+LOC1049700,Karlberg,L472450,Karlberg,exact,1.0
+LOC1049750,Karlowicz (Karlovci),L472600,Karlowicz (Karlovci),exact,1.0
+LOC1049800,Karlsbad,L472650,Karlsbad,exact,1.0
+LOC1049850,Karlsborg,L472900,Karlsborg,exact,1.0
+LOC1049900,Karlskrona,L473050,Karlskrona,exact,1.0
+LOC1049950,Karlsruhe,L473100,Karlsruhe,exact,1.0
+LOC1050000,Karlstad,L473900,Karlstad,exact,1.0
+LOC1050050,Karpaterne,L474050,Karpaterne,exact,1.0
+LOC1050100,Karrebæk,L474250,Karrebæk,exact,1.0
+LOC1050150,Karrebæksminde,L474300,Karrebæksminde,exact,1.0
+LOC1050200,Kassel,L474400,Kassel,exact,1.0
+LOC1050250,Kastel,L476000,Kastel,exact,1.0
+LOC1050300,Katrineholm,L476250,Katrineholm,exact,1.0
+LOC1050350,Kattegat,L476350,Kattegat,exact,1.0
+LOC1050400,Katwijk,L476700,Katwijk,exact,1.0
+LOC1050450,Kaukasus,L476800,Kaukasus,exact,1.0
+LOC1050500,Kazan,L476900,Kazan,exact,1.0
+LOC1050550,Kea,L476950,Kea,exact,1.0
+LOC1050600,Kehl,L477050,Kehl,exact,1.0
+LOC1050650,Kellinghusen,L477200,Kellinghusen,exact,1.0
+LOC1050700,Kempten,L477450,Kempten,exact,1.0
+LOC1050750,Khalkis,L477750,Khalkis,exact,1.0
+LOC1050800,Khios,L477850,Khios,exact,1.0
+LOC1050850,Kiel,L478000,Kiel,exact,1.0
+LOC1050900,Kielerfjord,L480600,Kielerfjord,exact,1.0
+LOC1050950,Kifissia,L480750,Kifissia,exact,1.0
+LOC1051000,Kifissos,L480850,Kifissos,exact,1.0
+LOC1051050,"Kilburn, Bransbury House",L480900,"Kilburn, Bransbury House",exact,1.0
+LOC1051100,Kina,L481200,Kina,exact,1.0
+LOC1051150,Kinnekulle,L482000,Kinnekulle,exact,1.0
+LOC1051250,Kirkestaten,L482550,Kirkestaten,exact,1.0
+LOC1051300,Kirnitz,L482650,Kirnitz,exact,1.0
+LOC1051350,Kissingen,L482700,Kissingen,exact,1.0
+LOC1051400,Klampenborg,L482750,Klampenborg,exact,1.0
+LOC1051450,Klara-Elven,L484250,Klara-Elven,exact,1.0
+LOC1051500,Klaus,L484300,Klaus,exact,1.0
+LOC1051550,Kleef,L484350,Kleef,exact,1.0
+LOC1051600,"Klopp, Burg",L484400,"Klopp, Burg",exact,1.0
+LOC1051650,Kloster-Mansfeld,L484450,Kloster-Mansfeld,exact,1.0
+LOC1051700,Klosterneuburg,L484500,Klosterneuburg,exact,1.0
+LOC1051750,Knivholt,L484650,Knivholt,exact,1.0
+LOC1051800,Knole House,L484700,Knole House,exact,1.0
+LOC1051850,"Knudshoved, Fyn",L484850,"Knudshoved, Fyn",exact,1.0
+LOC1051900,Knuthenborg,L484900,Knuthenborg,exact,1.0
+LOC1051950,Kobelnick,L485000,Kobelnick,exact,1.0
+LOC1052000,Koblenz,L485050,Koblenz,exact,1.0
+LOC1052050,Kochelsee,L485500,Kochelsee,exact,1.0
+LOC1052100,Kohlfurt,L485550,Kohlfurt,exact,1.0
+LOC1052150,Kolberg,L485600,Kolberg,exact,1.0
+LOC1052200,Kolbäck,L485650,Kolbäck,exact,1.0
+LOC1052250,Kolding,L485700,Kolding,exact,1.0
+LOC1052300,Kolin,L486650,Kolin,exact,1.0
+LOC1052350,Kollmann,L486800,Kollmann,exact,1.0
+LOC1052400,Kolonos,L486850,Kolonos,exact,1.0
+LOC1052450,Komorn (Komárno),L486900,Komorn (Komárno),exact,1.0
+LOC1052500,"Kongens Have, København",L487000,"Kongens Have, København",exact,1.0
+LOC1052550,Kongeaaen,L486950,Kongeaaen,exact,1.0
+LOC1052600,Kongsdal,L487300,Kongsdal,exact,1.0
+LOC1052650,Kongsvinger,L487350,Kongsvinger,exact,1.0
+LOC1052700,Konstantinopel,L487650,Konstantinopel,exact,1.0
+LOC1052750,Konstanz,L490650,Konstanz,exact,1.0
+LOC1052800,Korinth,L490750,Korinth,exact,1.0
+LOC1052850,Korneuburg,L490800,Korneuburg,exact,1.0
+LOC1052900,Korsør,L490850,Korsør,exact,1.0
+LOC1052950,Kowicz,L496200,Kowicz,exact,1.0
+LOC1053000,Krebshuset Kro,L496250,Krebshuset Kro,exact,1.0
+LOC1053150,Kreta,L496600,Kreta,exact,1.0
+LOC1053200,"Kreuznach, Bad",L496650,"Kreuznach, Bad",exact,1.0
+LOC1053250,Krippen (ved Schandau),L496750,Krippen (ved Schandau),exact,1.0
+LOC1053300,Kristinehamn,L496800,Kristinehamn,exact,1.0
+LOC1053350,Krogerup,L496900,Krogerup,exact,1.0
+LOC1053400,Kronborg,L496950,Kronborg,exact,1.0
+LOC1053450,Kubin,L497350,Kubin,exact,1.0
+LOC1053500,Kuchl,L497400,Kuchl,exact,1.0
+LOC1053600,Kuhstall,L497600,Kuhstall,exact,1.0
+LOC1053650,Kulla Gunnarstorp,L497750,Kulla Gunnarstorp,exact,1.0
+LOC1053750,Kulm,L498050,Kulm,exact,1.0
+LOC1053800,Kumla,L498200,Kumla,exact,1.0
+LOC1053850,Kungelf,L498250,Kungelf,exact,1.0
+LOC1053900,Kurland,L498300,Kurland,exact,1.0
+LOC1053950,Kuttenberg,L498400,Kuttenberg,exact,1.0
+LOC1054000,Kværndrup,L498450,Kværndrup,exact,1.0
+LOC1054050,Kyritz,L498550,Kyritz,exact,1.0
+LOC1054100,Küssnacht am Rigi,L498600,Küssnacht am Rigi,exact,1.0
+LOC1054150,Küstendil,L498700,Küstendil,exact,1.0
+LOC1054200,Küstendje (Costanta),L498750,Küstendje (Costanta),exact,1.0
+LOC1054250,Källtorp,L498950,Källtorp,exact,1.0
+LOC1054300,Kärra,L499000,Kärra,exact,1.0
+LOC1054350,København,L499100,København,exact,1.0
+LOC1054400,Køge,L592900,Køge,exact,1.0
+LOC1054450,Køge Bugt,L594000,Køge Bugt,exact,1.0
+LOC1054500,Köln,L594100,Köln,exact,1.0
+LOC1054550,Kölva,L595400,Kölva,exact,1.0
+LOC1054600,Køng,L595450,Køng,exact,1.0
+LOC1054650,Königerode,L595550,Königerode,exact,1.0
+LOC1054700,Königsberg,L595650,Königsberg,exact,1.0
+LOC1054750,Königsplatz,L596100,Königsplatz,exact,1.0
+LOC1054800,Königstein,L596150,Königstein,exact,1.0
+LOC1054850,Köping,L596450,Köping,exact,1.0
+LOC1054900,"Kösen, Bad",L596550,"Kösen, Bad",exact,1.0
+LOC1054950,Köthen,L596700,Köthen,exact,1.0
+LOC1055000,Laca,L597050,Laca,exact,1.0
+LOC1055050,Lachen,L597100,Lachen,exact,1.0
+LOC1055100,Ladegaardsøen (ved Christiania),L597150,Ladegaardsøen (ved Christiania),exact,1.0
+LOC1055150,Lagan,L597300,Lagan,exact,1.0
+LOC1055200,Lago dei Tartari,L597350,Lago dei Tartari,exact,1.0
+LOC1055250,Lago Maggiore,L597400,Lago Maggiore,exact,1.0
+LOC1055300,Lahn,L597550,Lahn,exact,1.0
+LOC1055350,Laholm,L597650,Laholm,exact,1.0
+LOC1055400,Laibach,L597700,Laibach,exact,1.0
+LOC1055450,Lambach,L597900,Lambach,exact,1.0
+LOC1055500,Lammhult,L597950,Lammhult,exact,1.0
+LOC1055550,Landeron,L598000,Landeron,exact,1.0
+LOC1055600,Landskrona,L598100,Landskrona,exact,1.0
+LOC1055650,Langeland,L598600,Langeland,exact,1.0
+LOC1055700,Langenfelde (Holsten),L599350,Langenfelde (Holsten),exact,1.0
+LOC1055750,Langesø,L599400,Langesø,exact,1.0
+LOC1055850,Langaa (Fyn),L598350,Langaa (Fyn),exact,1.0
+LOC1055900,Lapland,L599850,Lapland,exact,1.0
+LOC1055950,Larvik,L599900,Larvik,exact,1.0
+LOC1056000,Lauenburg,L599950,Lauenburg,exact,1.0
+LOC1056050,Lausanne,L600200,Lausanne,exact,1.0
+LOC1056100,Lauterbrunnen,L601450,Lauterbrunnen,exact,1.0
+LOC1056150,Lavis,L601650,Lavis,exact,1.0
+LOC1056200,Lavrbjerg,L601750,Lavrbjerg,exact,1.0
+LOC1056250,Laxenburg,L601800,Laxenburg,exact,1.0
+LOC1056300,Laxå,L601900,Laxå,exact,1.0
+LOC1056350,Lecco-Bugten (Como-Søen),L602000,Lecco-Bugten (Como-Søen),exact,1.0
+LOC1056400,Leckö,L602050,Leckö,exact,1.0
+LOC1056450,Leeds,L602250,Leeds,exact,1.0
+LOC1056500,Lehrte,L602300,Lehrte,exact,1.0
+LOC1056550,Leiden,L602700,Leiden,exact,1.0
+LOC1056600,Leimbach,L603500,Leimbach,exact,1.0
+LOC1056650,Leipzig,L603600,Leipzig,exact,1.0
+LOC1056700,Leith,L610200,Leith,exact,1.0
+LOC1056750,Leitmeritz,L610250,Leitmeritz,exact,1.0
+LOC1056800,Lek,L610350,Lek,exact,1.0
+LOC1056850,Lekkende,L610400,Lekkende,exact,1.0
+LOC1056900,Lemberg (Lwów),L610550,Lemberg (Lwów),exact,1.0
+LOC1056950,Lemvig,L610600,Lemvig,exact,1.0
+LOC1057000,Lenz,L610800,Lenz,exact,1.0
+LOC1057050,Leopoldsberg,L610850,Leopoldsberg,exact,1.0
+LOC1057100,Lerchenborg,L610950,Lerchenborg,exact,1.0
+LOC1057150,Lethraborg,L611550,Lethraborg,exact,1.0
+LOC1057200,Levane,L611650,Levane,exact,1.0
+LOC1057250,Libanon,L611750,Libanon,exact,1.0
+LOC1057300,Liben,L611800,Liben,exact,1.0
+LOC1057350,Lidköping,L611850,Lidköping,exact,1.0
+LOC1057400,"Liebenwerda, Bad",L612000,"Liebenwerda, Bad",exact,1.0
+LOC1057450,Liebethaler Grund,L612150,Liebethaler Grund,exact,1.0
+LOC1057500,Lifland,L612200,Lifland,exact,1.0
+LOC1057550,Lilienstein,L612300,Lilienstein,exact,1.0
+LOC1057600,Lilla Edet,L612450,Lilla Edet,exact,1.0
+LOC1057650,Lille,L612550,Lille,exact,1.0
+LOC1057700,Lille Odinshøi,L612600,Lille Odinshøi,exact,1.0
+LOC1057750,Lillebelt,L612650,Lillebelt,exact,1.0
+LOC1057800,Lillestrøm,L613250,Lillestrøm,exact,1.0
+LOC1057850,Lilliendal,L613300,Lilliendal,exact,1.0
+LOC1057900,Limfjorden,L613350,Limfjorden,exact,1.0
+LOC1057950,Limsta,L613650,Limsta,exact,1.0
+LOC1058000,Lindau im Bodensee,L613700,Lindau im Bodensee,exact,1.0
+LOC1058050,Lingen,L614200,Lingen,exact,1.0
+LOC1058100,Linköping,L614300,Linköping,exact,1.0
+LOC1058150,Linth-Kanalen,L614500,Linth-Kanalen,exact,1.0
+LOC1058200,Linz,L614600,Linz,exact,1.0
+LOC1058250,"Lipariske Øer, de",L614900,"Lipariske Øer, de",exact,1.0
+LOC1058300,Lippe-Detmold,L614950,Lippe-Detmold,exact,1.0
+LOC1058350,Liro,L615050,Liro,exact,1.0
+LOC1058400,Lissabon,L615100,Lissabon,exact,1.0
+LOC1058450,Liverpool,L619800,Liverpool,exact,1.0
+LOC1058500,Livorno,L619850,Livorno,exact,1.0
+LOC1058550,Ljung,L620850,Ljung,exact,1.0
+LOC1058600,lnversnaid,L451300,lnversnaid,exact,1.0
+LOC1058650,Lobositz,L620900,Lobositz,exact,1.0
+LOC1058700,Loch Katrine,L620950,Loch Katrine,exact,1.0
+LOC1058750,Loch Laggan,L621000,Loch Laggan,exact,1.0
+LOC1058800,Loch Lomond,L621200,Loch Lomond,exact,1.0
+LOC1058850,"Locle, Le",L621450,"Locle, Le",exact,1.0
+LOC1058900,Lohmen,L624350,Lohmen,exact,1.0
+LOC1058950,Loiano,L624400,Loiano,exact,1.0
+LOC1059000,Loire,L624450,Loire,exact,1.0
+LOC1059050,Loisach,L624650,Loisach,exact,1.0
+LOC1059100,Loja,L624700,Loja,exact,1.0
+LOC1059150,Lolland,L624800,Lolland,exact,1.0
+LOC1059200,Lom-Palanka,L625250,Lom-Palanka,exact,1.0
+LOC1059250,London,L625300,London,exact,1.0
+LOC1059300,Longchamp,L636100,Longchamp,exact,1.0
+LOC1059350,Lorch,L636200,Lorch,exact,1.0
+LOC1059400,Loreto,L636250,Loreto,exact,1.0
+LOC1059450,Lottchensitz (ved Maxen),L636300,Lottchensitz (ved Maxen),exact,1.0
+LOC1059500,Louisehøj (ved Silkeborg),L636350,Louisehøj (ved Silkeborg),exact,1.0
+LOC1059550,Lowerzer-See,L636400,Lowerzer-See,exact,1.0
+LOC1059600,lselle,L453500,lselle,exact,1.0
+LOC1059650,lsted,L454500,lsted,exact,1.0
+LOC1059700,ltri,L461150,ltri,exact,1.0
+LOC1059750,Lucca,L636450,Lucca,exact,1.0
+LOC1059800,Lucriner-Søen,L636700,Lucriner-Søen,exact,1.0
+LOC1059850,Ludwigshafen,L636750,Ludwigshafen,exact,1.0
+LOC1059900,Ludwigslust,L636800,Ludwigslust,exact,1.0
+LOC1059950,Luganer-Søen,L636900,Luganer-Søen,exact,1.0
+LOC1060000,Lugano,L636950,Lugano,exact,1.0
+LOC1060050,Lund,L637000,Lund,exact,1.0
+LOC1060100,Lundeborg,L637750,Lundeborg,exact,1.0
+LOC1060150,Lundenburg,L637800,Lundenburg,exact,1.0
+LOC1060200,Lundsgaard,L637850,Lundsgaard,exact,1.0
+LOC1060250,Lunéville,L638100,Lunéville,exact,1.0
+LOC1060300,Lungern,L638150,Lungern,exact,1.0
+LOC1060350,Lungern-Søen,L638300,Lungern-Søen,exact,1.0
+LOC1060400,Lurlei,L638350,Lurlei,exact,1.0
+LOC1060450,Luzern,L638450,Luzern,exact,1.0
+LOC1060500,Lübeck,L639450,Lübeck,exact,1.0
+LOC1060550,Lykkesholm,L641300,Lykkesholm,exact,1.0
+LOC1060600,Lüneburg,L641600,Lüneburg,exact,1.0
+LOC1060650,Lüneburger Heide,L641900,Lüneburger Heide,exact,1.0
+LOC1060700,Lyngby,L642050,Lyngby,exact,1.0
+LOC1060750,Lyon,L642950,Lyon,exact,1.0
+LOC1060800,Lyoner-Bugten,L643850,Lyoner-Bugten,exact,1.0
+LOC1060850,Lyrastad,L643900,Lyrastad,exact,1.0
+LOC1060900,Lystrup,L643950,Lystrup,exact,1.0
+LOC1060950,Lütschinen,L644000,Lütschinen,exact,1.0
+LOC1061000,Lüttich (Liège),L644050,Lüttich (Liège),exact,1.0
+LOC1061050,Lützen,L644250,Lützen,exact,1.0
+LOC1061100,Lærkehøj (Ulvborg S.),L644350,Lærkehøj (Ulvborg S.),exact,1.0
+LOC1061200,Løgsø,L644450,Løgsø,exact,1.0
+LOC1061250,Løkken,L644500,Løkken,exact,1.0
+LOC1061300,Löningen,L644800,Löningen,exact,1.0
+LOC1061350,Løvenborg,L644850,Løvenborg,exact,1.0
+LOC1061400,Löwen (Louvain),L644900,Löwen (Louvain),exact,1.0
+LOC1061450,Macerata,L645100,Macerata,exact,1.0
+LOC1061500,Macon,L645150,Macon,exact,1.0
+LOC1061550,Madeira,L645200,Madeira,exact,1.0
+LOC1061600,Madrid,L645300,Madrid,exact,1.0
+LOC1061650,Maegaard,L647250,Maegaard,exact,1.0
+LOC1061700,Mafra,L647300,Mafra,exact,1.0
+LOC1061750,Magdeburg,L647550,Magdeburg,exact,1.0
+LOC1061800,"Magra, La",L648950,"Magra, La",exact,1.0
+LOC1061850,Maidstone,L649000,Maidstone,exact,1.0
+LOC1061900,Main,L649100,Main,exact,1.0
+LOC1061950,Mainz,L649400,Mainz,exact,1.0
+LOC1062000,Maiori,L649850,Maiori,exact,1.0
+LOC1062050,Maira,L649950,Maira,exact,1.0
+LOC1062100,Makedonien,L650000,Makedonien,exact,1.0
+LOC1062150,Málaga,L650050,Málaga,exact,1.0
+LOC1062200,Malebern,L651850,Malebern,exact,1.0
+LOC1062250,Malines,L651900,Malines,exact,1.0
+LOC1062300,Malmö,L652000,Malmö,exact,1.0
+LOC1062350,Maloja-Kulm,L653000,Maloja-Kulm,exact,1.0
+LOC1062400,Malta,L653050,Malta,exact,1.0
+LOC1062450,Manchester,L653450,Manchester,exact,1.0
+LOC1062500,Mannheim,L653700,Mannheim,exact,1.0
+LOC1062550,Mansfeld,L654100,Mansfeld,exact,1.0
+LOC1062600,Mantova,L654150,Mantova,exact,1.0
+LOC1062650,Marathon,L654450,Marathon,exact,1.0
+LOC1062700,Marburg,L654500,Marburg,exact,1.0
+LOC1062750,Maria-Frieden,L654650,Maria-Frieden,exact,1.0
+LOC1062800,Mariager,L654750,Mariager,exact,1.0
+LOC1062850,Mariager Fjord,L654900,Mariager Fjord,exact,1.0
+LOC1062900,Maria-Zell,L654700,Maria-Zell,exact,1.0
+LOC1062950,Maribo,L654950,Maribo,exact,1.0
+LOC1063000,"Marienborg, Møn",L655000,"Marienborg, Møn",exact,1.0
+LOC1063050,Marienbrücke (ved Hohenschwangau),L655050,Marienbrücke (ved Hohenschwangau),exact,1.0
+LOC1063100,Marienlyst,L655100,Marienlyst,exact,1.0
+LOC1063150,Mariestad,L655650,Mariestad,exact,1.0
+LOC1063200,Marina di Conca,L655800,Marina di Conca,exact,1.0
+LOC1063250,Marino,L655850,Marino,exact,1.0
+LOC1063300,Marmara-Havet,L655900,Marmara-Havet,exact,1.0
+LOC1063350,Marmara-Øen,L656150,Marmara-Øen,exact,1.0
+LOC1063400,Marne,L656200,Marne,exact,1.0
+LOC1063450,Marokko,L656250,Marokko,exact,1.0
+LOC1063500,Maroussi (Amarousion),L656400,Maroussi (Amarousion),exact,1.0
+LOC1063550,Marseille,L656450,Marseille,exact,1.0
+LOC1063600,Marselisborg,L657750,Marselisborg,exact,1.0
+LOC1063650,Marsk Stigs Hule,L657800,Marsk Stigs Hule,exact,1.0
+LOC1063700,Marslev,L657900,Marslev,exact,1.0
+LOC1063800,Martinswand,L658150,Martinswand,exact,1.0
+LOC1063850,Martorp,L658250,Martorp,exact,1.0
+LOC1063900,Massa,L658300,Massa,exact,1.0
+LOC1063950,Matra,L658350,Matra,exact,1.0
+LOC1064000,Matta,L658400,Matta,exact,1.0
+LOC1064050,Matterhorn,L658450,Matterhorn,exact,1.0
+LOC1064100,"Maus, die (Deurenburg)",L658500,"Maus, die (Deurenburg)",exact,1.0
+LOC1064150,Maxen,L658550,Maxen,exact,1.0
+LOC1064200,Meaux,L661900,Meaux,exact,1.0
+LOC1064250,Mecklenburg,L662000,Mecklenburg,exact,1.0
+LOC1064300,Mecklenburg-Schwerin,L662500,Mecklenburg-Schwerin,exact,1.0
+LOC1064350,Megara,L662600,Megara,exact,1.0
+LOC1064400,Mehádia,L662650,Mehádia,exact,1.0
+LOC1064450,Meiningen,L662750,Meiningen,exact,1.0
+LOC1064500,Meiringen,L663100,Meiringen,exact,1.0
+LOC1064550,Meissen,L663200,Meissen,exact,1.0
+LOC1064600,Mekka,L663300,Mekka,exact,1.0
+LOC1064650,Melbourne,L663350,Melbourne,exact,1.0
+LOC1064750,Mem,L663550,Mem,exact,1.0
+LOC1064800,Menton (Mentone),L663750,Menton (Mentone),exact,1.0
+LOC1064850,Meran,L664500,Meran,exact,1.0
+LOC1064900,Mérida,L664600,Merida,folded,1.0
+LOC1064950,Merseburg,L664750,Merseburg,exact,1.0
+LOC1065000,Messenien,L664950,Messenien,exact,1.0
+LOC1065050,Messina,L665000,Messina,exact,1.0
+LOC1065100,Meudon,L665050,Meudon,exact,1.0
+LOC1065150,Mexico,L665100,Mexico,exact,1.0
+LOC1065200,Middelfart,L665250,Middelfart,exact,1.0
+LOC1065250,Middelhavet,L666300,Middelhavet,exact,1.0
+LOC1065300,Milano,L672350,Milano,exact,1.0
+LOC1065350,Minden,L674100,Minden,exact,1.0
+LOC1065400,Minneapolis,L674500,Minneapolis,exact,1.0
+LOC1065450,Minnesota,L674550,Minnesota,exact,1.0
+LOC1065500,Minori,L674600,Minori,exact,1.0
+LOC1065550,Miranda de Ebro,L674700,Miranda de Ebro,exact,1.0
+LOC1065600,Mississippi,L674800,Mississippi,exact,1.0
+LOC1065650,Mittenwald,L674850,Mittenwald,exact,1.0
+LOC1065700,Mjøsen,L674950,Mjøsen,exact,1.0
+LOC1065750,Modena,L675000,Modena,exact,1.0
+LOC1065800,Modum,L675050,Modum,exact,1.0
+LOC1065850,Moerdijk,L675350,Moerdijk,exact,1.0
+LOC1065900,Mogyorod,L675400,Mogyorod,exact,1.0
+LOC1065950,Mohács,L675500,Mohács,exact,1.0
+LOC1066000,Mola di Gaëta (Formia),L675550,Mola di Gaëta (Formia),exact,1.0
+LOC1066050,Moldau,L675850,Moldau,exact,1.0
+LOC1066100,Moldava,L676150,Moldava,exact,1.0
+LOC1066150,Mols,L676200,Mols,exact,1.0
+LOC1066200,Monaco,L676250,Monaco,exact,1.0
+LOC1066250,Mondego,L676550,Mondego,exact,1.0
+LOC1066300,Monheim in Bayern,L676700,Monheim in Bayern,exact,1.0
+LOC1066350,Monnetier,L676750,Monnetier,exact,1.0
+LOC1066400,Mons,L676800,Mons,exact,1.0
+LOC1066450,Monserrat,L676900,Monserrat,exact,1.0
+LOC1066500,Monserrate (Portugal),L677000,Monserrate (Portugal),exact,1.0
+LOC1066550,Mont Cenis,L677750,Mont Cenis,exact,1.0
+LOC1066600,Mont Pouillerel,L677800,Mont Pouillerel,exact,1.0
+LOC1066650,Montblanc,L677100,Montblanc,exact,1.0
+LOC1066700,Monte Cavo,L678000,Monte Cavo,exact,1.0
+LOC1066750,Monte Circeo (Circes Ø),L678150,Monte Circeo (Circes Ø),exact,1.0
+LOC1066800,Monte Cristo,L678250,Monte Cristo,exact,1.0
+LOC1066850,"Monte della Misericordia, Ischia",L678300,"Monte della Misericordia, Ischia",exact,1.0
+LOC1066900,Monte Nuovo,L678450,Monte Nuovo,exact,1.0
+LOC1066950,Monte Porzio,L678500,Monte Porzio,exact,1.0
+LOC1067000,Monte Rosa,L678600,Monte Rosa,exact,1.0
+LOC1067100,Monte Soratte (Soracte),L678800,Monte Soratte (Soracte),exact,1.0
+LOC1067150,Montebello,L677850,Montebello,exact,1.0
+LOC1067200,Montecarelli,L677900,Montecarelli,exact,1.0
+LOC1067250,Montefiascone,L678350,Montefiascone,exact,1.0
+LOC1067300,Montélimart,L678400,Montélimart,exact,1.0
+LOC1067350,Monteroni,L678550,Monteroni,exact,1.0
+LOC1067400,Montpellier,L679050,Montpellier,exact,1.0
+LOC1067450,Montreux,L679200,Montreux,exact,1.0
+LOC1067500,Monze,L681450,Monze,exact,1.0
+LOC1067550,Mora,L681500,Mora,exact,1.0
+LOC1067600,Morea,L681600,Morea,exact,1.0
+LOC1067650,Mori,L681700,Mori,exact,1.0
+LOC1067700,Moritzburg,L681750,Moritzburg,exact,1.0
+LOC1067750,Mornas,L681800,Mornas,exact,1.0
+LOC1067800,Mornaux,L681850,Mornaux,exact,1.0
+LOC1067850,Mornex,L681900,Mornex,exact,1.0
+LOC1067900,Mors,L681950,Mors,exact,1.0
+LOC1067950,Morteau,L682000,Morteau,exact,1.0
+LOC1068000,"Mosebackan, Stockholm",L682100,"Mosebackan, Stockholm",exact,1.0
+LOC1068100,Moskva,L682250,Moskva,exact,1.0
+LOC1068150,Motala,L682550,Motala,exact,1.0
+LOC1068200,Motala-Strømmen,L683000,Motala-Strømmen,exact,1.0
+LOC1068250,Mullerup,L683300,Mullerup,exact,1.0
+LOC1068300,Munkebo Bakke,L683450,Munkebo Bakke,exact,1.0
+LOC1068350,Munkeboda,L683500,Munkeboda,exact,1.0
+LOC1068400,Murano,L683550,Murano,exact,1.0
+LOC1068450,Murcia,L683600,Murcia,exact,1.0
+LOC1068500,Murnau,L683950,Murnau,exact,1.0
+LOC1068550,Musselburgh,L684050,Musselburgh,exact,1.0
+LOC1068650,Mühlhausen,L684250,Mühlhausen,exact,1.0
+LOC1068700,Mülheim a.d. Ruhr,L684350,Mülheim a.d. Ruhr,exact,1.0
+LOC1068750,Münchberg,L684450,Münchberg,exact,1.0
+LOC1068800,München,L684500,München,exact,1.0
+LOC1068850,Münden,L692450,Münden,exact,1.0
+LOC1068900,Münster,L692650,Münster,exact,1.0
+LOC1068950,Münsterdorf,L692900,Münsterdorf,exact,1.0
+LOC1069000,Mürzzuschlag,L693100,Mürzzuschlag,exact,1.0
+LOC1069050,Mytilene,L693200,Mytilene,exact,1.0
+LOC1069100,Mägdesprung,L693250,Mägdesprung,exact,1.0
+LOC1069150,Mähren,L693300,Mähren,exact,1.0
+LOC1069200,Mälaren,L693450,Mälaren,exact,1.0
+LOC1069250,Møen,L694000,Møen,exact,1.0
+LOC1069300,Møens Klint,L694500,Møens Klint,exact,1.0
+LOC1069350,Møllerup,L694650,Møllerup,exact,1.0
+LOC1069400,Mölln,L694700,Mölln,exact,1.0
+LOC1069450,"Mönch, der",L694750,"Mönch, der",exact,1.0
+LOC1069500,Maas (Meuse),L645000,Maas (Meuse),exact,1.0
+LOC1069550,"Nahe, die",L694850,"Nahe, die",exact,1.0
+LOC1069600,Nakskov,L694900,Nakskov,exact,1.0
+LOC1069650,Nancy,L695000,Nancy,exact,1.0
+LOC1069700,Napoli,L695200,Napoli,exact,1.0
+LOC1069750,Narbonne,L701850,Narbonne,exact,1.0
+LOC1069800,Narni,L702000,Narni,exact,1.0
+LOC1069850,Narva,L702150,Narva,exact,1.0
+LOC1069900,Nassau,L702200,Nassau,exact,1.0
+LOC1069950,Nauen,L702300,Nauen,exact,1.0
+LOC1070000,Naumburg,L702350,Naumburg,exact,1.0
+LOC1070050,Nauplia,L702600,Nauplia,exact,1.0
+LOC1070100,Naxos,L702700,Naxos,exact,1.0
+LOC1070150,Nea Phocea (Nea Fokaia),L702800,Nea Phocea (Nea Fokaia),exact,1.0
+LOC1070200,"Necessidades, Lissabon",L702850,"Necessidades, Lissabon",exact,1.0
+LOC1070250,Neckar,L702900,Neckar,exact,1.0
+LOC1070300,Nemi,L703250,Nemi,exact,1.0
+LOC1070350,Nemi-Søen,L703300,Nemi-Søen,exact,1.0
+LOC1070400,Nepi,L703550,Nepi,exact,1.0
+LOC1070450,Nera,L703750,Nera,exact,1.0
+LOC1070500,Neubrandenburg,L703800,Neubrandenburg,exact,1.0
+LOC1070550,Neuchâtel (By),L703900,Neuchâtel (By),exact,1.0
+LOC1070600,Neuchâtel (Kanton),L703850,Neuchâtel (Kanton),exact,1.0
+LOC1070650,Neuchâteller-Søen,L705150,Neuchâteller-Søen,exact,1.0
+LOC1070700,Neuensalz,L705650,Neuensalz,exact,1.0
+LOC1070750,Neuhaus (Schweiz),L705700,Neuhaus (Schweiz),exact,1.0
+LOC1070800,Neuilly-sur-Seine,L705900,Neuilly-sur-Seine,exact,1.0
+LOC1070850,Neumark,L705950,Neumark,exact,1.0
+LOC1070900,Neumarkt (Egna),L706000,Neumarkt (Egna),exact,1.0
+LOC1070950,Neumünster,L706100,Neumünster,exact,1.0
+LOC1071000,Neusatz (Novisad),L706550,Neusatz (Novisad),exact,1.0
+LOC1071050,Neusiedler-Søen,L706650,Neusiedler-Søen,exact,1.0
+LOC1071100,Neuveville,L706700,Neuveville,exact,1.0
+LOC1071150,Neva,L706750,Neva,exact,1.0
+LOC1071200,New York,L706900,New York,exact,1.0
+LOC1071250,Newcastle,L706800,Newcastle,exact,1.0
+LOC1071300,Niagara,L711200,Niagara,exact,1.0
+LOC1071350,Nibe,L711250,Nibe,exact,1.0
+LOC1071400,Nicobarerne,L711300,Nicobarerne,exact,1.0
+LOC1071450,Nicopoli,L711350,Nicopoli,exact,1.0
+LOC1071500,Niedergrund,L711400,Niedergrund,exact,1.0
+LOC1071550,Nienburg,L711450,Nienburg,exact,1.0
+LOC1071600,Niesen,L711500,Niesen,exact,1.0
+LOC1071650,Nilen,L711650,Nilen,exact,1.0
+LOC1071700,Nil-Kanalen,L711800,Nil-Kanalen,exact,1.0
+LOC1071750,Nîmes,L711850,Nimes,folded,1.0
+LOC1071800,Ninive,L712300,Ninive,exact,1.0
+LOC1071850,Nishni Novgorod,L712450,Nishni Novgorod,exact,1.0
+LOC1071900,Nisida,L712500,Nisida,exact,1.0
+LOC1071950,Nissum Fjord,L712600,Nissum Fjord,exact,1.0
+LOC1072000,Nizza (Nice),L712800,Nizza (Nice),exact,1.0
+LOC1072050,Nocera Superiore,L715400,Nocera Superiore,exact,1.0
+LOC1072100,Nordamerika,L715450,Nordamerika,exact,1.0
+LOC1072150,Norden,L715500,Norden,exact,1.0
+LOC1072200,Norderhov,L716300,Norderhov,exact,1.0
+LOC1072250,Norditalien,L716350,Norditalien,exact,1.0
+LOC1072300,Nordkap,L716600,Nordkap,exact,1.0
+LOC1072350,Nordsleswig,L716700,Nordsleswig,exact,1.0
+LOC1072400,Nordstemmen,L716750,Nordstemmen,exact,1.0
+LOC1072450,Nord-Sverige,L716800,Nord-Sverige,exact,1.0
+LOC1072500,Nordsøen,L716850,Nordsøen,exact,1.0
+LOC1072550,Nordtyskland,L717450,Nordtyskland,exact,1.0
+LOC1072600,Norge,L717600,Norge,exact,1.0
+LOC1072650,Norring,L722850,Norring,exact,1.0
+LOC1072700,Norrköping,L722900,Norrköping,exact,1.0
+LOC1072750,Norrland,L722950,Norrland,exact,1.0
+LOC1072800,Northeim,L723000,Northeim,exact,1.0
+LOC1072850,Novara,L723050,Novara,exact,1.0
+LOC1072900,Novella,L723100,Novella,exact,1.0
+LOC1072950,Novi Ligure,L723150,Novi Ligure,exact,1.0
+LOC1073000,Nuestra Señora de Miraflores,L723200,Nuestra Señora de Miraflores,exact,1.0
+LOC1073050,Nyborg,L723250,Nyborg,exact,1.0
+LOC1073100,Nyborg Fjord,L726450,Nyborg Fjord,exact,1.0
+LOC1073150,Nydam Mose,L726650,Nydam Mose,exact,1.0
+LOC1073200,"Nygård, Trollhättan",L726700,"Nygård, Trollhättan",exact,1.0
+LOC1073250,Nykvarn,L726750,Nykvarn,exact,1.0
+LOC1073300,Nykøbing F.,L726800,Nykøbing F,folded,1.0
+LOC1073350,Nykøbing Sj.,L727050,Nykøbing Sj,folded,1.0
+LOC1073400,Nyköping,L727100,Nyköping,exact,1.0
+LOC1073450,Nyon,L727150,Nyon,exact,1.0
+LOC1073500,Nürnberg,L727300,Nürnberg,exact,1.0
+LOC1073550,Nysø,L729050,Nysø,exact,1.0
+LOC1073600,Nærum,L729850,Nærum,exact,1.0
+LOC1073650,Næsodden (Christiania),L730100,Næsodden (Christiania),exact,1.0
+LOC1073700,Næstved,L730150,Næstved,exact,1.0
+LOC1073750,Nøddebo,L731300,Nøddebo,exact,1.0
+LOC1073800,Nør,L731350,Nør,exact,1.0
+LOC1073850,Nørager,L731450,Nørager,exact,1.0
+LOC1073900,Nørre Vosborg,L731550,Nørre Vosborg,exact,1.0
+LOC1073950,Nørresundby,L731500,Nørresundby,exact,1.0
+LOC1074000,Oberammergau,L732250,Oberammergau,exact,1.0
+LOC1074050,Ober-Mittewald,L733050,Ober-Mittewald,exact,1.0
+LOC1074100,Ober-Weimar,L733100,Ober-Weimar,exact,1.0
+LOC1074150,"Ochsenkopf, das",L733250,"Ochsenkopf, das",exact,1.0
+LOC1074200,Odense,L733300,Odense,exact,1.0
+LOC1074250,Odense Aa,L744900,Odense Aa,exact,1.0
+LOC1074300,Odessa,L745100,Odessa,exact,1.0
+LOC1074350,Odinshøj,L745200,Odinshøj,exact,1.0
+LOC1074400,Oed,L1031950,Oed,exact,1.0
+LOC1074450,Oedenburg,L1032000,Oedenburg,exact,1.0
+LOC1074500,Oelschnitz,L1032150,Oelschnitz,exact,1.0
+LOC1074550,Ofen (Buda),L745300,Ofen (Buda),exact,1.0
+LOC1074600,Offenbach,L745550,Offenbach,exact,1.0
+LOC1074650,Offenburg,L745600,Offenburg,exact,1.0
+LOC1074700,Okertal,L745650,Okertal,exact,1.0
+LOC1074750,Oland,L745700,Oland,exact,1.0
+LOC1074800,Olazagutia,L746000,Olazagutia,exact,1.0
+LOC1074850,Oldenburg,L746050,Oldenburg,exact,1.0
+LOC1074900,Oldenzaal,L747700,Oldenzaal,exact,1.0
+LOC1074950,Oldesloe,L747750,Oldesloe,exact,1.0
+LOC1075000,Olette,L747800,Olette,exact,1.0
+LOC1075050,"Oliden, Trollhätta",L747850,"Oliden, Trollhätta",exact,1.0
+LOC1075100,Ol-Jonsdammen,L747900,Ol-Jonsdammen,exact,1.0
+LOC1075150,Olmütz,L747950,Olmütz,exact,1.0
+LOC1075200,Olten,L748000,Olten,exact,1.0
+LOC1075250,"Olymp, Bjerg i Lilleasien S.f. Brussa",L748300,"Olymp, Bjerg i Lilleasien S.f. Brussa",exact,1.0
+LOC1075300,Omø,L748450,Omø,exact,1.0
+LOC1075350,Oneglia,L748500,Oneglia,exact,1.0
+LOC1075400,Oos,L748550,Oos,exact,1.0
+LOC1075450,O-Palanka,L748650,O-Palanka,exact,1.0
+LOC1075500,Oporto,L748700,Oporto,exact,1.0
+LOC1075550,Orange,L748850,Orange,exact,1.0
+LOC1075600,Orava (Rahova),L748900,Orava (Rahova),exact,1.0
+LOC1075650,Ordrup,L748950,Ordrup,exact,1.0
+LOC1075700,Ordrup Kro,L749000,Ordrup Kro,exact,1.0
+LOC1075750,Orienten,L749050,Orienten,exact,1.0
+LOC1075800,Orihuela,L749400,Orihuela,exact,1.0
+LOC1075850,Oringe,L749500,Oringe,exact,1.0
+LOC1075900,Orléans,L749650,Orléans,exact,1.0
+LOC1075950,Oron,L749800,Oron,exact,1.0
+LOC1076000,Orsova,L749850,Orsova,exact,1.0
+LOC1076050,Oschatz,L750400,Oschatz,exact,1.0
+LOC1076100,Oschenleben,L750450,Oschenleben,exact,1.0
+LOC1076200,Osnabrück,L750650,Osnabrück,exact,1.0
+LOC1076250,Ostende,L751000,Ostende,exact,1.0
+LOC1076300,Osterode (Harzen),L751400,Osterode (Harzen),exact,1.0
+LOC1076350,Osterode (Østpreussen),L751450,Osterode (Østpreussen),exact,1.0
+LOC1076400,Ostia,L751500,Ostia,exact,1.0
+LOC1076450,Ostindien,L751550,Ostindien,exact,1.0
+LOC1076500,Ostrova (Ostrov),L751700,Ostrova (Ostrov),exact,1.0
+LOC1076600,Ottensen,L751800,Ottensen,exact,1.0
+LOC1076650,Ouchy,L751950,Ouchy,exact,1.0
+LOC1076700,Ourupgaard,L752550,Ourupgaard,exact,1.0
+LOC1076750,"Overgaard, Udbyneder S.",L752600,"Overgaard, Udbyneder S",folded,1.0
+LOC1076800,Ovinehøj,L752650,Ovinehøj,exact,1.0
+LOC1076850,Oxelösund,L752750,Oxelösund,exact,1.0
+LOC1076900,Oxford,L752800,Oxford,exact,1.0
+LOC1076950,Paderborn,L752850,Paderborn,exact,1.0
+LOC1077000,Padova,L752900,Padova,exact,1.0
+LOC1077050,Paestum,L796550,Paestum,exact,1.0
+LOC1077100,Pagani,L753200,Pagani,exact,1.0
+LOC1077150,Palermo,L753300,Palermo,exact,1.0
+LOC1077200,Pallanza,L753400,Pallanza,exact,1.0
+LOC1077250,Palmela,L753450,Palmela,exact,1.0
+LOC1077300,Palsgaard,L753850,Palsgaard,exact,1.0
+LOC1077350,Palstrup,L753900,Palstrup,exact,1.0
+LOC1077400,Palæstina,L754000,Palæstina,exact,1.0
+LOC1077450,Pancsova (Pančevo),L754050,Pancsova (Pančevo),exact,1.0
+LOC1077500,"Panker, Lütjenburg",L754100,"Panker, Lütjenburg",exact,1.0
+LOC1077550,Parano,L754150,Parano,exact,1.0
+LOC1077600,Pardubitz,L754200,Pardubitz,exact,1.0
+LOC1077650,Paris,L754300,Paris,exact,1.0
+LOC1077700,Parma,L773050,Parma,exact,1.0
+LOC1077750,Parnes-Bjergene,L773100,Parnes-Bjergene,exact,1.0
+LOC1077800,Paros,L773150,Paros,exact,1.0
+LOC1077850,Partenkirchen,L773200,Partenkirchen,exact,1.0
+LOC1077900,Pasewalk,L773250,Pasewalk,exact,1.0
+LOC1077950,Pass Lueg,L773300,Pass Lueg,exact,1.0
+LOC1078000,Passignano,L773350,Passignano,exact,1.0
+LOC1078050,Passy,L773400,Passy,exact,1.0
+LOC1078100,Patras,L773500,Patras,exact,1.0
+LOC1078150,Pau,L773550,Pau,exact,1.0
+LOC1078200,Pavia,L773600,Pavia,exact,1.0
+LOC1078250,Peblingesøen,L773700,Peblingesøen,exact,1.0
+LOC1078300,Pedersborg,L774100,Pedersborg,exact,1.0
+LOC1078350,Pegnitz,L774150,Pegnitz,exact,1.0
+LOC1078400,Pegu,L774200,Pegu,exact,1.0
+LOC1078450,Peking,L774250,Peking,exact,1.0
+LOC1078500,Peloponnesos,L774300,Peloponnesos,exact,1.0
+LOC1078550,Pena,L774350,Pena,exact,1.0
+LOC1078600,Pennsylvanien,L774550,Pennsylvanien,exact,1.0
+LOC1078650,Pentelikon,L774600,Pentelikon,exact,1.0
+LOC1078700,Pentelis,L774650,Pentelis,exact,1.0
+LOC1078750,Pera,L774750,Pera,exact,1.0
+LOC1078800,Perleberg,L775350,Perleberg,exact,1.0
+LOC1078850,Perpignan,L775500,Perpignan,exact,1.0
+LOC1078900,Perschling,L775800,Perschling,exact,1.0
+LOC1078950,Persien,L775850,Persien,exact,1.0
+LOC1079000,Peru,L775900,Peru,exact,1.0
+LOC1079050,Perugia,L775950,Perugia,exact,1.0
+LOC1079100,Pesaro,L776350,Pesaro,exact,1.0
+LOC1079150,Peschiera,L776400,Peschiera,exact,1.0
+LOC1079200,Pessin,L776500,Pessin,exact,1.0
+LOC1079250,Pest,L776550,Pest,exact,1.0
+LOC1079300,Petersgaard,L777250,Petersgaard,exact,1.0
+LOC1079350,Petershøi,L777300,Petershøi,exact,1.0
+LOC1079400,Peterswalde,L779350,Peterswalde,exact,1.0
+LOC1079450,Peterwardein (Petrovaradin),L779450,Peterwardein (Petrovaradin),exact,1.0
+LOC1079500,Pfalz,L779500,Pfalz,exact,1.0
+LOC1079550,"Pfäffers, Bad",L779550,Pfäffers Bad,folded,1.0
+LOC1079600,"Pfäffers, Dorf",L779700,"Pfäffers, Dorf",exact,1.0
+LOC1079650,Philadelphia,L779850,Philadelphia,exact,1.0
+LOC1079700,Piacenza,L780200,Piacenza,exact,1.0
+LOC1079750,Piano di Sorrento,L780250,Piano di Sorrento,exact,1.0
+LOC1079850,Pielach,L780450,Pielach,exact,1.0
+LOC1079900,Piémont,L780500,Piémont,exact,1.0
+LOC1079950,Pietra Mala,L780600,Pietra Mala,exact,1.0
+LOC1080000,Pietrasanta,L780700,Pietrasanta,exact,1.0
+LOC1080050,Pilatus,L780800,Pilatus,exact,1.0
+LOC1080100,Pillnitz,L781050,Pillnitz,exact,1.0
+LOC1080150,Pinneberg,L781450,Pinneberg,exact,1.0
+LOC1080200,"Piperviken, Christiania",L781550,"Piperviken, Christiania",exact,1.0
+LOC1080250,Pirano,L781600,Pirano,exact,1.0
+LOC1080300,Pirna,L781650,Pirna,exact,1.0
+LOC1080350,Piræus,L781900,Piræus,exact,1.0
+LOC1080400,Pisa,L782700,Pisa,exact,1.0
+LOC1080450,Pissevache,L783500,Pissevache,exact,1.0
+LOC1080500,Pistoia,L783700,Pistoia,exact,1.0
+LOC1080550,Piz Bernina,L783750,Piz Bernina,exact,1.0
+LOC1080600,Planian (Planen),L783800,Planian (Planen),exact,1.0
+LOC1080650,Plauen (Vogtland),L783850,Plauen (Vogtland),exact,1.0
+LOC1080700,Plauenscher Grund (ved Dresden),L784150,Plauenscher Grund (ved Dresden),exact,1.0
+LOC1080750,Plavisovicza,L784450,Plavisovicza,exact,1.0
+LOC1080800,Pleinfeld,L784500,Pleinfeld,exact,1.0
+LOC1080850,Pleisse,L784600,Pleisse,exact,1.0
+LOC1080900,Plesse,L784650,Plesse,exact,1.0
+LOC1080950,"Plessur, die",L784700,"Plessur, die",exact,1.0
+LOC1081000,Plön,L784800,Plön,exact,1.0
+LOC1081050,Po,L784850,Po,exact,1.0
+LOC1081100,Poderina,L785000,Poderina,exact,1.0
+LOC1081150,Poggibonsi,L785050,Poggibonsi,exact,1.0
+LOC1081200,Poitiers,L785150,Poitiers,exact,1.0
+LOC1081250,Polen,L785450,Polen,exact,1.0
+LOC1081300,Poligny,L785750,Poligny,exact,1.0
+LOC1081350,Pombal,L785800,Pombal,exact,1.0
+LOC1081400,Pommern,L785850,Pommern,exact,1.0
+LOC1081450,Pompei,L785950,Pompei,exact,1.0
+LOC1081500,Ponte Centeno,L786750,Ponte Centeno,exact,1.0
+LOC1081550,Ponte Lucano,L786850,Ponte Lucano,exact,1.0
+LOC1081600,Ponte Molle,L786900,Ponte Molle,exact,1.0
+LOC1081650,Pontecorvo,L786800,Pontecorvo,exact,1.0
+LOC1081700,"Pontinske Sumpe, de",L787150,"Pontinske Sumpe, de",exact,1.0
+LOC1081750,Pontresina,L787350,Pontresina,exact,1.0
+LOC1081800,Porta Westphalica,L787400,Porta Westphalica,exact,1.0
+LOC1081850,Portici,L787500,Portici,exact,1.0
+LOC1081900,Portsmouth,L787800,Portsmouth,exact,1.0
+LOC1081950,Portugal,L787900,Portugal,exact,1.0
+LOC1082000,Posen,L789450,Posen,exact,1.0
+LOC1082050,Posillipo-Grotten,L789500,Posillipo-Grotten,exact,1.0
+LOC1082100,Potsdam,L790050,Potsdam,exact,1.0
+LOC1082150,Pozzuoli,L790900,Pozzuoli,exact,1.0
+LOC1082200,Prades,L791150,Prades,exact,1.0
+LOC1082250,Prag,L791300,Prag,exact,1.0
+LOC1082300,Prato,L793300,Prato,exact,1.0
+LOC1082350,Prebischtor,L793350,Prebischtor,exact,1.0
+LOC1082400,Preetz,L793450,Preetz,exact,1.0
+LOC1082450,Pressburg (Bratislava),L793500,Pressburg (Bratislava),exact,1.0
+LOC1082500,Preussen,L793600,Preussen,exact,1.0
+LOC1082550,Procida,L794300,Procida,exact,1.0
+LOC1082600,Promontorium (Promontor),L794850,Promontorium (Promontor),exact,1.0
+LOC1082650,Provence,L794900,Provence,exact,1.0
+LOC1082700,Præstø,L795000,Præstø,exact,1.0
+LOC1082750,Præstø Fjord,L795600,Præstø Fjord,exact,1.0
+LOC1082800,Purkersdorf,L795700,Purkersdorf,exact,1.0
+LOC1082850,Pyramiderne,L795750,Pyramiderne,exact,1.0
+LOC1082900,Pyrenæerne,L795850,Pyrenæerne,exact,1.0
+LOC1082950,Pyrmont,L796500,Pyrmont,exact,1.0
+LOC1083000,Pöseldorf,L797000,Pöseldorf,exact,1.0
+LOC1083100,Quedlinburg,L797100,Quedlinburg,exact,1.0
+LOC1083150,Queluz,L797200,Queluz,exact,1.0
+LOC1083200,Quiévrain,L797250,Quiévrain,exact,1.0
+LOC1083250,Rabenau (ved Tharandt),L797500,Rabenau (ved Tharandt),exact,1.0
+LOC1083300,"Rabenhorst, Maxen",L797550,"Rabenhorst, Maxen",exact,1.0
+LOC1083350,"Rabenstein, ved Maxen",L798000,"Rabenstein, ved Maxen",exact,1.0
+LOC1083400,Radicofani,L798250,Radicofani,exact,1.0
+LOC1083450,Radojevacz,L798300,Radojevacz,exact,1.0
+LOC1083500,Ragatz,L798350,Ragatz,exact,1.0
+LOC1083550,Ragusa,L798850,Ragusa,exact,1.0
+LOC1083600,Raito,L798900,Raito,exact,1.0
+LOC1083650,Raklev,L798950,Raklev,exact,1.0
+LOC1083700,Ramlösa,L799000,Ramlösa,exact,1.0
+LOC1083750,Ramme,L799150,Ramme,exact,1.0
+LOC1083800,Ramme-Dige,L799200,Ramme-Dige,exact,1.0
+LOC1083850,Rammelsberg,L799250,Rammelsberg,exact,1.0
+LOC1083900,Ramsgate,L799400,Ramsgate,exact,1.0
+LOC1083950,Ramundeboda,L799550,Ramundeboda,exact,1.0
+LOC1084000,Randers,L799600,Randers,exact,1.0
+LOC1084050,Rankhyttan,L801800,Rankhyttan,exact,1.0
+LOC1084100,Rapallo,L801850,Rapallo,exact,1.0
+LOC1084150,Rapperschwyl,L801950,Rapperschwyl,exact,1.0
+LOC1084200,Rastede,L802050,Rastede,exact,1.0
+LOC1084250,Rathen,L802100,Rathen,exact,1.0
+LOC1084300,Ratzeburger See,L802150,Ratzeburger See,exact,1.0
+LOC1084350,Raudnitz,L802200,Raudnitz,exact,1.0
+LOC1084400,Rava,L802250,Rava,exact,1.0
+LOC1084450,Ravenna,L802300,Ravenna,exact,1.0
+LOC1084500,Ravenscraig Castle,L802350,Ravenscraig Castle,exact,1.0
+LOC1084550,Ravensrock (ved Tanger),L802450,Ravensrock (ved Tanger),exact,1.0
+LOC1084600,Ravenswood,L802750,Ravenswood,exact,1.0
+LOC1084650,Ravnholt,L802800,Ravnholt,exact,1.0
+LOC1084700,Redefin,L802900,Redefin,exact,1.0
+LOC1084750,Refsnæs,L802950,Refsnæs,exact,1.0
+LOC1084800,Regensburg,L803000,Regensburg,exact,1.0
+LOC1084950,Reichenbach,L803400,Reichenbach,exact,1.0
+LOC1085000,Remmels,L803500,Remmels,exact,1.0
+LOC1085050,Rendsborg,L803550,Rendsborg,exact,1.0
+LOC1085100,Rengen,L805000,Rengen,exact,1.0
+LOC1085150,Resina,L805200,Resina,exact,1.0
+LOC1085200,Reuss,L805400,Reuss,exact,1.0
+LOC1085250,Rheder,L805650,Rheder,exact,1.0
+LOC1085300,Rheine,L805700,Rheine,exact,1.0
+LOC1085350,Rheinfels,L805800,Rheinfels,exact,1.0
+LOC1085450,Rhin-Bayern,L805950,Rhin-Bayern,exact,1.0
+LOC1085500,Rhinen,L806050,Rhinen,exact,1.0
+LOC1085550,"Rhinfaldet, Schaffhausen",L808850,"Rhinfaldet, Schaffhausen",exact,1.0
+LOC1085600,Rhin-Hessen,L806000,Rhin-Hessen,exact,1.0
+LOC1085650,Rhinlandene,L809050,Rhinlandene,exact,1.0
+LOC1085700,Rhodos,L809100,Rhodos,exact,1.0
+LOC1085750,Rhônedalen,L809150,Rhônedalen,exact,1.0
+LOC1085800,Rhônen,L809350,Rhônen,exact,1.0
+LOC1085850,Ribe,L810050,Ribe,exact,1.0
+LOC1085900,Riberhus,L810450,Riberhus,exact,1.0
+LOC1085950,Riccorsi,L810500,Riccorsi,exact,1.0
+LOC1086000,Richmond,L810550,Richmond,exact,1.0
+LOC1086050,Richterswyl,L810700,Richterswyl,exact,1.0
+LOC1086100,Ried,L810850,Ried,exact,1.0
+LOC1086150,Riesa,L810900,Riesa,exact,1.0
+LOC1086200,Riesengebirge,L811150,Riesengebirge,exact,1.0
+LOC1086250,Rieti,L811300,Rieti,exact,1.0
+LOC1086300,Riga,L811350,Riga,exact,1.0
+LOC1086350,Rigi,L811400,Rigi,exact,1.0
+LOC1086400,Rigi-Kulm,L811700,Rigi-Kulm,exact,1.0
+LOC1086450,Rigi-Staffel,L812000,Rigi-Staffel,exact,1.0
+LOC1086500,Riglen,L812050,Riglen,exact,1.0
+LOC1086550,Ringerike,L812100,Ringerike,exact,1.0
+LOC1086600,Ringkøbing,L812150,Ringkøbing,exact,1.0
+LOC1086650,Ringkøbing Fjord,L812350,Ringkøbing Fjord,exact,1.0
+LOC1086700,Ringsjön (Stora Rängen),L812400,Ringsjön (Stora Rängen),exact,1.0
+LOC1086750,Ringsted,L812450,Ringsted,exact,1.0
+LOC1086800,Rinkenæs,L813900,Rinkenæs,exact,1.0
+LOC1086850,Rio de Janeiro,L813950,Rio de Janeiro,exact,1.0
+LOC1086900,Riva,L814400,Riva,exact,1.0
+LOC1086950,Rob Roy's Cave,L814650,Rob Roy's Cave,exact,1.0
+LOC1087000,Rochester,L814700,Rochester,exact,1.0
+LOC1087050,Rochus-Kapellet (ved Bingen),L814900,Rochus-Kapellet (ved Bingen),exact,1.0
+LOC1087100,Rolandseck,L815000,Rolandseck,exact,1.0
+LOC1087150,Rolighed,L815050,Rolighed,exact,1.0
+LOC1087200,Rom,L832350,Rom,exact,1.0
+LOC1087250,Romanshorn,L848950,Romanshorn,exact,1.0
+LOC1087300,Romont,L849200,Romont,exact,1.0
+LOC1087350,Ronciglione,L849250,Ronciglione,exact,1.0
+LOC1087400,Ronco all' Adige,L849350,Ronco all' Adige,exact,1.0
+LOC1087450,Roosendaal,L849400,Roosendaal,exact,1.0
+LOC1087500,Rorschach,L849450,Rorschach,exact,1.0
+LOC1087550,Roseg-Gletscher,L849550,Roseg-Gletscher,exact,1.0
+LOC1087600,Rosenborg Slot,L849600,Rosenborg Slot,exact,1.0
+LOC1087650,Rosendal (ved Stockholm),L849800,Rosendal (ved Stockholm),exact,1.0
+LOC1087700,Rosendal ved Aarhus (Navnet vist misforstaaet),L849750,Rosendal ved Aarhus (Navnet vist misforstaaet),exact,1.0
+LOC1087750,Rosenheim,L849950,Rosenheim,exact,1.0
+LOC1087800,Rosenthal (Rosendal) (ved Fakse),L850000,Rosenthal (Rosendal) (ved Fakse),exact,1.0
+LOC1087850,Rosenvold,L850050,Rosenvold,exact,1.0
+LOC1087900,Roskilde,L850100,Roskilde,exact,1.0
+LOC1087950,Roskilde Kro,L854150,Roskilde Kro,exact,1.0
+LOC1088000,Rossdorf,L854300,Rossdorf,exact,1.0
+LOC1088050,Rosstrappe,L854350,Rosstrappe,exact,1.0
+LOC1088100,Rostock,L854450,Rostock,exact,1.0
+LOC1088150,Rotenburg in Hannover,L854550,Rotenburg in Hannover,exact,1.0
+LOC1088200,Roth,L854700,Roth,exact,1.0
+LOC1088250,Rottenburg an der Laber,L854750,Rottenburg an der Laber,exact,1.0
+LOC1088300,Rotterdam,L854800,Rotterdam,exact,1.0
+LOC1088350,Rovereto,L855150,Rovereto,exact,1.0
+LOC1088400,Rovigo,L855350,Rovigo,exact,1.0
+LOC1088450,Roxen,L855400,Roxen,exact,1.0
+LOC1088500,Rubjerg Kirke,L855700,Rubjerg Kirke,exact,1.0
+LOC1088550,Rubjerg Klitter,L855750,Rubjerg Klitter,exact,1.0
+LOC1088600,Rudeskov,L855850,Rudeskov,exact,1.0
+LOC1088650,Rue,L855900,Rue,exact,1.0
+LOC1088700,Rumelien,L855950,Rumelien,exact,1.0
+LOC1088750,Rumpenheim,L856050,Rumpenheim,exact,1.0
+LOC1088800,Rumænien,L856150,Rumænien,exact,1.0
+LOC1088850,Rungsted,L856200,Rungsted,exact,1.0
+LOC1088900,Rusland,L856600,Rusland,exact,1.0
+LOC1088950,Rustschuk (Russe),L857600,Rustschuk (Russe),exact,1.0
+LOC1089000,Rübeland,L857700,Rübeland,exact,1.0
+LOC1089050,Rygen,L858350,Rygen,exact,1.0
+LOC1089100,Rygaard,L857800,Rygaard,exact,1.0
+LOC1089150,Rysensten,L858550,Rysensten,exact,1.0
+LOC1089200,Rütli,L858600,Rütli,exact,1.0
+LOC1089250,Röhrsdorf,L858650,Röhrsdorf,exact,1.0
+LOC1089300,Rønne,L858750,Rønne,exact,1.0
+LOC1089350,Rønnebæksholm,L858800,Rønnebæksholm,exact,1.0
+LOC1089400,Rønnede,L858850,Rønnede,exact,1.0
+LOC1089450,Rørby,L859100,Rørby,exact,1.0
+LOC1089500,Røraas,L859050,Røraas,exact,1.0
+LOC1089550,Raab,L797350,Raab,exact,1.0
+LOC1089600,Råbäck (ved Kinnekulla),L797400,Råbäck (ved Kinnekulla),exact,1.0
+LOC1089650,"Raadmandsskoven, Næstved",L797450,"Raadmandsskoven, Næstved",exact,1.0
+LOC1089700,Sabinerbjergene,L859500,Sabinerbjergene,exact,1.0
+LOC1089750,Sachsen (Kongerige),L859550,Sachsen (Kongerige),exact,1.0
+LOC1089800,Sachsenhausen,L859700,Sachsenhausen,exact,1.0
+LOC1089850,Sachsisk Schweiz,L859800,Sachsisk Schweiz,exact,1.0
+LOC1089900,Sado,L860650,Sado,exact,1.0
+LOC1089950,Sagunto,L860700,Sagunto,exact,1.0
+LOC1090000,Saint Helena,L861050,Saint Helena,exact,1.0
+LOC1090050,Saint John's Wood,L861100,Saint John's Wood,exact,1.0
+LOC1090100,Saint Patrick's Wood,L861650,Saint Patrick's Wood,exact,1.0
+LOC1090200,Saint-Denis,L860950,Saint-Denis,exact,1.0
+LOC1090250,Sainte-Croix (Schweiz),L861800,Sainte-Croix (Schweiz),exact,1.0
+LOC1090300,Saint-Louis,L861350,Saint-Louis,exact,1.0
+LOC1090350,Saint-Martin,L861400,Saint-Martin,exact,1.0
+LOC1090400,Saint-Maurice,L861450,Saint-Maurice,exact,1.0
+LOC1090500,Sakskøbing,L861850,Sakskøbing,exact,1.0
+LOC1090550,Sala,L861900,Sala,exact,1.0
+LOC1090600,Salamis-Bugten,L862050,Salamis-Bugten,exact,1.0
+LOC1090650,Salerno,L862250,Salerno,exact,1.0
+LOC1090700,Salève,L862550,Salève,exact,1.0
+LOC1090750,Salò,L862900,Salò,exact,1.0
+LOC1090800,Salorno (Salurn),L862950,Salorno (Salurn),exact,1.0
+LOC1090850,Salsta Slot,L863050,Salsta Slot,exact,1.0
+LOC1090900,Salvaterra,L863100,Salvaterra,exact,1.0
+LOC1090950,Salzach,L863150,Salzach,exact,1.0
+LOC1091000,Salzachthal,L863550,Salzachthal,exact,1.0
+LOC1091050,Salzburg,L863600,Salzburg,exact,1.0
+LOC1091100,Salzgitter,L864600,Salzgitter,exact,1.0
+LOC1091150,Samaden,L864650,Samaden,exact,1.0
+LOC1091200,Samsø,L864850,Samsø,exact,1.0
+LOC1091250,San Casciano in Val di Pesa,L865200,San Casciano in Val di Pesa,exact,1.0
+LOC1091300,San Chídrian,L865250,San Chidrian,folded,1.0
+LOC1091350,San Francisco,L865300,San Francisco,exact,1.0
+LOC1091400,San Giovanni a Teduccio,L865350,San Giovanni a Teduccio,exact,1.0
+LOC1091450,San Lorenzo Nuovo,L865400,San Lorenzo Nuovo,exact,1.0
+LOC1091500,San Luís,L865450,San Luis,folded,1.0
+LOC1091550,San Pedro de Pena,L865650,San Pedro de Pena,exact,1.0
+LOC1091600,San Quirico d'Orcia,L865800,San Quirico d'Orcia,exact,1.0
+LOC1091650,San Sebastián,L865900,San Sebastián,exact,1.0
+LOC1091700,Sandefjord,L866050,Sandefjord,exact,1.0
+LOC1091750,Sandsee Slot,L866150,Sandsee Slot,exact,1.0
+LOC1091800,Sandviken,L866200,Sandviken,exact,1.0
+LOC1091850,Sankt Croix (Vestindien),L866350,Sankt Croix (Vestindien),exact,1.0
+LOC1091900,Sankt Gallen,L867450,Sankt Gallen,exact,1.0
+LOC1091950,"Sankt Gerhardsbjerget (Szant Gellert hegy), Buda",L867550,"Sankt Gerhardsbjerget (Szant Gellert hegy), Buda",exact,1.0
+LOC1092000,Sankt Goar,L867600,Sankt Goar,exact,1.0
+LOC1092050,Sankt Gotthard,L868000,Sankt Gotthard,exact,1.0
+LOC1092100,"Sankt Johannes Kloster, Slesvig",L868300,"Sankt Johannes Kloster, Slesvig",exact,1.0
+LOC1092150,Sankt Jørgens Gaard (ved Svendborg),L868350,Sankt Jørgens Gaard (ved Svendborg),exact,1.0
+LOC1092200,"Sankt Marthes Kilde, Karise",L868600,"Sankt Marthes Kilde, Karise",exact,1.0
+LOC1092250,Sankt Moritz,L868650,Sankt Moritz,exact,1.0
+LOC1092300,Sankt Peter,L868750,Sankt Peter,exact,1.0
+LOC1092350,Sankt Petersborg,L868800,Sankt Petersborg,exact,1.0
+LOC1092400,Sankt Pölten,L870300,Sankt Pôlten,folded,1.0
+LOC1092450,Sankt Thomas,L870400,Sankt Thomas,exact,1.0
+LOC1092500,Santa Agata,L870550,Santa Agata,exact,1.0
+LOC1092550,Santa Cruz de Mudela,L870750,Santa Cruz de Mudela,exact,1.0
+LOC1092600,Santa Maria (ved Cintra),L870800,Santa Maria (ved Cintra),exact,1.0
+LOC1092650,Santa Maria degli Angeli (ved Assisi),L870850,Santa Maria degli Angeli (ved Assisi),exact,1.0
+LOC1092700,Santa Maria Maggiore (ved Nocera Superiore),L870900,Santa Maria Maggiore (ved Nocera Superiore),exact,1.0
+LOC1092750,Santander,L870950,Santander,exact,1.0
+LOC1092800,Santarem,L871000,Santarem,exact,1.0
+LOC1092850,Saônen,L871050,Saônen,exact,1.0
+LOC1092900,Sardinien,L871150,Sardinien,exact,1.0
+LOC1092950,Sargans,L871250,Sargans,exact,1.0
+LOC1093000,Sarine (Saane),L871350,Sarine (Saane),exact,1.0
+LOC1093050,Sarnen,L871400,sarnen,folded,1.0
+LOC1093100,Sarner-Søen,L871450,Sarner-Søen,exact,1.0
+LOC1093150,Sarzana,L871500,Sarzana,exact,1.0
+LOC1093200,Sava (Sau),L871550,Sava (Sau),exact,1.0
+LOC1093250,Saverne,L871650,Saverne,exact,1.0
+LOC1093300,Savona,L871700,Savona,exact,1.0
+LOC1093350,Savoyen,L871750,Savoyen,exact,1.0
+LOC1093400,Saxtorf,L872050,Saxtorf,exact,1.0
+LOC1093450,Scaricalasino,L872100,Scaricalasino,exact,1.0
+LOC1093550,Schaffhausen,L872150,Schaffhausen,exact,1.0
+LOC1093600,Schandau,L872550,Schandau,exact,1.0
+LOC1093650,Schelde,L872750,Schelde,exact,1.0
+LOC1093700,Schelletau,L872850,Schelletau,exact,1.0
+LOC1093750,Scheveningen,L872900,Scheveningen,exact,1.0
+LOC1093800,Schiedam,L873050,Schiedam,exact,1.0
+LOC1093850,Schilda,L873100,Schilda,exact,1.0
+LOC1093900,Schlangenbad,L873150,Schlangenbad,exact,1.0
+LOC1093950,Schlesien,L873200,Schlesien,exact,1.0
+LOC1094000,Schmerikon,L873550,Schmerikon,exact,1.0
+LOC1094050,Schneekoppe,L873600,Schneekoppe,exact,1.0
+LOC1094100,Schreckenstein,L873650,Schreckenstein,exact,1.0
+LOC1094150,Schreckhorn,L873700,Schreckhorn,exact,1.0
+LOC1094200,Schumla,L873750,Schumla,exact,1.0
+LOC1094250,Schupanek,L873800,Schupanek,exact,1.0
+LOC1094300,Schwabach,L873850,Schwabach,exact,1.0
+LOC1094350,"Schwalbach, Bad",L873900,"Schwalbach, Bad",exact,1.0
+LOC1094400,"Schwanennest, Maxen",L873950,"Schwanennest, Maxen",exact,1.0
+LOC1094450,Schwanenstadt,L874150,Schwanenstadt,exact,1.0
+LOC1094550,Schweiz,L874350,Schweiz,exact,1.0
+LOC1094600,Schwerin,L878200,Schwerin,exact,1.0
+LOC1094650,Schwyz,L878250,Schwyz,exact,1.0
+LOC1094700,Schönberg (Mecklenburg),L878550,Schönberg (Mecklenburg),exact,1.0
+LOC1094750,Schönberg (Tyrol),L878600,Schönberg (Tyrol),exact,1.0
+LOC1094800,Schönbrunn,L878650,Schönbrunn,exact,1.0
+LOC1094850,Schöppenstedt,L878950,Schöppenstedt,exact,1.0
+LOC1094900,Scylla,L879000,Scylla,exact,1.0
+LOC1094950,Sebastopol,L879050,Sebastopol,exact,1.0
+LOC1095000,Sedan,L879100,Sedan,exact,1.0
+LOC1095050,Seeshaupt,L879400,Seeshaupt,exact,1.0
+LOC1095100,Seinen,L879550,Seinen,exact,1.0
+LOC1095150,Sele,L880200,Sele,exact,1.0
+LOC1095200,Sem,L880250,Sem,exact,1.0
+LOC1095250,Semendria (Smederevo),L880300,Semendria (Smederevo),exact,1.0
+LOC1095300,Semlin (Zemun),L880400,Semlin (Zemun),exact,1.0
+LOC1095350,Semmering,L880650,Semmering,exact,1.0
+LOC1095400,Sendling,L880700,Sendling,exact,1.0
+LOC1095450,Senlis,L880750,Senlis,exact,1.0
+LOC1095500,Sens,L880800,Sens,exact,1.0
+LOC1095550,Serbien,L880850,Serbien,exact,1.0
+LOC1095600,Serreslev (ved Horsens),L881000,Serreslev (ved Horsens),exact,1.0
+LOC1095650,Serridslev,L881050,Serridslev,exact,1.0
+LOC1095700,Sesto Calende,L881100,Sesto Calende,exact,1.0
+LOC1095750,Sestos,L881250,Sestos,exact,1.0
+LOC1095800,Sestri Levante,L881300,Sestri Levante,exact,1.0
+LOC1095850,Settecomuni,L881350,Settecomuni,exact,1.0
+LOC1095900,Setúbal,L881400,Setúbal,exact,1.0
+LOC1095950,Seven Oaks,L882750,Seven Oaks,exact,1.0
+LOC1096000,Sevilla,L883150,Sevilla,exact,1.0
+LOC1096050,Sèvres,L884100,Sèvres,exact,1.0
+LOC1096100,Sheffield,L884150,Sheffield,exact,1.0
+LOC1096150,Sibirien,L884200,Sibirien,exact,1.0
+LOC1096200,Sicilien,L884300,Sicilien,exact,1.0
+LOC1096250,Siebengebirge,L884850,Siebengebirge,exact,1.0
+LOC1096300,Sieghartskirchen,L884950,Sieghartskirchen,exact,1.0
+LOC1096350,Siena,L885000,Siena,exact,1.0
+LOC1096400,Sierra Morena,L885100,Sierra Morena,exact,1.0
+LOC1096450,Signhildsberg,L885200,Signhildsberg,exact,1.0
+LOC1096500,Sigtuna,L885250,Sigtuna,exact,1.0
+LOC1096550,Silberhorn,L885400,Silberhorn,exact,1.0
+LOC1096600,Sild,L885450,Sild,exact,1.0
+LOC1096650,Silistria,L885550,Silistria,exact,1.0
+LOC1096700,Silkeborg,L885600,Silkeborg,exact,1.0
+LOC1096750,Silkeborg Langsø,L887450,Silkeborg Langsø,exact,1.0
+LOC1096800,Silvaplana,L887600,Silvaplana,exact,1.0
+LOC1096850,Silvköparen,L887650,Silvköparen,exact,1.0
+LOC1096900,Simnitza (Zimnicea),L887700,Simnitza (Zimnicea),exact,1.0
+LOC1096950,Simplon,L887750,Simplon,exact,1.0
+LOC1097000,Sion (Sitten),L888100,Sion (Sitten),exact,1.0
+LOC1097050,Sipp,L888200,Sipp,exact,1.0
+LOC1097100,Siracusa,L888250,Siracusa,exact,1.0
+LOC1097150,Sirmien (Syrmien),L888300,Sirmien (Syrmien),exact,1.0
+LOC1097200,Sistow (Svistov),L888350,Sistow (Svistov),exact,1.0
+LOC1097250,Sjælland,L888400,Sjælland,exact,1.0
+LOC1097300,Sjöända,L888850,Sjöânda,folded,1.0
+LOC1097350,Skabersjö,L889200,Skabersjö,exact,1.0
+LOC1097400,Skagen,L889300,Skagen,exact,1.0
+LOC1097450,Skamlingsbanken,L889900,Skamlingsbanken,exact,1.0
+LOC1097500,Skanderborg,L889950,Skanderborg,exact,1.0
+LOC1097550,Skandinavien,L890200,Skandinavien,exact,1.0
+LOC1097600,Skara,L890300,Skara,exact,1.0
+LOC1097650,Skelskør,L890350,Skelskør,exact,1.0
+LOC1097700,Skibbinge,L894400,Skibbinge,exact,1.0
+LOC1097750,Skive,L894450,Skive,exact,1.0
+LOC1097800,Skodsborg,L894500,Skodsborg,exact,1.0
+LOC1097850,Skokloster,L894600,Skokloster,exact,1.0
+LOC1097900,Skotland,L894700,Skotland,exact,1.0
+LOC1097950,Skovshoved,L896300,Skovshoved,exact,1.0
+LOC1098000,"Skrædder-Klinten, Trollhätta",L896350,"Skrædder-Klinten, Trollhätta",exact,1.0
+LOC1098050,Skutari,L896400,Skutari,exact,1.0
+LOC1098100,Skaane,L888900,Skaane,exact,1.0
+LOC1098150,Slagelse,L896900,Slagelse,exact,1.0
+LOC1098200,Slagelse Lystskov,L902600,Slagelse Lystskov,exact,1.0
+LOC1098250,Slangerup,L902650,Slangerup,exact,1.0
+LOC1098300,Slesvig (By),L904450,Slesvig (By),exact,1.0
+LOC1098350,Slesvig (Hertugdømme),L902700,Slesvig (Hertugdømme),exact,1.0
+LOC1098400,Slien,L906200,Slien,exact,1.0
+LOC1098450,Slipshavn,L906250,Slipshavn,exact,1.0
+LOC1098500,Slots-Bjergby Galgebakke,L906300,Slots-Bjergby Galgebakke,exact,1.0
+LOC1098550,Slude Gaard,L906400,Slude Gaard,exact,1.0
+LOC1098600,Smyrna,L907050,Smyrna,exact,1.0
+LOC1098650,Smaalandsfarvandet,L906450,Smaalandsfarvandet,exact,1.0
+LOC1098700,Snekkersten,L907450,Snekkersten,exact,1.0
+LOC1098750,Snoghøj,L907500,Snoghøj,exact,1.0
+LOC1098800,"Soden, Bad",L907800,"Soden, Bad",exact,1.0
+LOC1098850,Soest,L907900,Soest,exact,1.0
+LOC1098900,Sofiero,L908000,Sofiero,exact,1.0
+LOC1098950,Solfatara,L908050,Solfatara,exact,1.0
+LOC1099000,Solna,L908150,Solna,exact,1.0
+LOC1099050,Solothurn,L908250,Solothurn,exact,1.0
+LOC1099100,Somma Lombardo,L908300,Somma Lombardo,exact,1.0
+LOC1099150,Sonnenstein,L908350,Sonnenstein,exact,1.0
+LOC1099200,Sophienlund,L908500,Sophienlund,exact,1.0
+LOC1099250,Soracte,L908550,Soracte,exact,1.0
+LOC1099300,Sorgenfri Slot,L908800,Sorgenfri Slot,exact,1.0
+LOC1099400,"Sortebrødre, Hovedgaard ved Næstved",L909600,"Sortebrødre, Hovedgaard ved Næstved",exact,1.0
+LOC1099500,Sorø,L909950,Sorø,exact,1.0
+LOC1099550,Sorø Sø,L916500,Sorø Sø,exact,1.0
+LOC1099600,Spandau,L916700,Spandau,exact,1.0
+LOC1099650,Spanien,L916850,Spanien,exact,1.0
+LOC1099700,Speyer,L920900,Speyer,exact,1.0
+LOC1099750,Spezia-Bugten,L921000,Spezia-Bugten,exact,1.0
+LOC1099800,Spielberg (ved Brünn),L921100,Spielberg (ved Brünn),exact,1.0
+LOC1099850,Splügen,L921150,Splügen,exact,1.0
+LOC1099900,Spoleto,L921400,Spoleto,exact,1.0
+LOC1099950,Spree,L921600,Spree,exact,1.0
+LOC1100000,Sprogø,L921750,Sprogø,exact,1.0
+LOC1100050,Staby Folkehøjskole,L922000,Staby Folkehøjskole,exact,1.0
+LOC1100100,Stade,L922050,Stade,exact,1.0
+LOC1100150,Stadum,L922150,Stadum,exact,1.0
+LOC1100200,Staggia,L922200,Staggia,exact,1.0
+LOC1100250,Stampfemühle (ved Slesvig By),L922250,Stampfemühle (ved Slesvig By),exact,1.0
+LOC1100300,Stannern,L922300,Stannern,exact,1.0
+LOC1100350,Stans,L922350,Stans,exact,1.0
+LOC1100400,Stansstad,L922500,Stansstad,exact,1.0
+LOC1100450,Starnberg,L922550,Starnberg,exact,1.0
+LOC1100500,Starnberger See,L922900,Starnberger See,exact,1.0
+LOC1100550,Staubbach,L923100,Staubbach,exact,1.0
+LOC1100600,Stavanger,L923300,Stavanger,exact,1.0
+LOC1100650,Stecken,L923400,Stecken,exact,1.0
+LOC1100700,Stege,L923450,Stege,exact,1.0
+LOC1100750,Stegeborg,L923500,Stegeborg,exact,1.0
+LOC1100800,Stein,L923650,Stein,exact,1.0
+LOC1100850,Steinbad (ved Teplitz),L923800,Steinbad (ved Teplitz),exact,1.0
+LOC1100900,Steinhöring,L923850,Steinhöring,exact,1.0
+LOC1100950,Steinnach,L923700,Steinnach,exact,1.0
+LOC1101000,Steinsdorf,L923900,Steinsdorf,exact,1.0
+LOC1101050,Sterzing,L923950,Sterzing,exact,1.0
+LOC1101100,Stettin,L924050,Stettin,exact,1.0
+LOC1101150,Stiernholm Slot,L924550,Stiernholm Slot,exact,1.0
+LOC1101200,Stirling,L924600,Stirling,exact,1.0
+LOC1101250,Stockerau,L924750,Stockerau,exact,1.0
+LOC1101300,Stockholm,L924850,Stockholm,exact,1.0
+LOC1101350,Stolzenfels,L931150,Stolzenfels,exact,1.0
+LOC1101400,Stora Eken,L931350,Stora Eken,exact,1.0
+LOC1101450,Store Hedinge,L933650,Store Hedinge,exact,1.0
+LOC1101500,Store Hestehave (ved Jungshoved),L933800,Store Hestehave (ved Jungshoved),exact,1.0
+LOC1101550,Store Vildmose,L933900,Store Vildmose,exact,1.0
+LOC1101600,Storebelt,L931500,Storebelt,exact,1.0
+LOC1101650,"Storta, La",L933950,"Storta, La",exact,1.0
+LOC1101700,Storaaen,L931400,Storaaen,exact,1.0
+LOC1101750,Stoss (ved Brunnen),L934050,Stoss (ved Brunnen),exact,1.0
+LOC1101800,Stralsund,L934250,Stralsund,exact,1.0
+LOC1101850,Strandhuse (ved Svendborg),L934350,Strandhuse (ved Svendborg),exact,1.0
+LOC1101900,Strandmøllen,L934400,Strandmøllen,exact,1.0
+LOC1101950,Strandvejen,L934450,Strandvejen,exact,1.0
+LOC1102000,Strassburg,L935150,Strassburg,exact,1.0
+LOC1102050,Strengberg,L936050,Strengberg,exact,1.0
+LOC1102100,Strib,L936100,Strib,exact,1.0
+LOC1102150,Stromboli,L936500,Stromboli,exact,1.0
+LOC1102200,Strood,L936550,Strood,exact,1.0
+LOC1102250,Struer,L936800,Struer,exact,1.0
+LOC1102300,Struppen (ved Pirna),L936850,Struppen (ved Pirna),exact,1.0
+LOC1102350,Sturefors,L936900,Sturefors,exact,1.0
+LOC1102400,Stuttgart,L937000,Stuttgart,exact,1.0
+LOC1102450,Stäket,L937950,Stäket,exact,1.0
+LOC1102500,Stör,L938000,Stör,exact,1.0
+LOC1102600,Suez-Kanalen,L938250,Suez-Kanalen,exact,1.0
+LOC1102650,Susenborg,L938600,Susenborg,exact,1.0
+LOC1102700,Susaaen,L938450,Susaaen,exact,1.0
+LOC1102750,Svaneberg,L938650,Svaneberg,exact,1.0
+LOC1102800,Svaneke,L938700,Svaneke,exact,1.0
+LOC1102850,Sveaborg,L938750,Sveaborg,exact,1.0
+LOC1102900,Svendborg,L938800,Svendborg,exact,1.0
+LOC1102950,Svendborg Sund,L941050,Svendborg Sund,exact,1.0
+LOC1103000,Svensk Pommern,L941300,Svensk Pommern,exact,1.0
+LOC1103050,Sverrig,L941400,Sverrig,exact,1.0
+LOC1103100,Svindinge (Fyn),L946050,Svindinge(Fyn),folded,1.0
+LOC1103150,Sydamerika,L946550,Sydamerika,exact,1.0
+LOC1103200,Sydfrankrig,L946850,Sydfrankrig,exact,1.0
+LOC1103250,Sydtyskland,L946900,Sydtyskland,exact,1.0
+LOC1103300,Syke,L946950,Syke,exact,1.0
+LOC1103350,Syra,L947050,Syra,exact,1.0
+LOC1103400,Syrien,L947400,Syrien,exact,1.0
+LOC1103450,Széchenyi-Vejen,L947650,Széchenyi-Vejen,exact,1.0
+LOC1103500,Sztary-Szlankamen,L947700,Sztary-Szlankamen,exact,1.0
+LOC1103550,"Sæby, Løve H., Holbæk A.",L947750,"Sæby, Løve H., Holbæk A",folded,1.0
+LOC1103600,Säfsjö,L947950,Säfsjö,exact,1.0
+LOC1103650,Sävo Sund (Sävsund),L948000,Sävo Sund (Sävsund),exact,1.0
+LOC1103700,"Søbygaard, Søby S., Gjern H.",L948050,"Søbygaard, Søby S., Gjern H",folded,1.0
+LOC1103750,Søbygaards Sø,L948100,Søbygaards Sø,exact,1.0
+LOC1103800,Söderkoping,L948150,Söderkoping,exact,1.0
+LOC1103850,Södertelge,L948350,Södertelge,exact,1.0
+LOC1103900,Søllerod Sø,L949700,Søllerod Sø,exact,1.0
+LOC1103950,Søllerød,L948500,Søllerød,exact,1.0
+LOC1104000,Sølyst,L949950,Sølyst,exact,1.0
+LOC1104050,Sønderborg,L950100,Sønderborg,exact,1.0
+LOC1104100,Søndermarken,L950850,Søndermarken,exact,1.0
+LOC1104150,Sörby,L950900,Sörby,exact,1.0
+LOC1104200,Saal,L859150,Saal,exact,1.0
+LOC1104250,Saale,L859200,Saale,exact,1.0
+LOC1104300,Saane (Sarine),L859350,Saane (Sarine),exact,1.0
+LOC1104350,Saarbrücken,L859450,Saarbrücken,exact,1.0
+LOC1104400,Tajo (Tejo),L951850,Tajo (Tejo),exact,1.0
+LOC1104450,Talavera de la Reyna,L952850,Talavera de la Reyna,exact,1.0
+LOC1104500,Talfers,L952900,Talfers,exact,1.0
+LOC1104550,Tamina,L952950,Tamina,exact,1.0
+LOC1104600,Tanger,L953150,Tanger,exact,1.0
+LOC1104650,Tangermünde,L954350,Tangermünde,exact,1.0
+LOC1104700,Tarascon,L954400,Tarascon,exact,1.0
+LOC1104750,Tarasp,L954450,Tarasp,exact,1.0
+LOC1104800,Tarifa,L954600,Tarifa,exact,1.0
+LOC1104850,Tasching-See,L954750,Tasching-See,exact,1.0
+LOC1104900,Tatra,L954800,Tatra,exact,1.0
+LOC1104950,Tavernelle,L954850,Tavernelle,exact,1.0
+LOC1105000,Teglgaarden,L954900,Teglgaarden,exact,1.0
+LOC1105050,Teheran,L956400,Teheran,exact,1.0
+LOC1105100,Tells Kapel,L956450,Tells Kapel,exact,1.0
+LOC1105150,Tellsplatte,L956700,Tellsplatte,exact,1.0
+LOC1105200,Tem,L956800,Tem,exact,1.0
+LOC1105250,Temesvár,L956900,Temesvár,exact,1.0
+LOC1105300,Tempe,L956950,Tempe,exact,1.0
+LOC1105350,Teplitz,L957000,Teplitz,exact,1.0
+LOC1105400,Terni,L957750,Terni,exact,1.0
+LOC1105450,Terracina,L957900,Terracina,exact,1.0
+LOC1105500,Tessin (Ticino),L958250,Tessin (Ticino),exact,1.0
+LOC1105550,Tetschen,L958300,Tetschen,exact,1.0
+LOC1105600,Tetuan,L958450,Tetuan,exact,1.0
+LOC1105650,Teufelsbrücke (i Sachsisk Schweiz),L958750,Teufelsbrücke (i Sachsisk Schweiz),exact,1.0
+LOC1105700,Teufelsmauer,L958800,Teufelsmauer,exact,1.0
+LOC1105750,Teufelsstein (i Reuss-Dalen),L958850,Teufelsstein (i Reuss-Dalen),exact,1.0
+LOC1105800,Teulelsbrücke (i Reuss-Dalen),L958550,Teulelsbrücke (i Reuss-Dalen),exact,1.0
+LOC1105850,Teutschen,L958900,Teutschen,exact,1.0
+LOC1105900,Teverone,L958950,Teverone,exact,1.0
+LOC1105950,Texas,L959000,Texas,exact,1.0
+LOC1106000,Tharandt,L959100,Tharandt,exact,1.0
+LOC1106050,Theben (Dĕvín),L959750,Theben (Dĕvin),folded,1.0
+LOC1106100,Theben (Grækenland),L959650,Theben (Grækenland),exact,1.0
+LOC1106200,Themsen,L959850,Themsen,exact,1.0
+LOC1106350,Theresienstadt,L960250,Theresienstadt,exact,1.0
+LOC1106400,Thessalien,L960300,Thessalien,exact,1.0
+LOC1106450,Thiedenwiese,L960400,Thiedenwiese,exact,1.0
+LOC1106500,Thisted,L960450,Thisted,exact,1.0
+LOC1106550,Thun,L961000,Thun,exact,1.0
+LOC1106600,Thuner-Søen,L961400,Thuner-Søen,exact,1.0
+LOC1106700,Thurø,L962000,Thurø,exact,1.0
+LOC1106750,Tiaras,L962100,Tiaras,exact,1.0
+LOC1106800,Tiberen,L962150,Tiberen,exact,1.0
+LOC1106850,Tiberøen,L963250,Tiberøen,exact,1.0
+LOC1106900,Tiefurt,L963350,Tiefurt,exact,1.0
+LOC1106950,Tifis,L963450,Tifis,exact,1.0
+LOC1107000,"Tindebjerget, Silkeborg",L963500,"Tindebjerget, Silkeborg",exact,1.0
+LOC1107050,Tinos,L963550,Tinos,exact,1.0
+LOC1107100,Tissø,L963700,Tissø,exact,1.0
+LOC1107150,Tiszovicza,L963850,Tiszovicza,exact,1.0
+LOC1107200,Tivoli (ved Rom),L963900,Tivoli (ved Rom),exact,1.0
+LOC1107250,Tjele,L964350,Tjele,exact,1.0
+LOC1107300,Tjæreby,L964450,Tjæreby,exact,1.0
+LOC1107350,Toledo,L964550,Toledo,exact,1.0
+LOC1107400,Tolentino,L965050,Tolentino,exact,1.0
+LOC1107450,Tomba di Nerone,L965100,Tomba di Nerone,exact,1.0
+LOC1107500,"Toppö, Trollhättan",L965200,"Toppö, Trollhättan",exact,1.0
+LOC1107550,Torino,L965250,Torino,exact,1.0
+LOC1107600,Torpa,L965900,Torpa,exact,1.0
+LOC1107650,Torquay,L966050,Torquay,exact,1.0
+LOC1107700,Torre Annunziata,L966500,Torre Annunziata,exact,1.0
+LOC1107800,Torre di tre Ponti,L966700,Torre di tre Ponti,exact,1.0
+LOC1107850,Torrenieri,L966750,Torrenieri,exact,1.0
+LOC1107900,Torup,L966800,Torup,exact,1.0
+LOC1107950,Tostedt,L966900,Tostedt,exact,1.0
+LOC1108000,Toul,L966950,Toul,exact,1.0
+LOC1108050,Toulon,L967000,Toulon,exact,1.0
+LOC1108100,Toulouse,L967350,Toulouse,exact,1.0
+LOC1108150,"Tour de Pelz, La",L967400,"Tour de Pelz, La",exact,1.0
+LOC1108200,Tours,L967450,Tours,exact,1.0
+LOC1108250,Trafalgar,L967750,Trafalgar,exact,1.0
+LOC1108300,Trajans Mur,L967800,Trajans Mur,exact,1.0
+LOC1108350,Trajans Tavle,L967850,Trajans Tavle,exact,1.0
+LOC1108400,Trankebar,L967900,Trankebar,exact,1.0
+LOC1108450,Trapezunt,L967950,Trapezunt,exact,1.0
+LOC1108500,Trasimener-Søen,L968050,Trasimener-Søen,exact,1.0
+LOC1108550,Traun,L968150,Traun,exact,1.0
+LOC1108600,Trave,L968300,Trave,exact,1.0
+LOC1108650,Travemünde,L968450,Travemünde,exact,1.0
+LOC1108700,Trekroner,L968600,Trekroner,exact,1.0
+LOC1108750,Treuenbrietzen,L968850,Treuenbrietzen,exact,1.0
+LOC1108800,Trient (Trento),L968900,Trient (Trento),exact,1.0
+LOC1108850,Trier,L969100,Trier,exact,1.0
+LOC1108900,Triest,L969250,Triest,exact,1.0
+LOC1108950,Trinity (ved Edinburgh),L969800,Trinity (ved Edinburgh),exact,1.0
+LOC1109000,Tripolis,L970150,Tripolis,exact,1.0
+LOC1109050,Troia (Cetobriga),L970200,Troia (Cetobriga),exact,1.0
+LOC1109100,Trojasletten,L970400,Trojasletten,exact,1.0
+LOC1109150,Trollhättan,L970550,Trollhättan,exact,1.0
+LOC1109200,Trondhjem,L971550,Trondhjem,exact,1.0
+LOC1109250,Tropea,L971700,Tropea,exact,1.0
+LOC1109300,Trujillo,L971750,Trujillo,exact,1.0
+LOC1109350,Tunbridge,L971850,Tunbridge,exact,1.0
+LOC1109400,Tunis,L971950,Tunis,exact,1.0
+LOC1109450,Turbia (La Turbie),L972050,Turbia (La Turbie),exact,1.0
+LOC1109500,Turnau,L972100,Turnau,exact,1.0
+LOC1109550,Tusculum,L972150,Tusculum,exact,1.0
+LOC1109600,Tuturcan (Turtucaia),L972200,Tuturcan (Turtucaia),exact,1.0
+LOC1109650,Tweed,L972300,Tweed,exact,1.0
+LOC1109700,Tübingen,L972400,Tübingen,exact,1.0
+LOC1109750,Tyrifjord,L972450,Tyrifjord,exact,1.0
+LOC1109800,Tyrkiet,L972500,Tyrkiet,exact,1.0
+LOC1109850,Tyrol,L972650,Tyrol,exact,1.0
+LOC1109900,Tyskland,L973300,Tyskland,exact,1.0
+LOC1109950,"Tøien, Christiania",L976350,"Tøien, Christiania",exact,1.0
+LOC1110000,Tønder,L976900,Tønder,exact,1.0
+LOC1110050,Tåkern,L950950,Tåkern,exact,1.0
+LOC1110100,Taarbæk,L951000,Taarbæk,exact,1.0
+LOC1110150,Taasinge (Thorseng),L951450,Taasinge (Thorseng),exact,1.0
+LOC1110200,Taastrup,L951750,Taastrup,exact,1.0
+LOC1110250,Uddevalla,L976950,Uddevalla,exact,1.0
+LOC1110300,Ulfåsa,L977000,Ulfåsa,exact,1.0
+LOC1110350,Ulkebøl,L977100,Ulkebøl,exact,1.0
+LOC1110400,Ulm,L977200,Ulm,exact,1.0
+LOC1110450,Ulriksdal,L977300,Ulriksdal,exact,1.0
+LOC1110500,Ulse,L977550,Ulse,exact,1.0
+LOC1110550,Ulse Sø,L977600,Ulse Sø,exact,1.0
+LOC1110600,Ulvborg,L977750,Ulvborg,exact,1.0
+LOC1110650,Ungarn,L977800,Ungarn,exact,1.0
+LOC1110700,Untersendling,L978600,Untersendling,exact,1.0
+LOC1110750,Uppsala,L978650,Uppsala,exact,1.0
+LOC1110800,Uri-Rothstock,L981150,Uri-Rothstock,exact,1.0
+LOC1110850,Urup,L981250,Urup,exact,1.0
+LOC1110900,Utrecht,L981300,Utrecht,exact,1.0
+LOC1110950,Uttewalder Grund,L982000,Uttewalder Grund,exact,1.0
+LOC1111000,Vadstena,L982050,Vadstena,exact,1.0
+LOC1111050,Vaksala,L982250,Vaksala,exact,1.0
+LOC1111100,Val de Travers,L982350,Val de Travers,exact,1.0
+LOC1111150,Valakiet,L982400,Valakiet,exact,1.0
+LOC1111200,Valby,L982700,Valby,exact,1.0
+LOC1111250,Valcimarra,L982750,Valcimarra,exact,1.0
+LOC1111300,Valence,L982800,Valence,exact,1.0
+LOC1111350,Valencia,L983000,Valencia,exact,1.0
+LOC1111400,Valenciennes,L983400,Valenciennes,exact,1.0
+LOC1111450,Valladolid,L983500,Valladolid,exact,1.0
+LOC1111500,"Valletta, La",L983550,"Valletta, La",exact,1.0
+LOC1111550,Vallø,L983700,Vallø,exact,1.0
+LOC1111600,Valparaiso,L984100,Valparaiso,exact,1.0
+LOC1111650,Vamdrup,L984150,Vamdrup,exact,1.0
+LOC1111700,Van Diemens Land (=Tasmanien),L984250,Van Diemens Land (=Tasmanien),exact,1.0
+LOC1111750,Varberg,L984300,Varberg,exact,1.0
+LOC1111800,Varde,L984450,Varde,exact,1.0
+LOC1111850,Vardøhus,L984500,Vardøhus,exact,1.0
+LOC1111900,Vasto,L984550,Vasto,exact,1.0
+LOC1111950,Vattholma Bruk,L984600,Vattholma Bruk,exact,1.0
+LOC1112000,Vaucluse,L984650,Vaucluse,exact,1.0
+LOC1112050,Vaud (Kanton),L984700,Vaud (Kanton),exact,1.0
+LOC1112100,Vedbygaard,L984750,Vedbygaard,exact,1.0
+LOC1112150,Vedbæk,L984800,Vedbæk,exact,1.0
+LOC1112200,Vedersø,L985050,Vedersø,exact,1.0
+LOC1112250,Vejle,L985100,Vejle,exact,1.0
+LOC1112300,Velino,L986150,Velino,exact,1.0
+LOC1112350,Velletri,L986200,Velletri,exact,1.0
+LOC1112450,Vemmetofte,L986450,Vemmetofte,exact,1.0
+LOC1112500,Vendsyssel,L986700,Vendsyssel,exact,1.0
+LOC1112550,Venek,L986750,Venek,exact,1.0
+LOC1112600,Venern,L986800,Venern,exact,1.0
+LOC1112650,Venersborg,L987350,Venersborg,exact,1.0
+LOC1112700,Venetien,L987900,Venetien,exact,1.0
+LOC1112750,Venezia,L987950,Venezia,exact,1.0
+LOC1112800,"Ventegodt, Avlsgaard ved Løgten, København",L989850,"Ventegodt, Avlsgaard ved Løgten, København",exact,1.0
+LOC1112850,"Verlorne Loch, das",L989900,"Verlorne Loch, das",exact,1.0
+LOC1112900,Vermland,L989950,Vermland,exact,1.0
+LOC1112950,Vernet,L990000,Vernet,exact,1.0
+LOC1113000,Vernex,L990350,Vernex,exact,1.0
+LOC1113050,Verona,L991100,Verona,exact,1.0
+LOC1113100,Versailles,L991900,Versailles,exact,1.0
+LOC1113150,Verviers,L992650,Verviers,exact,1.0
+LOC1113200,Vest-Amerika,L992700,Vest-Amerika,exact,1.0
+LOC1113250,Vestergötland,L992950,Vestergötland,exact,1.0
+LOC1113300,Vesterhavet,L993050,Vesterhavet,exact,1.0
+LOC1113350,Vestervig,L993950,Vestervig,exact,1.0
+LOC1113400,Vestervik,L994000,Vestervik,exact,1.0
+LOC1113450,Vesterås,L992850,Vesterås,exact,1.0
+LOC1113500,Vestindien (dansk),L994050,Vestindien (dansk),exact,1.0
+LOC1113550,Vestjylland,L995500,Vestjylland,exact,1.0
+LOC1113600,Vesuv,L995650,Vesuv,exact,1.0
+LOC1113650,Veteranis Hule,L998000,Veteranis Hule,exact,1.0
+LOC1113700,Vettern,L998050,Vettern,exact,1.0
+LOC1113750,Vevey,L998750,Vevey,exact,1.0
+LOC1113800,Vexiö,L1000200,Vexiö,exact,1.0
+LOC1113850,Via Appia,L1000250,Via Appia,exact,1.0
+LOC1113900,Via mala,L1000500,Via mala,exact,1.0
+LOC1113950,Via Tiburtina,L1000650,Via Tiburtina,exact,1.0
+LOC1114000,Viborg,L1000700,Viborg,exact,1.0
+LOC1114050,Viby Sj.,L1001400,Viby Sj,folded,1.0
+LOC1114100,Vicenza,L1001450,Vicenza,exact,1.0
+LOC1114150,Vichy,L1001650,Vichy,exact,1.0
+LOC1114200,Vico Equense,L1001750,Vico Equense,exact,1.0
+LOC1114250,Vidskølle,L1001800,Vidskølle,exact,1.0
+LOC1114300,Vienenburg,L1001850,Vienenburg,exact,1.0
+LOC1114350,Vienne,L1001900,Vienne,exact,1.0
+LOC1114400,Vierlandene,L1002000,Vierlandene,exact,1.0
+LOC1114450,Vierwaldstätter-Søen,L1002100,Vierwaldstätter-Søen,exact,1.0
+LOC1114500,Vietri sul mare,L1002950,Vietri sul mare,exact,1.0
+LOC1114550,Vig,L1003000,Vig,exact,1.0
+LOC1114600,Viken,L1003050,Viken,exact,1.0
+LOC1114650,Villa Adriana,L1003100,Villa Adriana,exact,1.0
+LOC1114700,Villafranca,L1003150,Villafranca,exact,1.0
+LOC1114750,Villanuova,L1003450,Villanuova,exact,1.0
+LOC1114800,Villefranche (Pyrénées-Orientales),L1003500,Villefranche (Pyrénées-Orientales),exact,1.0
+LOC1114850,Villeneuve (ved Genfersøen),L1003550,Villeneuve (ved Genfersøen),exact,1.0
+LOC1114900,Vincennes,L1003850,Vincennes,exact,1.0
+LOC1114950,Visborg Ruin,L1004000,Visborg Ruin,exact,1.0
+LOC1115000,Višegrad,L1004050,Visegrad,folded,1.0
+LOC1115050,Vissenbjerg,L1004100,Vissenbjerg,exact,1.0
+LOC1115100,Viterbo,L1004150,Viterbo,exact,1.0
+LOC1115150,Viznau,L1004200,Viznau,exact,1.0
+LOC1115200,Vogeserne,L1004250,Vogeserne,exact,1.0
+LOC1115250,Voghera,L1004450,Voghera,exact,1.0
+LOC1115300,Vojens,L1004550,Vojens,exact,1.0
+LOC1115350,Voldbjerg,L1004650,Voldbjerg,exact,1.0
+LOC1115400,Volsker-Bjergene,L1004700,Volsker-Bjergene,exact,1.0
+LOC1115450,Vordingborg,L1004800,Vordingborg,exact,1.0
+LOC1115500,Vouga,L1005250,Vouga,exact,1.0
+LOC1115550,Vresen,L1005300,Vresen,exact,1.0
+LOC1115600,Vreta Klosterkirke,L1005350,Vreta Klosterkirke,exact,1.0
+LOC1115650,Vretstorp,L1005500,Vretstorp,exact,1.0
+LOC1115700,Vuka,L1005550,Vuka,exact,1.0
+LOC1115750,Vukovar,L1005600,Vukovar,exact,1.0
+LOC1115800,Vöcklabruck,L1005650,Vöcklabruck,exact,1.0
+LOC1115850,Wabern,L1005750,Wabern,exact,1.0
+LOC1115900,"Wahrendorf, Holsten",L1005800,"Wahrendorf, Holsten",exact,1.0
+LOC1115950,Waizen (Vać),L1005850,Waizen (Vać),exact,1.0
+LOC1116000,Walchersee,L1005950,Walchersee,exact,1.0
+LOC1116050,Waldheim,L1006000,Waldheim,exact,1.0
+LOC1116100,Wales,L1006050,Wales,exact,1.0
+LOC1116150,Walhalla (ved Regensburg),L1006100,Walhalla (ved Regensburg),exact,1.0
+LOC1116200,Wallenstadter-Søen (Wallen-See),L1006200,Wallenstadter-Søen (Wallen-See),exact,1.0
+LOC1116250,Wallersee,L1006400,Wallersee,exact,1.0
+LOC1116300,Wandsbeck,L1006450,Wandsbeck,exact,1.0
+LOC1116350,Warden,L1006550,Warden,exact,1.0
+LOC1116400,Warnow,L1006600,Warnow,exact,1.0
+LOC1116500,Wartburg,L1006850,Wartburg,exact,1.0
+LOC1116550,"Wartenstein, Ragatz",L1007400,"Wartenstein, Ragatz",exact,1.0
+LOC1116600,Washington,L1007550,Washington,exact,1.0
+LOC1116650,Wasserburg,L1007800,Wasserburg,exact,1.0
+LOC1116700,Weimar,L1007850,Weimar,exact,1.0
+LOC1116750,"Weissenburg, Bayern",L1013500,"Weissenburg, Bayern",exact,1.0
+LOC1116800,Weissenfels,L1013550,Weissenfels,exact,1.0
+LOC1116850,Weisseritz (die wilde),L1013700,Weisseritz (die wilde),exact,1.0
+LOC1116900,Weitenegg,L1013750,Weitenegg,exact,1.0
+LOC1116950,Wels,L1013800,Wels,exact,1.0
+LOC1117000,Weltrus,L1013900,Weltrus,exact,1.0
+LOC1117050,Werden,L1013950,Werden,exact,1.0
+LOC1117100,Werra,L1014000,Werra,exact,1.0
+LOC1117150,"Wesen, Schweiz",L1014150,"Wesen, Schweiz",exact,1.0
+LOC1117200,Wesenstein,L1014300,Wesenstein,exact,1.0
+LOC1117250,Weser,L1014550,Weser,exact,1.0
+LOC1117300,Westfalen,L1014600,Westfalen,exact,1.0
+LOC1117350,Wetterhorn,L1014950,Wetterhorn,exact,1.0
+LOC1117400,Widdin (Vidin),L1015200,Widdin (Vidin),exact,1.0
+LOC1117450,Wien,L1015350,Wien,exact,1.0
+LOC1117500,Wien (Floden),L1022900,Wien (Floden),exact,1.0
+LOC1117550,Wiener Neustadt,L1022950,Wiener Neustadt,exact,1.0
+LOC1117600,Wiesbaden,L1023000,Wiesbaden,exact,1.0
+LOC1117650,Wiesenstein,L1023450,Wiesenstein,exact,1.0
+LOC1117700,Wight,L1023500,Wight,exact,1.0
+LOC1117750,Wildbad,L1023600,Wildbad,exact,1.0
+LOC1117800,Wilhelmshöhe,L1024250,Wilhelmshöhe,exact,1.0
+LOC1117900,"Willenscharen, Holsten",L1025150,"Willenscharen, Holsten",exact,1.0
+LOC1117950,Windsor,L1025200,Windsor,exact,1.0
+LOC1118000,Winsen,L1025250,Winsen,exact,1.0
+LOC1118050,Winterberg (ved Wien),L1025300,Winterberg (ved Wien),exact,1.0
+LOC1118150,"Winterberg, Kleiner",L1025400,"Winterberg, Kleiner",exact,1.0
+LOC1118200,Winterthur,L1025450,Winterthur,exact,1.0
+LOC1118250,Wismar,L1025600,Wismar,exact,1.0
+LOC1118300,Wittenberg,L1025700,Wittenberg,exact,1.0
+LOC1118350,Wittenberge,L1025750,Wittenberge,exact,1.0
+LOC1118400,Woigwitz,L1026000,Woigwitz,exact,1.0
+LOC1118450,Wolfenbüttel,L1026050,Wolfenbüttel,exact,1.0
+LOC1118500,Worms,L1026150,Worms,exact,1.0
+LOC1118550,Wusterhausen an der Dosse,L1026200,Wusterhausen an der Dosse,exact,1.0
+LOC1118600,Wustermark,L1026250,Wustermark,exact,1.0
+LOC1118650,Wyk,L1026300,Wyk,exact,1.0
+LOC1118700,Würmsee (Starnberger See),L1026950,Würmsee (Starnberger See),exact,1.0
+LOC1118750,Württemberg,L1027000,Württemberg,exact,1.0
+LOC1118800,Würzburg,L1027300,Würzburg,exact,1.0
+LOC1118850,Wäggis,L1027450,Wäggis,exact,1.0
+LOC1118900,Währing,L1027550,Währing,exact,1.0
+LOC1118950,Waadt (Kanton),L1005700,Waadt (Kanton),exact,1.0
+LOC1119000,Xenil,L1027600,Xenil,exact,1.0
+LOC1119050,Ybbs,L1027750,Ybbs,exact,1.0
+LOC1119100,Ülzen,L1027800,Ülzen,exact,1.0
+LOC1119150,York,L1028050,York,exact,1.0
+LOC1119200,Ystad,L1028250,Ystad,exact,1.0
+LOC1119250,Yverdon,L1028300,Yverdon,exact,1.0
+LOC1119300,Zehlendorf,L1028500,Zehlendorf,exact,1.0
+LOC1119350,Ziegenhain (ved Jena),L1028550,Ziegenhain (ved Jena),exact,1.0
+LOC1119400,Znaim,L1028600,Znaim,exact,1.0
+LOC1119450,Zug,L1028800,Zug,exact,1.0
+LOC1119500,Zugersee,L1029000,Zugersee,exact,1.0
+LOC1119550,Zuidersøen,L1028750,Zuidersøen,exact,1.0
+LOC1119600,Zwickau,L1029150,Zwickau,exact,1.0
+LOC1119650,Zürich,L1029300,Zürich,exact,1.0
+LOC1119700,Züricher-Søen,L1030200,Züricher-Søen,exact,1.0
+LOC1119750,Æbelø,L1030650,Æbelø,exact,1.0
+LOC1119800,"Æble, Frørup S.",L1030700,"Æble, Frørup S",folded,1.0
+LOC1119850,Ægina (Aigina),L1030800,Ægina (Aigina),exact,1.0
+LOC1119900,Ægypten,L1031050,Ægypten,exact,1.0
+LOC1119950,Ækvator,L1031750,Ækvator,exact,1.0
+LOC1120000,Älgsjön,L1031800,Älgsjön,exact,1.0
+LOC1120050,Ærø,L1031850,Ærø,exact,1.0
+LOC1120100,Ättestupa,L1031900,Ättestupa,exact,1.0
+LOC1120150,Øksendrup,L1032050,Øksendrup,exact,1.0
+LOC1120200,"Øland, Limfjorden",L1032100,"Øland, Limfjorden",exact,1.0
+LOC1120250,Örbyhus,L1032200,Örbyhus,exact,1.0
+LOC1120300,Ørbæk,L1032250,Ørbæk,exact,1.0
+LOC1120350,Ørbæklunde,L1032300,Ørbæklunde,exact,1.0
+LOC1120400,Örebro,L1032900,Örebro,exact,1.0
+LOC1120450,Øresund,L1033050,Øresund,exact,1.0
+LOC1120500,Ørslev,L1035350,Ørslev,exact,1.0
+LOC1120550,Östa (Ösby),L1035450,Östa (Ôsby),folded,1.0
+LOC1120600,Österby,L1035500,Österby,exact,1.0
+LOC1120650,Østersøen,L1035550,Østersøen,exact,1.0
+LOC1120700,Østrig,L1035900,Østrig,exact,1.0
+LOC1120750,Øverød,L1036500,Øverød,exact,1.0
+LOC1120800,Øvre Stolk,L1036600,Øvre Stolk,exact,1.0
+LOC1120850,Aabenraa,L100000,Aabenraa,exact,1.0
+LOC1120900,Aachen,L100500,Aachen,exact,1.0
+LOC1120950,Aagaard,L101050,Aagaard,exact,1.0
+LOC1121000,Åkerström,L101150,Akerström,folded,1.0
+LOC1121050,Aakjær,L101200,Aakjær,exact,1.0
+LOC1121100,Aalborg,L101250,Aalborg,exact,1.0
+LOC1121150,Aalbæk,L106250,Aalbæk,exact,1.0
+LOC1121200,Aalesund,L106300,Aalesund,exact,1.0
+LOC1121250,Aalsgaarde,L106350,Aalsgaarde,exact,1.0
+LOC1121300,Aare,L106500,Aare,exact,1.0
+LOC1121350,Aarhus,L106650,Aarhus,exact,1.0
+LOC1121400,Årsta,L109500,Årsta,exact,1.0
+LOC1121450,Aarup,L109600,Aarup,exact,1.0
+LOC1121500,Aarøsund,L109650,Aarøsund,exact,1.0
+LOC1121550,"Aasen, Silkeborg",L109950,"Aasen, Silkeborg",exact,1.0
+LOC1121600,Aastrup,L110000,Aastrup,exact,1.0
+LOC1000200,Adelsberg (Adlersberg?),,,new,0
+LOC1004250,Arles,,,new,0
+LOC1006900,Basel,,,new,0
+LOC1008500,Benfica,,,new,0
+LOC1010350,Björkö (i Mälaren),,,new,0
+LOC1010850,Boccano (Baccano?),L193600,Boecano (Baccano?),fuzzy,0.933
+LOC1010950,Bodenbach,L193800,Bodenhach,fuzzy,0.889
+LOC1018050,"Cathrineholm, Krummerup S., Øster-Flakkebjerg H.",L233950,"Cathrinebolm, Krummerup S., Øster-Flakkebjerg H",fuzzy,0.977
+LOC1019000,Châtelet,,,new,0
+LOC1019450,Chillon,,,new,0
+LOC1023350,Delphi,,,new,0
+LOC1023650,Deutz,,,new,0
+LOC1024500,Dornburg,,,new,0
+LOC1025050,Drottningholm,L285050,Drottningholro,fuzzy,0.889
+LOC1027000,Elbekosteletz,L292600,Elbekostele1z,fuzzy,0.923
+LOC1031250,Flensborg Fjord,,,new,0
+LOC1031950,Frankenmarkt,L323150,Frankeomarkt,fuzzy,0.917
+LOC1033300,Frohnalp,,,new,0
+LOC1034200,Gad's Hill Place,,,new,0
+LOC1035350,Gent,,,new,0
+LOC1036950,Goor,,,new,0
+LOC1038450,"Gullkroken, Vestergötland",L382050,"Cullkroken, Vesteegötland",fuzzy,0.917
+LOC1038500,Guntershausen,L382100,Cuntershausen,fuzzy,0.923
+LOC1039450,Hallsberg,L390700,Hallsbeeg,fuzzy,0.889
+LOC1040500,Havel,,,new,0
+LOC1040950,Heiligenstedten,L413900,Heiligeostedten,fuzzy,0.933
+LOC1042400,Hestehaven,L425850,Hestebaven,fuzzy,0.9
+LOC1042650,Higham,,,new,0
+LOC1048700,Josephsdorf,L465800,Jooephsdorf,fuzzy,0.909
+LOC1049350,Kalby Ris,L471750,Kaiby Ris,fuzzy,0.889
+LOC1051200,Kirkcaldy,L482450,Kirkealdy,fuzzy,0.889
+LOC1053050,"Kreischa, Bad",L496350,"Kreiseha, Bad",fuzzy,0.917
+LOC1053100,Krempe,,,new,0
+LOC1053550,Kufstein,,,new,0
+LOC1053700,Kullen,,,new,0
+LOC1055800,Languedoc-Kanalen (Canal du Midi),L599650,Languedoc-Kanalen (Cana1 du Midi),fuzzy,0.968
+LOC1061150,Löfsta Bruk,L644400,Löfsta Brok,fuzzy,0.909
+LOC1063750,Marstrand,,,new,0
+LOC1064700,"Melk, Stift",L663400,"Meik, Stift",fuzzy,0.9
+LOC1067050,Monte Somma,,,new,0
+LOC1068050,Mosel,,,new,0
+LOC1068600,Müglitz,,,new,0
+LOC1076150,Oskarshal,L750550,Oskarsbal,fuzzy,0.889
+LOC1076550,Otricoli,,,new,0
+LOC1079800,Pianoro,,,new,0
+LOC1083050,Quebec,,,new,0
+LOC1084850,Regenstein,L803250,Regeostein,fuzzy,0.9
+LOC1084900,Reichenau,L803350,Reiehenau,fuzzy,0.889
+LOC1085400,"Rheinstein, Burg",L805850,"Rhein stein, Burg",fuzzy,0.968
+LOC1090150,Saint-Cloud,L860850,Saint-Cioud,fuzzy,0.909
+LOC1090450,Saint-Quentin,L861700,Saint-Queotin,fuzzy,0.923
+LOC1093500,Seefeld,,,new,0
+LOC1094500,Schwarzwald,,,new,0
+LOC1099350,Sorrento,,,new,0
+LOC1099450,Sortehavet,L909650,Sortehave1,fuzzy,0.9
+LOC1102550,Stångån,,,new,0
+LOC1106150,Theiss (Tisza),L959800,Theiss (Tizza),fuzzy,0.917
+LOC1106250,Therapia,,,new,0
+LOC1106300,Theresiensprung (ved Maxen),L960200,Thereaiemprung (ved Maxen),fuzzy,0.898
+LOC1106650,Thurebyholm,L961800,Thurebybolm,fuzzy,0.909
+LOC1107750,Torre del Greco,L966600,Torre del Greeo,fuzzy,0.933
+LOC1112400,"Velo, Hadeland",L986400,"Velo, Hadefand",fuzzy,0.923
+LOC1116450,Warszava,,,new,0
+LOC1117850,Wilhelmsthal,L1024600,Wilbelmsthal,fuzzy,0.917
+LOC1118100,"Winterberg, Grosser",L1025350,"Winterberg, Crosser",fuzzy,0.944
+,,L110400,Adelsberg,old-only,0
+,,L144450,Aries,old-only,0
+,,L161000,Base1,old-only,0
+,,L178150,Bemfica,old-only,0
+,,L191950,Björkö,old-only,0
+,,L236500,Chåtdet,old-only,0
+,,L237300,chiavenna,old-only,0
+,,L237700,Cililion,old-only,0
+,,L267150,Delpbi,old-only,0
+,,L267900,Deurz,old-only,0
+,,L272550,Domburg,old-only,0
+,,L321200,Fleruborg Fjord,old-only,0
+,,L342250,Frobnalp,old-only,0
+,,L348850,Gad's Hil1 Plaee,old-only,0
+,,L360300,Cent,old-only,0
+,,L372900,Coor,old-only,0
+,,L412250,Have1,old-only,0
+,,L426450,Higharn,old-only,0
+,,L496550,Krernpe,old-only,0
+,,L497450,Kulstein,old-only,0
+,,L497800,Kulien,old-only,0
+,,L658000,Mantrand,old-only,0
+,,L678700,Monte Sorruna,old-only,0
+,,L682150,Mose1,old-only,0
+,,L684100,Müg11tz,old-only,0
+,,L751750,Otrieoli,old-only,0
+,,L780400,"Pianoro, I 392",old-only,0
+,,L797050,Quebee,old-only,0
+,,L874200,Schwanwald,old-only,0
+,,L879250,Scefeld,old-only,0
+,,L908400,Sonnenstcin,old-only,0
+,,L909150,Sorremo,old-only,0
+,,L921850,Ståogån,old-only,0
+,,L960150,Tberapia,old-only,0
+,,L1006650,Warszawa,old-only,0

@@ -112,6 +112,37 @@ def place_id(loc_id) -> str:
     return f"L{int(loc_id):05d}"
 
 
+V097_XLSX = ROOT / "data" / "raw" / "4-LOCATION-V0.97.xlsx"
+V097_XWALK = ROOT / "data" / "curated" / "place_v097_crosswalk.csv"
+
+
+def load_v097_overlay():
+    """V0.97 place records keyed by V0.92 entity_id (via the crosswalk from
+    place_v097_crosswalk.py), plus the V0.97-only places keyed by LOC id.
+    Returns ({L-id: rec}, [rec, …]); both empty if the files are missing."""
+    if not (V097_XLSX.exists() and V097_XWALK.exists()):
+        return {}, []
+    recs = {}
+    wb = load_workbook(V097_XLSX, read_only=True, data_only=True)
+    for r in wb["Location"].iter_rows(min_row=5, values_only=True):
+        if r[0]:
+            recs[r[0]] = {"id": r[0], "label": s(r[1]), "country": s(r[3]),
+                          "category": s(r[4]), "lat": r[5], "lon": r[6],
+                          "geo": s(r[7])}
+    wb.close()
+    mapped, new_only = {}, []
+    with V097_XWALK.open(encoding="utf-8", newline="") as f:
+        for x in csv.DictReader(f):
+            rec = recs.get(x["loc_id_v097"])
+            if not rec:
+                continue
+            if x["entity_id_v092"]:
+                mapped[x["entity_id_v092"]] = rec
+            else:
+                new_only.append(rec)
+    return mapped, new_only
+
+
 # Roman volume → integer for the Pag handle. V0.82's Pag convention uses
 # decimal volume numbers (Pag010001 = Vol I, page 1). Mirror that here so
 # downstream builders that expect Pag-handle padding still parse.
@@ -191,12 +222,18 @@ def build_entities():
             "person_derived": "",
         })
 
+    V097, V097_NEW = load_v097_overlay()
     for r in sheet_rows(FILES["factdim"], "DimLoc1"):
         loc_id = r.get("LocID")
         if loc_id is None:
             continue
         country = s(r.get("Country"))
         region = s(r.get("Region"))
+        ov = V097.get(place_id(loc_id))
+        if V097 and not ov:  # V0.92-only place: dropped, V0.97 is the base
+            continue
+        if ov:  # V0.97 is the base for place names/coords/category
+            country, region = ov["country"] or country, ov["category"]
         out.append({
             "entity_id":    place_id(loc_id),
             "entity_type":  "place",
@@ -204,7 +241,7 @@ def build_entities():
             "genre_h2":     "",
             "form_h3":      "",
             "subform_h4":   "",
-            "label":        s(r.get("LocationTitle")),
+            "label":        ov["label"] if ov else s(r.get("LocationTitle")),
             "description":  " · ".join([x for x in (country, region) if x]),
             "see":          "",
             "see_also":     "",
@@ -213,8 +250,21 @@ def build_entities():
             # Repurpose person_derived to carry lat,lon when present, so the
             # column isn't wasted on places. Documented in the diff doc.
             "person_derived": (
+                f"{ov['lat']},{ov['lon']}" if ov and ov["lat"] is not None else
                 f"{s(r.get('Lat'))},{s(r.get('Lon'))}" if r.get("Lat") else ""
             ),
+        })
+
+    # V0.97-only places (no V0.92 counterpart): keep their LOC id; no
+    # V0.92 page references exist for them.
+    for ov in V097_NEW:
+        out.append({
+            "entity_id": ov["id"], "entity_type": "place",
+            "category_h1": "STED-REGISTER", "genre_h2": "", "form_h3": "",
+            "subform_h4": "", "label": ov["label"],
+            "description": " · ".join(x for x in (ov["country"], ov["category"]) if x),
+            "see": "", "see_also": "", "year_derived": "", "date_derived": "",
+            "person_derived": f"{ov['lat']},{ov['lon']}" if ov["lat"] is not None else "",
         })
 
     return out
@@ -239,10 +289,11 @@ def build_references():
     for r in sheet_rows(FILES["factdim"], "DimPer1"):
         per_labels[r["PerID"]] = s(r.get("RegistryTitle"))
 
-    # Place labels
+    # Place labels (V0.97 names where mapped)
+    V097, _ = load_v097_overlay()
     loc_labels = {}
     for r in sheet_rows(FILES["factdim"], "DimLoc1"):
-        loc_labels[r["LocID"]] = s(r.get("LocationTitle"))
+        loc_labels[r["LocID"]] = (V097.get(place_id(r["LocID"])) or {}).get("label") or s(r.get("LocationTitle"))
 
     out = []
     seq_counter = {}   # page_id → running per-page seq
@@ -271,6 +322,8 @@ def build_references():
         dia_pag_id = r.get("DiaPagID")
         loc_id = r.get("LocID")
         if dia_pag_id not in page_index or loc_id is None:
+            continue
+        if V097 and place_id(loc_id) not in V097:  # dropped V0.92-only place
             continue
         vol_roman, page_ref = page_index[dia_pag_id]
         emit(page_handle(vol_roman, page_ref), vol_roman, page_ref,
