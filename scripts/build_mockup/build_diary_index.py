@@ -2,8 +2,8 @@
 """
 Build compact JS index files that wire the register pages to diary pages.
 
-The mockup is opened from the file:// protocol (see CLAUDE.md, the CARTO
-tile note), where fetch() of JSON is blocked by the browser. So — exactly
+The mockup is opened from the file:// protocol (see CLAUDE.md, the
+Kortvisning note), where fetch() of JSON is blocked by the browser. So — exactly
 like mockup/data/works-extra.js — this emits *.js files that define global
 constants loaded with a plain <script> tag.
 

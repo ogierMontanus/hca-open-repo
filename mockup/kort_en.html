@@ -126,6 +126,8 @@
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
   crossorigin=""></script>
+<script src="vendor/basemap/basemap-world.js"></script>
+<script src="js/basemap.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
 (function () {
@@ -207,14 +209,9 @@
     });
   }
 
-  // CARTO Voyager tiles per CLAUDE.md (osm tile policy blocks file:// loads).
+  // Offline Natural Earth basemap (js/basemap.js) — no tile server needed.
   var map = L.map('kort-map', { worldCopyJump: true });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19,
-    referrerPolicy: 'strict-origin-when-cross-origin'
-  }).addTo(map);
+  HcaBasemap.addTo(map);
 
   // Cluster group with default Leaflet.markercluster behaviour: numerals
   // indicate the count, and clicking a cluster zooms in until its members

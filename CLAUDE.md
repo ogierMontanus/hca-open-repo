@@ -78,33 +78,34 @@ Wikidata-badges.
 
 ---
 
-## Kortvisning — kortfliser via CARTO
+## Kortvisning — offline Natural Earth-basiskort (ingen flise-server)
 
-**Brugerpræference (2026-06-03):** Alle Leaflet-visninger (i `mockup/`,
-`web/` og senere implementeringer) bruger **CARTO Voyager** som
-flise-leverandør:
+**Brugerpræference (2026-10-02, erstatter CARTO-præferencen fra
+2026-06-03):** Alle Leaflet-visninger bruger det **vendorede
+vektor-basiskort** i repoet — ingen fjern-flise-leverandør:
 
-```
-https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png
-```
-
-med `subdomains: 'abcd'`, `maxZoom: 19` og attribution
-
-```
-&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
-contributors &copy; <a href="https://carto.com/attributions">CARTO</a>
+```html
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="vendor/basemap/basemap-world.js"></script>
+<script src="js/basemap.js"></script>
+…
+var map = L.map('…');
+HcaBasemap.addTo(map);   // i stedet for L.tileLayer(...)
 ```
 
-**Begrundelse.** OpenStreetMap's frivilligt-drevne fliseservere
-(`tile.openstreetmap.org`) kræver en `Referer`-header per deres
-tile-usage-policy og blokerer requests uden en — også fra `file://`
-loads — med en 403r "Access blocked"-overlay (se `osm.wiki/Blocked`).
-CARTO's CDN leverer de samme OSM-data uden Referer-krav og fungerer
-derfor under både `file://` og senere HTTP-hosting.
+Data: Natural Earth (public domain) — 1:50m verden (`basemap-world.js`)
+og 1:10m Europa/Middelhavet (`basemap-europe.js`, lazy-loades ved
+zoom ≥ 5). Bygges én gang med `python scripts/build_mockup/build_basemap.py`
+(kræver `pip install shapely`); output committes. `maxZoom` er 10.
 
-**Følg denne præference i kode:** brug ikke `tile.openstreetmap.org`
-direkte. Hvis en anden flise-leverandør overvejes (Stadia, MapTiler,
-Mapbox), bekræft med brugeren først.
+**Begrundelse.** `tile.openstreetmap.org` blokerer requests uden
+`Referer` (også `file://`), og CARTO begyndte i 2026-10 at levere
+"API KEY REQUIRED"-fliser. Et lokalt basiskort virker under både
+`file://` og GitHub Pages uden nøgle, Referer-politik eller tredjepart.
+
+**Følg denne præference i kode:** tilføj ikke `L.tileLayer` mod en
+fjern flise-server (OSM, CARTO, Stadia, MapTiler, Mapbox …) uden at
+bekræfte med brugeren først.
 
 ---
 

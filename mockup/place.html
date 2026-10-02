@@ -102,6 +102,8 @@
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
   crossorigin=""></script>
+<script src="vendor/basemap/basemap-world.js"></script>
+<script src="js/basemap.js"></script>
 <script>
 /* Hand-curated PLACES — takes precedence over generated PLACES_EXTRA.
    Mirrors WORKS / PERSONS curation pattern. Use to override a
@@ -374,15 +376,10 @@ function escAttr(s) { return String(s == null ? '' : s)
     renderInbound(IN_PAGE);
   }
 
-  // Leaflet init when geocoded — CARTO Voyager tiles per CLAUDE.md.
+  // Leaflet init when geocoded — offline basemap (js/basemap.js).
   if (hasCoords && typeof L !== 'undefined') {
-    const map = L.map('place-map').setView([pl.lat, pl.lon], 11);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19,
-      referrerPolicy: 'strict-origin-when-cross-origin'
-    }).addTo(map);
+    const map = L.map('place-map').setView([pl.lat, pl.lon], 6);
+    HcaBasemap.addTo(map);
     L.marker([pl.lat, pl.lon]).addTo(map)
       .bindPopup('<b>' + escAttr(pl.label) + '</b><br>' +
         pl.lat.toFixed(4) + '° N, ' + pl.lon.toFixed(4) + '° Ø')

@@ -42,3 +42,6 @@ mockup/data/cooccurrence.js
 # "data not built yet" message when this file is absent.
 mockup/data/nation-index.js
 
+
+# Natural Earth download cache for scripts/build_mockup/build_basemap.py
+.cache/
