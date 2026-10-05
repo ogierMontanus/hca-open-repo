@@ -540,6 +540,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ── Layout switcher ──────────────────────────────────────────────── */
   var tlRendered = false;
+  var calInitialised = false;
   var calendarPane = document.getElementById('calendar-results');
   var calendarGrid = document.getElementById('calendar-grid');
   var calendarEntries = document.getElementById('calendar-entries');
@@ -560,19 +561,36 @@ document.addEventListener('DOMContentLoaded', function () {
     return year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
   }
 
-  // Build a map of dates with diary entries
+  var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // diary-index "d" is DD-MM-YYYY; undated pages (no d) have no calendar slot.
+  function isoOf(entry) {
+    var m = /^(\d\d)-(\d\d)-(\d{4})$/.exec(entry.d || '');
+    return m ? m[3] + '-' + m[2] + '-' + m[1] : '';
+  }
+
+  // Map ISO date -> entries dated that day
   function buildDateMap() {
     var dateMap = {};
     if (typeof DIARY_INDEX !== 'undefined') {
       DIARY_INDEX.forEach(function (entry) {
-        if (entry.y) {  // year exists
-          var dateKey = entry.y;
-          if (!dateMap[dateKey]) dateMap[dateKey] = [];
-          dateMap[dateKey].push(entry);
-        }
+        var key = isoOf(entry);
+        if (key) (dateMap[key] = dateMap[key] || []).push(entry);
       });
     }
     return dateMap;
+  }
+
+  function monthEntries(year, month) {
+    var prefix = year + '-' + String(month + 1).padStart(2, '0') + '-';
+    return (typeof DIARY_INDEX === 'undefined') ? [] : DIARY_INDEX.filter(function (e) {
+      return isoOf(e).indexOf(prefix) === 0;
+    });
+  }
+
+  function firstMonthWithEntries(year) {
+    for (var m = 0; m < 12; m++) { if (monthEntries(year, m).length) return m; }
+    return 0;
   }
 
   var diaryDateMap = buildDateMap();
@@ -604,12 +622,7 @@ document.addEventListener('DOMContentLoaded', function () {
     for (var day = 1; day <= daysInMonth; day++) {
       var dayCell = document.createElement('button');
       var dateKey = formatDateKey(year, month, day);
-      var dayEntries = (typeof DIARY_INDEX !== 'undefined')
-        ? DIARY_INDEX.filter(function (entry) {
-            // Simple month/year check based on year value
-            return entry.y === String(year);
-          })
-        : [];
+      var dayEntries = diaryDateMap[dateKey] || [];
 
       dayCell.type = 'button';
       dayCell.style.cssText = 'padding:8px;text-align:center;font-size:0.85rem;border:1px solid var(--color-border);background:var(--color-surface);cursor:pointer;position:relative;min-height:40px;display:flex;align-items:center;justify-content:center';
@@ -633,39 +646,40 @@ document.addEventListener('DOMContentLoaded', function () {
         dayCell.style.outlineOffset = '-2px';
       }
 
-      dayCell.addEventListener('click', function () {
-        selectedDate = dateKey;
-        renderCalendar(year, month);
-        showCalendarEntriesForYear(year);
-      });
+      dayCell.addEventListener('click', (function (key) {
+        return function () {
+          selectedDate = (selectedDate === key) ? null : key;
+          renderCalendar(year, month);
+          showCalendarEntries(year, month);
+        };
+      })(dateKey));
 
       calendarGrid.appendChild(dayCell);
     }
   }
 
-  function showCalendarEntriesForYear(year) {
+  function showCalendarEntries(year, month) {
     calendarEntries.innerHTML = '';
 
     var title = document.createElement('h3');
     title.style.cssText = 'font-size:0.95rem;font-weight:600;margin-bottom:var(--sp3)';
-    title.textContent = 'Year ' + year;
+    var day = selectedDate ? parseInt(selectedDate.slice(8), 10) : 0;
+    var label = day ? MONTH_NAMES[month] + ' ' + day + ', ' + year : MONTH_NAMES[month] + ' ' + year;
+    title.textContent = label;
     calendarEntries.appendChild(title);
 
-    // Find diary entries for this year
-    if (typeof DIARY_INDEX !== 'undefined') {
-      var entries = DIARY_INDEX.filter(function (entry) {
-        return entry.y === String(year);
-      });
+    var entries = selectedDate ? (diaryDateMap[selectedDate] || []) : monthEntries(year, month);
 
+    if (typeof DIARY_INDEX !== 'undefined') {
       if (entries.length === 0) {
         var noEntries = document.createElement('p');
         noEntries.style.cssText = 'color:var(--color-text-muted);font-size:0.85rem';
-        noEntries.textContent = 'No diary entries for year ' + year + '.';
+        noEntries.textContent = 'No diary pages in ' + label + '.';
         calendarEntries.appendChild(noEntries);
       } else {
         var info = document.createElement('p');
         info.style.cssText = 'color:var(--color-text-muted);font-size:0.83rem;margin-bottom:var(--sp4)';
-        info.textContent = entries.length + ' diary pages from ' + year;
+        info.textContent = entries.length + ' diary pages — ' + label;
         calendarEntries.appendChild(info);
 
         var resultsDiv = document.createElement('div');
@@ -730,6 +744,7 @@ document.addEventListener('DOMContentLoaded', function () {
         moreBtn.style.display = 'none';
         toolbar.style.display = 'none';
         calendarPane.style.display = 'none';
+        tablePane.style.display = 'none';
         tlPane.style.display  = '';
         countEl.innerHTML = '<strong>' + (typeof TIMELINE_INDEX !== 'undefined'
           ? TIMELINE_INDEX.length.toLocaleString('en-US') : '0') +
@@ -749,9 +764,13 @@ document.addEventListener('DOMContentLoaded', function () {
           ? DIARY_INDEX.length.toLocaleString('en-US') : '0') +
           '</strong> diary pages';
         var defaultYear = calYearSel.value || (typeof DIARY_INDEX !== 'undefined' && DIARY_INDEX.length > 0 ? DIARY_INDEX[0].y : new Date().getFullYear());
+        if (!calInitialised) {
+          calMonthSel.value = firstMonthWithEntries(parseInt(defaultYear));
+          calInitialised = true;
+        }
         var defaultMonth = parseInt(calMonthSel.value) || 0;
         renderCalendar(parseInt(defaultYear), defaultMonth);
-        showCalendarEntriesForYear(parseInt(defaultYear));
+        showCalendarEntries(parseInt(defaultYear), defaultMonth);
       } else if (layout === 'table') {
         grid.style.display    = 'none';
         moreBtn.style.display = 'none';
@@ -814,18 +833,20 @@ document.addEventListener('DOMContentLoaded', function () {
   // Calendar month/year change handlers
   calYearSel.addEventListener('change', function () {
     var year = parseInt(calYearSel.value);
+    selectedDate = null;
+    // Jump to the year's first month with pages so the grid is not blank.
+    calMonthSel.value = firstMonthWithEntries(year);
     var month = parseInt(calMonthSel.value);
     renderCalendar(year, month);
-    showCalendarEntriesForYear(year);
-    selectedDate = null;
+    showCalendarEntries(year, month);
   });
 
   calMonthSel.addEventListener('change', function () {
     var year = parseInt(calYearSel.value);
     var month = parseInt(calMonthSel.value);
-    renderCalendar(year, month);
-    showCalendarEntriesForYear(year);
     selectedDate = null;
+    renderCalendar(year, month);
+    showCalendarEntries(year, month);
   });
 
   function apply() { diaryCtrl.applyFilter(filter.value.trim(), yearSel.value); }
