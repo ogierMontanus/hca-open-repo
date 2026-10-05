@@ -13,7 +13,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index_en.html" class="site-logo">HCA Open Repository</a>
+    <a href="index_en.html" class="site-logo">The HCA Who-What-Where</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
       <button type="submit" class="search-btn">Search</button>
@@ -374,6 +374,7 @@
     var top = hasPersons ? (PLACE_TOP_PERSONS[rid] || []) : [];
     return { rid: rid, label: p.label || rid, desc: p.description || '',
              refs: p.refs || 0, init: initialOf(p.label),
+             see: p.see || null,
              country: p.country_da || null,
              category: p.category || null,
              persons: top.map(function (t) { return t[0]; }) };
@@ -406,7 +407,7 @@
         esc(p.rid) + '" data-cart-label="' + esc(p.label) + '"></label>'; } },
     { key: 'rid', label: 'ID',
       html: function (p) { return '<a class="data-table__id-link" href="place.html?reg=' +
-        esc(p.rid) + '">' + esc(p.rid) + '</a>'; } },
+        esc(p.see || p.rid) + '">' + esc(p.rid) + '</a>'; } },
     { key: 'label', label: 'Name', value: function (p) { return p.label; } },
     { key: 'country', label: 'Country', value: function (p) { return p.country || 'Irrelevant or unregistered'; } },
     { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
@@ -418,7 +419,7 @@
     return '<div class="result-row">' +
       '<label class="result-card__select"><input type="checkbox" ' +
       'data-cart-type="place" data-cart-rid="' + esc(p.rid) + '" data-cart-label="' + esc(p.label) + '"></label>' +
-      '<a href="place.html?reg=' + esc(p.rid) + '" class="result-card" ' +
+      '<a href="place.html?reg=' + esc(p.see || p.rid) + '" class="result-card" ' +
       'style="display:flex;align-items:baseline;gap:var(--sp4);padding:var(--sp4)">' +
       '<div style="min-width:90px;font-size:0.72rem;font-weight:600;color:var(--color-text-muted);font-family:monospace">' + esc(p.rid) + '</div>' +
       '<div style="flex:1"><div class="result-card__title" style="font-size:0.95rem">' + esc(p.label) + '</div>' +

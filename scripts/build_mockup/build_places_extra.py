@@ -190,6 +190,37 @@ def load_verified_categories_and_countries() -> tuple[dict[str, str], dict[str, 
     return cats, countries
 
 
+# Register cross-references: "Venedig, se: Venezia." / "Tivoli (...), se Sagregistret."
+SEE_RE = re.compile(r"^(?P<from>.+?),?\s+se:?\s+(?P<to>.+?)\.?\s*$")
+
+
+def resolve_see_refs(generated: dict[str, dict]) -> None:
+    """Add rec["see"] = <rid of the main entry> to every cross-reference
+    place whose target is found in the register. Target match: exact label,
+    else the single entry whose label starts with "<target> (" / "<target>,".
+    Unresolvable targets (e.g. "se Sagregistret") get no `see` field."""
+    by_label: dict[str, list[str]] = {}
+    for rid, rec in generated.items():
+        by_label.setdefault(rec["label"], []).append(rid)
+    parsed = {rid: SEE_RE.match(rec["label"]) for rid, rec in generated.items()}
+    parsed = {rid: m for rid, m in parsed.items() if m}
+
+    def find(target: str) -> str | None:
+        hits = [r for r in by_label.get(target, []) if r not in parsed]
+        if not hits:
+            hits = [rid for rid, rec in generated.items() if rid not in parsed
+                    and rec["label"].startswith((target + " (", target + ","))]
+        return hits[0] if len(hits) == 1 else None
+
+    n = 0
+    for rid, m in parsed.items():
+        t = find(m.group("to"))
+        if t:
+            generated[rid]["see"] = t
+            n += 1
+    print(f"  {n:,} of {len(parsed):,} 'se:' cross-references resolved to a main entry")
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -269,6 +300,8 @@ def main() -> None:
             rec["country_da"] = verified_countries[rid]
             verified_country_hits += 1
         generated[rid] = rec
+
+    resolve_see_refs(generated)
 
     geo_hits = rejser_hits + sv14_hits + herred_amt_hits
     print(f"  generated {len(generated):,} entries ({geo_hits:,} with coordinates from "

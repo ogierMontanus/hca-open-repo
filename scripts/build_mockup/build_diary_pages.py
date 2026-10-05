@@ -320,7 +320,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 
 <header class="site-header">
   <div class="container">
-    <a href="../index.html" class="site-logo">HCA Open Repository</a>
+    <a href="../index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>

@@ -26,7 +26,7 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="site-logo">HCA Open Repository</a>
+    <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
     <form class="search-form" role="search" onsubmit="return false">
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
@@ -148,7 +148,11 @@ function escAttr(s) { return String(s == null ? '' : s)
     return;
   }
 
-  if (typeof Cart !== 'undefined') {
+  // Cross-reference stub ("Venedig, se: Venezia."): the stub has no diary
+  // references, map or description of its own — it only points at the main
+  // entry, so it is not offered for the cart either.
+  const target = pl.see ? ALL_PLACES[pl.see] : null;
+  if (typeof Cart !== 'undefined' && !target) {
     Cart.mountToggle(document.getElementById('js-cart-toggle'), 'place', reg, pl.label);
   }
 
@@ -196,6 +200,18 @@ function escAttr(s) { return String(s == null ? '' : s)
       '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
   }
   document.getElementById('js-sidebar').innerHTML = sb;
+
+  if (target) {
+    document.getElementById('js-main').innerHTML =
+      '<a class="nation-link" href="place.html?reg=' + escAttr(pl.see) + '">' +
+      '<div class="nation-link__body">' +
+      '<div class="nation-link__title">Se hovedposten: ' + escAttr(target.label) + '</div>' +
+      '<div class="nation-link__meta">' + escAttr(pl.label) +
+      ' er en krydshenvisning i Stedregistret — dagbogsreferencer, kort og øvrige oplysninger findes under ' +
+      escAttr(target.label) + '.</div>' +
+      '</div><span class="nation-link__arrow">→</span></a>';
+    return;
+  }
 
   // ── Main content ─────────────────────────────────────────────────────────
   let main = '';
