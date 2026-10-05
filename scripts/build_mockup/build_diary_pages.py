@@ -312,7 +312,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title_str} — HCA Open Repository</title>
+  <title>{title_str} — HCA's Hvem-hvad-hvor</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/edition-text.css">
 </head>
