@@ -39,7 +39,7 @@ import re
 import sys
 import unicodedata
 import urllib.parse
-from collections import Counter
+from collections import Counter, defaultdict
 
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
@@ -385,14 +385,30 @@ def _entity_key(label: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"[^\w\s]", " ", s)).strip()
 
 
-def load_non_individuals() -> dict:
-    """{normalised label: entityType} for every master2 row that is NOT an
-    individual — families, firms, groups, the register's one dog.
+# Kinds kept out of persons-extra.js altogether.
+GATED_KINDS = {"crossReference", "crossReferenceMalformed"}
+# Kinds shown, but never with a personal gender. The same category
+# person_gender.csv gives the entries its review found to be collectives.
+COLLECTIVE_KINDS = {"family", "group", "organisation", "animal"}
+OTHER_GENDER = "Andet (især firmaer/slægter/øvrige grupper)"
 
-    Assigning a gender or a nationality to `Collin, Familien` is a category
-    error, not a hard edge case, so those rows must not reach the person
-    facets. The gate lives in the enrichment repo (see
-    classify_entity_type.py); this is the consumer side of it.
+
+def load_non_individuals() -> dict:
+    """{normalised label: {entityType, ...}} for every master2 row that is NOT an
+    individual — cross-references, families, firms, groups, the register's
+    one dog.
+
+    Only cross-references are gated out (GATED_KINDS): they are pointers to
+    another entry, not entities. Families, firms and other groups stay in
+    the list and the facets, with the gender category OTHER_GENDER instead
+    of a personal gender (COLLECTIVE_KINDS). The classification lives in
+    the enrichment repo (see classify_entity_type.py); this is the consumer
+    side of it.
+
+    The key is the label, and a bare surname can name several entries of
+    different kinds (`Horn` is both a cross-reference and a family). Such a
+    label is neither gated nor forced to OTHER_GENDER; the person keeps the
+    gender from person_gender.csv, which is decided per entry.
 
     Degrades to {} when master2 is absent, matching how the other optional
     enrichments behave — but says so loudly, because a silently missing
@@ -400,15 +416,15 @@ def load_non_individuals() -> dict:
     """
     if not os.path.exists(ENTITY_TYPES):
         return {}
-    out = {}
+    out = defaultdict(set)
     with open(ENTITY_TYPES, encoding="utf-8") as f:
         for r in csv.DictReader(f, delimiter="\t"):
             kind = (r.get("29_entityType") or "").strip()
             if kind and kind != "individual":
                 key = _entity_key(r.get("RegistryTitle", ""))
                 if key:
-                    out[key] = kind
-    return out
+                    out[key].add(kind)
+    return dict(out)
 
 
 def main() -> None:
@@ -417,19 +433,22 @@ def main() -> None:
 
     print(f"Loading {os.path.relpath(ENTITIES, ROOT)}…")
     non_individuals = load_non_individuals()
-    persons, gated = [], []
+    persons, gated, collective = [], [], set()
     with open(ENTITIES, encoding="utf-8") as f:
         for r in csv.DictReader(f):
             if r["entity_type"] != "person":
                 continue
-            kind = non_individuals.get(_entity_key(r.get("label", "")))
-            if kind:
-                gated.append((r.get("label", ""), kind))
+            kinds = non_individuals.get(_entity_key(r.get("label", "")), set())
+            if kinds and kinds <= GATED_KINDS:
+                gated.append((r.get("label", ""), "/".join(sorted(kinds))))
                 continue
+            if kinds and kinds <= COLLECTIVE_KINDS:
+                collective.add(r["entity_id"])
             persons.append(r)
-    print(f"  {len(persons):,} persons")
+    print(f"  {len(persons):,} persons ({len(collective)} families, firms, groups "
+          f"→ gender »{OTHER_GENDER}«)")
     if gated:
-        print(f"  {len(gated)} excluded as non-individuals (29_entityType):")
+        print(f"  {len(gated)} excluded as cross-references (29_entityType):")
         for label, kind in gated:
             print(f"    {label}  [{kind}]")
     elif not non_individuals:
@@ -510,8 +529,10 @@ def main() -> None:
             # docs/data-model/person-gender-facet.md. genderConf bæres med,
             # så en senere UI kan skelne "høj sikkerhed" fra "sandsynlig"
             # uden at genberegne noget.
-            "gender":       gender_by_person.get(rid, (None, None))[0],
-            "genderConf":   gender_by_person.get(rid, (None, None))[1],
+            "gender":       OTHER_GENDER if rid in collective
+                            else gender_by_person.get(rid, (None, None))[0],
+            "genderConf":   None if rid in collective
+                            else gender_by_person.get(rid, (None, None))[1],
             "roles":        roles,
             # True when parse_person_role.py matched this person as the
             # creator of at least one registered værk (source A — see

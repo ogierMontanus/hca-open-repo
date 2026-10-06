@@ -8,11 +8,12 @@ every consumer degrades gracefully without them). That means there is no
 diff between builds to inspect, so the two things worth protecting are
 asserted here instead:
 
-  1. Non-individuals stay OUT. `Collin, Familien`, the bankier firm
-     `Behrens` and the register's one dog are proper names, not people;
-     giving them a gender or a nationality in the person facets is a
-     category error. build_persons_extra.py gates them on
-     29_entityType from data/curated/person_entity_types.tsv.
+  1. Cross-references stay OUT; families, firms and groups stay IN with
+     the gender category »Andet (især firmaer/slægter/øvrige grupper)«.
+     `Collin, Familien`, the bankier firm `Behrens` and the register's one
+     dog are proper names, not people, so they never get a personal
+     gender. build_persons_extra.py reads 29_entityType from
+     data/curated/person_entity_types.tsv.
 
   2. The population does not collapse. A gate that accidentally matches
      far too much would silently empty the facets — which looks exactly
@@ -58,14 +59,17 @@ def test_population_is_plausible(persons):
     )
 
 
-def test_known_non_individuals_are_gated(persons):
-    """Families and firms must not carry person facets."""
-    labels = {p.get("label", "") for p in persons.values()}
-    for name in ("Collin, Familien", "Behrens", "Barberini, Familien"):
-        assert name not in labels, (
-            f"{name!r} is in persons-extra.js but is not an individual. "
-            "The 29_entityType gate in build_persons_extra.py is not filtering "
-            "it — see docs/data-model/person-master-files.md."
+OTHER_GENDER = "Andet (især firmaer/slægter/øvrige grupper)"
+
+
+def test_known_collectives_are_shown_as_other(persons):
+    """Families and firms are listed, but never with a personal gender."""
+    by_label = {p.get("label", ""): p for p in persons.values()}
+    for name in ("Collin, Familien", "Barberini, Familien"):
+        assert name in by_label, f"{name!r} is missing from persons-extra.js"
+        assert by_label[name].get("gender") == OTHER_GENDER, (
+            f"{name!r} has gender {by_label[name].get('gender')!r}, "
+            f"expected {OTHER_GENDER!r}"
         )
 
 
@@ -75,19 +79,23 @@ def test_gate_data_is_present_and_used(persons):
     if not ENTITY_TYPES.exists():
         pytest.skip(f"{ENTITY_TYPES.relative_to(ROOT)} absent — gate cannot run")
 
-    gated_labels = set()
+    kinds_by_label = {}
     with ENTITY_TYPES.open(encoding="utf-8") as f:
         header = f.readline().rstrip("\n").split("\t")
         title_i = header.index("RegistryTitle")
+        kind_i = header.index("29_entityType")
         for line in f:
             cells = line.rstrip("\n").split("\t")
-            if len(cells) > title_i:
-                gated_labels.add(cells[title_i])
+            if len(cells) > kind_i:
+                kinds_by_label.setdefault(cells[title_i], set()).add(cells[kind_i])
+    # A label that also names a family etc. (`Horn`) is not gated.
+    gated_labels = {label for label, kinds in kinds_by_label.items()
+                    if all(k.startswith("crossReference") for k in kinds)}
 
-    assert gated_labels, "person_entity_types.tsv has no rows to gate on"
+    assert gated_labels, "person_entity_types.tsv has no cross-references to gate on"
 
     present = {p.get("label", "") for p in persons.values()} & gated_labels
     assert not present, (
-        f"{len(present)} non-individual(s) reached persons-extra.js: "
+        f"{len(present)} cross-reference(s) reached persons-extra.js: "
         f"{sorted(present)[:5]}"
     )

@@ -39,14 +39,23 @@ manuel gennemgang af resten. Metoden står i `indikatorer` (»gennemsyn: …«).
 | Mandlig | 6.076 |
 | Kvindelig | 3.202 |
 | Endnu ubestemt | 167 |
-| Andet (især firmaer, slægter og øvrige grupper) | 77 |
+| Andet (især firmaer/slægter/øvrige grupper) | 77 |
 | *uden række (krydshenvisninger)* | 706 |
 
 Poster, hvor køn ikke er meningsfuldt, deles i to: **krydshenvisninger** har
 ingen række og dermed intet køn, så Køn-facetten springer dem over;
 **firmaer, slægter, ægtepar, familier, grupper og dyr** får kategorien
-»Andet (især firmaer, slægter og øvrige grupper)«. En del af dem holdes
-dog helt ude af personfacetterne af `person_entity_types.tsv`. De 167 »Endnu ubestemte« er 120 personer, som ikke
+»Andet (især firmaer/slægter/øvrige grupper)«.
+
+`build_persons_extra.py` gør det samme med `person_entity_types.tsv`: kun
+krydshenvisninger (`crossReference*`) holdes ude af personlisten og
+filtrene. Familier, firmaer, grupper og dyr (`family`, `organisation`,
+`group`, `animal`) vises med kategorien Andet, også hvis
+`person_gender.csv` siger andet. En label, der både er krydshenvisning og
+familie (`Horn`, `Poulsen`), tæller ikke som nogen af delene; dér gælder
+`person_gender.csv`. På sitet giver det 94 poster under Andet.
+
+De 167 »Endnu ubestemte« er 120 personer, som ikke
 findes i den rettede segmentering, gennemsynet bygger på; 34 personer, som
 hjemmesiden har slået sammen af registerposter med forskelligt køn; og 13
 underposter som »– Hans Datter«. Skævheden mod mænd i de afledte
