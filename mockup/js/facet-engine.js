@@ -38,9 +38,7 @@
  *
  * data-match may list several values comma-separated; they combine with OR
  * (so data-match="da,no" reads "Dansk or Norsk"). Hand-written rows using the
- * same attributes work exactly like generated ones, except that generated
- * rows also carry data-match-exact, which turns the comma split off so a
- * value that contains a comma stays one value.
+ * same attributes work exactly like generated ones.
  *
  * ── Groups awaiting data ──────────────────────────────────────────────────
  *
@@ -138,12 +136,7 @@ window.FacetEngine = (function () {
         box:   box,
         field: box.getAttribute('data-facet'),
         empty: box.hasAttribute('data-facet-empty'),
-        // Generated rows carry data-match-exact: the value is one literal
-        // string that may itself contain a comma (e.g. Køn › "Andet (især
-        // firmaer, slægter og øvrige grupper)"), so it must not be split.
-        want:  box.hasAttribute('data-match-exact')
-                 ? [box.getAttribute('data-match') || '']
-                 : (box.getAttribute('data-match') || '').split(',')
+        want:  (box.getAttribute('data-match') || '').split(',')
       };
     }
 
@@ -271,7 +264,7 @@ window.FacetEngine = (function () {
       var rowsHtml = renderRows.map(function (r) {
         var checked = checkedVals[r.value] ? ' checked' : '';
         return '<label class="facet-item"><input type="checkbox" data-facet="' +
-          esc(field) + '" data-match="' + esc(r.value) + '" data-match-exact' + checked + '>' +
+          esc(field) + '" data-match="' + esc(r.value) + '"' + checked + '>' +
           '<span class="facet-item__label">' + esc(r.label) + '</span>' +
           '<span class="facet-item__count">' + num(r.n) + '</span></label>';
       }).join('');
