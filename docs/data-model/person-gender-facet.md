@@ -25,6 +25,31 @@ prioriteringssignalet til den menneskelige redaktør.
 Dækning ved forskellige cutoffs: 68,4 % af registret afgøres ved ≥ 0,70,
 44,4 % ved ≥ 0,90.
 
+## Efter redaktionelt gennemsyn (oktober 2026)
+
+`person_gender.csv` er siden oktober 2026 parserens output med et
+redaktionelt gennemsyn lagt ovenpå (stage 1f' i hca-open-repo-redesign,
+`apply_gender_review.py` med `data/curated/person_gender_reviewed.csv`).
+De »Endnu ubestemte« er afgjort med regler (titel, erhverv, kønsord,
+fornavn), en model, der kun må foreslå mænd ved sikkerhed ≥ 0,98, og en
+manuel gennemgang af resten. Metoden står i `indikatorer` (»gennemsyn: …«).
+
+| Kategori | Antal |
+|---|---:|
+| Mandlig | 6.076 |
+| Kvindelig | 3.202 |
+| Endnu ubestemt | 167 |
+| *uden række (irrelevant)* | 783 |
+
+Poster, hvor køn ikke er meningsfuldt (krydshenvisninger, firmaer, slægter,
+grupper, dyr), har **ingen række** og dermed intet køn; Køn-facetten
+springer dem over. De 167 »Endnu ubestemte« er 120 personer, som ikke
+findes i den rettede segmentering, gennemsynet bygger på; 34 personer, som
+hjemmesiden har slået sammen af registerposter med forskelligt køn; og 13
+underposter som »– Hans Datter«. Skævheden mod mænd i de afledte
+afgørelser og forbeholdene er beskrevet i redesign-repoets
+`docs/reports/gender-inference-experiment.md`.
+
 ## Metode: navneviden udledes af registret, ikke af en indbygget liste
 
 Opgaven forbyder en simpel universel navneliste og kræver kontekstafhængig
