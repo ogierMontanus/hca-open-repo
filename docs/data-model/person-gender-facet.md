@@ -39,11 +39,14 @@ manuel gennemgang af resten. Metoden står i `indikatorer` (»gennemsyn: …«).
 | Mandlig | 6.076 |
 | Kvindelig | 3.202 |
 | Endnu ubestemt | 167 |
-| *uden række (irrelevant)* | 783 |
+| Andet (især firmaer, slægter og øvrige grupper) | 77 |
+| *uden række (krydshenvisninger)* | 706 |
 
-Poster, hvor køn ikke er meningsfuldt (krydshenvisninger, firmaer, slægter,
-grupper, dyr), har **ingen række** og dermed intet køn; Køn-facetten
-springer dem over. De 167 »Endnu ubestemte« er 120 personer, som ikke
+Poster, hvor køn ikke er meningsfuldt, deles i to: **krydshenvisninger** har
+ingen række og dermed intet køn, så Køn-facetten springer dem over;
+**firmaer, slægter, ægtepar, familier, grupper og dyr** får kategorien
+»Andet (især firmaer, slægter og øvrige grupper)«. En del af dem holdes
+dog helt ude af personfacetterne af `person_entity_types.tsv`. De 167 »Endnu ubestemte« er 120 personer, som ikke
 findes i den rettede segmentering, gennemsynet bygger på; 34 personer, som
 hjemmesiden har slået sammen af registerposter med forskelligt køn; og 13
 underposter som »– Hans Datter«. Skævheden mod mænd i de afledte
