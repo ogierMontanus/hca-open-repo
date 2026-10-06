@@ -235,7 +235,6 @@
               <button class="layout-switcher__btn layout-switcher__btn--active" data-layout="list">Liste</button>
               <button class="layout-switcher__btn" data-layout="table">Tabel</button>
               <button class="layout-switcher__btn" data-layout="calendar">Kalender</button>
-              <button class="layout-switcher__btn" data-layout="timeline">Tidslinje</button>
             </div>
           </div>
 
@@ -381,12 +380,10 @@
 
           <!-- Table view (Tabel) — every diary page at once, sortable, populated
                below from DIARY_INDEX directly (same independence from the free-text
-               search box as Kalender/Tidslinje already have — see the layout
+               search box as Kalender already has — see the layout
                switcher wiring). -->
           <div id="diary-table-results" style="display:none"></div>
 
-          <!-- Timeline view (Tidslinje) — populated by timeline-wire.js when data is present -->
-          <div id="timeline-results" style="display:none"></div>
         </div>
 
       </div>
@@ -468,15 +465,12 @@
 </footer>
 
 <!-- Generated diary data (gitignored). Build with:
-     python scripts/build_mockup/build_diary_index.py
-     python scripts/build_mockup/build_timeline_index.py -->
+     python scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
-<script src="data/timeline-index.js" onerror="void 0"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script src="js/diary-wire.js"></script>
-<script src="js/timeline-wire.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof Cart !== 'undefined') {
@@ -484,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function () {
     Cart.wireCheckboxes();
   }
   var grid     = document.getElementById('diary-results');
-  var tlPane   = document.getElementById('timeline-results');
   var tablePane = document.getElementById('diary-table-results');
   var moreBtn  = document.getElementById('diary-more');
   var countEl  = document.getElementById('diary-count');
@@ -539,7 +532,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ── Layout switcher ──────────────────────────────────────────────── */
-  var tlRendered = false;
   var calInitialised = false;
   var calendarPane = document.getElementById('calendar-results');
   var calendarGrid = document.getElementById('calendar-grid');
@@ -733,25 +725,10 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.classList.add('layout-switcher__btn--active');
 
       var layout = btn.dataset.layout;
-      if (layout === 'timeline') {
+      if (layout === 'calendar') {
         grid.style.display    = 'none';
         moreBtn.style.display = 'none';
         toolbar.style.display = 'none';
-        calendarPane.style.display = 'none';
-        tablePane.style.display = 'none';
-        tlPane.style.display  = '';
-        countEl.innerHTML = '<strong>' + (typeof TIMELINE_INDEX !== 'undefined'
-          ? TIMELINE_INDEX.length.toLocaleString('da-DK') : '0') +
-          '</strong> begivenheder · 1805–1875';
-        if (!tlRendered) {
-          TimelineWire.render(tlPane);
-          tlRendered = true;
-        }
-      } else if (layout === 'calendar') {
-        grid.style.display    = 'none';
-        moreBtn.style.display = 'none';
-        toolbar.style.display = 'none';
-        tlPane.style.display  = 'none';
         tablePane.style.display = 'none';
         calendarPane.style.display = '';
         countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
@@ -769,7 +746,6 @@ document.addEventListener('DOMContentLoaded', function () {
         grid.style.display    = 'none';
         moreBtn.style.display = 'none';
         toolbar.style.display = 'none';
-        tlPane.style.display  = 'none';
         calendarPane.style.display = 'none';
         tablePane.style.display = '';
         countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
@@ -777,7 +753,6 @@ document.addEventListener('DOMContentLoaded', function () {
           '</strong> dagbogssider';
         renderDiaryTable();
       } else {
-        tlPane.style.display  = 'none';
         calendarPane.style.display = 'none';
         tablePane.style.display = 'none';
         grid.style.display    = '';
@@ -848,10 +823,10 @@ document.addEventListener('DOMContentLoaded', function () {
   yearSel.addEventListener('change', apply);
 
   // Deep-link support: index.html's "Hvornår" landing card points here with
-  // ?layout=timeline so a reader lands straight in the Tidslinje view
-  // instead of the default diary list. Triggered last (after every pane
-  // above has set its own default display) and reuses the click handler's
-  // own pane-switching logic rather than duplicating it.
+  // ?layout=calendar so a reader lands straight in that view instead of the
+  // default diary list. Triggered last (after every pane above has set its
+  // own default display) and reuses the click handler's own pane-switching
+  // logic rather than duplicating it.
   var initialLayout = new URLSearchParams(location.search).get('layout');
   if (initialLayout) {
     var initialBtn = document.querySelector(

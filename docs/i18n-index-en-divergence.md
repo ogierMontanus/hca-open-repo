@@ -47,7 +47,8 @@ its supporting CSS (`.landing-www`, `.landing-subtitle .w`,
 `.landing-card__heading .w`), including the taller hero
 (`min-height: 48vh` vs. the Danish page's `46vh`) and wider inner column
 (`max-width: 660px` vs. `640px`) that make room for the extra WWW line.
-The `<title>` tag wording is likewise unchanged.
+The `<title>` tag wording was unchanged at the time; since 2026-10-05 it is
+"The HCA Who-What-Where" (see CLAUDE.md, "Projektnavn").
 
 Everything else — card labels, list items, example chips, nav strip,
 footer, counts — was rebuilt to match the current Danish content and
@@ -67,8 +68,8 @@ structure, translated fresh rather than patched.
 - "Improvisatoren" (Andersen's novel, in the search placeholder) →
   "The Improvisatore", its standard published English title.
 - "Hvornår" → "When" (not "Timeline", to keep the four-card parallelism
-  with Who/What/Where; "Timeline" appears inside the row's own example
-  text instead: "Timeline of travels").
+  with Who/What/Where; "Calendar" appears inside the row's own example
+  text instead: "Calendar of diary pages").
 
 ## Cross-links: which `_en.html` twins exist today
 

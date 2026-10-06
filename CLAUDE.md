@@ -20,7 +20,12 @@ skill `verify-fix-commit` (`.claude/skills/verify-fix-commit/SKILL.md`).
 
 ## Projektnavn
 
-**Officielt projektnavn:** HCA Open Repository
+**Webstedets navn (siden 2026-10-05):** **HCA's Hvem-hvad-hvor** på dansk,
+**The HCA Who-What-Where** på engelsk — bruges i `<title>`, sidehoved
+(`.site-logo`), landingside, udskriftshoveder og om-sider. Brug aldrig
+"HCA Open Repository" som synligt sidenavn i `mockup/`.
+
+**Projektnavn i repo og formelle dokumenter:** HCA Open Repository
 
 Projektet blev tidligere kendt som "H.C. Andersen Dagbogsregister". Fra 2026 refereres til det som **HCA Open Repository** på engelsk og **HCA Åbent Arkiv** på dansk i formelle dokumenter.
 

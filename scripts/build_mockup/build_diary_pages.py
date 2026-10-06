@@ -409,7 +409,7 @@ def render_page(vol: str, page: str, ents: dict, diary: dict, refs: dict,
 
 <footer class="site-footer">
   <div class="container">
-    Prototype v0.2 &nbsp;·&nbsp; Data: HCA Open Repository — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="../om.html" style="color:inherit">Vores kilder</a>
+    Prototype v0.2 &nbsp;·&nbsp; Data: HCA's Hvem-hvad-hvor — Det Kongelige Bibliotek &nbsp;·&nbsp; <a href="../om.html" style="color:inherit">Vores kilder</a>
   </div>
 </footer>
 

@@ -19,7 +19,7 @@ are the pages a reader reaches directly from the front door.
 | `search.html` | `search_en.html` | Static demo results page |
 | `places.html` | `places_en.html` | Full JS: FacetEngine, alphabet bar, list/table switcher |
 | `persons.html` | `persons_en.html` | Full JS, including the `?reg=` detail view and its sidebar restructuring |
-| `diaries.html` | `diaries_en.html` | Largest: List/Table/Calendar/Timeline switcher + the calendar-grid widget |
+| `diaries.html` | `diaries_en.html` | Largest: List/Table/Calendar switcher + the calendar-grid widget |
 
 All six cross-link to each other's `_en.html` twin; the DA lang-switch
 link on each page intentionally still points at the Danish original.
