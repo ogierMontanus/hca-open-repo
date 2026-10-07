@@ -41,6 +41,8 @@ import unicodedata
 import urllib.parse
 from collections import Counter, defaultdict
 
+import _diary_scope  # noqa: E402  (sibling module; scripts run from repo root)
+
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
@@ -457,7 +459,7 @@ def main() -> None:
 
     ref_count: Counter[str] = Counter()
     if os.path.exists(REFS):
-        with open(REFS, encoding="utf-8") as f:
+        with _diary_scope.open_refs(REFS) as f:
             for r in csv.DictReader(f):
                 ref_count[r["entity_id"]] += 1
         print(f"  reference counts loaded for {len(ref_count):,} entities")

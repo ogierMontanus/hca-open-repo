@@ -107,10 +107,11 @@ mockup.
 
 ## Follow-ups
 
-- Dates/years and full text now exist for all ten diary volumes (I–X):
-  4,413 of the 4,546 indexed pages. The other 133 pages (vol XI and
-  pages beyond the diary text in I–X) are known only from register
-  references and list vol/page only.
+- Dates/years and full text exist for all ten diary volumes (I–X): 4,413
+  pages. Only those pages are shown. Register references to other pages
+  (vol XI, pages beyond the diary text) are excluded by `_diary_scope.py`
+  and listed in `docs/todo-data-errors.md`
+  (`python scripts/build_mockup/report_untranscribed_pages.py`).
 - Country attribution for places comes from a 33-country bounding-box
   gazetteer inlined in `build_places_extra.py` (and `build_web_data.py`).
   Replace with a proper reverse-geocoder when the workshop produces one.

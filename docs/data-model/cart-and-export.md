@@ -188,13 +188,13 @@ from any source (including a checkbox ticked individually).
   pages.
 - Detail-page toggles (`persons.html?reg=…`, `place.html`, `work.html`)
   add/remove the single entity and repaint "+ Tilføj til kurv" ⇄ "✓ I
-  kurven" live. `diaries.html`'s "Vælg alle" adds all 4,544 generated
+  kurven" live. `diaries.html`'s "Vælg alle" adds all 4,413 generated
   diary pages (>100 confirm accepted) with correct tri-state/indeterminate
   behaviour on a single manual check, and unchecking it removes all of
   them again. Diary-reference checkboxes embedded on a person detail page
   (`persons.html?reg=…`) actually toggle the cart — the pre-fix version
   would have rendered inert (see `Cart.wireCheckboxes()` note above).
-  `cart.html` renders all 4,544 diary items grouped under "Dagbogssider",
+  `cart.html` renders all 4,413 diary items grouped under "Dagbogssider",
   each `.cart-item__rid` a real `<a href="diary-pages/<rid>.html">`
   (confirmed as an `<a>` element, not the plain-text title next to it).
 
@@ -246,12 +246,10 @@ than trusting that "no console errors" meant "it worked."
   Bringing `romaner.html` onto real data (or retiring it in favour of the
   `bibliotek.html` filter) is a separate, larger job than adding a
   checkbox to markup that doesn't correspond to `WORKS_EXTRA` entities.
-- **`entry.html` / `search.html`** — `entry.html` is a hand-authored static
-  design mockup for a diary-entry page (no data file loaded, same
-  situation `romaner.html` was in before it was retired — see below), and
-  is superseded by the real generated `diary-pages/*.html` template, which
-  now has cart wiring (see "Diary pages" below). `search.html` (free-text
-  search hits) remains out of scope. `Cart`'s `type` field is a free
+- **`entry.html` / `search.html`** — both removed (placeholder pages with
+  invented content). `entry.html` was superseded by the real generated
+  `diary-pages/*.html` template, which has cart wiring (see "Diary pages"
+  below); a real `search.html` is planned in `docs/plan-fulltext-search.md`. `Cart`'s `type` field is a free
   string, not hardcoded to a fixed list, so wiring a further type later is
   the same pattern used for `diary` below.
 

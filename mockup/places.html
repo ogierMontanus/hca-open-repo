@@ -45,7 +45,7 @@
       <p>H1 = STED-REGISTER — steder omtalt i H.C. Andersens dagbøger</p>
       <div class="page-hero__meta">
         <span>2.508 registerposter</span>
-        <span>18.849 poster i dagbøgerne</span>
+        <span>18.840 poster i dagbøgerne</span>
       </div>
     </div>
   </div>
@@ -162,29 +162,26 @@
                  data-facet-sort-alpha-label="A-Å"></div>
           </div>
 
-          <!-- Omtaleår — afventer data. Omtaleår udledes af dagbogssidernes
-               datoer, og de findes i dag kun for bind VI–VII (751 af 4.544
-               sider). Datoerne for de øvrige bind leveres senere i samme
-               præcise format; de må ikke udledes af overskrifter eller
-               bindnumre. Indtil da står intervallet 1825–1875 urørt, og
-               gruppen er markeret pending, så FacetEngine springer den over
-               og den derfor ikke kan bortfiltrere sider i det skjulte.
-               Aktivering = fjern data-facet-pending og genopbyg. -->
-          <div class="facet-group" data-facet-pending>
+          <!-- Omtaleår — live. Omtaleår = årene hvor stedet nævnes på en
+               transskriberet dagbogsside (PLACES_EXTRA[rid].my, bygget af
+               build_places_extra.py ud fra diary.csv; dagbogsdatoer findes nu
+               for alle bind I–X). Et interval-facet i FacetEngine
+               (data-facet-range): sted passerer, hvis ét af dets omtaleår
+               ligger i [fra, til]. -->
+          <div class="facet-group">
             <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body" style="padding:8px 16px 14px">
-              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem;opacity:0.45">
-                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825" disabled
-                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem;cursor:not-allowed"
+            <div class="facet-group__body" style="padding:8px 16px 14px" data-facet-range="years">
+              <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825" data-range-from
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
                        aria-label="Fra årstal">
                 <span style="color:var(--color-text-muted)">—</span>
-                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875" disabled
-                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem;cursor:not-allowed"
+                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875" data-range-to
+                       style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
                        aria-label="Til årstal">
               </div>
               <p class="facet-note" style="padding-left:0">
-                Aktiveres når dagbogsdatoer for alle bind er indlæst. I dag er
-                bind VI–VII daterede.
+                Steder omtalt på en dagbogsside fra de angivne år. Steder uden dateret omtale udelades, så længe et årstal er sat.
               </p>
               <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
             </div>
@@ -232,7 +229,7 @@
            <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg><span class="side-acc__tab-word">Hvem</span></div>
            <div class="side-acc__body">
              <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-person"></use></svg>Hvem</div>
-             <div class="side-acc__count">10.228 personer · 39.361 poster</div>
+             <div class="side-acc__count">10.228 personer · 39.233 poster</div>
              <ul class="side-acc__list">
                <li>Kunstnere</li>
                <li>Kvinder</li>
@@ -245,7 +242,7 @@
            <div class="side-acc__tab"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span><span class="side-acc__tab-word">Hvad</span></div>
            <div class="side-acc__body">
              <div class="side-acc__heading"><span class="icon-cluster icon-cluster--lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-book"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-painting"></use></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-note"></use></svg></span>Hvad</div>
-             <div class="side-acc__count">3.708 registerposter · 11.195 poster</div>
+             <div class="side-acc__count">3.708 registerposter · 11.120 poster</div>
              <ul class="side-acc__list">
                <li>Teater &amp; Musik</li>
                <li>Billedkunst</li>
@@ -258,7 +255,7 @@
            <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg><span class="side-acc__tab-word">Hvor</span></div>
            <div class="side-acc__body">
              <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg>Hvor</div>
-             <div class="side-acc__count">2.508 steder · 18.849 poster</div>
+             <div class="side-acc__count">2.508 steder · 18.840 poster</div>
              <ul class="side-acc__list">
                <li>Byer</li>
                <li>Lande</li>
@@ -379,7 +376,8 @@
              see: p.see || null,
              country: p.country_da || null,
              category: p.category || null,
-             persons: top.map(function (t) { return t[0]; }) };
+             persons: top.map(function (t) { return t[0]; }),
+             years: p.my || [] };
   });
 
   var collator = (typeof Intl !== 'undefined' && Intl.Collator)
@@ -648,7 +646,8 @@
     accessors: {
       country:  function (p) { return p.country; },
       category: function (p) { return p.category; },
-      person:   function (p) { return p.persons; }
+      person:   function (p) { return p.persons; },
+      years:    function (p) { return p.years; }
     },
     labels: {
       category: function (v) { return CATEGORY_LABELS_DA[v] || v; },

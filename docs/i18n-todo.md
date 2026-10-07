@@ -16,7 +16,6 @@ are the pages a reader reaches directly from the front door.
 |---|---|---|
 | `index.html` | `index_en.html` | Regenerated from the current Danish structure; original English "W W W" hero title concept kept, not re-translated |
 | `works.html` | `works_en.html` | Register overview — static, no live JS |
-| `search.html` | `search_en.html` | Static demo results page |
 | `places.html` | `places_en.html` | Full JS: FacetEngine, alphabet bar, list/table switcher |
 | `persons.html` | `persons_en.html` | Full JS, including the `?reg=` detail view and its sidebar restructuring |
 | `diaries.html` | `diaries_en.html` | Largest: List/Table/Calendar switcher + the calendar-grid widget |
@@ -36,7 +35,6 @@ site, Danish and English pages alike.
 |---|---|---|---|
 | `work.html` | 689 | yes | Linked from every work-related card/chip on every translated page today |
 | `place.html` | 402 | yes | Same, for places — including places_en.html's own card links |
-| `entry.html` | 194 | no (static) | One diary-page detail view; linked from every diary result card |
 
 (`person.html`, the secondary/legacy person detail page, was deleted
 2026-09-07 rather than translated — `persons_en.html` already self-hosts
@@ -74,7 +72,7 @@ Danish page every single `_en.html` footer links to right now.
 
 ### Explicitly out of scope: generated diary pages
 
-`mockup/diary-pages/*.html` — **4,544 auto-generated files**, one per
+`mockup/diary-pages/*.html` — **4,413 auto-generated files**, one per
 diary page, built by `scripts/build_mockup/build_diary_pages.py` (or
 equivalent). Hand-translating these is not viable; this needs an English
 mode added to the generating script instead (e.g. an `--lang en` flag

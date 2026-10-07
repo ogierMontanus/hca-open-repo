@@ -40,9 +40,12 @@ import re
 import sys
 from collections import Counter
 
+import _diary_scope  # noqa: E402  (sibling module; scripts run from repo root)
+
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
+DIARY      = os.path.join(ROOT, "data", "normalized", "diary.csv")
 REJSER     = os.path.join(ROOT, "data", "normalized", "rejser.tsv")
 SV14       = os.path.join(ROOT, "data", "normalized", "sv14_places_reconciled.csv")
 CATEGORIES = os.path.join(ROOT, "data", "normalized", "steder_verified_categories.csv")
@@ -221,6 +224,17 @@ def resolve_see_refs(generated: dict[str, dict]) -> None:
     print(f"  {n:,} of {len(parsed):,} 'se:' cross-references resolved to a main entry")
 
 
+def load_page_years() -> dict[tuple[str, str], set[int]]:
+    """(vol, page) -> {year, ...} from the transcribed diary (diary.csv)."""
+    out: dict[tuple[str, str], set[int]] = {}
+    with open(DIARY, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            y = (r.get("year") or "").strip()
+            if y.isdigit():
+                out.setdefault((r["vol"], r["page"]), set()).add(int(y))
+    return out
+
+
 def main() -> None:
     if not os.path.exists(ENTITIES):
         sys.exit(f"Missing {ENTITIES} — run scripts/normalization/hca_xlsx_to_csv.py first.")
@@ -234,11 +248,20 @@ def main() -> None:
     print(f"  {len(places):,} places")
 
     ref_count: Counter[str] = Counter()
+    # Years in which each place is mentioned in the diaries, for the
+    # "Omtaleår" facet on places.html. A diary page can span a year change,
+    # so a page contributes every distinct year found on its rows.
+    page_years = load_page_years()
+    mention_years: dict[str, set[int]] = {}
     if os.path.exists(REFS):
-        with open(REFS, encoding="utf-8") as f:
+        with _diary_scope.open_refs(REFS) as f:
             for r in csv.DictReader(f):
                 ref_count[r["entity_id"]] += 1
-        print(f"  reference counts loaded for {len(ref_count):,} entities")
+                yrs = page_years.get((r["vol"], r["page"]))
+                if yrs:
+                    mention_years.setdefault(r["entity_id"], set()).update(yrs)
+        print(f"  reference counts loaded for {len(ref_count):,} entities "
+              f"({len(mention_years):,} with dated mentions)")
 
     geo = load_rejser_geocodes()
     print(f"  rejser gazetteer: {len(geo):,} place-name keys")
@@ -269,6 +292,8 @@ def main() -> None:
             "refs":        ref_count.get(rid, 0),
             "category":    categories.get(rid),
         }
+        if rid in mention_years:
+            rec["my"] = sorted(mention_years[rid])
         g = geo.get(label.casefold())
         if g:
             rec.update(g)
@@ -325,6 +350,8 @@ def main() -> None:
         f.write("// docs/data-model/steder-verificeret-category-mapping.md. Raw English value as\n")
         f.write("// verified; UI templates translate it for display, they don't get it pre-translated.\n")
         f.write("// The hand-curated PLACES object in place.html takes precedence (ALL_PLACES merge).\n")
+        f.write("// `my` = sorted list of years in which the place is mentioned on a transcribed diary\n")
+        f.write("// page (from diary.csv); absent when no mention is dated. Powers \"Omtaleår\" on places.html.\n")
         f.write("const PLACES_EXTRA = ")
         f.write(json.dumps(generated, ensure_ascii=False, separators=(",", ":")))
         f.write(";\n")

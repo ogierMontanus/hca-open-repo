@@ -48,6 +48,8 @@ import os
 import sys
 from collections import Counter, defaultdict
 
+import _diary_scope  # noqa: E402  (sibling module; scripts run from repo root)
+
 # This script's progress output contains "person→place". On Windows the
 # console defaults to cp1252, which cannot encode U+2192, so the print below
 # raised UnicodeEncodeError and the stage died after doing all of its work.
@@ -83,7 +85,7 @@ def main() -> None:
     persons_on_page: dict[tuple, set[str]] = defaultdict(set)
     places_on_page:  dict[tuple, set[str]] = defaultdict(set)
     works_on_page:   dict[tuple, set[str]] = defaultdict(set)
-    with open(REFS, encoding="utf-8") as f:
+    with _diary_scope.open_refs(REFS) as f:
         for row in csv.DictReader(f):
             rid = row.get("entity_id")
             key = (row.get("vol") or "", row.get("page") or "")

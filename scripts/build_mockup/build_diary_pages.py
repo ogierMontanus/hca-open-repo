@@ -25,6 +25,8 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+import _diary_scope  # noqa: E402  (sibling module; scripts run from repo root)
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 REFS_CSV  = REPO_ROOT / "data" / "normalized" / "references.csv"
 DIARY_CSV = REPO_ROOT / "data" / "normalized" / "diary.csv"
@@ -122,7 +124,7 @@ def load_kb_links() -> dict:
 def load_references() -> dict:
     """Returns {(vol, page): [entity_id, ...]} preserving seq order."""
     refs = defaultdict(list)
-    with REFS_CSV.open(newline="", encoding="utf-8") as f:
+    with _diary_scope.open_refs(REFS_CSV) as f:
         for row in csv.DictReader(f):
             refs[(row["vol"], row["page"])].append(row["entity_id"])
     return refs

@@ -29,6 +29,8 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+import _diary_scope  # noqa: E402  (sibling module; scripts run from repo root)
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 REFS_CSV  = REPO_ROOT / "data" / "normalized" / "references.csv"
 DIARY_CSV = REPO_ROOT / "data" / "normalized" / "diary.csv"
@@ -108,7 +110,7 @@ def main():
     ent_pages   = defaultdict(list)   # entity_id -> [pag]  (vol/page order)
 
     rows = []
-    with REFS_CSV.open(newline="", encoding="utf-8") as f:
+    with _diary_scope.open_refs(REFS_CSV) as f:
         for r in csv.DictReader(f):
             if not r["vol"] or not r["page"]:
                 continue

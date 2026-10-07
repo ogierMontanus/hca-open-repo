@@ -142,8 +142,9 @@ Kilde: `raw/1-KBDiaryLinkData-PQ-links-active.xlsm` →
 
 - Dækker **bind I–X**, 4.413 sider. Bind XI er ikke udgivet hos KB, så
   registrets 56 sider derfra har intet link — siden udelader det blot.
-- 4.411 af registrets 4.544 dagbogssider har et link (97,1 %). De
-  resterende 133 ligger uden for KB's sidetælling for bindet.
+- Alle 4.413 viste dagbogssider (de med transskriberet tekst) har et
+  link; registerhenvisninger til sider uden tekst er udeladt
+  (se `docs/todo-data-errors.md`).
 - URL-formen udledes af `OffSetTab` i projektmappen:
   `hcadag{bind}_{offset + side - 1}_{side}.xhtml`. Reglen rammer 4.412 af
   4.413 rækker præcist.

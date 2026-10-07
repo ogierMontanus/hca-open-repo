@@ -48,6 +48,23 @@
  * been supplied yet — the group stays visible with an honest note instead of
  * being deleted or, worse, filled with invented counts.
  *
+ * ── Range groups (year from–to) ───────────────────────────────────────────
+ *
+ *   <div class="facet-group">
+ *     <div class="facet-group__header">Omtaleår …</div>
+ *     <div class="facet-group__body"
+ *          data-facet-range="years">      ← accessor name; its values are numbers
+ *       <input type="number" data-range-from>  —  <input type="number" data-range-to>
+ *     </div>
+ *   </div>
+ *
+ * An item passes when ANY of its values for that accessor lies within
+ * [from, to] (either bound may be left empty = open). Items with no value
+ * at all are excluded while a bound is set — they have nothing to match.
+ * A range group takes part in the same AND with the checkbox groups, counts
+ * as one active facet, is cleared by reset(), and feeds matcher() so page
+ * chrome (the alphabet bar) sees it too.
+ *
  * ── Usage ─────────────────────────────────────────────────────────────────
  *
  *   var facets = FacetEngine.create({
@@ -70,6 +87,8 @@ window.FacetEngine = (function () {
   'use strict';
 
   var BOX_SEL = 'input[type=checkbox][data-facet]';
+  var RANGE_SEL = '[data-facet-range]';
+  var RANGE_INPUT_SEL = RANGE_SEL + ' [data-range-from], ' + RANGE_SEL + ' [data-range-to]';
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -151,12 +170,42 @@ window.FacetEngine = (function () {
       return false;
     }
 
+    // A range group's bounds as numbers, or null while both ends are empty.
+    // Reversed bounds (from 1860 to 1840) are swapped rather than silently
+    // matching nothing.
+    function readRange(el) {
+      var host = el.querySelector(RANGE_SEL);
+      if (!host) return undefined;               // not a range group
+      var fromEl = host.querySelector('[data-range-from]');
+      var toEl   = host.querySelector('[data-range-to]');
+      var lo = fromEl && fromEl.value !== '' ? parseInt(fromEl.value, 10) : NaN;
+      var hi = toEl && toEl.value !== '' ? parseInt(toEl.value, 10) : NaN;
+      if (isNaN(lo) && isNaN(hi)) return null;
+      if (!isNaN(lo) && !isNaN(hi) && lo > hi) { var t = lo; lo = hi; hi = t; }
+      return { field: host.getAttribute('data-facet-range'),
+               lo: isNaN(lo) ? -Infinity : lo, hi: isNaN(hi) ? Infinity : hi };
+    }
+
+    function inRange(idx, r) {
+      var vals = VALS[idx][r.field] || [];
+      for (var v = 0; v < vals.length; v++) {
+        var n = parseInt(vals[v], 10);
+        if (n >= r.lo && n <= r.hi) return true;
+      }
+      return false;
+    }
+
     // Live groups only — a data-facet-pending group is invisible to the engine.
     function liveGroups() {
       var out = [];
       var els = panel.querySelectorAll('.facet-group');
       for (var g = 0; g < els.length; g++) {
         if (els[g].hasAttribute('data-facet-pending')) continue;
+        var rng = readRange(els[g]);
+        if (rng !== undefined) {
+          out.push({ el: els[g], preds: [], checked: [], range: rng });
+          continue;
+        }
         var boxes = els[g].querySelectorAll(BOX_SEL);
         if (!boxes.length) continue;
         var all = [], checked = [];
@@ -175,7 +224,9 @@ window.FacetEngine = (function () {
     function passes(idx, groups, skipEl) {
       for (var g = 0; g < groups.length; g++) {
         var grp = groups[g];
-        if (grp.el === skipEl || !grp.checked.length) continue;
+        if (grp.el === skipEl) continue;
+        if (grp.range && !inRange(idx, grp.range)) return false;
+        if (!grp.checked.length) continue;
         var ok = false;
         for (var j = 0; j < grp.checked.length; j++) {
           if (hits(idx, grp.checked[j])) { ok = true; break; }
@@ -387,7 +438,9 @@ window.FacetEngine = (function () {
     function state(groups) {
       groups = groups || liveGroups();
       var active = 0;
-      for (var i = 0; i < groups.length; i++) active += groups[i].checked.length;
+      for (var i = 0; i < groups.length; i++) {
+        active += groups[i].checked.length + (groups[i].range ? 1 : 0);
+      }
       return { active: active, total: items.length, shown: filtered.length };
     }
 
@@ -398,6 +451,8 @@ window.FacetEngine = (function () {
       FacetOverlay.collapseAll();
       var boxes = panel.querySelectorAll(BOX_SEL);
       for (var i = 0; i < boxes.length; i++) boxes[i].checked = false;
+      var rangeInputs = panel.querySelectorAll(RANGE_INPUT_SEL);
+      for (var ri = 0; ri < rangeInputs.length; ri++) rangeInputs[ri].value = '';
       // Nothing is selected any more, so any facet showing a below-the-cutoff
       // value only because it was ticked should fold back to its plain
       // top-N state too.
@@ -415,6 +470,11 @@ window.FacetEngine = (function () {
     panel.addEventListener('change', function (ev) {
       var t = ev.target;
       if (t && t.matches && t.matches(BOX_SEL)) apply();
+    });
+    // Range inputs: re-filter while typing and on the spinner arrows alike.
+    panel.addEventListener('input', function (ev) {
+      var t = ev.target;
+      if (t && t.matches && t.matches(RANGE_INPUT_SEL)) apply();
     });
 
     // Clear boxes first, then let the page drop its own prefilter state
