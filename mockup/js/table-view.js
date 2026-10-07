@@ -78,7 +78,10 @@ window.TableView = (function () {
       return '<tr>' + columns.map(function (c) {
         var cls = [c.numeric ? tableClass + '__num' : null, c.className || null]
           .filter(Boolean).join(' ');
-        return '<td' + (cls ? ' class="' + cls + '"' : '') + '>' + cellHtml(c, item) + '</td>';
+        // data-label feeds the phone layout (css/mobile.css), where each row
+        // becomes a stacked card and the cell shows its column name.
+        return '<td' + (cls ? ' class="' + cls + '"' : '') +
+          (c.label ? ' data-label="' + esc(c.label) + '"' : '') + '>' + cellHtml(c, item) + '</td>';
       }).join('') + '</tr>';
     }
 

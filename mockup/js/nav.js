@@ -83,3 +83,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 });
+
+/* Facet-panel helpers shared by every browse page: removable active-filter
+   chips (js/active-filters.js) and the phone filter toggle (js/mobile-nav.js).
+   Both are no-ops on pages without a .facet-panel. */
+(function bootstrapFacetHelpers() {
+  if (!document.querySelector('.facet-panel')) return;
+  var self = document.currentScript
+    || document.querySelector('script[src$="js/nav.js"]')
+    || document.querySelector('script[src*="nav.js"]');
+  var base = self ? self.src.replace(/js\/nav\.js.*$/, '') : '';
+  ['js/active-filters.js', 'js/mobile-nav.js'].forEach(function (src) {
+    var s = document.createElement('script');
+    s.src = base + src;
+    document.head.appendChild(s);
+  });
+})();

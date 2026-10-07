@@ -1,0 +1,265 @@
+/* mobile.css — simplified vertical layout for phones.
+ *
+ * The site is laptop-first: wide horizontal layouts (sidebar + results, three
+ * landing columns, hover side-accordion, sortable tables). Everything here is
+ * scoped to narrow viewports and only overrides — desktop is untouched.
+ * Linked LAST in every page's <head> so it wins over the inline <style>
+ * blocks some pages carry.
+ *
+ * Rules of thumb:
+ *   - one column, nothing wider than the viewport, tap targets >= 44px;
+ *   - inputs at 16px so iOS Safari doesn't zoom on focus;
+ *   - never add an `overflow` value to .facet-panel or any other
+ *     position:sticky element that has a position:fixed descendant
+ *     (iOS Safari clips the fixed child to it — see CLAUDE.md). On phones the
+ *     panel is made position:static instead.
+ */
+@media (max-width: 760px) {
+
+  :root { --header-height: 56px; }
+  html, body { max-width: 100%; overflow-x: clip; }
+  .container { padding: 0 var(--sp4); }
+  .container[style*="margin-left"] { margin-left: auto !important; }
+  img, svg, video, canvas { max-width: 100%; }
+
+  /* Demo ribbon: smaller, so it doesn't swallow the logo. */
+  body::before { top: 10px; left: -40px; width: 120px; padding: 2px 0; font-size: 0.6rem; }
+
+  /* === Header: logo + language on row 1, search on row 2 ================= */
+  .site-header { height: auto; position: static; padding: var(--sp2) 0 var(--sp3); }
+  .site-header .container {
+    height: auto; flex-wrap: wrap; gap: var(--sp2) var(--sp3);
+  }
+  .site-logo { order: 1; flex: 1 1 0; min-width: 110px; padding-left: 28px; font-size: 0.98rem; white-space: normal; line-height: 1.2; }
+  #js-cart-badge { order: 2; }
+  .lang-switch { order: 3; }
+  .search-form { order: 4; flex: 1 0 100%; max-width: none; position: relative; }
+  .search-input { font-size: 16px; min-height: 44px; min-width: 0; width: 100%; }
+  .search-btn { min-height: 44px; padding: 0 var(--sp4); }
+  .lang-switch { gap: 0; }
+  .lang-switch a { padding: 10px 9px; font-size: 0.85rem; }
+  .cart-badge { min-height: 40px; display: inline-flex; align-items: center; }
+  .typeahead { max-width: calc(100vw - 2 * var(--sp4)); }
+
+  /* === Hero / breadcrumbs ================================================ */
+  .page-hero { padding: var(--sp5) 0; }
+  .page-hero h1 { font-size: 1.6rem; line-height: 1.15; }
+  .page-hero p { font-size: 0.95rem; }
+  .page-hero__head { gap: var(--sp3); }
+  .page-hero__icon { width: 44px; height: 44px; flex-shrink: 0; }
+  .page-hero__meta { display: flex; flex-wrap: wrap; gap: 2px var(--sp3); }
+  .page-hero__meta span + span::before { margin: 0 var(--sp2) 0 0; }
+  .breadcrumb { font-size: 0.8rem; flex-wrap: wrap; }
+  .section { padding-top: var(--sp5); padding-bottom: var(--sp5); }
+  .section-title { font-size: 1.2rem; }
+
+  /* === Facets + results: stacked, filters behind a toggle ================= */
+  .browse-layout { grid-template-columns: minmax(0, 1fr); gap: var(--sp4); }
+  .facet-panel { position: static; max-height: none; overflow-y: visible; }
+  .facet-panel__header { min-height: 52px; cursor: pointer; }
+  .facet-panel__title::after { content: " ▾"; font-size: 0.9rem; }
+  .facet-panel--m-open .facet-panel__title::after { content: " ▴"; }
+  .facet-panel__clear { padding: 12px 4px; font-size: 0.85rem; }
+  .facet-panel:not(.facet-panel--m-open) .facet-group { display: none; }
+  .facet-panel:not(.facet-panel--m-open) .facet-panel__header { border-bottom: none; }
+  .facet-group__header { min-height: 48px; font-size: 0.95rem; }
+  .facet-item { min-height: 44px; padding-top: 8px; padding-bottom: 8px; }
+  .facet-item input[type="checkbox"] { width: 22px; height: 22px; }
+  .facet-item__label { font-size: 0.95rem; }
+  .facet-group__body[data-facet-source] { max-height: 320px; }
+  .facet-more-toggle { min-height: 44px; }
+  .facet-group input[type="number"] { font-size: 16px !important; min-height: 44px; width: 6.5em !important; }
+  /* Expanded facet overlay: nearly full-screen, single column. */
+  .facet-group--expanded .facet-group__body[data-facet-source] {
+    top: 4vh; width: 96vw; max-height: 92vh; columns: 1;
+    padding: var(--sp2) var(--sp3) var(--sp4);
+  }
+  .facet-sort-toggle__btn { padding: 8px 14px; font-size: 0.8rem; }
+
+  /* Results header: count on its own line, controls wrap under it. */
+  .results-header { flex-wrap: wrap; gap: var(--sp2) var(--sp4); }
+  .results-count { flex: 1 0 100%; }
+  .results-header__select-all { min-height: 44px; display: inline-flex; align-items: center; gap: var(--sp2); }
+  .results-header__select-all input { width: 22px; height: 22px; }
+  .layout-switcher { margin-left: auto; }
+  .layout-switcher__btn { min-height: 44px; padding: 0 var(--sp4); }
+  #js-alpha-bar { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto; gap: 4px !important; padding-bottom: var(--sp2); -webkit-overflow-scrolling: touch; }
+  #js-alpha-bar .chip { flex: 0 0 auto; min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+  .active-filter { min-height: 36px; font-size: 0.85rem; }
+  .active-filter__x { width: 24px; height: 24px; }
+  .active-filters__clear { min-height: 36px; }
+
+  /* === Result cards and rows ============================================= */
+  .result-grid { grid-template-columns: minmax(0, 1fr); }
+  .result-row { align-items: stretch; }
+  .result-card__select { min-width: 44px; justify-content: center; }
+  .result-card__select input { width: 22px; height: 22px; }
+  /* Register rows (ID · title/meta · refs): ID and refs share the first line,
+     the title takes the full second line. Replaces the inline desktop flex row. */
+  .result-row > .result-card {
+    display: grid !important; grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px var(--sp3) !important; align-items: baseline !important; padding: var(--sp3) !important; min-width: 0;
+  }
+  .result-row > .result-card > div[style*="min-width"] { min-width: 0 !important; }
+  .result-row > .result-card > div:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .result-row > .result-card > div:nth-child(3) { grid-column: 2; grid-row: 1; text-align: right !important; }
+  .result-row > .result-card > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; min-width: 0; }
+  .result-card__body { min-width: 0; }
+  .result-card__title { overflow-wrap: anywhere; }
+  /* List-style cards (diary list): thumb becomes a slim strip above the body. */
+  .result-grid--list .result-card { flex-direction: column; }
+  .result-grid--list .result-card__thumb {
+    width: 100%; height: auto; min-height: 0; padding: 6px var(--sp4); justify-content: flex-start;
+    border-right: none; border-bottom: 1px solid var(--color-border);
+  }
+  .result-card__chips { flex-wrap: wrap; }
+  .chip { min-height: 32px; display: inline-flex; align-items: center; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  .result-card__chip-link { max-width: 100%; }
+
+  /* === Tables become stacked cards; sorting stays as a pill strip ========= */
+  .data-table, .data-table tbody { display: block; width: 100%; }
+  .data-table thead { display: block; overflow-x: auto; margin-bottom: var(--sp3); -webkit-overflow-scrolling: touch; }
+  .data-table thead tr { display: flex; gap: var(--sp2); }
+  .data-table th {
+    display: block; flex: 0 0 auto; white-space: nowrap; border: 1px solid var(--color-border);
+    border-radius: 999px; padding: 8px 14px; background: var(--color-surface); min-height: 40px;
+  }
+  .data-table th:first-child:empty { display: none; }
+  .data-table tbody tr {
+    display: block; background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); padding: var(--sp2) var(--sp4); margin-bottom: var(--sp3);
+  }
+  .data-table td {
+    display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp4);
+    border: none; padding: 6px 0; text-align: left; overflow-wrap: anywhere;
+  }
+  .data-table td::before {
+    content: attr(data-label); flex: 0 0 34%; max-width: 34%; color: var(--color-text-muted);
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .data-table td:not([data-label])::before { content: none; }
+  .data-table td:empty { display: none; }
+  .data-table td.data-table__num { text-align: left; }
+  .data-table td > *:not(input) { text-align: right; }
+  .data-table td:not([data-label]) { padding: 2px 0; }
+  .data-table .result-card__select { min-height: 36px; justify-content: flex-start; }
+
+  /* Cart table (own markup) */
+  .cart-table, .cart-table tbody { display: block; width: 100%; }
+  .cart-table thead { display: none; }
+  .cart-table tr { display: flex; flex-wrap: wrap; align-items: center; gap: 2px var(--sp3); padding: var(--sp3) 0; border-bottom: 1px solid var(--color-border); }
+  .cart-table td { border: none; padding: 0; text-align: left; }
+  .cart-table td:nth-child(3) { flex: 1 0 100%; order: -1; font-weight: 600; }
+  .cart-table__remove { margin-left: auto; }
+  .cart-item { flex-wrap: wrap; gap: var(--sp2) var(--sp3); }
+  .cart-item__remove { min-height: 44px; padding: 8px 14px; }
+  .cart-toolbar { padding: var(--sp3); }
+  .cart-toolbar__count { flex: 1 0 100%; }
+  .cart-toolbar button { flex: 1 1 auto; min-height: 44px; }
+
+  /* === Detail pages: sidebar and main stacked ============================ */
+  .entity-layout { display: flex; flex-direction: column; gap: var(--sp5); margin: 0; }
+  .entity-main, .entity-sidebar { order: 0; width: 100%; min-width: 0; position: static; gap: var(--sp5); }
+  .entity-sidebar { order: -1; }
+  /* Diary pages: the transcription comes first, the register sidebar after it. */
+  .entity-layout:has(.entry-text) .entity-sidebar { order: 1; }
+  .info-table td { display: block; width: auto; padding: 2px 0; }
+  .info-table td:first-child { padding-top: var(--sp3); }
+  .map-leaflet, .map-placeholder { height: 260px; }
+  .tabs { overflow-x: auto; white-space: nowrap; }
+  .tab-btn { min-height: 44px; flex: 0 0 auto; }
+  .entity-ref-item { flex-wrap: wrap; }
+  .entry-text { font-size: 1rem; }
+
+  /* === Side accordion: hover-only on desktop -> plain stacked links ====== */
+  .detail-with-sideacc { grid-template-columns: minmax(0, 1fr); gap: var(--sp5); }
+  .side-acc { flex-direction: column; width: 100%; height: auto; box-shadow: none; }
+  .side-acc__panel, .side-acc:hover .side-acc__panel, .side-acc:hover .side-acc__panel:hover {
+    max-width: 100%; border-right: none; border-bottom: 1.5px solid var(--color-border);
+    transition: none; min-height: 64px;
+  }
+  .side-acc__panel:last-child { border-bottom: none; }
+  .side-acc__tab { display: none; }
+  .side-acc__body {
+    position: static; opacity: 1; transform: none; pointer-events: auto; min-width: 0;
+    padding: var(--sp3) var(--sp4); transition: none;
+  }
+  .side-acc__list, .side-acc__examples { display: none; }
+  .side-acc__heading { font-size: 1rem; }
+  .side-acc__count { font-size: 0.8rem; }
+
+  /* === Category pages (cards/wings) ====================================== */
+  .wing-card, .subsection-card, .institution-card, .dimension-card, .collection-card { padding: var(--sp4); }
+  .institution-grid, .dimension-grid, .collection-grid, .subsection-grid { grid-template-columns: minmax(0, 1fr) !important; gap: var(--sp3); }
+  /* Inline 2-/3-column grids on the overview pages (the 7-column calendar stays). */
+  [style*="grid-template-columns:repeat(3,1fr)"], [style*="grid-template-columns:repeat(2,1fr)"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .author-tabs { overflow-x: auto; flex-wrap: nowrap; }
+  .author-tab { flex: 0 0 auto; min-height: 44px; }
+  .media-filter { flex-wrap: wrap; }
+  .media-filter__btn { min-height: 44px; }
+
+  /* === Landing page ====================================================== */
+  .landing-header { padding: var(--sp3) 0; }
+  .landing-header__logo { padding-left: 30px; font-size: 0.78rem; }
+  .landing-hero { min-height: 0; padding: 72px var(--sp4) var(--sp6); }
+  .landing-title { font-size: 2.4rem; }
+  .landing-subtitle { font-size: 1.15rem; margin-bottom: var(--sp5); }
+  .landing-search-form { max-width: none; }
+  .landing-search-input { font-size: 16px; min-height: 48px; padding-left: var(--sp4); padding-right: var(--sp3); min-width: 0; }
+  .landing-search-btn { min-height: 48px; padding: 0 var(--sp4); }
+  .landing-three { padding-bottom: var(--sp6); }
+  .landing-grid { grid-template-columns: minmax(0, 1fr); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .landing-card { padding: var(--sp5); border-right: none; border-bottom: 1.5px solid var(--color-border); }
+  .landing-card:last-child { border-bottom: none; }
+  .landing-card__heading { font-size: 1.6rem; }
+  .landing-card__list li { padding-top: 10px; padding-bottom: 10px; min-height: 44px; }
+  .landing-card__examples { display: none; }
+  .landing-hvornaar { flex-wrap: wrap; gap: 2px var(--sp3); }
+  .landing-hvornaar__examples { display: none; }
+  .landing-nav .container { gap: var(--sp3) var(--sp4); }
+  .landing-nav__sep { display: none; }
+  .landing-nav__item { min-height: 44px; font-size: 0.9rem; }
+  .landing-footer .container, .site-footer .container { flex-direction: column; align-items: flex-start !important; gap: var(--sp3) !important; }
+
+  /* === Diaries: calendar, toolbar, diary pages ========================== */
+  #calendar-results { padding: var(--sp3); }
+  #calendar-results select { font-size: 16px; min-height: 44px; }
+  #calendar-grid { max-width: none; width: 100%; }
+  #calendar-grid > button { min-height: 44px; }
+  .diary-toolbar, #diary-toolbar { flex-wrap: wrap; gap: var(--sp2); }
+  .diary-toolbar input, .diary-toolbar select, #diary-toolbar input, #diary-toolbar select { font-size: 16px; min-height: 44px; }
+  pre, .entry-text, .diary-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+  code, kbd { overflow-wrap: anywhere; word-break: break-word; }
+
+  /* === Map =============================================================== */
+  #kort-map { height: calc(100vh - 260px); min-height: 340px; }
+  .kort-meta { gap: var(--sp2) var(--sp4); }
+  .kort-meta > span[style*="margin-left:auto"] { margin-left: 0 !important; }
+  .kort-meta > span:not(:has(*)) { display: none; }  /* dot separators + helper text */
+
+  /* === Misc ============================================================== */
+  table:not(.data-table):not(.cart-table):not(.info-table) { display: block; overflow-x: auto; max-width: 100%; }
+  .nation-link { flex-wrap: wrap; }
+  .nation-grid { grid-template-columns: minmax(0, 1fr); }
+  .site-footer { padding: var(--sp5) 0; }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .landing-title { font-size: 2rem; }
+  .page-hero h1 { font-size: 1.4rem; }
+  .site-logo { font-size: 0.92rem; }
+}
+
+/* "Vis N resultater" button at the foot of the open filter panel (js/mobile-nav.js).
+   Hidden everywhere except an open panel on a phone. */
+.facet-panel__done { display: none; }
+@media (max-width: 760px) {
+  .facet-panel--m-open .facet-panel__done {
+    display: block; width: calc(100% - 2 * var(--sp4)); margin: var(--sp3) var(--sp4) var(--sp4);
+    min-height: 48px; font: inherit; font-weight: 600; color: #fff; background: var(--color-accent);
+    border: none; border-radius: var(--radius); cursor: pointer;
+  }
+}

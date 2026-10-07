@@ -1302,3 +1302,39 @@ body::before {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
+
+/* === Active-filter chips ====================================================
+   Rendered by js/active-filters.js between the results header and the results:
+   one removable chip per ticked facet value / year range / letter, plus a
+   "clear all". Lets any filter be undone with one tap even when the facet
+   panel is closed (phones — see css/mobile.css) or scrolled out of view. */
+.active-filters {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp2);
+  margin: 0 0 var(--sp4);
+}
+.active-filters[hidden] { display: none; }
+.active-filter {
+  display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
+  padding: 4px 6px 4px 12px; font: inherit; font-size: 0.8rem; line-height: 1.3;
+  color: var(--color-accent); background: var(--color-accent-light);
+  border: 1px solid var(--color-accent); border-radius: 999px; cursor: pointer;
+}
+.active-filter:hover { background: #cde3f0; }
+.active-filter__group { color: var(--color-text-muted); font-size: 0.72rem; }
+.active-filter__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.active-filter__x {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%; font-size: 1rem; line-height: 1;
+  background: var(--color-accent); color: #fff; flex-shrink: 0;
+}
+.active-filters__clear {
+  font: inherit; font-size: 0.8rem; color: var(--color-text-muted);
+  background: none; border: none; text-decoration: underline; cursor: pointer;
+  padding: 4px 6px;
+}
+.active-filters__clear:hover { color: var(--color-accent); }
+.facet-panel__badge {
+  display: none; margin-left: 6px; padding: 0 7px; border-radius: 999px;
+  font-size: 0.7rem; letter-spacing: 0; background: var(--color-accent); color: #fff;
+}
+.facet-panel__badge--on { display: inline-block; }
