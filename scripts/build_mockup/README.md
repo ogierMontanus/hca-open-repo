@@ -107,9 +107,10 @@ mockup.
 
 ## Follow-ups
 
-- Dates/years for diary pages currently exist only for vols VI + VII
-  (751 of 4,544 pages); the other ≈3,800 pages list vol/page only
-  until more volumes are transcribed.
+- Dates/years and full text now exist for all ten diary volumes (I–X):
+  4,413 of the 4,546 indexed pages. The other 133 pages (vol XI and
+  pages beyond the diary text in I–X) are known only from register
+  references and list vol/page only.
 - Country attribution for places comes from a 33-country bounding-box
   gazetteer inlined in `build_places_extra.py` (and `build_web_data.py`).
   Replace with a proper reverse-geocoder when the workshop produces one.
