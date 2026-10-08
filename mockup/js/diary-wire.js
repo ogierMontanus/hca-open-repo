@@ -111,6 +111,13 @@ window.DiaryWire = (function () {
     return titleFor(m);
   }
 
+  /* Unescaped twin of headingFor() for cart labels (stored as text). */
+  function plainHeading(m) {
+    if (m.d) return formatDate(m.d);
+    if (m.y) return m.y;
+    return 'Bind ' + (m.v || '?') + ', s. ' + (m.p || '?');
+  }
+
   /* --- diary-reference section for one register entry -------------------- */
   function refs(container, regId, opts) {
     opts = opts || {};
@@ -254,6 +261,50 @@ window.DiaryWire = (function () {
         // several page-sized clicks otherwise; see the click handler).
         if (remaining > 0) opts.moreBtn.textContent = 'Vis alle (' + remaining.toLocaleString('da-DK') + ')';
       }
+    }
+
+    // "Vælg alle" over every diary page of this entry (all rec.e, not just the
+    // rendered 24), shown above the list in BOTH layouts -- it sits outside
+    // `container`, which table/list renders overwrite wholesale. Only offered
+    // for 2+ references; with one, its own checkbox is the whole story. Built
+    // here rather than per page so persons/place/work (da + en) stay identical.
+    var selectAllBox = null;
+    if (typeof Cart !== 'undefined' && rec.e.length > 1 && container.parentNode) {
+      var en = document.documentElement.lang === 'en';
+      var wrap = document.createElement('label');
+      wrap.className = 'results-header__select-all';
+      wrap.style.margin = '0 0 var(--sp3)';
+      wrap.innerHTML = '<input type="checkbox"> <span>' +
+        (en ? 'Select all' : 'Vælg alle') + ' (' + rec.e.length.toLocaleString(en ? 'en-GB' : 'da-DK') + ')</span>';
+      container.parentNode.insertBefore(wrap, container);
+      selectAllBox = wrap.firstChild;
+      var allItems = function () {
+        return rec.e.map(function (pag) {
+          return { type: 'diary', rid: pag, label: plainHeading((hasMeta() && DIARY_META[pag]) || {}) };
+        });
+      };
+      var paintSelectAll = function () {
+        var inCount = 0;
+        for (var i = 0; i < rec.e.length; i++) if (Cart.has('diary', rec.e[i])) inCount++;
+        selectAllBox.checked = inCount === rec.e.length;
+        selectAllBox.indeterminate = inCount > 0 && inCount < rec.e.length;
+      };
+      selectAllBox.addEventListener('change', function () {
+        if (selectAllBox.checked) {
+          if (rec.e.length > 100 && !confirm(en
+                ? 'Add all ' + rec.e.length + ' diary pages to the cart?'
+                : 'Tilføj alle ' + rec.e.length.toLocaleString('da-DK') + ' dagbogssider til kurven?')) {
+            selectAllBox.checked = false;
+            return;
+          }
+          Cart.addMany(allItems());
+        } else {
+          Cart.removeMany(allItems());
+        }
+        Cart.syncCheckboxes(container);
+      });
+      Cart.subscribe(paintSelectAll);
+      paintSelectAll();
     }
 
     render(Math.min(step, rec.e.length));

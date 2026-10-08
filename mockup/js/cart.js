@@ -57,7 +57,10 @@
  *   mountToggle(el, type, rid,    fills el with a live "+ Tilføj til kurv" /
  *               label)             "✓ I kurven" ("+ Add to cart" / "✓ In
  *                                   cart" in English) button — for detail
- *                                   pages with one entity and no result list
+ *                                   pages with one entity and no result list.
+ *                                   Adds the entity PLUS all its diary pages
+ *                                   and (persons) attributed works; removing
+ *                                   takes the whole bundle out again
  *
  * ── Markup contract ─────────────────────────────────────────────────────
  *   <div class="result-row">
@@ -76,6 +79,16 @@ window.Cart = (function () {
   'use strict';
 
   var KEY = 'hca-cart-v1';
+
+  // Directory prefix of mockup/ relative to the current page, taken from this
+  // script's own src ("../js/cart.js" on diary-pages/*.html → "../"). The
+  // badge links to cart.html, which lives in mockup/, so a bare 'cart.html'
+  // 404s from the diary-pages/ subfolder.
+  var BASE = (function () {
+    var s = document.currentScript;
+    var m = s && /^(.*?)js\/cart\.js(?:[?#].*)?$/.exec(s.getAttribute('src') || '');
+    return m ? m[1] : '';
+  })();
   var subscribers = [];
 
   function safeStorage() {
@@ -210,7 +223,7 @@ window.Cart = (function () {
     function paint() {
       var n = count();
       var en = isEnglish();
-      el.innerHTML = '<a href="' + (en ? 'cart_en.html' : 'cart.html') + '" class="cart-badge' +
+      el.innerHTML = '<a href="' + BASE + (en ? 'cart_en.html' : 'cart.html') + '" class="cart-badge' +
         (n ? ' cart-badge--active' : '') + '">' +
         (en ? '🛒 Cart' : '🛒 Kurv') + (n ? ' <span class="cart-badge__count">' + n + '</span>' : '') + '</a>';
     }
@@ -222,18 +235,61 @@ window.Cart = (function () {
   // item, not a list — persons.html?reg=…, place.html, work.html, and the
   // generated diary-pages/*.html — where there is no row of results to put a
   // checkbox next to. Mirrors mountBadge's self-painting pattern.
+  // Plain-text cart label for a diary page — same precedence as
+  // DiaryWire.heading (date, else year, else "Bind V, s. P"), minus the HTML
+  // escaping, since the label is stored as text.
+  function diaryLabel(pag) {
+    var m = (typeof DIARY_META !== 'undefined' && DIARY_META[pag]) || {};
+    if (m.d) return (typeof DiaryWire !== 'undefined' && DiaryWire.formatDate) ? DiaryWire.formatDate(m.d) : m.d;
+    if (m.y) return m.y;
+    return 'Bind ' + (m.v || '?') + ', s. ' + (m.p || '?');
+  }
+
+  // Everything that travels with a detail page's own entity when it goes in
+  // the cart: EVERY diary page that mentions it (DIARY_REFS) — so the cart
+  // and PDF always hold at least one diary entry, the primary source, not
+  // just a register stub — and, for a person, every work attributed to them
+  // in the register (the "N værker tilskrevet …" block on the page). Empty
+  // for a diary page itself, and when the entity has no diary mentions at all.
+  function relatedFor(type, rid) {
+    var out = [];
+    if (type === 'diary') return out;
+    if (typeof DIARY_REFS !== 'undefined' && DIARY_REFS[rid] && DIARY_REFS[rid].e) {
+      DIARY_REFS[rid].e.forEach(function (pag) {
+        out.push({ type: 'diary', rid: pag, label: diaryLabel(pag) });
+      });
+    }
+    if (type === 'person' && typeof EntityRefs !== 'undefined') {
+      EntityRefs.worksByAuthor(rid).forEach(function (w) {
+        out.push({ type: 'work', rid: w.rid, label: w.title });
+      });
+    }
+    return out;
+  }
+
   function mountToggle(el, type, rid, label) {
     if (!el) return;
+    var related = null;
+    function rel() { return related || (related = relatedFor(type, rid)); }
     function paint() {
       var inCart = has(type, rid);
       var en = isEnglish();
+      var n = rel().length;
+      var suffix = n ? (en ? ' (+' + n + ' related)' : ' (+' + n + ' tilknyttede)') : '';
       el.innerHTML = '<button type="button" class="cart-toggle-btn' +
         (inCart ? ' cart-toggle-btn--active' : '') + '">' +
         (en
-          ? (inCart ? '✓ In cart' : '+ Add to cart')
-          : (inCart ? '✓ I kurven' : '+ Tilføj til kurv')) + '</button>';
+          ? (inCart ? '✓ In cart' : '+ Add to cart' + suffix)
+          : (inCart ? '✓ I kurven' : '+ Tilføj til kurv' + suffix)) + '</button>';
       el.querySelector('button').addEventListener('click', function () {
-        toggle(type, rid, label);
+        var items = [{ type: type, rid: rid, label: label }].concat(rel());
+        if (has(type, rid)) { removeMany(items); return; }
+        // Same >100 guard as "Vælg alle" — a heavily-mentioned person must
+        // not balloon the cart with one unannounced click.
+        if (items.length > 100 && !window.confirm(en
+          ? 'Add ' + items.length + ' items (this entry plus its diary pages and works)?'
+          : 'Tilføj ' + items.length + ' poster (denne post samt dens dagbogssider og værker)?')) return;
+        addMany(items);
       });
     }
     subscribe(paint);

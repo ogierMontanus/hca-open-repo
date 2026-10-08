@@ -274,9 +274,9 @@ support there once covers all of it:
 - `list()` gained an opt-in `opts.selectAll` (a checkbox element) with the
   same tri-state / >100-confirm "Vælg alle" logic as
   `category-catalogue.js` and `persons.html`, wired from `diaries.html`.
-  The embedded `refs()` lists don't take a select-all — they're a
-  secondary view of an already-filtered set (one entity's mentions), not a
-  primary "browse everything" list.
+  The embedded `refs()` lists don't take the `opts.selectAll` option;
+  instead `refs()` builds its own "Vælg alle (N)" / "Select all (N)" checkbox
+  (see "Diary-reference select-all" below).
 - `persons.html`'s `Cart.wireCheckboxes()` call had to move: it lived
   inside the list-view branch only, so it never ran on a `?reg=…` detail
   view load — meaning the embedded diary-reference checkboxes there would
@@ -305,6 +305,40 @@ into a `#js-cart-toggle` div sitting under the hero chips on all four
 detail-page shapes; styled once as `.cart-toggle-btn` in `style.css`
 rather than per-page, since it's the same button everywhere.
 
+### Constraint: a detail-page add always carries its diary pages (2026-10-08)
+
+A bare single-entity add (just "Bremer, Fredrika" and nothing else) gives a
+cart and PDF with one register stub and no primary source — not useful.
+**Rule: adding a `person`/`place`/`work` from its detail page must always
+include at least one diary page (post) in the cart.** Implemented as "all of
+them": `relatedFor(type, rid)` in `js/cart.js` adds every diary page in
+`DIARY_REFS[rid].e` (e.g. `Reg0042200` Fredrika Bremer → 1 person + 44 diary
+pages), so the minimum is met whenever the entity has any diary mention at
+all. An entity with zero diary refs can only be added alone — there is
+nothing to include.
+
+For a **person**, the bundle also contains every work attributed to them in
+the register (`EntityRefs.worksByAuthor(rid)`, the "N værker tilskrevet …"
+block on the page; Bremer: 6 works) — so cart.html and the PDF carry the
+person, their diary mentions and their works.
+
+Behaviour details: the button label shows the bundle size ("+ Tilføj til kurv
+(+50 tilknyttede)"); more than 100 items triggers the same confirm as "Vælg
+alle"; clicking "✓ I kurven" removes the whole bundle again (including any of
+those diary pages/works the reader had ticked separately). `diary` pages have
+no bundle. Places/works get the diary pages but no extra related entities.
+
+### Diary-reference select-all (2026-10-08)
+
+`DiaryWire.refs()` inserts a "Vælg alle (N)" checkbox (`.results-header__select-all`,
+"Select all (N)" when `<html lang="en">`) directly above the reference list
+whenever the entry has **more than one** reference. It sits outside the list
+container, so it stays put in both Liste and Tabel layouts (which overwrite the
+container's contents). It covers all N references, not just the rendered 24;
+tri-state via `Cart.subscribe`; >100 asks for confirmation. Built inside
+`refs()` so `persons.html`, `persons_en.html`, `place.html` and `work.html` are
+identical by construction — no per-page markup to keep in sync.
+
 The generated `diary-pages/*.html` template
 (`scripts/build_mockup/build_diary_pages.py`) needed the same
 `Cart.mountBadge()` / `Cart.mountToggle()` call baked into its Python
@@ -326,6 +360,20 @@ the link to survive into a saved PDF — Chrome's print-to-PDF already
 preserves any `<a href>` present in the printed DOM as a clickable link;
 the only change needed was making sure the *id* was the element carrying
 the `href`.
+
+### PDF keeps every link; badge works from `diary-pages/` (2026-10-08)
+
+In the printed/PDF table each row now has **three** routes to the entry: the ID
+link, the title (also an `<a>`, same target — in the on-screen list cards too),
+and a print-only **URL column** with the absolute address as plain text (via
+`new URL(href, location.href)`), so the link survives even in a PDF viewer or
+export path that drops `<a>` annotations. Verified with Chromium `page.pdf()`:
+51-item cart → 106 link annotations. Absolute URLs are only useful from the
+hosted site, not `file://`.
+
+`Cart.mountBadge()` linked a bare `cart.html`, which 404s from
+`diary-pages/*.html`. `cart.js` now derives a `BASE` prefix from its own
+`<script src>` (`../js/cart.js` → `../`) and prefixes the badge link.
 
 ## A third view: sortable table, and the PDF's actual default
 

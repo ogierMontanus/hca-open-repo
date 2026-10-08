@@ -77,6 +77,12 @@
     .cart-table th[aria-sort="descending"] .cart-table__sort-arrow { opacity: 1; }
     .cart-table td.cart-table__type { color: var(--color-text-muted); white-space: nowrap; }
     .cart-table td.cart-table__remove { text-align: right; }
+    /* Title is a second link to the same page as the ID; the URL column is
+       print-only — the same address as visible text, so the link survives even
+       where a PDF export drops <a> annotations (viewers auto-link plain URLs). */
+    .cart-table td a.cart-table__title-link, .cart-item__title a { color: inherit; text-decoration: none; }
+    .cart-table td a.cart-table__title-link:hover, .cart-item__title a:hover { text-decoration: underline; }
+    .cart-table th.cart-table__url, .cart-table td.cart-table__url { display: none; }
     .cart-table tbody tr:hover { background: var(--color-surface-2); }
 
     /* "Save as PDF" happens via the browser's own print dialog — see
@@ -105,6 +111,8 @@
       .cart-table thead { display: table-header-group; }
       .cart-table tr { break-inside: avoid; }
       .cart-table th.cart-table__remove, .cart-table td.cart-table__remove { display: none; }
+      .cart-table th.cart-table__url, .cart-table td.cart-table__url { display: table-cell; }
+      .cart-table td.cart-table__url { font-size: 0.68rem; word-break: break-all; color: #333; }
       /* The dark gradient hero reads fine on screen but wastes toner and
          fights with black text on paper — flatten it to plain text. The
          breadcrumb has its own dedicated white-on-dark rule in style.css
@@ -233,6 +241,12 @@
     diary:  function (rid) { return 'diary-pages/' + encodeURIComponent(rid) + '.html'; }
   };
 
+  // Absolute address for the print-only URL column (relative hrefs resolve
+  // against the page, so on GitHub Pages this is the live https URL).
+  function absUrl(href) {
+    try { return new URL(href, location.href).href; } catch (e) { return href; }
+  }
+
   function itemHtml(item) {
     // One malformed rid (e.g. an unpaired surrogate reaching encodeURIComponent
     // as a URIError) must not blank the whole list — render this row as a
@@ -248,7 +262,7 @@
       // that id, so the id is what needs to survive as a live link.
       return '<div class="cart-item">' +
         '<div class="cart-item__label">' +
-        '<span class="cart-item__title">' + esc(item.label) + '</span> ' +
+        '<span class="cart-item__title"><a href="' + esc(href) + '">' + esc(item.label) + '</a></span> ' +
         '<a class="cart-item__rid" href="' + esc(href) + '">' + esc(item.rid) + '</a>' +
         '</div>' +
         '<button type="button" class="cart-item__remove" data-type="' + esc(item.type) +
@@ -313,7 +327,8 @@
       return '<tr>' +
         '<td class="cart-table__type">' + esc(TYPE_LABEL[item.type] || item.type) + '</td>' +
         '<td><a class="cart-item__rid" href="' + esc(href) + '">' + esc(item.rid) + '</a></td>' +
-        '<td>' + esc(item.label) + '</td>' +
+        '<td><a class="cart-table__title-link" href="' + esc(href) + '">' + esc(item.label) + '</a></td>' +
+        '<td class="cart-table__url">' + esc(absUrl(href)) + '</td>' +
         '<td class="cart-table__remove"><button type="button" class="cart-item__remove" data-type="' +
         esc(item.type) + '" data-rid="' + esc(item.rid) + '">Remove</button></td>' +
         '</tr>';
@@ -321,6 +336,7 @@
       return '<tr><td class="cart-table__type">' + esc(item.type || '') + '</td>' +
         '<td>' + esc(item.rid) + '</td>' +
         '<td>' + esc(item.label || '?') + ' — could not be displayed correctly</td>' +
+        '<td class="cart-table__url"></td>' +
         '<td class="cart-table__remove"><button type="button" class="cart-item__remove" data-type="' +
         esc(item.type) + '" data-rid="' + esc(item.rid) + '">Remove</button></td></tr>';
     }
@@ -338,6 +354,7 @@
       '<th data-sort="type" aria-sort="' + (sortKey === 'type' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') + '">Type ' + sortArrow('type') + '</th>' +
       '<th data-sort="rid" aria-sort="' + (sortKey === 'rid' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') + '">ID ' + sortArrow('rid') + '</th>' +
       '<th data-sort="label" aria-sort="' + (sortKey === 'label' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') + '">Title ' + sortArrow('label') + '</th>' +
+      '<th class="cart-table__url">URL</th>' +
       '<th class="cart-table__remove"></th>' +
       '</tr></thead><tbody>' + sorted.map(tableRowHtml).join('') + '</tbody></table>';
   }
