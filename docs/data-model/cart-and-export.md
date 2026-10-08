@@ -51,40 +51,18 @@ no-op (checkboxes still render, nothing persists) if `sessionStorage`
 throws — some privacy-mode configurations disable it — rather than
 breaking the page; see `Cart.storageAvailable`.
 
-### Why "download as PDF" means the browser's print dialog, not a JS PDF library
+### Why "download as PDF" used to mean the browser's print dialog — and no longer does
 
-Researched three client-side options (jsPDF, pdfmake, html2pdf.js) before
-picking. The blocking finding: **the 14 standard PDF fonts jsPDF/pdfmake
-ship with are ASCII-only** — anything outside that (æ, ø, å included)
-needs a custom font embedded as a base64-encoded TTF. That is a real,
-non-trivial cost for a register whose entire content is Danish.
-`html2pdf.js` sidesteps the font problem by rasterising the page to an
-image via `html2canvas` first, but the trade-off is a PDF with no
-selectable/searchable text — a bad fit for a reference register people
-will want to search or copy from.
+**Superseded 2026-10-08** — see "Direct PDF generation" below. The original
+reasoning, kept for the record: the 14 standard PDF fonts jsPDF/pdfmake ship
+with are ASCII-only, so æ, ø, å need an embedded font; `html2pdf.js` rasterises
+the page (no selectable text). `window.print()` + "Save as PDF" gave a real
+text PDF with zero dependencies, at the price of one extra click.
 
-`cart.html`'s "Download som PDF" button instead calls `window.print()`
-against a `@media print` stylesheet that hides site chrome and formats
-the list cleanly. The reader picks "Save as PDF" as the print
-destination — built into Chrome/Edge/Firefox's print dialog on every
-major OS. This produces a **real text PDF**, rendered by the browser's
-own font stack (so æøå are simply correct, no embedding needed), with
-zero new dependencies — consistent with this project's existing
-"stdlib only / no dependencies" convention (`facet-engine.js`'s own
-docstring states the same preference for the mockup's JS). The one
-real cost, stated plainly in-page rather than glossed over: it's one
-extra click (choosing "Save as PDF" in the dialog) instead of an
-instant automatic file download.
-
-**Upgrade path, if a literal one-click `.pdf` download is wanted
-later:** jsPDF via CDN (this project already loads Leaflet from
-`unpkg.com`, so a CDN dependency is precedented) with a Danish-capable
-embedded font — DejaVu Sans covers Latin Extended-A, which includes
-æøå. Convert once with jsPDF's own `fontconverter.html`, commit the
-resulting base64 JS file alongside `cart.js`. Not built now because it
-adds a real asset and a real dependency for a capability the browser's
-own print dialog already provides "at first," per the request's own
-framing.
+What overturned it: with a large cart (hundreds to thousands of diary pages) the
+print route got slow — the browser lays out and previews every page before it
+offers "Save as PDF", and the tab is frozen meanwhile. The font objection was
+the cost of an asset, not a blocker: the fonts are now vendored (see below).
 
 ## Architecture
 
@@ -179,8 +157,8 @@ from any source (including a checkbox ticked individually).
   checked entries on bibliotek.html, billedkunst.html and
   teater-musik.html in sequence and watched the badge climb 2 → 4 → 6.
 - `cart.html` groups by type, lets individual items be removed, and its
-  "Download som PDF" button calls `window.print()` (verified by
-  stubbing `window.print` and asserting it was invoked). With one of
+  "Download som PDF" button called `window.print()` at the time (verified by
+  stubbing `window.print`; since replaced by direct PDF generation). With one of
   each type in the cart, groups render in the correct fixed order
   ("Personer (1)", "Værker (587)", "Steder (1)") and each item's href
   points at the right detail page (`work.html?reg=…` for a work).
@@ -420,17 +398,15 @@ environment).
 
 ## The PDF as a document: cover, one A4 sheet per diary page, appendix (2026-10-08)
 
-"Download som PDF" no longer prints the ID/title table when the cart holds
-diary pages. `js/cart-pdf.js` (`CartPdf.build`) fills the print-only
-`#js-print-doc`; the click handler then adds `body.printing-doc` and calls
-`window.print()` (`css/cart-print.css` hides everything else under that
-class; `afterprint` removes it again). Layout follows the reference PDF
-(`HCA-Dagbog_At-vaere-eller-ikke-vaere_Bind-IV_22-sider…`):
+"Download som PDF" no longer prints the ID/title table. `js/cart-pdf.js`
+(`CartPdf.download`) writes a document with this layout straight to a file
+(see "Direct PDF generation" below for how); the layout follows the reference
+PDF (`HCA-Dagbog_At-vaere-eller-ikke-vaere_Bind-IV_22-sider…`):
 
 | Part | Content | Source |
 |---|---|---|
 | Cover | title, page count, "Kurvens indhold" (count per type), "Omfang" (bind + year span), "Samlet oversigt over navne" (union of persons/places/works over all pages, most-mentioned first, top 20 each, linked), "Dokumentoplysninger" (date, source, site) | `Cart.all()`, per-page records below. **No AI summary / slicers / model info** — we have no source for them; they were deliberately dropped, not faked |
-| One sheet per diary page (book order) | header + "Bind IV, side 197", "Dagbogsår", "Dagbogstekst" with `IV-197-5`-style line markers and a date per dated paragraph, "Fodnoter", rule, then the smaller linked name block ("Tilknyttet dagbogsside": Personer / Steder / Værker / Datoer), footer with the Det Kgl. Bibliotek URL and "Side n / N" | `mockup/data/diary-print/vol-<roman>.js` |
+| One sheet per diary page (book order) | header + "Bind IV, side 197", "Dagbogsår", "Dagbogstekst" with `IV-197-5`-style line markers and a date per dated paragraph, "Fodnoter", rule, then the smaller linked name block ("Tilknyttet dagbogsside": Personer / Steder / Værker / Datoer), the Det Kgl. Bibliotek URL; page footer "Side n / N" | `mockup/data/diary-print/vol-<roman>.js` |
 | Appendix | "Valgte registerposter": person/place/work entries (Type, ID, Titel, URL) | `Cart.all()` |
 
 **Data.** The text exists only in the generated `diary-pages/*.html` and
@@ -442,12 +418,80 @@ entity list). They are plain `<script>`-loaded, so they work under `file://`
 (no `fetch()`), only the volumes in the cart are loaded, and the folder is
 gitignored like `diary-pages/`. Tested by `tests/test_diary_print_build.py`.
 
-**Fallback.** No diary pages in the cart, or the print data missing/blocked →
-the previous table print (`printTable()` in cart.html) runs unchanged.
+**Fallback.** The PDF library or the diary print data missing/blocked, or an
+error while building → the table print (`printTable()` in cart.html, through
+the browser's print dialog) runs unchanged. A cart with only register entries
+now gets the PDF too (cover + appendix).
 
-**Links.** Every name, id, title and the KB address is an absolute `<a href>`
-(Chromium `page.pdf()`: 684 link annotations for 22 pages + 2 entries); the KB
-URL is also visible text.
+**Links.** Every name, id, title and the KB address is a link annotation with an
+absolute URL; the KB URL is also visible text.
+
+### Direct PDF generation: pdfmake in a Web Worker (2026-10-08)
+
+Reported: long response times for a cart with many hits. The print route
+built the whole document as HTML and let the browser's print engine lay it out
+and preview it; the tab is frozen while it does. Now:
+
+```
+cart.html click ─► CartPdf.download (main thread: loads data, builds a payload)
+                      │  postMessage(rows, register, fonts)
+                      ▼
+              Web Worker (Blob): pdfmake + makeBuilder() ─► layout ─► PDF Blob
+                      │  progress messages ("… 1.200 / 4.413", "Skriver PDF … 12 s")
+                      ▼
+              <a download> ─► file saved
+```
+
+- **Library:** pdfmake 0.3.11 (MIT), vendored. It does the layout (wrapping,
+  page breaks, tables with repeating header, link annotations) from a JSON-like
+  document definition built by `makeBuilder()` in `cart-pdf.js`.
+- **Fonts:** Liberation Serif/Sans (SIL OFL), subset and embedded — the
+  "custom embedded font" the old note called a blocker is a one-off vendoring
+  step (`scripts/build_mockup/build_pdf_assets.py`, output committed). The
+  one corpus character they lack (℔) is substituted; `tests/test_cart_pdf_assets.py`
+  fails if the data ever needs another.
+- **Why a Blob worker:** the site must open from `file://`, where a page cannot
+  start a worker from a script file nor `importScripts()` another file. The
+  worker source is therefore text: `vendor/pdfmake/pdf-assets.js` carries the
+  library as a string (loaded by an ordinary `<script>`), and the builder's own
+  source comes from `makeBuilder.toString()`. Hence `makeBuilder()` must stay
+  self-contained and DOM-free — it parses the edition markup with a tokenizer
+  (`parseMarkup`), not `innerHTML`; `tests/test_cart_pdf_assets.py` checks the
+  data only uses tags the tokenizer knows (incl. nested `<div>` verse lines).
+  If a worker cannot start, the same builder runs on the main thread.
+- **Link annotations:** pdfmake writes one annotation per *word* of a linked
+  text, ~300 bytes each — the first version produced 23 KB/page. `noWrap` on
+  labels ≤ 50 characters makes it one per name (15 KB/page).
+
+**Measured** (headless Chromium on the build machine; `scripts/qa/cart_pdf_check.py`
+and ad-hoc timing):
+
+| Cart | Old print route (`page.pdf()`, headless) | Direct, worker | Page responsive during? |
+|---|---|---|---|
+| 100 diary pages | 1.2 s | ~2 s | worker: yes (longest freeze 32 ms) |
+| 400 diary pages | 4.8 s, 3.4 MB | 6.7 s, 5.8 MB | worker: yes (23 ms) · no worker: frozen 7 s |
+| 1,500 diary pages | — | 24.9 s | yes (33 ms) |
+| all 4,413 diary pages | — | 78 s, 70 MB | — |
+| 12,000 register entries + 150 pages | — | 10.5 s, 11 MB | — |
+
+Read this honestly: raw layout throughput is about the same as Chromium's
+*headless* print-to-PDF (~15 ms/page), which is the cheapest part of the old
+route. What changes is everything around it — no print dialog, no print
+preview of every page (which a real browser does *before* offering "Save as PDF"
+and which could not be measured headless), no frozen tab, a progress
+read-out, and a file saved in one click. A 4,000-page cart still takes about a
+minute and gives a ~70 MB file; that is inherent to the amount of text and
+links. `compress: false` was tried: 12 % faster, 5.7× larger — not worth it.
+
+**Differences from the print version.** Fonts are Liberation (Times/Arial
+metrics) instead of the browser's serif/sans; the name block flows after the
+text instead of being pinned to the bottom of the sheet (pdfmake has no
+flexbox; a sheet that overflows A4 continues on the next page, as before); the
+footer "Side n / N" counts physical PDF pages rather than diary sheets.
+
+**Cancel / memory.** There is no cancel button yet (closing the tab stops the
+worker). pdfmake builds the file in memory — the 4,413-page run completed in
+headless Chromium, but a low-memory phone may not manage that.
 
 **Limits.** Page numbers are "Side n / N" per diary sheet (computed in JS), not
 the browser's own page counter, so they stay right in Firefox too; a sheet whose
@@ -492,6 +536,9 @@ share one `localStorage` key. `diaries.html` (Liste/Tabel/Kalender/
 Tidslinje) was left at its existing Liste default — it never had a Gitter
 option either, and its default isn't persisted the same way the other
 pages' is, so changing it was judged out of scope for this sweep.
+
+> Since 2026-10-08 this table print is only the **fallback** (see "Direct PDF
+> generation"); the paragraphs below describe how it behaves when it runs.
 
 **The PDF export defaults to the table regardless of which view is
 selected on screen** — denser and easier to scan for a large cart than a

@@ -6,7 +6,6 @@
   <title>Kurv — HCA's Hvem-hvad-hvor</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/edition-text.css">
-  <link rel="stylesheet" href="css/cart-print.css">
   <style>
     .cart-group { margin-top: var(--sp8); }
     .cart-group:first-of-type { margin-top: var(--sp6); }
@@ -87,13 +86,11 @@
     .cart-table th.cart-table__url, .cart-table td.cart-table__url { display: none; }
     .cart-table tbody tr:hover { background: var(--color-surface-2); }
 
-    /* "Save as PDF" happens via the browser's own print dialog — see
-       docs/data-model/cart-and-export.md for why (real text, correct
-       æøå rendering, zero new dependencies, vs. a client-side PDF library
-       needing a custom embedded font for anything outside ASCII). This
-       stylesheet is what the print dialog / "Save as PDF" actually sees:
-       chrome, buttons and the remove-affordance all disappear, and a
-       printed-only header/date takes their place. */
+    /* Fallback only: "Download som PDF" normally writes the PDF itself
+       (js/cart-pdf.js). If that fails, or on a plain Ctrl+P, this is what
+       the browser's print dialog sees: chrome, buttons and the
+       remove-affordance disappear, and a printed-only header/date takes
+       their place. */
     .print-only { display: none; }
     @media print {
       .site-header, .cart-toolbar, .cart-item__remove, .site-footer,
@@ -181,11 +178,10 @@
         <button type="button" id="js-cart-clear">Ryd kurv</button>
       </div>
       <p class="cart-note" id="js-cart-pdf-note" style="display:none">
-        »Download som PDF« åbner browserens udskriftsdialog — vælg
-        <strong>»Gem som PDF«</strong> som destination. Det giver en rigtig
-        tekst-PDF med korrekt æ/ø/å (en indlejret PDF-skrifttype ville kræve
-        en separat skrifttype-fil for danske tegn — se
-        <code>docs/data-model/cart-and-export.md</code>).
+        »Download som PDF« danner en færdig PDF direkte i browseren — forside,
+        ét A4-ark pr. dagbogsside med klikbare navne og kildelinks, og en
+        oversigt over de valgte registerposter. Ved mange sider kan det tage
+        et øjeblik; knappen viser, hvor langt den er.
       </p>
 
       <div id="js-cart-body"></div>
@@ -210,7 +206,6 @@
   </div>
 </footer>
 
-<div id="js-print-doc" aria-hidden="true"></div>
 <script src="js/cart.js"></script>
 <script src="js/cart-pdf.js"></script>
 <script>
@@ -423,9 +418,9 @@
     if (Cart.count() && confirm('Ryd hele kurven (' + Cart.count() + ' poster)?')) Cart.clear();
   });
 
-  // Fallback print: the plain ID/title/URL table. Used when the diary print
-  // data (js/cart-pdf.js + data/diary-print/) is missing or the cart holds
-  // no diary pages.
+  // Fallback print: the plain ID/title/URL table, through the browser's own
+  // print dialog. Only used when js/cart-pdf.js cannot produce the PDF (the
+  // PDF library or data/diary-print/ is missing or blocked).
   function printTable() {
     var d = new Date();
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
@@ -455,27 +450,26 @@
     window.print();
   }
 
-  // The PDF proper: cover page, one A4 sheet per diary page, appendix of
-  // register entries — built by CartPdf into #js-print-doc, then printed
-  // under body.printing-doc (see css/cart-print.css). The afterprint
-  // listener is registered BEFORE print(), as in printTable().
+  // The PDF proper — cover page, one A4 sheet per diary page, appendix of
+  // register entries — is written straight to a file by CartPdf (pdfmake), no
+  // print dialog. Falls back to the plain table print (printTable) only when
+  // the PDF tools or the diary data could not be loaded, or on any error.
   document.getElementById('js-cart-download').addEventListener('click', function () {
     var btn = this;
+    var label = btn.textContent;
     btn.disabled = true;
     var built = (typeof CartPdf !== 'undefined')
-      ? CartPdf.build(Cart.all(), { typeLabel: TYPE_LABEL, typeHref: TYPE_HREF })
+      ? CartPdf.download(Cart.all(), {
+          typeLabel: TYPE_LABEL, typeHref: TYPE_HREF,
+          onStatus: function (s) { btn.textContent = s; }
+        })
       : Promise.resolve(false);
     built.then(function (ok) {
-      if (!ok) { printTable(); return; }
-      var cleanup = function () {
-        document.body.classList.remove('printing-doc');
-        CartPdf.clear();
-        window.removeEventListener('afterprint', cleanup);
-      };
-      window.addEventListener('afterprint', cleanup);
-      document.body.classList.add('printing-doc');
-      window.print();
-    }).catch(function () { printTable(); }).then(function () { btn.disabled = false; });
+      if (!ok) printTable();
+    }).catch(function (e) {
+      if (window.console) console.error(e);
+      printTable();
+    }).then(function () { btn.disabled = false; btn.textContent = label; });
   });
 
   Cart.subscribe(render);
