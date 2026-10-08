@@ -19,10 +19,13 @@ static HTML file or a `*.js` file that defines a global via a plain
 | `build_search_index.py`  | `entities.csv`, `references.csv`                            | `mockup/data/search-index.js`  (~16,400 entities, ref-sorted) | **no — gitignored** |
 | `build_cooccurrence.py`  | `entities.csv`, `references.csv`                            | `mockup/data/cooccurrence.js` (top-12 peers per person/place, count ≥ 2) | **no — gitignored** |
 | `build_diary_print.py`   | `diary_html.csv`, `diary.csv`, `references.csv`, `entities.csv`, `kb_diary_links.csv` | `mockup/data/diary-print/vol-*.js` (per-page text + names for the cart PDF) | **no — gitignored** |
+| `build_kb_links.py`      | `raw/1-KBDiaryLinkData-PQ-links-active.xlsm`                | `data/normalized/kb_diary_links.csv` (KB facsimile link per diary page) | **yes — one-off, committed**; not in `build_all.py` or CI (needs the raw workbook) |
 | `build_pdf_assets.py`    | `vendor/pdfmake.min.js` + system Liberation fonts           | `mockup/vendor/pdfmake/pdf-assets.js` (PDF library + subset fonts as strings, for the cart PDF worker) | **yes — one-off, committed** (needs `pip install fonttools`) |
 
-All six outputs are fully derived from the normalised CSVs, so they
-are excluded from git. The committed mockup pages **degrade
+The eight generated outputs (the gitignored rows above) are fully derived
+from the normalised CSVs, so they are excluded from git. The two
+**committed** rows are one-off vendoring/parsing steps that are not part
+of the pipeline: re-run them only when their input changes. The committed mockup pages **degrade
 gracefully**: `work.html` and `place.html` fall back to their own
 hand-curated `WORKS`/`PLACES` dicts when the generated data is absent;
 `persons.html` and the listing pages fall back to their static sample
@@ -43,15 +46,20 @@ Useful flags:
 
 ```powershell
 python scripts/build_all.py --skip-pages   # skip the slow 4,500-file diary HTML stage
+python scripts/build_all.py --skip-print   # skip the cart-PDF print data (stage 3c)
 python scripts/build_all.py --only 4b      # rebuild just persons-extra.js
 ```
 
-The wrapper covers all ten stages — Stage 1a (xlsx → CSV), Stage 1b
-(rejser geocodes, optional), Stage 2 (web JSON), Stage 3a/3b (diary
-pages + index), Stage 4a/4b/4c (works/persons/places extras), Stage 4d
-(search index for the landing typeahead), Stage 4e (co-occurrence
-index for the reciprocal-link sections on persons.html / place.html).
-Stage 1b's failure is non-fatal, mirroring CI.
+The wrapper covers every stage in `STAGES_AFTER_INGEST` in `build_all.py`
+— Stage 1a (xlsx → CSV), the optional enrichment stages 1b–1f (rejser
+geocodes, SV14 reconciliation, work languages, person descriptors, diary
+text from the EPUB), Stage 2 (web JSON), Stage 3a/3b (diary pages + index),
+Stage 3c (per-page print data for the cart PDF), Stage 4a/4b/4c
+(works/persons/places extras), Stage 4d (search index for the landing
+typeahead), Stage 4e (co-occurrence index for the reciprocal-link sections
+on persons.html / place.html) and the optional Stage 4f (nation index).
+Failures in the optional stages are non-fatal, mirroring CI (which omits
+1f: it needs the unzipped EPUB under `raw/`, and `diary.csv` is committed).
 
 Then open `mockup/diaries.html`, `mockup/work.html?reg=Reg001260`,
 `mockup/persons.html?reg=Reg0052440`, `mockup/place.html?reg=Reg0017430`,

@@ -22,6 +22,7 @@ Usage (from repo root):
     python scripts/build_all.py                  # auto-pick highest source
     python scripts/build_all.py --source DIR     # explicit folder
     python scripts/build_all.py --skip-pages     # skip the 4,500-file diary HTML stage
+    python scripts/build_all.py --skip-print     # skip the cart-PDF print data (3c)
     python scripts/build_all.py --only 4a        # only run that one stage (by id)
     python scripts/build_all.py --list-sources   # show what source folders exist
 
@@ -178,6 +179,8 @@ def main():
                     help="run only the stage with this id (e.g. 4a)")
     ap.add_argument("--skip-pages", action="store_true",
                     help="skip Stage 3a (the slow 4,500-file diary HTML generator)")
+    ap.add_argument("--skip-print", action="store_true",
+                    help="skip Stage 3c (per-page print data for the cart PDF)")
     args = ap.parse_args()
 
     if args.list_sources:
@@ -201,10 +204,11 @@ def main():
         if not stages:
             sys.exit(f"unknown stage id: {args.only}  "
                      f"(known: {', '.join(s[0] for s in all_stages)})")
-    elif args.skip_pages:
-        stages = [s for s in all_stages if s[0] != "3a"]
     else:
-        stages = all_stages
+        skipped = {"3a"} if args.skip_pages else set()
+        if args.skip_print:
+            skipped.add("3c")
+        stages = [s for s in all_stages if s[0] not in skipped]
 
     t0 = time.time()
     for stage in stages:

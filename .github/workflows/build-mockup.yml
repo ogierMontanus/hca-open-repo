@@ -45,6 +45,8 @@ jobs:
             pip install -r scripts/parsers/requirements.txt
           fi
           pip install openpyxl
+          # Test dependencies: pytest, and fontTools for the PDF-font coverage test.
+          pip install pytest fonttools
 
       - name: Stage 1a — xlsx to normalised CSVs
         run: python scripts/normalization/hca_xlsx_to_csv.py
@@ -130,12 +132,20 @@ jobs:
       - name: Lint — no stale person.html link targets
         run: python tests/test_no_stale_person_refs.py
 
+      # Every generated artifact now exists, so the tests that skip locally
+      # without a build run for real here (diary-print completeness,
+      # REFS_CAP overflow, cart-PDF font coverage and markup vocabulary, …).
+      - name: Tests
+        run: python -m pytest tests -q
+
       - name: Bundle static site
         run: |
           mkdir -p _site
           cp -r web/* _site/
           mkdir -p _site/mockup
           cp -r mockup/* _site/mockup/
+          # Frozen, deliberately unlinked files (see CLAUDE.md) — not part of the site.
+          rm -rf _site/mockup/irrelevant
           # Drop a small landing page at the root that points stakeholders
           # straight at the demo mockup. Overrides any web/index.html so
           # /hca-open-repo/ → mockup. The mockup also stays reachable at
