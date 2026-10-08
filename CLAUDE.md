@@ -59,7 +59,11 @@ Se `mockup/irrelevant/README.md` for indholdet og begrundelsen pr. fil.
 
 ## Arbejdsbranch
 
-Udviklingsarbejde sker på branchen `claude/youthful-carson-XIZ5I`.
+Eksperimenter og nyt udviklingsarbejde lægges på en **ny branch** pr.
+opgave (fx `claude/cart-pdf-worker`) — der er ingen fast arbejdsbranch.
+Vælg et kort, beskrivende navn med præfikset `claude/`, og genbrug ikke en
+gammel branch, der er divergeret fra `main` (force-push aldrig for at få
+den til at passe).
 Push aldrig direkte til `main` uden eksplicit godkendelse.
 
 ---
