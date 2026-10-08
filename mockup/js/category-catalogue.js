@@ -275,17 +275,10 @@
   }
   if (selectAllCb) {
     selectAllCb.addEventListener('change', function () {
-      if (selectAllCb.checked) {
-        if (filtered.length > 100 &&
-            !confirm(t('confirmAddAll', 'Tilføj alle {n} værker til kurven?',
-              { n: filtered.length.toLocaleString(LOCALE) }))) {
-          selectAllCb.checked = false;
-          return;
-        }
-        Cart.addMany(filtered.map(function (w) { return { type: 'work', rid: w.rid, label: w.title }; }));
-      } else {
-        Cart.removeMany(filtered.map(function (w) { return { type: 'work', rid: w.rid }; }));
-      }
+      // Each work with its bundle (diary pages) — the same rule as a
+      // single tick; Cart.selectBundles counts and confirms above 100 new items.
+      var ents = filtered.map(function (w) { return { type: 'work', rid: w.rid, label: w.title }; });
+      if (!Cart.selectBundles(ents, selectAllCb.checked)) { updateSelectAll(); return; }
       Cart.syncCheckboxes(grid);
     });
   }

@@ -375,6 +375,96 @@ hosted site, not `file://`.
 `diary-pages/*.html`. `cart.js` now derives a `BASE` prefix from its own
 `<script src>` (`../js/cart.js` → `../`) and prefixes the badge link.
 
+## Bundles everywhere, ownership, and the diary-pages bridge (2026-10-08)
+
+**One rule for list and detail.** Ticking a person/place/work on a *list*
+page (persons, places, bibliotek, billedkunst, teater-musik, da+en) now adds
+the same bundle as the detail page's button: the entry + every diary page that
+mentions it (+ attributed works for a person). "Vælg alle" does it for the
+whole filtered set via `Cart.selectBundles()`, with a counted confirmation
+above 100 new items ("Tilføj 10.183 personer, 4.249 dagbogssider og 2.460
+værker til kurven?" — all persons, measured: 1.2 s, 2.3 MB stored). The list
+pages load `data/diary-refs.js` + `data/diary-refs-overflow.js` for this;
+without them an entry goes in alone. Diary checkboxes stay single pages.
+
+**Ownership (`by`).** Bundles overlap (Bremer and Dickens share pages), so
+each item records who brought it: `'*'` = explicit pick, `'person|Reg…'` =
+bundle member. `remove()` deletes the item and releases what it owned; items
+left with no owner go too. Un-ticking Bremer therefore keeps pages Dickens or
+the reader also holds, and cart.html's "Fjern" on an entry removes its
+bundle without needing the diary data. Old stored carts (no `by`) read as
+explicit.
+
+**Diary pages had their own cart.** Reported as "only entries chosen on
+diary-pages show". Not reproducible in Chromium (file:// storage is shared),
+but exactly reproduced by emulating per-directory storage (Firefox under
+file://): `mockup/` and `mockup/diary-pages/` each got their own
+sessionStorage — 0 of 51 entries visible on the diary page. Fix: every save
+is mirrored into `window.name` with a timestamp; `load()` takes the newer
+copy (51 of 51 with the same emulation). `window.name` is cleared when an
+off-site link is followed in the same tab, so the cart isn't handed to other
+sites. A new tab still starts empty (sessionStorage semantics).
+
+**Checkbox repaint.** Every cart change now repaints every rendered checkbox
+(a bundle changes many items, e.g. the embedded Dagbogsreferencer boxes
+under the detail button), and again on `pageshow` — the browser's form-state
+restoration re-ticked boxes after "back". Both were found by the monkey test.
+
+**Monkey test.** `python scripts/qa/cart_monkey.py [--steps N] [--seed S]
+[--partition]`: deterministic ownership scenarios, then a seeded random walk
+over all cart pages checking badge = count = stored, no orphaned owners,
+checkboxes = cart, count survives navigation (incl. diary-pages/), no page
+errors. `--partition` emulates per-directory storage. Real Firefox could not
+be driven here (Playwright's Firefox fails to start a page in this
+environment).
+
+## The PDF as a document: cover, one A4 sheet per diary page, appendix (2026-10-08)
+
+"Download som PDF" no longer prints the ID/title table when the cart holds
+diary pages. `js/cart-pdf.js` (`CartPdf.build`) fills the print-only
+`#js-print-doc`; the click handler then adds `body.printing-doc` and calls
+`window.print()` (`css/cart-print.css` hides everything else under that
+class; `afterprint` removes it again). Layout follows the reference PDF
+(`HCA-Dagbog_At-vaere-eller-ikke-vaere_Bind-IV_22-sider…`):
+
+| Part | Content | Source |
+|---|---|---|
+| Cover | title, page count, "Kurvens indhold" (count per type), "Omfang" (bind + year span), "Samlet oversigt over navne" (union of persons/places/works over all pages, most-mentioned first, top 20 each, linked), "Dokumentoplysninger" (date, source, site) | `Cart.all()`, per-page records below. **No AI summary / slicers / model info** — we have no source for them; they were deliberately dropped, not faked |
+| One sheet per diary page (book order) | header + "Bind IV, side 197", "Dagbogsår", "Dagbogstekst" with `IV-197-5`-style line markers and a date per dated paragraph, "Fodnoter", rule, then the smaller linked name block ("Tilknyttet dagbogsside": Personer / Steder / Værker / Datoer), footer with the Det Kgl. Bibliotek URL and "Side n / N" | `mockup/data/diary-print/vol-<roman>.js` |
+| Appendix | "Valgte registerposter": person/place/work entries (Type, ID, Titel, URL) | `Cart.all()` |
+
+**Data.** The text exists only in the generated `diary-pages/*.html` and
+`data/normalized/diary_html.csv`, and `DIARY_INDEX` keeps just 3 chips per
+page, so `scripts/build_mockup/build_diary_print.py` (build stage **3c**, also
+in `.github/workflows/build-mockup.yml`) writes one JS file per volume
+(`DIARY_PRINT[Pag…] = {d, k, h, e}`: date, KB URL, edition markup, full
+entity list). They are plain `<script>`-loaded, so they work under `file://`
+(no `fetch()`), only the volumes in the cart are loaded, and the folder is
+gitignored like `diary-pages/`. Tested by `tests/test_diary_print_build.py`.
+
+**Fallback.** No diary pages in the cart, or the print data missing/blocked →
+the previous table print (`printTable()` in cart.html) runs unchanged.
+
+**Links.** Every name, id, title and the KB address is an absolute `<a href>`
+(Chromium `page.pdf()`: 684 link annotations for 22 pages + 2 entries); the KB
+URL is also visible text.
+
+**Limits.** Page numbers are "Side n / N" per diary sheet (computed in JS), not
+the browser's own page counter, so they stay right in Firefox too; a sheet whose
+text + names overflow A4 simply continues on the next sheet (worst-case pages in
+the corpus were checked and fit one sheet). Fonts are the browser's
+serif/sans — the look matches the reference approximately.
+
+### `REFS_CAP` and "all occurrences" (2026-10-08)
+
+`DIARY_REFS[reg].e` is capped at 60 pages per entity (`build_diary_index.py`
+`REFS_CAP`); 131 frequently-mentioned entities (e.g. Collin, 266 pages) have
+`n > 60`. The remainder is written to `data/diary-refs-overflow.js`
+(`DIARY_REFS_OVERFLOW`, loaded on persons/persons_en/place/work), and
+`DiaryWire.pagesFor(rid)` joins both. The diary-reference list, its "Vælg
+alle (N)" box and the detail-page cart bundle (`Cart.relatedFor`) all use it —
+before this, they silently stopped at 60.
+
 ## A third view: sortable table, and the PDF's actual default
 
 `cart.html` originally had one view — cards grouped by type ("Liste").

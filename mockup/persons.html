@@ -275,6 +275,7 @@
 <script src="data/cooccurrence.js" onerror="void 0"></script>
 <script src="data/diary-index.js" onerror="void 0"></script>
 <script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="data/diary-refs-overflow.js" onerror="void 0"></script>
 <script src="js/diary-wire.js"></script>
 <script src="data/nation-index.js" onerror="void 0"></script>
 <script src="js/facet-overlay.js"></script>
@@ -635,16 +636,10 @@
   }
   if (selectAllCb) {
     selectAllCb.addEventListener('change', function () {
-      if (selectAllCb.checked) {
-        if (filtered.length > 100 &&
-            !confirm('Tilføj alle ' + filtered.length.toLocaleString('da-DK') + ' personer til kurven?')) {
-          selectAllCb.checked = false;
-          return;
-        }
-        Cart.addMany(filtered.map(function (p) { return { type: 'person', rid: p.rid, label: p.label }; }));
-      } else {
-        Cart.removeMany(filtered.map(function (p) { return { type: 'person', rid: p.rid }; }));
-      }
+      // Each person with its bundle (diary pages, works) — the same rule as a
+      // single tick; Cart.selectBundles counts and confirms above 100 new items.
+      var ents = filtered.map(function (p) { return { type: 'person', rid: p.rid, label: p.label }; });
+      if (!Cart.selectBundles(ents, selectAllCb.checked)) { updateSelectAll(); return; }
       Cart.syncCheckboxes(grid);
     });
   }

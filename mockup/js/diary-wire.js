@@ -111,6 +111,17 @@ window.DiaryWire = (function () {
     return titleFor(m);
   }
 
+  /* Every diary page that mentions `regId`, in book order: the first REFS_CAP
+   * from DIARY_REFS[..].e plus the remainder from data/diary-refs-overflow.js
+   * (optional -- absent, the list is just the capped one). Shared with
+   * js/cart.js so "add to cart" and "Vælg alle" cover ALL pages. */
+  function pagesFor(regId) {
+    var rec = (typeof DIARY_REFS !== 'undefined' && DIARY_REFS[regId]) || null;
+    if (!rec) return [];
+    var more = (typeof DIARY_REFS_OVERFLOW !== 'undefined' && DIARY_REFS_OVERFLOW[regId]) || [];
+    return more.length ? rec.e.concat(more) : rec.e;
+  }
+
   /* Unescaped twin of headingFor() for cart labels (stored as text). */
   function plainHeading(m) {
     if (m.d) return formatDate(m.d);
@@ -124,7 +135,7 @@ window.DiaryWire = (function () {
     if (!container || typeof DIARY_REFS === 'undefined' || !DIARY_REFS[regId]) {
       return null;  // leave the page's static fallback markup in place
     }
-    var rec = DIARY_REFS[regId];
+    var rec = { n: DIARY_REFS[regId].n, e: pagesFor(regId) };
     var shown = 0;
     var step = opts.pageSize || 24;
     var layout = opts.layout || 'list';  // 'list' | 'grid' | 'table'
@@ -432,5 +443,5 @@ window.DiaryWire = (function () {
   // heading/formatDate are exported so pages rendering their own diary cards
   // (diaries.html's calendar view) label them identically instead of
   // re-deriving the rule and drifting from it.
-  return { refs: refs, list: list, heading: headingFor, formatDate: formatDate };
+  return { refs: refs, list: list, heading: headingFor, formatDate: formatDate, pagesFor: pagesFor };
 })();

@@ -310,6 +310,9 @@
 <script src="js/facet-overlay.js"></script>
 <script src="js/facet-engine.js"></script>
 <script src="js/nation-link.js"></script>
+<!-- Diary reverse index: a ticked entry brings all its diary pages into the cart (js/cart.js relatedFor). -->
+<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="data/diary-refs-overflow.js" onerror="void 0"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script>
@@ -448,16 +451,10 @@
   }
   if (selectAllCb) {
     selectAllCb.addEventListener('change', function () {
-      if (selectAllCb.checked) {
-        if (filtered.length > 100 &&
-            !confirm('Add all ' + filtered.length.toLocaleString('en-US') + ' places to the cart?')) {
-          selectAllCb.checked = false;
-          return;
-        }
-        Cart.addMany(filtered.map(function (p) { return { type: 'place', rid: p.rid, label: p.label }; }));
-      } else {
-        Cart.removeMany(filtered.map(function (p) { return { type: 'place', rid: p.rid }; }));
-      }
+      // Each place with its bundle (diary pages) — the same rule as a
+      // single tick; Cart.selectBundles counts and confirms above 100 new items.
+      var ents = filtered.map(function (p) { return { type: 'place', rid: p.rid, label: p.label }; });
+      if (!Cart.selectBundles(ents, selectAllCb.checked)) { updateSelectAll(); return; }
       Cart.syncCheckboxes(grid);
     });
   }

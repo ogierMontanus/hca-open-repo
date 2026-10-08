@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kurv — HCA's Hvem-hvad-hvor</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edition-text.css">
+  <link rel="stylesheet" href="css/cart-print.css">
   <style>
     .cart-group { margin-top: var(--sp8); }
     .cart-group:first-of-type { margin-top: var(--sp6); }
@@ -208,7 +210,9 @@
   </div>
 </footer>
 
+<div id="js-print-doc" aria-hidden="true"></div>
 <script src="js/cart.js"></script>
+<script src="js/cart-pdf.js"></script>
 <script>
 (function () {
   'use strict';
@@ -419,7 +423,10 @@
     if (Cart.count() && confirm('Ryd hele kurven (' + Cart.count() + ' poster)?')) Cart.clear();
   });
 
-  document.getElementById('js-cart-download').addEventListener('click', function () {
+  // Fallback print: the plain ID/title/URL table. Used when the diary print
+  // data (js/cart-pdf.js + data/diary-print/) is missing or the cart holds
+  // no diary pages.
+  function printTable() {
     var d = new Date();
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
     document.getElementById('js-print-date').textContent =
@@ -446,6 +453,29 @@
       render();
     }
     window.print();
+  }
+
+  // The PDF proper: cover page, one A4 sheet per diary page, appendix of
+  // register entries — built by CartPdf into #js-print-doc, then printed
+  // under body.printing-doc (see css/cart-print.css). The afterprint
+  // listener is registered BEFORE print(), as in printTable().
+  document.getElementById('js-cart-download').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true;
+    var built = (typeof CartPdf !== 'undefined')
+      ? CartPdf.build(Cart.all(), { typeLabel: TYPE_LABEL, typeHref: TYPE_HREF })
+      : Promise.resolve(false);
+    built.then(function (ok) {
+      if (!ok) { printTable(); return; }
+      var cleanup = function () {
+        document.body.classList.remove('printing-doc');
+        CartPdf.clear();
+        window.removeEventListener('afterprint', cleanup);
+      };
+      window.addEventListener('afterprint', cleanup);
+      document.body.classList.add('printing-doc');
+      window.print();
+    }).catch(function () { printTable(); }).then(function () { btn.disabled = false; });
   });
 
   Cart.subscribe(render);
