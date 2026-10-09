@@ -391,6 +391,33 @@
         });
         sbH += '</div></div></div>';
       }
+      // Anderseniana (Museum Odense) — artikelsøgning på navn. Ikke en
+      // bekræftet identifikation; se docs/external-links.md §4.
+      if (p.searchName) {
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header"><i>Anderseniana</i>' +
+          '<span class="info-block__tag">tilføjet</span></div>' +
+          '<div class="info-block__body">' +
+          '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
+          'Artikler fra Museum Odense, især dets tidsskrift <i>Anderseniana</i>.</p>' +
+          '<div style="font-size:0.82rem"><a class="external-link" ' +
+          'href="https://museumodense.dk/alle-udgivelser/?artikel_navn=' + encodeURIComponent(p.searchName).replace(/%20/g, '+') + '" ' +
+          'target="_blank" rel="noopener noreferrer"><i>Anderseniana</i>' +
+          '<span class="external-link__icon" aria-hidden="true">↗</span>' +
+          '<span class="sr-only"> (åbner i nyt faneblad)</span></a></div></div></div>';
+      }
+      // Sekundærlitteratur (H.C. Andersen Centret) — bibliografisøgning på efternavn.
+      if (p.searchSurname) {
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Sekundærlitteratur' +
+          '<span class="info-block__tag">tilføjet</span></div>' +
+          '<div class="info-block__body">' +
+          '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
+          'Bibliografier fra H.C. Andersen Centret, inklusive Andersens udgivelser (primærlitteratur).</p>' +
+          '<div style="font-size:0.82rem"><a class="external-link" ' +
+          'href="https://andersen.sdu.dk/forskning/bib/bibsoeg.html?fritekst=%22' + encodeURIComponent(p.searchSurname) + '%22" ' +
+          'target="_blank" rel="noopener noreferrer">Sekundærlitteratur' +
+          '<span class="external-link__icon" aria-hidden="true">↗</span>' +
+          '<span class="sr-only"> (åbner i nyt faneblad)</span></a></div></div></div>';
+      }
       // ── Nation-krydslink ─────────────────────────────────────────────────
       // Below Biografiske opslag, in the sidebar rather than the main
       // column (user preference 2026-08-28): from a German person, offer

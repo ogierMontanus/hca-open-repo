@@ -122,11 +122,13 @@ tastaturbrugere. Derfor:
 | Brevbasen (andersen.sdu.dk), verificeret korrespondance | `Se N breve hos H.C. Andersen Centret` |
 | Store norske leksikon-søgning (personregister, norsk nationalitet) | `Søg på Store norske leksikon` |
 | GND Explorer-søgning (personregister, øvrig nationalitet) | `Søg i GND Explorer` |
+| Museum Odense, artikelsøgning (personregister, alle personer) | `Anderseniana` |
+| H.C. Andersen Centret, bibliografisøgning (personer og værker, ikke steder) | `Sekundærlitteratur` |
 | Lex.dk-søgning (personregister, ingen registreret nationalitet) | `Søg på Lex.dk` |
 
 Ny type ekstern kilde: tilføj den her, så teksten er ens på tværs af sider.
 
-De fem søgelinks ovenfor er en anden underkategori end resten af tabellen:
+De søgelinks ovenfor er en anden underkategori end resten af tabellen:
 de peger på en SØGNING, ikke en bekræftet post — se
 `docs/data-model/person-bio-search-links.md` for hele reglen (hvornår de
 tilføjes, hvordan URL'en bygges, og hvorfor de ikke må se ud som
@@ -153,3 +155,44 @@ Kilde: `raw/1-KBDiaryLinkData-PQ-links-active.xlsm` →
   mens begge nabosider følger reglen. Byggescriptet skriver den beregnede
   URL (`hcadag01_053_13.xhtml`, verificeret 200 OK) og advarer om
   afvigelsen. Rettes projektmappen, forsvinder advarslen.
+
+---
+
+## 6. Hvilke sites vi linker til, og hvornår
+
+Overblik over eksterne mål. Nyt mål: tilføj en række her og i §4.
+
+| Mål | Hvor | Hvornår | Type |
+|---|---|---|---|
+| Det Kgl. Bibliotek | dagbogssider | altid, bind I–X (§5) | kilde-faksimile |
+| Wikidata | person/sted/værk | kun med kurateret `wd` | autoritetslink |
+| Lex.dk / Deutsche Biographie / SNL / GND Explorer | `persons.html` | kun uden `wd`; valg efter nationalitet (`docs/data-model/person-bio-search-links.md`) | søgning |
+| Museum Odense (*Anderseniana*) | `persons.html` (+ `_en`) | alle personer med navn | søgning |
+| H.C. Andersen Centret, bibliografi (andersen.sdu.dk/forskning/bib) | `persons.html` (+ `_en`), `work.html` — **ikke** `place.html` | alle personer og værker | søgning |
+| Brevbasen (andersen.sdu.dk) | `persons.html` | kun verificeret korrespondance | kilde |
+
+**Museum Odense / *Anderseniana*.** Sidebar-blok med forklaringen
+"Artikler fra Museum Odense, især dets tidsskrift *Anderseniana*." URL:
+`https://museumodense.dk/alle-udgivelser/?artikel_navn=Fornavn+Efternavn`
+(navnet er `searchName` fra `build_persons_extra.py` — samme
+"Fornavn Efternavn"-omvending som bio-søgelinkene, mellemrum som `+`).
+Det er en **søgning**, ikke en identifikation: samme regel som §4 ovenfor.
+Ikke selvstændigt verificeret mod live-siden (URL-formen er angivet af
+brugeren, 2026-10-09).
+
+**H.C. Andersen Centret / Sekundærlitteratur.** Sidebar-blok med
+forklaringen "Bibliografier fra H.C. Andersen Centret, inklusive Andersens
+udgivelser (primærlitteratur)." URL:
+`https://andersen.sdu.dk/forskning/bib/bibsoeg.html?fritekst=%22{term}%22`
+(frasesøgning). `{term}` er den mest basale form af posten:
+
+- **Personer:** efternavnet (`searchSurname`, delen før første komma i
+  registerlabelen).
+- **Værker:** grundtitlen (`searchTitle`, `main_title()` i
+  `build_works_extra.py`) — uden parenteser (forfatter, sted, år), uden
+  "se:"-hale og uden genudgivelseskæden efter første ` - `.
+- **Steder:** vises aldrig.
+
+Søgning, ikke identifikation (§4). Efternavne alene er brede søgninger
+(fx "Hansen"). URL-formen er angivet af brugeren, 2026-10-09, og er ikke
+verificeret mod live-siden.

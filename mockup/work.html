@@ -606,6 +606,15 @@ const ALL_WORKS = Object.assign({}, (typeof WORKS_EXTRA !== 'undefined' ? WORKS_
     sb += `</div></div>`;
   }
 
+  // 4b. Sekundærlitteratur (H.C. Andersen Centret) — bibliografisøgning på
+  // værkets grundtitel (searchTitle; se docs/external-links.md §6).
+  const bibTerm = w.searchTitle || (wx && wx.searchTitle) || '';
+  if (bibTerm) {
+    sb += `<div class="sidebar-box"><div class="sidebar-box__title">Sekundærlitteratur</div>` +
+      `<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">Bibliografier fra H.C. Andersen Centret, inklusive Andersens udgivelser (primærlitteratur).</p>` +
+      `<div style="font-size:0.82rem"><a class="external-link" href="https://andersen.sdu.dk/forskning/bib/bibsoeg.html?fritekst=%22${encodeURIComponent(bibTerm)}%22" target="_blank" rel="noopener noreferrer">Sekundærlitteratur<span class="external-link__icon" aria-hidden="true">↗</span><span class="sr-only"> (åbner i nyt faneblad)</span></a></div></div>`;
+  }
+
   // 5. Hyppigst samtidige steder
   if (coPlaces && coPlaces.length) {
     sb += `<div class="sidebar-box"><div class="sidebar-box__title">Hyppigst samtidige steder</div><div style="display:flex;flex-direction:column;gap:6px">`;

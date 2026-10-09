@@ -456,6 +456,32 @@
         });
         sbH += '</div></div></div>';
       }
+      // Anderseniana (Museum Odense) — article search by name. See docs/external-links.md §4.
+      if (p.searchName) {
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header"><i>Anderseniana</i>' +
+          '<span class="info-block__tag">added</span></div>' +
+          '<div class="info-block__body">' +
+          '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
+          'Articles from Museum Odense, especially its journal <i>Anderseniana</i>.</p>' +
+          '<div style="font-size:0.82rem"><a class="external-link" ' +
+          'href="https://museumodense.dk/alle-udgivelser/?artikel_navn=' + encodeURIComponent(p.searchName).replace(/%20/g, '+') + '" ' +
+          'target="_blank" rel="noopener noreferrer"><i>Anderseniana</i>' +
+          '<span class="external-link__icon" aria-hidden="true">↗</span>' +
+          '<span class="sr-only"> (opens in a new tab)</span></a></div></div></div>';
+      }
+      // Sekundærlitteratur (H.C. Andersen Centret) — bibliography search by surname.
+      if (p.searchSurname) {
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Secondary literature' +
+          '<span class="info-block__tag">added</span></div>' +
+          '<div class="info-block__body">' +
+          '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
+          'Bibliographies from the H.C. Andersen Centre, including Andersen\'s own publications (primary literature).</p>' +
+          '<div style="font-size:0.82rem"><a class="external-link" ' +
+          'href="https://andersen.sdu.dk/forskning/bib/bibsoeg.html?fritekst=%22' + encodeURIComponent(p.searchSurname) + '%22" ' +
+          'target="_blank" rel="noopener noreferrer">Secondary literature' +
+          '<span class="external-link__icon" aria-hidden="true">↗</span>' +
+          '<span class="sr-only"> (opens in a new tab)</span></a></div></div></div>';
+      }
     }
 
     // Main content

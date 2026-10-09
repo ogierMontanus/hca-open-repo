@@ -105,6 +105,28 @@ def split_container_chain(title):
     return title[:last].strip(), title[last + 3:].strip()
 
 
+def main_title(title):
+    """The most basic form of a work title, for a bibliography search term
+    (docs/external-links.md §6): drops a "se:"/"Se ogsaa:" tail, everything
+    from the first top-level ' - ' (reprint/edition chain, see
+    split_container_chain()), and every parenthetical (author, place, year,
+    subtitle). "Dryaden" stays "Dryaden"; "Hyrden og Slangen (Rudolph
+    Schmidt)" becomes "Hyrden og Slangen"."""
+    t = SEE_TAIL_RE.split((title or "").replace("\n", " "))[0]
+    out, depth = [], 0
+    for i, c in enumerate(t):
+        if c == "(":
+            depth += 1
+        elif c == ")":
+            depth = max(0, depth - 1)
+        elif depth == 0:
+            if t[i:i + 3] == " - " and not t.lstrip("*").lstrip().startswith(("»", "«")):
+                break
+            out.append(c)
+    r = "".join(out).strip().lstrip("*").strip(" -–[]")
+    return re.sub(r"\s+", " ", r).strip()
+
+
 PAREN_ALL_RE = re.compile(r"\(([^()]+)\)")
 
 # BILLEDKUNST titles that carry no person_derived attribution are usually
@@ -859,6 +881,8 @@ def main():
 
         generated[rid] = {
             "title": r["label"].strip(),
+            # Grundtitel til Sekundærlitteratur-søgelinket (work.html).
+            "searchTitle": main_title(r["label"]),
             "h2": h2 or "ANDRE FORFATTERE",
             "h3": h3 or "—",
             "wing": wing,

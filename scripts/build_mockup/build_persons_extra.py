@@ -277,6 +277,17 @@ def full_name_from_label(label: str) -> str:
     return (given + " " + surname).strip() if given else surname
 
 
+def surname_from_label(label: str) -> str:
+    """Just the surname ("Efternavn" before the first comma), cleaned the
+    same way as full_name_from_label() — the search term for the H.C.
+    Andersen Centret bibliography link (docs/external-links.md §6). A label
+    with no comma is returned as-is."""
+    s = _LEADING_SEE_ALSO_RE.sub("", label)
+    s = _TRAILING_SEE_RE.sub("", s)
+    s = _TRAILING_DATE_PAREN_RE.sub("", s).strip()
+    return s.split(",")[0].strip()
+
+
 # A person with NO recorded nationality at all defaults to Lex.dk too —
 # see the dedicated comment inside bio_search_links() for why that's a
 # resource default, not a nationality inference. Two umbrella keys
@@ -543,6 +554,11 @@ def main() -> None:
             "worksRegistryCreator": rid in work_creators,
             "wd":           wd,
             "bioLinks":     bio_links,
+            # "Fornavn Efternavn" til Anderseniana-søgelinket (museumodense.dk)
+            # — se docs/external-links.md. Selve URL'en bygges i persons.html.
+            "searchName":   full_name_from_label(label),
+            # Efternavn alene — søgeterm til Sekundærlitteratur-linket.
+            "searchSurname": surname_from_label(label),
             "breve":        breve,
         }
 
