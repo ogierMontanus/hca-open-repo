@@ -89,7 +89,8 @@ window.CartPdf = (function () {
         counts: { diary: ['dagbogsside', 'dagbogssider'], person: ['person', 'personer'], place: ['sted', 'steder'], work: ['værk', 'værker'] },
         persons: 'Personer', places: 'Steder', works: 'Værker', dates: 'Datoer',
         more: function (n) { return '… og ' + n + ' flere'; },
-        generated: 'Genereret', source: 'Kilde', sourceVal: 'H.C. Andersens dagbøger (Det Kgl. Bibliotek) og sitets tilknyttede registerdata',
+        generated: 'Genereret', source: 'Kilde', sourceVal: 'H.C. Andersens dagbøger (Det Danske Sprog- og Litteraturselskab, Det Kgl. Bibliotek) og sitets tilknyttede registerdata',
+        about: 'Om projektet', aboutUrl: 'om.html',
         site: 'Websted',
         volume: 'Bind', page: 'side', year: 'Dagbogsår', text: 'Dagbogstekst', lineMarks: 'Linjemarkering',
         notes: 'Fodnoter', related: 'Tilknyttet dagbogsside', kb: 'Kilde: Det Kgl. Bibliotek', sheet: 'Side',
@@ -113,7 +114,8 @@ window.CartPdf = (function () {
         counts: { diary: ['diary page', 'diary pages'], person: ['person', 'persons'], place: ['place', 'places'], work: ['work', 'works'] },
         persons: 'Persons', places: 'Places', works: 'Works', dates: 'Dates',
         more: function (n) { return '… and ' + n + ' more'; },
-        generated: 'Generated', source: 'Source', sourceVal: "H.C. Andersen's diaries (Royal Danish Library) and the site's linked register data",
+        generated: 'Generated', source: 'Source', sourceVal: "H.C. Andersen's diaries (Society for Danish Language and Literature, Royal Danish Library) and the site's linked register data",
+        about: 'About the project', aboutUrl: 'om_en.html',
         site: 'Site',
         volume: 'Volume', page: 'page', year: 'Diary year', text: 'Diary text', lineMarks: 'Line markers',
         notes: 'Footnotes', related: 'Linked to this diary page', kb: 'Source: Royal Danish Library', sheet: 'Page',
@@ -419,7 +421,9 @@ window.CartPdf = (function () {
         fontSize: 9, color: GREY,
         text: [
           t.generated + ': ' + gen + '\n',
-          t.source + ': ' + t.sourceVal + '\n',
+          t.source + ': ' + t.sourceVal + ' – ',
+          lnk(t.aboutUrl, t.about, { color: BLUE }),
+          '\n',
           t.site + ': ',
           lnk('index.html', "HCA's Hvem-hvad-hvor", { color: BLUE })
         ]
