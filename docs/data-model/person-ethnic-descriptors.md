@@ -474,6 +474,7 @@ sub-identity's grid is judged on its own count.
 | Umbrella | Covers |
 |---|---|
 | **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, badisk, thüringsk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
+| **Polsk** | polsk + preussisk — preussisk is deliberately **also** a member of Tysk (2026-10-17: a Prussian counts as both German and Polish), so "Preussisk" appears as a sub-identity under both umbrellas |
 | **Britisk** | engelsk, skotsk, irsk, angelsaksisk |
 | **Græsk** | græsk, nygræsk + the ancient polities (attisk, atheniensisk, makedonisk) and østromersk |
 | **Dansk** | dansk + regional (jysk, sjællandsk, fynsk, københavnsk), the duchies, and the crown territories (islandsk, grønlandsk, dansk_vestindisk) |
