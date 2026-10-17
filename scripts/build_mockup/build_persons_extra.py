@@ -218,7 +218,7 @@ def load_breve_crosswalk() -> dict:
 def load_nation_umbrellas() -> dict:
     """{umbrella_key: {member_key, ...}} from data/curated/nation_umbrellas_da.csv
     — the same clustering nation.html itself uses (e.g. "Tyskland" groups
-    tysk with every pre-1871 German state: preussisk, sachsisk, bayersk...).
+    tysk with every pre-1871 German state: sachsisk, bayersk, hannoveransk...).
     Reused here rather than re-deriving a narrower "German states" list by
     hand, so a person bio_search_links() calls German is exactly the same
     set of persons nation.html's own Tyskland page would show — including

@@ -50,11 +50,13 @@ Genbrugt bevidst, frem for at opfinde en snævrere "tyske delstater"-liste:
 en person `bio_search_links()` kalder tysk er præcis den samme mængde
 personer, `nation.html`s Tyskland-side ville vise.
 
-Det betyder blandt andet, at de før-1871 tyske delstater (`preussisk`,
-`sachsisk`, `bayersk`, `hannoveransk`, `oldenburgsk`, `westfalsk`,
+Det betyder blandt andet, at de før-1871 tyske delstater (`sachsisk`, `bayersk`, `hannoveransk`, `oldenburgsk`, `westfalsk`,
 `württembergsk`, `hessisk`, `thüringsk`, `badisk`, …) tæller som tysk —
 korpusset navngiver dem langt oftere end det samlende "tysk" (Tyskland
-blev først samlet i 1871, midt i dagbogsperioden).
+blev først samlet i 1871, midt i dagbogsperioden). `preussisk` er ikke
+længere en nøgle: formerne udvides ved parsing til både `tysk` og `polsk`
+(se `person-ethnic-descriptors.md`, "Nedlagt: preussisk"), så preussere er
+stadig tyske her.
 
 **Slesvig-Holsten-nøglerne** (`holstensk`, `slesvigholstensk`,
 `holstenlauenborgsk`) er med vilje medlem af **begge** paraplyer —

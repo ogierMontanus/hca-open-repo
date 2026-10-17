@@ -1,6 +1,6 @@
 key,label_da,category,forms,notes
 dansk,Dansk,national,dansk;danske,
-tysk,Tysk,national,tysk;tyske,"Pre-1871 the corpus mostly names the specific German state (preussisk, sachsisk…) instead — see german_state rows."
+tysk,Tysk,national,tysk;tyske,"Pre-1871 the corpus mostly names the specific German state (sachsisk, bayersk…) instead — see german_state rows."
 fransk,Fransk,national,fransk;franske,
 svensk,Svensk,national,svensk;svenske,
 engelsk,Engelsk,national,engelsk;engelske,British Isles — see also britisk.
@@ -42,7 +42,7 @@ armenisk,Armenisk,national,armenisk;armeniske,
 algiersk,Algiersk,national,algiersk;algierske,
 maltesisk,Maltesisk,national,maltesisk;maltesiske,
 frisisk,Frisisk,ethnolinguistic,frisisk;frisiske,North Sea Germanic ethnic/linguistic group spanning the Danish-German-Dutch coast.
-preussisk,Preussisk,german_state,preussisk;preussiske;prøjsisk;prøjsiske;preusisk;preusiske,"Pre-1871 German state; the by-far most frequent german_state form in the corpus (74 hits). ""Preusisk"" (single s) is a spelling variant attested once in the corpus."
+preussisk,Preussisk,dissolved,preussisk;preussiske;prøjsisk;prøjsiske;preusisk;preusiske,"DISSOLVED as a collective category (2026-10-17) — no key of its own in the output; each form yields one match for tysk and one for polsk, see ethnic_adjective_expansions_da.csv. Was the most frequent german_state form (74 hits). ""Preusisk"" (single s) is a spelling variant attested once."
 sachsisk,Sachsisk,german_state,sachsisk;sachsiske;saksisk;saksiske,Saxony. Corpus consistently spells it "sachsisk" (German-influenced spelling), not the modern Danish "saksisk".
 bayersk,Bayersk,german_state,bayersk;bayerske;bayrisk;bayriske,Bavaria — both spellings attested.
 hannoveransk,Hannoveransk,german_state,hannoveransk;hannoveranske,Hanover.

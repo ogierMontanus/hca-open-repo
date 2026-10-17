@@ -84,6 +84,11 @@ def load_adjectives(path):
     out = {}
     with open(path, encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
+            if row["category"] == "dissolved":
+                # Collective category with no key of its own (preussisk) —
+                # the parser already expanded its forms into real keys; see
+                # data/curated/ethnic_adjective_expansions_da.csv.
+                continue
             out[row["key"]] = {"label_da": row["label_da"], "category": row["category"]}
     return out
 
