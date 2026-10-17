@@ -56,7 +56,6 @@ import openpyxl
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 WORKBOOK   = os.path.join(ROOT, "data", "raw", "HCA REPOSITORY V0.82", "HCA-Repository V0.82.xlsx")
 ADJ_TABLE  = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
-EXPANSIONS = os.path.join(ROOT, "data", "curated", "ethnic_adjective_expansions_da.csv")
 OUT        = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
 REVIEW_OUT = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors_review.csv")
 
@@ -93,47 +92,22 @@ RELATION_MARKERS = {
 INSTITUTION_ARTICLES = {"det", "den", "de"}
 
 
-def load_expansions(path):
-    """{key: [target_key, …]} from data/curated/ethnic_adjective_expansions_da.csv.
-    Optional: absent file = no dissolved categories."""
-    if not os.path.exists(path):
-        return {}
-    with open(path, encoding="utf-8", newline="") as f:
-        return {row["key"]: [t.strip() for t in row["expands_to"].split(";") if t.strip()]
-                for row in csv.DictReader(f)}
-
-
-def load_adjective_table(path, expansions_path=EXPANSIONS):
-    """Returns (form_lookup, labels) where form_lookup maps a casefolded
-    surface form to a LIST of (key, label_da, category) hits, and labels
-    maps key -> label_da (for reporting).
-
-    A key listed in the expansions file is a dissolved collective
-    category: it has no key of its own in the output, and each of its
-    forms yields one hit per target key instead (preussisk -> tysk +
-    polsk). Targets must be ordinary rows of the adjective table."""
+def load_adjective_table(path):
+    """Returns (form_lookup, forms_by_key) where form_lookup maps a
+    casefolded surface form to (key, label_da, category), and
+    forms_by_key maps key -> label_da (for reporting)."""
     if not os.path.exists(path):
         sys.exit(f"Missing {path}")
-    with open(path, encoding="utf-8", newline="") as f:
-        rows = list(csv.DictReader(f))
-    by_key = {row["key"]: row for row in rows}
-    expansions = load_expansions(expansions_path)
     form_lookup = {}
     labels = {}
-    for row in rows:
-        targets = expansions.get(row["key"])
-        if targets:
-            bad = [t for t in targets if t not in by_key or t in expansions]
-            if bad:
-                sys.exit(f"{row['key']}: expansion targets must be ordinary keys, got {bad}")
-            hits = [(t, by_key[t]["label_da"], by_key[t]["category"]) for t in targets]
-        else:
-            labels[row["key"]] = row["label_da"]
-            hits = [(row["key"], row["label_da"], row["category"])]
-        for form in row["forms"].split(";"):
-            form = form.strip()
-            if form:
-                form_lookup[form.casefold()] = hits
+    with open(path, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            key = row["key"]
+            labels[key] = row["label_da"]
+            for form in row["forms"].split(";"):
+                form = form.strip()
+                if form:
+                    form_lookup[form.casefold()] = (key, row["label_da"], row["category"])
     return form_lookup, labels
 
 
@@ -177,27 +151,33 @@ def parse_matches(persons, form_lookup):
             lt = tok.casefold()
             position_type = "leading" if i == 0 else "embedded"
 
-            def emit(hits, matched_form, match_type):
-                referent = "subject" if position_type == "leading" else classify_referent(tokens, i)
-                for key, label_da, category in hits:
-                    matches.append({
-                        "entity_id": p["entity_id"], "label": p["label"],
-                        "matched_form": matched_form, "nationality_key": key,
-                        "nationality_label": label_da, "category": category,
-                        "position_index": i, "position_type": position_type,
-                        "match_type": match_type, "referent_hint": referent,
-                        "description": desc,
-                    })
-
             hit = form_lookup.get(lt)
             if hit is not None:
-                emit(hit, tok, "fixed_compound" if lt in FIXED_COMPOUND_NOTE else "single")
+                key, label_da, category = hit
+                match_type = "fixed_compound" if lt in FIXED_COMPOUND_NOTE else "single"
+                referent = "subject" if position_type == "leading" else classify_referent(tokens, i)
+                matches.append({
+                    "entity_id": p["entity_id"], "label": p["label"],
+                    "matched_form": tok, "nationality_key": key, "nationality_label": label_da,
+                    "category": category, "position_index": i, "position_type": position_type,
+                    "match_type": match_type, "referent_hint": referent,
+                    "description": desc,
+                })
                 continue
 
             if "-" in lt:
-                for part in lt.split("-"):
-                    if part in form_lookup:
-                        emit(form_lookup[part], f"{tok} (part: {part})", "hyphen_compound")
+                parts = lt.split("-")
+                part_hits = [(part, form_lookup[part]) for part in parts if part in form_lookup]
+                for part, (key, label_da, category) in part_hits:
+                    referent = "subject" if position_type == "leading" else classify_referent(tokens, i)
+                    matches.append({
+                        "entity_id": p["entity_id"], "label": p["label"],
+                        "matched_form": f"{tok} (part: {part})", "nationality_key": key,
+                        "nationality_label": label_da, "category": category,
+                        "position_index": i, "position_type": position_type,
+                        "match_type": "hyphen_compound", "referent_hint": referent,
+                        "description": desc,
+                    })
                 continue
 
             # No-hyphen dual-nationality compound, e.g. "svensknorsk" =
@@ -210,7 +190,16 @@ def parse_matches(persons, form_lookup):
                     left, right = lt[:cut], lt[cut:]
                     if left in form_lookup and right in form_lookup:
                         for part in (left, right):
-                            emit(form_lookup[part], f"{tok} (part: {part})", "solid_compound")
+                            key, label_da, category = form_lookup[part]
+                            referent = "subject" if position_type == "leading" else classify_referent(tokens, i)
+                            matches.append({
+                                "entity_id": p["entity_id"], "label": p["label"],
+                                "matched_form": f"{tok} (part: {part})", "nationality_key": key,
+                                "nationality_label": label_da, "category": category,
+                                "position_index": i, "position_type": position_type,
+                                "match_type": "solid_compound", "referent_hint": referent,
+                                "description": desc,
+                            })
                         break
     return matches
 

@@ -28,15 +28,13 @@ Reg0030820,"Ahlefeldt, Charlotte Elisabeth Sophie Wilhelmine von, Grevinde, f. v
 Reg0030840,"Ahlefeldt, Frederik Christian (1652–1669)",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Student i Strassburg.
 Reg0031000,"Ahlgrensson, Fritz (1838–1902)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Teatermaler.
 Reg0031030,"Ahlmann, Nicolai (1809–1890)",nordslesvigsk,nordslesvigsk,Nordslesvigsk,border_region,0,leading,single,subject,"nordslesvigsk Politiker, Medlem af den preussiske Landdag 1867–1875."
-Reg0031030,"Ahlmann, Nicolai (1809–1890)",preussiske,tysk,Tysk,national,5,embedded,single,possible_institution,"nordslesvigsk Politiker, Medlem af den preussiske Landdag 1867–1875."
-Reg0031030,"Ahlmann, Nicolai (1809–1890)",preussiske,polsk,Polsk,national,5,embedded,single,possible_institution,"nordslesvigsk Politiker, Medlem af den preussiske Landdag 1867–1875."
+Reg0031030,"Ahlmann, Nicolai (1809–1890)",preussiske,preussisk,Preussisk,german_state,5,embedded,single,possible_institution,"nordslesvigsk Politiker, Medlem af den preussiske Landdag 1867–1875."
 Reg0031060,"Ainsworth, William Francis (1807–1896)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Læge, Geolog og Opdagelsesrejsende."
 Reg0031070,"Ainsworth, William Harrison (1805–1882)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Romanforfatter.
 Reg0031080,Aischylos (525–456 f. Chr.),græsk,græsk,Græsk,national,0,leading,single,subject,græsk Tragediedigter.
 Reg0031100,"Alayrac, Nicolas d’ (1753–1809)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Operakomponist.
 Reg0031110,"Albani, Francesco (1578–1660)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
-Reg0031160,"Albedyll, Gustav von (1790–1863)",preussisk,tysk,Tysk,national,1,embedded,single,unclear,"fhv. preussisk Major, Dresden."
-Reg0031160,"Albedyll, Gustav von (1790–1863)",preussisk,polsk,Polsk,national,1,embedded,single,unclear,"fhv. preussisk Major, Dresden."
+Reg0031160,"Albedyll, Gustav von (1790–1863)",preussisk,preussisk,Preussisk,german_state,1,embedded,single,unclear,"fhv. preussisk Major, Dresden."
 Reg0031250,"Alcochete, Jácome Leäo Daupias, Baron (1813–1894)",portugisisk,portugisisk,Portugisisk,national,0,leading,single,subject,portugisisk Kunstsamler.
 Reg0031270,"Aldridge, Ira (ca. 1805–67)",Amerikansk,amerikansk,Amerikansk,national,0,leading,single,subject,Amerikansk negerskuespiller.
 Reg0031280,Alexander den Store (356–23 f.Chr.),makedonisk,makedonisk,Makedonisk,historical_polity,0,leading,single,subject,makedonisk Konge.
@@ -105,8 +103,7 @@ Reg0033200,"Aubert, Ludvig Cæsar Martin (1807–1887)",Norsk,norsk,Norsk,nation
 Reg0033220,"Auerbach, Berthold (1812–1882)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Forfatter.
 Reg0033290,"auf der Maur, Xaver (1822–1904)",schweizisk,schweizisk,Schweizisk,national,6,embedded,single,possible_relation,"Broder til Agatha a.d.M., schweizisk Oberstløjtnant, Indehaver af Hotel zum Goldnen Adler, Brunnen."
 Reg0033360,"Augustenborg, Carl August, Prins af Slesvig-Holsten-Sønderborg- (1768–1810)",svensk,svensk,Svensk,national,4,embedded,single,unclear,"General, Statholder i Norge, svensk Tronfølger 1809."
-Reg0033470,"Augustenborg, Waldemar, Prins af Slesvig-Holsten-Sønderborg- (1810–1871)",preussisk,tysk,Tysk,national,6,embedded,single,unclear,"Søn af Prins Emil af A., preussisk General."
-Reg0033470,"Augustenborg, Waldemar, Prins af Slesvig-Holsten-Sønderborg- (1810–1871)",preussisk,polsk,Polsk,national,6,embedded,single,unclear,"Søn af Prins Emil af A., preussisk General."
+Reg0033470,"Augustenborg, Waldemar, Prins af Slesvig-Holsten-Sønderborg- (1810–1871)",preussisk,preussisk,Preussisk,german_state,6,embedded,single,unclear,"Søn af Prins Emil af A., preussisk General."
 Reg0033480,"Augustus, Julius Cæsar Octavianus (63 f.Chr.-14 e.Chr.)",romersk,romersk,Romersk,historical_polity,0,leading,single,subject,romersk Kejser 29 f.Chr.
 Reg0033490,"Aumont, Louis (1805–1870)",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Portrætmaler.
 Reg0033510,"Austin, Sarah, f. Taylor (1793–1867)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Oversætterinde, g. 1820 m. Juristen John A."
@@ -124,8 +121,7 @@ Reg0033930,"Baggesen, Theodor (1832–1896)",tysk,tysk,Tysk,national,9,embedded,
 Reg0033970,"Bailac, J.",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Vicekonsul i Bayonne.
 Reg0033980,Bajazet (Bajazid) I (1347–1403),tyrkisk,tyrkisk,Tyrkisk,national,0,leading,single,subject,tyrkisk Sultan 1389–1402.
 Reg0034000,"Baker, Sir Samuel White (1821–1893)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Opdagelsesrejsende.
-Reg0034030,"Balan, Ludwig von (1812–1874)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Gesandt i København 1859–1863, senere i Bruxelles."
-Reg0034030,"Balan, Ludwig von (1812–1874)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Gesandt i København 1859–1863, senere i Bruxelles."
+Reg0034030,"Balan, Ludwig von (1812–1874)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Gesandt i København 1859–1863, senere i Bruxelles."
 Reg0034040,"Balbi, Felippo",neapolitansk,neapolitansk,Neapolitansk,historical_polity,0,leading,single,subject,neapolitansk Maler.
 Reg0034050,"Baibus, Marcus Nonius",romersk,romersk,Romersk,historical_polity,0,leading,single,subject,"romersk Prokonsul, Herculanum."
 Reg0034060,"Balfe, Michael William (1808–1870)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Komponist.
@@ -165,15 +161,11 @@ Reg0035450,"Beaulieu, Napoléon Alcindor de, Baron (1805–1872)",Belgisk,belgis
 Reg0035460,"Beaulieu-Marconnay, Alexander von, Friherre (1827–1899)",oldenburgsk,oldenburgsk,Oldenburgsk,german_state,8,embedded,single,possible_relation,"Søn af W.E.v.B.-M., senere oldenburgsk Kammerherre, Chef for Hofforvaltningen i Eutin."
 Reg0035480,"Beaulieu-Marconnay, Carl Olivier von, Friherre (1811–1889)",thüringske,thüringsk,Thüringsk,german_state,27,embedded,single,possible_institution,"Søn af W.E.v. B.-M., Geheime-Referendar i Weimar, 1848 Hofmarskal hos Storhertugen af Sachsen-Weimar-Eisenach, 1853 Overhofmester hos Enkestorhertuginden, 1850–1852 og 1854–1857 Teaterintendant, 1864–1866 Gesandt ved Forbundsdagen i Frankfurt for de thüringske Stater, levede derefter i Dresden."
 Reg0035490,"Beaulieu-Marconnay, Edmund von, Friherre (1817–1900)",oldenburgsk,oldenburgsk,Oldenburgsk,german_state,7,embedded,single,possible_relation,"Søn af W.E.v.B.- M., oldenburgsk Løjtnant, senere preussisk Oberst og Kammerherre."
-Reg0035490,"Beaulieu-Marconnay, Edmund von, Friherre (1817–1900)",preussisk,tysk,Tysk,national,10,embedded,single,unclear,"Søn af W.E.v.B.- M., oldenburgsk Løjtnant, senere preussisk Oberst og Kammerherre."
-Reg0035490,"Beaulieu-Marconnay, Edmund von, Friherre (1817–1900)",preussisk,polsk,Polsk,national,10,embedded,single,unclear,"Søn af W.E.v.B.- M., oldenburgsk Løjtnant, senere preussisk Oberst og Kammerherre."
-Reg0035500,"Beaulieu-Marconnay, Ernst von, Friherre (1819–1855)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Kavalleriløjtnant, Fætter til Carl v. B.-M., Digter."
-Reg0035500,"Beaulieu-Marconnay, Ernst von, Friherre (1819–1855)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Kavalleriløjtnant, Fætter til Carl v. B.-M., Digter."
+Reg0035490,"Beaulieu-Marconnay, Edmund von, Friherre (1817–1900)",preussisk,preussisk,Preussisk,german_state,10,embedded,single,unclear,"Søn af W.E.v.B.- M., oldenburgsk Løjtnant, senere preussisk Oberst og Kammerherre."
+Reg0035500,"Beaulieu-Marconnay, Ernst von, Friherre (1819–1855)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Kavalleriløjtnant, Fætter til Carl v. B.-M., Digter."
 Reg0035510,"Beaulieu-Marconnay, Eugen von, Friherre (1815–1898)",oldenburgsk,oldenburgsk,Oldenburgsk,german_state,7,embedded,single,possible_relation,"Søn af W.E.v.B.-M., oldenburgsk Obergerichtsrat og Kammerherre."
-Reg0035520,"Beaulieu-Marconnay, Flavie von, Friherreinde (1851–1925)",preussisk,tysk,Tysk,national,9,embedded,single,possible_relation,"Datter af Carl v. B.-M., g. 1875 m. senere preussisk Oberstløjtnant, Friherre Strahl von Salis-Soglio."
-Reg0035520,"Beaulieu-Marconnay, Flavie von, Friherreinde (1851–1925)",preussisk,polsk,Polsk,national,9,embedded,single,possible_relation,"Datter af Carl v. B.-M., g. 1875 m. senere preussisk Oberstløjtnant, Friherre Strahl von Salis-Soglio."
-Reg0035560,"Beaulieu-Marconnay, Leo von, Friherre (1848–1923)",preussisk,tysk,Tysk,national,7,embedded,single,possible_relation,"Søn af Carl v. B.-M., senere preussisk Oberst."
-Reg0035560,"Beaulieu-Marconnay, Leo von, Friherre (1848–1923)",preussisk,polsk,Polsk,national,7,embedded,single,possible_relation,"Søn af Carl v. B.-M., senere preussisk Oberst."
+Reg0035520,"Beaulieu-Marconnay, Flavie von, Friherreinde (1851–1925)",preussisk,preussisk,Preussisk,german_state,9,embedded,single,possible_relation,"Datter af Carl v. B.-M., g. 1875 m. senere preussisk Oberstløjtnant, Friherre Strahl von Salis-Soglio."
+Reg0035560,"Beaulieu-Marconnay, Leo von, Friherre (1848–1923)",preussisk,preussisk,Preussisk,german_state,7,embedded,single,possible_relation,"Søn af Carl v. B.-M., senere preussisk Oberst."
 Reg0035590,"Beauvois, Eugène (1835–1912)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Arkæolog og Historiker.
 Reg0035720,"Beck, Carl (1817–1879)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0035760,"Beck-Friis, Corfitz, Greve (1801–1870)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Kammerherre, Besidder af Borringe Kloster og Fiholm."
@@ -262,8 +254,7 @@ Reg0038650,"Birch-Reichenwald, Christian (1814–1891)",norsk,norsk,Norsk,nation
 Reg0038690,Birger Jarl (død 1266),Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Stormand.
 Reg0038710,Birgitta (ca. 1303–73),Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Helgeninde, Datter af Birger Persson, Stifter af Birgittinerordenen."
 Reg0038730,"Bismarck, Otto von, Fyrste (1815–1898)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Statsmand.
-Reg0038750,"Bismarck-Bohlen, Theodor, Greve (1790–1873)",Preussisk,tysk,Tysk,national,0,leading,single,subject,Preussisk Oberst.
-Reg0038750,"Bismarck-Bohlen, Theodor, Greve (1790–1873)",Preussisk,polsk,Polsk,national,0,leading,single,subject,Preussisk Oberst.
+Reg0038750,"Bismarck-Bohlen, Theodor, Greve (1790–1873)",Preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,Preussisk Oberst.
 Reg0038950,"Bjerring, Vilhelm (1805–1879)",Fransk,fransk,Fransk,national,2,embedded,single,unclear,"Lektor i Fransk ved Københavns Universitet, tit. Professor 1848, Landstingsmand."
 Reg0038960,"Björck, Ernst Daniel (1838–1868)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Digter og Præst, Søn af G.D.B."
 Reg0039020,"Bjørnson, Bjørn (1859–1942)",norsk,norsk,Norsk,national,4,embedded,single,unclear,"Søn af Bjørnstjeme B., norsk Skuespiller og Teaterchef."
@@ -308,8 +299,7 @@ Reg0040360,"Bonnet, Jules",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk
 Reg0040460,"Boom, J. M. (død 1875)",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Konsul i Cadix.
 Reg0040540,"Borghese, Marco Antonio, Prins (1814–1886)",romersk,romersk,Romersk,historical_polity,0,leading,single,subject,romersk Adelsmand.
 Reg0040560,"Borgo di Primo, Olinto dal (1775–1856)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk Chargé d’affaires i Madrid, 1848–1856 Ministerresident sst., Kammerherre."
-Reg0040590,"Bornemann, Fred. Wilh. Ludw. (1798–1864)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Retslærd, 2. Präsident des Obertribunals, 1860 Kronsyndikus."
-Reg0040590,"Bornemann, Fred. Wilh. Ludw. (1798–1864)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Retslærd, 2. Präsident des Obertribunals, 1860 Kronsyndikus."
+Reg0040590,"Bornemann, Fred. Wilh. Ludw. (1798–1864)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Retslærd, 2. Präsident des Obertribunals, 1860 Kronsyndikus."
 Reg0040630,"Bornstedt, Luise von, Baronesse (1807–1870)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digterinde.
 Reg0040660,"Borries, Theodor (1820–1897)",dansk,dansk,Dansk,national,10,embedded,single,unclear,"Broder til Carl B., udvandret til England 1844, senere Grosserer og dansk Vicekonsul i Newcastle."
 Reg0040740,"Bosboom, Johannes (1817–1891)",Hollandsk,hollandsk,Hollandsk,national,0,leading,single,subject,Hollandsk Maler.
@@ -340,8 +330,7 @@ Reg0041660,"Brandt, Andreas Ludvig (1820–1882)",Dansk,dansk,Dansk,national,0,l
 Reg0041660,"Brandt, Andreas Ludvig (1820–1882)",dansk,dansk,Dansk,national,8,embedded,single,unclear,"Dansk Grosserer i Amsterdam (Firma Ebeling & Brandt), senere dansk Konsul sst."
 Reg0041740,"Brandt, Frederik Peter (1825–1891)",Norsk,norsk,Norsk,national,0,leading,single,subject,"Norsk Retshistoriker, Lektor (Professor) i Lovkyndighed ved Christiania Universitet."
 Reg0041750,"Brandt, Georg (1830–1889)",dansk,dansk,Dansk,national,5,embedded,single,unclear,"Broder til A.L.B., dansk Grosserer i Amsterdam, Konsul 1882."
-Reg0041920,"Brassier de Saint-Simon-Vallade, Marie Joseph Anton von, Greve (1798–1872)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Gesandt i Athen 1841, Kammerherre."
-Reg0041920,"Brassier de Saint-Simon-Vallade, Marie Joseph Anton von, Greve (1798–1872)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Gesandt i Athen 1841, Kammerherre."
+Reg0041920,"Brassier de Saint-Simon-Vallade, Marie Joseph Anton von, Greve (1798–1872)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Gesandt i Athen 1841, Kammerherre."
 Reg0041960,"Braun, Wilhelm von (1813–1860)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Digter.
 Reg0041990,"Bravo, Johan (1797–1876)",holstensk,holstensk,Holstensk,border_region,0,leading,single,subject,"holstensk Maler, 1843 dansk Kunstagent i Rom, 1847 dansk Konsul i Rom, 1855 tillige svensk-norsk Konsul, 1866 Etatsraad."
 Reg0041990,"Bravo, Johan (1797–1876)",dansk,dansk,Dansk,national,2,embedded,single,unclear,"holstensk Maler, 1843 dansk Kunstagent i Rom, 1847 dansk Konsul i Rom, 1855 tillige svensk-norsk Konsul, 1866 Etatsraad."
@@ -349,8 +338,7 @@ Reg0041990,"Bravo, Johan (1797–1876)",dansk,dansk,Dansk,national,6,embedded,si
 Reg0041990,"Bravo, Johan (1797–1876)",svensk-norsk (part: svensk),svensk,Svensk,national,11,embedded,hyphen_compound,unclear,"holstensk Maler, 1843 dansk Kunstagent i Rom, 1847 dansk Konsul i Rom, 1855 tillige svensk-norsk Konsul, 1866 Etatsraad."
 Reg0041990,"Bravo, Johan (1797–1876)",svensk-norsk (part: norsk),norsk,Norsk,national,11,embedded,hyphen_compound,unclear,"holstensk Maler, 1843 dansk Kunstagent i Rom, 1847 dansk Konsul i Rom, 1855 tillige svensk-norsk Konsul, 1866 Etatsraad."
 Reg0042000,"Bredahl, Andreas Georg (død 1778, 40 år gl.)",dansk,dansk,Dansk,national,1,embedded,single,unclear,"Afskediget dansk Kaptajn, Konvertit."
-Reg0042070,"Bredow, Adele von, Grevinde, f. von Gansauge (1830–1885)",preussisk,tysk,Tysk,national,2,embedded,single,possible_relation,g. 1852 m. preussisk Appellations-Geheimerat Otto v. B. til Goerne m.v.
-Reg0042070,"Bredow, Adele von, Grevinde, f. von Gansauge (1830–1885)",preussisk,polsk,Polsk,national,2,embedded,single,possible_relation,g. 1852 m. preussisk Appellations-Geheimerat Otto v. B. til Goerne m.v.
+Reg0042070,"Bredow, Adele von, Grevinde, f. von Gansauge (1830–1885)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,possible_relation,g. 1852 m. preussisk Appellations-Geheimerat Otto v. B. til Goerne m.v.
 Reg0042160,"Breiting, Herman (1804–1860)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Operasanger, i St. Petersborg 1839–1842."
 Reg0042200,"Bremer, Fredrika (1801–1865)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Forfatterinde, Datter af Birgitta Charlotte B."
 Reg0042220,"Brenner, Emma, f. Kron (1823–1875)",schweizisk,schweizisk,Schweizisk,national,0,leading,single,subject,"schweizisk Digterinde, g.m. J.C.B."
@@ -368,8 +356,7 @@ Reg0042610,Broberg,Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk
 Reg0042700,"Brockdorff, Ferdinand Schack (1814–1881)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk Købmand i Antwerpen, 1871 dansk Konsul sst., senere Generalkonsul."
 Reg0042700,"Brockdorff, Ferdinand Schack (1814–1881)",dansk,dansk,Dansk,national,4,embedded,single,unclear,"Dansk Købmand i Antwerpen, 1871 dansk Konsul sst., senere Generalkonsul."
 Reg0042750,"Brockenhuus, Frederik (1758–1846)",danske,dansk,Dansk,national,4,embedded,single,possible_institution,"fhv. Attaché ved det danske Gesandtskab i Napoli, Kammerherre."
-Reg0042930,"Brockhausen, Adolf von, Friherre (1801–1858)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Gesandt i Napoli, Kammerherre."
-Reg0042930,"Brockhausen, Adolf von, Friherre (1801–1858)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Gesandt i Napoli, Kammerherre."
+Reg0042930,"Brockhausen, Adolf von, Friherre (1801–1858)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Gesandt i Napoli, Kammerherre."
 Reg0043020,"Brodtkorb, Herman Hoe (1821–1880)",norsk,norsk,Norsk,national,2,embedded,single,unclear,"cand. jur., norsk Godsejer, Kjørbo, Sandviken."
 Reg0043070,"Bronte, Charlotte (1816–1855)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Forfatterinde (Currer Bell).
 Reg0043080,"Bronzino, Agnlolo (1503–1572)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
@@ -389,8 +376,7 @@ Reg0044070,"Buchheister, H. (1825–1906)",jydsk-fynske (part: fynske),fynsk,Fyn
 Reg0044170,"Bugge, Niels (død 1358)",jysk,jysk,Jysk,regional_danish,0,leading,single,subject,"jysk Herremand, Godsejer."
 Reg0044220,"Buli, Anders Sandøe Ørsted (1817–1907)",norsk,norsk,Norsk,national,4,embedded,single,unclear,"Søn af Albertine B., norsk Generalkrigskommissær, Christiania."
 Reg0044290,"Buil, Ole (1810–1880)",Norsk,norsk,Norsk,national,0,leading,single,subject,Norsk Violinvirtuos.
-Reg0044360,"Bunsen, C. J. von (1791–1860)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Diplomat, 1827–1838 Minister i Rom, 1841–1854 i London, 1857 Friherre, arkæologisk og kirkehistorisk Forfatter."
-Reg0044360,"Bunsen, C. J. von (1791–1860)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Diplomat, 1827–1838 Minister i Rom, 1841–1854 i London, 1857 Friherre, arkæologisk og kirkehistorisk Forfatter."
+Reg0044360,"Bunsen, C. J. von (1791–1860)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Diplomat, 1827–1838 Minister i Rom, 1841–1854 i London, 1857 Friherre, arkæologisk og kirkehistorisk Forfatter."
 Reg0044470,Burchardi,sachsisk,sachsisk,Sachsisk,german_state,0,leading,single,subject,"sachsisk Officer, Maxen 27.7.1856."
 Reg0044480,"Burdett-Goutts, Angela (1814–1907)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Filantrop.
 Reg0044490,"Burenstam, Gari Reinhold (1829–1907)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Diplomat, 1859–1870 svensk-norsk Legationssekretær i Wien."
@@ -443,8 +429,7 @@ Reg0045510,"Camphausen, Wilhelm (1818–1885)",Tysk,tysk,Tysk,national,0,leading
 Reg0045520,"Camprubi, Mariano",Spansk,spansk,Spansk,national,0,leading,single,subject,Spansk Danser.
 Reg0045530,"Camuccini, Vincenzo (1771–1844)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
 Reg0045540,"Candolle, Augustin de (1778–1841)",schweizisk,schweizisk,Schweizisk,national,0,leading,single,subject,"schweizisk Botaniker, Professor i Geneve."
-Reg0045550,"Canitz und Dallwitz, Karl Wilhelm Ernst von, Friherre (1787–1850)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Udenrigsminister 1845–1848, Generalløjtnant."
-Reg0045550,"Canitz und Dallwitz, Karl Wilhelm Ernst von, Friherre (1787–1850)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Udenrigsminister 1845–1848, Generalløjtnant."
+Reg0045550,"Canitz und Dallwitz, Karl Wilhelm Ernst von, Friherre (1787–1850)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Udenrigsminister 1845–1848, Generalløjtnant."
 Reg0045560,"Canova, Antonio (1757–1822)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Billedhugger.
 Reg0045570,"Cánovas del Castillo, Antonio (1828–1897)",Spansk,spansk,Spansk,national,0,leading,single,subject,Spansk Statsmand og Forfatter.
 Reg0045600,"Cantù, Cesare (1807–1895)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Historiker.
@@ -491,12 +476,9 @@ Reg0046990,"Cervantes Saavedra, Miguel de (1547–1616)",Spansk,spansk,Spansk,na
 Reg0047050,"Chambord, Henri, Greve af – (1820–1883)",fransk,fransk,Fransk,national,7,embedded,single,unclear,"Søn af Hertug Charles Ferdinand af Berry, fransk Tronprætendent."
 Reg0047060,"Chamisso, Adelbert von (1781–1838)",fransk-tysk (part: fransk),fransk,Fransk,national,0,leading,hyphen_compound,subject,fransk-tysk Digter og Naturforsker.
 Reg0047060,"Chamisso, Adelbert von (1781–1838)",fransk-tysk (part: tysk),tysk,Tysk,national,0,leading,hyphen_compound,subject,fransk-tysk Digter og Naturforsker.
-Reg0047090,"Chamisso, Ernst von (1820–1894)",preussisk,tysk,Tysk,national,5,embedded,single,unclear,"Søn af Adelbert v. C., preussisk Løjtnant, senere Oberst."
-Reg0047090,"Chamisso, Ernst von (1820–1894)",preussisk,polsk,Polsk,national,5,embedded,single,unclear,"Søn af Adelbert v. C., preussisk Løjtnant, senere Oberst."
-Reg0047100,"Chamisso, Hermann von (1832–1886)",preussisk,tysk,Tysk,national,6,embedded,single,unclear,"Søn af Adelbert v. C., senere preussisk Medicinalrat, dr. med."
-Reg0047100,"Chamisso, Hermann von (1832–1886)",preussisk,polsk,Polsk,national,6,embedded,single,unclear,"Søn af Adelbert v. C., senere preussisk Medicinalrat, dr. med."
-Reg0047130,"Chamisso, Max von (1822–1894)",preussisk,tysk,Tysk,national,5,embedded,single,unclear,"Søn af Adelbert v. C., preussisk Løjtnant, senere Major."
-Reg0047130,"Chamisso, Max von (1822–1894)",preussisk,polsk,Polsk,national,5,embedded,single,unclear,"Søn af Adelbert v. C., preussisk Løjtnant, senere Major."
+Reg0047090,"Chamisso, Ernst von (1820–1894)",preussisk,preussisk,Preussisk,german_state,5,embedded,single,unclear,"Søn af Adelbert v. C., preussisk Løjtnant, senere Oberst."
+Reg0047100,"Chamisso, Hermann von (1832–1886)",preussisk,preussisk,Preussisk,german_state,6,embedded,single,unclear,"Søn af Adelbert v. C., senere preussisk Medicinalrat, dr. med."
+Reg0047130,"Chamisso, Max von (1822–1894)",preussisk,preussisk,Preussisk,german_state,5,embedded,single,unclear,"Søn af Adelbert v. C., preussisk Løjtnant, senere Major."
 Reg0047140,"Championnet, J.-A.-E. (1762–1800)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk General.
 Reg0047150,"Chantrey, Sir Francis Legatt (1781–1842)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Billedhugger.
 Reg0047160,Chapay,schweizisk,schweizisk,Schweizisk,national,0,leading,single,subject,schweizisk Konsul i Madrid 1862.
@@ -567,8 +549,7 @@ Reg0049270,"Costenoble, Karl Ludwig (1769–1837)",Østrigsk,østrigsk,Østrigsk
 Reg0049410,"Coyet, Gustaf Julius, Friherre (1775–1862)",svensk,svensk,Svensk,national,1,embedded,single,unclear,"Kammerherre, svensk Hofmarskal, Besidder af Torup."
 Reg0049440,"Cramer, Michael John (1835–1898)",amerikansk,amerikansk,Amerikansk,national,3,embedded,single,unclear,"dr. phil. & theol., amerikansk Gesandt i København 1870–1881, derefter i Bern, senere Prof. theol."
 Reg0049460,"Cramm, Wilhelm von (1815–1876)",holstensk,holstensk,Holstensk,border_region,1,embedded,single,unclear,"hertugelig holstensk Major, senere kgl. preussisk Postdirektør."
-Reg0049460,"Cramm, Wilhelm von (1815–1876)",preussisk,tysk,Tysk,national,5,embedded,single,unclear,"hertugelig holstensk Major, senere kgl. preussisk Postdirektør."
-Reg0049460,"Cramm, Wilhelm von (1815–1876)",preussisk,polsk,Polsk,national,5,embedded,single,unclear,"hertugelig holstensk Major, senere kgl. preussisk Postdirektør."
+Reg0049460,"Cramm, Wilhelm von (1815–1876)",preussisk,preussisk,Preussisk,german_state,5,embedded,single,unclear,"hertugelig holstensk Major, senere kgl. preussisk Postdirektør."
 Reg0049480,"Cranach, Lucas d.Æ. (1472–1553)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Maler.
 Reg0049490,"Cranch, Christopher Pearse (1813–1892)",Amerikansk,amerikansk,Amerikansk,national,0,leading,single,subject,Amerikansk Maler og Digter.
 Reg0049500,"Creneville, Franz Folliot von. Greve (1815–1888)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,"Østrigsk Major, Kammerherre hos Kejseren af Østrig, senere Feltmarskal-Løjtnant."
@@ -669,8 +650,7 @@ Reg0052930,"Domenichino, Domenico Zampieri, kaldet - (1581–1641)",Italiensk,it
 Reg0052940,"Domitianus, Titus Flavius (51–96)",romersk,romersk,Romersk,historical_polity,0,leading,single,subject,romersk Kejser 81.
 Reg0052960,"Donatello, Donato di Niccolo di Betto Bardi, kaldet - (ca. 1386–1466)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Billedhugger.
 Reg0052970,"Donizetti, Gaetano (1797–1848)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Operakomponist.
-Reg0053040,"Donner, Johan Otto (1808–1873)",preussisk,tysk,Tysk,national,8,embedded,single,unclear,"Premierløjtnant i Søetaten, Krydstoldinspektør på Hertugdømmernes Vestkyst, senere preussisk Kontreadmiral."
-Reg0053040,"Donner, Johan Otto (1808–1873)",preussisk,polsk,Polsk,national,8,embedded,single,unclear,"Premierløjtnant i Søetaten, Krydstoldinspektør på Hertugdømmernes Vestkyst, senere preussisk Kontreadmiral."
+Reg0053040,"Donner, Johan Otto (1808–1873)",preussisk,preussisk,Preussisk,german_state,8,embedded,single,unclear,"Premierløjtnant i Søetaten, Krydstoldinspektør på Hertugdømmernes Vestkyst, senere preussisk Kontreadmiral."
 Reg0053120,"Dor, Henri (1835–1913)",schweizisk,schweizisk,Schweizisk,national,6,embedded,single,unclear,"Søn af C.L.H.D., schweizisk Læge, Professor ved Universitetet i Bem, 1876 Øjenlæge i Lyon."
 Reg0053160,"Dorré, Louise",Fransk,fransk,Fransk,national,0,leading,single,subject,"Fransk Lærerinde, Paris, g. 1877 m. de Turgis, Funktionær ved Paris-Lyon Jernbaneselskabet."
 Reg0053210,"Dorset, Thomas Sackville, Jarl af – (1536–1608)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Digter.
@@ -735,10 +715,8 @@ Reg0055040,"Ehrensvärd, Frans Adolf, Friherre (1798–1868)",svensk,svensk,Sven
 Reg0055060,"Eichendorff, Joseph von, Friherre (1788–1857)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0055070,Eichhof,Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Arkitekt, Athen 12.4.1841."
 Reg0055140,"Eisendecher, Carl (Tuch) von (1841–1934)",tysk,tysk,Tysk,national,6,embedded,single,unclear,"Søn af Wilhelm v.E., senere tysk Kontreadmiral."
-Reg0055160,"Eisendecher, Christa von (1852–1940)",preussisk,tysk,Tysk,national,7,embedded,single,possible_relation,"Datter af Wilhelm v. E., g. 1875 m. preussisk Ritmester og Godsejer, Grev Karl von Eickstedt-Peterswaldt."
-Reg0055160,"Eisendecher, Christa von (1852–1940)",preussisk,polsk,Polsk,national,7,embedded,single,possible_relation,"Datter af Wilhelm v. E., g. 1875 m. preussisk Ritmester og Godsejer, Grev Karl von Eickstedt-Peterswaldt."
-Reg0055170,"Eisendecher, Gustave von (1842–1914)",preussisk,tysk,Tysk,national,8,embedded,single,possible_relation,"Datter af Wilhelm v. E., g. 1860 m. kgl. preussisk Major Henning Bogislav von Koller."
-Reg0055170,"Eisendecher, Gustave von (1842–1914)",preussisk,polsk,Polsk,national,8,embedded,single,possible_relation,"Datter af Wilhelm v. E., g. 1860 m. kgl. preussisk Major Henning Bogislav von Koller."
+Reg0055160,"Eisendecher, Christa von (1852–1940)",preussisk,preussisk,Preussisk,german_state,7,embedded,single,possible_relation,"Datter af Wilhelm v. E., g. 1875 m. preussisk Ritmester og Godsejer, Grev Karl von Eickstedt-Peterswaldt."
+Reg0055170,"Eisendecher, Gustave von (1842–1914)",preussisk,preussisk,Preussisk,german_state,8,embedded,single,possible_relation,"Datter af Wilhelm v. E., g. 1860 m. kgl. preussisk Major Henning Bogislav von Koller."
 Reg0055180,"Eisendecher, Wilhelm von (1803–1880)",oldenburgsk,oldenburgsk,Oldenburgsk,german_state,8,embedded,single,unclear,"dr. phil., Kabinetssekretær, senere Minister i Oldenburg og oldenburgsk Gesandt ved Forbundsdagen i Frankfurt."
 Reg0055210,"Ejserman, Arthur (1826–1866)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Skuespiller og Skuespilforfatter.
 Reg0055230,"Ekman, Robert Wilhelm (1808–1873)",finsk,finsk,Finsk,national,0,leading,single,subject,finsk Maler.
@@ -760,10 +738,8 @@ Reg0055890,Espinosa,Fransk,fransk,Fransk,national,0,leading,single,subject,"Fran
 Reg0055920,"Essen, Hans Henric von, Friherre (1835–1894)",svensk-norsk (part: svensk),svensk,Svensk,national,0,leading,hyphen_compound,subject,"svensk-norsk Legationssekretær i Kbh. 1863, senere Gesandt i Rom og i Wien, 1879 Greve."
 Reg0055920,"Essen, Hans Henric von, Friherre (1835–1894)",svensk-norsk (part: norsk),norsk,Norsk,national,0,leading,hyphen_compound,subject,"svensk-norsk Legationssekretær i Kbh. 1863, senere Gesandt i Rom og i Wien, 1879 Greve."
 Reg0055930,"Esslair, Ferd. Joh. Bapt. (1772–1840)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Skuespiller.
-Reg0055990,"Etzel, Anton von",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Løjtnant ved det kgl. preussiske Garde-Grenader-Regiment Kaiser Alexander, Berlin."
-Reg0055990,"Etzel, Anton von",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Løjtnant ved det kgl. preussiske Garde-Grenader-Regiment Kaiser Alexander, Berlin."
-Reg0055990,"Etzel, Anton von",preussiske,tysk,Tysk,national,5,embedded,single,unclear,"preussisk Løjtnant ved det kgl. preussiske Garde-Grenader-Regiment Kaiser Alexander, Berlin."
-Reg0055990,"Etzel, Anton von",preussiske,polsk,Polsk,national,5,embedded,single,unclear,"preussisk Løjtnant ved det kgl. preussiske Garde-Grenader-Regiment Kaiser Alexander, Berlin."
+Reg0055990,"Etzel, Anton von",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Løjtnant ved det kgl. preussiske Garde-Grenader-Regiment Kaiser Alexander, Berlin."
+Reg0055990,"Etzel, Anton von",preussiske,preussisk,Preussisk,german_state,5,embedded,single,unclear,"preussisk Løjtnant ved det kgl. preussiske Garde-Grenader-Regiment Kaiser Alexander, Berlin."
 Reg0056010,"Eurenius, Wilhelm Abraham (1830–1892)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Hoffotograf.
 Reg0056020,Euripides (480(?)-406 f. Chr.),græsk,græsk,Græsk,national,0,leading,single,subject,græsk Tragediedigter.
 Reg0056030,"Evans, F. M. (1803–1870)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Bogtrykker og Forlægger (Bradbury & Evans).
@@ -798,11 +774,9 @@ Reg0057270,"Fernandes, Vasco (død mellem 1541 og 1543)",portugisisk,portugisisk
 Reg0057480,"Fiedler, Frederik Julius (1806–1880)",Danske,dansk,Dansk,national,4,embedded,single,unclear,"cand. jur., Volontør i Danske Kancelli, 1837 Kancellist, 1843 Assessor i Landsoversamt Hof og Stadsretten, 1860 Justitiarius sst.; 1854 Justitsraad, 1859 Etatsraad, 1868 Konferensraad."
 Reg0057510,"Fiesco, Gianluigi de’, Greve af Lavagna (1523–1547)",Genuesisk,genovesisk,Genovesisk,historical_polity,0,leading,single,subject,Genuesisk Adelsmand.
 Reg0057520,"Fiesoie, Giovanni da (1387–1455)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
-Reg0057550,"Finck, Friedrich August von (1718–1766)",Preussisk,tysk,Tysk,national,0,leading,single,subject,"Preussisk Generalløjtnant, efter Kapitulationen ved Maxen 1759 og Krigsfangenskab idømt Kassation 1763, s.A. dansk General af Infanteriet og Deputeret 1765 i General-Krigs-Direktorariet."
-Reg0057550,"Finck, Friedrich August von (1718–1766)",Preussisk,polsk,Polsk,national,0,leading,single,subject,"Preussisk Generalløjtnant, efter Kapitulationen ved Maxen 1759 og Krigsfangenskab idømt Kassation 1763, s.A. dansk General af Infanteriet og Deputeret 1765 i General-Krigs-Direktorariet."
+Reg0057550,"Finck, Friedrich August von (1718–1766)",Preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"Preussisk Generalløjtnant, efter Kapitulationen ved Maxen 1759 og Krigsfangenskab idømt Kassation 1763, s.A. dansk General af Infanteriet og Deputeret 1765 i General-Krigs-Direktorariet."
 Reg0057550,"Finck, Friedrich August von (1718–1766)",dansk,dansk,Dansk,national,12,embedded,single,unclear,"Preussisk Generalløjtnant, efter Kapitulationen ved Maxen 1759 og Krigsfangenskab idømt Kassation 1763, s.A. dansk General af Infanteriet og Deputeret 1765 i General-Krigs-Direktorariet."
-Reg0057580,"Finckh, Eduard (1836–1924)",preussisk,tysk,Tysk,national,5,embedded,single,unclear,"Søn af Alexander F., senere preussisk Generalmajor."
-Reg0057580,"Finckh, Eduard (1836–1924)",preussisk,polsk,Polsk,national,5,embedded,single,unclear,"Søn af Alexander F., senere preussisk Generalmajor."
+Reg0057580,"Finckh, Eduard (1836–1924)",preussisk,preussisk,Preussisk,german_state,5,embedded,single,unclear,"Søn af Alexander F., senere preussisk Generalmajor."
 Reg0057620,"Fiorentini, Signora",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,"Italiensk Operasangerinde, Casino 3.5.1869."
 Reg0057640,"Firmenich (Richartz), Johann Mathias (1808–1889)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Forfatter og Oversætter, Professor 1860."
 Reg0057670,Fischer,Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,"Østrigsk Skuespillerinde, Wien 16.6.1834."
@@ -874,10 +848,8 @@ Reg0060400,"Gade, F. G. (1830–1905)",amerikansk,amerikansk,Amerikansk,national
 Reg0060420,"Gade, Gerhard (1834–1909)",Amerikansk,amerikansk,Amerikansk,national,0,leading,single,subject,Amerikansk Konsul i Christiania.
 Reg0060430,"Gade, Herman Andreas (1831–1877)",Norsk,norsk,Norsk,national,0,leading,single,subject,"Norsk Premierløjtnant i Søetaten, som Frivillig 1864 tjenstgørende på »Rolf Krake«, Adjudant hos Prins Oskar Fredrik, 1866 Kammerherre, 1873 Kabinetssekretær, 1874 Kaptajn."
 Reg0060510,"Gaetano, Scipione Pulzone (1550–1598)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
-Reg0060560,"Galen, Clemens, Greve (1838–før 1873)",preussisk,tysk,Tysk,national,6,embedded,single,possible_relation,"Søn af F.K.H.G., preussisk Legationssekretær i København 1866–1867."
-Reg0060560,"Galen, Clemens, Greve (1838–før 1873)",preussisk,polsk,Polsk,national,6,embedded,single,possible_relation,"Søn af F.K.H.G., preussisk Legationssekretær i København 1866–1867."
-Reg0060570,"Galen, Ferdinand Karl Hubert von, Greve (1803–1881)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Gesandt i Madrid, senere i Stockholm."
-Reg0060570,"Galen, Ferdinand Karl Hubert von, Greve (1803–1881)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Gesandt i Madrid, senere i Stockholm."
+Reg0060560,"Galen, Clemens, Greve (1838–før 1873)",preussisk,preussisk,Preussisk,german_state,6,embedded,single,possible_relation,"Søn af F.K.H.G., preussisk Legationssekretær i København 1866–1867."
+Reg0060570,"Galen, Ferdinand Karl Hubert von, Greve (1803–1881)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Gesandt i Madrid, senere i Stockholm."
 Reg0060580,"Galilei, Galileo (1564–1642)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Fysiker og Astronom.
 Reg0060600,"Galitzin, Vasiliu Petrovid, Fyrste (1800–1862)",russisk,russisk,Russisk,national,0,leading,single,subject,russisk Kunstsamler.
 Reg0060640,"Gallait, Louis (1810–1887)",Belgisk,belgisk,Belgisk,national,0,leading,single,subject,Belgisk Maler.
@@ -1020,8 +992,7 @@ Reg0064200,"Gutzkow, Karl (1811–1878)",Tysk,tysk,Tysk,national,0,leading,singl
 Reg0064210,"Gwynn, Nell (1650–1687)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Skuespillerinde, Kong Charles II's Mætresse."
 Reg0064220,Gül-Baba,tyrkisk,tyrkisk,Tyrkisk,national,0,leading,single,subject,tyrkisk Helgen.
 Reg0064320,"Gülich, J. Th. (1801–1877)",slesvigholstensk,slesvigholstensk,Slesvig-holstensk,border_region,10,embedded,single,unclear,"Over- og Landsretsadvokat i Slesvig, dr. jur., Stænderdeputeret for Aabenraa 1840–1848, slesvigholstensk Politiker, 1859–1876 preusisk Kredsretsraad i Bergen på Rügen."
-Reg0064320,"Gülich, J. Th. (1801–1877)",preusisk,tysk,Tysk,national,12,embedded,single,unclear,"Over- og Landsretsadvokat i Slesvig, dr. jur., Stænderdeputeret for Aabenraa 1840–1848, slesvigholstensk Politiker, 1859–1876 preusisk Kredsretsraad i Bergen på Rügen."
-Reg0064320,"Gülich, J. Th. (1801–1877)",preusisk,polsk,Polsk,national,12,embedded,single,unclear,"Over- og Landsretsadvokat i Slesvig, dr. jur., Stænderdeputeret for Aabenraa 1840–1848, slesvigholstensk Politiker, 1859–1876 preusisk Kredsretsraad i Bergen på Rügen."
+Reg0064320,"Gülich, J. Th. (1801–1877)",preusisk,preussisk,Preussisk,german_state,12,embedded,single,unclear,"Over- og Landsretsadvokat i Slesvig, dr. jur., Stænderdeputeret for Aabenraa 1840–1848, slesvigholstensk Politiker, 1859–1876 preusisk Kredsretsraad i Bergen på Rügen."
 Reg0064330,"Gyllenborg, Carl, Greve (1679–1746)",svensk,svensk,Svensk,national,4,embedded,single,possible_relation,"Søn af Jakob G., svensk Statsmand, Kancellipræsident."
 Reg0064340,"Gyllenborg, Jakob, Greve (1648–1701)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Landshøvding.
 Reg0064360,"Gyllenkrok, Gyllenlog(?)",svensk,svensk,Svensk,national,3,embedded,single,unclear,"(Navnet vist misforstået), svensk Løjtnant, Passager på Götakanal-Damperen Maj 1849."
@@ -1098,8 +1069,7 @@ Reg0067540,"Hase, Karl August von (1800–1890)",Tysk,tysk,Tysk,national,0,leadi
 Reg0067550,"Hascbroek, J. P. (1812–1896)",Hollandsk,hollandsk,Hollandsk,national,0,leading,single,subject,"Hollandsk Digter, Præst i Amsterdam."
 Reg0067590,"Hasper, Moritz (1799–1846)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Læge i Leipzig.
 Reg0067610,"Hasselt (-Barth), Wilhelmine van (1813–1881)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Operasangerinde, g.m. Komponisten Gustav Barth."
-Reg0067620,"Hatzfeldt, Maximilian Fr. Karl Franz von, Greve (1813–1859)",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Gesandt i Paris 1853–1859.
-Reg0067620,"Hatzfeldt, Maximilian Fr. Karl Franz von, Greve (1813–1859)",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Gesandt i Paris 1853–1859.
+Reg0067620,"Hatzfeldt, Maximilian Fr. Karl Franz von, Greve (1813–1859)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Gesandt i Paris 1853–1859.
 Reg0067640,"Hauch, Carsten (1790–1872)",nordiske,nordisk,Nordisk,supranational,11,embedded,single,unclear,"Digter, Lektor i Naturvidenskaberne ved Sorø Akademi, 1846 Professor i Kiel i nordiske Sprog, 1851 i København i Æstetik, 1858–1859 Medlem af Det kgl. Teaters Direktion."
 Reg0067800,von Hausen,sachsisk,sachsisk,Sachsisk,german_state,0,leading,single,subject,"sachsisk Major, indkvarteret på Maxen 1857."
 Reg0067820,"Hauser, Miska (Michael) (1822–1887)",ungarsk,ungarsk,Ungarsk,national,0,leading,single,subject,ungarsk Violinist.
@@ -1124,10 +1094,8 @@ Reg0068630,"Heinefetter, Clara (1816–1857)",Tysk,tysk,Tysk,national,0,leading,
 Reg0068640,"Heinefetter, Sabine (1809–1872)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Operasangerinde, Søster til Clara H., g. 1845 m. Købmand Marquet."
 Reg0068680,"Heinke, Clara (1825–1892)",tysk,tysk,Tysk,national,4,embedded,single,unclear,"Datter af Friederike H., tysk Portrætmalerinde, Breslau, senere Berlin."
 Reg0068760,"Helfft, Julius (1818–1894)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Maler.
-Reg0068800,"Helldorff, Heinrich von (1799–1873)",preussisk,tysk,Tysk,national,1,embedded,single,unclear,"kgl. preussisk Kammerherre, Landrat, Godsejer."
-Reg0068800,"Helldorff, Heinrich von (1799–1873)",preussisk,polsk,Polsk,national,1,embedded,single,unclear,"kgl. preussisk Kammerherre, Landrat, Godsejer."
-Reg0068810,"Helldorf, Melanie (Lonny) von (1835–1917)",preussisk,tysk,Tysk,national,7,embedded,single,possible_relation,"Broderdatter af H.v.H., g.1863 m. preussisk Major Grev Ernst v.d. Schulenburg."
-Reg0068810,"Helldorf, Melanie (Lonny) von (1835–1917)",preussisk,polsk,Polsk,national,7,embedded,single,possible_relation,"Broderdatter af H.v.H., g.1863 m. preussisk Major Grev Ernst v.d. Schulenburg."
+Reg0068800,"Helldorff, Heinrich von (1799–1873)",preussisk,preussisk,Preussisk,german_state,1,embedded,single,unclear,"kgl. preussisk Kammerherre, Landrat, Godsejer."
+Reg0068810,"Helldorf, Melanie (Lonny) von (1835–1917)",preussisk,preussisk,Preussisk,german_state,7,embedded,single,possible_relation,"Broderdatter af H.v.H., g.1863 m. preussisk Major Grev Ernst v.d. Schulenburg."
 Reg0068900,"Helms, Svend Henrik (1814–1878)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk Konsulatssekretær i Leipzig, tysk dr. phil., Oversætter."
 Reg0068900,"Helms, Svend Henrik (1814–1878)",tysk,tysk,Tysk,national,4,embedded,single,unclear,"Dansk Konsulatssekretær i Leipzig, tysk dr. phil., Oversætter."
 Reg0069030,"Hendrichs, Hermann (1809–1871)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Skuespiller.
@@ -1154,11 +1122,9 @@ Reg0070100,"Hess, Peter von (1792–1871)",Tysk,tysk,Tysk,national,0,leading,sin
 Reg0070140,"Hesse, Wilhelmine Charlotte, f. Neuendorff (1792–efter 1837)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Operasangerinde, ved Hamburger Stadttheater 1822–1837, g. 1822 m. Portrætmaler Joh. Friedr. David Philipp H."
 Reg0070250,"Hessen-Kassel, Wilhelm, Landgreve og Prins af – (1787–1867)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk General, Kong Christian IX's Svigerfader."
 Reg0070300,"Hetzel, Jules (1814–1886)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Forlagsboghandler og Børnebogsforfatter.
-Reg0070310,"Heuberger, Karl (1790–efter 1882)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Landraad i St. Goar, Afsked 1848."
-Reg0070310,"Heuberger, Karl (1790–efter 1882)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Landraad i St. Goar, Afsked 1848."
+Reg0070310,"Heuberger, Karl (1790–efter 1882)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Landraad i St. Goar, Afsked 1848."
 Reg0070370,"Heydebrand und der Lasa, Tassilo von (1818–1899)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Diplomat, preussisk Gesandt i København 1865, tysk Gesandt 1871–1879, Skakforfatter."
-Reg0070370,"Heydebrand und der Lasa, Tassilo von (1818–1899)",preussisk,tysk,Tysk,national,2,embedded,single,unclear,"Tysk Diplomat, preussisk Gesandt i København 1865, tysk Gesandt 1871–1879, Skakforfatter."
-Reg0070370,"Heydebrand und der Lasa, Tassilo von (1818–1899)",preussisk,polsk,Polsk,national,2,embedded,single,unclear,"Tysk Diplomat, preussisk Gesandt i København 1865, tysk Gesandt 1871–1879, Skakforfatter."
+Reg0070370,"Heydebrand und der Lasa, Tassilo von (1818–1899)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,unclear,"Tysk Diplomat, preussisk Gesandt i København 1865, tysk Gesandt 1871–1879, Skakforfatter."
 Reg0070370,"Heydebrand und der Lasa, Tassilo von (1818–1899)",tysk,tysk,Tysk,national,6,embedded,single,unclear,"Tysk Diplomat, preussisk Gesandt i København 1865, tysk Gesandt 1871–1879, Skakforfatter."
 Reg0070380,"Heye, J. P. (1809–1876)",Hollandsk,hollandsk,Hollandsk,national,0,leading,single,subject,Hollandsk Digter og Læge.
 Reg0070410,"Heyerdahl, Henry (1825–1903)",Norsk,norsk,Norsk,national,0,leading,single,subject,"Norsk Ingeniørkaptajn, Industridrivende."
@@ -1176,8 +1142,7 @@ Reg0071020,"Hofer, Andreas (1767–1810)",tyrolsk,tyrolsk,Tyrolsk,regional_forei
 Reg0071050,"Hoffmann, E. Th. A. (1776–1822)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0071060,"Hoffmann, Sophie (1803–1852)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Operasangerinde.
 Reg0071070,"Hoffmann von Hoffmannsegg, Johann Genturius, Greve (1766–1849)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Entomolog og Botaniker.
-Reg0071190,"Hohenzollern-Sigmaringen, Karl Anton, Fyrste af – (1811–1885)",preussisk,tysk,Tysk,national,2,embedded,single,unclear,"regerende Fyrste 1831–1850, preussisk Ministerpræsident 1859–1862."
-Reg0071190,"Hohenzollern-Sigmaringen, Karl Anton, Fyrste af – (1811–1885)",preussisk,polsk,Polsk,national,2,embedded,single,unclear,"regerende Fyrste 1831–1850, preussisk Ministerpræsident 1859–1862."
+Reg0071190,"Hohenzollern-Sigmaringen, Karl Anton, Fyrste af – (1811–1885)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,unclear,"regerende Fyrste 1831–1850, preussisk Ministerpræsident 1859–1862."
 Reg0071250,"Hohwii, Andreas (1803–1885)",sønderjydsk,sønderjydsk,Sønderjydsk,border_region,0,leading,single,subject,sønderjydsk Kronometermager i Amsterdam.
 Reg0071300,"Holbein, Franz, Edler von (1779–1855)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,"Østrigsk Teaterdirektør og Forfatter, 1841–1853 Direktør for Burgtheater, Wien."
 Reg0071310,"Holbein, Hans d.Y. (1497–1543)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Maler.
@@ -1275,8 +1240,7 @@ Reg0075370,"Janson, Kristoffer (1841–1917)",Norsk,norsk,Norsk,national,0,leadi
 Reg0075420,Jean Paul (Pseud. f. Johann Paul Friedrich Richter) (1763–1825),Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0075450,Jeffrem Obrenowics (1790–1856),serbisk,serbisk,Serbisk,national,0,leading,single,subject,"serbisk Prins, Broder til Fyrst Milosch."
 Reg0075480,"Jenke, Carl (1809–1886)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Skuespiller, ved Hofteatret i Oldenburg 1837–1857."
-Reg0075780,"Jenssen-Tusch, Wilhelm Theodor Amalrich (død 1894)",Preussisk,tysk,Tysk,national,17,embedded,single,unclear,"Søn af Georg Friedrich J.(-T.), Sekondløjtnant ved 2. Dragonregiment i Itzehoe, 1852 udelukket fra Amnestien, død som fhv. Preussisk Major."
-Reg0075780,"Jenssen-Tusch, Wilhelm Theodor Amalrich (død 1894)",Preussisk,polsk,Polsk,national,17,embedded,single,unclear,"Søn af Georg Friedrich J.(-T.), Sekondløjtnant ved 2. Dragonregiment i Itzehoe, 1852 udelukket fra Amnestien, død som fhv. Preussisk Major."
+Reg0075780,"Jenssen-Tusch, Wilhelm Theodor Amalrich (død 1894)",Preussisk,preussisk,Preussisk,german_state,17,embedded,single,unclear,"Søn af Georg Friedrich J.(-T.), Sekondløjtnant ved 2. Dragonregiment i Itzehoe, 1852 udelukket fra Amnestien, død som fhv. Preussisk Major."
 Reg0075800,"Jerdan, William (1728–1869)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Publicist, Udgiver af The Literary Gazette og af Leisure Hours."
 Reg0075940,"Jerrold, Douglas (1803–1857)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Humorist og Dramatiker.
 Reg0076110,"Jeunesse, Auguste",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Forfatter.
@@ -1357,8 +1321,7 @@ Reg0078630,"Kjerulf, Peder (1781–1841)",norske,norsk,Norsk,national,9,embedded
 Reg0078700,"Klavsen, S. Harris (1829–1873)",Nordisk,nordisk,Nordisk,supranational,6,embedded,single,unclear,"Lærer i Odense fra 1859, Redaktør af Nordisk Skoletidende."
 Reg0078710,"Kléber, Jean-Baptiste (1753–1800)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk General.
 Reg0078800,"Kleine-Gartman, Maria Johanna, f. Gartman (1818–1885)",Hollandsk,hollandsk,Hollandsk,national,0,leading,single,subject,"Hollandsk Skuespillerinde, g.m. Musikeren L. Kleine."
-Reg0078810,"Kleist, Friedr. Heinr. Ferd. Emil, Greve af Nollendorf (1762–1822)",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Feltmarskal.
-Reg0078810,"Kleist, Friedr. Heinr. Ferd. Emil, Greve af Nollendorf (1762–1822)",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Feltmarskal.
+Reg0078810,"Kleist, Friedr. Heinr. Ferd. Emil, Greve af Nollendorf (1762–1822)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Feltmarskal.
 Reg0078820,"Kleist, Heinrich von (1777–1811)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0078830,"Klenze, Leo von (1784–1864)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Arkitekt, München."
 Reg0078840,"Kletke, Hermann (1813–1886)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Journalist, Lyriker og Eventyr dig ter."
@@ -1403,8 +1366,7 @@ Reg0081200,"Kudraffsky, Ludwig von (1805–1894)",østrigsk,østrigsk,Østrigsk,
 Reg0081200,"Kudraffsky, Ludwig von (1805–1894)",østrigske,østrigsk,Østrigsk,national,13,embedded,single,possible_institution,"Broder til Chr. v. K., østrigsk Officer og Diplomat, Gorvettenkapitän, 1837–1841 tjenestegørende ved det østrigske Gesandtskab i Athen og Konstantinopel og Chef for Briggen Montecucoli, senere Feltmarskalløjtnant, Friherre 1859."
 Reg0081260,"Kuliman, J.R.",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Vicekonsul i Uddevalla 1849.
 Reg0081270,"Kummer, Friedrich August (1770–1849)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Cellist og Komponist.
-Reg0081300,"Kunowski, Otto Friedrich Wilhelm von (1791–1864)",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Løjnant og Godsejer (Bechlin).
-Reg0081300,"Kunowski, Otto Friedrich Wilhelm von (1791–1864)",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Løjnant og Godsejer (Bechlin).
+Reg0081300,"Kunowski, Otto Friedrich Wilhelm von (1791–1864)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Løjnant og Godsejer (Bechlin).
 Reg0081330,"Kunzen, Carl Frederik (1800–1872)",Danske,dansk,Dansk,national,2,embedded,single,unclear,"Volontør i Danske Kancelli, senere Justitiarius i den vestindiske Lands-Overret og Konferensraad."
 Reg0081330,"Kunzen, Carl Frederik (1800–1872)",vestindiske,dansk_vestindisk,Dansk-vestindisk,colonial,8,embedded,single,possible_institution,"Volontør i Danske Kancelli, senere Justitiarius i den vestindiske Lands-Overret og Konferensraad."
 Reg0081400,Kühlmann,oldenburgsk,oldenburgsk,Oldenburgsk,german_state,0,leading,single,subject,"oldenburgsk Konsul, Bordeaux 1866."
@@ -1486,10 +1448,8 @@ Reg0083880,"Lessing, Gotthold Ephraim (1729–1781)",Tysk,tysk,Tysk,national,0,l
 Reg0084000,"Leuhusen, Alexander Magnus, Friherre (1821–1903)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Oberst, Regimentschef i Jönköping, 1884 Generalmajor i Reserven."
 Reg0084010,"Leuven, Adolphe de (Pseud. for Adolphe de Ribbing) (1807–1884)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Skuespilforfatter.
 Reg0084020,"Levassor, Pierre (1808–1870)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Skuespiller.
-Reg0084090,"Levetzau, Werner Carl Julius Gottlieb (1822–1899)",preussisk,tysk,Tysk,national,8,embedded,single,unclear,"Søn af J.G.L., stud.jur. (Kiel), 1867–1889 preussisk Landraad i Aabenraa."
-Reg0084090,"Levetzau, Werner Carl Julius Gottlieb (1822–1899)",preussisk,polsk,Polsk,national,8,embedded,single,unclear,"Søn af J.G.L., stud.jur. (Kiel), 1867–1889 preussisk Landraad i Aabenraa."
-Reg0084100,"Levetzau, Wilhelm Frederik Ludwig Theodor (1820–1889)",preussisk,tysk,Tysk,national,23,embedded,single,unclear,"Søn af J.G.L., stud.jur. (Kiel), 1851 Herredsfoged i Husby og Ny Herreder, Kammerjunker, 1852 Amtmand i Neumünster, senere Amtmand i Stormarn og preussisk Geheimeregierungsrat."
-Reg0084100,"Levetzau, Wilhelm Frederik Ludwig Theodor (1820–1889)",preussisk,polsk,Polsk,national,23,embedded,single,unclear,"Søn af J.G.L., stud.jur. (Kiel), 1851 Herredsfoged i Husby og Ny Herreder, Kammerjunker, 1852 Amtmand i Neumünster, senere Amtmand i Stormarn og preussisk Geheimeregierungsrat."
+Reg0084090,"Levetzau, Werner Carl Julius Gottlieb (1822–1899)",preussisk,preussisk,Preussisk,german_state,8,embedded,single,unclear,"Søn af J.G.L., stud.jur. (Kiel), 1867–1889 preussisk Landraad i Aabenraa."
+Reg0084100,"Levetzau, Wilhelm Frederik Ludwig Theodor (1820–1889)",preussisk,preussisk,Preussisk,german_state,23,embedded,single,unclear,"Søn af J.G.L., stud.jur. (Kiel), 1851 Herredsfoged i Husby og Ny Herreder, Kammerjunker, 1852 Amtmand i Neumünster, senere Amtmand i Stormarn og preussisk Geheimeregierungsrat."
 Reg0084200,Levison,jødisk,jødisk,Jødisk,religious_ethnic,0,leading,single,subject,"jødisk Hotelgæst, Bremen 18.6.1844."
 Reg0084210,Levison,Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Turist i Venezia 3.6.1854.
 Reg0084320,"Lewald, August (1792–1871)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Forfatter.
@@ -1502,8 +1462,7 @@ Reg0084460,"Lewis, Mrs.",engelsk,engelsk,Engelsk,national,2,embedded,single,poss
 Reg0084490,"Leyden, Lucas van (1494–1535)",Hollandsk,hollandsk,Hollandsk,national,0,leading,single,subject,Hollandsk Maler og Grafiker.
 Reg0084540,"Liberi, Pietro (1605–1687)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
 Reg0084570,"Lichnowsky, Felix von, Fyrste (1814–1848)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Politiker og Forfatter.
-Reg0084600,"Lichtenstein, Gustav",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Konsul i Marseille (1846).
-Reg0084600,"Lichtenstein, Gustav",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Konsul i Marseille (1846).
+Reg0084600,"Lichtenstein, Gustav",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Konsul i Marseille (1846).
 Reg0084620,"Lidner, Bengt (1757–1793)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Digter.
 Reg0084630,"Lie, Erika (1845–1903)",Norsk,norsk,Norsk,national,0,leading,single,subject,"Norsk Pianistinde, g. 1874 m. Oscar Nissen."
 Reg0084640,"Lie, Ida (1838–1905)",norsk,norsk,Norsk,national,4,embedded,single,unclear,"Søster til Erika L., norsk Pianistinde og Klaverpædagog."
@@ -1521,8 +1480,7 @@ Reg0085230,"Lindpaintner, Peter von (1791–1856)",Tysk,tysk,Tysk,national,0,lea
 Reg0085260,"Lingg, Hermann (1820–1905)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0085280,"Linné, Carl von (1707–1778)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Botaniker.
 Reg0085340,"Linnström, Hj. (1836–1914)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Forlagsboghandler og Bibliograf, 1871–1884 Indehaver af L. J. Hiertas Forlag, Stockholm."
-Reg0085350,"Linstow, August Wilhelm Frantz von (1814–1887)",preussisk,tysk,Tysk,national,11,embedded,single,unclear,"Premierløjtnant ved 2. Dragonregiment i Itzehoe, 1852 udelukket fra Amnestien, død som fhv. preussisk Major."
-Reg0085350,"Linstow, August Wilhelm Frantz von (1814–1887)",preussisk,polsk,Polsk,national,11,embedded,single,unclear,"Premierløjtnant ved 2. Dragonregiment i Itzehoe, 1852 udelukket fra Amnestien, død som fhv. preussisk Major."
+Reg0085350,"Linstow, August Wilhelm Frantz von (1814–1887)",preussisk,preussisk,Preussisk,german_state,11,embedded,single,unclear,"Premierløjtnant ved 2. Dragonregiment i Itzehoe, 1852 udelukket fra Amnestien, død som fhv. preussisk Major."
 Reg0085410,"Liszt, Franz (1811–1886)",ungarsk,ungarsk,Ungarsk,national,0,leading,single,subject,ungarsk Klavervirtuos og Komponist.
 Reg0085460,Livia Drusilla (ca. 55 f. Chr.-29 e. Chr.),romersk,romersk,Romersk,historical_polity,0,leading,single,subject,"romersk Kejserinde, g.m. Kejser Augustus."
 Reg0085480,"Livingstone, David (1813–1873)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Opdagelsesrejsende, Missionær."
@@ -1532,8 +1490,7 @@ Reg0085540,"Lobedanz, Edmund (1820–1882)",tysk-dansk (part: tysk),tysk,Tysk,na
 Reg0085540,"Lobedanz, Edmund (1820–1882)",tysk-dansk (part: dansk),dansk,Dansk,national,0,leading,hyphen_compound,subject,tysk-dansk Forfatter.
 Reg0085550,"Lobedanz, Karl Friedrich Theodor (1809–1889)",tysk,tysk,Tysk,national,13,embedded,single,unclear,"Broder til Edmund L., tidligere Privatsekretær hos Grev Conrad Rantzau-Breitenburg, Advokat i Itzehoe, tysk Digter."
 Reg0085580,"Lockhart, John Gibson (1794–1854)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Forfatter, Udgiver af The Quarterly Review, Walter Scotts Svigersøn og Biograf."
-Reg0085590,"Loen, Leopold von, Friherre (1817–1895)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Infanterigeneral, senere Kejserens Generaladjudant, Dattersøn af Wilh. v. Humboldt."
-Reg0085590,"Loen, Leopold von, Friherre (1817–1895)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Infanterigeneral, senere Kejserens Generaladjudant, Dattersøn af Wilh. v. Humboldt."
+Reg0085590,"Loen, Leopold von, Friherre (1817–1895)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Infanterigeneral, senere Kejserens Generaladjudant, Dattersøn af Wilh. v. Humboldt."
 Reg0085600,"Lohmeyer, Charles Beckwith (ca. 1810–74)",Engelsk,engelsk,Engelsk,national,2,embedded,single,unclear,"Sproglærer i Engelsk, Ingeniør, senere Institutbestyrer, Oversætter af H.C. Andersens Værker."
 Reg0085640,"Longfellow, H. W. (1807–1882)",Amerikansk,amerikansk,Amerikansk,national,0,leading,single,subject,"Amerikansk Digter, Professor i Cambridge ved Boston."
 Reg0085650,"Longfellow, Samuel (1819–1892)",amerikansk,amerikansk,Amerikansk,national,5,embedded,single,unclear,"Broder til H. W. L., amerikansk Unitarpræst."
@@ -1568,12 +1525,10 @@ Reg0086610,"Lundgren, Egron S. (1815–1875)",Svensk,svensk,Svensk,national,0,le
 Reg0086670,"Luther, Martin (1483–1546)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Kirkereformator, Søn af Hans L."
 Reg0086690,Lutz,Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Billedhugger.
 Reg0086780,"Lyell, Charles, senere Sir Charles Lyell (1797–1875)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Geolog, Ven af H. C. Ørsted."
-Reg0086790,"Lynar, Marie, Grevinde, f. Friherreinde von der Marwitz (1821–1895)",preussisk,tysk,Tysk,national,2,embedded,single,possible_relation,"g. 1839 m. preussisk Kammerherre, Ritmester Grev Hermann Roehus von L."
-Reg0086790,"Lynar, Marie, Grevinde, f. Friherreinde von der Marwitz (1821–1895)",preussisk,polsk,Polsk,national,2,embedded,single,possible_relation,"g. 1839 m. preussisk Kammerherre, Ritmester Grev Hermann Roehus von L."
+Reg0086790,"Lynar, Marie, Grevinde, f. Friherreinde von der Marwitz (1821–1895)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,possible_relation,"g. 1839 m. preussisk Kammerherre, Ritmester Grev Hermann Roehus von L."
 Reg0086830,"Lyser, Karoline, f. Leonhardt (1811–1899)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Improvisatrice, g. 1° m. Forfatteren J. P. Th. L., 2° m. Komponisten Edgar Mansfeld."
 Reg0086840,"Lütgendorff-Leinburg, Gottfried, Friherre (1825–1893)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Forfatter og Oversætter (Gottfried Leinburg).
-Reg0086960,Lütteroth,preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Konsul i Triest.
-Reg0086960,Lütteroth,preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Konsul i Triest.
+Reg0086960,Lütteroth,preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Konsul i Triest.
 Reg0087040,"Lytton, Sir Edward Bulwer- (1803–1873)",engelsk,engelsk,Engelsk,national,1,embedded,single,unclear,"1866 Baron, engelsk Romanforfatter (Edward Bulwer)."
 Reg0087050,"Lytton, Edward Robert Bulwer- (1831–1891)",engelsk,engelsk,Engelsk,national,7,embedded,single,unclear,"Søn af E. B.-L., 1873 Baron, 1880 Jarl, engelsk Diplomat og Forfatter (Owen Meredith), 1863–1864 Legationssekretær i København, 1865 i Lissabon, 1868 i Wien, senere Vicekonge i Indien."
 Reg0087220,"Lützow, Rudolph von, Greve (1780–1858)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,Østrigsk Gesandt ved Pavehoffet.
@@ -1584,8 +1539,7 @@ Reg0087650,"Løvenskiold, Otto (1811–1882)",Norsk,norsk,Norsk,national,0,leadi
 Reg0087690,"Løvenørn, Frederik Erik Vendelbo de (1798–1849)",danske,dansk,Dansk,national,5,embedded,single,possible_institution,"Chargé d’affaires ved Det danske Gesandtskab i Berlin, senere Ministerresident ved Hansestæderne og Generalkonsul i Hamburg."
 Reg0087740,"Löwe, Carl (1796–1869)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Balladekomponist.
 Reg0087750,"Löwe, Ludwig (1795–1871)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Skuespiller.
-Reg0087810,"Löwenstein-Wertheim, Wilhelm, Prins af – (1817–1887)",preussisk,tysk,Tysk,national,5,embedded,single,unclear,"Søn af Wilhelm L.-W., preussisk Legationssekretær i Lissabon."
-Reg0087810,"Löwenstein-Wertheim, Wilhelm, Prins af – (1817–1887)",preussisk,polsk,Polsk,national,5,embedded,single,unclear,"Søn af Wilhelm L.-W., preussisk Legationssekretær i Lissabon."
+Reg0087810,"Löwenstein-Wertheim, Wilhelm, Prins af – (1817–1887)",preussisk,preussisk,Preussisk,german_state,5,embedded,single,unclear,"Søn af Wilhelm L.-W., preussisk Legationssekretær i Lissabon."
 Reg0087840,"Löwenstern, Georg Heinrich von, Baron (1786–1856)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk Gesandt i Wien, Generalmajor."
 Reg0087930,"Maase, Frederik von der (1825–1905)",danske,dansk,Dansk,national,9,embedded,single,possible_institution,"Søn af Fr. v. d. M. (1800–1866), Attaché ved det danske Gesandtskab i Berlin, 1856–1867 Legationssekretær i Stockholm, 1867 Kammerherre, Besidder af Anholt."
 Reg0087980,"Machado de Gastro, Joaquim (1732–1822)",portugisisk,portugisisk,Portugisisk,national,0,leading,single,subject,portugisisk Billedhugger.
@@ -1597,8 +1551,7 @@ Reg0088060,"Macready, William Charles (1793–1873)",Engelsk,engelsk,Engelsk,nat
 Reg0088160,"Madsen, Chr. (død 1848)",danske,dansk,Dansk,national,14,embedded,single,possible_institution,"Proprietær, Daurup, Medlem af Commiteen for Sjælland i Selskabet til Hesteavlens Fremme i de danske Provindser."
 Reg0088230,"Madvig, J. N. A. (1833–1919)",slesvigske,slesvigsk,Slesvigsk,border_region,8,embedded,single,possible_institution,"Søn af J.N.M., Fuldmægtig i det slesvigske Ministerium, senere Formand i Sø- og Handelsretten."
 Reg0088240,"Magdeburg, Frøken",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Passager fra Wiesbaden på Dampskibet Batavier 22.6.1847.
-Reg0088270,"Magnani, Anna Maria (1772–1846)",preussisk,tysk,Tysk,national,4,embedded,single,possible_relation,"Thorvaldsens Elskerinde, g. 1795–1803 m. preussisk Resident i Rom Wilh. Uhden."
-Reg0088270,"Magnani, Anna Maria (1772–1846)",preussisk,polsk,Polsk,national,4,embedded,single,possible_relation,"Thorvaldsens Elskerinde, g. 1795–1803 m. preussisk Resident i Rom Wilh. Uhden."
+Reg0088270,"Magnani, Anna Maria (1772–1846)",preussisk,preussisk,Preussisk,german_state,4,embedded,single,possible_relation,"Thorvaldsens Elskerinde, g. 1795–1803 m. preussisk Resident i Rom Wilh. Uhden."
 Reg0088370,"Mahon, Philip Henry, Lord (1805–1875)",engelsk,engelsk,Engelsk,national,3,embedded,single,unclear,"1855 Jarl af Stanhope, engelsk Politiker og Historiker."
 Reg0088390,"Malibran, Eugène",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Finansmand.
 Reg0088400,"Malibran, Maria Félicita, f. Garcia (1808–1836)",fransk-spansk (part: fransk),fransk,Fransk,national,0,leading,hyphen_compound,subject,"fransk-spansk Operasangerinde, g. 1° 1825 m. Eugène M., 2° 1836 m. C. A. de Bériot."
@@ -1617,8 +1570,7 @@ Reg0088590,"Manderstierna, Alexandra (1836–1913)",østrigsk,østrigsk,Østrigs
 Reg0088740,"Mansbach, Carl Adalbert, Friherre (1820–1890)",svensk-norsk (part: svensk),svensk,Svensk,national,0,leading,hyphen_compound,subject,"svensk-norsk Gesandt i Belgien, Kammerherre."
 Reg0088740,"Mansbach, Carl Adalbert, Friherre (1820–1890)",svensk-norsk (part: norsk),norsk,Norsk,national,0,leading,hyphen_compound,subject,"svensk-norsk Gesandt i Belgien, Kammerherre."
 Reg0088760,"Mantegna, Andrea (1431–1506)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler og Kobberstikker.
-Reg0088770,"Manteuffel, Edwin von, Friherre (1809–1885)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk General, 1873 Generalfeltmarskal."
-Reg0088770,"Manteuffel, Edwin von, Friherre (1809–1885)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk General, 1873 Generalfeltmarskal."
+Reg0088770,"Manteuffel, Edwin von, Friherre (1809–1885)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk General, 1873 Generalfeltmarskal."
 Reg0088840,"Maratti, Carlo (1625–1713)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
 Reg0088880,"Marconi, Rocco (omkr. 1515)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
 Reg0089060,"Margoldt, Henriette von, f. Schultze (1800–1853)",sachsisk,sachsisk,Sachsisk,german_state,2,embedded,single,possible_relation,g. 1821 m. sachsisk Ritmester Adolf von M.
@@ -1672,11 +1624,9 @@ Reg0090980,"Menzel, Wolfgang (1798–1873)",Tysk,tysk,Tysk,national,0,leading,si
 Reg0090990,"Mercadante, Saverio (1797–1810)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Operakomponist.
 Reg0091010,Merrel,Amerikansk,amerikansk,Amerikansk,national,0,leading,single,subject,"Amerikansk Familie, bor i Hotel Royal April-Maj 1870."
 Reg0091080,"Metastasio, Pietro (1698–1782)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Digter.
-Reg0091130,"Metternich, Clemens Wolff gen. von –, Friherre (1803–1872)",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Regierungs-Vice-Präsident i Potsdam.
-Reg0091130,"Metternich, Clemens Wolff gen. von –, Friherre (1803–1872)",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Regierungs-Vice-Präsident i Potsdam.
+Reg0091130,"Metternich, Clemens Wolff gen. von –, Friherre (1803–1872)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Regierungs-Vice-Präsident i Potsdam.
 Reg0091140,"Metternich, Klemens, Fyrste af – (1773–1859)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,Østrigsk Udenrigsminister 1809–1848.
-Reg0091150,"Metternich, Philip Wolff gen. von –, Friherre (1842–1900)",preussisk,tysk,Tysk,national,9,embedded,single,unclear,"Søn af Clemens W.v.M., senere Godsejer og preussisk Kammerherre."
-Reg0091150,"Metternich, Philip Wolff gen. von –, Friherre (1842–1900)",preussisk,polsk,Polsk,national,9,embedded,single,unclear,"Søn af Clemens W.v.M., senere Godsejer og preussisk Kammerherre."
+Reg0091150,"Metternich, Philip Wolff gen. von –, Friherre (1842–1900)",preussisk,preussisk,Preussisk,german_state,9,embedded,single,unclear,"Søn af Clemens W.v.M., senere Godsejer og preussisk Kammerherre."
 Reg0091170,"Metternich-Winneburg, Richard, Fyrste af – (1829–1895)",østrigsk,østrigsk,Østrigsk,national,4,embedded,single,possible_relation,"Søn af Klemens M., østrigsk Gesandt i Paris 1859–1870."
 Reg0091310,"Meyer, Catherine (Kate), f. Baronesse de Bretton (1831–1900)",engelsk,engelsk,Engelsk,national,3,embedded,single,possible_relation,"g. 1 ° m. Købmand, engelsk Konsul på St. Thomas William Joseph Emerson, 2° 1870 m. Wilhelm M."
 Reg0091390,"Meyer, Friedrich Rudolph (1807–1882)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Maler, Dresden 1860."
@@ -1721,8 +1671,7 @@ Reg0092620,"Moltke, Frederik (Fritz), Greve (1825–1875)",danske,dansk,Dansk,na
 Reg0092660,"Moltke, Gustav Carl (1806–1887)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Skuespiller ved Hofteatret i Oldenburg 1833, Direktør sst. 1856."
 Reg0092670,"Moltke, Helmuth von, Greve (1800–1891)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Generalfeltmarskal.
 Reg0092780,"Moltke, Ludvig, Lensgreve (1790–1864)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk Gesandt i Stockholm 1832, i Paris 1848–1856."
-Reg0093130,"Moltke-Hvitfeldt, Olga, Komtesse (1870–1955)",preussisk,tysk,Tysk,national,7,embedded,single,possible_relation,"Datter af Wladimir M.-H., g. 1891 m. preussisk Oberst Egmont Polydor von Websky."
-Reg0093130,"Moltke-Hvitfeldt, Olga, Komtesse (1870–1955)",preussisk,polsk,Polsk,national,7,embedded,single,possible_relation,"Datter af Wladimir M.-H., g. 1891 m. preussisk Oberst Egmont Polydor von Websky."
+Reg0093130,"Moltke-Hvitfeldt, Olga, Komtesse (1870–1955)",preussisk,preussisk,Preussisk,german_state,7,embedded,single,possible_relation,"Datter af Wladimir M.-H., g. 1891 m. preussisk Oberst Egmont Polydor von Websky."
 Reg0093140,"Moltke-Hvitfeldt, Wladimir, Greve (1834–1894)",svensk,svensk,Svensk,national,6,embedded,single,possible_relation,"Søn af A.G.M.-H., svensk Marineløjtnant, 1864 Premierløjtnant, 1865 Besidder af Qvesarum, 1867 Hofjægermester."
 Reg0093170,"Monnier, Marc (1829–1885)",fransk-schweizisk (part: fransk),fransk,Fransk,national,0,leading,hyphen_compound,subject,"fransk-schweizisk Publicist og Skuespilforfatter, Professor ved Universitetet i Genève."
 Reg0093170,"Monnier, Marc (1829–1885)",fransk-schweizisk (part: schweizisk),schweizisk,Schweizisk,national,0,leading,hyphen_compound,subject,"fransk-schweizisk Publicist og Skuespilforfatter, Professor ved Universitetet i Genève."
@@ -1744,8 +1693,7 @@ Reg0093480,"Mosen, Julius (1803–1867)",Tysk,tysk,Tysk,national,0,leading,singl
 Reg0093510,"Mosenthai, S. H. (1821–1877)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Skuespilforfatter.
 Reg0093610,"Mourier-Petersen, Ferdinand (1825–1898)",danske,dansk,Dansk,national,10,embedded,single,possible_institution,"cand. jur., Ejer af Rugaard ved Grenaa, Formand for Det danske Hedeselskab, Folketingsmand, 1866 Landstingsmand."
 Reg0093640,"Mozart, Wolfgang Amadeus (1756–1791)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,Østrigsk Komponist.
-Reg0093660,Muck,preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Konsul i Napoli 1846.
-Reg0093660,Muck,preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Konsul i Napoli 1846.
+Reg0093660,Muck,preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Konsul i Napoli 1846.
 Reg0093690,"Mumm von Scheibler, Gottlieb (1781–1852)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk Generalkonsul i Frankfurt a.M., Grundlægger af Champagne-firmaet Mumm i Reims."
 Reg0093700,"Mumm von Schwarzenstein, Herman Jakob Georg von (1816–1887)",dansk,dansk,Dansk,national,16,embedded,single,unclear,"Søn af Gottlieb Mumm von Scheibler, senere Chef for Champagnefirmaet P. A. Mumm & Co., Reims, og dansk Generalkonsul i Frankfurt a.M."
 Reg0093730,"Munch, Andreas (1811–1884)",Norsk,norsk,Norsk,national,0,leading,single,subject,Norsk Digter.
@@ -1769,8 +1717,7 @@ Reg0094360,"Müller, Karl Otfried (1797–1840)",Tysk,tysk,Tysk,national,0,leadi
 Reg0094490,"Müller, Wilhelm (1794–1827)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0094520,"Müllner, Adolf (1774–1829)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,Østrigsk Digter.
 Reg0094530,"Münch-Bellinghausen, Eligius Franz Joseph von, Friherre (1806–1871)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,"Østrigsk Skuespildigter (Friedrich Halm), 1867 Præfekt for Hofbiblioteket i Wien og Generalintendant for begge Hofteatre."
-Reg0094540,"Münnich, Amalia, Grevinde (1824–1921)",preussisk,tysk,Tysk,national,7,embedded,single,possible_relation,"Datter af Fr.Fr.M., g. 1850 m. preussisk Amtshauptmann Ludw. v. Engelbrechten."
-Reg0094540,"Münnich, Amalia, Grevinde (1824–1921)",preussisk,polsk,Polsk,national,7,embedded,single,possible_relation,"Datter af Fr.Fr.M., g. 1850 m. preussisk Amtshauptmann Ludw. v. Engelbrechten."
+Reg0094540,"Münnich, Amalia, Grevinde (1824–1921)",preussisk,preussisk,Preussisk,german_state,7,embedded,single,possible_relation,"Datter af Fr.Fr.M., g. 1850 m. preussisk Amtshauptmann Ludw. v. Engelbrechten."
 Reg0094680,"Mæcenas, Gajus Gilnius (død 8 f.Chr.)",romersk,romersk,Romersk,historical_polity,0,leading,single,subject,"romersk Stormand, Ven af Augustus."
 Reg0094690,"Mädel, Julie Louise Johanne, f. Gehlhaar (1801–1850)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Skuespillerinde, g. 1° m. Skuespiller Joh.Fr.M., 2° 1836 m. Spejlfabrikant J.B.Fischer."
 Reg0094750,Møller,Dansk-Amerikaner (part: dansk),dansk,Dansk,national,0,leading,hyphen_compound,subject,"Dansk-Amerikaner, havde som dreng set H.C. Andersen 1859 på Børglumkloster (København 29.10.1873)."
@@ -1802,8 +1749,7 @@ Reg0096050,"Neureuther, Eugen Napoleon (1806–1882)",Tysk,tysk,Tysk,national,0,
 Reg0096060,"Neuville, Abdon-Charles-Félix Dubourg, kaldet — (1813–?)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Skuespiller.
 Reg0096080,"Newnham, J. G. C. L. (1819–?)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Konsul i Amsterdam.
 Reg0096100,"Nicander, Karl August (1799–1839)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Digter.
-Reg0096110,"Nicolai, Gustav (1795–1852)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Divisionsauditør, Forfatter af »Italien wie es wirklich ist«."
-Reg0096110,"Nicolai, Gustav (1795–1852)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Divisionsauditør, Forfatter af »Italien wie es wirklich ist«."
+Reg0096110,"Nicolai, Gustav (1795–1852)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Divisionsauditør, Forfatter af »Italien wie es wirklich ist«."
 Reg0096130,"Nicolai, Otto (1810–1849)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Operakomponist.
 Reg0096140,Nicolas,Fransk,fransk,Fransk,national,0,leading,single,subject,"Fransk General, Bordeaux 22.4.1866."
 Reg0096150,"Nicolay, Nicolai Pavlovic von, Baron (1818–1869)",russisk,russisk,Russisk,national,0,leading,single,subject,russisk Gesandt i København 1860–1867.
@@ -1851,8 +1797,7 @@ Reg0098050,"O’Neill, Jorge (George) Torlades (1817–1890)",portugisisk,portug
 Reg0098050,"O’Neill, Jorge (George) Torlades (1817–1890)",dansk,dansk,Dansk,national,8,embedded,single,unclear,"Søn af José Maria O’N., portugisisk Købmand, dansk Generalkonsul i Lissabon 1841."
 Reg0098080,"O’Neill, José Maria (1788–1841)",dansk,dansk,Dansk,national,7,embedded,single,unclear,"Chef for Handelshuset Torlades O’Neill, Lissabon, dansk Konsul."
 Reg0098220,"Oranja, Simon d’",portugisisk,portugisisk,Portugisisk,national,0,leading,single,subject,"portugisisk Proprietær, Lissabon 19.7.1866."
-Reg0098250,"Oriola, Eduard, Greve (1809–1862)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Generalløjtnant, Gesandt, Baden-Baden 26.9.1867."
-Reg0098250,"Oriola, Eduard, Greve (1809–1862)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Generalløjtnant, Gesandt, Baden-Baden 26.9.1867."
+Reg0098250,"Oriola, Eduard, Greve (1809–1862)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Generalløjtnant, Gesandt, Baden-Baden 26.9.1867."
 Reg0098350,"Ortenbach, Alexander (død 1881)",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Konsul i Barcelona.
 Reg0098410,"Ostade, Adriaen van (1610–1684)",Hollandsk,hollandsk,Hollandsk,national,0,leading,single,subject,Hollandsk Maler.
 Reg0098420,"Ostermann-Tolstoj, Alexander Ivanovitj, Greve (1772–1837)",russisk,russisk,Russisk,national,0,leading,single,subject,russisk General.
@@ -1908,8 +1853,7 @@ Reg0099880,Pepita de Olivá (1830–1868),spansk,spansk,Spansk,national,5,embedd
 Reg0099910,"Peres, Domingo Garcia",portugisisk,portugisisk,Portugisisk,national,0,leading,single,subject,portugisisk Læge (Maj 1866).
 Reg0099920,"Périer, Casimir (1777–1832)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk liberal Politiker.
 Reg0099930,Perikies (ca. 495–429 f.Chr.),Attisk,attisk,Attisk,historical_polity,0,leading,single,subject,Attisk Statsmand.
-Reg0099950,"Perponcher-Sedlnitzky, Wilhelm von, Greve (1819–1893)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk (fra 1871: tysk) Gesandt i Haag 1863–1874, derefter i Brüssel."
-Reg0099950,"Perponcher-Sedlnitzky, Wilhelm von, Greve (1819–1893)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk (fra 1871: tysk) Gesandt i Haag 1863–1874, derefter i Brüssel."
+Reg0099950,"Perponcher-Sedlnitzky, Wilhelm von, Greve (1819–1893)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk (fra 1871: tysk) Gesandt i Haag 1863–1874, derefter i Brüssel."
 Reg0099950,"Perponcher-Sedlnitzky, Wilhelm von, Greve (1819–1893)",tysk,tysk,Tysk,national,2,embedded,single,unclear,"preussisk (fra 1871: tysk) Gesandt i Haag 1863–1874, derefter i Brüssel."
 Reg0099960,"Perrault, Charles (1628–1703)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Eventyrdigter.
 Reg0100000,"Perrot, Jules-Joseph (1810–1892)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Balletmester.
@@ -1959,8 +1903,7 @@ Reg0101490,"Platen, Filip Peter Bogislaus von (1801–1827)",svensk,svensk,Svens
 Reg0101510,"Platen-Hallermund, Adolf, Greve (1814–1889)",hannoveransk,hannoveransk,Hannoveransk,german_state,0,leading,single,subject,"hannoveransk Statsmand, Gesandt i Haag 1866."
 Reg0101530,Platon (427–347 f.Chr.),græsk,græsk,Græsk,national,0,leading,single,subject,græsk Filosof.
 Reg0101620,"Piessen (fra 1853: Scheel-Plessen), Cail, Baron, senere Greve (1811–1892)",slesvig-holstensk,slesvigholstensk,Slesvig-holstensk,border_region,0,leading,fixed_compound,subject,"slesvig-holstensk Politiker, 1843–1845 Amtmand over Nordborg og Sønderborg Amter, 1866 preussisk Overpræsident for Slesvig-Holsten."
-Reg0101620,"Piessen (fra 1853: Scheel-Plessen), Cail, Baron, senere Greve (1811–1892)",preussisk,tysk,Tysk,national,8,embedded,single,unclear,"slesvig-holstensk Politiker, 1843–1845 Amtmand over Nordborg og Sønderborg Amter, 1866 preussisk Overpræsident for Slesvig-Holsten."
-Reg0101620,"Piessen (fra 1853: Scheel-Plessen), Cail, Baron, senere Greve (1811–1892)",preussisk,polsk,Polsk,national,8,embedded,single,unclear,"slesvig-holstensk Politiker, 1843–1845 Amtmand over Nordborg og Sønderborg Amter, 1866 preussisk Overpræsident for Slesvig-Holsten."
+Reg0101620,"Piessen (fra 1853: Scheel-Plessen), Cail, Baron, senere Greve (1811–1892)",preussisk,preussisk,Preussisk,german_state,8,embedded,single,unclear,"slesvig-holstensk Politiker, 1843–1845 Amtmand over Nordborg og Sønderborg Amter, 1866 preussisk Overpræsident for Slesvig-Holsten."
 Reg0101650,"Piessis, Alphonsine (død 1847)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Kurtisane (»Kameliadamen«).
 Reg0101660,"Piessy, Jeanne (1819–1897)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Skuespillerinde.
 Reg0101680,"Plock, Ernst Ludwig (1800–1843)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Skuespiller.
@@ -2004,8 +1947,7 @@ Reg0103250,"Putnam, Sally G.",Amerikansk,amerikansk,Amerikansk,national,0,leadin
 Reg0103270,"Pycke de Peteghem, Amédée, Baron (1824–1898)",Belgisk,belgisk,Belgisk,national,0,leading,single,subject,Belgisk Gesandt i Lissabon 1866.
 Reg0103280,"Piickler-Muskau, Hermann Ludwig Heinrich von, Fyrste (1785–1871)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Forfatter og Havearkitekt.
 Reg0103360,"Quatrefages de Bréau, Jean Louis Armand de (1810–1892)",Fransk,fransk,Fransk,national,0,leading,single,subject,"Fransk Naturforsker og Antropolog, Professor ved Musée d’histoire naturelle i Paris, deltog i den internationale arkæologiske Kongres i København 27.8.-5.9.1869."
-Reg0103370,"Quehl, Ryne (død 1864)",preussisk,tysk,Tysk,national,2,embedded,single,unclear,"dr.phil., preussisk Generalkonsul i København 1853–1864, Grundlægger af Central-Press-Amt."
-Reg0103370,"Quehl, Ryne (død 1864)",preussisk,polsk,Polsk,national,2,embedded,single,unclear,"dr.phil., preussisk Generalkonsul i København 1853–1864, Grundlægger af Central-Press-Amt."
+Reg0103370,"Quehl, Ryne (død 1864)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,unclear,"dr.phil., preussisk Generalkonsul i København 1853–1864, Grundlægger af Central-Press-Amt."
 Reg0103400,"Quételet, Jacques (1796–1874)",Belgisk,belgisk,Belgisk,national,0,leading,single,subject,"Belgisk Matematiker og Statistiker, Direktør for det kgl. Observatorium i Briissel."
 Reg0103420,"Quiding, Peter (1797–1880)",svensk,svensk,Svensk,national,1,embedded,single,unclear,"Justitieråd (□: svensk Højesteretsdommer) 1847, Svoger til Fredrika Bremer."
 Reg0103440,"Qvarnstrom, G. G. (1810–1867)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Billedhugger.
@@ -2014,8 +1956,7 @@ Reg0103600,"Raasløff, Waldemar (1815–1883)",dansk,dansk,Dansk,national,4,embe
 Reg0103720,"Rachel, Elisabeth Felix (1821–1858)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Skuespillerinde.
 Reg0103730,"Racine, Jean (1639–1699)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Digter.
 Reg0103740,"Radcliffe, Ann, f. Ward (1764–1823)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Romanforfatterinde.
-Reg0103760,"Radziwill, Wilhelm",preussisk,tysk,Tysk,national,1,embedded,single,unclear,"Fyrste (1797–1870), preussisk Generalmajor."
-Reg0103760,"Radziwill, Wilhelm",preussisk,polsk,Polsk,national,1,embedded,single,unclear,"Fyrste (1797–1870), preussisk Generalmajor."
+Reg0103760,"Radziwill, Wilhelm",preussisk,preussisk,Preussisk,german_state,1,embedded,single,unclear,"Fyrste (1797–1870), preussisk Generalmajor."
 Reg0103770,Rafael (Raffaello Santi) (1483–1520),Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
 Reg0103810,"Rafn, C. C. (1795–1864)",nordiske,nordisk,Nordisk,supranational,7,embedded,single,unclear,"Stifter af og Sekretær i Det kgl. nordiske Oldskriftsselskab, tit. Professor 1826, Oldforsker."
 Reg0103880,"Rahbek, Otto Holger (1785–1851)",svensk-norsk (part: svensk),svensk,Svensk,national,5,embedded,hyphen_compound,unclear,"Halvbroder til Knud Lyne R., svensk-norsk Generalkonsul."
@@ -2040,8 +1981,7 @@ Reg0104450,"Raynaud, Amédée",Dansk,dansk,Dansk,national,0,leading,single,subje
 Reg0104460,"Raynaud, P.",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Vicekonsul i Nizza 1861.
 Reg0104490,Reaulty y de Ramsault,Spansk,spansk,Spansk,national,0,leading,single,subject,"Spansk Greve, 28.11.1862."
 Reg0104500,"Reboul, Jean (1795–1864)",Fransk,fransk,Fransk,national,0,leading,single,subject,"Fransk Digter, Bagermester i Nîmes."
-Reg0104630,"Redern, Alexandra von, Grevinde, f. Friherreinde von Pahlen (død 1846)",preussisk,tysk,Tysk,national,2,embedded,single,possible_relation,"Enke efter preussisk Gesandt i London, Kammerherre, Grev Sigismund von R., Overhofmesterinde hos Arvestorhertuginde Sophie af Sachsen-Weimar-Eisenach."
-Reg0104630,"Redern, Alexandra von, Grevinde, f. Friherreinde von Pahlen (død 1846)",preussisk,polsk,Polsk,national,2,embedded,single,possible_relation,"Enke efter preussisk Gesandt i London, Kammerherre, Grev Sigismund von R., Overhofmesterinde hos Arvestorhertuginde Sophie af Sachsen-Weimar-Eisenach."
+Reg0104630,"Redern, Alexandra von, Grevinde, f. Friherreinde von Pahlen (død 1846)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,possible_relation,"Enke efter preussisk Gesandt i London, Kammerherre, Grev Sigismund von R., Overhofmesterinde hos Arvestorhertuginde Sophie af Sachsen-Weimar-Eisenach."
 Reg0104640,"Redon, Erneste (1835–1907)",Fransk,fransk,Fransk,national,0,leading,single,subject,"Fransk Komponist og Pianist, Bordeaux."
 Reg0104670,"Redwitz, Oskar von, Friherre (1823–1891)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0104800,"Regnard, J. F. (1655–1709)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Skuespilforfatter.
@@ -2062,8 +2002,7 @@ Reg0105360,"Rethel, Alfred (1816–1859)",Tysk,tysk,Tysk,national,0,leading,sing
 Reg0105380,"Retzius, Anders Adolf (1795–1860)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Anatom og Antropolog.
 Reg0105400,"Retzsch, Moritz (1779–1857)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Maler og Raderer.
 Reg0105410,"Reumont, Alfred von (1808–1887)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Diplomat og Historiker, 1848 preussisk Gesandt ved Pavehoffet i Rom, 1851 i Firenze (Storhertugdømmet Toscana), Legationsraad, Kammerherre."
-Reg0105410,"Reumont, Alfred von (1808–1887)",preussisk,tysk,Tysk,national,4,embedded,single,unclear,"Tysk Diplomat og Historiker, 1848 preussisk Gesandt ved Pavehoffet i Rom, 1851 i Firenze (Storhertugdømmet Toscana), Legationsraad, Kammerherre."
-Reg0105410,"Reumont, Alfred von (1808–1887)",preussisk,polsk,Polsk,national,4,embedded,single,unclear,"Tysk Diplomat og Historiker, 1848 preussisk Gesandt ved Pavehoffet i Rom, 1851 i Firenze (Storhertugdømmet Toscana), Legationsraad, Kammerherre."
+Reg0105410,"Reumont, Alfred von (1808–1887)",preussisk,preussisk,Preussisk,german_state,4,embedded,single,unclear,"Tysk Diplomat og Historiker, 1848 preussisk Gesandt ved Pavehoffet i Rom, 1851 i Firenze (Storhertugdømmet Toscana), Legationsraad, Kammerherre."
 Reg0105420,"Reuscher, Julius",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Oversætter af H.C. Andersens Værker.
 Reg0105470,"Reuter, Fritz (1810–1874)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Forfatter.
 Reg0105620,"Reventlow, Frederik (Fritz), Greve (1791–1851)",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Gesandt i London 1841–1851.
@@ -2117,8 +2056,7 @@ Reg0106890,"Ropp, Carl Moritz Johann von der, Baron (1816–1873)",russisk,russi
 Reg0106910,"Roquette, Otto (1824–1896)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Digter.
 Reg0106920,"Rosa, Salvator (1615–1673)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,"Italiensk Maler, Raderer og Digter."
 Reg0106960,"Rosen, Adolf von, Greve (1797–1886)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Industri- og Finansmand.
-Reg0106970,"Rosen, Alfred von (1825–1912)",preussisk,tysk,Tysk,national,14,embedded,single,unclear,"Søn af Wilh.v.R., tidligere Departementschef i Ministeriet for Holsten og Lauenburg, var 1873 preussisk Regierungsrat i Slesvig By, senere Regeringspræsident i Ameberg, Westfalen, og Geheimerat."
-Reg0106970,"Rosen, Alfred von (1825–1912)",preussisk,polsk,Polsk,national,14,embedded,single,unclear,"Søn af Wilh.v.R., tidligere Departementschef i Ministeriet for Holsten og Lauenburg, var 1873 preussisk Regierungsrat i Slesvig By, senere Regeringspræsident i Ameberg, Westfalen, og Geheimerat."
+Reg0106970,"Rosen, Alfred von (1825–1912)",preussisk,preussisk,Preussisk,german_state,14,embedded,single,unclear,"Søn af Wilh.v.R., tidligere Departementschef i Ministeriet for Holsten og Lauenburg, var 1873 preussisk Regierungsrat i Slesvig By, senere Regeringspræsident i Ameberg, Westfalen, og Geheimerat."
 Reg0107100,"Rosen, Georg von, Greve (1843–1923)",svensk,svensk,Svensk,national,5,embedded,single,unclear,"Søn af Adolf v. R., svensk Maler."
 Reg0107150,"Rosén, J. M. (1806–1885)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Publicist, Forfatter og Komponist, besøgte Kbhvn. 1838."
 Reg0107160,"Rosenberg, G. (1829–1885)",Dansk,dansk,Dansk,national,12,embedded,single,unclear,"Søn af Sophie R., cand. jur. 1854, ansat i Kultusministeriet, 1863 Fuldmægtig, 1856–1867 Medarbejder ved »Dansk Maanedsskrift«, 1884 midlertidig Docent i dansk Litteraturhistorie ved Københavns Universitet, Litteraturhistoriker."
@@ -2165,8 +2103,7 @@ Reg0109300,"Sachs, Salomo (1772–1855)",Tysk,tysk,Tysk,national,0,leading,singl
 Reg0109390,"Sachsen, Johann, Prins af – (1801–1873)",tysk,tysk,Tysk,national,7,embedded,single,unclear,"Broder til Friedrich August af S., Konge 1854, tysk Digter, Oversætter af Dantes Divina Commedia."
 Reg0109550,"Sachsen-Weimar-Eisenach, Bernhard, Prins af – (1792–1862)",hollandsk,hollandsk,Hollandsk,national,8,embedded,single,unclear,"Søn af Carl August af S.-W.-E. (1757–1828), hollandsk General."
 Reg0109610,"Sachsen-Weimar-Eisenach, Hermann, Prins af – (1825–1901)",württembergsk,württembergsk,Württembergsk,german_state,7,embedded,single,unclear,"Søn af Bernhard af S.-W.-E., württembergsk Generalløjtnant."
-Reg0109650,"Sachsen-Weimar-Eisenach, Marie Alexandrine, Prinsesse af – (1849–1922)",preussisk,tysk,Tysk,national,10,embedded,single,possible_relation,"Datter af Carl Alexander af S.-W.-E., g. 1876 m. preussisk General Prins Heinrich VII af Reuss-Coestritz."
-Reg0109650,"Sachsen-Weimar-Eisenach, Marie Alexandrine, Prinsesse af – (1849–1922)",preussisk,polsk,Polsk,national,10,embedded,single,possible_relation,"Datter af Carl Alexander af S.-W.-E., g. 1876 m. preussisk General Prins Heinrich VII af Reuss-Coestritz."
+Reg0109650,"Sachsen-Weimar-Eisenach, Marie Alexandrine, Prinsesse af – (1849–1922)",preussisk,preussisk,Preussisk,german_state,10,embedded,single,possible_relation,"Datter af Carl Alexander af S.-W.-E., g. 1876 m. preussisk General Prins Heinrich VII af Reuss-Coestritz."
 Reg0109760,"Saint-Ferriol, Vicomte de",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Gesandt i København 1869–1876.
 Reg0109770,de Saint-Georges,Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Gesandt i Rio de Janeiro 1851–1867.
 Reg0109780,"Saint-Léon, Arthur (1821–1870)",Fransk,fransk,Fransk,national,0,leading,single,subject,"Fransk Balletmester, Koreograf og Violinist."
@@ -2197,14 +2134,11 @@ Reg0110550,"Sarolta, Signora",ungarsk-italiensk (part: ungarsk),ungarsk,Ungarsk,
 Reg0110550,"Sarolta, Signora",ungarsk-italiensk (part: italiensk),italiensk,Italiensk,national,0,leading,hyphen_compound,subject,ungarsk-italiensk Operasangerinde.
 Reg0110570,"Sarto, Andrea del (1486–1531)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
 Reg0110600,"Sassoferrato, Giambattista Salvi, kaldet - (1609–1685)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
-Reg0110640,"Saurmar-Stenzendorf, Roda von, Grevinde, f. Grevinde von Wurmbrand-Stuppenbach (1844–1916)",preussisk,tysk,Tysk,national,2,embedded,single,possible_relation,g. 1867 m. preussisk Ritmester Joseph Johan v. S.-S.
-Reg0110640,"Saurmar-Stenzendorf, Roda von, Grevinde, f. Grevinde von Wurmbrand-Stuppenbach (1844–1916)",preussisk,polsk,Polsk,national,2,embedded,single,possible_relation,g. 1867 m. preussisk Ritmester Joseph Johan v. S.-S.
+Reg0110640,"Saurmar-Stenzendorf, Roda von, Grevinde, f. Grevinde von Wurmbrand-Stuppenbach (1844–1916)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,possible_relation,g. 1867 m. preussisk Ritmester Joseph Johan v. S.-S.
 Reg0110650,"Sauvage, Thomas (1794–1877)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Skuespilforfatter.
 Reg0110660,"Savigny, Friedrich Karl von (1779–1861)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Retslærd, 1842–1848 preussisk Minister for Lovgivning."
-Reg0110660,"Savigny, Friedrich Karl von (1779–1861)",preussisk,tysk,Tysk,national,2,embedded,single,unclear,"Tysk Retslærd, 1842–1848 preussisk Minister for Lovgivning."
-Reg0110660,"Savigny, Friedrich Karl von (1779–1861)",preussisk,polsk,Polsk,national,2,embedded,single,unclear,"Tysk Retslærd, 1842–1848 preussisk Minister for Lovgivning."
-Reg0110670,"Savigny, Karl Friedrich von (1814–1875)",preussisk,tysk,Tysk,national,6,embedded,single,unclear,"Søn af F.C.v.S., preussisk Diplomat og Politiker, Gesandt i Dresden 1859–1862."
-Reg0110670,"Savigny, Karl Friedrich von (1814–1875)",preussisk,polsk,Polsk,national,6,embedded,single,unclear,"Søn af F.C.v.S., preussisk Diplomat og Politiker, Gesandt i Dresden 1859–1862."
+Reg0110660,"Savigny, Friedrich Karl von (1779–1861)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,unclear,"Tysk Retslærd, 1842–1848 preussisk Minister for Lovgivning."
+Reg0110670,"Savigny, Karl Friedrich von (1814–1875)",preussisk,preussisk,Preussisk,german_state,6,embedded,single,unclear,"Søn af F.C.v.S., preussisk Diplomat og Politiker, Gesandt i Dresden 1859–1862."
 Reg0110710,"Savoyen, Eugen, Prins af (1663–1736)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,Østrigsk Feltherre.
 Reg0110720,"Saxe, Maurice de, Greve (1616–1750)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Marskal.
 Reg0110740,"Saxild, Hans Vilhelm (1813–1891)",argentinsk,argentinsk,Argentinsk,national,2,embedded,single,possible_relation,"dr.med., argentinsk Konsul i København 1863, Generalkonsul 1878."
@@ -2383,8 +2317,7 @@ Reg0117230,"Staaf, Ferdinand Nathanael (1823–1887)",Svensk,svensk,Svensk,natio
 Reg0117280,"Stålberg, Vilhelmina (1803–1872)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Forfatterinde (Vilhelmina).
 Reg0117300,"Stadion-Warthausen, Franz, Greve (1806–1853)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,"Østrigsk Statsmand, Guvernør i Triest, 1848 Indenrigsminister."
 Reg0117310,"Stäel-Holstein, Germaine de, Baronesse, f. Necker (1766–1817)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Forfatterinde.
-Reg0117360,"Staff gen. Reitzenstein, Hermann von (1792–1867)",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Generalmajor.
-Reg0117360,"Staff gen. Reitzenstein, Hermann von (1792–1867)",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Generalmajor.
+Reg0117360,"Staff gen. Reitzenstein, Hermann von (1792–1867)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Generalmajor.
 Reg0117420,"Stagnelius, Erik Johan (1793–1823)",Svensk,svensk,Svensk,national,0,leading,single,subject,Svensk Digter.
 Reg0117450,"Stahr, Adolf (1805–1876)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Forfatter, Kunsthistoriker, Konrektor ved Gymnasiet i Oldenburg."
 Reg0117460,"Stahr, Fanny Lewald-, f. Lewald (1811–1889)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Forfatterinde, g. 1855 m. Adolf S."
@@ -2523,8 +2456,7 @@ Reg0122210,"Thun-Hohenstein, Anton von, Greve (1754–1840)",Østrigsk,østrigsk
 Reg0122410,"Tiarini, Alessandro (1577–1668)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Maler.
 Reg0122420,"Tiberius, Claudius Nero (42 f. Chr.-37 e. Chr.)",romersk,romersk,Romersk,historical_polity,0,leading,single,subject,romersk Kejser 14 e. Chr.
 Reg0122430,"Tichatschek, Joseph Aloys (1807–1886)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Operasanger.
-Reg0122440,"Tichy, Antonio",preussisk,tysk,Tysk,national,1,embedded,single,unclear,"Commerzien-Rath, preussisk Konsul i Wien 1846."
-Reg0122440,"Tichy, Antonio",preussisk,polsk,Polsk,national,1,embedded,single,unclear,"Commerzien-Rath, preussisk Konsul i Wien 1846."
+Reg0122440,"Tichy, Antonio",preussisk,preussisk,Preussisk,german_state,1,embedded,single,unclear,"Commerzien-Rath, preussisk Konsul i Wien 1846."
 Reg0122470,"Tidemand, Adolph (1814–1876)",Norsk,norsk,Norsk,national,0,leading,single,subject,Norsk Maler.
 Reg0122490,"Tidemand, Emil (1812–1865)",norsk,norsk,Norsk,national,4,embedded,single,unclear,"Broder til Adolph T., norsk Kunstkritiker."
 Reg0122520,"Tieck, Christian Friedrich (1776–1851)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Billedhugger.
@@ -2573,8 +2505,7 @@ Reg0123790,"Trumpy, Hermann (1837–?)",norsk,norsk,Norsk,national,5,embedded,si
 Reg0123840,"Tullin, Christian Braunmann (1728–1765)",Norsk,norsk,Norsk,national,0,leading,single,subject,Norsk Digter.
 Reg0123850,"Turenne, Henri de Latour d’Auvergne, Vicomte (1611–1675)",Fransk,fransk,Fransk,national,0,leading,single,subject,Fransk Marskal.
 Reg0123860,"Turgenjev, Ivan (1818–1883)",russisk,russisk,Russisk,national,0,leading,single,subject,russisk Digter.
-Reg0123890,"Tutein, Ferdinand (1788–1880)",preussisk,tysk,Tysk,national,1,embedded,single,unclear,"Grosserer, preussisk Vicekonsul 1816–1848."
-Reg0123890,"Tutein, Ferdinand (1788–1880)",preussisk,polsk,Polsk,national,1,embedded,single,unclear,"Grosserer, preussisk Vicekonsul 1816–1848."
+Reg0123890,"Tutein, Ferdinand (1788–1880)",preussisk,preussisk,Preussisk,german_state,1,embedded,single,unclear,"Grosserer, preussisk Vicekonsul 1816–1848."
 Reg0124080,"Tyrell, J.",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Kunstsamler.
 Reg0124180,"Tønsberg, Niels Chr. (1813–1897)",Norsk,norsk,Norsk,national,0,leading,single,subject,"Norsk Forlagsboghandler, Generalkonsul."
 Reg0124190,Töpfer,Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Turist, Brunnen 25.6.1873."
@@ -2589,8 +2520,7 @@ Reg0124530,"Ulrichs, Heinrich (1807–1843)",Tysk,tysk,Tysk,national,0,leading,s
 Reg0124610,"Unger (Ungher), Caroline (1803–1877)",ungarsk,ungarsk,Ungarsk,national,0,leading,single,subject,"ungarsk Operasangerinde, g. 1840 Savatier."
 Reg0124620,"Ungern-Sternberg, Alexander von, Friherre (1806–1868)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Forfatter (A. von Sternberg).
 Reg0124630,"Ungern-Sternberg und Pyrkel, Ernst Wilhelm Rembert von, Baron (1794–1879)",russisk,russisk,Russisk,national,0,leading,single,subject,russisk Gesandt i København 1847–1860.
-Reg0124710,Uthof,preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Konsul i Cadix 1862.
-Reg0124710,Uthof,preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Konsul i Cadix 1862.
+Reg0124710,Uthof,preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Konsul i Cadix 1862.
 Reg0124740,"Vaccá Berlinghieri, Andrea (1772–1826)",Italiensk,italiensk,Italiensk,national,0,leading,single,subject,Italiensk Øjenlæge.
 Reg0124750,Vácz,ungarsk,ungarsk,Ungarsk,national,0,leading,single,subject,ungarsk Eneboer.
 Reg0124790,"Valdés Leal, Juan de (1622–1691)",Spansk,spansk,Spansk,national,0,leading,single,subject,Spansk Maler.
@@ -2623,14 +2553,10 @@ Reg0125440,Villanis,Fransk,fransk,Fransk,national,0,leading,single,subject,"Fran
 Reg0125460,"Villers, Karl (død 1890)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Læge, dr. med."
 Reg0125650,"Vischer, Peter, den ældre (ca. 1460–1529)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Billedhugger.
 Reg0125680,"Vitéz, Johan (1408–1472)",ungarsk,ungarsk,Ungarsk,national,0,leading,single,subject,"ungarsk Statsmand, Biskop og Kansler."
-Reg0125760,"Vogel, Alexander (1841–1889)",preussiske,tysk,Tysk,national,8,embedded,single,possible_institution,"Sønnesøn af Ida V., senere Kaptajn i den preussiske Hær."
-Reg0125760,"Vogel, Alexander (1841–1889)",preussiske,polsk,Polsk,national,8,embedded,single,possible_institution,"Sønnesøn af Ida V., senere Kaptajn i den preussiske Hær."
-Reg0125770,"Vogel, Friedrich George von",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Generalmajor.
-Reg0125770,"Vogel, Friedrich George von",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Generalmajor.
-Reg0125780,"Vogel, Ida von, f. von Glasenapp (1797–1866)",preussisk,tysk,Tysk,national,2,embedded,single,possible_relation,"g.m. preussisk Generalmajor Friedrich George v.V., Veninde af Fru Serre."
-Reg0125780,"Vogel, Ida von, f. von Glasenapp (1797–1866)",preussisk,polsk,Polsk,national,2,embedded,single,possible_relation,"g.m. preussisk Generalmajor Friedrich George v.V., Veninde af Fru Serre."
-Reg0125790,"Vogel von Falckenstein, Ernst Friedrich Eduard (1797–1885)",preussisk,tysk,Tysk,national,0,leading,single,subject,"preussisk Generalløjtnant, 1864 Guvernør i Nørrejylland."
-Reg0125790,"Vogel von Falckenstein, Ernst Friedrich Eduard (1797–1885)",preussisk,polsk,Polsk,national,0,leading,single,subject,"preussisk Generalløjtnant, 1864 Guvernør i Nørrejylland."
+Reg0125760,"Vogel, Alexander (1841–1889)",preussiske,preussisk,Preussisk,german_state,8,embedded,single,possible_institution,"Sønnesøn af Ida V., senere Kaptajn i den preussiske Hær."
+Reg0125770,"Vogel, Friedrich George von",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Generalmajor.
+Reg0125780,"Vogel, Ida von, f. von Glasenapp (1797–1866)",preussisk,preussisk,Preussisk,german_state,2,embedded,single,possible_relation,"g.m. preussisk Generalmajor Friedrich George v.V., Veninde af Fru Serre."
+Reg0125790,"Vogel von Falckenstein, Ernst Friedrich Eduard (1797–1885)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,"preussisk Generalløjtnant, 1864 Guvernør i Nørrejylland."
 Reg0125800,"Vogel von Vogelstein, Carl Christian (1788–1868)",Tysk,tysk,Tysk,national,0,leading,single,subject,"Tysk Portræt- og Historiemaler, Hofmaler i Dresden, 1853 flyttet til München."
 Reg0125830,"Vogl, Johann Nepomuk (1802–1866)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,Østrigsk Digter.
 Reg0125860,"Vogt, Frederik Sigfried (1777–1855)",Dansk,dansk,Dansk,national,0,leading,single,subject,"Dansk Chargé d’Affaires i Napoli, Etatsraad."
@@ -2683,8 +2609,7 @@ Reg0128070,"Welhaven, Elisabeth Cathrine (1815–1901)",norsk,norsk,Norsk,nation
 Reg0128080,"Welhaven, J. S. (1807–1873)",Norsk,norsk,Norsk,national,0,leading,single,subject,"Norsk Digter, Professor i Filosofi ved Christiania Universitetet."
 Reg0128120,"Wellington, Arthur Wellesley, Hertug af – (1769–1852)",Engelsk,engelsk,Engelsk,national,0,leading,single,subject,Engelsk Feltherre og Statsmand.
 Reg0128130,"Wells, Mrs.",Amerikansk,amerikansk,Amerikansk,national,0,leading,single,subject,"Amerikansk Dame, Paris 13.5.1868."
-Reg0128170,Wendt,preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Officer i tyrkisk Tjeneste 1841.
-Reg0128170,Wendt,preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Officer i tyrkisk Tjeneste 1841.
+Reg0128170,Wendt,preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Officer i tyrkisk Tjeneste 1841.
 Reg0128170,Wendt,tyrkisk,tyrkisk,Tyrkisk,national,3,embedded,single,unclear,preussisk Officer i tyrkisk Tjeneste 1841.
 Reg0128180,"Wennberg, Fredrik Wilhelm (1799–1881)",Svensk,svensk,Svensk,national,0,leading,single,subject,"Svensk Grosserer, dansk Konsul Stockholm."
 Reg0128180,"Wennberg, Fredrik Wilhelm (1799–1881)",dansk,dansk,Dansk,national,2,embedded,single,unclear,"Svensk Grosserer, dansk Konsul Stockholm."
@@ -2705,10 +2630,8 @@ Reg0129130,"Wilhelmj, August (1845–1908)",Tysk,tysk,Tysk,national,0,leading,si
 Reg0129140,"Wilhelmi, Friedrich (1788–1852)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Skuespiller.
 Reg0129160,Wilke,tysk,tysk,Tysk,national,2,embedded,single,unclear,"fra Berlin, tysk Rejsende, Napoli Marts 1841."
 Reg0129250,"Willemoes-Suhm, Friedrich (1816–1891)",dansk,dansk,Dansk,national,4,embedded,single,unclear,"Politimester i Altona, Afsked 1864, 1865 dansk Kammerherre, 1866 preussisk Amtmand (Landraad) over Rendsborg Amt, 1877 over Segeberg, preussisk Regierungsrat."
-Reg0129250,"Willemoes-Suhm, Friedrich (1816–1891)",preussisk,tysk,Tysk,national,6,embedded,single,unclear,"Politimester i Altona, Afsked 1864, 1865 dansk Kammerherre, 1866 preussisk Amtmand (Landraad) over Rendsborg Amt, 1877 over Segeberg, preussisk Regierungsrat."
-Reg0129250,"Willemoes-Suhm, Friedrich (1816–1891)",preussisk,polsk,Polsk,national,6,embedded,single,unclear,"Politimester i Altona, Afsked 1864, 1865 dansk Kammerherre, 1866 preussisk Amtmand (Landraad) over Rendsborg Amt, 1877 over Segeberg, preussisk Regierungsrat."
-Reg0129250,"Willemoes-Suhm, Friedrich (1816–1891)",preussisk,tysk,Tysk,national,14,embedded,single,unclear,"Politimester i Altona, Afsked 1864, 1865 dansk Kammerherre, 1866 preussisk Amtmand (Landraad) over Rendsborg Amt, 1877 over Segeberg, preussisk Regierungsrat."
-Reg0129250,"Willemoes-Suhm, Friedrich (1816–1891)",preussisk,polsk,Polsk,national,14,embedded,single,unclear,"Politimester i Altona, Afsked 1864, 1865 dansk Kammerherre, 1866 preussisk Amtmand (Landraad) over Rendsborg Amt, 1877 over Segeberg, preussisk Regierungsrat."
+Reg0129250,"Willemoes-Suhm, Friedrich (1816–1891)",preussisk,preussisk,Preussisk,german_state,6,embedded,single,unclear,"Politimester i Altona, Afsked 1864, 1865 dansk Kammerherre, 1866 preussisk Amtmand (Landraad) over Rendsborg Amt, 1877 over Segeberg, preussisk Regierungsrat."
+Reg0129250,"Willemoes-Suhm, Friedrich (1816–1891)",preussisk,preussisk,Preussisk,german_state,14,embedded,single,unclear,"Politimester i Altona, Afsked 1864, 1865 dansk Kammerherre, 1866 preussisk Amtmand (Landraad) over Rendsborg Amt, 1877 over Segeberg, preussisk Regierungsrat."
 Reg0129260,"Willemoes-Suhm, Martin (1787–1865)",slesvig-holstenske,slesvigholstensk,Slesvig-holstensk,border_region,9,embedded,fixed_compound,possible_institution,"fhv. Oberstløjtnant i Kavalleriet, 1843 Land- og Søkrigskommissær i 2det slesvig-holstenske Distrikt."
 Reg0129310,"Willmers, Rudolph (1821–1878)",Tysk,tysk,Tysk,national,0,leading,single,subject,Tysk Klavervirtuos og Komponist.
 Reg0129350,Wilson,Engelsk,engelsk,Engelsk,national,0,leading,single,subject,"Engelsk Familie, Amiens 16.-17.7.1857."
@@ -2722,8 +2645,7 @@ Reg0129640,"Winsløw, Ferd. S.",skandinaviske,skandinavisk,Skandinavisk,supranat
 Reg0129650,"Winterhalter, Franz Xaver (1806–1873)",Tysk-fransk (part: tysk),tysk,Tysk,national,0,leading,hyphen_compound,subject,Tysk-fransk Maler og Litograf.
 Reg0129650,"Winterhalter, Franz Xaver (1806–1873)",Tysk-fransk (part: fransk),fransk,Fransk,national,0,leading,hyphen_compound,subject,Tysk-fransk Maler og Litograf.
 Reg0129880,"Witthauer, Friedrich (1793 (eller 1786)-1846)",Østrigsk,østrigsk,Østrigsk,national,0,leading,single,subject,Østrigsk Forfatter og Journalist.
-Reg0129940,"Witzleben, Gerhard August von (1808–1880)",preussisk,tysk,Tysk,national,0,leading,single,subject,preussisk Generalløjtnant.
-Reg0129940,"Witzleben, Gerhard August von (1808–1880)",preussisk,polsk,Polsk,national,0,leading,single,subject,preussisk Generalløjtnant.
+Reg0129940,"Witzleben, Gerhard August von (1808–1880)",preussisk,preussisk,Preussisk,german_state,0,leading,single,subject,preussisk Generalløjtnant.
 Reg0129950,"Witzleben, Leopold von (1789–1862)",russisk,russisk,Russisk,national,1,embedded,single,unclear,"kejserlig russisk Ritmester og storhertugelig sachsisk Kammerherre, Weimar 1846."
 Reg0129950,"Witzleben, Leopold von (1789–1862)",sachsisk,sachsisk,Sachsisk,german_state,5,embedded,single,unclear,"kejserlig russisk Ritmester og storhertugelig sachsisk Kammerherre, Weimar 1846."
 Reg0130000,"Woldsen, J. N. (1794–1872)",Dansk,dansk,Dansk,national,0,leading,single,subject,Dansk Generalkonsul i Amsterdam.

@@ -54,7 +54,7 @@ window.NationLink = (function () {
     };
   }
 
-  /* NATION_INDEX is keyed by umbrella, so a member key ('sachsisk') has no
+  /* NATION_INDEX is keyed by umbrella, so a member key ('preussisk') has no
      entry of its own — resolve it through NATION_MEMBER_OF. A key claimed by
      several umbrellas (kurlandsk → tysk + russisk, holstensk → dansk + tysk)
      resolves to whichever umbrella is listed first, i.e. row order in

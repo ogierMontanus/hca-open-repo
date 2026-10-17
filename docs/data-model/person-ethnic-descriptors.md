@@ -37,7 +37,7 @@ Categories:
 | Category | Meaning | Examples |
 |---|---|---|
 | `national` | modern nation-state demonym | dansk, tysk, fransk, svensk, italiensk, amerikansk |
-| `german_state` | pre-1871 German polity (Germany wasn't unified until 1871, well inside the diary period) | sachsisk, bayersk/bayrisk, hannoveransk, oldenburgsk/oldenborgsk, mecklenburgsk, westfalsk, württembergsk, thüringsk |
+| `german_state` | pre-1871 German polity (Germany wasn't unified until 1871, well inside the diary period) | preussisk (74 hits — the most frequent single form after the "big five"), sachsisk, bayersk/bayrisk, hannoveransk, oldenburgsk/oldenborgsk, mecklenburgsk, westfalsk, württembergsk, thüringsk |
 | `border_region` | the contested Schleswig-Holstein(-Lauenburg) duchies — central to the wars of 1848–51 and 1864; every key here belongs to **both** the Dansk and Tysk umbrellas | slesvigsk, nordslesvigsk, sydslesvigsk, sønderjydsk, holstensk, lauenborgsk, slesvig-holstensk, holsten-lauenborgsk |
 | `regional_danish` | Danish regional/city demonym, not a foreign nationality | jysk/jydsk, sjællandsk, fynsk, københavnsk/kjøbenhavnsk |
 | `colonial` | Danish colonial-era territorial demonym | dansk-vestindisk (Danish West Indies), grønlandsk |
@@ -421,7 +421,7 @@ raw key list makes a poor menu.
 Clustering never discards the distinction: each umbrella carries a
 `members` array keeping every contributing key's entities separate, and
 `nation.html` renders each section grouped under its sub-identity
-heading with a count ("Sachsisk 30"). A chip row under the page title
+heading with a count ("Preussisk 30"). A chip row under the page title
 lists what the umbrella covers, so the grouping is never a black box —
 including a member with zero entities of its own, like `badisk` and
 `hessisk` under Tysk (attested nowhere in this particular register, but
@@ -473,7 +473,7 @@ sub-identity's grid is judged on its own count.
 
 | Umbrella | Covers |
 |---|---|
-| **Tysk** | tysk + the pre-1871 polities (sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, badisk, thüringsk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
+| **Tysk** | tysk + the pre-1871 polities (preussisk, sachsisk, bayersk, hannoveransk, oldenburgsk, mecklenburgsk, westfalsk, württembergsk, hessisk, badisk, thüringsk), tysk_romersk, frankisk, plattysk, frisisk, kurlandsk, and the Schleswig-Holstein keys |
 | **Britisk** | engelsk, skotsk, irsk, angelsaksisk |
 | **Græsk** | græsk, nygræsk + the ancient polities (attisk, atheniensisk, makedonisk) and østromersk |
 | **Dansk** | dansk + regional (jysk, sjællandsk, fynsk, københavnsk), the duchies, and the crown territories (islandsk, grønlandsk, dansk_vestindisk) |
@@ -537,36 +537,3 @@ both memberships.
   folded into a bigger umbrella — was giving a false-positive family
   its own picker presence instead of excluding it like its siblings
   (`romansk Filolog`, `nyeuropæisk Lingvistik`).
-
-
-## Dissolved: preussisk (2026-10-17)
-
-`preussisk` is no longer a collective ethnic category. It was the most
-frequent `german_state` form (74 hits) and showed up as its own
-"Preussisk" sub-identity under Tysk. It is now dissolved: a Prussian is
-counted as **both German and Polish**.
-
-Mechanism — `data/curated/ethnic_adjective_expansions_da.csv` maps a
-key to the keys it expands to (`preussisk` → `tysk;polsk`).
-`parse_person_ethnic_descriptors.py` emits **one match row per target
-key** for every surface form of an expanded key, so
-`person_ethnic_descriptors.csv` never contains `nationality_key =
-preussisk`. The row in `ethnic_adjectives_da.csv` stays (category
-`dissolved`) only to carry the surface forms (`preussisk`, `prøjsisk`,
-`preusisk` …); `build_nation_index.py` skips `dissolved` rows.
-
-Consequences:
-
-- `nation.html` has no "Preussisk" chip or sub-heading; the persons
-  appear under Tysk (as members of the `tysk` key itself) and under
-  Polsk (standalone key).
-- `preussisk` was removed from the Tysk umbrella members in
-  `nation_umbrellas_da.csv` and from `nation_place_labels_da.csv`. The
-  *place* "Preussen" (a region inside Tyskland) is unaffected.
-- Where a single nationality per person is needed
-  (`parse_person_gender.py` takes the first), `tysk` wins — the order in
-  the expansions file.
-- `person_gender.csv`, `person_gender_review.csv` and
-  `given_name_gender_stats.csv` in `data/normalized/` were not
-  regenerated here (the committed versions already lag the parser);
-  they still carry `preussisk` as a nationality until the next gender run.
