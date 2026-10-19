@@ -1,6 +1,19 @@
 /* nav.js — layout switcher, facet toggles, facet group collapse,
    and bootstrap of the shared header-search typeahead. */
 
+/* "Indberet fejl" button — loaded here for the same reason as the search
+   engine below: nav.js is on every inner page, including the generated
+   diary pages. index.html, index_en.html and works.html do not load nav.js
+   and include report-issue.js directly. */
+(function bootstrapReportIssue() {
+  var self = document.currentScript || document.querySelector('script[src*="nav.js"]');
+  if (!self) return;
+  var s = document.createElement('script');
+  s.src = self.src.replace(/nav\.js.*$/, 'report-issue.js');
+  s.defer = true;
+  document.head.appendChild(s);
+})();
+
 /* Load the search index + typeahead engine on every page that ships the
    header search bar. nav.js is the one script included site-wide, so doing
    it here lights up all inner pages (and the generated diary pages) without

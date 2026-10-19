@@ -1,0 +1,13 @@
+name = "hca-report-issue"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# Non-secret settings. The GitHub token is NOT here — set it with
+#   wrangler secret put GITHUB_TOKEN
+# See docs/report-issue.md.
+[vars]
+GITHUB_REPO = "ogierMontanus/hca-open-repo"
+# Comma-separated list of sites allowed to call the Worker from a browser.
+ALLOWED_ORIGINS = "https://ogiermontanus.github.io"
+SCREENSHOT_BRANCH = "report-screenshots"
+ISSUE_LABEL = "brugerrapport"
