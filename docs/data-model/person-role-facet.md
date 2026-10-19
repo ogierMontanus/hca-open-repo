@@ -140,3 +140,26 @@ tal, der endnu ikke er i CSV'en — kør frekvenstællingen i scriptets egen
 udviklingshistorik, eller filtrer `kilde_beskrivelse_termer`-kolonnen i
 `data/normalized/person_role.csv` mod termer der IKKE optræder i
 `data/curated/person_role_terms_da.csv`), og tilføj dem til CSV'en.
+
+## Uklassificerede personer: klynger til manuel bucket-tildeling
+
+De 4.664 personer uden rolle kan gennemgås klyngevis i stedet for én ad
+gangen. `scripts/parsers/cluster_unassigned_roles.py` grupperer dem efter
+erhvervsord i beskrivelsen i 20 klynger (K01–K20) — bevidst *finere* end de
+9 buckets, så hver klynge kan afbildes på én bucket (eller på "Ingen
+passende bucket"). Samme referent-rensning som `parse_person_role.py`
+(`RELATION_RE`/`MARRIED_RE`), plus: nummererede ægteskaber (`g. 1° 1810
+m. …`), genitiv+slægtskab-led (`Grev X's Svigersøn`) og ord efter
+`hos/af/til/for/under/efter` (arbejdsgiveren, ikke personens eget erhverv)
+udelades.
+
+```
+python scripts/parsers/cluster_unassigned_roles.py
+```
+
+Skriver `data/normalized/person_role_unassigned_clusters.csv` (én række pr.
+klynge, tom `bucket`-kolonne), `…_persons.csv` (én række pr. person) og
+`…_annotation.xlsx` (samme to tabeller; `bucket` har en dropdown med de 9
+buckets). Personer uden erhvervsord rapporteres som restgrupper R1–R4, ikke
+som klynger. Annotatorens svar bør føres tilbage som nye termer i
+`data/curated/person_role_terms_da.csv`, ikke som direkte persontildeling.
