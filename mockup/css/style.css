@@ -925,6 +925,13 @@ body[data-section="hvor"] .page-hero {
 .map-placeholder__note { font-size: 0.73rem; opacity: 0.6; }
 
 /* === Leaflet map (rendered for entities that have geocodes) === */
+/* Leaflet's panes/controls use z-index 400–1000. Without its own stacking
+   context the map competes with the sticky header (z-index 100) at root
+   level and covers the header search typeahead, which is trapped inside
+   the header's context whatever z-index it has. `isolation` keeps those
+   values inside the map without touching `overflow` (see the
+   sticky/overflow iOS pitfall further down). */
+.leaflet-container { isolation: isolate; }
 .map-leaflet {
   width: 100%; height: 320px;
   border: 1px solid var(--color-border);
