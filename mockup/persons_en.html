@@ -144,7 +144,7 @@
             </div>
           </div>
 
-          <!-- Rolle / Erhverv — AFLEDT facet, ikke en registreret oplysning
+          <!-- Erhvervsgren (Occupational branch) — AFLEDT facet, ikke en registreret oplysning
                (samme princip som Køn ovenfor). Værdierne kommer fra
                scripts/parsers/parse_person_role.py, som kombinerer to
                kilder: a) forfatter/kunstner/komponist-optræden i
@@ -154,7 +154,7 @@
                se docs/data-model/person-role-facet.md. Rækker og tal
                genereres af FacetEngine — skriv dem ikke i hånden. -->
           <div class="facet-group">
-            <div class="facet-group__header">Role / Occupation <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Occupational branch <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" data-facet-source="role"></div>
             <div style="padding:0 12px 10px;font-size:0.7rem;color:var(--color-text-muted);line-height:1.45">
               Automatically derived from the work register and the register text — see
@@ -694,7 +694,7 @@
       value: function (p) { return (p.nationality || []).map(function (k) { return natLabels[k] || k; }).join(', '); } },
     { key: 'gender', label: 'Gender', value: function (p) { return p.gender || ''; },
       sortValue: function (p) { return GENDER_SORT[p.gender] || '9'; } },
-    { key: 'role', label: 'Role / Occupation', value: function (p) { return (p.role || []).join(', '); } },
+    { key: 'role', label: 'Occupational branch', value: function (p) { return (p.role || []).join(', '); } },
     { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
@@ -906,6 +906,11 @@
       gender: function (p) { return p.gender; },
       role: function (p) { return p.role; },
       worksRegistry: function (p) { return p.worksRegistry; }
+    },
+    // Occupational branch: thematic order, not by count — see
+    // data/curated/person_role_bucket_order.csv (emitted in persons-extra.js).
+    fixedOrder: {
+      role: typeof PERSON_ROLE_ORDER !== 'undefined' ? PERSON_ROLE_ORDER : []
     },
     labels: {
       nationality: function (k) { return natLabels[k] || k; },

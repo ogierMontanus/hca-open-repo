@@ -24,7 +24,7 @@ more than one role):
        2. The high-frequency terms from that harvest are hand-clustered
           into data/curated/person_role_terms_da.csv — ~185 terms grouped
           into 9 buckets (Gejstlig, Militær, Adel/Kongelig/Hof,
-          Embedsmand/Jura/Politik, Handel/Erhverv, Akademiker/Lærd,
+          Embedsmand/Jura/Politik, Erhverv, Lærd/Akademisk uddannelse uden for jura og teologi,
           Kunstner/Billedkunst, Musiker/Scenekunst, Forfatter/Digter) —
           "10 or so" buckets suitable for a filter panel, per the brief.
           A term not in the CSV contributes nothing; a person matching no
@@ -47,7 +47,7 @@ Writes data/normalized/person_role.csv:
   entity_id, roller, kilde_vaerk, kilde_beskrivelse_termer
 
   roller                    — semicolon-joined bucket names, e.g.
-                               "Gejstlig;Akademiker/Lærd"
+                               "Gejstlig;Lærd/Akademisk uddannelse uden for jura og teologi"
   kilde_vaerk                — semicolon-joined wing labels that
                                contributed via source A (empty if none)
   kilde_beskrivelse_termer   — semicolon-joined harvested terms that
@@ -80,7 +80,7 @@ WING_BUCKET = {
 # sorts by count, not this fixed order.
 BUCKET_ORDER = [
     "Gejstlig", "Militær", "Adel/Kongelig/Hof", "Embedsmand/Jura/Politik",
-    "Handel/Erhverv", "Akademiker/Lærd", "Kunstner/Billedkunst",
+    "Erhverv", "Lærd/Akademisk uddannelse uden for jura og teologi", "Kunstner/Billedkunst",
     "Musiker/Scenekunst", "Forfatter/Digter",
 ]
 

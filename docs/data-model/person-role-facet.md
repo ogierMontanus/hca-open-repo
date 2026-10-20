@@ -1,4 +1,7 @@
-# Rolle / Erhverv-facettering af personregistret
+# Erhvervsgren-facettering af personregistret
+
+> Facetten hed før 2026-10-20 "Rolle / Erhverv". Omdøbte buckets: "Handel/Erhverv" →
+> "Erhverv", "Akademiker/Lærd" → "Lærd/Akademisk uddannelse uden for jura og teologi".
 
 `scripts/parsers/parse_person_role.py` gennemgår de 10.228 poster i
 PERSON-REGISTRET og tildeler hver person nul, én eller flere af 9
@@ -31,9 +34,9 @@ Fordeling pr. bucket (en person kan tælle i flere buckets):
 | Bucket | Antal |
 |---|---:|
 | Embedsmand/Jura/Politik | 1.065 |
-| Handel/Erhverv | 939 |
+| Erhverv | 939 |
 | Forfatter/Digter | 931 |
-| Akademiker/Lærd | 878 |
+| Lærd/Akademisk uddannelse uden for jura og teologi | 878 |
 | Adel/Kongelig/Hof | 832 |
 | Musiker/Scenekunst | 821 |
 | Militær | 699 |
@@ -71,8 +74,8 @@ reelt erhvervsbetegnende ord er hånd-klynget i
 | Militær | kaptajn, oberst, løjtnant, general, søofficer |
 | Adel/Kongelig/Hof | kammerherre, konge, dronning, greve, hofdame |
 | Embedsmand/Jura/Politik | etatsraad, amtmand, borgmester, konsul, advokat |
-| Handel/Erhverv | grosserer, købmand, bankier, direktør, fabrikant |
-| Akademiker/Lærd | professor, lærer, læge, historiker, ingeniør |
+| Erhverv | grosserer, købmand, bankier, direktør, fabrikant |
+| Lærd/Akademisk uddannelse uden for jura og teologi | professor, lærer, læge, historiker, ingeniør |
 | Kunstner/Billedkunst | maler, billedhugger, arkitekt, tegner, fotograf |
 | Musiker/Scenekunst | skuespiller, komponist, operasanger, dirigent |
 | Forfatter/Digter | forfatter, digter, oversætter, redaktør, journalist |
@@ -163,3 +166,54 @@ klynge, tom `bucket`-kolonne), `…_persons.csv` (én række pr. person) og
 buckets). Personer uden erhvervsord rapporteres som restgrupper R1–R4, ikke
 som klynger. Annotatorens svar bør føres tilbage som nye termer i
 `data/curated/person_role_terms_da.csv`, ikke som direkte persontildeling.
+
+### Manuel klynge-tildeling (2026-10-20)
+
+Annotationsarket `person_role_unassigned_annotation_,manual.xlsx` (kolonne C
+pr. klynge) er ført ud i `data/curated/person_role_cluster_buckets.csv`;
+`python scripts/parsers/apply_cluster_roles.py` skriver
+`data/normalized/person_role_manual.csv`, som `build_persons_extra.py` lægger
+ovenpå (kun for personer uden automatisk rolle). Primære og sekundære klynger
+tæller begge. Nye erhvervsgrene: **Håndværk** (K14), **Gæstgiveri** (K15),
+**Tjenestefolk/Lavtlønnede** (K16), **Landbrug/Søfart** (K17–K18) og
+**Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv** (K19–K20
++ restkategori for de 3.440 personer uden erhvervsord, R1–R4; en person får
+den kun, hvis ingen anden gren passer). K05 og K06 stod tomme/med "," i
+arket og er sat til Lærd/Akademisk uddannelse uden for jura og teologi.
+
+**Restgruppe R3** (1.784 personer, kun slægtskab/ægteskab/relation i
+beskrivelsen) har sin egen gren, **Kun slægtskab angivet**; kun R1, R2 og R4
+(1.656) får "Endnu ukategoriseret/…".
+
+**Flere grene pr. person.** En person må høre til flere erhvervsgrene.
+Undtagelse: restkategorierne **Kun slægtskab angivet** og **Endnu
+ukategoriseret/…** er eksklusive (kolonnen `eksklusiv` i
+`person_role_bucket_order.csv`) — de står aldrig sammen med en anden gren og
+falder væk, så snart en reel gren tildeles. `build_persons_extra.py`
+(`enforce_exclusive`) håndhæver det ved bygning.
+
+**Køn "Andet" → Ukategoriseret.** En post med køn "Andet (især
+firmaer/slægter/øvrige grupper)" får altid erhvervsgrenen "Endnu
+ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv" — også hvor
+parseren eller klyngerne ellers havde givet en gren (fx et bankfirma →
+Erhverv). Reglen ligger i `build_persons_extra.py` (`UNCATEGORISED_ROLE`);
+før 2026-10-20 var sådanne poster ikke udelukket fra erhvervsgrenene.
+
+**Visningsrækkefølge.** Facetten vises tematisk, ikke efter antal:
+`data/curated/person_role_bucket_order.csv` udsendes som `PERSON_ROLE_ORDER` i
+`persons-extra.js` og gives til FacetEngine som `fixedOrder.role`. En gren, der
+ikke står i filen, vises sidst (efter antal).
+
+### Adelsarv i R2–R4 (2026-10-20)
+
+Et grådigt forsøg på at placere R2–R4 via fagord, lederstillinger og
+efternavne blev kasseret som for grumset. Kun adelsarven er bevaret, i
+`apply_cluster_roles.py`: en person i R2–R4 med arvelig titel i etiketten
+eller med en adelig slægtning ("g. m. Grev X", "Datter af Baron Y") får
+**Adel/Kongelig/Hof** i stedet for "Kun slægtskab angivet"/"Endnu
+ukategoriseret". Hofembeder (Kammerherre) tæller ikke.
+
+Reglen er siden udrullet til alle andre poster: personer med en klynge- eller
+automatisk rolle får Adel/Kongelig/Hof **som tillæg** (kilde `adel+:…` i
+`person_role_manual.csv`; 309 poster med automatisk rolle, 68 i klynger).
+Uden for R2–R4 kræves titel og slægtskabsord i samme komma-led.

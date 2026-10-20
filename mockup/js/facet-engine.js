@@ -76,6 +76,7 @@
  *     },
  *     labels:   { person: function (rid) { return NAMES[rid]; } },
  *     sortKeys: { person: surnameKey },   // tiebreak when counts are equal
+ *     fixedOrder: { role: ['A', 'B'] },   // optional: fixed display order
  *     onChange: function (filtered) { render(filtered); }
  *   });
  *
@@ -107,6 +108,7 @@ window.FacetEngine = (function () {
     var accessors = opts.accessors || {};
     var labels    = opts.labels || {};
     var sortKeys  = opts.sortKeys || {};
+    var fixedOrder = opts.fixedOrder || {};
     var onChange  = opts.onChange || function () {};
     if (!panel) return null;
 
@@ -287,6 +289,14 @@ window.FacetEngine = (function () {
         return b.n - a.n ||
                String(keyOf(a.value)).localeCompare(String(keyOf(b.value)), 'da');
       });
+      // A field with a fixedOrder list (e.g. persons.html's thematic
+      // Erhvervsgren facet) is shown in that order instead; values missing
+      // from the list follow, still by count (Array#sort is stable).
+      var order = fixedOrder[field];
+      if (order && order.length) {
+        var pos = function (v) { var i = order.indexOf(v); return i < 0 ? order.length : i; };
+        rows.sort(function (a, b) { return pos(a.value) - pos(b.value); });
+      }
 
       var total = rows.length;
       var visibleRows = rows;

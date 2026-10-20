@@ -113,7 +113,7 @@
             </div>
           </div>
 
-          <!-- Rolle / Erhverv — AFLEDT facet, ikke en registreret oplysning
+          <!-- Erhvervsgren — AFLEDT facet, ikke en registreret oplysning
                (samme princip som Køn ovenfor). Værdierne kommer fra
                scripts/parsers/parse_person_role.py, som kombinerer to
                kilder: a) forfatter/kunstner/komponist-optræden i
@@ -123,7 +123,7 @@
                se docs/data-model/person-role-facet.md. Rækker og tal
                genereres af FacetEngine — skriv dem ikke i hånden. -->
           <div class="facet-group">
-            <div class="facet-group__header">Rolle / Erhverv <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__header">Erhvervsgren <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body" data-facet-source="role"></div>
             <div style="padding:0 12px 10px;font-size:0.7rem;color:var(--color-text-muted);line-height:1.45">
               Automatisk udledt af værkregistret og registerteksten — se
@@ -620,7 +620,7 @@
       value: function (p) { return (p.nationality || []).map(function (k) { return natLabels[k] || k; }).join(', '); } },
     { key: 'gender', label: 'Køn', value: function (p) { return p.gender || ''; },
       sortValue: function (p) { return GENDER_SORT[p.gender] || '9'; } },
-    { key: 'role', label: 'Rolle / Erhverv', value: function (p) { return (p.role || []).join(', '); } },
+    { key: 'role', label: 'Erhvervsgren', value: function (p) { return (p.role || []).join(', '); } },
     { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
@@ -832,6 +832,11 @@
       gender: function (p) { return p.gender; },
       role: function (p) { return p.role; },
       worksRegistry: function (p) { return p.worksRegistry; }
+    },
+    // Erhvervsgren: tematisk rækkefølge, ikke efter antal — se
+    // data/curated/person_role_bucket_order.csv (udsendt i persons-extra.js).
+    fixedOrder: {
+      role: typeof PERSON_ROLE_ORDER !== 'undefined' ? PERSON_ROLE_ORDER : []
     },
     labels: {
       nationality: function (k) { return natLabels[k] || k; },
