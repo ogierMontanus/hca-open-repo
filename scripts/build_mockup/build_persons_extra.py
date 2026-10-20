@@ -53,6 +53,8 @@ GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
 ROLE       = os.path.join(ROOT, "data", "normalized", "person_role.csv")
 # Manuel klynge-tildeling (apply_cluster_roles.py) for personer uden rolle i ROLE.
 ROLE_MANUAL = os.path.join(ROOT, "data", "normalized", "person_role_manual.csv")
+# Advarselsflag for kvindelige poster (scripts/parsers/gender_role_check.py).
+ROLE_GENDER_FLAGS = os.path.join(ROOT, "data", "normalized", "person_role_gender_flags.csv")
 # Tematisk visningsrækkefølge for Erhvervsgren-facetten (PERSON_ROLE_ORDER).
 ROLE_ORDER = os.path.join(ROOT, "data", "curated", "person_role_bucket_order.csv")
 ENTITY_TYPES = os.path.join(ROOT, "data", "curated", "person_entity_types.tsv")
@@ -194,6 +196,23 @@ def _read_role_order() -> list:
     with open(ROLE_ORDER, encoding="utf-8", newline="") as f:
         return [(r["bucket"].strip(), (r.get("eksklusiv") or "").strip().lower() == "ja")
                 for r in csv.DictReader(f) if (r.get("bucket") or "").strip()]
+
+
+def load_gender_role_flags() -> tuple[dict, dict]:
+    """({entity_id: {bucket, …}}, {entity_id: ersatz-gren}) fra
+    gender_role_check.py: grene en kvindelig post kun har "arvet" fra faderens/
+    ægtefællens titel (status `fjernet`), og den gren hun får, hvis ingen er
+    tilbage. Tomt, hvis kontrollen ikke er kørt."""
+    removed, ersatz = {}, {}
+    if not os.path.exists(ROLE_GENDER_FLAGS):
+        return removed, ersatz
+    with open(ROLE_GENDER_FLAGS, encoding="utf-8-sig", newline="") as f:
+        for r in csv.DictReader(f):
+            if r.get("status") == "fjernet":
+                removed.setdefault(r["entity_id"], set()).add(r["bucket"])
+                if r.get("ersatz"):
+                    ersatz[r["entity_id"]] = r["ersatz"]
+    return removed, ersatz
 
 
 def load_role_labels_en() -> dict:
@@ -555,6 +574,7 @@ def main() -> None:
               "(run scripts/parsers/parse_person_gender.py)")
 
     roles_by_person, work_creators = load_roles()
+    gender_removed, gender_ersatz = load_gender_role_flags()
     if roles_by_person:
         print(f"  {len(roles_by_person):,} persons with a Rolle/Erhverv classification "
               f"(scripts/parsers/parse_person_role.py)")
@@ -585,8 +605,13 @@ def main() -> None:
         nats = nationalities_by_person.get(rid, [])
         gender = (OTHER_GENDER if rid in collective
                   else gender_by_person.get(rid, (None, None))[0])
-        roles = ([UNCATEGORISED_ROLE] if gender == OTHER_GENDER
-                 else roles_by_person.get(rid, []))
+        roles = roles_by_person.get(rid, [])
+        if rid in gender_removed:
+            # Kvindelig post, der kun har "arvet" mandsdomineret gren fra
+            # faderens/ægtefællens titel — se gender_role_check.py.
+            roles = [b for b in roles if b not in gender_removed[rid]]                 or [gender_ersatz.get(rid, UNCATEGORISED_ROLE)]
+        if gender == OTHER_GENDER:
+            roles = [UNCATEGORISED_ROLE]
         wd = wd_by_person.get(rid)
         breve = breve_by_person.get(rid)
 

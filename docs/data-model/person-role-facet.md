@@ -1,7 +1,7 @@
 # Erhvervsgren-facettering af personregistret
 
 > Facetten hed før 2026-10-20 "Rolle / Erhverv". Omdøbte buckets: "Handel/Erhverv" →
-> "Erhverv", "Akademiker/Lærd" → "Lærd/Akademisk uddannelse uden for jura og teologi".
+> "Erhverv" → "Handel", "Akademiker/Lærd" → "Lærd/Akademisk uddannelse uden for jura og teologi".
 
 `scripts/parsers/parse_person_role.py` gennemgår de 10.228 poster i
 PERSON-REGISTRET og tildeler hver person nul, én eller flere af 9
@@ -34,7 +34,7 @@ Fordeling pr. bucket (en person kan tælle i flere buckets):
 | Bucket | Antal |
 |---|---:|
 | Embedsmand/Jura/Politik | 1.065 |
-| Erhverv | 939 |
+| Handel | 939 |
 | Forfatter/Digter | 931 |
 | Lærd/Akademisk uddannelse uden for jura og teologi | 878 |
 | Adel/Kongelig/Hof | 832 |
@@ -74,7 +74,7 @@ reelt erhvervsbetegnende ord er hånd-klynget i
 | Militær | kaptajn, oberst, løjtnant, general, søofficer |
 | Adel/Kongelig/Hof | kammerherre, konge, dronning, greve, hofdame |
 | Embedsmand/Jura/Politik | etatsraad, amtmand, borgmester, konsul, advokat |
-| Erhverv | grosserer, købmand, bankier, direktør, fabrikant |
+| Handel | grosserer, købmand, bankier, direktør, fabrikant |
 | Lærd/Akademisk uddannelse uden for jura og teologi | professor, lærer, læge, historiker, ingeniør |
 | Kunstner/Billedkunst | maler, billedhugger, arkitekt, tegner, fotograf |
 | Musiker/Scenekunst | skuespiller, komponist, operasanger, dirigent |
@@ -196,7 +196,7 @@ falder væk, så snart en reel gren tildeles. `build_persons_extra.py`
 firmaer/slægter/øvrige grupper)" får altid erhvervsgrenen "Endnu
 ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv" — også hvor
 parseren eller klyngerne ellers havde givet en gren (fx et bankfirma →
-Erhverv). Reglen ligger i `build_persons_extra.py` (`UNCATEGORISED_ROLE`);
+Handel). Reglen ligger i `build_persons_extra.py` (`UNCATEGORISED_ROLE`);
 før 2026-10-20 var sådanne poster ikke udelukket fra erhvervsgrenene.
 
 **Visningsrækkefølge.** Facetten vises tematisk, ikke efter antal:
@@ -227,3 +227,27 @@ blive forældet i forhold til værkregistret. persons_en.html viser engelske
 gren-navne fra kolonnen `label_en` i `person_role_bucket_order.csv`
 (udsendt som `PERSON_ROLE_LABELS_EN`); værdierne forbliver danske, fordi de
 indgår i `?role=`-URL'er.
+
+### Kønstjek mod "arv" af mandsdominerede grene (2026-10-20)
+
+Bucketen "Erhverv" hedder nu **Handel**. `besidder` er fjernet som term
+(godsejere er ikke handelsdrivende), og `godsejer` hører nu til
+Adel/Kongelig/Hof. `proprietær`, `forpagter` og `ejer` ligger uændret i Handel.
+
+`scripts/parsers/gender_role_check.py` (trin 4a5 i `build_all.py`) bruger køn
+"Kvindelig" som advarselsflag: en kvindes beskrivelse nævner ofte faderens
+eller ægtefællens titel ("Enke efter Sognepræst X", "g. m. Kaptajn Y"), som
+ellers lækker ind som hendes egen gren. For Militær, Embedsmand/Jura/Politik,
+Gejstlig, Handel, Håndværk, Landbrug/Søfart og Lærd/Akademisk … kræves det, at
+mindst én af de termer, der gav grenen, står i personens **egen tekst**
+(beskrivelsen før første ægteskabs-/enkemarkør, uden slægtskabsled). Ellers
+fjernes grenen (`fjernet`), og hun får "Kun slægtskab angivet" (har
+slægtskabsmarkører) eller "Endnu ukategoriseret/…". Resultatet og de
+bevarede advarsler (`beholdt`) står i
+`data/normalized/person_role_gender_flags.csv` (åbner direkte i Excel);
+`build_persons_extra.py` fjerner `fjernet`-grenene. Kunst, Musik, Forfatter,
+Adel, Gæstgiveri og Tjenestefolk kontrolleres ikke.
+
+Kendt begrænsning: "Datter af Inspektør X, Kommandørkaptajn Y, g. …" — faderens
+apposition efter første komma tolkes som personens egen tekst og bevares som
+advarsel.

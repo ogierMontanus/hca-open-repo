@@ -10,7 +10,7 @@ Reg0030200,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0030220,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0030230,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K19;K07
 Reg0030240,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0030260,Lærd/Akademisk uddannelse uden for jura og teologi;Erhverv,klynge:K06;K13;K07
+Reg0030260,Lærd/Akademisk uddannelse uden for jura og teologi;Handel,klynge:K06;K13;K07
 Reg0030270,Kun slægtskab angivet,rest:R3
 Reg0030300,Håndværk,klynge:K14
 Reg0030330,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -35,6 +35,7 @@ Reg0030760,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0030770,Adel/Kongelig/Hof,adel:titel
 Reg0030780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0030790,Adel/Kongelig/Hof,adel:titel
+Reg0030800,Adel/Kongelig/Hof,adel:titel
 Reg0030850,Adel/Kongelig/Hof,adel:titel
 Reg0030860,Adel/Kongelig/Hof,adel:titel
 Reg0030880,Adel/Kongelig/Hof,adel:titel
@@ -68,11 +69,12 @@ Reg0031520,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0031560,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0031610,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0031620,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0031640,Adel/Kongelig/Hof,adel:titel
 Reg0031650,Adel/Kongelig/Hof,adel:titel
 Reg0031670,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0031700,Landbrug/Søfart,klynge:K18
 Reg0031740,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0031750,Erhverv,klynge:K13
+Reg0031750,Handel,klynge:K13
 Reg0031760,Kun slægtskab angivet,rest:R3
 Reg0031770,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0031780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -103,7 +105,7 @@ Reg0032270,Adel/Kongelig/Hof,adel:titel
 Reg0032290,Adel/Kongelig/Hof,adel:titel
 Reg0032310,Kun slægtskab angivet,rest:R3
 Reg0032320,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K06
-Reg0032340,Erhverv,klynge:K13
+Reg0032340,Handel,klynge:K13
 Reg0032350,Gæstgiveri,klynge:K15
 Reg0032370,Embedsmand/Jura/Politik,klynge:K12
 Reg0032390,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -146,7 +148,7 @@ Reg0033190,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0033230,Kun slægtskab angivet,rest:R3
 Reg0033240,Kun slægtskab angivet,rest:R3
 Reg0033250,Kun slægtskab angivet,rest:R3
-Reg0033260,Erhverv,klynge:K13
+Reg0033260,Handel,klynge:K13
 Reg0033270,Kun slægtskab angivet,rest:R3
 Reg0033280,Kun slægtskab angivet,rest:R3
 Reg0033300,Adel/Kongelig/Hof,klynge:K19;adel:titel
@@ -187,7 +189,7 @@ Reg0034150,Kun slægtskab angivet,rest:R3
 Reg0034160,Gæstgiveri,klynge:K15
 Reg0034170,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0034190,Kun slægtskab angivet,rest:R3
-Reg0034200,Erhverv,klynge:K13
+Reg0034200,Handel,klynge:K13
 Reg0034240,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0034250,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0034260,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -247,7 +249,7 @@ Reg0035550,Adel/Kongelig/Hof,adel:titel
 Reg0035570,Adel/Kongelig/Hof,adel:titel
 Reg0035600,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0035610,Gejstlig,klynge:K10
-Reg0035650,Erhverv,klynge:K13
+Reg0035650,Handel,klynge:K13
 Reg0035660,Kun slægtskab angivet,rest:R3
 Reg0035670,Adel/Kongelig/Hof,adel:relation
 Reg0035700,Kun slægtskab angivet,rest:R3
@@ -260,11 +262,11 @@ Reg0035970,Adel/Kongelig/Hof,adel:titel
 Reg0035980,Adel/Kongelig/Hof,adel:titel
 Reg0035990,Adel/Kongelig/Hof,adel:titel
 Reg0036000,Adel/Kongelig/Hof,adel:titel
-Reg0036030,Erhverv,klynge:K13
+Reg0036030,Handel,klynge:K13
 Reg0036090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0036120,Adel/Kongelig/Hof,adel:titel
 Reg0036150,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0036170,Erhverv,klynge:K13
+Reg0036170,Handel,klynge:K13
 Reg0036180,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0036200,Landbrug/Søfart,klynge:K18
 Reg0036280,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
@@ -369,13 +371,13 @@ Reg0038440,Kun slægtskab angivet,rest:R3
 Reg0038460,Embedsmand/Jura/Politik,klynge:K12
 Reg0038470,Embedsmand/Jura/Politik,klynge:K12
 Reg0038480,Kun slægtskab angivet,rest:R3
-Reg0038510,Erhverv,klynge:K13
+Reg0038510,Handel,klynge:K13
 Reg0038530,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0038540,Kun slægtskab angivet,rest:R3
 Reg0038550,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0038570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0038580,Embedsmand/Jura/Politik;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K12;K07
-Reg0038600,Lærd/Akademisk uddannelse uden for jura og teologi;Håndværk;Erhverv,klynge:K05;K14;K13
+Reg0038600,Lærd/Akademisk uddannelse uden for jura og teologi;Håndværk;Handel,klynge:K05;K14;K13
 Reg0038610,Kun slægtskab angivet,rest:R3
 Reg0038650,Embedsmand/Jura/Politik,klynge:K12
 Reg0038670,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -401,7 +403,7 @@ Reg0038990,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0039000,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0039010,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0039040,Kun slægtskab angivet,rest:R3
-Reg0039050,Erhverv,klynge:K13
+Reg0039050,Handel,klynge:K13
 Reg0039060,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0039090,Kun slægtskab angivet,rest:R3
 Reg0039120,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -410,18 +412,20 @@ Reg0039170,Kun slægtskab angivet,rest:R3
 Reg0039190,Kun slægtskab angivet,rest:R3
 Reg0039210,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0039280,Adel/Kongelig/Hof,adel:titel
+Reg0039290,Adel/Kongelig/Hof,adel:titel
 Reg0039310,Adel/Kongelig/Hof,adel:titel
 Reg0039320,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0039330,Adel/Kongelig/Hof,adel:titel
 Reg0039340,Adel/Kongelig/Hof,adel:titel
 Reg0039360,Kun slægtskab angivet,rest:R3
 Reg0039370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0039380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0039420,Erhverv,klynge:K13
+Reg0039420,Handel,klynge:K13
 Reg0039430,Kun slægtskab angivet,rest:R3
 Reg0039440,Kun slægtskab angivet,rest:R3
 Reg0039450,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K05
 Reg0039530,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0039560,Erhverv,klynge:K13
+Reg0039560,Handel,klynge:K13
 Reg0039570,Kun slægtskab angivet,rest:R3
 Reg0039580,Kun slægtskab angivet,rest:R3
 Reg0039630,Kun slægtskab angivet,rest:R3
@@ -439,7 +443,7 @@ Reg0039910,Embedsmand/Jura/Politik,klynge:K12
 Reg0039930,Håndværk,klynge:K14
 Reg0039940,Kun slægtskab angivet,rest:R3
 Reg0039960,Landbrug/Søfart;Gæstgiveri,klynge:K17;K15
-Reg0040020,Erhverv,klynge:K13
+Reg0040020,Handel,klynge:K13
 Reg0040070,Kun slægtskab angivet,rest:R3
 Reg0040080,Adel/Kongelig/Hof,klynge:K09
 Reg0040090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -478,8 +482,8 @@ Reg0040950,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0040990,Kun slægtskab angivet,rest:R3
 Reg0041010,Kun slægtskab angivet,rest:R3
 Reg0041020,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0041060,Erhverv,klynge:K13
-Reg0041070,Erhverv,klynge:K13
+Reg0041060,Handel,klynge:K13
+Reg0041070,Handel,klynge:K13
 Reg0041100,Kun slægtskab angivet,rest:R3
 Reg0041120,Kun slægtskab angivet,rest:R3
 Reg0041130,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K05
@@ -531,16 +535,17 @@ Reg0042090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0042110,Kun slægtskab angivet,rest:R3
 Reg0042120,Kun slægtskab angivet,rest:R3
 Reg0042140,Kun slægtskab angivet,rest:R3
-Reg0042170,Erhverv,klynge:K13
+Reg0042170,Handel,klynge:K13
 Reg0042180,Kun slægtskab angivet,rest:R3
 Reg0042190,Kun slægtskab angivet,rest:R3
 Reg0042220,Forfatter/Digter,klynge:K03
 Reg0042230,Kun slægtskab angivet,rest:R3
 Reg0042250,Kun slægtskab angivet,rest:R3
-Reg0042260,Erhverv,klynge:K13
+Reg0042260,Handel,klynge:K13
 Reg0042280,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0042300,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0042350,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0042370,Adel/Kongelig/Hof,adel:titel
 Reg0042390,Adel/Kongelig/Hof,adel:titel
 Reg0042420,Gejstlig,klynge:K08
 Reg0042430,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
@@ -558,11 +563,13 @@ Reg0042550,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0042560,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0042570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0042590,Kun slægtskab angivet,rest:R3
-Reg0042630,Erhverv,klynge:K13
+Reg0042630,Handel,klynge:K13
 Reg0042650,Embedsmand/Jura/Politik;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K12;K07
 Reg0042660,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0042670,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0042680,Kun slægtskab angivet,rest:R3
+Reg0042710,Adel/Kongelig/Hof,adel:titel
+Reg0042720,Adel/Kongelig/Hof,adel:titel
 Reg0042730,Adel/Kongelig/Hof,adel:titel
 Reg0042740,Adel/Kongelig/Hof,klynge:K09
 Reg0042760,Embedsmand/Jura/Politik,klynge:K12
@@ -615,7 +622,7 @@ Reg0043910,Gejstlig,klynge:K10
 Reg0043920,Kun slægtskab angivet,rest:R3
 Reg0043940,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0043950,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
-Reg0043960,Håndværk;Erhverv,klynge:K14;K13
+Reg0043960,Håndværk;Handel,klynge:K14;K13
 Reg0043980,Kun slægtskab angivet,rest:R3
 Reg0044000,Kun slægtskab angivet,rest:R3
 Reg0044010,Kun slægtskab angivet,rest:R3
@@ -652,7 +659,7 @@ Reg0044530,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0044550,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0044570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0044580,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0044590,Erhverv,klynge:K13
+Reg0044590,Handel,klynge:K13
 Reg0044600,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0044610,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0044640,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -666,7 +673,7 @@ Reg0044860,Embedsmand/Jura/Politik,klynge:K12
 Reg0044870,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0044880,Adel/Kongelig/Hof,klynge:K09
 Reg0044930,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0044990,Erhverv,klynge:K13
+Reg0044990,Handel,klynge:K13
 Reg0045000,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0045030,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0045140,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -695,6 +702,7 @@ Reg0045680,Kun slægtskab angivet,rest:R3
 Reg0045700,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0045730,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0045770,Lærd/Akademisk uddannelse uden for jura og teologi;Embedsmand/Jura/Politik;Landbrug/Søfart,klynge:K05;K12;K18;K07
+Reg0045780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0045830,Kun slægtskab angivet,rest:R3
 Reg0045850,Kun slægtskab angivet,rest:R3
 Reg0045860,Tjenestefolk/Lavtlønnede,klynge:K16
@@ -712,6 +720,7 @@ Reg0046090,Lærd/Akademisk uddannelse uden for jura og teologi;Embedsmand/Jura/P
 Reg0046130,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0046170,Kun slægtskab angivet,rest:R3
 Reg0046190,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0046230,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
 Reg0046240,Kun slægtskab angivet,rest:R3
 Reg0046260,Adel/Kongelig/Hof,adel:relation
 Reg0046290,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -727,6 +736,7 @@ Reg0046440,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0046450,Kun slægtskab angivet,rest:R3
 Reg0046470,Kun slægtskab angivet,rest:R3
 Reg0046510,Kun slægtskab angivet,rest:R3
+Reg0046550,Adel/Kongelig/Hof;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K09;K07
 Reg0046570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0046580,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0046590,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -738,10 +748,10 @@ Reg0046680,Adel/Kongelig/Hof,klynge:K09
 Reg0046700,Kun slægtskab angivet,rest:R3
 Reg0046710,Kun slægtskab angivet,rest:R3
 Reg0046720,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0046730,Erhverv,klynge:K13
+Reg0046730,Handel,klynge:K13
 Reg0046750,Gejstlig,klynge:K08
 Reg0046760,Tjenestefolk/Lavtlønnede,klynge:K16
-Reg0046790,Erhverv;Håndværk,klynge:K13;K14
+Reg0046790,Handel;Håndværk,klynge:K13;K14
 Reg0046800,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0046810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0046840,Kun slægtskab angivet,rest:R3
@@ -809,7 +819,7 @@ Reg0048190,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0048220,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0048230,Kun slægtskab angivet,rest:R3
 Reg0048240,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0048250,Erhverv,klynge:K13
+Reg0048250,Handel,klynge:K13
 Reg0048260,Kun slægtskab angivet,rest:R3
 Reg0048280,Kun slægtskab angivet,rest:R3
 Reg0048300,Kun slægtskab angivet,rest:R3
@@ -834,7 +844,7 @@ Reg0048640,Kun slægtskab angivet,rest:R3
 Reg0048650,Kun slægtskab angivet,rest:R3
 Reg0048660,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0048680,Kun slægtskab angivet,rest:R3
-Reg0048710,Erhverv,klynge:K13
+Reg0048710,Handel,klynge:K13
 Reg0048720,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0048730,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0048740,Kun slægtskab angivet,rest:R3
@@ -848,7 +858,7 @@ Reg0048830,Kun slægtskab angivet,rest:R3
 Reg0048850,Militær;Adel/Kongelig/Hof,klynge:K11;adel:titel
 Reg0048870,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0048890,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
-Reg0048920,Erhverv,klynge:K13
+Reg0048920,Handel,klynge:K13
 Reg0048960,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K06
 Reg0048990,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0049020,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
@@ -885,6 +895,7 @@ Reg0049650,Landbrug/Søfart,klynge:K18
 Reg0049680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0049710,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0049740,Kun slægtskab angivet,rest:R3
+Reg0049780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0049810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0049820,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0049840,Kun slægtskab angivet,rest:R3
@@ -892,6 +903,7 @@ Reg0049850,Kun slægtskab angivet,rest:R3
 Reg0049860,Musiker/Scenekunst,klynge:K01
 Reg0049890,Kun slægtskab angivet,rest:R3
 Reg0049900,Kun slægtskab angivet,rest:R3
+Reg0049950,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0050010,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0050030,Kun slægtskab angivet,rest:R3
 Reg0050040,Kun slægtskab angivet,rest:R3
@@ -949,6 +961,7 @@ Reg0051040,Adel/Kongelig/Hof,adel:titel
 Reg0051050,Adel/Kongelig/Hof,adel:titel
 Reg0051060,Gejstlig;Adel/Kongelig/Hof,klynge:K10;adel:titel
 Reg0051070,Adel/Kongelig/Hof,adel:titel
+Reg0051080,Adel/Kongelig/Hof,adel:titel
 Reg0051090,Adel/Kongelig/Hof,adel:titel
 Reg0051100,Adel/Kongelig/Hof,adel:titel
 Reg0051120,Adel/Kongelig/Hof,adel:titel
@@ -1053,7 +1066,7 @@ Reg0053310,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0053320,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0053370,Kun slægtskab angivet,rest:R3
 Reg0053380,Landbrug/Søfart,klynge:K17
-Reg0053390,Erhverv,klynge:K13
+Reg0053390,Handel,klynge:K13
 Reg0053410,Kun slægtskab angivet,rest:R3
 Reg0053420,Kun slægtskab angivet,rest:R3
 Reg0053430,Kun slægtskab angivet,rest:R3
@@ -1064,17 +1077,17 @@ Reg0053470,Kun slægtskab angivet,rest:R3
 Reg0053490,Kun slægtskab angivet,rest:R3
 Reg0053500,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0053510,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0053530,Erhverv,klynge:K13
+Reg0053530,Handel,klynge:K13
 Reg0053550,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0053560,Kun slægtskab angivet,rest:R3
 Reg0053570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0053580,Kun slægtskab angivet,rest:R3
 Reg0053590,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0053600,Erhverv,klynge:K13;K19
+Reg0053600,Handel,klynge:K13;K19
 Reg0053610,Kun slægtskab angivet,rest:R3
 Reg0053630,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0053650,Kun slægtskab angivet,rest:R3
-Reg0053670,Erhverv,klynge:K13
+Reg0053670,Handel,klynge:K13
 Reg0053690,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
 Reg0053700,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0053740,Kun slægtskab angivet,rest:R3
@@ -1089,13 +1102,13 @@ Reg0053900,Kun slægtskab angivet,rest:R3
 Reg0053980,Musiker/Scenekunst,klynge:K01
 Reg0054020,Kun slægtskab angivet,rest:R3
 Reg0054030,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0054050,Erhverv,klynge:K13
+Reg0054050,Handel,klynge:K13
 Reg0054070,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0054080,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0054090,Kun slægtskab angivet,rest:R3
 Reg0054180,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0054190,Håndværk,klynge:K14
-Reg0054250,Erhverv,klynge:K13
+Reg0054250,Handel,klynge:K13
 Reg0054280,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K06
 Reg0054330,Kun slægtskab angivet,rest:R3
 Reg0054340,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -1112,7 +1125,7 @@ Reg0054520,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0054540,Kunstner/Billedkunst,klynge:K02
 Reg0054550,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0054560,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
-Reg0054570,Erhverv,klynge:K13
+Reg0054570,Handel,klynge:K13
 Reg0054590,Kun slægtskab angivet,rest:R3
 Reg0054630,Kun slægtskab angivet,rest:R3
 Reg0054650,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -1124,7 +1137,7 @@ Reg0054790,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0054820,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0054830,Kun slægtskab angivet,rest:R3
 Reg0054850,Kun slægtskab angivet,rest:R3
-Reg0054860,Embedsmand/Jura/Politik;Erhverv,klynge:K12;K13
+Reg0054860,Embedsmand/Jura/Politik;Handel,klynge:K12;K13
 Reg0054880,Kun slægtskab angivet,rest:R3
 Reg0054890,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K05
 Reg0054960,Adel/Kongelig/Hof;Embedsmand/Jura/Politik,klynge:K09;K12
@@ -1133,7 +1146,7 @@ Reg0055000,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0055030,Forfatter/Digter;Kunstner/Billedkunst;Adel/Kongelig/Hof,klynge:K03;K02;adel:titel
 Reg0055050,Kun slægtskab angivet,rest:R3
 Reg0055110,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0055120,Erhverv,klynge:K13
+Reg0055120,Handel,klynge:K13
 Reg0055130,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0055150,Kun slægtskab angivet,rest:R3
 Reg0055160,Adel/Kongelig/Hof,klynge:K09
@@ -1151,7 +1164,7 @@ Reg0055360,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0055370,Musiker/Scenekunst,klynge:K01
 Reg0055380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0055400,Kun slægtskab angivet,rest:R3
-Reg0055410,Erhverv,klynge:K13
+Reg0055410,Handel,klynge:K13
 Reg0055440,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0055470,Kun slægtskab angivet,rest:R3
 Reg0055480,Kun slægtskab angivet,rest:R3
@@ -1167,7 +1180,7 @@ Reg0055670,Embedsmand/Jura/Politik,klynge:K12
 Reg0055680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0055690,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0055700,Musiker/Scenekunst,klynge:K01
-Reg0055740,Erhverv,klynge:K13
+Reg0055740,Handel,klynge:K13
 Reg0055780,Kun slægtskab angivet,rest:R3
 Reg0055790,Kun slægtskab angivet,rest:R3
 Reg0055800,Kun slægtskab angivet,rest:R3
@@ -1221,12 +1234,12 @@ Reg0056770,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
 Reg0056780,Kun slægtskab angivet,rest:R3
 Reg0056800,Kun slægtskab angivet,rest:R3
 Reg0056810,Kun slægtskab angivet,rest:R3
-Reg0056820,Erhverv,klynge:K13
+Reg0056820,Handel,klynge:K13
 Reg0056870,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0056890,Håndværk;Musiker/Scenekunst,klynge:K14;K01
 Reg0056900,Embedsmand/Jura/Politik,klynge:K12
-Reg0056920,Erhverv,klynge:K13
-Reg0056940,Erhverv,klynge:K13
+Reg0056920,Handel,klynge:K13
+Reg0056940,Handel,klynge:K13
 Reg0056950,Kun slægtskab angivet,rest:R3
 Reg0056960,Kun slægtskab angivet,rest:R3
 Reg0056980,Embedsmand/Jura/Politik,klynge:K12
@@ -1246,6 +1259,7 @@ Reg0057250,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0057260,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0057290,Gæstgiveri,klynge:K15
 Reg0057300,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0057310,Militær;Adel/Kongelig/Hof,klynge:K11;adel:titel
 Reg0057330,Kun slægtskab angivet,rest:R3
 Reg0057360,Kun slægtskab angivet,rest:R3
 Reg0057380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -1288,12 +1302,12 @@ Reg0058340,Kun slægtskab angivet,rest:R3
 Reg0058380,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
 Reg0058400,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0058420,Adel/Kongelig/Hof,adel:titel
-Reg0058430,Erhverv,klynge:K13
+Reg0058430,Handel,klynge:K13
 Reg0058440,Kun slægtskab angivet,rest:R3
 Reg0058450,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0058460,Kun slægtskab angivet,rest:R3
 Reg0058470,Kun slægtskab angivet,rest:R3
-Reg0058480,Erhverv,klynge:K13
+Reg0058480,Handel,klynge:K13
 Reg0058490,Kun slægtskab angivet,rest:R3
 Reg0058560,Adel/Kongelig/Hof,adel:titel
 Reg0058570,Adel/Kongelig/Hof,adel:titel
@@ -1325,7 +1339,7 @@ Reg0059120,Kun slægtskab angivet,rest:R3
 Reg0059140,Kun slægtskab angivet,rest:R3
 Reg0059150,Musiker/Scenekunst,klynge:K01
 Reg0059180,Kun slægtskab angivet,rest:R3
-Reg0059200,Erhverv,klynge:K13
+Reg0059200,Handel,klynge:K13
 Reg0059240,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0059270,Kun slægtskab angivet,rest:R3
 Reg0059330,Kunstner/Billedkunst,klynge:K02
@@ -1336,6 +1350,7 @@ Reg0059410,Tjenestefolk/Lavtlønnede,klynge:K16
 Reg0059450,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0059480,Adel/Kongelig/Hof,adel:titel
 Reg0059490,Adel/Kongelig/Hof,adel:titel
+Reg0059520,Adel/Kongelig/Hof,adel:titel
 Reg0059530,Adel/Kongelig/Hof,adel:titel
 Reg0059540,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0059550,Kun slægtskab angivet,rest:R3
@@ -1343,7 +1358,7 @@ Reg0059560,Adel/Kongelig/Hof,adel:titel
 Reg0059570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0059600,Kun slægtskab angivet,rest:R3
 Reg0059620,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0059630,Erhverv,klynge:K13
+Reg0059630,Handel,klynge:K13
 Reg0059680,Adel/Kongelig/Hof,adel:titel
 Reg0059710,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0059730,Kunstner/Billedkunst,klynge:K02
@@ -1369,7 +1384,7 @@ Reg0060310,Kun slægtskab angivet,rest:R3
 Reg0060330,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0060340,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
 Reg0060380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0060410,Erhverv,klynge:K13
+Reg0060410,Handel,klynge:K13
 Reg0060440,Kun slægtskab angivet,rest:R3
 Reg0060460,Kun slægtskab angivet,rest:R3
 Reg0060480,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -1387,13 +1402,13 @@ Reg0060650,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0060660,Kun slægtskab angivet,rest:R3
 Reg0060690,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0060720,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0060750,Erhverv,klynge:K13
+Reg0060750,Handel,klynge:K13
 Reg0060780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0060840,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0060850,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0060860,Kun slægtskab angivet,rest:R3
 Reg0060880,Kun slægtskab angivet,rest:R3
-Reg0060890,Erhverv,klynge:K13
+Reg0060890,Handel,klynge:K13
 Reg0060930,Musiker/Scenekunst,klynge:K01
 Reg0060940,Forfatter/Digter,klynge:K03
 Reg0060960,Kun slægtskab angivet,rest:R3
@@ -1436,7 +1451,7 @@ Reg0061900,Kun slægtskab angivet,rest:R3
 Reg0061930,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0061970,Kun slægtskab angivet,rest:R3
 Reg0061980,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0062050,Erhverv,klynge:K13
+Reg0062050,Handel,klynge:K13
 Reg0062060,Adel/Kongelig/Hof,adel:titel
 Reg0062090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0062130,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K06
@@ -1592,8 +1607,10 @@ Reg0065310,Kun slægtskab angivet,rest:R3
 Reg0065330,Kun slægtskab angivet,rest:R3
 Reg0065370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0065380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0065390,Adel/Kongelig/Hof,adel:titel
 Reg0065410,Adel/Kongelig/Hof,adel:titel
 Reg0065440,Adel/Kongelig/Hof,adel:titel
+Reg0065460,Adel/Kongelig/Hof,adel:titel
 Reg0065470,Adel/Kongelig/Hof,klynge:K09
 Reg0065490,Adel/Kongelig/Hof,adel:titel
 Reg0065510,Adel/Kongelig/Hof,adel:titel
@@ -1631,7 +1648,7 @@ Reg0066190,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0066200,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0066250,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0066290,Kunstner/Billedkunst,klynge:K02
-Reg0066300,Gæstgiveri;Erhverv,klynge:K15;K13
+Reg0066300,Gæstgiveri;Handel,klynge:K15;K13
 Reg0066310,Kun slægtskab angivet,rest:R3
 Reg0066340,Kun slægtskab angivet,rest:R3
 Reg0066360,Kun slægtskab angivet,rest:R3
@@ -1648,7 +1665,7 @@ Reg0066560,Kun slægtskab angivet,rest:R3
 Reg0066600,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0066640,Kun slægtskab angivet,rest:R3
 Reg0066700,Kun slægtskab angivet,rest:R3
-Reg0066710,Erhverv,klynge:K13
+Reg0066710,Handel,klynge:K13
 Reg0066730,Landbrug/Søfart,klynge:K18
 Reg0066740,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0066760,Adel/Kongelig/Hof,klynge:K09
@@ -1668,7 +1685,7 @@ Reg0066950,Embedsmand/Jura/Politik,klynge:K12
 Reg0066970,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0067000,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0067020,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0067050,Erhverv,klynge:K13
+Reg0067050,Handel,klynge:K13
 Reg0067060,Kun slægtskab angivet,rest:R3
 Reg0067070,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04;K07
 Reg0067080,Kun slægtskab angivet,rest:R3
@@ -1715,7 +1732,7 @@ Reg0067910,Kun slægtskab angivet,rest:R3
 Reg0067920,Adel/Kongelig/Hof,adel:titel
 Reg0067940,Kun slægtskab angivet,rest:R3
 Reg0068050,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0068060,Erhverv,klynge:K13
+Reg0068060,Handel,klynge:K13
 Reg0068070,Kun slægtskab angivet,rest:R3
 Reg0068100,Kun slægtskab angivet,rest:R3
 Reg0068110,Musiker/Scenekunst,klynge:K01
@@ -1756,7 +1773,7 @@ Reg0068870,Kun slægtskab angivet,rest:R3
 Reg0068930,Kun slægtskab angivet,rest:R3
 Reg0069010,Gejstlig,klynge:K08
 Reg0069040,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0069060,Erhverv,klynge:K13;K19
+Reg0069060,Handel,klynge:K13;K19
 Reg0069070,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0069080,Kun slægtskab angivet,rest:R3
 Reg0069090,Kun slægtskab angivet,rest:R3
@@ -1778,15 +1795,15 @@ Reg0069350,Landbrug/Søfart,klynge:K17
 Reg0069360,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0069370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0069380,Kun slægtskab angivet,rest:R3
-Reg0069390,Erhverv,klynge:K13
-Reg0069400,Erhverv,klynge:K13
+Reg0069390,Handel,klynge:K13
+Reg0069400,Handel,klynge:K13
 Reg0069410,Kun slægtskab angivet,rest:R3
 Reg0069430,Kun slægtskab angivet,rest:R3
 Reg0069440,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0069450,Kun slægtskab angivet,rest:R3
-Reg0069470,Erhverv,klynge:K13
-Reg0069510,Erhverv,klynge:K13
-Reg0069530,Kunstner/Billedkunst;Erhverv,klynge:K02;K13
+Reg0069470,Handel,klynge:K13
+Reg0069510,Handel,klynge:K13
+Reg0069530,Kunstner/Billedkunst;Handel,klynge:K02;K13
 Reg0069550,Kun slægtskab angivet,rest:R3
 Reg0069560,Håndværk,klynge:K14
 Reg0069600,Kun slægtskab angivet,rest:R3
@@ -1847,7 +1864,7 @@ Reg0070560,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0070580,Kunstner/Billedkunst,klynge:K02
 Reg0070680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0070690,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0070700,Erhverv;Musiker/Scenekunst,klynge:K13;K01
+Reg0070700,Handel;Musiker/Scenekunst,klynge:K13;K01
 Reg0070710,Kun slægtskab angivet,rest:R3
 Reg0070740,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0070760,Kun slægtskab angivet,rest:R3
@@ -1874,7 +1891,7 @@ Reg0071200,Kun slægtskab angivet,rest:R3
 Reg0071210,Kun slægtskab angivet,rest:R3
 Reg0071240,Kun slægtskab angivet,rest:R3
 Reg0071250,Håndværk,klynge:K14
-Reg0071260,Erhverv,klynge:K13
+Reg0071260,Handel,klynge:K13
 Reg0071320,Kun slægtskab angivet,rest:R3
 Reg0071360,Adel/Kongelig/Hof,adel:titel
 Reg0071400,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -1929,12 +1946,13 @@ Reg0072320,Adel/Kongelig/Hof,adel:titel
 Reg0072330,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0072350,Kun slægtskab angivet,rest:R3
 Reg0072360,Kun slægtskab angivet,rest:R3
+Reg0072370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0072400,Adel/Kongelig/Hof,adel:titel
 Reg0072410,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0072420,Adel/Kongelig/Hof,adel:titel
 Reg0072470,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0072480,Kun slægtskab angivet,rest:R3
-Reg0072550,Erhverv,klynge:K13
+Reg0072550,Handel,klynge:K13
 Reg0072570,Landbrug/Søfart;Embedsmand/Jura/Politik,klynge:K17;K12
 Reg0072580,Kun slægtskab angivet,rest:R3
 Reg0072600,Musiker/Scenekunst,klynge:K01
@@ -1945,7 +1963,7 @@ Reg0072670,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0072690,Embedsmand/Jura/Politik,klynge:K12
 Reg0072740,Kun slægtskab angivet,rest:R3
 Reg0072750,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
-Reg0072760,Erhverv,klynge:K13
+Reg0072760,Handel,klynge:K13
 Reg0072770,Musiker/Scenekunst,klynge:K01
 Reg0072780,Kun slægtskab angivet,rest:R3
 Reg0072790,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -1971,7 +1989,7 @@ Reg0073140,Kunstner/Billedkunst,klynge:K02
 Reg0073160,Kun slægtskab angivet,rest:R3
 Reg0073190,Kun slægtskab angivet,rest:R3
 Reg0073210,Kun slægtskab angivet,rest:R3
-Reg0073220,Erhverv,klynge:K13
+Reg0073220,Handel,klynge:K13
 Reg0073290,Kun slægtskab angivet,rest:R3
 Reg0073300,Kun slægtskab angivet,rest:R3
 Reg0073320,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2006,7 +2024,7 @@ Reg0073820,Adel/Kongelig/Hof,adel:relation
 Reg0073840,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0073860,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0073880,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0073890,Erhverv,klynge:K13
+Reg0073890,Handel,klynge:K13
 Reg0073900,Kun slægtskab angivet,rest:R3
 Reg0073930,Håndværk,klynge:K14
 Reg0073950,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2047,7 +2065,7 @@ Reg0074810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0074850,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0074870,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0074880,Lærd/Akademisk uddannelse uden for jura og teologi;Militær,klynge:K06;K11
-Reg0074890,Erhverv,klynge:K13
+Reg0074890,Handel,klynge:K13
 Reg0074930,Adel/Kongelig/Hof,klynge:K09
 Reg0074940,Gejstlig;Embedsmand/Jura/Politik,klynge:K08;K12
 Reg0074950,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
@@ -2072,11 +2090,11 @@ Reg0075300,Kun slægtskab angivet,rest:R3
 Reg0075310,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0075320,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0075330,Håndværk,klynge:K14
-Reg0075340,Erhverv,klynge:K13
+Reg0075340,Handel,klynge:K13
 Reg0075350,Kun slægtskab angivet,rest:R3
 Reg0075410,Kun slægtskab angivet,rest:R3
 Reg0075430,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0075470,Erhverv;Embedsmand/Jura/Politik,klynge:K13;K12
+Reg0075470,Handel;Embedsmand/Jura/Politik,klynge:K13;K12
 Reg0075490,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0075500,Tjenestefolk/Lavtlønnede,klynge:K16
 Reg0075510,Tjenestefolk/Lavtlønnede,klynge:K16
@@ -2105,7 +2123,7 @@ Reg0075940,Forfatter/Digter,klynge:K03
 Reg0075950,Kun slægtskab angivet,rest:R3
 Reg0075960,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0076000,Kun slægtskab angivet,rest:R3
-Reg0076030,Erhverv,klynge:K13
+Reg0076030,Handel,klynge:K13
 Reg0076050,Kun slægtskab angivet,rest:R3
 Reg0076060,Kun slægtskab angivet,rest:R3
 Reg0076090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2152,20 +2170,20 @@ Reg0076840,Adel/Kongelig/Hof,adel:titel
 Reg0076850,Adel/Kongelig/Hof,adel:titel
 Reg0076860,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0076900,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0076910,Erhverv,klynge:K13
+Reg0076910,Handel,klynge:K13
 Reg0076920,Kun slægtskab angivet,rest:R3
 Reg0076930,Kun slægtskab angivet,rest:R3
 Reg0076940,Kun slægtskab angivet,rest:R3
 Reg0076960,Kun slægtskab angivet,rest:R3
 Reg0076980,Kun slægtskab angivet,rest:R3
-Reg0076990,Erhverv,klynge:K13
-Reg0077000,Erhverv;Forfatter/Digter,klynge:K13;K03
+Reg0076990,Handel,klynge:K13
+Reg0077000,Handel;Forfatter/Digter,klynge:K13;K03
 Reg0077030,Håndværk,klynge:K14
 Reg0077040,Kun slægtskab angivet,rest:R3
 Reg0077060,Kun slægtskab angivet,rest:R3
 Reg0077070,Kun slægtskab angivet,rest:R3
 Reg0077080,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0077090,Håndværk;Erhverv,klynge:K14;K13
+Reg0077090,Håndværk;Handel,klynge:K14;K13
 Reg0077100,Håndværk,klynge:K14
 Reg0077140,Kun slægtskab angivet,rest:R3
 Reg0077180,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2180,7 +2198,7 @@ Reg0077270,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,kl
 Reg0077280,Kun slægtskab angivet,rest:R3
 Reg0077290,Tjenestefolk/Lavtlønnede,klynge:K16
 Reg0077320,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0077330,Erhverv,klynge:K13
+Reg0077330,Handel,klynge:K13
 Reg0077340,Kun slægtskab angivet,rest:R3
 Reg0077380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0077390,Tjenestefolk/Lavtlønnede,klynge:K16
@@ -2271,9 +2289,10 @@ Reg0079280,Adel/Kongelig/Hof,adel:titel
 Reg0079290,Adel/Kongelig/Hof,adel:titel
 Reg0079310,Adel/Kongelig/Hof,adel:titel
 Reg0079340,Adel/Kongelig/Hof,adel:titel
+Reg0079360,Adel/Kongelig/Hof,adel:titel
 Reg0079370,Adel/Kongelig/Hof,adel:titel
 Reg0079400,Adel/Kongelig/Hof,adel:titel
-Reg0079410,Erhverv,klynge:K13
+Reg0079410,Handel,klynge:K13
 Reg0079440,Kun slægtskab angivet,rest:R3
 Reg0079460,Kun slægtskab angivet,rest:R3
 Reg0079480,Kun slægtskab angivet,rest:R3
@@ -2301,7 +2320,7 @@ Reg0080010,Kun slægtskab angivet,rest:R3
 Reg0080030,Kun slægtskab angivet,rest:R3
 Reg0080050,Forfatter/Digter,klynge:K03
 Reg0080070,Kun slægtskab angivet,rest:R3
-Reg0080080,Erhverv,klynge:K13
+Reg0080080,Handel,klynge:K13
 Reg0080090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0080100,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0080110,Kun slægtskab angivet,rest:R3
@@ -2313,7 +2332,7 @@ Reg0080280,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0080300,Embedsmand/Jura/Politik,klynge:K12
 Reg0080310,Kun slægtskab angivet,rest:R3
 Reg0080350,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0080380,Erhverv,klynge:K13
+Reg0080380,Handel,klynge:K13
 Reg0080390,Kun slægtskab angivet,rest:R3
 Reg0080400,Kun slægtskab angivet,rest:R3
 Reg0080430,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
@@ -2339,7 +2358,7 @@ Reg0080870,Embedsmand/Jura/Politik,klynge:K12
 Reg0080890,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0080900,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0080930,Musiker/Scenekunst,klynge:K01
-Reg0080940,Erhverv;Embedsmand/Jura/Politik,klynge:K13;K12
+Reg0080940,Handel;Embedsmand/Jura/Politik,klynge:K13;K12
 Reg0080950,Håndværk,klynge:K14
 Reg0080960,Kun slægtskab angivet,rest:R3
 Reg0080970,Landbrug/Søfart,klynge:K18
@@ -2350,7 +2369,7 @@ Reg0081050,Landbrug/Søfart,klynge:K18
 Reg0081060,Kun slægtskab angivet,rest:R3
 Reg0081070,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0081080,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
-Reg0081110,Erhverv,klynge:K13
+Reg0081110,Handel,klynge:K13
 Reg0081120,Kun slægtskab angivet,rest:R3
 Reg0081160,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
 Reg0081170,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2369,7 +2388,7 @@ Reg0081420,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0081430,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0081470,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0081480,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0081520,Erhverv,klynge:K13
+Reg0081520,Handel,klynge:K13
 Reg0081550,Embedsmand/Jura/Politik,klynge:K12
 Reg0081560,Kun slægtskab angivet,rest:R3
 Reg0081600,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
@@ -2380,7 +2399,7 @@ Reg0081650,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0081680,Kun slægtskab angivet,rest:R3
 Reg0081730,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0081740,Forfatter/Digter,klynge:K03
-Reg0081770,Erhverv,klynge:K13
+Reg0081770,Handel,klynge:K13
 Reg0081830,Adel/Kongelig/Hof,adel:titel
 Reg0081840,Adel/Kongelig/Hof,adel:titel
 Reg0081850,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2405,6 +2424,7 @@ Reg0082200,Kun slægtskab angivet,rest:R3
 Reg0082210,Kun slægtskab angivet,rest:R3
 Reg0082230,Håndværk,klynge:K14
 Reg0082310,Kun slægtskab angivet,rest:R3
+Reg0082320,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
 Reg0082340,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0082370,Musiker/Scenekunst,klynge:K01
 Reg0082380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2451,7 +2471,7 @@ Reg0083040,Kun slægtskab angivet,rest:R3
 Reg0083050,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0083120,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0083130,Kun slægtskab angivet,rest:R3
-Reg0083140,Håndværk;Erhverv,klynge:K14;K13
+Reg0083140,Håndværk;Handel,klynge:K14;K13
 Reg0083190,Kun slægtskab angivet,rest:R3
 Reg0083210,Kunstner/Billedkunst,klynge:K02
 Reg0083220,Kun slægtskab angivet,rest:R3
@@ -2505,10 +2525,10 @@ Reg0084270,Kun slægtskab angivet,rest:R3
 Reg0084290,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0084350,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0084370,Adel/Kongelig/Hof,klynge:K09
-Reg0084410,Erhverv;Adel/Kongelig/Hof,klynge:K13;adel:titel
+Reg0084410,Handel;Adel/Kongelig/Hof,klynge:K13;adel:titel
 Reg0084420,Musiker/Scenekunst,klynge:K01
 Reg0084460,Kun slægtskab angivet,rest:R3
-Reg0084480,Erhverv,klynge:K13
+Reg0084480,Handel,klynge:K13
 Reg0084510,Kun slægtskab angivet,rest:R3
 Reg0084520,Kun slægtskab angivet,rest:R3
 Reg0084530,Kun slægtskab angivet,rest:R3
@@ -2532,6 +2552,7 @@ Reg0084990,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0085080,Kun slægtskab angivet,rest:R3
 Reg0085090,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K06
 Reg0085100,Kun slægtskab angivet,rest:R3
+Reg0085110,Embedsmand/Jura/Politik;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K12;K07
 Reg0085160,Kun slægtskab angivet,rest:R3
 Reg0085180,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0085200,Kun slægtskab angivet,rest:R3
@@ -2555,7 +2576,7 @@ Reg0085560,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0085570,Kun slægtskab angivet,rest:R3
 Reg0085590,Militær;Adel/Kongelig/Hof,klynge:K11;adel:titel
 Reg0085610,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0085620,Erhverv,klynge:K13
+Reg0085620,Handel,klynge:K13
 Reg0085630,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0085650,Gejstlig,klynge:K08
 Reg0085660,Kun slægtskab angivet,rest:R3
@@ -2565,7 +2586,7 @@ Reg0085720,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0085730,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0085790,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0085810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0085840,Erhverv,klynge:K13
+Reg0085840,Handel,klynge:K13
 Reg0085930,Kun slægtskab angivet,rest:R3
 Reg0085960,Militær;Adel/Kongelig/Hof,klynge:K11;adel:titel
 Reg0085970,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2573,7 +2594,7 @@ Reg0085990,Kun slægtskab angivet,rest:R3
 Reg0086010,Tjenestefolk/Lavtlønnede,klynge:K16
 Reg0086020,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0086030,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0086040,Erhverv,klynge:K13
+Reg0086040,Handel,klynge:K13
 Reg0086070,Kun slægtskab angivet,rest:R3
 Reg0086080,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K19
 Reg0086090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2588,7 +2609,7 @@ Reg0086250,Håndværk,klynge:K14
 Reg0086260,Kun slægtskab angivet,rest:R3
 Reg0086280,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0086310,Landbrug/Søfart;Embedsmand/Jura/Politik,klynge:K18;K12
-Reg0086410,Erhverv,klynge:K13
+Reg0086410,Handel,klynge:K13
 Reg0086430,Håndværk,klynge:K14
 Reg0086460,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0086480,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2598,7 +2619,7 @@ Reg0086560,Militær,klynge:K11
 Reg0086570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0086620,Kun slægtskab angivet,rest:R3
 Reg0086640,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
-Reg0086650,Erhverv,klynge:K13
+Reg0086650,Handel,klynge:K13
 Reg0086660,Tjenestefolk/Lavtlønnede,klynge:K16
 Reg0086670,Gejstlig,klynge:K08
 Reg0086680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2632,7 +2653,7 @@ Reg0087240,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0087260,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0087270,Embedsmand/Jura/Politik;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K12;K07
 Reg0087280,Adel/Kongelig/Hof,adel:titel
-Reg0087310,Erhverv,klynge:K13
+Reg0087310,Handel,klynge:K13
 Reg0087320,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0087340,Kun slægtskab angivet,rest:R3
 Reg0087350,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2654,7 +2675,7 @@ Reg0087680,Kun slægtskab angivet,rest:R3
 Reg0087710,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0087730,Kunstner/Billedkunst,klynge:K02
 Reg0087740,Musiker/Scenekunst,klynge:K01
-Reg0087760,Erhverv,klynge:K13
+Reg0087760,Handel,klynge:K13
 Reg0087770,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0087780,Kun slægtskab angivet,rest:R3
 Reg0087800,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2686,8 +2707,8 @@ Reg0088300,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0088330,Musiker/Scenekunst;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K01;K07
 Reg0088350,Kun slægtskab angivet,rest:R3
 Reg0088360,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
-Reg0088390,Erhverv,klynge:K13
-Reg0088430,Erhverv,klynge:K13
+Reg0088390,Handel,klynge:K13
+Reg0088430,Handel,klynge:K13
 Reg0088460,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0088480,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0088490,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2704,7 +2725,7 @@ Reg0088660,Adel/Kongelig/Hof,adel:titel
 Reg0088670,Kun slægtskab angivet,rest:R3
 Reg0088680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0088710,Kun slægtskab angivet,rest:R3
-Reg0088720,Erhverv,klynge:K13
+Reg0088720,Handel,klynge:K13
 Reg0088750,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0088780,Kun slægtskab angivet,rest:R3
 Reg0088790,Kun slægtskab angivet,rest:R3
@@ -2712,7 +2733,7 @@ Reg0088830,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0088850,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0088890,Kun slægtskab angivet,rest:R3
 Reg0088910,Kun slægtskab angivet,rest:R3
-Reg0088930,Erhverv,klynge:K13
+Reg0088930,Handel,klynge:K13
 Reg0088940,Kun slægtskab angivet,rest:R3
 Reg0088950,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0088970,Kun slægtskab angivet,rest:R3
@@ -2774,7 +2795,7 @@ Reg0090260,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0090270,Kun slægtskab angivet,rest:R3
 Reg0090280,Kun slægtskab angivet,rest:R3
 Reg0090290,Håndværk,klynge:K14
-Reg0090310,Erhverv,klynge:K13
+Reg0090310,Handel,klynge:K13
 Reg0090340,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
 Reg0090350,Gejstlig,klynge:K08
 Reg0090370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2809,6 +2830,7 @@ Reg0090830,Kun slægtskab angivet,rest:R3
 Reg0090840,Embedsmand/Jura/Politik;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K12;K07
 Reg0090900,Kun slægtskab angivet,rest:R3
 Reg0090910,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0090930,Adel/Kongelig/Hof,adel:titel
 Reg0090950,Gejstlig,klynge:K08
 Reg0091000,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0091010,Kun slægtskab angivet,rest:R3
@@ -2844,12 +2866,12 @@ Reg0091640,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0091650,Kun slægtskab angivet,rest:R3
 Reg0091700,Militær,klynge:K11
 Reg0091720,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0091730,Erhverv,klynge:K13
-Reg0091740,Erhverv,klynge:K13
+Reg0091730,Handel,klynge:K13
+Reg0091740,Handel,klynge:K13
 Reg0091760,Adel/Kongelig/Hof,adel:titel
 Reg0091770,Kun slægtskab angivet,rest:R3
 Reg0091780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0091810,Erhverv,klynge:K13
+Reg0091810,Handel,klynge:K13
 Reg0091820,Kun slægtskab angivet,rest:R3
 Reg0091870,Embedsmand/Jura/Politik,klynge:K12
 Reg0091880,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2867,17 +2889,18 @@ Reg0092080,Adel/Kongelig/Hof,klynge:K09
 Reg0092090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0092110,Embedsmand/Jura/Politik,klynge:K12
 Reg0092120,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
-Reg0092140,Erhverv,klynge:K13
+Reg0092140,Handel,klynge:K13
 Reg0092190,Kun slægtskab angivet,rest:R3
 Reg0092220,Forfatter/Digter;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K03;K06
 Reg0092230,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0092260,Håndværk;Erhverv,klynge:K14;K13
+Reg0092260,Håndværk;Handel,klynge:K14;K13
 Reg0092280,Kun slægtskab angivet,rest:R3
 Reg0092290,Kun slægtskab angivet,rest:R3
 Reg0092340,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0092350,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0092360,Adel/Kongelig/Hof,adel:titel
 Reg0092370,Adel/Kongelig/Hof,adel:titel
+Reg0092420,Embedsmand/Jura/Politik;Adel/Kongelig/Hof,klynge:K12;adel:titel
 Reg0092430,Adel/Kongelig/Hof,adel:titel
 Reg0092440,Adel/Kongelig/Hof,adel:titel
 Reg0092450,Adel/Kongelig/Hof,adel:titel
@@ -2887,8 +2910,10 @@ Reg0092520,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0092530,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0092540,Kun slægtskab angivet,rest:R3
 Reg0092580,Lærd/Akademisk uddannelse uden for jura og teologi;Adel/Kongelig/Hof,klynge:K07;adel:titel
+Reg0092590,Adel/Kongelig/Hof,adel:titel
 Reg0092650,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0092670,Adel/Kongelig/Hof,adel:titel
+Reg0092680,Adel/Kongelig/Hof,adel:titel
 Reg0092740,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0092750,Adel/Kongelig/Hof,adel:titel
 Reg0092760,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -2898,6 +2923,8 @@ Reg0092820,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0092830,Adel/Kongelig/Hof,adel:titel
 Reg0092840,Adel/Kongelig/Hof,adel:titel
 Reg0092850,Kun slægtskab angivet,rest:R3
+Reg0092870,Adel/Kongelig/Hof,adel:titel
+Reg0092880,Embedsmand/Jura/Politik;Adel/Kongelig/Hof,klynge:K12;adel:titel
 Reg0092890,Kun slægtskab angivet,rest:R3
 Reg0092910,Adel/Kongelig/Hof,adel:titel
 Reg0092920,Adel/Kongelig/Hof,adel:titel
@@ -2914,7 +2941,7 @@ Reg0093100,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0093110,Adel/Kongelig/Hof,adel:titel
 Reg0093120,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0093130,Adel/Kongelig/Hof,adel:titel
-Reg0093150,Erhverv,klynge:K13
+Reg0093150,Handel,klynge:K13
 Reg0093180,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0093200,Kun slægtskab angivet,rest:R3
 Reg0093260,Kun slægtskab angivet,rest:R3
@@ -2995,8 +3022,8 @@ Reg0095120,Tjenestefolk/Lavtlønnede;Gæstgiveri,klynge:K16;K15
 Reg0095130,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0095150,Kunstner/Billedkunst,klynge:K02
 Reg0095190,Kun slægtskab angivet,rest:R3
-Reg0095220,Erhverv,klynge:K13
-Reg0095240,Erhverv,klynge:K13
+Reg0095220,Handel,klynge:K13
+Reg0095240,Handel,klynge:K13
 Reg0095250,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K04
 Reg0095340,Adel/Kongelig/Hof,adel:titel
 Reg0095380,Landbrug/Søfart,klynge:K17
@@ -3024,6 +3051,7 @@ Reg0095760,Kun slægtskab angivet,rest:R3
 Reg0095770,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0095780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0095810,Kun slægtskab angivet,rest:R3
+Reg0095820,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K07
 Reg0095840,Kun slægtskab angivet,rest:R3
 Reg0095850,Kun slægtskab angivet,rest:R3
 Reg0095860,Musiker/Scenekunst,klynge:K01
@@ -3055,6 +3083,7 @@ Reg0096680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0096700,Musiker/Scenekunst,klynge:K01
 Reg0096710,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0096740,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0096770,Adel/Kongelig/Hof,adel:titel
 Reg0096780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0096790,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0096820,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3086,6 +3115,7 @@ Reg0097330,Kun slægtskab angivet,rest:R3
 Reg0097340,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0097380,Adel/Kongelig/Hof,adel:titel
 Reg0097420,Adel/Kongelig/Hof,adel:titel
+Reg0097430,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0097440,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0097450,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0097460,Adel/Kongelig/Hof,klynge:K09
@@ -3157,13 +3187,13 @@ Reg0098640,Gejstlig,klynge:K10
 Reg0098680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0098730,Militær;Adel/Kongelig/Hof,klynge:K11;adel:titel
 Reg0098770,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0098780,Erhverv,klynge:K13
+Reg0098780,Handel,klynge:K13
 Reg0098790,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0098810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0098820,Adel/Kongelig/Hof,klynge:K09
 Reg0098980,Adel/Kongelig/Hof,adel:titel
 Reg0098990,Adel/Kongelig/Hof,adel:titel
-Reg0099040,Erhverv,klynge:K13
+Reg0099040,Handel,klynge:K13
 Reg0099050,Adel/Kongelig/Hof,adel:titel
 Reg0099080,Kun slægtskab angivet,rest:R3
 Reg0099090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3213,7 +3243,7 @@ Reg0099890,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0099900,Adel/Kongelig/Hof,adel:titel
 Reg0099940,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0099960,Forfatter/Digter,klynge:K03
-Reg0099970,Erhverv,klynge:K13
+Reg0099970,Handel,klynge:K13
 Reg0099980,Kun slægtskab angivet,rest:R3
 Reg0099990,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0100010,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3226,6 +3256,7 @@ Reg0100090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0100100,Tjenestefolk/Lavtlønnede,klynge:K16
 Reg0100110,Gejstlig,klynge:K08
 Reg0100120,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
+Reg0100150,Adel/Kongelig/Hof,adel:titel
 Reg0100160,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0100170,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0100190,Kun slægtskab angivet,rest:R3
@@ -3404,9 +3435,11 @@ Reg0103870,Kun slægtskab angivet,rest:R3
 Reg0103900,Kunstner/Billedkunst;Adel/Kongelig/Hof,klynge:K02;adel:titel
 Reg0103950,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0103970,Kun slægtskab angivet,rest:R3
+Reg0103980,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0104000,Kun slægtskab angivet,rest:R3
 Reg0104010,Kun slægtskab angivet,rest:R3
 Reg0104020,Kun slægtskab angivet,rest:R3
+Reg0104090,Embedsmand/Jura/Politik,klynge:K12
 Reg0104120,Adel/Kongelig/Hof,adel:titel
 Reg0104130,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0104150,Adel/Kongelig/Hof,adel:titel
@@ -3434,6 +3467,7 @@ Reg0104720,Kun slægtskab angivet,rest:R3
 Reg0104730,Kun slægtskab angivet,rest:R3
 Reg0104760,Kun slægtskab angivet,rest:R3
 Reg0104770,Kun slægtskab angivet,rest:R3
+Reg0104780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0104810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0104830,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0104840,Kun slægtskab angivet,rest:R3
@@ -3441,7 +3475,7 @@ Reg0104850,Embedsmand/Jura/Politik,klynge:K12
 Reg0104860,Kunstner/Billedkunst,klynge:K02
 Reg0104880,Forfatter/Digter;Adel/Kongelig/Hof,klynge:K03;adel:titel
 Reg0104900,Adel/Kongelig/Hof,adel:titel
-Reg0104910,Erhverv;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K13;K07
+Reg0104910,Handel;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K13;K07
 Reg0104920,Kun slægtskab angivet,rest:R3
 Reg0104930,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0104950,Kun slægtskab angivet,rest:R3
@@ -3477,6 +3511,7 @@ Reg0105530,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0105550,Adel/Kongelig/Hof,adel:titel
 Reg0105570,Adel/Kongelig/Hof,adel:titel
 Reg0105590,Adel/Kongelig/Hof,adel:titel
+Reg0105610,Adel/Kongelig/Hof,adel:titel
 Reg0105630,Adel/Kongelig/Hof,adel:titel
 Reg0105650,Adel/Kongelig/Hof,adel:titel
 Reg0105680,Adel/Kongelig/Hof,adel:titel
@@ -3520,7 +3555,7 @@ Reg0106480,Kun slægtskab angivet,rest:R3
 Reg0106510,Adel/Kongelig/Hof,adel:titel
 Reg0106530,Adel/Kongelig/Hof,adel:titel
 Reg0106540,Adel/Kongelig/Hof,adel:titel
-Reg0106550,Erhverv,klynge:K13
+Reg0106550,Handel,klynge:K13
 Reg0106560,Kun slægtskab angivet,rest:R3
 Reg0106580,Adel/Kongelig/Hof,adel:titel
 Reg0106600,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
@@ -3535,7 +3570,7 @@ Reg0106840,Kun slægtskab angivet,rest:R3
 Reg0106860,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0106870,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K19
 Reg0106940,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0106960,Erhverv;Adel/Kongelig/Hof,klynge:K13;adel:titel
+Reg0106960,Handel;Adel/Kongelig/Hof,klynge:K13;adel:titel
 Reg0106980,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0107020,Kun slægtskab angivet,rest:R3
 Reg0107050,Kun slægtskab angivet,rest:R3
@@ -3547,6 +3582,7 @@ Reg0107330,Embedsmand/Jura/Politik;Adel/Kongelig/Hof,klynge:K12;adel:titel
 Reg0107340,Embedsmand/Jura/Politik;Adel/Kongelig/Hof,klynge:K12;adel:titel
 Reg0107370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0107380,Adel/Kongelig/Hof,adel:titel
+Reg0107390,Lærd/Akademisk uddannelse uden for jura og teologi;Adel/Kongelig/Hof,klynge:K07;adel:titel
 Reg0107400,Adel/Kongelig/Hof,klynge:K09
 Reg0107410,Adel/Kongelig/Hof,adel:titel
 Reg0107420,Landbrug/Søfart,klynge:K17
@@ -3564,15 +3600,15 @@ Reg0107680,Kun slægtskab angivet,rest:R3
 Reg0107690,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0107760,Kun slægtskab angivet,rest:R3
 Reg0107800,Kun slægtskab angivet,rest:R3
-Reg0107840,Erhverv,klynge:K13
+Reg0107840,Handel,klynge:K13
 Reg0107850,Kun slægtskab angivet,rest:R3
 Reg0107860,Kun slægtskab angivet,rest:R3
 Reg0107890,Adel/Kongelig/Hof,adel:titel
 Reg0107910,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0107940,Kun slægtskab angivet,rest:R3
 Reg0107950,Kun slægtskab angivet,rest:R3
-Reg0107960,Erhverv,klynge:K13
-Reg0107970,Erhverv,klynge:K13
+Reg0107960,Handel,klynge:K13
+Reg0107970,Handel,klynge:K13
 Reg0107980,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0108010,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0108030,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3596,7 +3632,7 @@ Reg0108500,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0108510,Gæstgiveri,klynge:K15
 Reg0108530,Musiker/Scenekunst,klynge:K01
 Reg0108580,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0108590,Erhverv;Embedsmand/Jura/Politik,klynge:K13;K12
+Reg0108590,Handel;Embedsmand/Jura/Politik,klynge:K13;K12
 Reg0108630,Musiker/Scenekunst,klynge:K01
 Reg0108710,Kun slægtskab angivet,rest:R3
 Reg0108730,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3661,7 +3697,7 @@ Reg0109940,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0109970,Håndværk,klynge:K14
 Reg0109980,Kun slægtskab angivet,rest:R3
 Reg0109990,Kun slægtskab angivet,rest:R3
-Reg0110010,Erhverv,klynge:K13
+Reg0110010,Handel,klynge:K13
 Reg0110020,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0110030,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0110040,Kun slægtskab angivet,rest:R3
@@ -3721,7 +3757,7 @@ Reg0111260,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0111300,Kun slægtskab angivet,rest:R3
 Reg0111330,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0111340,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0111360,Erhverv,klynge:K13
+Reg0111360,Handel,klynge:K13
 Reg0111370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0111410,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0111420,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3738,7 +3774,7 @@ Reg0111630,Kun slægtskab angivet,rest:R3
 Reg0111640,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0111660,Gejstlig,klynge:K10
 Reg0111700,Kun slægtskab angivet,rest:R3
-Reg0111720,Erhverv,klynge:K13
+Reg0111720,Handel,klynge:K13
 Reg0111730,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0111750,Kun slægtskab angivet,rest:R3
 Reg0111770,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3766,14 +3802,14 @@ Reg0112100,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0112110,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0112150,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0112170,Kun slægtskab angivet,rest:R3
-Reg0112180,Erhverv,klynge:K13
+Reg0112180,Handel,klynge:K13
 Reg0112200,Kun slægtskab angivet,rest:R3
 Reg0112230,Embedsmand/Jura/Politik,klynge:K12
 Reg0112260,Kun slægtskab angivet,rest:R3
 Reg0112300,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0112320,Kun slægtskab angivet,rest:R3
 Reg0112350,Kun slægtskab angivet,rest:R3
-Reg0112370,Erhverv,klynge:K13
+Reg0112370,Handel,klynge:K13
 Reg0112390,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0112430,Kun slægtskab angivet,rest:R3
 Reg0112440,Kun slægtskab angivet,rest:R3
@@ -3795,7 +3831,7 @@ Reg0112670,Kun slægtskab angivet,rest:R3
 Reg0112690,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0112700,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0112730,Kun slægtskab angivet,rest:R3
-Reg0112830,Håndværk;Erhverv,klynge:K14;K13
+Reg0112830,Håndværk;Handel,klynge:K14;K13
 Reg0112860,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0112910,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0112940,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K06
@@ -3810,10 +3846,10 @@ Reg0113160,Kun slægtskab angivet,rest:R3
 Reg0113180,Kun slægtskab angivet,rest:R3
 Reg0113220,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0113230,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0113250,Erhverv,klynge:K13
+Reg0113250,Handel,klynge:K13
 Reg0113260,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0113290,Kun slægtskab angivet,rest:R3
-Reg0113310,Erhverv,klynge:K13;K19
+Reg0113310,Handel,klynge:K13;K19
 Reg0113320,Kun slægtskab angivet,rest:R3
 Reg0113340,Kun slægtskab angivet,rest:R3
 Reg0113360,Kun slægtskab angivet,rest:R3
@@ -3889,6 +3925,7 @@ Reg0114960,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0114970,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0114980,Musiker/Scenekunst,klynge:K01
 Reg0115050,Kun slægtskab angivet,rest:R3
+Reg0115060,Militær,klynge:K11;K19
 Reg0115070,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0115180,Kun slægtskab angivet,rest:R3
 Reg0115240,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3910,7 +3947,7 @@ Reg0115540,Kun slægtskab angivet,rest:R3
 Reg0115550,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0115560,Kun slægtskab angivet,rest:R3
 Reg0115570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0115600,Erhverv,klynge:K13
+Reg0115600,Handel,klynge:K13
 Reg0115620,Kun slægtskab angivet,rest:R3
 Reg0115630,Kun slægtskab angivet,rest:R3
 Reg0115710,Håndværk,klynge:K14
@@ -3943,10 +3980,10 @@ Reg0116290,Kun slægtskab angivet,rest:R3
 Reg0116360,Kun slægtskab angivet,rest:R3
 Reg0116370,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0116410,Militær,klynge:K11;K20
-Reg0116420,Erhverv,klynge:K13
+Reg0116420,Handel,klynge:K13
 Reg0116440,Kun slægtskab angivet,rest:R3
 Reg0116470,Kun slægtskab angivet,rest:R3
-Reg0116480,Erhverv,klynge:K13
+Reg0116480,Handel,klynge:K13
 Reg0116490,Kun slægtskab angivet,rest:R3
 Reg0116500,Kun slægtskab angivet,rest:R3
 Reg0116540,Embedsmand/Jura/Politik,klynge:K12
@@ -3975,7 +4012,7 @@ Reg0117050,Kun slægtskab angivet,rest:R3
 Reg0117080,Kun slægtskab angivet,rest:R3
 Reg0117090,Kun slægtskab angivet,rest:R3
 Reg0117120,Embedsmand/Jura/Politik,klynge:K12
-Reg0117150,Erhverv;Embedsmand/Jura/Politik,klynge:K13;K12;K19
+Reg0117150,Handel;Embedsmand/Jura/Politik,klynge:K13;K12;K19
 Reg0117160,Kun slægtskab angivet,rest:R3
 Reg0117170,Kun slægtskab angivet,rest:R3
 Reg0117240,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -3999,6 +4036,7 @@ Reg0117530,Adel/Kongelig/Hof,adel:titel
 Reg0117540,Adel/Kongelig/Hof,adel:titel
 Reg0117570,Adel/Kongelig/Hof,adel:titel
 Reg0117580,Adel/Kongelig/Hof,adel:titel
+Reg0117590,Adel/Kongelig/Hof,adel:titel
 Reg0117620,Adel/Kongelig/Hof,adel:titel
 Reg0117630,Adel/Kongelig/Hof,adel:titel
 Reg0117640,Adel/Kongelig/Hof,adel:titel
@@ -4032,7 +4070,7 @@ Reg0118160,Kun slægtskab angivet,rest:R3
 Reg0118180,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0118200,Embedsmand/Jura/Politik;Adel/Kongelig/Hof,klynge:K12;adel:titel
 Reg0118240,Embedsmand/Jura/Politik,klynge:K12
-Reg0118260,Erhverv,klynge:K13
+Reg0118260,Handel,klynge:K13
 Reg0118300,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0118340,Embedsmand/Jura/Politik,klynge:K12
 Reg0118370,Forfatter/Digter;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K03;K07
@@ -4104,7 +4142,7 @@ Reg0120060,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0120100,Musiker/Scenekunst;Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K01;K07
 Reg0120120,Gejstlig,klynge:K10
 Reg0120130,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0120150,Erhverv,klynge:K13
+Reg0120150,Handel,klynge:K13
 Reg0120160,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0120200,Kun slægtskab angivet,rest:R3
 Reg0120230,Musiker/Scenekunst,klynge:K01
@@ -4115,7 +4153,7 @@ Reg0120290,Adel/Kongelig/Hof,klynge:K09
 Reg0120310,Adel/Kongelig/Hof;Embedsmand/Jura/Politik,klynge:K09;K12
 Reg0120350,Landbrug/Søfart,klynge:K18
 Reg0120370,Kun slægtskab angivet,rest:R3
-Reg0120380,Erhverv,klynge:K13
+Reg0120380,Handel,klynge:K13
 Reg0120430,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0120440,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0120450,Kun slægtskab angivet,rest:R3
@@ -4126,7 +4164,7 @@ Reg0120530,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0120620,Kun slægtskab angivet,rest:R3
 Reg0120690,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0120730,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0120750,Erhverv;Adel/Kongelig/Hof,klynge:K13;adel:titel
+Reg0120750,Handel;Adel/Kongelig/Hof,klynge:K13;adel:titel
 Reg0120780,Kun slægtskab angivet,rest:R3
 Reg0120810,Kun slægtskab angivet,rest:R3
 Reg0120820,Kun slægtskab angivet,rest:R3
@@ -4176,7 +4214,8 @@ Reg0122030,Kun slægtskab angivet,rest:R3
 Reg0122040,Kun slægtskab angivet,rest:R3
 Reg0122050,Kun slægtskab angivet,rest:R3
 Reg0122060,Kun slægtskab angivet,rest:R3
-Reg0122070,Erhverv,klynge:K13
+Reg0122070,Handel,klynge:K13
+Reg0122110,Adel/Kongelig/Hof,adel:titel
 Reg0122120,Adel/Kongelig/Hof,adel:titel
 Reg0122130,Kun slægtskab angivet,rest:R3
 Reg0122170,Musiker/Scenekunst,klynge:K01
@@ -4201,7 +4240,7 @@ Reg0122500,Kun slægtskab angivet,rest:R3
 Reg0122510,Kun slægtskab angivet,rest:R3
 Reg0122530,Kun slægtskab angivet,rest:R3
 Reg0122550,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0122560,Erhverv,klynge:K13
+Reg0122560,Handel,klynge:K13
 Reg0122590,Kun slægtskab angivet,rest:R3
 Reg0122600,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0122610,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -4243,7 +4282,7 @@ Reg0123560,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0123570,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0123580,Kun slægtskab angivet,rest:R3
 Reg0123590,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K06
-Reg0123650,Erhverv,klynge:K13
+Reg0123650,Handel,klynge:K13
 Reg0123680,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0123700,Adel/Kongelig/Hof,klynge:K09
 Reg0123710,Kun slægtskab angivet,rest:R3
@@ -4255,7 +4294,7 @@ Reg0123850,Militær,klynge:K11
 Reg0123870,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0123880,Kun slægtskab angivet,rest:R3
 Reg0123910,Kun slægtskab angivet,rest:R3
-Reg0123930,Erhverv,klynge:K13
+Reg0123930,Handel,klynge:K13
 Reg0123940,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0123960,Kun slægtskab angivet,rest:R3
 Reg0123970,Kun slægtskab angivet,rest:R3
@@ -4268,9 +4307,9 @@ Reg0124190,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,kl
 Reg0124200,Kun slægtskab angivet,rest:R3
 Reg0124230,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0124250,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0124260,Erhverv,klynge:K13
+Reg0124260,Handel,klynge:K13
 Reg0124270,Musiker/Scenekunst,klynge:K01
-Reg0124300,Erhverv,klynge:K13
+Reg0124300,Handel,klynge:K13
 Reg0124310,Kun slægtskab angivet,rest:R3
 Reg0124380,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0124400,Adel/Kongelig/Hof,klynge:K09
@@ -4281,7 +4320,7 @@ Reg0124440,Adel/Kongelig/Hof,adel:titel
 Reg0124450,Kun slægtskab angivet,rest:R3
 Reg0124480,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0124490,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0124510,Erhverv,klynge:K13
+Reg0124510,Handel,klynge:K13
 Reg0124520,Kun slægtskab angivet,rest:R3
 Reg0124540,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0124640,Adel/Kongelig/Hof,adel:titel
@@ -4317,7 +4356,7 @@ Reg0125410,Adel/Kongelig/Hof,adel:titel
 Reg0125420,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0125430,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0125450,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0125490,Erhverv,klynge:K13
+Reg0125490,Handel,klynge:K13
 Reg0125500,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0125510,Landbrug/Søfart,klynge:K18
 Reg0125520,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -4355,7 +4394,7 @@ Reg0126110,Kun slægtskab angivet,rest:R3
 Reg0126120,Adel/Kongelig/Hof,adel:titel
 Reg0126160,Kun slægtskab angivet,rest:R3
 Reg0126170,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0126180,Erhverv,klynge:K13
+Reg0126180,Handel,klynge:K13
 Reg0126200,Kun slægtskab angivet,rest:R3
 Reg0126220,Embedsmand/Jura/Politik,klynge:K12
 Reg0126230,Kun slægtskab angivet,rest:R3
@@ -4389,7 +4428,7 @@ Reg0126730,Kun slægtskab angivet,rest:R3
 Reg0126760,Kun slægtskab angivet,rest:R3
 Reg0126770,Kun slægtskab angivet,rest:R3
 Reg0126780,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0126790,Erhverv,klynge:K13
+Reg0126790,Handel,klynge:K13
 Reg0126810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0126830,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0126840,Landbrug/Søfart,klynge:K18
@@ -4399,7 +4438,7 @@ Reg0126900,Kun slægtskab angivet,rest:R3
 Reg0126950,Kun slægtskab angivet,rest:R3
 Reg0126960,Kun slægtskab angivet,rest:R3
 Reg0126990,Kun slægtskab angivet,rest:R3
-Reg0127000,Erhverv,klynge:K13
+Reg0127000,Handel,klynge:K13
 Reg0127030,Kun slægtskab angivet,rest:R3
 Reg0127040,Kun slægtskab angivet,rest:R3
 Reg0127050,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -4471,7 +4510,7 @@ Reg0128440,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0128480,Kun slægtskab angivet,rest:R3
 Reg0128490,Kun slægtskab angivet,rest:R3
 Reg0128520,Kun slægtskab angivet,rest:R3
-Reg0128540,Erhverv,klynge:K13
+Reg0128540,Handel,klynge:K13
 Reg0128600,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0128620,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0128630,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -4501,7 +4540,7 @@ Reg0129090,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0129100,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0129110,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0129120,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0129150,Embedsmand/Jura/Politik;Erhverv,klynge:K12;K13
+Reg0129150,Embedsmand/Jura/Politik;Handel,klynge:K12;K13
 Reg0129160,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,klynge:K20
 Reg0129170,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0129220,Kun slægtskab angivet,rest:R3
@@ -4521,7 +4560,7 @@ Reg0129460,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K05
 Reg0129480,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0129520,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0129530,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
-Reg0129540,Erhverv,klynge:K13
+Reg0129540,Handel,klynge:K13
 Reg0129550,Kun slægtskab angivet,rest:R3
 Reg0129560,Gejstlig,klynge:K08
 Reg0129580,Kun slægtskab angivet,rest:R3
@@ -4556,8 +4595,10 @@ Reg0130310,Forfatter/Digter;Håndværk,klynge:K03;K14
 Reg0130340,Kun slægtskab angivet,rest:R3
 Reg0130360,Kun slægtskab angivet,rest:R3
 Reg0130370,Embedsmand/Jura/Politik,klynge:K12
+Reg0130380,Adel/Kongelig/Hof,klynge:K09
 Reg0130390,Militær;Embedsmand/Jura/Politik,klynge:K11;K12
 Reg0130400,Adel/Kongelig/Hof,adel:titel
+Reg0130410,Adel/Kongelig/Hof,adel:titel
 Reg0130460,Lærd/Akademisk uddannelse uden for jura og teologi;Militær,klynge:K05;K11
 Reg0130480,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0130490,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
@@ -4578,7 +4619,7 @@ Reg0130810,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,re
 Reg0130820,Kun slægtskab angivet,rest:R3
 Reg0130850,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0130870,Musiker/Scenekunst,klynge:K01
-Reg0130880,Lærd/Akademisk uddannelse uden for jura og teologi;Erhverv,klynge:K04;K13
+Reg0130880,Lærd/Akademisk uddannelse uden for jura og teologi;Handel,klynge:K04;K13
 Reg0130900,Adel/Kongelig/Hof,adel:titel
 Reg0130910,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,rest
 Reg0130940,Lærd/Akademisk uddannelse uden for jura og teologi,klynge:K05
@@ -4643,18 +4684,15 @@ Reg0132250,Adel/Kongelig/Hof,adel:titel
 Reg0132260,Embedsmand/Jura/Politik,klynge:K12
 Reg0030490,Adel/Kongelig/Hof,adel+:titel
 Reg0030590,Adel/Kongelig/Hof,adel+:titel
-Reg0030800,Adel/Kongelig/Hof,adel+:titel
 Reg0030820,Adel/Kongelig/Hof,adel+:titel
 Reg0030900,Adel/Kongelig/Hof,adel+:titel
 Reg0031250,Adel/Kongelig/Hof,adel+:titel
 Reg0031450,Adel/Kongelig/Hof,adel+:titel
-Reg0031640,Adel/Kongelig/Hof,adel+:titel
 Reg0032790,Adel/Kongelig/Hof,adel+:titel
 Reg0033360,Adel/Kongelig/Hof,adel+:titel
 Reg0033470,Adel/Kongelig/Hof,adel+:titel
 Reg0034540,Adel/Kongelig/Hof,adel+:titel
 Reg0034590,Adel/Kongelig/Hof,adel+:titel
-Reg0034820,Adel/Kongelig/Hof,adel+:titel
 Reg0035450,Adel/Kongelig/Hof,adel+:titel
 Reg0035500,Adel/Kongelig/Hof,adel+:titel
 Reg0035560,Adel/Kongelig/Hof,adel+:titel
@@ -4670,18 +4708,13 @@ Reg0038730,Adel/Kongelig/Hof,adel+:titel
 Reg0038750,Adel/Kongelig/Hof,adel+:titel
 Reg0039080,Adel/Kongelig/Hof,adel+:titel
 Reg0039230,Adel/Kongelig/Hof,adel+:titel
-Reg0039290,Adel/Kongelig/Hof,adel+:titel
 Reg0039300,Adel/Kongelig/Hof,adel+:titel
-Reg0039330,Adel/Kongelig/Hof,adel+:titel
 Reg0039550,Adel/Kongelig/Hof,adel+:titel
 Reg0039650,Adel/Kongelig/Hof,adel+:titel
 Reg0040250,Adel/Kongelig/Hof,adel+:titel
 Reg0040890,Adel/Kongelig/Hof,adel+:titel
 Reg0042310,Adel/Kongelig/Hof,adel+:titel
-Reg0042370,Adel/Kongelig/Hof,adel+:titel
 Reg0042690,Adel/Kongelig/Hof,adel+:titel
-Reg0042710,Adel/Kongelig/Hof,adel+:titel
-Reg0042720,Adel/Kongelig/Hof,adel+:titel
 Reg0042830,Adel/Kongelig/Hof,adel+:titel
 Reg0043470,Adel/Kongelig/Hof,adel+:titel
 Reg0044770,Adel/Kongelig/Hof,adel+:titel
@@ -4691,7 +4724,6 @@ Reg0046830,Adel/Kongelig/Hof,adel+:titel
 Reg0049330,Adel/Kongelig/Hof,adel+:titel
 Reg0050360,Adel/Kongelig/Hof,adel+:titel
 Reg0050880,Adel/Kongelig/Hof,adel+:titel
-Reg0051080,Adel/Kongelig/Hof,adel+:titel
 Reg0051170,Adel/Kongelig/Hof,adel+:titel
 Reg0051180,Adel/Kongelig/Hof,adel+:titel
 Reg0051320,Adel/Kongelig/Hof,adel+:titel
@@ -4710,13 +4742,11 @@ Reg0055040,Adel/Kongelig/Hof,adel+:titel
 Reg0055060,Adel/Kongelig/Hof,adel+:titel
 Reg0055310,Adel/Kongelig/Hof,adel+:titel
 Reg0056840,Adel/Kongelig/Hof,adel+:titel
-Reg0057310,Adel/Kongelig/Hof,adel+:titel
 Reg0058220,Adel/Kongelig/Hof,adel+:relation
 Reg0058350,Adel/Kongelig/Hof,adel+:titel
 Reg0058410,Adel/Kongelig/Hof,adel+:titel
 Reg0058540,Adel/Kongelig/Hof,adel+:titel
 Reg0058630,Adel/Kongelig/Hof,adel+:titel
-Reg0059520,Adel/Kongelig/Hof,adel+:titel
 Reg0059670,Adel/Kongelig/Hof,adel+:titel
 Reg0060560,Adel/Kongelig/Hof,adel+:titel
 Reg0060570,Adel/Kongelig/Hof,adel+:titel
@@ -4737,11 +4767,8 @@ Reg0064280,Adel/Kongelig/Hof,adel+:titel
 Reg0064330,Adel/Kongelig/Hof,adel+:titel
 Reg0064340,Adel/Kongelig/Hof,adel+:titel
 Reg0064660,Adel/Kongelig/Hof,adel+:titel
-Reg0065100,Adel/Kongelig/Hof,adel+:titel
-Reg0065390,Adel/Kongelig/Hof,adel+:titel
 Reg0065400,Adel/Kongelig/Hof,adel+:titel
 Reg0065430,Adel/Kongelig/Hof,adel+:titel
-Reg0065460,Adel/Kongelig/Hof,adel+:titel
 Reg0065500,Adel/Kongelig/Hof,adel+:titel
 Reg0067010,Adel/Kongelig/Hof,adel+:titel
 Reg0067040,Adel/Kongelig/Hof,adel+:titel
@@ -4765,11 +4792,8 @@ Reg0076310,Adel/Kongelig/Hof,adel+:titel
 Reg0076480,Adel/Kongelig/Hof,adel+:titel
 Reg0076750,Adel/Kongelig/Hof,adel+:titel
 Reg0077610,Adel/Kongelig/Hof,adel+:titel
-Reg0077730,Adel/Kongelig/Hof,adel+:titel
 Reg0078380,Adel/Kongelig/Hof,adel+:titel
 Reg0079330,Adel/Kongelig/Hof,adel+:titel
-Reg0079360,Adel/Kongelig/Hof,adel+:titel
-Reg0079380,Adel/Kongelig/Hof,adel+:titel
 Reg0081020,Adel/Kongelig/Hof,adel+:titel
 Reg0081530,Adel/Kongelig/Hof,adel+:titel
 Reg0081790,Adel/Kongelig/Hof,adel+:titel
@@ -4781,7 +4805,6 @@ Reg0083420,Adel/Kongelig/Hof,adel+:titel
 Reg0083770,Adel/Kongelig/Hof,adel+:titel
 Reg0083800,Adel/Kongelig/Hof,adel+:titel
 Reg0084000,Adel/Kongelig/Hof,adel+:titel
-Reg0084390,Adel/Kongelig/Hof,adel+:titel
 Reg0084570,Adel/Kongelig/Hof,adel+:titel
 Reg0084730,Adel/Kongelig/Hof,adel+:titel
 Reg0084740,Adel/Kongelig/Hof,adel+:titel
@@ -4799,7 +4822,6 @@ Reg0088520,Adel/Kongelig/Hof,adel+:titel
 Reg0088530,Adel/Kongelig/Hof,adel+:titel
 Reg0088650,Adel/Kongelig/Hof,adel+:titel
 Reg0088770,Adel/Kongelig/Hof,adel+:titel
-Reg0090930,Adel/Kongelig/Hof,adel+:titel
 Reg0090970,Adel/Kongelig/Hof,adel+:titel
 Reg0091140,Adel/Kongelig/Hof,adel+:titel
 Reg0091170,Adel/Kongelig/Hof,adel+:titel
@@ -4807,18 +4829,13 @@ Reg0091310,Adel/Kongelig/Hof,adel+:titel
 Reg0092180,Adel/Kongelig/Hof,adel+:titel
 Reg0092380,Adel/Kongelig/Hof,adel+:titel
 Reg0092400,Adel/Kongelig/Hof,adel+:titel
-Reg0092420,Adel/Kongelig/Hof,adel+:titel
 Reg0092550,Adel/Kongelig/Hof,adel+:titel
 Reg0092570,Adel/Kongelig/Hof,adel+:titel
-Reg0092590,Adel/Kongelig/Hof,adel+:titel
 Reg0092610,Adel/Kongelig/Hof,adel+:titel
-Reg0092680,Adel/Kongelig/Hof,adel+:titel
 Reg0092710,Adel/Kongelig/Hof,adel+:titel
 Reg0092730,Adel/Kongelig/Hof,adel+:titel
 Reg0092780,Adel/Kongelig/Hof,adel+:titel
 Reg0092810,Adel/Kongelig/Hof,adel+:titel
-Reg0092870,Adel/Kongelig/Hof,adel+:titel
-Reg0092880,Adel/Kongelig/Hof,adel+:titel
 Reg0092900,Adel/Kongelig/Hof,adel+:titel
 Reg0092950,Adel/Kongelig/Hof,adel+:titel
 Reg0093000,Adel/Kongelig/Hof,adel+:titel
@@ -4831,8 +4848,6 @@ Reg0095300,Adel/Kongelig/Hof,adel+:titel
 Reg0095310,Adel/Kongelig/Hof,adel+:titel
 Reg0095870,Adel/Kongelig/Hof,adel+:titel
 Reg0096150,Adel/Kongelig/Hof,adel+:titel
-Reg0096760,Adel/Kongelig/Hof,adel+:titel
-Reg0096770,Adel/Kongelig/Hof,adel+:titel
 Reg0096830,Adel/Kongelig/Hof,adel+:titel
 Reg0096840,Adel/Kongelig/Hof,adel+:titel
 Reg0096870,Adel/Kongelig/Hof,adel+:titel
@@ -4846,9 +4861,7 @@ Reg0098720,Adel/Kongelig/Hof,adel+:titel
 Reg0099060,Adel/Kongelig/Hof,adel+:titel
 Reg0099260,Adel/Kongelig/Hof,adel+:relation
 Reg0099950,Adel/Kongelig/Hof,adel+:titel
-Reg0100150,Adel/Kongelig/Hof,adel+:titel
 Reg0100870,Adel/Kongelig/Hof,adel+:titel
-Reg0101270,Adel/Kongelig/Hof,adel+:titel
 Reg0101480,Adel/Kongelig/Hof,adel+:titel
 Reg0101500,Adel/Kongelig/Hof,adel+:titel
 Reg0101510,Adel/Kongelig/Hof,adel+:titel
@@ -4864,21 +4877,16 @@ Reg0104190,Adel/Kongelig/Hof,adel+:titel
 Reg0104670,Adel/Kongelig/Hof,adel+:titel
 Reg0105050,Adel/Kongelig/Hof,adel+:titel
 Reg0105560,Adel/Kongelig/Hof,adel+:titel
-Reg0105580,Adel/Kongelig/Hof,adel+:titel
-Reg0105610,Adel/Kongelig/Hof,adel+:titel
 Reg0105620,Adel/Kongelig/Hof,adel+:titel
 Reg0105660,Adel/Kongelig/Hof,adel+:titel
 Reg0105850,Adel/Kongelig/Hof,adel+:titel
 Reg0106340,Adel/Kongelig/Hof,adel+:titel
 Reg0106500,Adel/Kongelig/Hof,adel+:titel
 Reg0106520,Adel/Kongelig/Hof,adel+:titel
-Reg0106890,Adel/Kongelig/Hof,adel+:titel
-Reg0106900,Adel/Kongelig/Hof,adel+:titel
 Reg0107010,Adel/Kongelig/Hof,adel+:titel
 Reg0107100,Adel/Kongelig/Hof,adel+:titel
 Reg0107310,Adel/Kongelig/Hof,adel+:titel
 Reg0107350,Adel/Kongelig/Hof,adel+:titel
-Reg0107390,Adel/Kongelig/Hof,adel+:titel
 Reg0107830,Adel/Kongelig/Hof,adel+:titel
 Reg0108570,Adel/Kongelig/Hof,adel+:titel
 Reg0109440,Adel/Kongelig/Hof,adel+:titel
@@ -4898,7 +4906,6 @@ Reg0112060,Adel/Kongelig/Hof,adel+:titel
 Reg0114290,Adel/Kongelig/Hof,adel+:titel
 Reg0114670,Adel/Kongelig/Hof,adel+:titel
 Reg0115020,Adel/Kongelig/Hof,adel+:titel
-Reg0115420,Adel/Kongelig/Hof,adel+:titel
 Reg0116630,Adel/Kongelig/Hof,adel+:relation
 Reg0116710,Adel/Kongelig/Hof,adel+:titel
 Reg0116890,Adel/Kongelig/Hof,adel+:titel
@@ -4906,7 +4913,6 @@ Reg0116900,Adel/Kongelig/Hof,adel+:titel
 Reg0117300,Adel/Kongelig/Hof,adel+:titel
 Reg0117310,Adel/Kongelig/Hof,adel+:titel
 Reg0117560,Adel/Kongelig/Hof,adel+:titel
-Reg0117590,Adel/Kongelig/Hof,adel+:titel
 Reg0117600,Adel/Kongelig/Hof,adel+:titel
 Reg0117610,Adel/Kongelig/Hof,adel+:titel
 Reg0117680,Adel/Kongelig/Hof,adel+:titel
@@ -4923,8 +4929,6 @@ Reg0120300,Adel/Kongelig/Hof,adel+:titel
 Reg0120700,Adel/Kongelig/Hof,adel+:titel
 Reg0120710,Adel/Kongelig/Hof,adel+:titel
 Reg0121670,Adel/Kongelig/Hof,adel+:titel
-Reg0122110,Adel/Kongelig/Hof,adel+:titel
-Reg0122210,Adel/Kongelig/Hof,adel+:titel
 Reg0122900,Adel/Kongelig/Hof,adel+:titel
 Reg0122970,Adel/Kongelig/Hof,adel+:titel
 Reg0123230,Adel/Kongelig/Hof,adel+:titel
@@ -4935,15 +4939,12 @@ Reg0125400,Adel/Kongelig/Hof,adel+:titel
 Reg0126250,Adel/Kongelig/Hof,adel+:titel
 Reg0126260,Adel/Kongelig/Hof,adel+:titel
 Reg0126270,Adel/Kongelig/Hof,adel+:titel
-Reg0126490,Adel/Kongelig/Hof,adel+:titel
 Reg0126550,Adel/Kongelig/Hof,adel+:titel
 Reg0127570,Adel/Kongelig/Hof,adel+:titel
 Reg0127680,Adel/Kongelig/Hof,adel+:titel
 Reg0127690,Adel/Kongelig/Hof,adel+:titel
 Reg0128120,Adel/Kongelig/Hof,adel+:titel
 Reg0128550,Adel/Kongelig/Hof,adel+:titel
-Reg0130380,Adel/Kongelig/Hof,adel+:titel
-Reg0130410,Adel/Kongelig/Hof,adel+:titel
 Reg0130440,Adel/Kongelig/Hof,adel+:titel
 Reg0130840,Adel/Kongelig/Hof,adel+:titel
 Reg0130890,Adel/Kongelig/Hof,adel+:titel
