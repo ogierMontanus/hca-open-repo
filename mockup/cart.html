@@ -47,6 +47,8 @@
     }
     #js-cart-download:hover { background: var(--color-accent-hover); }
     #js-cart-download:disabled { background: var(--color-border); border-color: var(--color-border); cursor: not-allowed; }
+    #js-cart-export { background: var(--color-surface); color: var(--color-text); }
+    #js-cart-export:hover { border-color: var(--color-accent); color: var(--color-accent); }
     #js-cart-clear { background: var(--color-surface); color: var(--color-text-muted); }
     #js-cart-clear:hover { border-color: #c0392b; color: #c0392b; }
     .cart-note {
@@ -175,6 +177,7 @@
           <button class="layout-switcher__btn" data-layout="table" type="button">▦ Tabel</button>
         </div>
         <button type="button" id="js-cart-download">Download som PDF</button>
+        <button type="button" id="js-cart-export">Hent kurv til dagbogs-PDF</button>
         <button type="button" id="js-cart-clear">Ryd kurv</button>
       </div>
       <p class="cart-note" id="js-cart-pdf-note" style="display:none">
@@ -182,6 +185,14 @@
         ét A4-ark pr. dagbogsside med klikbare navne og kildelinks, og en
         oversigt over de valgte registerposter. Ved mange sider kan det tage
         et øjeblik; knappen viser, hvor langt den er.
+      </p>
+      <p class="cart-note" id="js-cart-diary-pdf-note" style="display:none">
+        »Hent kurv til dagbogs-PDF« gemmer kurven som <code>hca-kurv.json</code>.
+        Byg derefter en PDF med dagbogsteksten, fodnoter (de valgte poster
+        fremhævet med gul baggrund), links til hver side på webstedet og
+        datoer som bogmærker:
+        <code>python scripts/build_mockup/build_diary_pdf.py --cart hca-kurv.json -o dagbog.pdf</code>
+        — se <code>docs/data-model/cart-and-export.md</code>.
       </p>
 
       <div id="js-cart-body"></div>
@@ -355,12 +366,14 @@
     var toolbar = document.getElementById('js-cart-toolbar');
     var body = document.getElementById('js-cart-body');
     var pdfNote = document.getElementById('js-cart-pdf-note');
+    var diaryPdfNote = document.getElementById('js-cart-diary-pdf-note');
     var downloadBtn = document.getElementById('js-cart-download');
     var switcher = document.getElementById('js-cart-layout-switcher');
 
     if (!items.length) {
       toolbar.style.display = 'none';
       pdfNote.style.display = 'none';
+      diaryPdfNote.style.display = 'none';
       body.innerHTML = '<div class="cart-empty">Kurven er tom. Afkryds poster på ' +
         '<a href="persons.html">Personregister</a>, <a href="bibliotek.html">Værkregister</a>, ' +
         '<a href="places.html">Stedregister</a> eller <a href="diaries.html">Dagbogsregister</a> for at tilføje dem.</div>';
@@ -369,6 +382,7 @@
 
     toolbar.style.display = '';
     pdfNote.style.display = '';
+    diaryPdfNote.style.display = '';
     document.getElementById('js-cart-count').textContent =
       items.length.toLocaleString('da-DK') + (items.length === 1 ? ' post valgt' : ' poster valgt');
     downloadBtn.disabled = false;
@@ -422,6 +436,54 @@
   // print dialog. Only used when js/cart-pdf.js cannot produce the PDF (the
   // PDF library or data/diary-print/ is missing or blocked).
   function printTable() {
+    var rows = [];
+    Cart.all().forEach(function (item) {
+      var title = (item.title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var url = (item.url || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      rows.push(
+        '<tr><td>' + (item.id || '') + '</td><td>' + title + '</td><td><a href="' + url + '">' + url + '</a></td></tr>'
+      );
+    });
+
+    var content = '<!doctype html><html><head><meta charset="utf-8"><title>HCA kurv</title>' +
+      '<style>body{font-family:sans-serif;margin:2rem}table{border-collapse:collapse;width:100%}td{padding:.5rem;border:1px solid #ddd;vertical-align:top}th{padding:.5rem;border:1px solid #ddd;text-align:left}</style>' +
+      '</head><body><h1>HCA kurv</h1><table><thead><tr><th>ID</th><th>Titel</th><th>URL</th></tr></thead><tbody>' +
+      rows.join('') + '</tbody></table></body></html>';
+
+    var win = window.open('', '_blank', 'width=900,height=700');
+    if (!win) return;
+    win.document.write(content);
+    win.document.close();
+    win.focus();
+    win.print();
+  }
+
+  // Hands the cart to scripts/build_mockup/build_diary_pdf.py: diary items
+  // become the PDF's pages, person/place/work items the entities highlighted
+  // in its footnotes. A file download (Blob) works under file:// as well.
+  document.getElementById('js-cart-export').addEventListener('click', function () {
+    var blob = new Blob([JSON.stringify({ version: 1, items: Cart.all() }, null, 1)],
+      { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hca-kurv.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  document.getElementById('js-cart-download').addEventListener('click', function () {
+    var payload = JSON.stringify({ version: 1, items: Cart.all() }, null, 1);
+    var blob = new Blob([payload], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hca-kurv.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
     var d = new Date();
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
     document.getElementById('js-print-date').textContent =
