@@ -1,0 +1,21 @@
+klynge,bucket,notes
+K01,Musiker/Scenekunst,
+K02,Kunstner/Billedkunst,
+K03,Forfatter/Digter,
+K04,Lærd/Akademisk uddannelse uden for jura og teologi,
+K05,Lærd/Akademisk uddannelse uden for jura og teologi,"kolonne C tom i annotationsarket; afledt: læge/dyrlæge/ingeniør ligger i Lærd/Akademisk uddannelse uden for jura og teologi i person_role_terms_da.csv"
+K06,Lærd/Akademisk uddannelse uden for jura og teologi,"kolonne C var ',' i annotationsarket; afledt: lærer ligger i Lærd/Akademisk uddannelse uden for jura og teologi i person_role_terms_da.csv"
+K07,Lærd/Akademisk uddannelse uden for jura og teologi,
+K08,Gejstlig,
+K09,Adel/Kongelig/Hof,
+K10,Gejstlig,
+K11,Militær,
+K12,Embedsmand/Jura/Politik,
+K13,Handel,"tidl. Handel/Erhverv → Erhverv"
+K14,Håndværk,
+K15,Gæstgiveri,
+K16,Tjenestefolk/Lavtlønnede,
+K17,Landbrug/Søfart,
+K18,Landbrug/Søfart,
+K19,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,
+K20,Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,

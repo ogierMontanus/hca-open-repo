@@ -73,6 +73,12 @@ STAGES_AFTER_INGEST = [
     ("3b", "diary index + reverse-index",  "scripts/build_mockup/build_diary_index.py", False),
     ("3c", "diary print data (cart PDF)", "scripts/build_mockup/build_diary_print.py", False),
     ("4a", "works-extra.js",               "scripts/build_mockup/build_works_extra.py", False),
+    # Rolle/erhvervsgren-kæden: parse_person_role.py læser works-extra.js (4a);
+    # klyngerne og apply_cluster_roles.py bygger på resultatet, og 4b læser det hele.
+    ("4a2", "person roles (auto)",         "scripts/parsers/parse_person_role.py",      False),
+    ("4a3", "person role clusters",        "scripts/parsers/cluster_unassigned_roles.py", False),
+    ("4a4", "person roles (cluster/noble)", "scripts/parsers/apply_cluster_roles.py",   False),
+    ("4a5", "person roles (gender check)", "scripts/parsers/gender_role_check.py",     False),
     ("4b", "persons-extra.js",             "scripts/build_mockup/build_persons_extra.py", False),
     ("4c", "places-extra.js",              "scripts/build_mockup/build_places_extra.py", False),
     ("4d", "search-index.js (typeahead)",  "scripts/build_mockup/build_search_index.py", False),

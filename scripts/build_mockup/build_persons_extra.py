@@ -51,6 +51,12 @@ ADJECTIVES = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
 UMBRELLAS  = os.path.join(ROOT, "data", "curated", "nation_umbrellas_da.csv")
 GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
 ROLE       = os.path.join(ROOT, "data", "normalized", "person_role.csv")
+# Manuel klynge-tildeling (apply_cluster_roles.py) for personer uden rolle i ROLE.
+ROLE_MANUAL = os.path.join(ROOT, "data", "normalized", "person_role_manual.csv")
+# Advarselsflag for kvindelige poster (scripts/parsers/gender_role_check.py).
+ROLE_GENDER_FLAGS = os.path.join(ROOT, "data", "normalized", "person_role_gender_flags.csv")
+# Tematisk visningsrækkefølge for Erhvervsgren-facetten (PERSON_ROLE_ORDER).
+ROLE_ORDER = os.path.join(ROOT, "data", "curated", "person_role_bucket_order.csv")
 ENTITY_TYPES = os.path.join(ROOT, "data", "curated", "person_entity_types.tsv")
 WIKIDATA   = os.path.join(ROOT, "data", "curated", "persons_wikidata.csv")
 BREVE      = os.path.join(ROOT, "data", "curated", "breve_person_crosswalk.csv")
@@ -157,7 +163,83 @@ def load_roles() -> tuple[dict, set]:
                 roller_by_person[r["entity_id"]] = roller
             if (r.get("kilde_vaerk") or "").strip():
                 creators.add(r["entity_id"])
+    # Personer uden automatisk rolle: manuel klynge-/restkategori-tildeling
+    # (scripts/parsers/apply_cluster_roles.py). Tilføjes kun hvor ROLE intet gav.
+    if os.path.exists(ROLE_MANUAL):
+        with open(ROLE_MANUAL, encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                roller = [x for x in (r.get("roller") or "").split(";") if x]
+                if not roller:
+                    continue
+                if r["entity_id"] not in roller_by_person:
+                    roller_by_person[r["entity_id"]] = roller
+                elif (r.get("kilde") or "").startswith("adel+"):
+                    # Adelsarv som TILLÆG til en automatisk rolle.
+                    have = roller_by_person[r["entity_id"]]
+                    have += [x for x in roller if x not in have]
+    order = _read_role_order()
+    for rid, roller in roller_by_person.items():
+        roller_by_person[rid] = enforce_exclusive(roller, order)
     return roller_by_person, creators
+
+
+def load_role_order() -> list:
+    """Erhvervsgrenene i tematisk rækkefølge, til persons.html's facet.
+    En gren der ikke står i filen vises efter de listede (efter antal)."""
+    return [b for b, _ in _read_role_order()]
+
+
+def _read_role_order() -> list:
+    """[(bucket, eksklusiv)] fra data/curated/person_role_bucket_order.csv."""
+    if not os.path.exists(ROLE_ORDER):
+        return []
+    with open(ROLE_ORDER, encoding="utf-8", newline="") as f:
+        return [(r["bucket"].strip(), (r.get("eksklusiv") or "").strip().lower() == "ja")
+                for r in csv.DictReader(f) if (r.get("bucket") or "").strip()]
+
+
+def load_gender_role_flags() -> tuple[dict, dict]:
+    """({entity_id: {bucket, …}}, {entity_id: ersatz-gren}) fra
+    gender_role_check.py: grene en kvindelig post kun har "arvet" fra faderens/
+    ægtefællens titel (status `fjernet`), og den gren hun får, hvis ingen er
+    tilbage. Tomt, hvis kontrollen ikke er kørt."""
+    removed, ersatz = {}, {}
+    if not os.path.exists(ROLE_GENDER_FLAGS):
+        return removed, ersatz
+    with open(ROLE_GENDER_FLAGS, encoding="utf-8-sig", newline="") as f:
+        for r in csv.DictReader(f):
+            if r.get("status") == "fjernet":
+                removed.setdefault(r["entity_id"], set()).add(r["bucket"])
+                if r.get("ersatz"):
+                    ersatz[r["entity_id"]] = r["ersatz"]
+    return removed, ersatz
+
+
+def load_role_labels_en() -> dict:
+    """{bucket: engelsk visningsnavn} fra kolonnen `label_en`. Værdierne
+    (bucket-navnene) forbliver danske — de bruges i URL'er (?role=…); kun
+    visningen på persons_en.html oversættes."""
+    if not os.path.exists(ROLE_ORDER):
+        return {}
+    with open(ROLE_ORDER, encoding="utf-8", newline="") as f:
+        return {r["bucket"].strip(): r["label_en"].strip() for r in csv.DictReader(f)
+                if (r.get("bucket") or "").strip() and (r.get("label_en") or "").strip()}
+
+
+def enforce_exclusive(roller: list, order: list) -> list:
+    """En person må have flere erhvervsgrene, undtagen restkategorierne
+    (kolonnen `eksklusiv` i person_role_bucket_order.csv): "Kun slægtskab
+    angivet" og "Endnu ukategoriseret/…" står aldrig sammen med andre grene.
+    Findes en reel gren, falder restkategorierne væk; er der kun
+    restkategorier, beholdes den første i filens rækkefølge."""
+    exclusive = [b for b, ex in order if ex]
+    real = [r for r in roller if r not in exclusive]
+    if real:
+        return real
+    for b in exclusive:
+        if b in roller:
+            return [b]
+    return roller
 
 
 def load_person_wikidata() -> dict:
@@ -404,6 +486,9 @@ GATED_KINDS = {"crossReference", "crossReferenceMalformed"}
 # person_gender.csv gives the entries its review found to be collectives.
 COLLECTIVE_KINDS = {"family", "group", "organisation", "animal"}
 OTHER_GENDER = "Andet (især firmaer/slægter/øvrige grupper)"
+# Regel: en post med køn = OTHER_GENDER (firma/slægt/gruppe) får altid
+# erhvervsgrenen UNCATEGORISED — uanset hvad parseren/klyngerne ellers gav.
+UNCATEGORISED_ROLE = "Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv"
 
 
 def load_non_individuals() -> dict:
@@ -489,6 +574,7 @@ def main() -> None:
               "(run scripts/parsers/parse_person_gender.py)")
 
     roles_by_person, work_creators = load_roles()
+    gender_removed, gender_ersatz = load_gender_role_flags()
     if roles_by_person:
         print(f"  {len(roles_by_person):,} persons with a Rolle/Erhverv classification "
               f"(scripts/parsers/parse_person_role.py)")
@@ -517,7 +603,15 @@ def main() -> None:
         label = (r.get("label") or "").strip()
         born, died = parse_life(label)
         nats = nationalities_by_person.get(rid, [])
+        gender = (OTHER_GENDER if rid in collective
+                  else gender_by_person.get(rid, (None, None))[0])
         roles = roles_by_person.get(rid, [])
+        if rid in gender_removed:
+            # Kvindelig post, der kun har "arvet" mandsdomineret gren fra
+            # faderens/ægtefællens titel — se gender_role_check.py.
+            roles = [b for b in roles if b not in gender_removed[rid]]                 or [gender_ersatz.get(rid, UNCATEGORISED_ROLE)]
+        if gender == OTHER_GENDER:
+            roles = [UNCATEGORISED_ROLE]
         wd = wd_by_person.get(rid)
         breve = breve_by_person.get(rid)
 
@@ -580,6 +674,14 @@ def main() -> None:
         f.write(";\n")
         f.write("const NATIONALITY_LABELS = ")
         f.write(json.dumps(nationality_labels, ensure_ascii=False, separators=(",", ":")))
+        f.write(";\n")
+        # Erhvervsgren-facettens faste, tematiske rækkefølge (FacetEngine
+        # fixedOrder) — data/curated/person_role_bucket_order.csv.
+        f.write("const PERSON_ROLE_ORDER = ")
+        f.write(json.dumps(load_role_order(), ensure_ascii=False, separators=(",", ":")))
+        f.write(";\n")
+        f.write("const PERSON_ROLE_LABELS_EN = ")
+        f.write(json.dumps(load_role_labels_en(), ensure_ascii=False, separators=(",", ":")))
         f.write(";\n")
     print(f"  wrote {os.path.relpath(OUT, ROOT)}  "
           f"({os.path.getsize(OUT)/1024:.0f} KB)")
