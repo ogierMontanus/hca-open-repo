@@ -1,16 +1,16 @@
-bucket,notes,eksklusiv
-Kunstner/Billedkunst,,
-Musiker/Scenekunst,,
-Forfatter/Digter,,
-Lærd/Akademisk uddannelse uden for jura og teologi,tidl. Akademiker/Lærd,
-Gejstlig,,
-Embedsmand/Jura/Politik,,
-Erhverv,tidl. Handel/Erhverv,
-Håndværk,,
-Gæstgiveri,,
-Landbrug/Søfart,,
-Tjenestefolk/Lavtlønnede,,
-Militær,,
-Adel/Kongelig/Hof,,
-Kun slægtskab angivet,restgruppe R3,ja
-Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,,ja
+bucket,notes,eksklusiv,label_en
+Kunstner/Billedkunst,,,Visual artists
+Musiker/Scenekunst,,,Musicians & performing arts
+Forfatter/Digter,,,Writers & poets
+Lærd/Akademisk uddannelse uden for jura og teologi,tidl. Akademiker/Lærd,,Scholars & academic training (excl. law & theology)
+Gejstlig,,,Clergy
+Embedsmand/Jura/Politik,,,"Civil service, law & politics"
+Erhverv,tidl. Handel/Erhverv,,Business & commerce
+Håndværk,,,Crafts & trades
+Gæstgiveri,,,Inns & hospitality
+Landbrug/Søfart,,,Agriculture & seafaring
+Tjenestefolk/Lavtlønnede,,,Servants & low-paid work
+Militær,,,Military
+Adel/Kongelig/Hof,,,"Nobility, royalty & court"
+Kun slægtskab angivet,restgruppe R3,ja,Only family relation given
+Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv,,ja,Not yet categorised / outside categories / no known paid occupation

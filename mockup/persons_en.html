@@ -655,6 +655,11 @@
   });
 
   var natLabels = (typeof NATIONALITY_LABELS !== 'undefined') ? NATIONALITY_LABELS : {};
+  // Occupational-branch values stay Danish (they appear in ?role= URLs);
+  // only the label painted on screen is English —
+  // data/curated/person_role_bucket_order.csv, column label_en.
+  var roleLabels = (typeof PERSON_ROLE_LABELS_EN !== 'undefined') ? PERSON_ROLE_LABELS_EN : {};
+  function roleLabel(k) { return roleLabels[k] || k; }
   // Nationality VALUES stay Danish (docs/i18n-policy.md: no chosen
   // machine-translation procedure yet for the ~40-term controlled
   // vocabulary) -- only the facet chrome and surrounding sentences below
@@ -694,7 +699,7 @@
       value: function (p) { return (p.nationality || []).map(function (k) { return natLabels[k] || k; }).join(', '); } },
     { key: 'gender', label: 'Gender', value: function (p) { return p.gender || ''; },
       sortValue: function (p) { return GENDER_SORT[p.gender] || '9'; } },
-    { key: 'role', label: 'Occupational branch', value: function (p) { return (p.role || []).join(', '); } },
+    { key: 'role', label: 'Occupational branch', value: function (p) { return (p.role || []).map(roleLabel).join(', '); } },
     { key: 'refs', label: 'Refs.', numeric: true, value: function (p) { return p.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;
@@ -914,6 +919,7 @@
     },
     labels: {
       nationality: function (k) { return natLabels[k] || k; },
+      role: roleLabel,
       worksRegistry: function () { return 'Also creator of registered works'; }
     },
     sortKeys: {

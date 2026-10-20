@@ -196,6 +196,17 @@ def _read_role_order() -> list:
                 for r in csv.DictReader(f) if (r.get("bucket") or "").strip()]
 
 
+def load_role_labels_en() -> dict:
+    """{bucket: engelsk visningsnavn} fra kolonnen `label_en`. Værdierne
+    (bucket-navnene) forbliver danske — de bruges i URL'er (?role=…); kun
+    visningen på persons_en.html oversættes."""
+    if not os.path.exists(ROLE_ORDER):
+        return {}
+    with open(ROLE_ORDER, encoding="utf-8", newline="") as f:
+        return {r["bucket"].strip(): r["label_en"].strip() for r in csv.DictReader(f)
+                if (r.get("bucket") or "").strip() and (r.get("label_en") or "").strip()}
+
+
 def enforce_exclusive(roller: list, order: list) -> list:
     """En person må have flere erhvervsgrene, undtagen restkategorierne
     (kolonnen `eksklusiv` i person_role_bucket_order.csv): "Kun slægtskab
@@ -643,6 +654,9 @@ def main() -> None:
         # fixedOrder) — data/curated/person_role_bucket_order.csv.
         f.write("const PERSON_ROLE_ORDER = ")
         f.write(json.dumps(load_role_order(), ensure_ascii=False, separators=(",", ":")))
+        f.write(";\n")
+        f.write("const PERSON_ROLE_LABELS_EN = ")
+        f.write(json.dumps(load_role_labels_en(), ensure_ascii=False, separators=(",", ":")))
         f.write(";\n")
     print(f"  wrote {os.path.relpath(OUT, ROOT)}  "
           f"({os.path.getsize(OUT)/1024:.0f} KB)")

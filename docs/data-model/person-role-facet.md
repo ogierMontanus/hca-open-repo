@@ -217,3 +217,13 @@ Reglen er siden udrullet til alle andre poster: personer med en klynge- eller
 automatisk rolle får Adel/Kongelig/Hof **som tillæg** (kilde `adel+:…` i
 `person_role_manual.csv`; 309 poster med automatisk rolle, 68 i klynger).
 Uden for R2–R4 kræves titel og slægtskabsord i samme komma-led.
+
+### Pipeline og engelske navne (2026-10-20)
+
+`build_all.py` kører kæden som trin 4a2 (`parse_person_role.py`), 4a3
+(`cluster_unassigned_roles.py`) og 4a4 (`apply_cluster_roles.py`) mellem
+works-extra (4a) og persons-extra (4b); rolledata kan derfor ikke længere
+blive forældet i forhold til værkregistret. persons_en.html viser engelske
+gren-navne fra kolonnen `label_en` i `person_role_bucket_order.csv`
+(udsendt som `PERSON_ROLE_LABELS_EN`); værdierne forbliver danske, fordi de
+indgår i `?role=`-URL'er.
