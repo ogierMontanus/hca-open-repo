@@ -118,8 +118,11 @@
   // Faceted filtering — read state from the sibling .facet-panel on every
   // render. Each H2/H3/author/rid/place checkbox carries the matching
   // data-* attribute naming the exact WORKS_EXTRA value it filters on.
-  // Within a .facet-group the predicates combine with OR; across groups
-  // with AND; an empty group (no boxes ticked) imposes no constraint.
+  // By default the predicates of a .facet-group combine with OR and groups
+  // with AND; the reader can switch any pair to AND/OR in the active-filter
+  // bar. Order, operators and evaluation live in js/filter-logic.js
+  // (HcaFilter, must load first; docs/filter-logic.md). An empty group (no
+  // boxes ticked) imposes no constraint.
   var FACET_SEL =
     'input[type=checkbox][data-h2], input[type=checkbox][data-h3], ' +
     'input[type=checkbox][data-author], input[type=checkbox][data-rid], ' +
@@ -143,46 +146,36 @@
            (p.place == null || w.place === p.place);
   }
 
-  function readFacetGroups() {
-    var groups = [];
+  // The facet selection as one HcaFilter expression. Every ticked box is a
+  // term, the boxes of one .facet-group form a group; the order and operators
+  // are kept in HcaFilter.shared, which the active-filter bar displays — so
+  // what is shown is what is evaluated. model.groups also lists every box of
+  // every group (ticked or not) for the availability counts.
+  function readFacetModel() {
+    var active = [], preds = {}, groups = [];
     document.querySelectorAll('.facet-panel .facet-group').forEach(function (g) {
       var boxes = g.querySelectorAll(FACET_SEL);
       if (!boxes.length) return;
-      var preds = [];
+      var gkey = HcaFilter.groupKeyOf(g);
+      var entry = { el: g, key: gkey, boxes: boxes };
+      groups.push(entry);
       for (var i = 0; i < boxes.length; i++) {
-        if (boxes[i].checked) preds.push(predOf(boxes[i]));
+        if (!boxes[i].checked) continue;
+        var key = HcaFilter.termKeyOfBox(boxes[i]);
+        active.push({ key: key, group: gkey });
+        preds[key] = predOf(boxes[i]);
       }
-      if (preds.length) groups.push(preds);
     });
-    return groups;
+    HcaFilter.shared.sync(active);
+    return { groups: groups, preds: preds, expr: HcaFilter.shared.expr(), terms: active.length };
   }
 
-  // Per-group active predicates indexed by group element — needed by
-  // updateFacetAvailability() which counts under "all OTHER groups" for
-  // each option (the standard adaptive-facet pattern).
-  function readGroupsByEl() {
-    var els = Array.prototype.slice.call(
-      document.querySelectorAll('.facet-panel .facet-group'));
-    return els.map(function (g) {
-      var boxes = g.querySelectorAll(FACET_SEL);
-      var preds = [];
-      for (var i = 0; i < boxes.length; i++) {
-        if (boxes[i].checked) preds.push(predOf(boxes[i]));
-      }
-      return { el: g, preds: preds };
-    });
-  }
-
-  function passesFacets(w, groups) {
-    for (var i = 0; i < groups.length; i++) {
-      var preds = groups[i];
-      var ok = false;
-      for (var j = 0; j < preds.length; j++) {
-        if (matchesPred(w, preds[j])) { ok = true; break; }
-      }
-      if (!ok) return false;
-    }
-    return true;
+  // Does work w pass the whole selection? `force` is HcaFilter.evalExpr's
+  // override of one group's truth (used for the facet counts).
+  function passesFacets(w, model, force) {
+    return HcaFilter.evalExpr(model.expr, function (key) {
+      return matchesPred(w, model.preds[key]);
+    }, force ? { force: force } : undefined);
   }
 
   var collator = (typeof Intl !== 'undefined' && Intl.Collator)
@@ -300,30 +293,38 @@
       esc(t('emptyResetBtn', 'Nulstil alle filtre')) + '</button></div>';
   }
 
-  // For each facet checkbox: count items that pass the letter filter AND all
-  // OTHER groups' active preds AND this option's pred. Options with 0 reach
-  // get disabled + dimmed; their .facet-item__count is also updated so the
-  // sidebar mirrors the live state. Checked boxes are never disabled — they
-  // are contributing to the current set and unticking them is the way out.
+  // For each facet checkbox: count the works that would remain if that value
+  // were the facet's only selection, with the letter filter and every other
+  // filter AND operator as the reader set them (with default operators:
+  // works passing all OTHER groups' ticks AND this option's pred). Options
+  // with 0 reach get disabled + dimmed; their .facet-item__count is also
+  // updated so the sidebar mirrors the live state. Checked boxes are never
+  // disabled — they are contributing to the current set and unticking them
+  // is the way out.
   function updateFacetAvailability() {
-    var byEl = readGroupsByEl();
-    byEl.forEach(function (entry, gi) {
-      var otherGroups = [];
-      for (var k = 0; k < byEl.length; k++) {
-        if (k === gi || !byEl[k].preds.length) continue;
-        otherGroups.push(byEl[k].preds);
+    var model = readFacetModel();
+    var pool = ALL.filter(function (w) { return !letter || w.init === letter; });
+    var base = null;   // pool entries passing the whole selection (lazy)
+    model.groups.forEach(function (entry) {
+      var inExpr = HcaFilter.hasGroup(model.expr, entry.key);
+      // Once per work and group (not per box): does it pass if this facet
+      // matches it (r1) / does not match it (r0)? A facet that is not part of
+      // the selection yet joins with AND, so r0 is false.
+      var pass1 = [], pass0 = [];
+      if (inExpr) {
+        pool.forEach(function (w) {
+          if (passesFacets(w, model, { key: entry.key, value: true })) pass1.push(w);
+          if (passesFacets(w, model, { key: entry.key, value: false })) pass0.push(w);
+        });
+      } else {
+        if (!base) base = pool.filter(function (w) { return passesFacets(w, model); });
+        pass1 = base;
       }
-      var boxes = entry.el.querySelectorAll(FACET_SEL);
-      boxes.forEach(function (b) {
+      entry.boxes.forEach(function (b) {
         var optPred = predOf(b);
-        var count = 0;
-        for (var i = 0; i < ALL.length; i++) {
-          var w = ALL[i];
-          if (letter && w.init !== letter) continue;
-          if (!passesFacets(w, otherGroups)) continue;
-          if (!matchesPred(w, optPred)) continue;
-          count++;
-        }
+        var count = 0, i;
+        for (i = 0; i < pass1.length; i++) if (matchesPred(pass1[i], optPred)) count++;
+        for (i = 0; i < pass0.length; i++) if (!matchesPred(pass0[i], optPred)) count++;
         var item = b.closest ? b.closest('.facet-item') : null;
         var countEl2 = item ? item.querySelector('.facet-item__count') : null;
         if (countEl2) countEl2.textContent = count;
@@ -342,11 +343,11 @@
   // selection. The "Alle" chip (no data-letter) is left alone.
   function updateLetterAvailability() {
     if (!bar) return;
-    var groups = readFacetGroups();
+    var model = readFacetModel();
     var counts = {};
     for (var i = 0; i < ALL.length; i++) {
       var w = ALL[i];
-      if (!passesFacets(w, groups)) continue;
+      if (!passesFacets(w, model)) continue;
       counts[w.init] = (counts[w.init] || 0) + 1;
     }
     bar.querySelectorAll('a.chip').forEach(function (chip) {
@@ -360,13 +361,13 @@
   }
 
   function apply() {
-    var groups = readFacetGroups();
+    var model = readFacetModel();
     filtered = ALL.filter(function (w) {
       if (letter && w.init !== letter) return false;
-      return passesFacets(w, groups);
+      return passesFacets(w, model);
     });
     filtered.sort(letter ? byTitle : byRefs);
-    var activeFacets = groups.reduce(function (n, g) { return n + g.length; }, 0);
+    var activeFacets = model.terms;
     var anyActive = activeFacets > 0 || letter !== null;
     showcaseEls.forEach(function (el) { el.style.display = anyActive ? 'none' : ''; });
     if (countEl) {
@@ -789,6 +790,8 @@
     facetPanel.addEventListener('change', function (ev) {
       if (ev.target && ev.target.matches && ev.target.matches(FACET_SEL)) apply();
     });
+    // The reader switched an AND/OR in the active-filter bar.
+    facetPanel.addEventListener('hca:filters-op-change', function () { apply(); });
   }
 
   // Wire the Nulstil button to clear all facet checkboxes + reset to "Alle".

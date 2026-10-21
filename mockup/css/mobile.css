@@ -88,6 +88,7 @@
   .active-filter { min-height: 36px; font-size: 0.85rem; }
   .active-filter__x { width: 24px; height: 24px; }
   .active-filters__clear { min-height: 36px; }
+  .active-filter-op { min-height: 36px; font-size: 0.8rem; }
 
   /* === Result cards and rows ============================================= */
   .result-grid { grid-template-columns: minmax(0, 1fr); }
