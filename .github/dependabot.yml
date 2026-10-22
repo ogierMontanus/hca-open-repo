@@ -10,13 +10,20 @@ updates:
       actions:
         patterns: ["*"]
 
+  # scripts/ci holds the hash-locked set the workflow installs
+  # (requirements.in -> requirements.txt, compiled with pip-compile).
   - package-ecosystem: pip
-    # Dependabot only recognises files named requirements.txt, so the
-    # differently named lists (requirements-pdf.txt, requirements-ci.txt)
-    # are covered by the weekly security-audit workflow instead.
-    directory: /scripts/parsers
+    directory: /scripts/ci
     schedule:
       interval: weekly
     groups:
       python:
         patterns: ["*"]
+
+  # The human-edited range files. Dependabot only recognises files named
+  # requirements.txt, so requirements-pdf/-ci/-dev.txt are covered by the
+  # weekly pip-audit in security-audit.yml instead.
+  - package-ecosystem: pip
+    directory: /scripts/parsers
+    schedule:
+      interval: weekly

@@ -1,0 +1,11 @@
+# Everything the build-mockup workflow installs. Resolve to the hash-locked
+# requirements.txt next to this file with:
+#
+#   pip-compile --generate-hashes --strip-extras \
+#       --output-file scripts/ci/requirements.txt scripts/ci/requirements.in
+#
+# (run with the Python version the workflow uses -- see build-mockup.yml).
+# CI installs the lock with --require-hashes, so a tampered or newly
+# published release of any package, direct or transitive, cannot slip in.
+-r ../parsers/requirements.txt
+-r ../requirements-ci.txt

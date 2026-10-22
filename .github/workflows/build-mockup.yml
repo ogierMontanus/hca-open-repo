@@ -37,15 +37,13 @@ jobs:
         with:
           python-version: '3.12'
 
+      # Hash-locked (scripts/ci/requirements.txt, compiled from requirements.in):
+      # --require-hashes refuses any package whose file hash is not in the lock.
+      # Covers scripts/parsers/requirements.txt plus the test tooling.
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f scripts/parsers/requirements.txt ]; then
-            pip install -r scripts/parsers/requirements.txt
-          fi
-          # Test dependencies: pytest, and fontTools for the PDF-font coverage
-          # test (+ openpyxl). Kept in a file so Dependabot and pip-audit see them.
-          pip install -r scripts/requirements-ci.txt
+          pip install --require-hashes -r scripts/ci/requirements.txt
 
       - name: Stage 1a — xlsx to normalised CSVs
         run: python scripts/normalization/hca_xlsx_to_csv.py
@@ -164,6 +162,12 @@ jobs:
           </html>
           HTML
           echo "Bundled $(find _site/mockup/diary-pages -name '*.html' | wc -l) diary pages"
+
+      # Content-Security-Policy: GitHub Pages cannot send headers, so inject a
+      # <meta> policy into every bundled page. Inline scripts are allowed by
+      # hash, computed here from the pages as served (docs/security.md).
+      - name: Apply Content-Security-Policy
+        run: python scripts/build_mockup/apply_csp.py _site/mockup
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3

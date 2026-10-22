@@ -4,13 +4,13 @@ on:
   pull_request:
     paths:
       - 'scripts/**/requirements*.txt'
-      - 'scripts/requirements-ci.txt'
+      - 'scripts/**/requirements.in'
       - '.github/workflows/**'
   push:
     branches: [main]
     paths:
       - 'scripts/**/requirements*.txt'
-      - 'scripts/requirements-ci.txt'
+      - 'scripts/**/requirements.in'
   schedule:
     - cron: '17 5 * * 1'   # weekly: new CVEs appear without any repo change
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
       - name: Audit Python dependencies
         run: |
           python -m pip install pip-audit
-          for f in scripts/parsers/requirements.txt scripts/build_mockup/requirements-pdf.txt scripts/requirements-ci.txt; do
+          for f in scripts/ci/requirements.txt scripts/parsers/requirements.txt scripts/build_mockup/requirements-pdf.txt scripts/requirements-dev.txt; do
             echo "::group::$f"
             pip-audit -r "$f"
             echo "::endgroup::"

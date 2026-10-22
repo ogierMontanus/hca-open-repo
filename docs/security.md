@@ -62,7 +62,8 @@ HTML built in script escapes every value taken from data or from the URL
 
   ```powershell
   python -m pip install pip-tools
-  pip-compile --generate-hashes --strip-extras scripts/ci/requirements.in
+  pip-compile --generate-hashes --strip-extras `
+      --output-file scripts/ci/requirements.txt scripts/ci/requirements.in
   ```
 
   Use the same Python minor version as `build-mockup.yml` (3.12). Dependabot
