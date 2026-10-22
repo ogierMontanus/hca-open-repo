@@ -105,7 +105,7 @@
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
@@ -268,10 +268,11 @@
 </footer>
 
 <!-- Generated data — gitignored; CI regenerates. Pages degrade gracefully when absent. -->
-<script src="data/nation-index.js" onerror="void 0"></script>
-<script src="data/persons-extra.js" onerror="void 0"></script>
-<script src="data/places-extra.js" onerror="void 0"></script>
-<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/nation-index.js"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/places-extra.js"></script>
+<script src="data/works-extra.js"></script>
+<script src="js/no-submit.js"></script>
 <script src="js/entity-refs.js"></script>
 <script src="js/table-view.js"></script>
 <script>

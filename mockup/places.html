@@ -10,12 +10,13 @@
 <body data-section="hvor">
 
 <div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
 <script src="js/icons.js"></script>
 
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
@@ -300,22 +301,22 @@
 
 <!-- Generated place catalogue (gitignored; CI regenerates it). Build with:
      python scripts/build_mockup/build_places_extra.py -->
-<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js"></script>
 <!-- cooccurrence.js supplies PLACE_TOP_PERSONS for the "Samtidige personer"
      facet; persons-extra.js supplies the labels for the person ids it returns.
      Both are generated and gitignored, so each is optional — the facet marks
      itself pending if either is absent rather than rendering bare Reg-ids.
        python scripts/build_mockup/build_cooccurrence.py
        python scripts/build_mockup/build_persons_extra.py -->
-<script src="data/cooccurrence.js" onerror="void 0"></script>
-<script src="data/persons-extra.js" onerror="void 0"></script>
-<script src="data/nation-index.js" onerror="void 0"></script>
+<script src="data/cooccurrence.js"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/nation-index.js"></script>
 <script src="js/facet-overlay.js"></script>
 <script src="js/facet-engine.js"></script>
 <script src="js/nation-link.js"></script>
 <!-- Diary reverse index: a ticked entry brings all its diary pages into the cart (js/cart.js relatedFor). -->
-<script src="data/diary-refs.js" onerror="void 0"></script>
-<script src="data/diary-refs-overflow.js" onerror="void 0"></script>
+<script src="data/diary-refs.js"></script>
+<script src="data/diary-refs-overflow.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script>
@@ -674,7 +675,7 @@
   var urlCategory = new URLSearchParams(location.search).get('category');
   if (urlCategory) {
     var categoryBox = document.querySelector(
-      '.facet-panel input[data-facet="category"][data-match="' + urlCategory.replace(/"/g, '') + '"]');
+      '.facet-panel input[data-facet="category"][data-match="' + CSS.escape(urlCategory) + '"]');
     if (categoryBox) categoryBox.checked = true;
   }
 

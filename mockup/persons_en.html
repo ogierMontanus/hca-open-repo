@@ -45,12 +45,13 @@
 <body data-section="hvem">
 
 <div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
 <script src="js/icons.js"></script>
 
 <header class="site-header">
   <div class="container">
     <a href="index_en.html" class="site-logo">The HCA Who-What-Where</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
       <button type="submit" class="search-btn">Search</button>
     </form>
@@ -297,16 +298,16 @@
 </footer>
 
 <!-- Person data + supporting data for the detail view (generated; gitignored). -->
-<script src="data/persons-extra.js" onerror="void 0"></script>
-<script src="data/works-extra.js" onerror="void 0"></script>
-<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/works-extra.js"></script>
+<script src="data/places-extra.js"></script>
 <script src="js/entity-refs.js"></script>
-<script src="data/cooccurrence.js" onerror="void 0"></script>
-<script src="data/diary-index.js" onerror="void 0"></script>
-<script src="data/diary-refs.js" onerror="void 0"></script>
-<script src="data/diary-refs-overflow.js" onerror="void 0"></script>
+<script src="data/cooccurrence.js"></script>
+<script src="data/diary-index.js"></script>
+<script src="data/diary-refs.js"></script>
+<script src="data/diary-refs-overflow.js"></script>
 <script src="js/diary-wire.js"></script>
-<script src="data/nation-index.js" onerror="void 0"></script>
+<script src="data/nation-index.js"></script>
 <script src="js/facet-overlay.js"></script>
 <script src="js/facet-engine.js"></script>
 <script src="js/nation-link.js"></script>
@@ -955,7 +956,7 @@
       val = val.trim();
       if (!val) return;
       var box = document.querySelector(
-        '.facet-panel input[data-facet="' + field + '"][data-match="' + val.replace(/"/g, '') + '"]');
+        '.facet-panel input[data-facet="' + field + '"][data-match="' + CSS.escape(val) + '"]');
       if (box) box.checked = true;
     });
   });

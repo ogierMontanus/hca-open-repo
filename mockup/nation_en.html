@@ -105,7 +105,7 @@
 <header class="site-header">
   <div class="container">
     <a href="index_en.html" class="site-logo">The HCA Who-What-Where</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
       <button type="submit" class="search-btn">Search</button>
     </form>
@@ -270,10 +270,11 @@
 </footer>
 
 <!-- Generated data — gitignored; CI regenerates. Pages degrade gracefully when absent. -->
-<script src="data/nation-index.js" onerror="void 0"></script>
-<script src="data/persons-extra.js" onerror="void 0"></script>
-<script src="data/places-extra.js" onerror="void 0"></script>
-<script src="data/works-extra.js" onerror="void 0"></script>
+<script src="data/nation-index.js"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/places-extra.js"></script>
+<script src="data/works-extra.js"></script>
+<script src="js/no-submit.js"></script>
 <script src="js/entity-refs.js"></script>
 <script src="js/table-view.js"></script>
 <script>

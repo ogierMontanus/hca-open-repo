@@ -73,12 +73,13 @@
 <body>
 
 <div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
 <script src="js/icons.js"></script>
 
 <header class="site-header">
   <div class="container">
     <a href="index_en.html" class="site-logo">The HCA Who-What-Where</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
       <button type="submit" class="search-btn">Search</button>
     </form>
@@ -381,8 +382,8 @@
 
 <!-- Generated diary data (gitignored). Build with:
      python scripts/build_mockup/build_diary_index.py -->
-<script src="data/diary-index.js" onerror="void 0"></script>
-<script src="data/diary-refs.js" onerror="void 0"></script>
+<script src="data/diary-index.js"></script>
+<script src="data/diary-refs.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script src="js/diary-wire.js"></script>
@@ -751,7 +752,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var initialLayout = new URLSearchParams(location.search).get('layout');
   if (initialLayout) {
     var initialBtn = document.querySelector(
-      '.layout-switcher__btn[data-layout="' + initialLayout + '"]');
+      '.layout-switcher__btn[data-layout="' + CSS.escape(initialLayout) + '"]');
     if (initialBtn) initialBtn.click();
   }
 });

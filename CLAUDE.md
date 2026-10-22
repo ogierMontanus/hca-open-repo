@@ -94,13 +94,18 @@ Wikidata-badges.
 vektor-basiskort** i repoet — ingen fjern-flise-leverandør:
 
 ```html
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="vendor/leaflet/leaflet.js"></script>
 <script src="vendor/basemap/basemap-world.js"></script>
 <script src="js/basemap.js"></script>
 …
 var map = L.map('…');
 HcaBasemap.addTo(map);   // i stedet for L.tileLayer(...)
 ```
+
+Leaflet 1.9.4 og Leaflet.markercluster 1.5.3 er **vendoreret** i
+`mockup/vendor/leaflet/` (byte-identiske med unpkg-udgivelserne; licenser
+ligger ved siden af). Load aldrig Leaflet fra `unpkg.com` eller anden CDN —
+det ville bryde `connect-src`/`script-src`-CSP'en (se `docs/security.md`).
 
 Data: Natural Earth (public domain) — 1:50m verden (`basemap-world.js`)
 og 1:10m Europa/Middelhavet (`basemap-europe.js`, lazy-loades ved

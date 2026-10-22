@@ -355,7 +355,7 @@
       <div class="landing-title">Andersens</div>
       <div class="landing-subtitle">Hvem — hvad — hvor?</div>
       <div class="landing-search-wrap">
-        <form class="landing-search-form" role="search" onsubmit="return false" autocomplete="off">
+        <form class="landing-search-form" role="search" data-no-submit autocomplete="off">
           <input type="search"
                  id="landing-search-input"
                  class="landing-search-input"
@@ -475,7 +475,8 @@
   </div>
 </footer>
 
-<script src="data/search-index.js" onerror="window.SEARCH_INDEX_MISSING=true"></script>
+<script src="data/search-index.js"></script>
+<script src="js/no-submit.js"></script>
 <script src="js/site-search.js"></script>
 
 </body>

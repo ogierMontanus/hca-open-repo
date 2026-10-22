@@ -10,12 +10,13 @@
 <body data-section="hvad">
 
 <div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
 <script src="js/icons.js"></script>
 
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
@@ -255,9 +256,9 @@
      group spelling variants of the same person onto one row and to keep
      a source citation out of the facet entirely -- same 4-script load
      order persons.html/work.html/places.html already use. -->
-<script src="data/persons-extra.js" onerror="void 0"></script>
-<script src="data/works-extra.js" onerror="void 0"></script>
-<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/works-extra.js"></script>
+<script src="data/places-extra.js"></script>
 <script src="js/entity-refs.js"></script>
 <script>
   window.CATEGORY_WING='billedkunst.html';
@@ -295,8 +296,8 @@
 })();
 </script>
 <!-- Diary reverse index: a ticked entry brings all its diary pages into the cart (js/cart.js relatedFor). -->
-<script src="data/diary-refs.js" onerror="void 0"></script>
-<script src="data/diary-refs-overflow.js" onerror="void 0"></script>
+<script src="data/diary-refs.js"></script>
+<script src="data/diary-refs-overflow.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script src="js/facet-overlay.js"></script>

@@ -1,0 +1,18 @@
+# Optional tools for scripts that are run by hand, not by the CI build.
+# (CI installs scripts/ci/requirements.txt; see docs/security.md.)
+#
+# Install what you need, e.g.  pip install -r scripts/requirements-dev.txt
+
+# PDF text extraction from the printed registers / Collin letters
+#   scripts/parsers/parse_personregister_xi.py, scripts/correspondence/*.py
+PyMuPDF>=1.24         # imported as `fitz`
+
+# Natural Earth basemap build:  python scripts/build_mockup/build_basemap.py
+shapely>=2.0
+
+# Browser QA: scripts/qa/cart_pdf_check.py, scripts/qa/cart_monkey.py
+# (then once:  python -m playwright install chromium)
+playwright>=1.45
+
+# Diary PDF builder + tests/test_build_diary_pdf.py
+-r build_mockup/requirements-pdf.txt

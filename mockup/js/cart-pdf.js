@@ -667,11 +667,27 @@ window.CartPdf = (function () {
 
   // Same work on the main thread (no worker available): the page is
   // unresponsive while it runs, but the result is identical.
+  // The library is run from a blob: script rather than eval(), so the page's
+  // Content-Security-Policy needs no 'unsafe-eval' (docs/security.md).
+  function loadPdfMakeInline() {
+    if (window.pdfMake) return Promise.resolve();
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(new Blob([window.HCA_PDFMAKE_SRC], { type: 'text/javascript' }));
+      var s = document.createElement('script');
+      function cleanup() { URL.revokeObjectURL(url); if (s.parentNode) s.parentNode.removeChild(s); }
+      s.onload = function () { cleanup(); resolve(); };
+      s.onerror = function () { cleanup(); reject(new Error('pdfmake could not be loaded')); };
+      s.src = url;
+      document.head.appendChild(s);
+    });
+  }
+
   function inline(payload, t, onStatus) {
-    if (!window.pdfMake) (0, eval)(window.HCA_PDFMAKE_SRC);   // eslint-disable-line no-eval
-    pdfMake.addVirtualFileSystem(window.HCA_PDF_FONTS);
-    pdfMake.addFonts(B.FONTS);
-    return tick().then(function () {
+    return loadPdfMakeInline().then(function () {
+      pdfMake.addVirtualFileSystem(window.HCA_PDF_FONTS);
+      pdfMake.addFonts(B.FONTS);
+      return tick();
+    }).then(function () {
       var doc = B.build(payload);
       onStatus(t.stWrite(0));
       return tick().then(function () { return pdfMake.createPdf(doc).getBlob(); });

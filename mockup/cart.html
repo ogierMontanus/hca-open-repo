@@ -136,7 +136,7 @@
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
@@ -217,6 +217,7 @@
   </div>
 </footer>
 
+<script src="js/no-submit.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/cart-pdf.js"></script>
 <script>
@@ -436,54 +437,6 @@
   // print dialog. Only used when js/cart-pdf.js cannot produce the PDF (the
   // PDF library or data/diary-print/ is missing or blocked).
   function printTable() {
-    var rows = [];
-    Cart.all().forEach(function (item) {
-      var title = (item.title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      var url = (item.url || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      rows.push(
-        '<tr><td>' + (item.id || '') + '</td><td>' + title + '</td><td><a href="' + url + '">' + url + '</a></td></tr>'
-      );
-    });
-
-    var content = '<!doctype html><html><head><meta charset="utf-8"><title>HCA kurv</title>' +
-      '<style>body{font-family:sans-serif;margin:2rem}table{border-collapse:collapse;width:100%}td{padding:.5rem;border:1px solid #ddd;vertical-align:top}th{padding:.5rem;border:1px solid #ddd;text-align:left}</style>' +
-      '</head><body><h1>HCA kurv</h1><table><thead><tr><th>ID</th><th>Titel</th><th>URL</th></tr></thead><tbody>' +
-      rows.join('') + '</tbody></table></body></html>';
-
-    var win = window.open('', '_blank', 'width=900,height=700');
-    if (!win) return;
-    win.document.write(content);
-    win.document.close();
-    win.focus();
-    win.print();
-  }
-
-  // Hands the cart to scripts/build_mockup/build_diary_pdf.py: diary items
-  // become the PDF's pages, person/place/work items the entities highlighted
-  // in its footnotes. A file download (Blob) works under file:// as well.
-  document.getElementById('js-cart-export').addEventListener('click', function () {
-    var blob = new Blob([JSON.stringify({ version: 1, items: Cart.all() }, null, 1)],
-      { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'hca-kurv.json';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-  });
-
-  document.getElementById('js-cart-download').addEventListener('click', function () {
-    var payload = JSON.stringify({ version: 1, items: Cart.all() }, null, 1);
-    var blob = new Blob([payload], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'hca-kurv.json';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-  });
     var d = new Date();
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
     document.getElementById('js-print-date').textContent =

@@ -647,8 +647,8 @@
     if (!v) return null;
     var h3 = (typeof v === 'string') ? v : v.h3;
     var h2 = (typeof v === 'string') ? null : v.h2;
-    var sel = '.facet-panel input[data-h3="' + String(h3).replace(/"/g, '') + '"]';
-    if (h2) sel += '[data-h2="' + String(h2).replace(/"/g, '') + '"]';
+    var sel = '.facet-panel input[data-h3="' + CSS.escape(String(h3)) + '"]';
+    if (h2) sel += '[data-h2="' + CSS.escape(String(h2)) + '"]';
     return document.querySelector(sel);
   }
 
