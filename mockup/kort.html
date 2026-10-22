@@ -5,18 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kort — HCA's Hvem-hvad-hvor</title>
   <link rel="stylesheet" href="css/style.css">
-  <!-- Leaflet 1.9.4 (same version as place.html) -->
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin="">
+  <!-- Leaflet 1.9.4, vendored (vendor/leaflet/) — no third-party host. -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <!-- Leaflet.markercluster 1.5.3 — bundles cluster CSS + default theme + JS. -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
-    integrity="sha256-YU3qCpj/P06tdPBJGPax0bm6Q1wltfwjsho5TR4+TYc="
-    crossorigin="">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
-    integrity="sha256-YSWCMtmNZNwqex4CEw1nQhvFub2lmU7vcCKP+XVwwXA="
-    crossorigin="">
+  <link rel="stylesheet" href="vendor/leaflet/MarkerCluster.css">
+  <link rel="stylesheet" href="vendor/leaflet/MarkerCluster.Default.css">
   <style>
     /* The map should fill the viewport below the header, minus a small footer.
        320 px on the per-place card is fine for context, but the all-places
@@ -45,7 +38,7 @@
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
@@ -126,17 +119,12 @@
   </div>
 </footer>
 
-<script src="data/places-extra.js" onerror="void 0"></script>
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-  crossorigin=""></script>
+<script src="data/places-extra.js"></script>
+<script src="vendor/leaflet/leaflet.js"></script>
 <script src="vendor/basemap/basemap-world.js"></script>
+<script src="js/no-submit.js"></script>
 <script src="js/basemap.js"></script>
-<script
-  src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"
-  integrity="sha256-Hk4dIpcqOSb0hZjgyvFOP+cEmDXUKKNE/tT542ZbNQg="
-  crossorigin=""></script>
+<script src="vendor/leaflet/leaflet.markercluster.js"></script>
 <script>
 (function () {
   'use strict';

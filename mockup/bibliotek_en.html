@@ -68,12 +68,13 @@
 <body data-section="hvad">
 
 <div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
 <script src="js/icons.js"></script>
 
 <header class="site-header">
   <div class="container">
     <a href="index_en.html" class="site-logo">The HCA Who-What-Where</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Search registers, diaries, places…" class="search-input">
       <button type="submit" class="search-btn">Search</button>
     </form>
@@ -348,9 +349,9 @@
      source citation ("Geijer og Afzelius: Svenska folkvisor Nr. 26") out
      of the facet entirely -- same 4-script load order persons_en.html/
      work.html/places_en.html already use. -->
-<script src="data/persons-extra.js" onerror="void 0"></script>
-<script src="data/works-extra.js" onerror="void 0"></script>
-<script src="data/places-extra.js" onerror="void 0"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/works-extra.js"></script>
+<script src="data/places-extra.js"></script>
 <script src="js/entity-refs.js"></script>
 <script>
   window.CATEGORY_WING='bibliotek.html';
@@ -397,8 +398,8 @@
   };
 </script>
 <!-- Diary reverse index: a ticked entry brings all its diary pages into the cart (js/cart.js relatedFor). -->
-<script src="data/diary-refs.js" onerror="void 0"></script>
-<script src="data/diary-refs-overflow.js" onerror="void 0"></script>
+<script src="data/diary-refs.js"></script>
+<script src="data/diary-refs-overflow.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script src="js/facet-overlay.js"></script>

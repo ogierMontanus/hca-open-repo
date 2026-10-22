@@ -5,11 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sted — HCA's Hvem-hvad-hvor</title>
   <link rel="stylesheet" href="css/style.css">
-  <!-- Leaflet — loaded eagerly; init runs only when the entity has coordinates. -->
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin="">
+  <!-- Leaflet 1.9.4, vendored (vendor/leaflet/) — loaded eagerly; init runs only when the entity has coordinates. -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <style>
     .wd-badge {
       display: inline-block; font-size: 0.63rem; font-family: monospace;
@@ -28,7 +25,7 @@
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
-    <form class="search-form" role="search" onsubmit="return false">
+    <form class="search-form" role="search" data-no-submit>
       <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
       <button type="submit" class="search-btn">Søg</button>
     </form>
@@ -74,24 +71,25 @@
   </div>
 </footer>
 
+<script src="js/no-submit.js"></script>
 <script src="js/nav.js"></script>
 <!-- Generated per-entity extras (gitignored). Build with the build_*_extra.py scripts.
      places-extra.js powers the page itself; works-extra.js + persons-extra.js
      are loaded so EntityRefs can render the "Værker" and "Personer" sections. -->
-<script src="data/places-extra.js" onerror="void 0"></script>
-<script src="data/works-extra.js" onerror="void 0"></script>
-<script src="data/persons-extra.js" onerror="void 0"></script>
+<script src="data/places-extra.js"></script>
+<script src="data/works-extra.js"></script>
+<script src="data/persons-extra.js"></script>
 <script src="js/entity-refs.js"></script>
 <!-- Co-occurrence index for "Hyppigste …" sections (gitignored).
      Build with: python scripts/build_mockup/build_cooccurrence.py -->
-<script src="data/cooccurrence.js" onerror="void 0"></script>
+<script src="data/cooccurrence.js"></script>
 <!-- Generated diary data (gitignored). Build with:
      python scripts/build_mockup/build_diary_index.py -->
-<script src="data/diary-index.js" onerror="void 0"></script>
-<script src="data/diary-refs.js" onerror="void 0"></script>
-<script src="data/diary-refs-overflow.js" onerror="void 0"></script>
+<script src="data/diary-index.js"></script>
+<script src="data/diary-refs.js"></script>
+<script src="data/diary-refs-overflow.js"></script>
 <script src="js/diary-wire.js"></script>
-<script src="data/nation-index.js" onerror="void 0"></script>
+<script src="data/nation-index.js"></script>
 <script src="js/nation-link.js"></script>
 <script src="js/cart.js"></script>
 <!-- Dagbogsreferencer defaults to layout:'table' when no localStorage
@@ -100,10 +98,7 @@
      to the list renderer but the "Vis alle" button still thinks
      everything is already shown and stays hidden forever. -->
 <script src="js/table-view.js"></script>
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-  crossorigin=""></script>
+<script src="vendor/leaflet/leaflet.js"></script>
 <script src="vendor/basemap/basemap-world.js"></script>
 <script src="js/basemap.js"></script>
 <script>
