@@ -28,6 +28,19 @@ def _load():
     return mod
 
 
+try:
+    import pytest
+except ImportError:                 # plain `python tests/test_build_diary_pdf.py`
+    pytest = None
+
+if pytest is not None:
+    @pytest.fixture
+    def mod():
+        pytest.importorskip('reportlab')
+        pytest.importorskip('pypdf')
+        return _load()
+
+
 def _build(mod, tmp, pages, entities):
     out = Path(tmp) / 'out.pdf'
     mod.main(['--pages', *pages, '--entity', *entities, '-o', str(out), '--base-url', BASE])
