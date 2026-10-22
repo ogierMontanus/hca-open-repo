@@ -1340,6 +1340,26 @@ body::before {
   padding: 4px 6px;
 }
 .active-filters__clear:hover { color: var(--color-accent); }
+/* AND/OR between chips (js/active-filters.js, logic in js/filter-logic.js).
+   Chips of one facet sit in a cluster that is evaluated as if parenthesised.
+   Deliberately quiet: a small native <select> without frame — no popup of our
+   own, and this bar lives outside the sticky .facet-panel. */
+.active-filter-cluster { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--sp2); max-width: 100%; }
+.active-filter-cluster--multi {
+  padding: 2px 6px; border: 1px dashed var(--color-border); border-radius: 999px;
+}
+.active-filter-op {
+  font: inherit; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
+  color: var(--color-text-muted); background: transparent;
+  border: none; border-radius: 4px; padding: 2px 2px; cursor: pointer;
+}
+.active-filter-op:hover, .active-filter-op:focus-visible { color: var(--color-accent); }
+.active-filter-op--fixed { cursor: default; padding: 2px 4px; }
+.active-filter-op--fixed:hover { color: var(--color-text-muted); }
+.active-filters__formula {
+  flex-basis: 100%; font-size: 0.72rem; color: var(--color-text-muted); line-height: 1.4;
+}
+.active-filters__formula-label { font-weight: 600; }
 .facet-panel__badge {
   display: none; margin-left: 6px; padding: 0 7px; border-radius: 999px;
   font-size: 0.7rem; letter-spacing: 0; background: var(--color-accent); color: #fff;

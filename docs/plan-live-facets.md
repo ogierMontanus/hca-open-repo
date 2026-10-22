@@ -1,5 +1,9 @@
 # Plan: Live facet-panel filtering
 
+> **Opdatering 2026-10-21:** operatoren mellem aktive filtre kan nu skiftes AND/OR — se
+> [`filter-logic.md`](filter-logic.md). Beskrivelsen nedenfor af «OR inden for en gruppe, AND
+> på tværs» er nu *standardadfærden*, ikke den eneste regel.
+
 Status: proposal · 2026-08-03 · revised after review
 
 Goal: turn `<aside class="facet-panel">` from hardcoded demo markup into

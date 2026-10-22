@@ -465,6 +465,21 @@
     window.print();
   }
 
+  // Hands the cart to scripts/build_mockup/build_diary_pdf.py: diary items
+  // become the PDF's pages, person/place/work items the entities highlighted
+  // in its footnotes. A file download (Blob) works under file:// as well.
+  document.getElementById('js-cart-export').addEventListener('click', function () {
+    var blob = new Blob([JSON.stringify({ version: 1, items: Cart.all() }, null, 1)],
+      { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hca-kurv.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
   // The PDF proper — cover page, one A4 sheet per diary page, appendix of
   // register entries — is written straight to a file by CartPdf (pdfmake), no
   // print dialog. Falls back to the plain table print (printTable) only when

@@ -1,9 +1,15 @@
 /* facet-engine.js — live filtering for <aside class="facet-panel">.
  *
  * Generalises the faceting core that has been running on the works-category
- * pages (see js/category-catalogue.js): OR within a facet group, AND across
- * groups, with adaptive availability — options that would yield nothing get
- * disabled, dimmed, and their counts rewritten to match the live state.
+ * pages (see js/category-catalogue.js): by default OR within a facet group, AND
+ * across groups, with adaptive availability — options that would yield nothing
+ * get disabled, dimmed, and their counts rewritten to match the live state.
+ *
+ * The operator between any two active filters can be switched AND/OR in the
+ * active-filter bar (js/active-filters.js). Order, operators and evaluation
+ * live in js/filter-logic.js (HcaFilter, must load first) and are documented
+ * in docs/filter-logic.md; this file only supplies the per-record truth of
+ * each term (hits / inRange) and asks HcaFilter to combine them.
  *
  * No dependencies. Plain <script> tag over an in-memory array, because the
  * mockup is opened over file:// where fetch() of JSON is blocked (that is also
@@ -61,8 +67,8 @@
  * An item passes when ANY of its values for that accessor lies within
  * [from, to] (either bound may be left empty = open). Items with no value
  * at all are excluded while a bound is set — they have nothing to match.
- * A range group takes part in the same AND with the checkbox groups, counts
- * as one active facet, is cleared by reset(), and feeds matcher() so page
+ * A range group is one term in its own group: it combines with the checkbox
+ * groups like any other (AND by default), counts as one active facet, is cleared by reset(), and feeds matcher() so page
  * chrome (the alphabet bar) sees it too.
  *
  * ── Usage ─────────────────────────────────────────────────────────────────
@@ -77,7 +83,7 @@
  *     labels:   { person: function (rid) { return NAMES[rid]; } },
  *     sortKeys: { person: surnameKey },   // tiebreak when counts are equal
  *     fixedOrder: { role: ['A', 'B'] },   // optional: fixed display order
- *     onChange: function (filtered) { render(filtered); }
+ *     onChange: function (filtered, state) { render(filtered); }  // state.expr: see filter-logic.js
  *   });
  *
  * Returns a controller: .apply() .reset() .state() .setPrefilter(fn)
@@ -203,9 +209,11 @@ window.FacetEngine = (function () {
       var els = panel.querySelectorAll('.facet-group');
       for (var g = 0; g < els.length; g++) {
         if (els[g].hasAttribute('data-facet-pending')) continue;
+        var gkey = HcaFilter.groupKeyOf(els[g]);
         var rng = readRange(els[g]);
         if (rng !== undefined) {
-          out.push({ el: els[g], preds: [], checked: [], range: rng });
+          if (rng) rng.key = HcaFilter.termKeyOfRange(els[g].querySelector(RANGE_SEL));
+          out.push({ el: els[g], key: gkey, preds: [], checked: [], range: rng });
           continue;
         }
         var boxes = els[g].querySelectorAll(BOX_SEL);
@@ -214,28 +222,42 @@ window.FacetEngine = (function () {
         for (var j = 0; j < boxes.length; j++) {
           var p = compile(boxes[j]);
           all.push(p);
-          if (boxes[j].checked) checked.push(p);
+          if (boxes[j].checked) { p.key = HcaFilter.termKeyOfBox(boxes[j]); checked.push(p); }
         }
-        out.push({ el: els[g], preds: all, checked: checked });
+        out.push({ el: els[g], key: gkey, preds: all, checked: checked });
       }
       return out;
     }
 
-    // OR inside a group, AND between groups. A group with nothing ticked
-    // imposes no constraint at all.
-    function passes(idx, groups, skipEl) {
+    // The selection as one HcaFilter expression. Every ticked box and every
+    // non-empty range is a term; terms of one facet form a group (OR between
+    // them unless the reader changed it), groups are joined AND unless the
+    // reader changed it. The order and operators live in HcaFilter.shared so
+    // the active-filter bar shows exactly this expression. A group with
+    // nothing ticked has no terms and so imposes no constraint.
+    //
+    // m.cur is the record index the term test currently answers for; set it,
+    // then call HcaFilter.evalExpr(m.expr, m.test).
+    function model(groups) {
+      var active = [], byKey = {};
       for (var g = 0; g < groups.length; g++) {
         var grp = groups[g];
-        if (grp.el === skipEl) continue;
-        if (grp.range && !inRange(idx, grp.range)) return false;
-        if (!grp.checked.length) continue;
-        var ok = false;
-        for (var j = 0; j < grp.checked.length; j++) {
-          if (hits(idx, grp.checked[j])) { ok = true; break; }
+        if (grp.range) {
+          active.push({ key: grp.range.key, group: grp.key });
+          byKey[grp.range.key] = grp.range;
         }
-        if (!ok) return false;
+        for (var j = 0; j < grp.checked.length; j++) {
+          active.push({ key: grp.checked[j].key, group: grp.key });
+          byKey[grp.checked[j].key] = grp.checked[j];
+        }
       }
-      return true;
+      HcaFilter.shared.sync(active);
+      var m = { groups: groups, expr: HcaFilter.shared.expr(), cur: 0 };
+      m.test = function (key) {
+        var t = byKey[key];
+        return t.want ? hits(m.cur, t) : inRange(m.cur, t);
+      };
+      return m;
     }
 
     /* ── Option rendering ───────────────────────────────────────────────── */
@@ -380,7 +402,7 @@ window.FacetEngine = (function () {
         // Runs after every repaint, including ones triggered by
         // FacetOverlay's own toggle/backdrop/Escape handling — refreshes
         // dimming/counts for whatever rows just appeared.
-        function () { updateAvailability(liveGroups()); }
+        function () { updateAvailability(model(liveGroups())); }
       );
     }
 
@@ -391,29 +413,54 @@ window.FacetEngine = (function () {
 
     /* ── Availability ───────────────────────────────────────────────────── */
 
-    // For each option: how many items would remain if it were ticked, given
-    // the prefilter and every OTHER group's current selection. Zero-reach
+    // For each option: how many records the result would hold if that value
+    // were the facet's only selection, with every other filter AND operator
+    // left as the reader set them. With default operators this is the classic
+    // "items passing all OTHER groups that have this value". Zero-reach
     // options are disabled and dimmed; ticked ones never are, since unticking
     // them is the way back out.
-    function updateAvailability(groups) {
+    function updateAvailability(m) {
+      var groups = m.groups, expr = m.expr;
       // The prefilter is the same for every option, so evaluate it once per
       // item rather than once per item per option.
       var pre = new Array(items.length);
       for (var i = 0; i < items.length; i++) {
         pre[i] = !prefilter || prefilter(items[i]);
       }
+      var base = null;   // per item: does it pass the whole expression? (lazy)
       for (var g = 0; g < groups.length; g++) {
-        // "All other groups" is also constant within a group — precompute
-        // which items survive them, then each option only tests itself.
-        var base = [];
-        for (var n = 0; n < items.length; n++) {
-          if (pre[n] && passes(n, groups, groups[g].el)) base.push(n);
-        }
         var preds = groups[g].preds;
+        if (!preds.length) continue;
+        var key = groups[g].key;
+        var inExpr = HcaFilter.hasGroup(expr, key);
+        // Once per item and group (not per option): does the record pass if
+        // this facet matches it (r1) / does not match it (r0)? A facet that
+        // is not part of the selection yet joins with AND, so r0 is false.
+        var pass1 = [], pass0 = [];
+        if (!inExpr && !base) {
+          base = new Array(items.length);
+          for (var q = 0; q < items.length; q++) {
+            m.cur = q;
+            base[q] = pre[q] && HcaFilter.evalExpr(expr, m.test);
+          }
+        }
+        for (var n = 0; n < items.length; n++) {
+          if (!pre[n]) continue;
+          if (inExpr) {
+            m.cur = n;
+            if (HcaFilter.evalExpr(expr, m.test, { force: { key: key, value: true } })) pass1.push(n);
+            if (HcaFilter.evalExpr(expr, m.test, { force: { key: key, value: false } })) pass0.push(n);
+          } else if (base[n]) {
+            pass1.push(n);
+          }
+        }
         for (var b = 0; b < preds.length; b++) {
-          var p = preds[b], count = 0;
-          for (var j = 0; j < base.length; j++) {
-            if (hits(base[j], p)) count++;
+          var p = preds[b], count = 0, j;
+          for (j = 0; j < pass1.length; j++) {
+            if (hits(pass1[j], p)) count++;
+          }
+          for (j = 0; j < pass0.length; j++) {
+            if (!hits(pass0[j], p)) count++;
           }
           var box  = p.box;
           var item = box.closest ? box.closest('.facet-item') : null;
@@ -434,13 +481,15 @@ window.FacetEngine = (function () {
 
     function apply() {
       var groups = liveGroups();
+      var m = model(groups);
       filtered = [];
       for (var i = 0; i < items.length; i++) {
         if (prefilter && !prefilter(items[i])) continue;
-        if (!passes(i, groups, null)) continue;
+        m.cur = i;
+        if (!HcaFilter.evalExpr(m.expr, m.test)) continue;
         filtered.push(items[i]);
       }
-      updateAvailability(groups);
+      updateAvailability(m);
       onChange(filtered, state(groups));
       return filtered;
     }
@@ -451,7 +500,10 @@ window.FacetEngine = (function () {
       for (var i = 0; i < groups.length; i++) {
         active += groups[i].checked.length + (groups[i].range ? 1 : 0);
       }
-      return { active: active, total: items.length, shown: filtered.length };
+      // expr = the boolean expression the result was computed from (see
+      // js/filter-logic.js); the same object the active-filter bar displays.
+      return { active: active, total: items.length, shown: filtered.length,
+               expr: HcaFilter.shared.expr() };
     }
 
     function reset(silent) {
@@ -467,6 +519,7 @@ window.FacetEngine = (function () {
       // value only because it was ticked should fold back to its plain
       // top-N state too.
       renderSources();
+      HcaFilter.shared.sync([]);
       if (!silent) apply();
     }
 
@@ -486,6 +539,10 @@ window.FacetEngine = (function () {
       var t = ev.target;
       if (t && t.matches && t.matches(RANGE_INPUT_SEL)) apply();
     });
+
+    // The reader switched an AND/OR in the active-filter bar: same selection,
+    // new combination.
+    panel.addEventListener('hca:filters-op-change', function () { apply(); });
 
     // Clear boxes first, then let the page drop its own prefilter state
     // (an active letter, a search term) inside onReset, then render once.
@@ -519,10 +576,12 @@ window.FacetEngine = (function () {
       // own output cannot say because it is already prefiltered. Reads the DOM
       // once and closes over the result, so it is safe to run per item.
       matcher: function () {
-        var groups = liveGroups();
+        var m = model(liveGroups());
         return function (item) {
           var idx = indexOfItem(item);
-          return idx >= 0 && passes(idx, groups, null);
+          if (idx < 0) return false;
+          m.cur = idx;
+          return HcaFilter.evalExpr(m.expr, m.test);
         };
       }
     };

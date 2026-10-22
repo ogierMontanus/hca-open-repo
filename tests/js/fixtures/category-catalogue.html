@@ -1,0 +1,65 @@
+<!doctype html>
+<!-- Fixture for tests/js/filter-ui.test.js: the REAL category-catalogue.js, facet-overlay.js,
+     filter-logic.js and active-filters.js over a small in-page WORKS_EXTRA, mirroring the
+     markup contract of mockup/bibliotek.html (hand-written data-h2 / data-h3 / data-place boxes). -->
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Fixture — category catalogue</title>
+<link rel="stylesheet" href="../../../mockup/css/style.css">
+</head>
+<body>
+<div class="browse-layout">
+  <aside class="facet-panel">
+    <div class="facet-panel__header">
+      <span class="facet-panel__title">Filtrér</span>
+      <button class="facet-panel__clear" type="button">Nulstil</button>
+    </div>
+    <div class="facet-group">
+      <div class="facet-group__header">Forfattergruppe (H2)</div>
+      <div class="facet-group__body">
+        <label class="facet-item"><input type="checkbox" data-h2="H. C. ANDERSEN"><span class="facet-item__label">H. C. Andersen</span><span class="facet-item__count">0</span></label>
+        <label class="facet-item"><input type="checkbox" data-h2="ANDRE FORFATTERE"><span class="facet-item__label">Andre forfattere</span><span class="facet-item__count">0</span></label>
+      </div>
+    </div>
+    <div class="facet-group">
+      <div class="facet-group__header">Form (H3)</div>
+      <div class="facet-group__body">
+        <label class="facet-item"><input type="checkbox" data-h3="Digte"><span class="facet-item__label">Digte</span><span class="facet-item__count">0</span></label>
+        <label class="facet-item"><input type="checkbox" data-h3="Eventyr"><span class="facet-item__label">Eventyr</span><span class="facet-item__count">0</span></label>
+        <label class="facet-item"><input type="checkbox" data-h3="Romaner"><span class="facet-item__label">Romaner</span><span class="facet-item__count">0</span></label>
+      </div>
+    </div>
+    <div class="facet-group">
+      <div class="facet-group__header">Sted</div>
+      <div class="facet-group__body">
+        <label class="facet-item"><input type="checkbox" data-place="Odense"><span class="facet-item__label">Odense</span><span class="facet-item__count">0</span></label>
+        <label class="facet-item"><input type="checkbox" data-place="København"><span class="facet-item__label">København</span><span class="facet-item__count">0</span></label>
+      </div>
+    </div>
+  </aside>
+  <div>
+    <div class="results-header"><span class="results-count" id="js-cat-count"></span></div>
+    <div id="js-cat-results"></div>
+    <button id="js-cat-more" type="button" style="display:none">Vis flere</button>
+  </div>
+</div>
+<script>
+  window.CATEGORY_WING = 'bibliotek.html';
+  window.CATEGORY_LABEL = 'Fixture';
+  var H = 'H. C. ANDERSEN', A = 'ANDRE FORFATTERE';
+  window.WORKS_EXTRA = {
+    W1: { wing: 'bibliotek.html', title: 'Værk 1', h2: H, h3: 'Digte',   place: 'Odense',    refs: 6 },
+    W2: { wing: 'bibliotek.html', title: 'Værk 2', h2: H, h3: 'Eventyr', place: 'Odense',    refs: 5 },
+    W3: { wing: 'bibliotek.html', title: 'Værk 3', h2: A, h3: 'Digte',   place: 'København', refs: 4 },
+    W4: { wing: 'bibliotek.html', title: 'Værk 4', h2: A, h3: 'Romaner', place: 'Odense',    refs: 3 },
+    W5: { wing: 'bibliotek.html', title: 'Værk 5', h2: A, h3: 'Eventyr', place: 'København', refs: 2 },
+    W6: { wing: 'bibliotek.html', title: 'Værk 6', h2: H, h3: 'Digte',   place: 'København', refs: 1 }
+  };
+</script>
+<script src="../../../mockup/js/filter-logic.js"></script>
+<script src="../../../mockup/js/facet-overlay.js"></script>
+<script src="../../../mockup/js/category-catalogue.js"></script>
+<script src="../../../mockup/js/active-filters.js"></script>
+</body>
+</html>

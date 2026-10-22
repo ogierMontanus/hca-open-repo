@@ -1,0 +1,77 @@
+<!doctype html>
+<!-- Fixture for tests/js/filter-ui.test.js: the REAL facet-engine.js, facet-overlay.js,
+     filter-logic.js and active-filters.js over a small in-page dataset, mirroring the
+     markup contract of mockup/persons.html (Nationalitet / Erhvervsgren / Køn). -->
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Fixture — FacetEngine</title>
+<link rel="stylesheet" href="../../../mockup/css/style.css">
+</head>
+<body>
+<div class="browse-layout">
+  <aside class="facet-panel">
+    <div class="facet-panel__header">
+      <span class="facet-panel__title">Filtrér</span>
+      <button class="facet-panel__clear" type="button">Nulstil</button>
+    </div>
+    <div class="facet-group">
+      <div class="facet-group__header">Nationalitet</div>
+      <div class="facet-group__body" data-facet-source="nationality" data-facet-limit="12" data-facet-empty-label="Uoplyst"></div>
+    </div>
+    <div class="facet-group">
+      <div class="facet-group__header">Erhvervsgren</div>
+      <div class="facet-group__body" data-facet-source="role"></div>
+    </div>
+    <div class="facet-group">
+      <div class="facet-group__header">Køn</div>
+      <div class="facet-group__body" data-facet-source="gender"></div>
+    </div>
+    <div class="facet-group">
+      <div class="facet-group__header">Omtaleår</div>
+      <div class="facet-group__body" data-facet-range="years">
+        <input type="number" data-range-from aria-label="fra"> — <input type="number" data-range-to aria-label="til">
+      </div>
+    </div>
+  </aside>
+  <div>
+    <div class="results-header"><span class="results-count" id="count"></span></div>
+    <ul id="results"></ul>
+  </div>
+</div>
+<script src="../../../mockup/js/filter-logic.js"></script>
+<script src="../../../mockup/js/facet-overlay.js"></script>
+<script src="../../../mockup/js/facet-engine.js"></script>
+<script src="../../../mockup/js/active-filters.js"></script>
+<script>
+  // n = nationality (array), r = role (array), g = gender, y = mention years
+  var PEOPLE = [
+    { name: 'Anna',   n: ['sv'], r: ['musiker'],           g: 'kvinde', y: [1840] },
+    { name: 'Bo',     n: ['sv'], r: ['maler'],             g: 'mand',   y: [1850] },
+    { name: 'Carl',   n: ['da'], r: ['musiker'],           g: 'mand',   y: [1860] },
+    { name: 'Dorte',  n: ['da'], r: ['maler'],             g: 'kvinde', y: [1840, 1870] },
+    { name: 'Erik',   n: ['no'], r: ['musiker'],           g: 'mand',   y: [1850] },
+    { name: 'Freja',  n: ['sv'], r: ['musiker', 'maler'],  g: 'kvinde', y: [1860] },
+    { name: 'Gunnar', n: ['no'], r: ['maler'],             g: 'mand',   y: [1870] },
+    { name: 'Hans',   n: ['da'], r: ['musiker'],           g: 'mand',   y: [1840] },
+    { name: 'Ida',    n: [],     r: [],                    g: 'kvinde', y: [] }
+  ];
+  var facets = FacetEngine.create({
+    panel: document.querySelector('.facet-panel'),
+    items: PEOPLE,
+    accessors: {
+      nationality: function (p) { return p.n; },
+      role:        function (p) { return p.r; },
+      gender:      function (p) { return p.g; },
+      years:       function (p) { return p.y; }
+    },
+    onChange: function (filtered) {
+      document.getElementById('results').innerHTML =
+        filtered.map(function (p) { return '<li>' + p.name + '</li>'; }).join('');
+      document.getElementById('count').textContent = filtered.length;
+    }
+  });
+  facets.apply();
+</script>
+</body>
+</html>
