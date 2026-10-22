@@ -1,0 +1,6 @@
+# Packages the CI workflow installs on top of scripts/parsers/requirements.txt.
+# Listed in a file (not inline `pip install`) so Dependabot and the
+# security-audit workflow can see them.
+openpyxl>=3.1
+pytest>=8.0
+fonttools>=4.50

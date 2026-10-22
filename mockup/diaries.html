@@ -745,7 +745,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var initialLayout = new URLSearchParams(location.search).get('layout');
   if (initialLayout) {
     var initialBtn = document.querySelector(
-      '.layout-switcher__btn[data-layout="' + initialLayout + '"]');
+      '.layout-switcher__btn[data-layout="' + CSS.escape(initialLayout) + '"]');
     if (initialBtn) initialBtn.click();
   }
 });

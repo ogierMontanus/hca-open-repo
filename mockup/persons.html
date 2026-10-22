@@ -874,7 +874,7 @@
       val = val.trim();
       if (!val) return;
       var box = document.querySelector(
-        '.facet-panel input[data-facet="' + field + '"][data-match="' + val.replace(/"/g, '') + '"]');
+        '.facet-panel input[data-facet="' + field + '"][data-match="' + CSS.escape(val) + '"]');
       if (box) box.checked = true;
     });
   });
