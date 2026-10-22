@@ -311,34 +311,18 @@ main { flex: 1; }
    Each top-level section carries an entity color that matches the
    three Hvem/Hvad/Hvor landing cards. Pages opt in by setting
    data-section="hvem" / "hvad" / "hvor" on <body>; the colour shows
-   on the page-hero h1, the active breadcrumb, and a thin top accent
-   bar above the section block. The body chip styles
-   (.chip--person etc.) already use the same palette tokens, so the
-   colour reads consistently between the page header and the chips
-   used inside list rows. */
-body[data-section="hvem"] .page-hero h1,
-body[data-section="hvem"] .breadcrumb__current {
-  color: var(--color-person);
-}
-body[data-section="hvem"] .page-hero {
-  border-top: 4px solid var(--color-person);
-}
+   as a thin top accent bar on the page-hero. The body chip styles
+   (.chip--person etc.) use the same palette tokens, so the colour
+   reads consistently between the page header and the chips used
+   inside list rows.
 
-body[data-section="hvad"] .page-hero h1,
-body[data-section="hvad"] .breadcrumb__current {
-  color: var(--color-work);
-}
-body[data-section="hvad"] .page-hero {
-  border-top: 4px solid var(--color-work);
-}
-
-body[data-section="hvor"] .page-hero h1,
-body[data-section="hvor"] .breadcrumb__current {
-  color: var(--color-place);
-}
-body[data-section="hvor"] .page-hero {
-  border-top: 4px solid var(--color-place);
-}
+   The hero's h1 and breadcrumb keep the neutral light text colour from
+   .page-hero regardless of section: the saturated entity colours
+   (blue / orange / green) have too little contrast on the dark hero
+   gradient, so the section colour is carried by the border only. */
+body[data-section="hvem"] .page-hero { border-top: 4px solid var(--color-person); }
+body[data-section="hvad"] .page-hero { border-top: 4px solid var(--color-work); }
+body[data-section="hvor"] .page-hero { border-top: 4px solid var(--color-place); }
 
 /* === Facet Panel === */
 .facet-panel {
