@@ -596,3 +596,46 @@ a visible error under the accurate count rather than a silent blank list.
 Verified both paths with Playwright: 229 items incl. one malformed rid all
 render (228 normal + 1 fallback row), and normal all-valid-data rendering
 is unchanged.
+
+## Diary PDF: page links, highlighted footnotes, date bookmarks
+
+The browser-print export above is a flat ID/title table. For a PDF of the
+diary pages themselves there is a separate build script,
+`scripts/build_mockup/build_diary_pdf.py` (reportlab; `pip install -r
+scripts/build_mockup/requirements-pdf.txt`). It is a Python script, not a
+browser feature, because native PDF bookmarks cannot be controlled from
+`window.print()` — Chrome's print-to-PDF does not reliably emit an outline.
+
+```powershell
+# 1. cart.html -> "Hent kurv til dagbogs-PDF" saves hca-kurv.json
+# 2. build the PDF from it:
+python scripts/build_mockup/build_diary_pdf.py --cart hca-kurv.json -o dagbog.pdf
+# or without the cart:
+python scripts/build_mockup/build_diary_pdf.py --pages Pag070002 Pag070003 --entity Reg0082020 -o dagbog.pdf
+```
+
+What goes in: the cart's **diary** items are the pages; its **person / place /
+work** items are the entities to highlight. With `--entity` and no pages,
+every page mentioning those entities is exported (stops above `--max-pages`,
+default 500).
+
+| Requirement | How it is met |
+|---|---|
+| Link per page number | The page title, and the footer of **every** PDF page the diary page fills, link to `<base-url>diary-pages/Pag{VV}{PPPP}.html` — the diary section of the site. Footnote entries link to their `persons.html` / `place.html` / `work.html` `?reg=` page. |
+| Searched entity highlighted | Register entries on the page are numbered footnotes at the bottom of the PDF page (two columns). The entities passed in (cart entities / `--entity`) get a yellow background; the cover page shows the legend. Nothing is highlighted if none are given. |
+| Native navigation, dates as headings | PDF outline (opens in the Bookmarks pane): year › month › day (`Tirsdag 2. januar 1866`). Pages without transcribed text (only vol. VI–VII have text) have no date and sit under `Bind III — uden dato › Side 64`. |
+
+Notes and limits:
+
+- `--base-url` defaults to `https://ogiermontanus.github.io/hca-open-repo/mockup/`,
+  **a guess** — set it to wherever the mockup is actually hosted. The
+  `diary-pages/*.html` files are gitignored build output, so the links only
+  resolve where `build_diary_pages.py` has been run and published.
+- Text is set in a TrueType family (Georgia/Arial on Windows, Liberation or
+  DejaVu on Linux, Bitstream Vera bundled with reportlab as last resort),
+  because the 14 built-in PDF fonts lack æ/ø/å. `--font-dir` adds a search
+  folder.
+- Footnotes get at most 330 pt per PDF page; a page with more entries
+  continues them on following pages (`… — fortsat`).
+- Checked by `tests/test_build_diary_pdf.py` (not in CI: it needs reportlab
+  and pypdf).

@@ -7,7 +7,7 @@ lodret visning. Desktop er uændret.
 | Fil | Rolle |
 |---|---|
 | `mockup/css/mobile.css` | `@media (max-width: 760px)`-regler: kompakt header, filtre bag en knap, tabeller som kort, stablede detaljesider, sidemenu som liste, landingsside i én kolonne. Linkes **sidst** i `<head>` på alle sider (også de genererede dagbogssider via `build_diary_pages.py`). |
-| `mockup/js/active-filters.js` | Aktive-filter-chips (× fjerner ét filter, «Ryd alle») + tæller på «Filtrér». Alle bredder. Slå fra med `data-active-filters="off"` på `.facet-panel` (bruges på `diaries*.html`, hvis facetter er statiske). |
+| `mockup/js/active-filters.js` | Aktive-filter-chips (× fjerner ét filter, «Ryd alle») + tæller på «Filtrér» + AND/OR-dropdown mellem chips og «Søgelogik»-linje (se [`filter-logic.md`](filter-logic.md)). Alle bredder. Slå fra med `data-active-filters="off"` på `.facet-panel` (bruges på `diaries*.html`, hvis facetter er statiske). |
 | `mockup/js/mobile-nav.js` | Åbn/luk filterpanelet på telefon + «Vis N resultater»-knap. |
 | `mockup/js/table-view.js` | Giver hver `<td>` `data-label`, så rækker kan blive til kort på telefon. |
 

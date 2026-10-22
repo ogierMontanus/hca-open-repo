@@ -8,8 +8,18 @@
  * Purely a view over the existing controls: removing a chip unticks the real
  * checkbox / empties the real input and dispatches the same change/input event
  * the user would have, so FacetEngine, category-catalogue.js and the page's own
- * letter bar all react exactly as they do to a direct click. Nothing here keeps
- * filter state of its own.
+ * letter bar all react exactly as they do to a direct click.
+ *
+ * Between every two chips sits an AND/OR dropdown. The order of the chips and
+ * the operators are NOT kept here: they are read from — and written to —
+ * HcaFilter.shared (js/filter-logic.js), the very object the engines evaluate
+ * the result from, so the bar cannot show one operator while another is
+ * applied. Chips of the same facet are clustered (a cluster is evaluated as if
+ * in parentheses); a muted line spells the whole expression out. Changing a
+ * dropdown fires `hca:filters-op-change` on the panel; the engine recomputes
+ * and this bar redraws. The letter chip is a page-level prefilter and is
+ * always AND: it has no dropdown. Without HcaFilter the bar degrades to plain
+ * chips. See docs/filter-logic.md.
  *
  * Opt out with data-active-filters="off" on the .facet-panel (used where the
  * panel's boxes are static and don't filter anything).
@@ -29,8 +39,15 @@
 
   var EN = (document.documentElement.getAttribute('lang') || '').toLowerCase().indexOf('en') === 0;
   var T = EN
-    ? { group: 'Active filters', remove: 'Remove filter', clear: 'Clear all', letter: 'Letter', from: 'from', to: 'to' }
-    : { group: 'Aktive filtre', remove: 'Fjern filter', clear: 'Ryd alle', letter: 'Bogstav', from: 'fra', to: 'til' };
+    ? { group: 'Active filters', remove: 'Remove filter', clear: 'Clear all', letter: 'Letter', from: 'from', to: 'to',
+        between: 'Operator between {a} and {b}', logic: 'Search logic', live: 'Filters are combined as: {x}',
+        always: 'Always AND (letter filter)' }
+    : { group: 'Aktive filtre', remove: 'Fjern filter', clear: 'Ryd alle', letter: 'Bogstav', from: 'fra', to: 'til',
+        between: 'Operator mellem {a} og {b}', logic: 'Søgelogik', live: 'Filtrene kombineres som: {x}',
+        always: 'Altid AND (bogstavfilter)' };
+  // Looked up again on every draw: this script is injected by nav.js and may
+  // run before js/filter-logic.js has loaded.
+  var F = null;
 
   var bar = document.createElement('div');
   bar.className = 'active-filters';
@@ -38,6 +55,12 @@
   bar.setAttribute('role', 'group');
   bar.setAttribute('aria-label', T.group);
   anchor.parentNode.insertBefore(bar, anchor.nextSibling);
+
+  // Announces the combined expression to screen readers when it changes.
+  var live = document.createElement('div');
+  live.className = 'sr-only';
+  live.setAttribute('aria-live', 'polite');
+  bar.parentNode.insertBefore(live, bar.nextSibling);
 
   var title = panel.querySelector('.facet-panel__title');
   var badge = null;
@@ -62,8 +85,10 @@
     el.dispatchEvent(new Event(type, { bubbles: true }));
   }
 
-  // One entry per active filter: { group, text, remove() }.
+  // One entry per active filter: { key, group, text, remove() }. `key` is the
+  // HcaFilter term key (null for the letter chip, which is not a term).
   function collect() {
+    F = window.HcaFilter || null;
     var out = [];
     var boxes = panel.querySelectorAll('input[type=checkbox]:checked');
     for (var i = 0; i < boxes.length; i++) {
@@ -72,6 +97,7 @@
       var lab = box.closest('label');
       var txt = lab && lab.querySelector('.facet-item__label');
       out.push({
+        key: F ? F.termKeyOfBox(box) : null,
         group: groupTitle(box),
         text: ((txt || lab || box).textContent || '').replace(/\s+/g, ' ').trim(),
         remove: (function (b) { return function () { b.checked = false; fire(b, 'change'); }; })(box)
@@ -87,6 +113,7 @@
       if (!lo && !hi) continue;
       var text = lo && hi ? (lo === hi ? lo : lo + '–' + hi) : (lo ? T.from + ' ' + lo : T.to + ' ' + hi);
       out.push({
+        key: F ? F.termKeyOfRange(host) : null,
         group: groupTitle(host),
         text: text,
         remove: (function (f, t) { return function () {
@@ -101,6 +128,8 @@
       for (var c = 0; c < chips.length; c++) {
         if (chips[c].style.background) {
           out.push({
+            key: null,
+            letter: true,
             group: T.letter,
             text: chips[c].getAttribute('data-letter'),
             remove: function () {
@@ -121,29 +150,114 @@
     });
   }
 
-  var last = null;
+  function chipHtml(it, i) {
+    return '<button type="button" class="active-filter" data-i="' + i + '"' +
+      (it.key ? ' data-key="' + esc(it.key) + '"' : '') + ' aria-label="' +
+      esc(T.remove + ': ' + (it.group ? it.group + ' ' : '') + it.text) + '">' +
+      (it.group ? '<span class="active-filter__group">' + esc(it.group) + ':</span>' : '') +
+      '<span class="active-filter__text">' + esc(it.text) + '</span>' +
+      '<span class="active-filter__x" aria-hidden="true">×</span></button>';
+  }
+
+  function opHtml(link, prev, next) {
+    var opts = '';
+    F.opNames().forEach(function (name) {
+      opts += '<option value="' + esc(name) + '"' + (name === link.op ? ' selected' : '') + '>' + esc(name) + '</option>';
+    });
+    var label = T.between.replace('{a}', prev.group + ' ' + prev.text).replace('{b}', next.group + ' ' + next.text);
+    return '<select class="active-filter-op active-filter-op--' + link.level + '" data-level="' + link.level +
+      '" data-op-key="' + esc(link.opKey) + '" aria-label="' + esc(label) + '">' + opts + '</select>';
+  }
+
+  // The chips that are terms of the filter expression, in expression order,
+  // each paired with its place in it; everything else (letter, controls the
+  // engine does not know) follows without operators.
+  function arrange(items) {
+    var byKey = {}, used = {};
+    items.forEach(function (it, i) { if (it.key) byKey[it.key] = i; });
+    var logic = [];
+    (F ? F.shared.snapshot() : []).forEach(function (link) {
+      if (byKey[link.key] === undefined) return;
+      used[byKey[link.key]] = true;
+      logic.push({ i: byKey[link.key], link: link });
+    });
+    var rest = [];
+    items.forEach(function (it, i) { if (!used[i]) rest.push(i); });
+    return { logic: logic, rest: rest };
+  }
+
+  var lastHtml = null, lastLive = '';
   function refresh() {
     var items = collect();
-    var sig = items.map(function (i) { return i.group + '\u0001' + i.text; }).join('\u0002');
     if (badge) {
       badge.textContent = items.length;
       badge.className = 'facet-panel__badge' + (items.length ? ' facet-panel__badge--on' : '');
     }
-    if (sig === last) return;
-    last = sig;
-    bar.hidden = items.length === 0;
-    var html = '';
-    for (var i = 0; i < items.length; i++) {
-      html += '<button type="button" class="active-filter" data-i="' + i + '" aria-label="' +
-        esc(T.remove + ': ' + (items[i].group ? items[i].group + ' ' : '') + items[i].text) + '">' +
-        (items[i].group ? '<span class="active-filter__group">' + esc(items[i].group) + ':</span>' : '') +
-        '<span class="active-filter__text">' + esc(items[i].text) + '</span>' +
-        '<span class="active-filter__x" aria-hidden="true">×</span></button>';
+    var arr = arrange(items);
+    var html = '', n, prev = null, cluster = false;
+
+    for (n = 0; n < arr.logic.length; n++) {
+      var cur = items[arr.logic[n].i], link = arr.logic[n].link;
+      if (link.level !== 'term') {                        // a new facet cluster begins
+        if (cluster) html += '</span>';
+        if (link.level === 'group') html += opHtml(link, prev, cur);
+        var several = n + 1 < arr.logic.length && arr.logic[n + 1].link.level === 'term';
+        html += '<span class="active-filter-cluster' + (several ? ' active-filter-cluster--multi' : '') + '">';
+        cluster = true;
+      } else {
+        html += opHtml(link, prev, cur);
+      }
+      html += chipHtml(cur, arr.logic[n].i);
+      prev = cur;
     }
+    if (cluster) html += '</span>';
+
+    arr.rest.forEach(function (i) {
+      var it = items[i];
+      if (it.letter && arr.logic.length) {
+        html += '<span class="active-filter-op active-filter-op--fixed" title="' + esc(T.always) + '">AND</span>';
+      }
+      html += chipHtml(it, i);
+    });
     if (items.length > 1) {
       html += '<button type="button" class="active-filters__clear" data-clear>' + T.clear + '</button>';
     }
-    bar.innerHTML = html;
+
+    var formula = '';
+    if (F && arr.logic.length > 1) {
+      var first = {};
+      arr.logic.forEach(function (e) { if (e.link.level !== 'term') first[items[e.i].key] = true; });
+      var byKey = {};
+      arr.logic.forEach(function (e) { byKey[items[e.i].key] = items[e.i]; });
+      formula = F.describe(F.shared.expr(), function (k) {
+        var it = byKey[k];
+        return it ? (first[k] && it.group ? it.group + ': ' : '') + it.text : k;
+      });
+      html += '<span class="active-filters__formula"><span class="active-filters__formula-label">' +
+        esc(T.logic) + ':</span> ' + esc(formula) + '</span>';
+    }
+
+    if (html !== lastHtml) {
+      lastHtml = html;
+      bar.hidden = items.length === 0;
+      // Redrawing would drop keyboard focus from the dropdown that was just used.
+      var f = document.activeElement, keep = null;
+      if (f && bar.contains(f) && f.classList.contains('active-filter-op')) {
+        keep = { level: f.getAttribute('data-level'), key: f.getAttribute('data-op-key') };
+      }
+      bar.innerHTML = html;
+      if (keep) {
+        var sels = bar.querySelectorAll('select.active-filter-op');
+        for (var s2 = 0; s2 < sels.length; s2++) {
+          if (sels[s2].getAttribute('data-level') === keep.level && sels[s2].getAttribute('data-op-key') === keep.key) {
+            sels[s2].focus();
+            break;
+          }
+        }
+      }
+    }
+    var liveText = formula ? T.live.replace('{x}', formula) : '';
+    if (liveText !== lastLive) { lastLive = liveText; live.textContent = liveText; }
   }
 
   // Event-driven refresh: after the engine/page handlers (which were attached
@@ -165,8 +279,24 @@
     var chip = ev.target.closest('.active-filter');
     if (!chip) return;
     // Re-collect: the panel may have repainted since the chips were drawn.
-    var item = collect()[parseInt(chip.getAttribute('data-i'), 10)];
+    var all = collect(), item = null, key = chip.getAttribute('data-key');
+    if (key) {
+      for (var k = 0; k < all.length; k++) if (all[k].key === key) { item = all[k]; break; }
+    } else {
+      item = all[parseInt(chip.getAttribute('data-i'), 10)];
+    }
     if (item) item.remove();
+    later();
+  });
+
+  // An AND/OR dropdown: record the choice in the shared state, then let the
+  // engine recompute (it listens on the panel) and redraw the bar.
+  bar.addEventListener('change', function (ev) {
+    F = window.HcaFilter || null;
+    var sel = ev.target.closest && ev.target.closest('.active-filter-op');
+    if (!sel || !F) return;
+    var changed = F.shared.setOp(sel.getAttribute('data-level'), sel.getAttribute('data-op-key'), sel.value);
+    if (changed) panel.dispatchEvent(new CustomEvent('hca:filters-op-change', { bubbles: true }));
     later();
   });
 
