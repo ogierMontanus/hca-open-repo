@@ -240,10 +240,34 @@ rækker — resten af siden er upåvirket.
    stadig grupperne i den manuelle kø. Den er håndredigeret og blev derfor
    ikke genskabt; kør `cluster_unassigned_roles.py` bevidst, når
    annotationen er afsluttet eller flyttet.
-4. **`person_role_gender_flags.csv` er forældet** i forhold til det
-   manuelle kønsgennemsyn (ca. 500 linjer ændres ved genkørsel af
-   `gender_role_check.py`). Uafhængig af gruppereglen; ikke genkørt.
-5. **`parse_person_gender.py` kender ikke kategorien Andet.** Genkøres den,
-   overskrives `person_gender.csv` og gennemsynets 87 grupper (og de øvrige
-   manuelle afgørelser) går tabt. Kør den ikke uden at lægge
-   `apply_gender_review.py` fra redesign-repoet ovenpå.
+4. **`confidence` i `person_gender.csv` er ødelagt i 6.507 rækker** (fundet
+   2026-10-24). Ved det manuelle gennemsyn (`03f53c5`, 22. okt.) er
+   værdier med tre decimaler blevet læst som tusindtal: `0.917` står nu som
+   `917`, `0.782` som `782` (alle 3-cifrede, > 1). Værdier med færre
+   decimaler (`0.95`, `1.0`) er intakte. Før `03f53c5` var ingen række > 1.
+   Skaden er fuldt reversibel: delt med 1000 stemmer alle 6.507 værdier med
+   filen før `03f53c5`. Sporene:
+   - `genderConf` i `persons-extra.js` bærer de ødelagte tal (ingen
+     UI-kode læser feltet i dag, så intet er synligt brudt).
+   - `person_role_gender_flags.csv` kopierer kolonnen. Den er **ikke**
+     forældet i indhold: ved genkørsel af `gender_role_check.py` er de samme
+     318 rækker med samme status, og kun `confidence` afviger (250 rækker).
+     Filen er derfor bevidst ikke regenereret; gør det først, når kolonnen
+     i `person_gender.csv` er rettet, ellers smitter fejlen.
+   - Køn-kategorierne (`koen`) er upåvirkede: 03f53c5 ændrede kun 32
+     rækker (19 → Mandlig, 3 → Kvindelig, 10 → Andet, alle fra Endnu
+     ubestemt).
+   Forslag: ret kolonnen (`/1000` for værdier > 1), og gem filen fra et
+   program, der ikke genfortolker decimaler (eller åbn med eksplicit
+   punktum-som-decimal).
+5. **`parse_person_gender.py` kender ikke kategorien Andet og skriver
+   direkte til `person_gender.csv`.** Filen er siden `03f53c5` det
+   afsluttede manuelle resultat: parserens output, redaktionelt gennemsyn
+   (stage 1f' i redesign-repoet), og den manuelle annotation (22 »Endnu
+   ubestemt« tilbage, 87 Andet, 706 krydshenvisninger uden række). Genkøres
+   parseren, overskrives alt dette, og de manuelle afgørelser kan kun
+   hentes fra git (`03f53c5`). Kør den ikke uden at lægge
+   `apply_gender_review.py` + `person_gender_reviewed.csv` ovenpå, og
+   tag en sikkerhedskopi først. Tabellen »Efter redaktionelt gennemsyn«
+   ovenfor viser tallene før den manuelle annotation (167 ubestemte; nu 22:
+   Mandlig 6.179, Kvindelig 3.234, Andet 87).
