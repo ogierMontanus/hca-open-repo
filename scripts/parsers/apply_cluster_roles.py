@@ -45,8 +45,11 @@ Regler:
 import csv
 import os
 import re
+import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, os.path.join(ROOT, "scripts", "build_mockup"))
+import _person_groups  # noqa: E402
 ROLES = os.path.join(ROOT, "data", "normalized", "person_role.csv")
 PERSONS = os.path.join(ROOT, "data", "normalized", "person_role_unassigned_persons.csv")
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
@@ -109,6 +112,8 @@ def main():
             text_by_person[r["entity_id"]] = (r["label"] or "", r["description"] or "")
 
     rows, n_cluster, n_group, n_rest, n_adel, n_plus = [], 0, 0, 0, 0, 0
+    groups = _person_groups.load_group_ids()
+    n_groups = 0
     auto_ids = set()
     with open(ROLES, encoding="utf-8", newline="") as f:
         for r in csv.DictReader(f):
@@ -117,6 +122,13 @@ def main():
                     auto_ids.add(r["entity_id"])
                 continue
             rid = r["entity_id"]
+            if rid in groups:
+                # Firma/slægt/gruppe (kønsgennemsynets »Andet«): aldrig klynge
+                # eller adelsarv — kun restkategorien, som build_persons_extra.py
+                # også pålægger dem.
+                rows.append((rid, REST_BUCKET, "gruppe"))
+                n_groups += 1
+                continue
             ks = clusters_by_person.get(rid, [])
             buckets = []
             for k in ks:
@@ -166,7 +178,7 @@ def main():
         w.writerows(rows)
     print(f"{len(rows):,} rækker: {n_cluster:,} via klynge, {n_adel:,} adelsarv i klynge/rest, "
           f"{n_plus:,} adelstillæg til automatisk rolle, {n_group:,} via egen "
-          f"restgruppe-gren, {n_rest:,} restkategori -> {OUT}")
+          f"restgruppe-gren, {n_groups:,} grupper, {n_rest:,} restkategori -> {OUT}")
 
 
 if __name__ == "__main__":

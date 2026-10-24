@@ -15,13 +15,18 @@ asserted here instead:
      gender. build_persons_extra.py reads 29_entityType from
      data/curated/person_entity_types.tsv.
 
-  2. The population does not collapse. A gate that accidentally matches
+  2. Every entry the editorial gender review (person_gender.csv) classifies
+     as »Andet« is handled as a group: that category, no genderConf, and no
+     trade branch. 29_entityType is keyed on label and misses many of them.
+
+  3. The population does not collapse. A gate that accidentally matches
      far too much would silently empty the facets — which looks exactly
      like a working build.
 
 Skips (does not fail) when the artifact has not been built, matching how
 the pipeline treats every other optional build output.
 """
+import csv
 import json
 import pathlib
 import re
@@ -31,6 +36,7 @@ import pytest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 ARTIFACT = ROOT / "mockup" / "data" / "persons-extra.js"
 ENTITY_TYPES = ROOT / "data" / "curated" / "person_entity_types.tsv"
+GENDER_CSV = ROOT / "data" / "normalized" / "person_gender.csv"
 
 # Measured at 10,146 on 2026-09-03. A wide band: the register itself grows
 # as the parsing is cleaned up, so this guards against collapse, not drift.
@@ -60,6 +66,7 @@ def test_population_is_plausible(persons):
 
 
 OTHER_GENDER = "Andet (især firmaer/slægter/øvrige grupper)"
+UNCATEGORISED_ROLE = "Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv"
 
 
 def test_known_collectives_are_shown_as_other(persons):
@@ -71,6 +78,30 @@ def test_known_collectives_are_shown_as_other(persons):
             f"{name!r} has gender {by_label[name].get('gender')!r}, "
             f"expected {OTHER_GENDER!r}"
         )
+
+
+def test_review_groups_are_handled_as_groups(persons):
+    """Groups per person_gender.csv get the same treatment as 29_entityType
+    collectives, whatever their label's entityType says."""
+    if not GENDER_CSV.exists():
+        pytest.skip(f"{GENDER_CSV.relative_to(ROOT)} absent")
+    with GENDER_CSV.open(encoding="utf-8-sig", newline="") as f:
+        groups = [r["entity_id"] for r in csv.DictReader(f)
+                  if r["koen"].strip() == OTHER_GENDER]
+    assert groups, "person_gender.csv has no »Andet« rows to check against"
+    # Entries whose bare label is also a cross-reference are gated out first.
+    present = [i for i in groups if i in persons]
+    assert len(present) >= len(groups) * 0.9, (
+        f"only {len(present)} of {len(groups)} review groups are in persons-extra.js"
+    )
+    wrong = [i for i in present
+             if persons[i].get("gender") != OTHER_GENDER
+             or persons[i].get("genderConf") is not None
+             or persons[i].get("roles") != [UNCATEGORISED_ROLE]]
+    assert not wrong, (
+        f"{len(wrong)} review group(s) not handled as groups: "
+        f"{[persons[i].get('label') for i in wrong[:5]]}"
+    )
 
 
 def test_gate_data_is_present_and_used(persons):

@@ -62,6 +62,9 @@ import re
 import sys
 from collections import Counter, defaultdict
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "build_mockup"))
+import _person_groups  # noqa: E402
+
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS = os.path.join(ROOT, "data", "normalized", "references.csv")
@@ -209,7 +212,15 @@ def main():
         for r in csv.DictReader(f):
             if r["entity_type"] == "person":
                 persons.append(r)
-    print(f"  {len(persons):,} persons")
+    # Firmaer, slægter og øvrige grupper (kønsgennemsynets »Andet«) har intet
+    # erhverv at høste: de får en tom række, så de hverken tæller i dækningen
+    # eller havner i den manuelle kø (cluster_unassigned_roles.py).
+    groups = _person_groups.load_group_ids()
+    group_rows = [{"entity_id": r["entity_id"], "roller": "", "kilde_vaerk": "",
+                   "kilde_beskrivelse_termer": ""}
+                  for r in persons if r["entity_id"] in groups]
+    persons = [r for r in persons if r["entity_id"] not in groups]
+    print(f"  {len(persons):,} persons ({len(group_rows)} groups skipped)")
 
     term_bucket = load_terms()
     print(f"  {len(term_bucket):,} harvested terms loaded from "
@@ -275,6 +286,8 @@ def main():
             "kilde_vaerk": ";".join(sorted(wings_hit)),
             "kilde_beskrivelse_termer": ";".join(terms_hit),
         })
+
+    rows_out.extend(group_rows)
 
     os.makedirs(os.path.dirname(OUT_CSV), exist_ok=True)
     with open(OUT_CSV, "w", encoding="utf-8", newline="") as f:

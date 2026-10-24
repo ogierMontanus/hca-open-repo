@@ -39,6 +39,7 @@ from collections import Counter, defaultdict
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.insert(0, os.path.dirname(__file__))
 import parse_person_role as ppr  # noqa: E402  (reuse RELATION_RE/MARRIED_RE)
+import _person_groups  # noqa: E402  (scripts/build_mockup is put on sys.path by ppr)
 
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
 ROLES = os.path.join(ROOT, "data", "normalized", "person_role.csv")
@@ -323,9 +324,12 @@ def main():
         for r in csv.DictReader(f):
             roles[r["entity_id"]] = r
 
-    un = [e for eid, e in ents.items() if not roles[eid]["roller"]]
+    # Grupper (kønsgennemsynets »Andet«) får ingen rolle og hører ikke til i
+    # den manuelle kø — build_persons_extra.py sætter dem på Endnu ukategoriseret.
+    groups = _person_groups.load_group_ids()
+    un = [e for eid, e in ents.items() if not roles[eid]["roller"] and eid not in groups]
     print(f"Personer i registret: {len(ents):,}")
-    print(f"Uden rolle-bucket:    {len(un):,}")
+    print(f"Uden rolle-bucket:    {len(un):,} (uden {len(groups & ents.keys()):,} grupper)")
 
     compiled = _compile()
     names = {cid: name for cid, name, _ in CLUSTERS}

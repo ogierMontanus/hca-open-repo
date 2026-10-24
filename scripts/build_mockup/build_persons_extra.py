@@ -42,6 +42,7 @@ import urllib.parse
 from collections import Counter, defaultdict
 
 import _diary_scope  # noqa: E402  (sibling module; scripts run from repo root)
+import _person_groups  # noqa: E402
 
 ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
@@ -485,7 +486,7 @@ GATED_KINDS = {"crossReference", "crossReferenceMalformed"}
 # Kinds shown, but never with a personal gender. The same category
 # person_gender.csv gives the entries its review found to be collectives.
 COLLECTIVE_KINDS = {"family", "group", "organisation", "animal"}
-OTHER_GENDER = "Andet (især firmaer/slægter/øvrige grupper)"
+OTHER_GENDER = _person_groups.OTHER_GENDER
 # Regel: en post med køn = OTHER_GENDER (firma/slægt/gruppe) får altid
 # erhvervsgrenen UNCATEGORISED — uanset hvad parseren/klyngerne ellers gav.
 UNCATEGORISED_ROLE = "Endnu ukategoriseret/Uden for kategori/Intet kendt lønnet erhverv"
@@ -543,8 +544,15 @@ def main() -> None:
             if kinds and kinds <= COLLECTIVE_KINDS:
                 collective.add(r["entity_id"])
             persons.append(r)
+    # Det redaktionelle kønsgennemsyn (person_gender.csv) afgør pr. post, hvad
+    # der er en gruppe — også de poster, 29_entityType ikke fanger, fordi det
+    # er nøglet på label (`Hansen og Frue`, `Bell & Daldy`, `Horn`).
+    review_groups = _person_groups.load_group_ids() & {r["entity_id"] for r in persons}
+    n_by_type = len(collective)
+    collective |= review_groups
     print(f"  {len(persons):,} persons ({len(collective)} families, firms, groups "
-          f"→ gender »{OTHER_GENDER}«)")
+          f"→ gender »{OTHER_GENDER}«: {n_by_type} by 29_entityType, "
+          f"{len(collective) - n_by_type} more from person_gender.csv)")
     if gated:
         print(f"  {len(gated)} excluded as cross-references (29_entityType):")
         for label, kind in gated:

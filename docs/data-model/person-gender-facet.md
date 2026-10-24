@@ -47,13 +47,25 @@ ingen række og dermed intet køn, så Køn-facetten springer dem over;
 **firmaer, slægter, ægtepar, familier, grupper og dyr** får kategorien
 »Andet (især firmaer/slægter/øvrige grupper)«.
 
-`build_persons_extra.py` gør det samme med `person_entity_types.tsv`: kun
-krydshenvisninger (`crossReference*`) holdes ude af personlisten og
-filtrene. Familier, firmaer, grupper og dyr (`family`, `organisation`,
-`group`, `animal`) vises med kategorien Andet, også hvis
-`person_gender.csv` siger andet. En label, der både er krydshenvisning og
-familie (`Horn`, `Poulsen`), tæller ikke som nogen af delene; dér gælder
-`person_gender.csv`. På sitet giver det 94 poster under Andet.
+**Hvad der er en gruppe, afgøres af to kilder, der lægges sammen**
+(`scripts/build_mockup/_person_groups.py` + `person_entity_types.tsv`):
+
+1. Rækker med kategorien Andet i `person_gender.csv` (87) — afgjort pr.
+   post af gennemsynet, også `Hansen og Frue`, `Bell & Daldy`, `Horn`.
+2. `person_entity_types.tsv` (nøglet på label): `family`, `organisation`,
+   `group`, `animal` vises med kategorien Andet, også hvis
+   `person_gender.csv` siger andet.
+
+Kun krydshenvisninger (`crossReference*`) holdes ude af personlisten og
+filtrene. En label, der både er krydshenvisning og familie (`Horn`,
+`Poulsen`), tæller ikke som nogen af delene i kilde 2; dér gælder kilde 1.
+På sitet giver det 99 poster under Andet.
+
+En gruppe behandles ens i hele kæden: `gender` = Andet, `genderConf` tom,
+og erhvervsgren »Endnu ukategoriseret«. `parse_person_role.py` høster intet
+erhverv for dem, `cluster_unassigned_roles.py` holder dem ude af den
+manuelle kø, og `apply_cluster_roles.py` giver dem kun restkategorien
+(kilde `gruppe`). `tests/test_persons_extra_gate.py` vogter det.
 
 De 167 »Endnu ubestemte« er 120 personer, som ikke
 findes i den rettede segmentering, gennemsynet bygger på; 34 personer, som
