@@ -61,6 +61,12 @@ filtrene. En label, der både er krydshenvisning og familie (`Horn`,
 `Poulsen`), tæller ikke som nogen af delene i kilde 2; dér gælder kilde 1.
 På sitet giver det 99 poster under Andet.
 
+**Ved uenighed vinder `person_entity_types.tsv`** (besluttet 2026-10-24):
+en post, hvis label er `family`/`organisation`/`group`/`animal` dér, vises
+med Andet, også hvis `person_gender.csv` giver den et personligt køn.
+Gennemsynet kan kun *tilføje* grupper, ikke fjerne dem. Se åbne punkter
+nedenfor.
+
 En gruppe behandles ens i hele kæden: `gender` = Andet, `genderConf` tom,
 og erhvervsgren »Endnu ukategoriseret«. `parse_person_role.py` høster intet
 erhverv for dem, `cluster_unassigned_roles.py` holder dem ude af den
@@ -211,3 +217,33 @@ Anden kommando lægger `gender` og `genderConf` på `PERSONS_EXTRA`, hvorfra
 
 Kører parseren ikke, står `gender` som `null`, og facetten viser blot ingen
 rækker — resten af siden er upåvirket.
+
+## Åbne punkter (til senere gennemsyn, noteret 2026-10-24)
+
+1. **14 poster er personer i `person_gender.csv`, men tvinges til Andet af
+   labelens entityType.** Nøglen er label, så flere poster med samme label
+   rammes samlet; mindst `Krause` (2 poster, én Kvindelig og én Mandlig)
+   ligner enkeltpersoner, der deler et slægtsnavn med en slægtspost.
+   Reglen ovenfor er bevidst valgt, men tallene bør efterses:
+   `Reg0036640` Bentley's Søstre · `Reg0045680` Carey · `Reg0063200` Grimm,
+   Brødrene · `Reg0071410` Holck, Holck-Winterfeldt · `Reg0072470` Holten ·
+   `Reg0080400` / `Reg0080410` Krause · `Reg0088780` Manthey · `Reg0094190`
+   Müller, Brødrene · `Reg0111810` Schepelem · `Reg0112430` / `Reg0112440`
+   Schlichtkrull · `Reg0115800` Skibsted · `Reg0127870` Weiher und Nimptsch.
+   Mulig løsning: nøgle `person_entity_types.tsv` på `entity_id` frem for
+   label.
+2. **`Madsen` (`Reg0088090`) og `Schou` (`Reg0113240`) er grupper i
+   gennemsynet, men ligger ikke i `persons-extra.js`**: deres bare label er
+   også en krydshenvisning og bliver gated væk, før gruppereglen når dem.
+   Samme årsag som punkt 1 (label-nøgle).
+3. **`person_role_unassigned_annotation.xlsx` er forældet**: den indeholder
+   stadig grupperne i den manuelle kø. Den er håndredigeret og blev derfor
+   ikke genskabt; kør `cluster_unassigned_roles.py` bevidst, når
+   annotationen er afsluttet eller flyttet.
+4. **`person_role_gender_flags.csv` er forældet** i forhold til det
+   manuelle kønsgennemsyn (ca. 500 linjer ændres ved genkørsel af
+   `gender_role_check.py`). Uafhængig af gruppereglen; ikke genkørt.
+5. **`parse_person_gender.py` kender ikke kategorien Andet.** Genkøres den,
+   overskrives `person_gender.csv` og gennemsynets 87 grupper (og de øvrige
+   manuelle afgørelser) går tabt. Kør den ikke uden at lægge
+   `apply_gender_review.py` fra redesign-repoet ovenpå.
