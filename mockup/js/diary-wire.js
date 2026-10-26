@@ -409,7 +409,13 @@ window.DiaryWire = (function () {
     }
 
     function render(reset) {
-      if (reset) { container.innerHTML = ''; shown = 0; }
+      if (reset) {
+        container.innerHTML = '';
+        shown = 0;
+        if (!filtered.length && opts.emptyText) {
+          container.innerHTML = '<p class="cart-note">' + esc(opts.emptyText) + '</p>';
+        }
+      }
       var next = filtered.slice(shown, shown + step);
       container.insertAdjacentHTML('beforeend', next.map(rowCard).join(''));
       shown += next.length;
@@ -427,11 +433,23 @@ window.DiaryWire = (function () {
       render(true);
     }
 
+    // Replace the listed rows wholesale — used when the facet panel
+    // (js/facet-engine.js) does the filtering and hands over its result.
+    function setRows(rows) {
+      filterYear = '';
+      filtered = rows;
+      render(true);
+    }
+
     render(true);
     if (opts.moreBtn) {
       opts.moreBtn.addEventListener('click', function () { render(false); });
     }
-    return { applyFilter: applyFilter, years: function () {
+    return { applyFilter: applyFilter, setRows: setRows,
+             // The search box's own test (place / Pag-id / chip labels), so a
+             // page can feed it to FacetEngine.setPrefilter.
+             matches: function (row, q) { return matches(row, q, ''); },
+             years: function () {
       var ys = {};
       for (var i = 0; i < DIARY_INDEX.length; i++) {
         if (DIARY_INDEX[i].y) ys[DIARY_INDEX[i].y] = (ys[DIARY_INDEX[i].y] || 0) + 1;

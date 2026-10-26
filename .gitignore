@@ -14,6 +14,7 @@ mockup/diary-pages/
 # scripts/build_mockup/build_diary_index.py. Pages degrade gracefully
 # to their curated sample cards when these are absent.
 mockup/data/diary-index.js
+mockup/data/diary-facets.js
 mockup/data/diary-refs.js
 mockup/data/diary-refs-overflow.js
 
