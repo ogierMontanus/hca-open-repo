@@ -34,6 +34,7 @@ mockup/data/diary-print/
 mockup/data/works-extra.js
 mockup/data/persons-extra.js
 mockup/data/places-extra.js
+mockup/data/places-stats.js
 
 # Local-only co-occurrence index (~770 KB) — regenerate with
 # scripts/build_mockup/build_cooccurrence.py. The "Hyppigste steder /

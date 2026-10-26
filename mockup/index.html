@@ -416,7 +416,7 @@
         <div class="landing-card landing-card--hvor">
           <a href="places.html" class="landing-card__link" aria-label="Hvor"></a>
           <div class="landing-card__heading">Hvor</div>
-          <div class="landing-card__count">2.433 steder · 18.737 poster i dagbøgerne</div>
+          <div class="landing-card__count"><span data-place-stat="total">2.433</span> steder · <span data-place-stat="diaryRefs">18.737</span> poster i dagbøgerne</div>
           <ul class="landing-card__list">
             <li><a href="places.html?category=City" class="landing-card__link-item">Byer</a></li>
             <li><a href="places.html?category=Country" class="landing-card__link-item">Lande</a></li>
@@ -448,7 +448,7 @@
       <span class="landing-nav__sep">·</span>
       <a href="kort.html" class="landing-nav__item">
         Kort
-        <span style="font-size:0.72rem;color:var(--color-text-muted)">(454 steder)</span>
+        <span style="font-size:0.72rem;color:var(--color-text-muted)">(<span data-place-stat="geocoded">2.421</span> steder)</span>
       </a>
       <span class="landing-nav__sep">·</span>
       <a href="nation.html" class="landing-nav__item">
@@ -476,6 +476,8 @@
 </footer>
 
 <script src="data/search-index.js"></script>
+<script src="data/places-stats.js"></script>
+<script src="js/place-stats.js"></script>
 <script src="js/no-submit.js"></script>
 <script src="js/site-search.js"></script>
 
