@@ -110,7 +110,11 @@ det ville bryde `connect-src`/`script-src`-CSP'en (se `docs/security.md`).
 Data: Natural Earth (public domain) — 1:50m verden (`basemap-world.js`)
 og 1:10m Europa/Middelhavet (`basemap-europe.js`, lazy-loades ved
 zoom ≥ 5). Bygges én gang med `python scripts/build_mockup/build_basemap.py`
-(kræver `pip install shapely`); output committes. `maxZoom` er 10.
+(kræver `pip install shapely`); output committes. `maxZoom` er 10 som standard; `kort.html` bruger
+18 (`HcaBasemap.addTo(map, { maxZoom: 18 })`), så klynger på mere end fire
+steder kan brydes op. Over zoom 12 skjules kystlinjerne (Natural Earth
+er for grovt til den skala, og steder ville ligge i havet), og kildelinjen
+siger det; et detaljeret lokalt lag kan senere overtage derfra.
 
 **Begrundelse.** `tile.openstreetmap.org` blokerer requests uden
 `Referer` (også `file://`), og CARTO begyndte i 2026-10 at levere

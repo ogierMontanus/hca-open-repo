@@ -207,7 +207,9 @@
 
   // Offline Natural Earth basemap (js/basemap.js) — no tile server needed.
   var map = L.map('kort-map', { worldCopyJump: true });
-  HcaBasemap.addTo(map);
+  // maxZoom 18 (default 10): clusters of more than four places only split
+  // fully from zoom 13, and the Copenhagen ramparts area needs more still.
+  HcaBasemap.addTo(map, { maxZoom: 18 });
 
   // Cluster group with default Leaflet.markercluster behaviour: numerals
   // indicate the count, and clicking a cluster zooms in until its members
