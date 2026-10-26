@@ -15,7 +15,7 @@ static HTML file or a `*.js` file that defines a global via a plain
 | `build_diary_index.py`   | `references.csv`, `diary.csv`, `entities.csv`               | `mockup/data/diary-index.js`, `diary-refs.js` | **no — gitignored** |
 | `build_works_extra.py`   | `entities.csv`, `references.csv`                            | `mockup/data/works-extra.js`   (3,677 works)  | **no — gitignored** |
 | `build_persons_extra.py` | `entities.csv`, `references.csv`                            | `mockup/data/persons-extra.js` (10,228 persons) | **no — gitignored** |
-| `build_places_extra.py`  | `entities.csv`, `references.csv`, `places.csv`, `rejser.tsv` | `mockup/data/places-extra.js`  (2,433 places, 2,421 geocoded) | **no — gitignored** |
+| `build_places_extra.py`  | `entities.csv`, `references.csv`, `places.csv`, `rejser.tsv` | `mockup/data/places-extra.js`  (2,433 places, 2,421 geocoded) + `places-stats.js` (the place counts on index.html) | **no — gitignored** |
 | `build_search_index.py`  | `entities.csv`, `references.csv`                            | `mockup/data/search-index.js`  (~16,400 entities, ref-sorted) | **no — gitignored** |
 | `build_cooccurrence.py`  | `entities.csv`, `references.csv`                            | `mockup/data/cooccurrence.js` (top-12 peers per person/place, count ≥ 2) | **no — gitignored** |
 | `build_diary_print.py`   | `diary_html.csv`, `diary.csv`, `references.csv`, `entities.csv`, `kb_diary_links.csv` | `mockup/data/diary-print/vol-*.js` (per-page text + names for the cart PDF) | **no — gitignored** |
@@ -80,6 +80,7 @@ data/normalized/*.csv
         ├── works-extra.js              (build_works_extra.py)
         ├── persons-extra.js            (build_persons_extra.py)
         ├── places-extra.js             (build_places_extra.py)
+        ├── places-stats.js             (build_places_extra.py — landing-page counts)
         ├── search-index.js             (build_search_index.py)
         └── cooccurrence.js             (build_cooccurrence.py)
                 │
