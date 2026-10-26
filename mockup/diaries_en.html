@@ -6,6 +6,8 @@
   <title>Diaries — The HCA Who-What-Where</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
+    .facet-panel[inert] { opacity: 0.5; }
+
     #calendar-results {
       background: var(--color-surface);
       border: 1px solid var(--color-border);
@@ -120,11 +122,12 @@
        <div>
       <div class="browse-layout">
 
-        <aside class="facet-panel" data-active-filters="off">
+        <aside class="facet-panel">
           <div class="facet-panel__header">
             <span class="facet-panel__title">Filter</span>
             <button class="facet-panel__clear">Reset</button>
           </div>
+          <p class="facet-note" id="facet-cal-note" hidden>Filters apply to the list and table views, not the calendar.</p>
 
           <!-- Temporal-mode selector — see docs/data-model/temporal-modelling.md.
                Diary pages are mentions by definition (a diary page IS Andersen
@@ -154,73 +157,59 @@
             </div>
           </div>
 
-          <div class="facet-group">
+          <!-- Omtaleår — deactivated for now (data-facet-pending: the engine
+               ignores the group). Diary dates are about to become the basic
+               unit instead of pages, which changes what a year filter means. -->
+          <div class="facet-group" data-facet-pending>
             <div class="facet-group__header">Mention year <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body" style="padding:8px 16px 14px">
+            <p class="facet-note">Disabled — the diaries will soon use the date, not the page, as their basic unit.</p>
+            <div class="facet-group__body" style="padding:8px 16px 14px;opacity:0.5">
               <div style="display:flex;gap:8px;align-items:center;font-size:0.85rem">
-                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1825"
+                <input type="number" min="1825" max="1875" placeholder="1825" disabled
                        style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
                        aria-label="From year">
                 <span style="color:var(--color-text-muted)">—</span>
-                <input type="number" list="omtaleaar-years" min="1825" max="1875" placeholder="1875"
+                <input type="number" min="1825" max="1875" placeholder="1875" disabled
                        style="width:5.5em;padding:4px 7px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.88rem"
                        aria-label="To year">
               </div>
-              <datalist id="omtaleaar-years"><option value="1825"><option value="1830"><option value="1835"><option value="1840"><option value="1845"><option value="1850"><option value="1855"><option value="1860"><option value="1865"><option value="1870"><option value="1875"></datalist>
             </div>
           </div>
 
+          <!-- Entity facets — rows and counts are rendered by FacetEngine from
+               DIARY_FACETS (data/diary-facets.js, built by
+               scripts/build_mockup/build_diary_index.py). Do not hand-write rows. -->
           <div class="facet-group">
             <div class="facet-group__header">Places mentioned <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Copenhagen</span><span class="facet-item__count">1,564</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paris</span><span class="facet-item__count">373</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rolighed</span><span class="facet-item__count">346</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Rome</span><span class="facet-item__count">332</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Dresden</span><span class="facet-item__count">325</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Plauen (Vogtland)</span><span class="facet-item__count">304</span></label>
-            </div>
+            <div class="facet-group__body"
+                 data-facet-source="place"
+                 data-facet-limit="6"
+                 data-facet-more-label="Show all"
+                 data-facet-fewer-label="Show fewer"
+                 data-facet-sort-count-label="Count"
+                 data-facet-sort-alpha-label="A-Z"></div>
           </div>
 
           <div class="facet-group">
             <div class="facet-group__header">Persons mentioned <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Edvard</span><span class="facet-item__count">740</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Henriques, Martin R.</span><span class="facet-item__count">461</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Melchior, Moritz G.</span><span class="facet-item__count">457</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Collin, Henriette Oline</span><span class="facet-item__count">423</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Koch, Ida</span><span class="facet-item__count">419</span></label>
-            </div>
+            <div class="facet-group__body"
+                 data-facet-source="person"
+                 data-facet-limit="5"
+                 data-facet-more-label="Show all"
+                 data-facet-fewer-label="Show fewer"
+                 data-facet-sort-count-label="Count"
+                 data-facet-sort-alpha-label="A-Z"></div>
           </div>
 
           <div class="facet-group">
-            <div class="facet-group__header">Works mentioned — Library <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Fairy Tales (H.C.A.)</span><span class="facet-item__count">2,732</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Poems (H.C.A.)</span><span class="facet-item__count">750</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Novels and Short Stories (H.C.A.)</span><span class="facet-item__count">417</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Plays and Opera Librettos (H.C.A.)</span><span class="facet-item__count">683</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Poems (Other authors)</span><span class="facet-item__count">341</span></label>
-            </div>
-          </div>
-
-          <div class="facet-group">
-            <div class="facet-group__header">Works mentioned — Theatre &amp; Music <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Operas &amp; Singspiele</span><span class="facet-item__count">1,037</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Plays — Other authors</span><span class="facet-item__count">1,478</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Ballets</span><span class="facet-item__count">292</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Vocal &amp; Instrumental Music</span><span class="facet-item__count">218</span></label>
-            </div>
-          </div>
-
-          <div class="facet-group">
-            <div class="facet-group__header">Works mentioned — Visual Art <span class="facet-group__toggle">▲</span></div>
-            <div class="facet-group__body">
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Paintings and Drawings</span><span class="facet-item__count">758</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Sculpture</span><span class="facet-item__count">489</span></label>
-              <label class="facet-item"><input type="checkbox"><span class="facet-item__label">Museums and Collections</span><span class="facet-item__count">189</span></label>
-            </div>
+            <div class="facet-group__header">Works mentioned <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body"
+                 data-facet-source="work"
+                 data-facet-limit="5"
+                 data-facet-more-label="Show all"
+                 data-facet-fewer-label="Show fewer"
+                 data-facet-sort-count-label="Count"
+                 data-facet-sort-alpha-label="A-Z"></div>
           </div>
         </aside>
 
@@ -384,8 +373,12 @@
      python scripts/build_mockup/build_diary_index.py -->
 <script src="data/diary-index.js"></script>
 <script src="data/diary-refs.js"></script>
+<script src="data/diary-facets.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
+<script src="js/facet-overlay.js"></script>
+<script src="js/filter-logic.js"></script>
+<script src="js/facet-engine.js"></script>
 <script src="js/diary-wire.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -400,6 +393,15 @@ document.addEventListener('DOMContentLoaded', function () {
   var toolbar  = document.getElementById('diary-toolbar');
   var filter   = document.getElementById('diary-filter');
   var yearSel  = document.getElementById('diary-year');
+  var panelEl  = document.querySelector('.facet-panel');
+  var calNote  = document.getElementById('facet-cal-note');
+  var facets   = null;        // FacetEngine controller once the facet data is loaded
+  var currentLayout = 'list';
+
+  // The rows the list and table show: the facet result when the panel is live.
+  function currentRows() {
+    return facets ? facets.filtered() : DIARY_INDEX;
+  }
 
   function escTable(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -444,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function () {
       ], { initialSort: 'dato', initialDir: 'asc',
            afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } });
     }
-    tableViewCtrl.render(DIARY_INDEX);
+    tableViewCtrl.render(currentRows());
   }
 
   /* ── Layout switcher ──────────────────────────────────────────────── */
@@ -647,6 +649,11 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.classList.add('layout-switcher__btn--active');
 
       var layout = btn.dataset.layout;
+      currentLayout = layout;
+      // The facet panel filters the list and table views only; the calendar
+      // always shows every page, so the panel is switched off there.
+      panelEl.inert = (layout === 'calendar');
+      calNote.hidden = (layout !== 'calendar');
       if (layout === 'calendar') {
         grid.style.display    = 'none';
         moreBtn.style.display = 'none';
@@ -667,11 +674,11 @@ document.addEventListener('DOMContentLoaded', function () {
       } else if (layout === 'table') {
         grid.style.display    = 'none';
         moreBtn.style.display = 'none';
-        toolbar.style.display = 'none';
         calendarPane.style.display = 'none';
         tablePane.style.display = '';
+        if (diaryCtrl) toolbar.style.display = 'flex'; else toolbar.style.display = 'none';
         countEl.innerHTML = '<strong>' + (typeof DIARY_INDEX !== 'undefined'
-          ? DIARY_INDEX.length.toLocaleString('en-US') : '0') +
+          ? currentRows().length.toLocaleString('en-US') : '0') +
           '</strong> diary pages';
         renderDiaryTable();
       } else {
@@ -688,16 +695,14 @@ document.addEventListener('DOMContentLoaded', function () {
     pageSize: 60,
     moreBtn: moreBtn,
     selectAll: document.getElementById('js-diary-select-all'),
+    emptyText: 'No diary pages match the filters.',
     onCount: function (shown, total) {
-      var yearActive = yearSel && yearSel.value;
-      var modeNote = yearActive
-        ? '<br><span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">mention year ' + yearSel.value + '</span>'
-        : '';
-      var showing = shown < total
+      if (currentLayout === 'calendar') return;   // the calendar always counts every page
+      var showing = (currentLayout === 'list' && shown < total)
         ? ' &nbsp;<span style="font-weight:400;font-size:0.78rem;color:var(--color-text-muted)">— showing ' + shown + '</span>'
         : '';
       countEl.innerHTML =
-        '<strong>' + total.toLocaleString('en-US') + '</strong> diary pages' + modeNote + showing;
+        '<strong>' + total.toLocaleString('en-US') + '</strong> diary pages' + showing;
     }
   });
   if (!diaryCtrl) return;  // no generated data → keep the static sample cards
@@ -706,12 +711,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var years = diaryCtrl.years();
   var yearList = Object.keys(years).sort();
 
-  // Populate toolbar year selector
-  yearList.forEach(function (y) {
-    var o = document.createElement('option');
-    o.value = y; o.textContent = y + ' (' + years[y] + ')';
-    yearSel.appendChild(o);
-  });
+  // Omtaleår is deactivated for now (see the facet panel): hide the toolbar's
+  // year select too, so the two don't disagree.
+  yearSel.hidden = true;
 
   // Populate calendar year selector
   yearList.forEach(function (y) {
@@ -740,9 +742,52 @@ document.addEventListener('DOMContentLoaded', function () {
     showCalendarEntries(year, month);
   });
 
-  function apply() { diaryCtrl.applyFilter(filter.value.trim(), yearSel.value); }
-  filter.addEventListener('input', apply);
-  yearSel.addEventListener('change', apply);
+  /* ── Filter panel ─────────────────────────────────────────────────── */
+  if (typeof DIARY_FACETS !== 'undefined' && typeof FacetEngine !== 'undefined') {
+    var FP = DIARY_FACETS.pages, FL = DIARY_FACETS.labels;
+    var idsAt = function (i) { return function (r) { var e = FP[r.h]; return e && e[i]; }; };
+    var labelOf = function (id) { return FL[id] || id; };
+
+    // The search box also looks at every entity on the page, not just the
+    // three chips DIARY_INDEX keeps per row.
+    var rowHasLabel = function (r, q) {
+      var e = FP[r.h];
+      if (!e) return false;
+      for (var t = 0; t < e.length; t++) {
+        for (var k = 0; k < e[t].length; k++) {
+          if (labelOf(e[t][k]).toLowerCase().indexOf(q) !== -1) return true;
+        }
+      }
+      return false;
+    };
+
+    facets = FacetEngine.create({
+      panel: panelEl,
+      items: DIARY_INDEX,
+      accessors: { place: idsAt(0), person: idsAt(1), work: idsAt(2) },
+      labels:    { place: labelOf, person: labelOf, work: labelOf },
+      // Tiebreak on the label (Efternavn, Fornavn) rather than the id.
+      sortKeys:  { place: labelOf, person: labelOf, work: labelOf },
+      onReset: function () { filter.value = ''; facets.setPrefilter(null, true); },
+      onChange: function (rows) {
+        diaryCtrl.setRows(rows);
+        if (currentLayout === 'table') renderDiaryTable();
+      }
+    });
+    filter.addEventListener('input', function () {
+      var q = filter.value.trim().toLowerCase();
+      facets.setPrefilter(q ? function (r) { return diaryCtrl.matches(r, q) || rowHasLabel(r, q); } : null);
+    });
+    facets.apply();
+  } else {
+    // No generated facet data: say so in the panel, keep the text search.
+    panelEl.querySelectorAll('[data-facet-source]').forEach(function (host) {
+      var grp = host.closest('.facet-group');
+      grp.setAttribute('data-facet-pending', '');
+      host.innerHTML = '<p class="facet-note">Needs data/diary-facets.js — run python scripts/build_mockup/build_diary_index.py.</p>';
+    });
+    filter.addEventListener('input', function () { diaryCtrl.applyFilter(filter.value.trim(), ''); });
+  }
 
   // Deep-link support: index.html's "Hvornår" landing card points here with
   // ?layout=calendar so a reader lands straight in that view instead of the
