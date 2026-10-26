@@ -19,6 +19,11 @@ Writes (gitignored — generated locally, like mockup/diary-pages/):
                                 const DIARY_REFS = { regId: {n, e:[pag,...]}, }
                                 reverse index → powers the "Dagbogsreferencer"
                                 section on place.html / persons.html / work.html
+  mockup/data/diary-facets.js — const DIARY_FACETS = { labels:{id:label},
+                                pages:{pag:[[placeIds],[personIds],[workIds]]} }
+                                EVERY entity per page (DIARY_INDEX rows keep
+                                only 3 chips) → powers the filter panel on
+                                diaries.html
 
 Run from the repo root:
   python3 scripts/build_mockup/build_diary_index.py
@@ -191,6 +196,22 @@ def main():
         row["c"] = chips
         index.append(row)
 
+    # --- DIARY_FACETS: every entity per page, bucketed by type -------------
+    # DIARY_INDEX rows keep at most 3 chips, which is fine for a card but
+    # would make facet counts wrong, so the filter panel gets its own file.
+    # pages[pag] = [[place ids], [person ids], [work ids]] (seq order).
+    facet_labels = {}
+    facet_pages  = {}
+    for p in all_pages:
+        buckets = {"place": [], "person": [], "work": []}
+        for eid in page_ents[p]:
+            t, lab = ents.get(eid, ("", ""))
+            if lab and t in buckets:
+                buckets[t].append(eid)
+                facet_labels[eid] = lab
+        if any(buckets.values()):
+            facet_pages[p] = [buckets["place"], buckets["person"], buckets["work"]]
+
     # --- DIARY_REFS: entity_id -> {n: total, e: [pag,...] capped} ----------
     refs = {}
     overflow = {}   # pages beyond REFS_CAP -> diary-refs-overflow.js
@@ -211,6 +232,16 @@ def main():
         header
         + "const DIARY_INDEX = "
         + json.dumps(index, ensure_ascii=False, separators=(",", ":"))
+        + ";\n",
+        encoding="utf-8",
+    )
+
+    facets_js = OUT_DIR / "diary-facets.js"
+    facets_js.write_text(
+        header
+        + "const DIARY_FACETS = "
+        + json.dumps({"labels": facet_labels, "pages": facet_pages},
+                     ensure_ascii=False, separators=(",", ":"))
         + ";\n",
         encoding="utf-8",
     )
@@ -242,6 +273,8 @@ def main():
 
     print(f"  wrote {idx_js.relative_to(REPO_ROOT)}  "
           f"({idx_js.stat().st_size/1024:.0f} KB, {len(index)} pages)")
+    print(f"  wrote {facets_js.relative_to(REPO_ROOT)}  "
+          f"({facets_js.stat().st_size/1024:.0f} KB, {len(facet_pages)} pages)")
     print(f"  wrote {refs_js.relative_to(REPO_ROOT)}  "
           f"({refs_js.stat().st_size/1024:.0f} KB, {len(refs)} entities)")
     print(f"  wrote {ovf_js.relative_to(REPO_ROOT)}  "
