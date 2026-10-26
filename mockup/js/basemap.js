@@ -11,12 +11,20 @@
  *
  * Usage: HcaBasemap.addTo(map) right after L.map(...). Requires
  * vendor/basemap/basemap-world.js to be loaded first.
+ *
+ * Zoom is capped at MAX_ZOOM (10) by default. A map that has to separate
+ * points closer together than that allows (kort.html) passes
+ * { maxZoom: 18 }. The coastline is only drawn at 1:10m, which puts places
+ * in the sea once zoomed in far enough, so above COARSE_ZOOM the land, rivers
+ * and borders are left out (neutral background, markers only) and the
+ * attribution line says so. A detailed local layer can take over from there.
  */
 (function () {
   'use strict';
 
   var DETAIL_ZOOM = 5;
   var MAX_ZOOM = 10;   // Natural Earth 1:10m gets blobby beyond this.
+  var COARSE_ZOOM = 12; // above this the coastline is further off than a marker is wide.
   // Must match EUROPE_BBOX in build_basemap.py ([[S, W], [N, E]]).
   var EUROPE_BOUNDS = L.latLngBounds([[26, -26], [72.5, 52]]);
 
@@ -27,6 +35,10 @@
     rivers:  { color: '#a8c3d2', weight: 0.9, opacity: 0.9 },
     borders: { color: '#a59a92', weight: 0.8, dashArray: '3 2', opacity: 0.9 }
   };
+
+  var EN = (document.documentElement.getAttribute('lang') || '').toLowerCase().indexOf('en') === 0;
+  var COARSE_NOTE = EN ? 'Coastlines hidden at this zoom — the base map is too coarse'
+                       : 'Kystlinjer skjules ved dette zoom — basiskortet er for grovt';
 
   var ATTRIBUTION = 'Kortdata: <a href="https://www.naturalearthdata.com/" ' +
     'target="_blank" rel="noopener noreferrer">Natural Earth</a>';
@@ -56,8 +68,9 @@
     document.head.appendChild(s);
   }
 
-  function addTo(map) {
-    map.setMaxZoom(MAX_ZOOM);
+  function addTo(map, opts) {
+    var maxZoom = (opts && opts.maxZoom) || MAX_ZOOM;
+    map.setMaxZoom(maxZoom);
     map.getContainer().style.background = STYLE.sea;
     if (!map.getPane('hcaBasemap')) {
       map.createPane('hcaBasemap').style.zIndex = 200;   // below overlays (400) and markers (600)
@@ -87,6 +100,9 @@
       // show doubled coastlines under the detail layer).
       var showEurope = detail && !!europe;
       var showWorld = !showEurope || !EUROPE_BOUNDS.contains(map.getBounds());
+      var coarse = map.getZoom() > COARSE_ZOOM;
+      if (coarse) { showEurope = false; showWorld = false; }
+      map.getContainer().style.background = coarse ? STYLE.land.fillColor : STYLE.sea;
       toggle(world, showWorld);
       toggle(europe, showEurope);
     }
@@ -97,7 +113,17 @@
       if (!on && map.hasLayer(layer)) map.removeLayer(layer);
     }
 
+    var coarseShown = false;
+    function coarseNote() {
+      var coarse = map.getZoom() > COARSE_ZOOM;
+      if (coarse === coarseShown) return;
+      coarseShown = coarse;
+      if (coarse) map.attributionControl.addAttribution(COARSE_NOTE);
+      else map.attributionControl.removeAttribution(COARSE_NOTE);
+    }
+
     map.on('zoomend moveend', update);
+    if (maxZoom > COARSE_ZOOM) map.on('zoomend', coarseNote);
     map.whenReady(update);
     return map;
   }
