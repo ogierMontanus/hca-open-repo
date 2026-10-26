@@ -16,7 +16,14 @@ pipeline doesn't care which release version it is reading:
       (the V0.92 ingester knows its own hard-coded folder path; CSVs
        go to data/normalized_v092/, not data/normalized/, so the rest
        of the pipeline keeps reading the V0.82 outputs until works
-       ship in V0.9x)
+       ship in V0.9x — which is why stage 1a2 below also runs the V0.82
+       ingester when the picked source is V0.92)
+
+  Place register: whichever ingester runs, the PLACES in
+  data/normalized/{entities,references,places}.csv come from the newest
+  data/HCA_Steder_GÆLDENDE_*_LocationID_*.xlsx (LOC… ids) — see
+  scripts/normalization/place_register.py. Stage 1a2 is what applies it
+  to data/normalized/ in a V0.92 run.
 
 Usage (from repo root):
     python scripts/build_all.py                  # auto-pick highest source
@@ -200,7 +207,16 @@ def main():
     source = pick_source(args.source)
     print(f"Source: {source.relative_to(REPO_ROOT)}")
     ingest = ingest_stage(source)
-    all_stages = [ingest] + [
+    all_stages = [ingest]
+    if classify_source(source)[0] == "v092":
+        # The V0.92 ingester writes data/normalized_v092/ only; the mockup
+        # reads data/normalized/, whose places come from the place register.
+        all_stages.append((
+            "1a2", "V0.82 ingest + place register -> data/normalized/ "
+                   "(entities, references, places)",
+            [sys.executable, str(REPO_ROOT / V082_INGESTER)], False,
+        ))
+    all_stages += [
         (i, label, [sys.executable, str(REPO_ROOT / script)], opt)
         for (i, label, script, opt) in STAGES_AFTER_INGEST
     ]

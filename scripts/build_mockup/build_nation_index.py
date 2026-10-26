@@ -113,17 +113,18 @@ def load_place_labels(path):
 
 def load_country_to_nation(path):
     """Returns {xlsx_country: nation_place_label} from data/curated/
-    steder_verified_categories.csv's country column having become far
-    more granular than this file's own nationality vocabulary (England
-    and Skotland are now distinct country_da values, not one folded
-    "Storbritannien" — see docs/data-model/steder-verificeret-category-
-    mapping.md and build_places_extra.py). Rows with a blank
-    nation_place_label (Tjekkiet, Kroatien, the continents, ...) are
-    genuinely unmapped -- no corresponding nationality key exists yet --
-    and are skipped rather than guessed at; load_places_extra() below
-    falls back to the raw country_da unchanged for those and for any
-    country_da this crosswalk doesn't mention at all, so a value it
-    doesn't know about degrades to "use it as-is" rather than vanishing."""
+    steder_country_to_nation_da.csv. The place register's Country column
+    (data/HCA_Steder_GÆLDENDE_*.xlsx -> places-extra.js `country_da`) is far
+    more granular than this file's own nationality vocabulary (England and
+    Skotland are distinct values, not one folded "Storbritannien" — see
+    docs/data-model/place-register-gaeldende.md and build_places_extra.py).
+    Rows with a blank nation_place_label (Tjekkiet, Kroatien, the
+    continents, ...) are genuinely unmapped -- no corresponding nationality
+    key exists yet -- and are skipped rather than guessed at;
+    load_places_extra() below falls back to the raw country_da unchanged for
+    those and for any country_da this crosswalk doesn't mention at all, so a
+    value it doesn't know about degrades to "use it as-is" rather than
+    vanishing."""
     out = {}
     if not os.path.exists(path):
         return out

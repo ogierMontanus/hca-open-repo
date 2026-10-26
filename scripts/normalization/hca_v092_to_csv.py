@@ -33,6 +33,7 @@ import warnings
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import place_register  # noqa: E402
 from epub_diary_to_csv import DEFAULT_EPUB, FIELDS as DIARY_FIELDS, build_rows  # noqa: E402
 
 warnings.filterwarnings("ignore")
@@ -112,24 +113,23 @@ def place_id(loc_id) -> str:
     return f"L{int(loc_id):05d}"
 
 
-V097_XLSX = ROOT / "data" / "raw" / "4-LOCATION-V0.97.xlsx"
 V097_XWALK = ROOT / "data" / "curated" / "place_v097_crosswalk.csv"
 
 
 def load_v097_overlay():
-    """V0.97 place records keyed by V0.92 entity_id (via the crosswalk from
-    place_v097_crosswalk.py), plus the V0.97-only places keyed by LOC id.
-    Returns ({L-id: rec}, [rec, …]); both empty if the files are missing."""
-    if not (V097_XLSX.exists() and V097_XWALK.exists()):
+    """Place-register records (data/HCA_Steder_GÆLDENDE_*.xlsx — LOC ids, the
+    successor of the V0.97 workbook) keyed by V0.92 entity_id (via the
+    crosswalk from place_v097_crosswalk.py), plus the register-only places
+    keyed by LOC id. Returns ({L-id: rec}, [rec, …]); both empty if the
+    workbook or the crosswalk is missing."""
+    xlsx = place_register.find_place_xlsx(required=False)
+    if not (xlsx and V097_XWALK.exists()):
         return {}, []
-    recs = {}
-    wb = load_workbook(V097_XLSX, read_only=True, data_only=True)
-    for r in wb["Location"].iter_rows(min_row=5, values_only=True):
-        if r[0]:
-            recs[r[0]] = {"id": r[0], "label": s(r[1]), "country": s(r[3]),
-                          "category": s(r[4]), "lat": r[5], "lon": r[6],
-                          "geo": s(r[7])}
-    wb.close()
+    recs = {p["entity_id"]: {"id": p["entity_id"], "label": p["label"],
+                             "country": p["country"], "category": p["category_da"],
+                             "lat": p["lat"], "lon": p["lon"],
+                             "geo": p["geocoding_status"]}
+            for p in place_register.load_places(xlsx)}
     mapped, new_only = {}, []
     with V097_XWALK.open(encoding="utf-8", newline="") as f:
         for x in csv.DictReader(f):
@@ -230,9 +230,9 @@ def build_entities():
         country = s(r.get("Country"))
         region = s(r.get("Region"))
         ov = V097.get(place_id(loc_id))
-        if V097 and not ov:  # V0.92-only place: dropped, V0.97 is the base
+        if V097 and not ov:  # V0.92-only place: dropped, the place register is the base
             continue
-        if ov:  # V0.97 is the base for place names/coords/category
+        if ov:  # the place register is the base for place names/coords/category
             country, region = ov["country"] or country, ov["category"]
         out.append({
             "entity_id":    place_id(loc_id),

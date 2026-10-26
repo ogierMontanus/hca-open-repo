@@ -3,6 +3,7 @@ LOC1000000,Abbotsford,L110050,Abbotsford,exact,1.0
 LOC1000050,Abydos,L110200,Abydos,exact,1.0
 LOC1000100,Acquapendente,L110250,Acquapendente,exact,1.0
 LOC1000150,Adamsthal,L110300,Adamsthal,exact,1.0
+LOC1000200,Adelsberg,L110400,Adelsberg,exact,1.0
 LOC1000250,Adriaterhavet,L110450,Adriaterhavet,exact,1.0
 LOC1000300,Afrika,L110900,Afrika,exact,1.0
 LOC1000350,Agersø,L111950,Agersø,exact,1.0
@@ -154,7 +155,7 @@ LOC1007700,Beckenried,L175700,Beckenried,exact,1.0
 LOC1007750,Beelitz,L175850,Beelitz,exact,1.0
 LOC1007800,Beeren-Eiland (Bjørneøen),L175900,Beeren-Eiland (Bjørneøen),exact,1.0
 LOC1007850,Beinum,L176000,Beinum,exact,1.0
-LOC1007900,"Beldringe, Baarse S., Præstø A",L176050,"Beldringe Baarse S., Præstø A",folded,1.0
+LOC1007900,"Beldringe, Baarse S., Præstø A.",L176050,"Beldringe Baarse S., Præstø A",folded,1.0
 LOC1007950,Belém,L176100,Belém,exact,1.0
 LOC1008000,Belgien,L176200,Belgien,exact,1.0
 LOC1008050,Belgrad,L176550,Belgrad,exact,1.0
@@ -202,6 +203,7 @@ LOC1010150,Bingen,L191200,Bingen,exact,1.0
 LOC1010200,Biscayiske Havbugt (Den spanske Sø),L191500,Biscayiske Havbugt (Den spanske Sø),exact,1.0
 LOC1010250,Bisserup,L191600,Bisserup,exact,1.0
 LOC1010300,Bjärka-Säby,L191650,Bjärka-Säby,exact,1.0
+LOC1010350,Björkö,L191950,Björkö,exact,1.0
 LOC1010400,Blankenburg,L192500,Blankenburg,exact,1.0
 LOC1010450,Blankenese,L192700,Blankenese,exact,1.0
 LOC1010500,Blechhütte,L192850,Blechhütte,exact,1.0
@@ -521,7 +523,6 @@ LOC1026600,Eisack,L290800,Eisack,exact,1.0
 LOC1026650,Eisenach,L290950,Eisenach,exact,1.0
 LOC1026700,Eisleben,L291900,Eisleben,exact,1.0
 LOC1026750,"Ekeberg, Christiania",L292000,"Ekeberg, Christiania",exact,1.0
-LOC1026800,Ekehy Kvarn,L292100,Ekehy Kvarn,exact,1.0
 LOC1026850,Ekolsund,L292150,Ekolsund,exact,1.0
 LOC1026900,Elba,L292200,Elba,exact,1.0
 LOC1026950,Elbdalen,L292400,Elbdalen,exact,1.0
@@ -1698,7 +1699,7 @@ LOC1087200,Rom,L832350,Rom,exact,1.0
 LOC1087250,Romanshorn,L848950,Romanshorn,exact,1.0
 LOC1087300,Romont,L849200,Romont,exact,1.0
 LOC1087350,Ronciglione,L849250,Ronciglione,exact,1.0
-LOC1087400,Ronco all' Adige,L849350,Ronco all' Adige,exact,1.0
+LOC1087400,Smyrna,L907050,Smyrna,exact,1.0
 LOC1087450,Roosendaal,L849400,Roosendaal,exact,1.0
 LOC1087500,Rorschach,L849450,Rorschach,exact,1.0
 LOC1087550,Roseg-Gletscher,L849550,Roseg-Gletscher,exact,1.0
@@ -1918,7 +1919,6 @@ LOC1098400,Slien,L906200,Slien,exact,1.0
 LOC1098450,Slipshavn,L906250,Slipshavn,exact,1.0
 LOC1098500,Slots-Bjergby Galgebakke,L906300,Slots-Bjergby Galgebakke,exact,1.0
 LOC1098550,Slude Gaard,L906400,Slude Gaard,exact,1.0
-LOC1098600,Smyrna,L907050,Smyrna,exact,1.0
 LOC1098650,Smaalandsfarvandet,L906450,Smaalandsfarvandet,exact,1.0
 LOC1098700,Snekkersten,L907450,Snekkersten,exact,1.0
 LOC1098750,Snoghøj,L907500,Snoghøj,exact,1.0
@@ -2019,7 +2019,7 @@ LOC1103600,Säfsjö,L947950,Säfsjö,exact,1.0
 LOC1103650,Sävo Sund (Sävsund),L948000,Sävo Sund (Sävsund),exact,1.0
 LOC1103700,"Søbygaard, Søby S., Gjern H.",L948050,"Søbygaard, Søby S., Gjern H",folded,1.0
 LOC1103750,Søbygaards Sø,L948100,Søbygaards Sø,exact,1.0
-LOC1103800,Söderkoping,L948150,Söderkoping,exact,1.0
+LOC1103800,Söderköping,L948150,Söderkoping,folded,1.0
 LOC1103850,Södertelge,L948350,Södertelge,exact,1.0
 LOC1103900,Søllerod Sø,L949700,Søllerod Sø,exact,1.0
 LOC1103950,Søllerød,L948500,Søllerød,exact,1.0
@@ -2367,11 +2367,9 @@ LOC1121450,Aarup,L109600,Aarup,exact,1.0
 LOC1121500,Aarøsund,L109650,Aarøsund,exact,1.0
 LOC1121550,"Aasen, Silkeborg",L109950,"Aasen, Silkeborg",exact,1.0
 LOC1121600,Aastrup,L110000,Aastrup,exact,1.0
-LOC1000200,Adelsberg (Adlersberg?),,,new,0
 LOC1004250,Arles,,,new,0
 LOC1006900,Basel,,,new,0
 LOC1008500,Benfica,,,new,0
-LOC1010350,Björkö (i Mälaren),,,new,0
 LOC1010850,Boccano (Baccano?),L193600,Boecano (Baccano?),fuzzy,0.933
 LOC1010950,Bodenbach,L193800,Bodenhach,fuzzy,0.889
 LOC1018050,"Cathrineholm, Krummerup S., Øster-Flakkebjerg H.",L233950,"Cathrinebolm, Krummerup S., Øster-Flakkebjerg H",fuzzy,0.977
@@ -2381,6 +2379,7 @@ LOC1023350,Delphi,,,new,0
 LOC1023650,Deutz,,,new,0
 LOC1024500,Dornburg,,,new,0
 LOC1025050,Drottningholm,L285050,Drottningholro,fuzzy,0.889
+LOC1026800,Ekeby,,,new,0
 LOC1027000,Elbekosteletz,L292600,Elbekostele1z,fuzzy,0.923
 LOC1031250,Flensborg Fjord,,,new,0
 LOC1031950,Frankenmarkt,L323150,Frankeomarkt,fuzzy,0.917
@@ -2420,6 +2419,7 @@ LOC1090150,Saint-Cloud,L860850,Saint-Cioud,fuzzy,0.909
 LOC1090450,Saint-Quentin,L861700,Saint-Queotin,fuzzy,0.923
 LOC1093500,Seefeld,,,new,0
 LOC1094500,Schwarzwald,,,new,0
+LOC1098600,Smyrna (Izmir),,,new,0
 LOC1099350,Sorrento,,,new,0
 LOC1099450,Sortehavet,L909650,Sortehave1,fuzzy,0.9
 LOC1102550,Stångån,,,new,0
@@ -2432,17 +2432,16 @@ LOC1112400,"Velo, Hadeland",L986400,"Velo, Hadefand",fuzzy,0.923
 LOC1116450,Warszava,,,new,0
 LOC1117850,Wilhelmsthal,L1024600,Wilbelmsthal,fuzzy,0.917
 LOC1118100,"Winterberg, Grosser",L1025350,"Winterberg, Crosser",fuzzy,0.944
-,,L110400,Adelsberg,old-only,0
 ,,L144450,Aries,old-only,0
 ,,L161000,Base1,old-only,0
 ,,L178150,Bemfica,old-only,0
-,,L191950,Björkö,old-only,0
 ,,L236500,Chåtdet,old-only,0
 ,,L237300,chiavenna,old-only,0
 ,,L237700,Cililion,old-only,0
 ,,L267150,Delpbi,old-only,0
 ,,L267900,Deurz,old-only,0
 ,,L272550,Domburg,old-only,0
+,,L292100,Ekehy Kvarn,old-only,0
 ,,L321200,Fleruborg Fjord,old-only,0
 ,,L342250,Frobnalp,old-only,0
 ,,L348850,Gad's Hil1 Plaee,old-only,0
@@ -2460,6 +2459,7 @@ LOC1118100,"Winterberg, Grosser",L1025350,"Winterberg, Crosser",fuzzy,0.944
 ,,L751750,Otrieoli,old-only,0
 ,,L780400,"Pianoro, I 392",old-only,0
 ,,L797050,Quebee,old-only,0
+,,L849350,Ronco all' Adige,old-only,0
 ,,L874200,Schwanwald,old-only,0
 ,,L879250,Scefeld,old-only,0
 ,,L908400,Sonnenstcin,old-only,0

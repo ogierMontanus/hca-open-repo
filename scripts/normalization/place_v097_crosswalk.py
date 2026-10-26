@@ -1,6 +1,8 @@
-"""place_v097_crosswalk.py — map V0.97 place records (LOC…) onto the V0.92
-place IDs (L{LocID}) so V0.97 labels/coords/categories can overlay the
-existing pipeline without re-keying anything.
+"""place_v097_crosswalk.py — map place-register records (LOC…, the current
+data/HCA_Steder_GÆLDENDE_*.xlsx; same LocationIDs as the old V0.97
+workbook) onto the V0.92 place IDs (L{LocID}) so the register's
+labels/coords/categories can overlay the V0.92 pipeline without re-keying
+anything.
 
 Match order: exact name → case/diacritic-folded name → fuzzy (difflib >=0.88,
 unique best). Unmatched rows on either side are listed for manual review.
@@ -8,12 +10,14 @@ unique best). Unmatched rows on either side are listed for manual review.
 Output: data/curated/place_v097_crosswalk.csv
 Usage:  python scripts/normalization/place_v097_crosswalk.py
 """
-import csv, difflib, re, unicodedata
+import csv, difflib, re, sys, unicodedata
 from pathlib import Path
 from openpyxl import load_workbook
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import place_register  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
-NEW = ROOT / "data/raw/4-LOCATION-V0.97.xlsx"
 OLD = ROOT / "data/raw/HCA REPOSITORY V0.92/LocationData-PQ-V0.92.xlsx"
 OUT = ROOT / "data/curated/place_v097_crosswalk.csv"
 FIELDS = ["loc_id_v097", "label_v097", "entity_id_v092", "label_v092", "match", "score"]
@@ -26,7 +30,8 @@ def fold(t):
 
 
 def load():
-    new = [r for r in load_workbook(NEW, read_only=True)["Location"].iter_rows(min_row=5, values_only=True) if r[0]]
+    # (LocationID, label) tuples — the code below only reads n[0] / n[1].
+    new = [(p["entity_id"], p["label"]) for p in place_register.load_places()]
     old = [r for r in load_workbook(OLD, read_only=True)["DimLoc"].iter_rows(min_row=2, values_only=True) if r[0]]
     return new, old
 
@@ -65,7 +70,7 @@ def main():
     rows = build()
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with OUT.open("w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f); w.writerow(FIELDS); w.writerows(rows)
+        w = csv.writer(f, lineterminator="\n"); w.writerow(FIELDS); w.writerows(rows)
     from collections import Counter
     print(Counter(r[4] for r in rows), "->", OUT.relative_to(ROOT))
 

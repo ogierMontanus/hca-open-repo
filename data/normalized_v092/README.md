@@ -52,6 +52,12 @@ are concatenated into `description` separated by ` · `.
 | `year_derived` | `YearOfBirth–YearOfDeath` (em-dash) when both present, else either |
 
 ### `entities.csv` (places)
+
+> Since 2026-10-26 the place **label, country, category and coordinates** come from the
+> place-register workbook `data/HCA_Steder_GÆLDENDE_*.xlsx` (via `place_v097_crosswalk.py`
+> and `place_register.py`); only `entity_id` and the page references stay V0.92. See
+> `docs/data-model/place-register-gaeldende.md`.
+
 | CSV column | V0.92 source |
 |---|---|
 | `entity_id` | `L{DimLoc1.LocID:05d}` |

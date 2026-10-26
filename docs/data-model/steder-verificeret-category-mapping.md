@@ -1,6 +1,9 @@
 # Steder_i_dagboegerne VER 1.0 — Category facet + LOD mapping
 
-Status: proposal · 2026-08-26
+Status: proposal · 2026-08-26 · **superseded 2026-10-26** — the place register is now based on
+`data/HCA_Steder_GÆLDENDE_21102026_LocationID_alle_2433_steder.xlsx` (LOC… ids); see
+[`place-register-gaeldende.md`](place-register-gaeldende.md). `reconcile_steder_categories.py` and
+`steder_verified_categories.csv` described below no longer exist; kept as history.
 
 Source file: `raw/Steder_i_dagboegerne_verificeret_udfyldt VER 1.0.xlsx`
 — human-verified by the project's place editor, built from and

@@ -15,7 +15,7 @@ static HTML file or a `*.js` file that defines a global via a plain
 | `build_diary_index.py`   | `references.csv`, `diary.csv`, `entities.csv`               | `mockup/data/diary-index.js`, `diary-refs.js` | **no — gitignored** |
 | `build_works_extra.py`   | `entities.csv`, `references.csv`                            | `mockup/data/works-extra.js`   (3,677 works)  | **no — gitignored** |
 | `build_persons_extra.py` | `entities.csv`, `references.csv`                            | `mockup/data/persons-extra.js` (10,228 persons) | **no — gitignored** |
-| `build_places_extra.py`  | `entities.csv`, `references.csv`, `rejser.tsv`              | `mockup/data/places-extra.js`  (2,508 places, ≈391 geocoded) | **no — gitignored** |
+| `build_places_extra.py`  | `entities.csv`, `references.csv`, `places.csv`, `rejser.tsv` | `mockup/data/places-extra.js`  (2,433 places, 2,421 geocoded) | **no — gitignored** |
 | `build_search_index.py`  | `entities.csv`, `references.csv`                            | `mockup/data/search-index.js`  (~16,400 entities, ref-sorted) | **no — gitignored** |
 | `build_cooccurrence.py`  | `entities.csv`, `references.csv`                            | `mockup/data/cooccurrence.js` (top-12 peers per person/place, count ≥ 2) | **no — gitignored** |
 | `build_diary_print.py`   | `diary_html.csv`, `diary.csv`, `references.csv`, `entities.csv`, `kb_diary_links.csv` | `mockup/data/diary-print/vol-*.js` (per-page text + names for the cart PDF) | **no — gitignored** |
@@ -62,7 +62,7 @@ Failures in the optional stages are non-fatal, mirroring CI (which omits
 1f: it needs the unzipped EPUB under `raw/`, and `diary.csv` is committed).
 
 Then open `mockup/diaries.html`, `mockup/work.html?reg=Reg001260`,
-`mockup/persons.html?reg=Reg0052440`, `mockup/place.html?reg=Reg0017430`,
+`mockup/persons.html?reg=Reg0052440`, `mockup/place.html?reg=LOC1087200`,
 etc. from disk.
 
 Need to run a single builder by hand? See the script paths in the

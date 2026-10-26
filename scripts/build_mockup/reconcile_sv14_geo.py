@@ -7,6 +7,15 @@ English/endonym spelling, geocoded) against B) the Danish STED-REGISTER
 (data/normalized/entities.csv, entity_type == 'place') to fill in
 coordinates for B entries that do not already have them.
 
+Since the place register became the LocationID workbook (see
+scripts/normalization/place_register.py) the coordinates of its 2,421
+geocoded places take precedence over everything here — build_places_extra.py
+only falls back to this file's lat/lon for the places the workbook could not
+geocode. The matches are still worth computing for every place because they
+also supply `destination_en` (the English spelling shown as "a.k.a." on
+place.html), so this script deliberately does NOT skip register-geocoded
+places.
+
 Entries in B that already resolve to coordinates via the existing
 rejser.tsv gazetteer (see build_places_extra.py) are left untouched —
 this script only targets the remaining gap.

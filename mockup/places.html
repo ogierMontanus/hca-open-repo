@@ -46,8 +46,8 @@
       </div>
       <p>H1 = STED-REGISTER — steder omtalt i H.C. Andersens dagbøger</p>
       <div class="page-hero__meta">
-        <span>2.508 registerposter</span>
-        <span>18.840 poster i dagbøgerne</span>
+        <span>2.433 registerposter</span>
+        <span>18.737 poster i dagbøgerne</span>
       </div>
     </div>
   </div>
@@ -90,21 +90,16 @@
             </div>
           </div>
 
-          <!-- Land — live off PLACES_EXTRA.country_da, now the human-verified
-               country from Steder_i_dagboegerne VER 1.0 (2.399 of 2.508
-               places; see docs/data-model/steder-verificeret-category-mapping.md
-               §5), so England and Skotland show as separate values instead
-               of a bounding-box "Storbritannien". The generated
-               "Irrelevant eller uregistreret" bucket makes the remaining
-               109-place gap selectable instead of silently dropping those
-               rows (user preference 2026-08-28: "Uoplyst" read as too
-               generic here, since the gap is register places the verified
-               xlsx source has no row for at all, not a field left blank on
-               an existing one). 79 distinct countries exist — limit=20
-               (not the 12 used elsewhere) so mid-frequency values like
-               Holland/Skotland aren't cut off the visible list. Rows and
-               counts are rendered by FacetEngine — do not hand-write them
-               here. -->
+          <!-- Land — live off PLACES_EXTRA.country_da, the curated country from the
+               place register (data/HCA_Steder_GÆLDENDE_*.xlsx; see docs/data-model/
+               place-register-gaeldende.md), so England and Skotland show as
+               separate values instead of a bounding-box "Storbritannien". The
+               generated "Irrelevant eller uregistreret" bucket makes the few
+               places without a country selectable instead of silently dropping
+               them. 79 distinct countries exist — limit=20 (not the 12 used
+               elsewhere) so mid-frequency values like Holland/Skotland aren't
+               cut off the visible list. Rows and counts are rendered by
+               FacetEngine — do not hand-write them here. -->
           <div class="facet-group">
             <div class="facet-group__header">Land <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body"
@@ -117,26 +112,23 @@
                  data-facet-sort-alpha-label="A-Å"></div>
           </div>
 
-          <!-- Stedstype — live off PLACES_EXTRA.category, human-verified
-               (not a name-pattern guess) from raw/Steder_i_dagboegerne_
-               verificeret_udfyldt VER 1.0.xlsx; see docs/data-model/
-               steder-verificeret-category-mapping.md for the join
-               methodology (95.8% of the register matched by name) and
-               the Wikidata/GeoNames class each value maps to. 187 of
-               2.508 places have no verified category yet (unmatched
-               name variant, or a blank Category cell in the source) —
-               "Uklassificeret" makes that gap selectable rather than
-               dropping those places from the facet, same convention as
-               Land's "Irrelevant eller uregistreret" bucket above. Raw values are the
-               English vocabulary as verified (City/Property/Region/…);
-               CATEGORY_LABELS_DA below is display-only translation, not
-               a second copy of the data — do not hand-write rows here,
-               FacetEngine renders them from PLACES_EXTRA. -->
+          <!-- Stedstype — live off PLACES_EXTRA.category, the curated Category from
+               the place register (data/HCA_Steder_GÆLDENDE_*.xlsx; Danish values
+               mapped to the English vocabulary in
+               scripts/normalization/place_register.py CATEGORY_DA_TO_EN; see
+               docs/data-model/place-register-gaeldende.md). Places with a blank
+               Category cell (2 today) land in "Uklassificeret", which makes that
+               gap selectable rather than dropping those places from the facet,
+               same convention as Land's "Irrelevant eller uregistreret" bucket
+               above. Raw values are the English vocabulary (City/Property/Region/…);
+               CATEGORY_LABELS_DA below is display-only translation, not a second
+               copy of the data — do not hand-write rows here, FacetEngine renders
+               them from PLACES_EXTRA. -->
           <div class="facet-group">
             <div class="facet-group__header">Kategori <span class="facet-group__toggle">▲</span></div>
             <div class="facet-group__body"
                  data-facet-source="category"
-                 data-facet-limit="12"
+                 data-facet-limit="14"
                  data-facet-empty-label="Uklassificeret"
                  data-facet-more-label="Vis alle"
                  data-facet-fewer-label="Vis færre"
@@ -192,7 +184,7 @@
 
         <div>
           <div class="results-header">
-            <span class="results-count"><strong>2.508</strong> steder i Stedregister</span>
+            <span class="results-count"><strong>2.433</strong> steder i Stedregister</span>
             <!-- Selects/deselects every currently FILTERED place (not just
                  the rendered page) — see js/cart.js and the wiring below. -->
             <label class="results-header__select-all">
@@ -257,7 +249,7 @@
            <div class="side-acc__tab"><svg class="side-acc__tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg><span class="side-acc__tab-word">Hvor</span></div>
            <div class="side-acc__body">
              <div class="side-acc__heading"><svg class="side-acc__heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-pin"></use></svg>Hvor</div>
-             <div class="side-acc__count">2.508 steder · 18.840 poster</div>
+             <div class="side-acc__count">2.433 steder · 18.737 poster</div>
              <ul class="side-acc__list">
                <li>Byer</li>
                <li>Lande</li>
@@ -628,7 +620,7 @@
   }
 
   // Raw PLACES_EXTRA.category values are the verified English vocabulary
-  // (see docs/data-model/steder-verificeret-category-mapping.md) --
+  // (see docs/data-model/place-register-gaeldende.md) --
   // display-only Danish labels, not a second copy of the data. Falls
   // back to the raw value for anything not in this table so a future
   // category the source file might add still renders instead of
@@ -637,7 +629,8 @@
     'City': 'By', 'Property': 'Gods', 'Region': 'Region',
     'Point of interest (POI)': 'Seværdighed', 'River': 'Flod',
     'Mountain': 'Bjerg', 'Island': 'Ø', 'Lake': 'Sø', 'Country': 'Land',
-    'Sea': 'Hav', 'Church': 'Kirke', 'Continent': 'Kontinent'
+    'Sea': 'Hav', 'Church': 'Kirke', 'Continent': 'Kontinent',
+    'Fictional place': 'Fiktivt sted'
   };
 
   var facets = FacetEngine.create({

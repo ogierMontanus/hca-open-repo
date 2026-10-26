@@ -57,3 +57,24 @@ Asien,,Continent, not a country.
 Afrika,,Continent, not a country.
 Nordamerika,,Continent, not a country.
 Sydamerika,,Continent, not a country.
+Wales,England,"Rolls up into the britisk umbrella's bucket (England) like Skotland and Irland (decided 2026-10-26). Stays its own distinct value in the places.html/kort.html Country facet."
+Grønland,,"NEW 2026-10-21. No mapping needed: the raw value ""Grønland"" already equals grønlandsk's place label (nation_place_labels_da.csv), and grønlandsk is a member of the dansk umbrella."
+Færøerne,Danmark,"Rolls up into the dansk umbrella's bucket (Danmark) — the Faroes were under the Danish crown throughout 1825–1875, same reasoning as Iceland/Greenland in nation_umbrellas_da.csv (decided 2026-10-26). Stays its own distinct value in the Country facet. No separate nationality key was created."
+Indonesien,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Myanmar,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Chile,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Gibraltar,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Saudi Arabien,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Palæstina,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Irak,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Cuba,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Monaco,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Libyen,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv. nordafrikansk (the closest umbrella) has no place_label_da.
+Guinea,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Vietnam,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Peru,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Kap Verde,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Mexico,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Sankt Helena,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Sri Lanka,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
+Flere lande,,"NEW 2026-10-21 (5 places, e.g. Rumelien, Atlanterhavet, Ostindien, Bukovina). Not a country — no nationality mapping applies; the places appear under ""Flere lande"" in the Land facet."
