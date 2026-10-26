@@ -504,6 +504,36 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   var diaryDateMap = buildDateMap();
+  // Dated days in order, so an empty month can point at the nearest page
+  // before and after it (ISO strings sort chronologically).
+  var datedKeys = Object.keys(diaryDateMap).sort();
+
+  // Nearest dated day before (dir < 0) or after (dir > 0) the given month.
+  function neighbourKey(year, month, dir) {
+    var i;
+    if (dir < 0) {
+      var first = formatDateKey(year, month, 1);
+      for (i = datedKeys.length - 1; i >= 0; i--) if (datedKeys[i] < first) return datedKeys[i];
+    } else {
+      var last = formatDateKey(year, month, getDaysInMonth(year, month));
+      for (i = 0; i < datedKeys.length; i++) if (datedKeys[i] > last) return datedKeys[i];
+    }
+    return '';
+  }
+
+  function dateLabel(key) {
+    return parseInt(key.slice(8), 10) + '. ' + MONTH_NAMES[parseInt(key.slice(5, 7), 10) - 1] + ' ' + key.slice(0, 4);
+  }
+
+  function jumpToDate(key) {
+    var year = parseInt(key.slice(0, 4), 10);
+    var month = parseInt(key.slice(5, 7), 10) - 1;
+    calYearSel.value = year;
+    calMonthSel.value = month;
+    selectedDate = key;
+    renderCalendar(year, month);
+    showCalendarEntries(year, month);
+  }
 
   function renderCalendar(year, month) {
     calendarGrid.innerHTML = '';
@@ -586,6 +616,23 @@ document.addEventListener('DOMContentLoaded', function () {
         noEntries.style.cssText = 'color:var(--color-text-muted);font-size:0.85rem';
         noEntries.textContent = 'Ingen dagbogssider i ' + label + '.';
         calendarEntries.appendChild(noEntries);
+
+        // Empty month: refer to the nearest dated page on either side.
+        if (!selectedDate) {
+          var nav = document.createElement('p');
+          nav.style.cssText = 'font-size:0.85rem;margin-top:var(--sp3);display:flex;flex-wrap:wrap;gap:var(--sp2) var(--sp6)';
+          [[-1, '← Forrige dagbogsside: '], [1, 'Næste dagbogsside: ']].forEach(function (side) {
+            var key = neighbourKey(year, month, side[0]);
+            if (!key) return;
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.style.cssText = 'background:none;border:0;padding:0;font:inherit;color:var(--color-accent);cursor:pointer;text-decoration:underline';
+            btn.textContent = side[0] < 0 ? side[1] + dateLabel(key) : side[1] + dateLabel(key) + ' →';
+            btn.addEventListener('click', function () { jumpToDate(key); });
+            nav.appendChild(btn);
+          });
+          if (nav.childNodes.length) calendarEntries.appendChild(nav);
+        }
       } else {
         var info = document.createElement('p');
         info.style.cssText = 'color:var(--color-text-muted);font-size:0.83rem;margin-bottom:var(--sp4)';
