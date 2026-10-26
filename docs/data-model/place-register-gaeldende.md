@@ -102,7 +102,7 @@ See the hand-over summary in the session that introduced this file; the
 short list: the `Smyrna`/`LOC1087400` row (looks like an overwritten
 `Ronco all' Adige`), new countries without a nation mapping
 (`data/curated/steder_country_to_nation_da.csv`, rows tagged `NEW
-2026-10-21`), the `Fiktivt sted` category (3 places), 4 places with blank
+2026-10-21`; Wales → England bucket / britisk and Færøerne → Danmark bucket / dansk decided 2026-10-26), the `Fiktivt sted` category (3 places), 4 places with blank
 Category/Country, and the ids of old bookmarks (`place.html?reg=Reg…` no
 longer resolves; use the `LOC…` id).
 

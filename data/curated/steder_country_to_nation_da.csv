@@ -57,9 +57,9 @@ Asien,,Continent, not a country.
 Afrika,,Continent, not a country.
 Nordamerika,,Continent, not a country.
 Sydamerika,,Continent, not a country.
-Wales,,"NEW in the 2026-10-21 place workbook. DECISION PENDING: roll up into the britisk bucket (England) like Skotland and Irland? Until decided it stays its own bucket, outside the britisk umbrella."
+Wales,England,"Rolls up into the britisk umbrella's bucket (England) like Skotland and Irland (decided 2026-10-26). Stays its own distinct value in the places.html/kort.html Country facet."
 Grønland,,"NEW 2026-10-21. No mapping needed: the raw value ""Grønland"" already equals grønlandsk's place label (nation_place_labels_da.csv), and grønlandsk is a member of the dansk umbrella."
-Færøerne,,NEW 2026-10-21. No nationality key for the Faroe Islands exists — DECISION PENDING (new key færøsk? member of the dansk umbrella?).
+Færøerne,Danmark,"Rolls up into the dansk umbrella's bucket (Danmark) — the Faroes were under the Danish crown throughout 1825–1875, same reasoning as Iceland/Greenland in nation_umbrellas_da.csv (decided 2026-10-26). Stays its own distinct value in the Country facet. No separate nationality key was created."
 Indonesien,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
 Myanmar,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
 Chile,,NEW 2026-10-21. No corresponding nationality key exists in ethnic_adjectives_da.csv.
