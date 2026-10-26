@@ -107,7 +107,7 @@
    destination_en, supply a Wikidata Q-number, or replace the auto-
    country-attribution from the bbox gazetteer with a better label. */
 const PLACES = {
-  'Reg0017430': {
+  'LOC1087200': {
     label: 'Rom',
     destination_en: 'Rome',
     country_da: 'Italien',
@@ -133,7 +133,7 @@ function escAttr(s) { return String(s == null ? '' : s)
   }
 
   const params = new URLSearchParams(location.search);
-  const reg = params.get('reg') || 'Reg0017430';   // default to Rom
+  const reg = params.get('reg') || 'LOC1087200';   // default to Rom
   const pl = ALL_PLACES[reg];
 
   if (!pl) {

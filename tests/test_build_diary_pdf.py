@@ -77,7 +77,7 @@ def test_helpers(mod):
 def test_pdf(mod):
     from pypdf import PdfReader
     pages = ['Pag070002', 'Pag070003', 'Pag030064']      # two dated, one without text
-    highlighted = 'Reg0010880'                            # København, on Pag070308 only
+    highlighted = 'LOC1054350'                           # København, on Pag070308 only
     with tempfile.TemporaryDirectory() as tmp:
         reader = PdfReader(str(_build(mod, tmp, pages, [highlighted])))
 

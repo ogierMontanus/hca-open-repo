@@ -70,7 +70,7 @@ PAGES = [
     "bibliotek.html", "billedkunst.html", "teater-musik.html", "teater-musik_en.html",
     "diaries.html", "cart.html", "cart_en.html",
     "persons.html?reg=Reg0042200", "persons.html?reg=Reg0048690", "persons_en.html?reg=Reg0042200",
-    "place.html?reg=Reg0017430", "place.html?reg=Reg0010590", "work.html?reg=Reg000476",
+    "place.html?reg=LOC1087200", "place.html?reg=LOC1052900", "work.html?reg=Reg000476",
     "diary-pages/Pag020283.html", "diary-pages/Pag040246.html", "diary-pages/Pag100400.html",
 ]
 

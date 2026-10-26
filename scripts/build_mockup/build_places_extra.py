@@ -4,31 +4,37 @@ build_places_extra.py
 ---------------------
 Generates mockup/data/places-extra.js — a `PLACES_EXTRA` JS object with
 one entry per row in data/normalized/entities.csv where
-entity_type == 'place'. Coordinates and Danish country names come from
-three sources, in precedence order:
+entity_type == 'place' (the LocationID place register, LOC… ids — see
+scripts/normalization/place_register.py).
+
+Category, country, visited/mentioned status and — first choice —
+coordinates come from data/normalized/places.csv (written by
+hca_xlsx_to_csv.py from the curated data/HCA_Steder_GÆLDENDE_*.xlsx).
+Where that workbook has no coordinates (GeocodingStatus "Ikke fundet"),
+three older sources fill the gap, in precedence order:
 
   1. the hcax.dk Rejser add-on (data/normalized/rejser.tsv) when the
-     place label matches — this is the primary, highest-confidence
-     source (Andersen's actual travel legs).
+     place label matches (Andersen's actual travel legs).
   2. data/normalized/sv14_places_reconciled.csv — produced by
      scripts/build_mockup/reconcile_sv14_geo.py from the TEI place-list
-     data/raw/SV14_places.xml — fills in the remaining gap for places
-     that rejser.tsv doesn't cover.
+     data/raw/SV14_places.xml.
   3. HERRED_AMT_RE below: a handful of remaining places state their own
      Danish administrative location in the label itself, in the
      abbreviated form "<sted>, <herred> H., <amt> A" (e.g. "Sæby, Løve
-     H., Holbæk A", Reg0020710). Herred/Amt are exclusively Danish
-     units, so a match infers country_da = "Danmark" with no
-     coordinates — geo_source records this as "herred_amt" rather than
-     leaving the place's Land facet at "Uoplyst".
+     H., Holbæk A"). Herred/Amt are exclusively Danish units, so a match
+     infers country_da = "Danmark" with no coordinates.
 
-`geo_source` on each entry records which source supplied it. The
-hand-curated `PLACES` object inside mockup/place.html (if any) keeps
-precedence over all three; PLACES_EXTRA fills every other gap so any
-?reg=… link to place.html resolves to real metadata instead of a blank
-page.
+Rejser/SV14 matches also supply `destination_en` (the English spelling)
+even when the coordinates come from the place register.
 
-Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py,
+`geo_source` on each entry records which source supplied the coordinates
+("register", "rejser", "sv14" or "herred_amt"). The hand-curated `PLACES`
+object inside mockup/place.html (if any) keeps precedence over all of
+them; PLACES_EXTRA fills every other gap so any ?reg=… link to place.html
+resolves to real metadata instead of a blank page.
+
+Stdlib only. Run after scripts/normalization/hca_xlsx_to_csv.py (which
+writes entities.csv, references.csv and places.csv),
 scripts/build_web/parse_rejser_htm.py and
 scripts/build_mockup/reconcile_sv14_geo.py.
 """
@@ -48,7 +54,7 @@ REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
 DIARY      = os.path.join(ROOT, "data", "normalized", "diary.csv")
 REJSER     = os.path.join(ROOT, "data", "normalized", "rejser.tsv")
 SV14       = os.path.join(ROOT, "data", "normalized", "sv14_places_reconciled.csv")
-CATEGORIES = os.path.join(ROOT, "data", "normalized", "steder_verified_categories.csv")
+PLACES_CSV = os.path.join(ROOT, "data", "normalized", "places.csv")
 OUT        = os.path.join(ROOT, "mockup", "data", "places-extra.js")
 
 # Reuse the 33-country bounding-box gazetteer from build_web_data.py.
@@ -168,29 +174,34 @@ def load_sv14_reconciled() -> dict[str, dict]:
     return geo
 
 
-def load_verified_categories_and_countries() -> tuple[dict[str, str], dict[str, str]]:
-    """Returns ({entity_id: category}, {entity_id: country}) from
-    data/normalized/steder_verified_categories.csv — see
-    scripts/build_mockup/reconcile_steder_categories.py and
-    docs/data-model/steder-verificeret-category-mapping.md. Degrades to
-    two empty dicts when the file is absent (that reconciliation script
-    hasn't run yet), same pattern as load_sv14_reconciled() above.
+def load_place_register() -> dict[str, dict]:
+    """Returns {entity_id: {category, country, lat, lon, visit}} from
+    data/normalized/places.csv (see scripts/normalization/place_register.py).
+    Degrades to an empty dict when the file is absent (Stage 1a has not
+    run yet), same pattern as load_sv14_reconciled() above.
 
-    The verified country is a RAW, more granular value than the old
-    bounding-box gazetteer (England and Skotland stay distinct, not
-    folded into one "Storbritannien" the way COUNTRIES above would) --
-    see main()'s precedence note on where it's applied."""
-    cats: dict[str, str] = {}
-    countries: dict[str, str] = {}
-    if not os.path.exists(CATEGORIES):
-        return cats, countries
-    with open(CATEGORIES, encoding="utf-8", newline="") as f:
+    `category` is the English vocabulary (City/Property/…/Fictional
+    place; UI templates translate it for display) and `country` is the
+    workbook's RAW Danish country — more granular than the bounding-box
+    gazetteer (England and Skotland stay distinct, not folded into one
+    "Storbritannien") — see main()'s precedence note."""
+    reg: dict[str, dict] = {}
+    if not os.path.exists(PLACES_CSV):
+        return reg
+    with open(PLACES_CSV, encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
-            if row.get("entity_id") and row.get("category"):
-                cats[row["entity_id"]] = row["category"]
-            if row.get("entity_id") and row.get("country"):
-                countries[row["entity_id"]] = row["country"]
-    return cats, countries
+            try:
+                lat, lon = float(row["lat"]), float(row["lon"])
+            except (KeyError, ValueError):
+                lat = lon = None
+            reg[row["entity_id"]] = {
+                "category": row.get("category") or None,
+                "country":  row.get("country") or None,
+                "lat":      round(lat, 5) if lat is not None else None,
+                "lon":      round(lon, 5) if lon is not None else None,
+                "visit":    row.get("visit_status") or None,
+            }
+    return reg
 
 
 # Register cross-references: "Venedig, se: Venezia." / "Tivoli (...), se Sagregistret."
@@ -269,9 +280,12 @@ def main() -> None:
     sv14_geo = load_sv14_reconciled()
     print(f"  SV14 reconciliation: {len(sv14_geo):,} entity-id matches")
 
-    categories, verified_countries = load_verified_categories_and_countries()
-    print(f"  verified categories: {len(categories):,} entity-id matches")
-    print(f"  verified countries: {len(verified_countries):,} entity-id matches")
+    register = load_place_register()
+    print(f"  place register (places.csv): {len(register):,} places, "
+          f"{sum(1 for r in register.values() if r['lat'] is not None):,} with coordinates")
+    if not register:
+        print("  [!] data/normalized/places.csv missing — run hca_xlsx_to_csv.py; "
+              "category/country/coordinates will be empty")
 
     # Emit one entry per place, INCLUDING IDs that mockup/place.html
     # also curates. place.html's `ALL_PLACES = Object.assign({},
@@ -282,7 +296,8 @@ def main() -> None:
     rejser_hits = 0
     sv14_hits = 0
     herred_amt_hits = 0
-    verified_country_hits = 0
+    register_geo_hits = 0
+    register_country_hits = 0
     for r in places:
         rid = r["entity_id"]
         label = (r.get("label") or "").strip()
@@ -290,8 +305,11 @@ def main() -> None:
             "label":       label,
             "description": (r.get("description") or "").strip() or None,
             "refs":        ref_count.get(rid, 0),
-            "category":    categories.get(rid),
+            "category":    (register.get(rid) or {}).get("category"),
         }
+        visit = (register.get(rid) or {}).get("visit")
+        if visit:
+            rec["visit"] = visit
         if rid in mention_years:
             rec["my"] = sorted(mention_years[rid])
         g = geo.get(label.casefold())
@@ -312,43 +330,43 @@ def main() -> None:
                 rec["amt"] = m.group("amt")
                 herred_amt_hits += 1
 
-        # Verified country OVERRIDES whatever the geo sources above set --
-        # it's human-verified and far more granular (England/Skotland stay
-        # distinct; the COUNTRIES gazetteer's bounding boxes would have
-        # folded both into one "Storbritannien"). Coordinates from rejser/
-        # SV14/herred_amt are kept regardless; only country_da is replaced.
-        # geo_source is left as whichever source supplied the coordinates
-        # (or unset) — it describes geo_source, not country_da's origin,
-        # so a place with rejser coordinates but a verified country now
-        # correctly has geo_source="rejser" and a verified country_da.
-        if rid in verified_countries:
-            rec["country_da"] = verified_countries[rid]
-            verified_country_hits += 1
+        # The place register is the base: its coordinates replace whatever
+        # the fallback sources above set (rejser/sv14 are kept only where the
+        # register has none), and its Danish country REPLACES the bounding-box
+        # gazetteer's — it is curated and more granular (England/Skotland stay
+        # distinct; the COUNTRIES boxes would have folded both into one
+        # "Storbritannien"). Rejser/SV14's destination_en is kept either way.
+        reg = register.get(rid) or {}
+        if reg.get("lat") is not None:
+            rec["lat"], rec["lon"] = reg["lat"], reg["lon"]
+            rec["geo_source"] = "register"
+            register_geo_hits += 1
+        if reg.get("country"):
+            rec["country_da"] = reg["country"]
+            register_country_hits += 1
         generated[rid] = rec
 
     resolve_see_refs(generated)
 
-    geo_hits = rejser_hits + sv14_hits + herred_amt_hits
-    print(f"  generated {len(generated):,} entries ({geo_hits:,} with coordinates from "
-          f"{rejser_hits:,} rejser, {sv14_hits:,} SV14, {herred_amt_hits:,} herred/amt; "
-          f"{verified_country_hits:,} with a verified country_da overriding/filling in "
-          f"beyond those)")
+    with_coords = sum(1 for g in generated.values() if g.get("lat") is not None)
+    print(f"  generated {len(generated):,} entries ({with_coords:,} with coordinates: "
+          f"{register_geo_hits:,} from the place register; of the fallbacks "
+          f"{rejser_hits:,} rejser / {sv14_hits:,} SV14 matched, "
+          f"{herred_amt_hits:,} herred/amt; {register_country_hits:,} with a register country_da)")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         f.write("// Auto-generated by scripts/build_mockup/build_places_extra.py — do not hand-edit.\n")
-        f.write("// One entry per place in STED-REGISTER. Coordinates and country come from\n")
-        f.write("// data/normalized/rejser.tsv (hcax.dk Rejser add-on) when the label matches,\n")
-        f.write("// falling back to data/normalized/sv14_places_reconciled.csv (SV14_places.xml\n")
-        f.write("// reconciliation — see reconcile_sv14_geo.py) when it doesn't, falling back further\n")
-        f.write("// to HERRED_AMT_RE (country_da only, no coordinates) when the label itself states a\n")
-        f.write("// Danish herred/amt, e.g. \"Sæby, Løve H., Holbæk A\". geo_source records which of\n")
-        f.write("// the three supplied an entry's country/coordinates.\n")
+        f.write("// One entry per place in STED-REGISTER (LocationID base, LOC… ids). Category,\n")
+        f.write("// country, visited/mentioned status and coordinates come from data/normalized/\n")
+        f.write("// places.csv (data/HCA_Steder_GÆLDENDE_*.xlsx via hca_xlsx_to_csv.py); where the\n")
+        f.write("// workbook has no coordinates, rejser.tsv (hcax.dk), sv14_places_reconciled.csv and\n")
+        f.write("// HERRED_AMT_RE (country_da only) fill in. geo_source records which supplied the\n")
+        f.write("// coordinates: register | rejser | sv14 | herred_amt.\n")
         f.write("// `category` (City/Property/Region/Point of interest (POI)/River/Mountain/Island/\n")
-        f.write("// Lake/Country/Sea/Church/Continent, or null) comes from data/normalized/\n")
-        f.write("// steder_verified_categories.csv — see reconcile_steder_categories.py and\n")
-        f.write("// docs/data-model/steder-verificeret-category-mapping.md. Raw English value as\n")
-        f.write("// verified; UI templates translate it for display, they don't get it pre-translated.\n")
+        f.write("// Lake/Country/Sea/Church/Continent/Fictional place, or null) is the raw English\n")
+        f.write("// value; UI templates translate it for display, they don't get it pre-translated.\n")
+        f.write("// `visit` = Besøgt | Omtalt (visited / only mentioned).\n")
         f.write("// The hand-curated PLACES object in place.html takes precedence (ALL_PLACES merge).\n")
         f.write("// `my` = sorted list of years in which the place is mentioned on a transcribed diary\n")
         f.write("// page (from diary.csv); absent when no mention is dated. Powers \"Omtaleår\" on places.html.\n")

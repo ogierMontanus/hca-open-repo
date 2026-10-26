@@ -64,7 +64,7 @@ def test_records_have_text_and_entities(records):
     assert with_text > 0.95 * len(records)
     for r in records.values():
         for t, rid, label in r["e"]:
-            assert t in ("person", "place", "work") and rid.startswith("Reg") and label
+            assert t in ("person", "place", "work") and rid.startswith(("Reg", "LOC")) and label
 
 
 def test_refs_plus_overflow_equal_total():

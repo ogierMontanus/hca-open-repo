@@ -85,8 +85,8 @@
 
       <!-- Disclaimer — filled in by JS with the actual count of geocoded
            places that carry no verified Category (see
-           docs/data-model/steder-verificeret-category-mapping.md). Only
-           2 of 454 today, but stated as a live number rather than a
+           docs/data-model/place-register-gaeldende.md). Only
+           0 of 2,421 today, but stated as a live number rather than a
            hand-typed one so it can't silently go stale as more places
            get geocoded or categorized. -->
       <p id="kort-category-disclaimer" style="font-size:0.78rem;color:var(--color-text-muted);margin:0 0 var(--sp4);display:none"></p>
@@ -165,17 +165,18 @@
 
   // Same raw-vocabulary-stays-English, display-label-is-Danish split as
   // places.html's CATEGORY_LABELS_DA — see docs/data-model/
-  // steder-verificeret-category-mapping.md. Kept in sync by hand since
+  // place-register-gaeldende.md. Kept in sync by hand since
   // this page has no shared facet-label module; if that starts drifting,
   // factor it out instead of duplicating a third time.
   var CATEGORY_LABELS_DA = {
     'City': 'By', 'Property': 'Gods', 'Region': 'Region',
     'Point of interest (POI)': 'Seværdighed', 'River': 'Flod',
     'Mountain': 'Bjerg', 'Island': 'Ø', 'Lake': 'Sø', 'Country': 'Land',
-    'Sea': 'Hav', 'Church': 'Kirke', 'Continent': 'Kontinent'
+    'Sea': 'Hav', 'Church': 'Kirke', 'Continent': 'Kontinent',
+    'Fictional place': 'Fiktivt sted'
   };
 
-  // Disclaimer: how many of the GEOCODED places (not the whole 2.508-
+  // Disclaimer: how many of the GEOCODED places (not the whole 2.433-
   // place register — a reader on this page only cares about what's on
   // the map) have no verified Category yet. Computed live so it can't
   // drift out of date the way a hand-typed number would as more places
@@ -186,7 +187,7 @@
     disclaimerEl.textContent = uncategorized + ' af ' + geocoded.length +
       ' geokodede steder mangler endnu en verificeret kategori og vises uanset ' +
       'hvilken kategori der vælges herunder — se docs/data-model/' +
-      'steder-verificeret-category-mapping.md.';
+      'place-register-gaeldende.md.';
     disclaimerEl.style.display = '';
   }
 
@@ -263,7 +264,7 @@
     if (n) map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
   });
 
-  // Deep-link via #reg=Reg0000100 → pan, zoom in enough to break the cluster
+  // Deep-link via #reg=LOC1000500 → pan, zoom in enough to break the cluster
   // open, then open the popup. Used by the link from per-place pages.
   function focusFromHash() {
     var h = (location.hash || '').replace(/^#/, '');

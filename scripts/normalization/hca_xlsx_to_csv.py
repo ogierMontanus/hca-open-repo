@@ -6,8 +6,16 @@ Reads HCA-Repository V0.82.xlsx (or equivalent CSV exports) and writes
 normalized CSVs to data/normalized/ (diary.csv is built from the EPUB
 edition by epub_diary_to_csv.py, not from the workbook's Diary sheet):
 
-  entities.csv    — persons, places, works from Registry sheet
-  references.csv  — diary-page → entity joins from RefInDiaryPage sheet
+  entities.csv    — persons, works from Registry sheet; PLACES from the
+                    place-register workbook (see place_register.py)
+  references.csv  — diary-page → entity joins from RefInDiaryPage sheet;
+                    place joins rebuilt for the place-register LocationIDs
+  places.csv      — one row per place: category, country, coordinates,
+                    geocoding status, visited/mentioned (place register)
+
+The V0.82 workbook's own STED-REGISTER rows (Reg… ids) are replaced by the
+newest data/HCA_Steder_GÆLDENDE_*_LocationID_*.xlsx (LOC… ids); pass
+--no-place-base to keep the V0.82 places instead.
 
 Usage:
   python3 scripts/normalization/hca_xlsx_to_csv.py
@@ -22,6 +30,9 @@ import csv
 import os
 import sys
 import warnings
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import place_register  # noqa: E402
 
 # openpyxl emits UserWarnings about Slicer List and other unsupported xlsx
 # extensions that are present in the HCA workbook. They are harmless and
@@ -178,6 +189,11 @@ def main():
     parser = argparse.ArgumentParser(description="Normalize HCA xlsx/csv to entities, diary, and references CSVs.")
     parser.add_argument("--input", default=XLSX_DEFAULT, help="Path to .xlsx file or CSV directory")
     parser.add_argument("--out", default=OUT_DIR, help="Output directory for normalized CSVs")
+    parser.add_argument("--places", default=None, metavar="XLSX",
+                        help="place-register workbook (default: newest "
+                             "data/HCA_Steder_GÆLDENDE_*.xlsx)")
+    parser.add_argument("--no-place-base", action="store_true",
+                        help="keep the V0.82 workbook's own place rows (Reg… ids)")
     args = parser.parse_args()
 
     inp = os.path.normpath(args.input)
@@ -193,29 +209,46 @@ def main():
 
     os.makedirs(args.out, exist_ok=True)
 
-    # entities.csv
-    if "Registry" in sheets:
-        rows = normalize_registry(sheets["Registry"])
+    ent_rows = normalize_registry(sheets["Registry"]) if "Registry" in sheets else None
+    if ent_rows is None:
+        print("  Warning: 'Registry' sheet not found — skipping entities.csv")
+    ref_rows = normalize_refs(sheets["RefInDiaryPage"]) if "RefInDiaryPage" in sheets else None
+    if ref_rows is None:
+        print("  Warning: 'RefInDiaryPage' sheet not found — skipping references.csv")
+
+    # Place register: the curated LocationID workbook is the base for places.
+    places = None
+    if not args.no_place_base and ent_rows is not None and ref_rows is not None:
+        xlsx = place_register.find_place_xlsx(args.places)
+        print(f"Place register: {os.path.relpath(xlsx, os.path.join(os.path.dirname(__file__), '..', '..'))}")
+        bad = place_register.unmapped_categories(place_register.load_places(xlsx))
+        if bad:
+            print(f"  Warning: category value(s) not in CATEGORY_DA_TO_EN, passed through raw: {sorted(bad)}")
+        ent_rows, ref_rows, places, corrected, dropped = place_register.apply_place_base(
+            ent_rows, ref_rows, places=place_register.load_places(xlsx))
+        print(f"  {len(places):,} places (LocationID base); replaced {dropped:,} V0.82 place "
+              f"reference rows")
+        for p in corrected:
+            print(f"  first page corrected by the place workbook: {p['entity_id']} {p['label']} "
+                  f"-> {place_register.ROMAN[p['book']]}-{p['page']}")
+
+    if ent_rows is not None:
         write_csv(
             os.path.join(args.out, "entities.csv"),
             ["entity_id", "entity_type", "category_h1", "genre_h2", "form_h3",
              "subform_h4", "label", "description", "see", "see_also",
              "year_derived", "date_derived", "person_derived"],
-            rows,
+            ent_rows,
         )
-    else:
-        print("  Warning: 'Registry' sheet not found — skipping entities.csv")
-
-    # references.csv
-    if "RefInDiaryPage" in sheets:
-        rows = normalize_refs(sheets["RefInDiaryPage"])
+    if ref_rows is not None:
         write_csv(
             os.path.join(args.out, "references.csv"),
             ["page_id", "entity_id", "entity_label", "vol", "page", "seq"],
-            rows,
+            ref_rows,
         )
-    else:
-        print("  Warning: 'RefInDiaryPage' sheet not found — skipping references.csv")
+    if places is not None:
+        write_csv(os.path.join(args.out, "places.csv"), place_register.PLACE_FIELDS,
+                  [place_register.places_csv_row(p) for p in places])
 
     print("Done.")
 

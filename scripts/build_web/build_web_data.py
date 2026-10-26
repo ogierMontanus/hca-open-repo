@@ -278,6 +278,28 @@ def build(verbose=False):
 
     journey_titles = {j["RejseID"]: j.get("Title", "") for j in rejser_journeys}
 
+    # Place register (data/HCA_Steder_GÆLDENDE_*.xlsx via hca_xlsx_to_csv.py):
+    # curated coordinates, Danish country and category for every place. Its
+    # coordinates take precedence over the Rejser leg's, which stays the
+    # source of the journey/leg details below.
+    register = {}
+    places_csv = os.path.join(NORMALIZED_DIR, "places.csv")
+    if os.path.exists(places_csv):
+        for row in load_csv(places_csv):
+            try:
+                reg_lat, reg_lon = float(row["lat"]), float(row["lon"])
+            except (KeyError, ValueError):
+                reg_lat = reg_lon = None
+            register[row["entity_id"]] = {
+                "lat": reg_lat, "lon": reg_lon,
+                "country": row.get("country") or None,
+                "category": row.get("category") or None,
+                "visit": row.get("visit_status") or None,
+            }
+    else:
+        warnings.append("data/normalized/places.csv missing — run hca_xlsx_to_csv.py; "
+                        "places carry Rejser coordinates only.")
+
     places_payload = []
     matched = 0
     legs_by_place_id = {}
@@ -318,9 +340,23 @@ def build(verbose=False):
                 for leg in rejser_legs
                 if leg["Destination_DA"].casefold().strip() == label.casefold().strip()
             ]
+        reg = register.get(pid)
+        if reg:
+            if reg["lat"] is not None:
+                rec["lat"], rec["lon"], rec["geocoded"] = reg["lat"], reg["lon"], True
+                if not match:
+                    rec["country_da"], rec["country_en"] = country_for(reg["lat"], reg["lon"])
+            if reg["country"]:
+                rec["country_da"] = reg["country"]
+                if not match:
+                    rec["country_en"] = None  # bounding-box name no longer applies
+            rec["category"] = reg["category"]
+            rec["visit"] = reg["visit"]
         places_payload.append(rec)
     places_payload.sort(key=lambda x: x["label"].lower())
     print(f"  matched {matched} of {len(places_payload)} places against Rejser DA names")
+    geocoded_total = sum(1 for r in places_payload if r["geocoded"])
+    print(f"  {geocoded_total} of {len(places_payload)} places geocoded (place register + Rejser)")
 
     country_counts = defaultdict(int)
     uncountried = 0
@@ -333,8 +369,9 @@ def build(verbose=False):
     if uncountried:
         print(f"  {uncountried} geocoded places fell outside the bounding-box gazetteer")
     warnings.append(
-        f"Coordinates available for {matched}/{len(places_payload)} places via the "
-        "hcax.dk Rejser add-on; the remaining majority is not geocoded for the October demo."
+        f"Coordinates available for {geocoded_total}/{len(places_payload)} places (place "
+        f"register; {matched} of them also match the hcax.dk Rejser add-on, which supplies the "
+        "journey legs)."
     )
 
     visits_payload = {

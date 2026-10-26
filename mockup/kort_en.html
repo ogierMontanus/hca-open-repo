@@ -85,8 +85,8 @@
 
       <!-- Disclaimer — filled in by JS with the actual count of geocoded
            places that carry no verified Category (see
-           docs/data-model/steder-verificeret-category-mapping.md). Only
-           2 of 454 today, but stated as a live number rather than a
+           docs/data-model/place-register-gaeldende.md). Only
+           0 of 2,421 today, but stated as a live number rather than a
            hand-typed one so it can't silently go stale as more places
            get geocoded or categorized. -->
       <p id="kort-category-disclaimer" style="font-size:0.78rem;color:var(--color-text-muted);margin:0 0 var(--sp4);display:none"></p>
@@ -164,12 +164,12 @@
   }
 
   // Raw PLACES_EXTRA.category values are already the verified English
-  // vocabulary (see docs/data-model/steder-verificeret-category-mapping.md),
+  // vocabulary (see docs/data-model/place-register-gaeldende.md),
   // so the English page needs only the same small display-tweak table as
   // places_en.html's CATEGORY_LABELS_EN — most values pass through unchanged.
   var CATEGORY_LABELS_EN = { 'Point of interest (POI)': 'Point of interest' };
 
-  // Disclaimer: how many of the GEOCODED places (not the whole 2,508-
+  // Disclaimer: how many of the GEOCODED places (not the whole 2,433-
   // place register — a reader on this page only cares about what's on
   // the map) have no verified Category yet. Computed live so it can't
   // drift out of date the way a hand-typed number would as more places
@@ -180,7 +180,7 @@
     disclaimerEl.textContent = uncategorized + ' of ' + geocoded.length +
       ' geocoded places still lack a verified category and are shown regardless ' +
       'of which category is selected below — see docs/data-model/' +
-      'steder-verificeret-category-mapping.md.';
+      'place-register-gaeldende.md.';
     disclaimerEl.style.display = '';
   }
 
@@ -257,7 +257,7 @@
     if (n) map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
   });
 
-  // Deep-link via #reg=Reg0000100 → pan, zoom in enough to break the cluster
+  // Deep-link via #reg=LOC1000500 → pan, zoom in enough to break the cluster
   // open, then open the popup. Used by the link from per-place pages.
   function focusFromHash() {
     var h = (location.hash || '').replace(/^#/, '');
