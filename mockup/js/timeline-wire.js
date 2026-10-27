@@ -22,6 +22,14 @@
  *   companion(iso, opts)        → small HTML block for a diary card
  *   plain(iso)                  → text-only summary (table cell, tooltips)
  *   mount(el, entries, opts)    → render the track into el (with "show all")
+ *   forEntity(type, rid)        → entries naming a register entity ('s' person,
+ *                                 'p' place, 'w' work), by date
+ *   whereIs(entry)              → { places:[[label, rid]], derived } — where the
+ *                                 entry happens (its own place links, else the
+ *                                 enclosing stay's)
+ *   mountEntity(el, type, rid, opts) → a "who/where/when" section for a
+ *                                 person/place/work detail page
+ *   legs()                      → journey routes: [{ e, stops:[[label, rid], …] }]
  *   label(entry)                → "1.–10. nov. 1845"
  */
 window.TimelineWire = (function () {
@@ -43,6 +51,11 @@ window.TimelineWire = (function () {
                   : { ophold: 'Ophold', rejse: 'Rejse', begivenhed: 'Begivenhed' },
     qual:      EN ? { ca: 'c.', sommer: 'summer', 'årets slutning': 'end of the year' }
                   : { ca: 'ca.', sommer: 'sommer', 'årets slutning': 'årets slutning' },
+    where:     EN ? 'Where: '                       : 'Sted: ',
+    whereVia:  EN ? 'according to the stay'         : 'ifølge opholdet',
+    entHead:   EN ? 'Chronology: where and when'    : 'Tidstavle: hvor og hvornår',
+    entIntro:  EN ? 'Entries in the diary edition\'s printed chronologies that name {n}.'
+                  : 'Poster i dagbogsudgavens tidstavler, hvor {n} nævnes — med stedet, hvor det er kendt.',
     attrib:    EN ? 'Source: the printed chronologies (Tidstavler) of the diary edition, vols. 1–10, Royal Danish Library.'
                   : 'Kilde: tidstavlerne i dagbogsudgaven, bind 1–10, Det Kgl. Bibliotek.',
     months:    EN ? ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
@@ -210,9 +223,20 @@ window.TimelineWire = (function () {
     if ((e.q || []).indexOf('ugyldig') !== -1) notes.push(T.invalid);
     var note = notes.length
       ? ' <span class="tl-item__note" title="' + notes.join(' · ').replace(/<[^>]+>/g, '') + '">ⓘ</span>' : '';
+    var where = '';
+    if (opts.where) {
+      var w = whereIs(e);
+      // A stay that opens with its place name already says where.
+      if (w.places.length && (w.derived || e.k !== 'ophold')) {
+        where = '<span class="tl-item__where">' + T.where + w.places.map(function (pl) {
+          return '<a class="' + REF_CLASS.p + '" href="' + PAGE.p + '?reg=' + encodeURIComponent(pl[1]) + '">' +
+            esc(pl[0]) + '</a>';
+        }).join(', ') + (w.derived ? ' <span class="tl-item__via">(' + T.whereVia + ')</span>' : '') + '</span>';
+      }
+    }
     return '<li class="tl-item tl-item--' + e.k + '">' +
       '<span class="tl-item__kind">' + T.kind[e.k] + '</span>' + when +
-      '<span class="tl-item__text">' + textHtml(e) + note + '</span>' + sourceHtml(e) + '</li>';
+      '<span class="tl-item__text">' + textHtml(e) + note + where + '</span>' + sourceHtml(e) + '</li>';
   }
 
   /* Render the track into `el`. opts: { day, pickDay:[first,last], limit }.
@@ -223,8 +247,8 @@ window.TimelineWire = (function () {
     if (!entries.length) { el.innerHTML = ''; return; }
     var limit = opts.limit || 12;
     var n = entries.length;
-    var head = '<h4 class="tl-track__title">' + T.title +
-      ' <span class="tl-track__count">· ' + n + ' ' + T.entries[n === 1 ? 0 : 1] + '</span></h4>';
+    var head = opts.head || ('<h4 class="tl-track__title">' + T.title +
+      ' <span class="tl-track__count">· ' + n + ' ' + T.entries[n === 1 ? 0 : 1] + '</span></h4>');
     var items = entries.map(function (e) { return itemHtml(e, opts); });
     var more = n > limit
       ? '<button type="button" class="tl-track__more" aria-expanded="false">' + T.showAll + ' (' + n + ')</button>' : '';
@@ -241,6 +265,71 @@ window.TimelineWire = (function () {
         btn.textContent = open ? T.showLess : T.showAll + ' (' + n + ')';
       });
     }
+  }
+
+  /* ── entity lookups (who / where / when) ─────────────────────────────── */
+
+  function spansOf(e, type) {
+    if (typeof e.x === 'string') return [];
+    return e.x.filter(function (s) { return typeof s !== 'string' && (!type || s[1] === type); });
+  }
+
+  var _byEntity = null;
+  function forEntity(type, rid) {
+    if (!has()) return [];
+    ensure();
+    if (!_byEntity) {
+      _byEntity = {};
+      _sorted.forEach(function (e) {
+        spansOf(e).forEach(function (s) {
+          var k = s[1] + ':' + s[2], list = (_byEntity[k] = _byEntity[k] || []);
+          if (list[list.length - 1] !== e) list.push(e);
+        });
+      });
+    }
+    return _byEntity[type + ':' + rid] || [];
+  }
+
+  function placesOf(e) {
+    var seen = {}, out = [];
+    spansOf(e, 'p').forEach(function (s) {
+      if (!seen[s[2]]) { seen[s[2]] = 1; out.push([s[0], s[2]]); }
+    });
+    return out;
+  }
+
+  /* Where does the entry happen? Its own place links; failing that, the
+   * places of the most specific stay/journey leg covering its first day. */
+  function whereIs(e) {
+    var own = placesOf(e);
+    if (own.length) return { places: own, derived: false };
+    var cover = onDay(e.a).filter(function (c) { return c !== e && c.k !== 'begivenhed'; });
+    for (var i = 0; i < cover.length; i++) {
+      var ps = placesOf(cover[i]);
+      if (ps.length) return { places: cover[i].k === 'rejse' ? ps.slice(-1) : ps.slice(0, 1), derived: true };
+    }
+    return { places: [], derived: false };
+  }
+
+  /* Journey legs for the map: "Fra X over Y til Z" → stops in text order. */
+  function legs() {
+    if (!has()) return [];
+    return TIMELINE.filter(function (e) { return e.k === 'rejse'; }).map(function (e) {
+      var stops = [];
+      placesOf(e).forEach(function (p) { stops.push(p); });
+      return { e: e, stops: stops };
+    }).filter(function (l) { return l.stops.length >= 2; });
+  }
+
+  function mountEntity(el, type, rid, opts) {
+    opts = opts || {};
+    var es = forEntity(type, rid);
+    if (!el || !es.length) return false;
+    var n = es.length;
+    var head = '<h2 class="section-title">' + T.entHead + '</h2>' +
+      '<p class="tl-track__intro">' + T.entIntro.replace('{n}', esc(opts.name || '')) + '</p>';
+    mount(el, es, { where: type !== 'p', limit: opts.limit || 8, head: head });
+    return true;
   }
 
   /* Small block for a diary card: the stay/journey leg for that date plus
@@ -271,5 +360,6 @@ window.TimelineWire = (function () {
 
   return { has: has, years: years, yearHasAny: yearHasAny, onDay: onDay, inMonth: inMonth,
            dayInfo: dayInfo, companion: companion, plain: plain, mount: mount,
-           label: label, itemHtml: itemHtml, plainText: plainText };
+           label: label, itemHtml: itemHtml, plainText: plainText, textHtml: textHtml,
+           forEntity: forEntity, whereIs: whereIs, mountEntity: mountEntity, legs: legs };
 })();

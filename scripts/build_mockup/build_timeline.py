@@ -496,6 +496,12 @@ class Matcher:
 
 # ── classification ─────────────────────────────────────────────────────────
 
+# Sentence openers that are never a place name ("Besøgt Victor Hugo.").
+NOT_A_PLACE = (r"^(Besøgt|Besøg|Hos|Gæst|Gæster|Aften|Aftenselskab|Middag|Udflugt|Tur|"
+               r"Flyttet|Set|Med|Til|Den|Det|De|I|Om|En|Et|Kontrakt|Møde|Første|Anden|"
+               r"Ridder|Fik|Modtog)\b")
+
+
 def classify(text: str, segs) -> str:
     """Heuristic kind, for filtering/colouring only (never for links):
       rejse       "Fra X til Y …" / "Rejse …" — a journey leg
@@ -507,6 +513,8 @@ def classify(text: str, segs) -> str:
     first = segs[0] if segs else ""
     if isinstance(first, list) and first[1] == "p":
         return "ophold"
+    if re.match(NOT_A_PLACE, text):
+        return "begivenhed"
     if re.match(r"^[A-ZÆØÅ][\wæøåäöüé\-]+(?:[ ,][A-ZÆØÅ][\wæøåäöüé\-]+)*[.,]", text) \
        and not re.search(r"\b(blev|er|var|dør|døde|udkom|fik|havde|får|ankom|rejste)\b", text):
         return "ophold"

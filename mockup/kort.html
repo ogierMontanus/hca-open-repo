@@ -77,6 +77,19 @@
           </select>
         </label>
         <span>·</span>
+        <span id="kort-routes-ctl" class="kort-routes-ctl" hidden>
+          <label style="display:flex;align-items:center;gap:6px">
+            <input type="checkbox" id="kort-routes-on"> Andersens rejser (Tidstavle)
+          </label>
+          <label style="display:flex;align-items:center;gap:6px">
+            År:
+            <select id="kort-routes-year"
+                    style="padding:4px 8px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.82rem"></select>
+          </label>
+          <span id="kort-routes-count" style="color:var(--color-text-muted)"></span>
+          <span class="kort-routes-ramp" aria-hidden="true"></span>
+        </span>
+        <span>·</span>
         <span>Klyngerne brydes op, når du zoomer ind</span>
         <span style="margin-left:auto">
           <a href="places.html" style="color:var(--color-accent)">Tilbage til stedregistret</a>
@@ -120,11 +133,14 @@
 </footer>
 
 <script src="data/places-extra.js"></script>
+<script src="data/timeline.js"></script>
+<script src="js/timeline-wire.js"></script>
 <script src="vendor/leaflet/leaflet.js"></script>
 <script src="vendor/basemap/basemap-world.js"></script>
 <script src="js/no-submit.js"></script>
 <script src="js/basemap.js"></script>
 <script src="vendor/leaflet/leaflet.markercluster.js"></script>
+<script src="js/kort-routes.js"></script>
 <script>
 (function () {
   'use strict';
@@ -281,6 +297,9 @@
   }
   focusFromHash();
   window.addEventListener('hashchange', focusFromHash);
+
+  // Andersen's journeys from the Tidstavle (optional layer, js/kort-routes.js).
+  if (typeof KortRoutes !== 'undefined') KortRoutes.init(map, PLACES_EXTRA);
 })();
 </script>
 <script src="js/nav.js"></script>

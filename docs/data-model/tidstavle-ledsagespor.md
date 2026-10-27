@@ -45,3 +45,22 @@ var Andersen, hvem besøgte han, hvad udkom. Derfor behandles den som et
 * **Tabel:** ekstra kolonne «Tidstavle».
 * Navne i beskrivelserne linker til `persons.html` / `place.html` / `work.html`;
   kildesiden linker (diskret, nyt faneblad) til EPUB'en hos Det Kgl. Bibliotek.
+
+## Rutelag på kortet (`kort.html`, `kort_en.html`)
+
+`js/kort-routes.js` tegner hvert rejseled («Fra X over Y til Z», 584 stk.) som
+en linje gennem de linkede steder i tekstens rækkefølge. Valgfrit lag
+(afkrydsning «Andersens rejser (Tidstavle)») med årsfilter; farven løber fra
+blå (tidligste år) til orange (seneste). Klik på en linje viser dato,
+beskrivelse (med stedlinks) og kildeside. Dybe links: `kort.html#routes=all`
+eller `#routes=1846`. Spring over-regel: et enkelt hop på over 4.500 km droppes
+hele leddet (værn mod homonym-fejl; ingen led er droppet i dag).
+
+## «Tidstavle: hvor og hvornår» på personsider
+
+`persons.html` / `persons_en.html` får en sektion over dagbogsreferencerne for
+de 150 personer, tidstavlerne nævner: dato, tekst med links og «Sted: …». Er
+stedet ikke nævnt i selve posten, hentes det fra det opholdsled, der dækker
+datoen (markeret «ifølge opholdet»). Personer uden poster får ingen sektion.
+Samme `TimelineWire.mountEntity(el, 's'|'p'|'w', rid)` kan genbruges til
+`place.html` og `work.html`.

@@ -306,6 +306,8 @@
 <script src="data/diary-index.js"></script>
 <script src="data/diary-refs.js"></script>
 <script src="data/diary-refs-overflow.js"></script>
+<script src="data/timeline.js"></script>
+<script src="js/timeline-wire.js"></script>
 <script src="js/diary-wire.js"></script>
 <script src="data/nation-index.js"></script>
 <script src="js/facet-overlay.js"></script>
@@ -575,6 +577,10 @@
       stackSidebarSticky(sb);
     }
 
+    // Tidstavle: where and when the printed chronologies put this person
+    // (filled below; stays empty when the person is not named there).
+    mainH += '<div id="person-timeline"></div>';
+
     // Diary references
     mainH += '<div><h2 class="section-title">Diary references</h2>' +
       '<div class="results-header">' +
@@ -589,6 +595,10 @@
       '</div></div>';
 
     mn.innerHTML = mainH;
+
+    if (typeof TimelineWire !== 'undefined') {
+      TimelineWire.mountEntity(document.getElementById('person-timeline'), 's', urlReg, { name: p.label });
+    }
 
     // Wire diary references
     var dGrid = document.getElementById('person-diary');
