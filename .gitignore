@@ -18,6 +18,10 @@ mockup/data/diary-facets.js
 mockup/data/diary-refs.js
 mockup/data/diary-refs-overflow.js
 
+# Local-only Tidstavle companion track (diaries.html) — regenerate with
+# scripts/build_mockup/build_timeline.py (reads data/HCA_Tidstavler_*.xlsx).
+mockup/data/timeline.js
+
 # Local-only generated per-page print data for the cart PDF (~1.5 MB per
 # volume) -- regenerate with scripts/build_mockup/build_diary_print.py.
 mockup/data/diary-print/

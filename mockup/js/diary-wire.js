@@ -368,13 +368,18 @@ window.DiaryWire = (function () {
       var heading = headingFor(m);
       var vp = titleFor(m);
       var sub = (heading === vp) ? esc(row.h) : vp + ' &nbsp;·&nbsp; ' + esc(row.h);
+      // Companion track: where the Tidstavle puts Andersen on this date
+      // (full DD-MM-YYYY dates only; partial ones have no single day).
+      var dm = /^(\d\d)-(\d\d)-(\d{4})$/.exec(row.d || '');
+      var tl = (dm && typeof TimelineWire !== 'undefined' && TimelineWire.has())
+        ? TimelineWire.companion(dm[3] + '-' + dm[2] + '-' + dm[1]) : '';
       return '<div class="result-row">' + selectBox(row.h, heading) +
         '<div class="result-card"' + highlight + '>' +
         '<a href="' + href + '" class="result-card__link" title="Gå til ' + esc(row.h) + '"></a>' +
         '<div class="result-card__body">' +
         '<div class="result-card__title">' + heading + '</div>' +
         '<div class="result-card__meta">' + sub + '</div>' +
-        '<div class="result-card__chips">' + chipMarkup + '</div></div></div>' +
+        '<div class="result-card__chips">' + chipMarkup + '</div>' + tl + '</div></div>' +
         '</div>';
     }
 

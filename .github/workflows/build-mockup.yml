@@ -6,6 +6,7 @@ on:
     paths:
       - 'data/raw/**'
       - 'data/HCA_Steder_*.xlsx'   # place register (LocationID base)
+      - 'data/HCA_Tidstavler_*.xlsx' # Tidstavle companion track (diaries.html)
       - 'data/normalized/**'
       - 'scripts/normalization/**'
       - 'scripts/build_web/**'
@@ -88,6 +89,12 @@ jobs:
 
       - name: Stage 3b — generate diary index + reverse-index JS
         run: python scripts/build_mockup/build_diary_index.py
+
+      # Stage 3b2 — Tidstavle companion track for diaries.html (reads the
+      # committed data/HCA_Tidstavler_*.xlsx; links names against the
+      # register). Gitignored; the page degrades gracefully without it.
+      - name: Stage 3b2 — generate timeline companion track
+        run: python scripts/build_mockup/build_timeline.py
 
       # Stage 3c — per-page print data (text, footnotes, full name lists, KB
       # link) that the cart's "Download som PDF" loads on demand. Gitignored.

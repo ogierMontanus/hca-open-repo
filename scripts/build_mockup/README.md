@@ -13,6 +13,7 @@ static HTML file or a `*.js` file that defines a global via a plain
 |--------|-------|--------|-------------------|
 | `build_diary_pages.py`   | `references.csv`, `diary.csv`, `entities.csv`               | `mockup/diary-pages/Pag*.html` (≈4,500 files) | **no — gitignored** |
 | `build_diary_index.py`   | `references.csv`, `diary.csv`, `entities.csv`               | `mockup/data/diary-index.js`, `diary-refs.js` | **no — gitignored** |
+| `build_timeline.py`      | `data/HCA_Tidstavler_bind_1-10_*.xlsx`, `entities.csv`, `places.csv`, `references.csv` | `mockup/data/timeline.js` (1.745 tidstavle-poster, navne linket til register; ledsagespor på `diaries.html`) | **no — gitignored** (`--report` viser matchstatistik) |
 | `build_works_extra.py`   | `entities.csv`, `references.csv`                            | `mockup/data/works-extra.js`   (3,677 works)  | **no — gitignored** |
 | `build_persons_extra.py` | `entities.csv`, `references.csv`                            | `mockup/data/persons-extra.js` (10,228 persons) | **no — gitignored** |
 | `build_places_extra.py`  | `entities.csv`, `references.csv`, `places.csv`, `rejser.tsv` | `mockup/data/places-extra.js`  (2,433 places, 2,421 geocoded) + `places-stats.js` (the place counts on index.html) | **no — gitignored** |

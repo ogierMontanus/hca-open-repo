@@ -78,6 +78,7 @@ STAGES_AFTER_INGEST = [
     ("2",  "CSVs -> web JSON",             "scripts/build_web/build_web_data.py",       False),
     ("3a", "diary pages (~4,500 HTML)",    "scripts/build_mockup/build_diary_pages.py", False),
     ("3b", "diary index + reverse-index",  "scripts/build_mockup/build_diary_index.py", False),
+    ("3b2", "timeline companion track (Tidstavle)", "scripts/build_mockup/build_timeline.py", False),
     ("3c", "diary print data (cart PDF)", "scripts/build_mockup/build_diary_print.py", False),
     ("4a", "works-extra.js",               "scripts/build_mockup/build_works_extra.py", False),
     # Rolle/erhvervsgren-kæden: parse_person_role.py læser works-extra.js (4a);

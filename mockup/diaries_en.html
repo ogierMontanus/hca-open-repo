@@ -270,6 +270,11 @@
             <div id="calendar-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;background:var(--color-border);padding:2px;border-radius:var(--radius)">
               <!-- Calendar weeks will be rendered here -->
             </div>
+            <p class="cal-legend" id="cal-legend" hidden>
+              <span><i class="lg-day"></i>Day with a diary page</span>
+              <span><i class="lg-bar"></i>Chronology: place of stay / journey</span>
+              <span><i class="lg-dot"></i>Chronology: event on the day</span>
+            </p>
             <div id="calendar-entries" style="margin-top:var(--sp6)">
               <!-- Selected date entries will be shown here -->
             </div>
@@ -374,11 +379,13 @@
 <script src="data/diary-index.js"></script>
 <script src="data/diary-refs.js"></script>
 <script src="data/diary-facets.js"></script>
+<script src="data/timeline.js"></script>
 <script src="js/cart.js"></script>
 <script src="js/table-view.js"></script>
 <script src="js/facet-overlay.js"></script>
 <script src="js/filter-logic.js"></script>
 <script src="js/facet-engine.js"></script>
+<script src="js/timeline-wire.js"></script>
 <script src="js/diary-wire.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -443,7 +450,11 @@ document.addEventListener('DOMContentLoaded', function () {
         { key: 'bindside', label: 'Vol./page',
           value: function (r) { return 'Vol. ' + (r.v || '?') + ', p. ' + (r.p || '?'); } },
         { key: 'pl', label: 'Place', value: function (r) { return r.pl || ''; } }
-      ], { initialSort: 'dato', initialDir: 'asc',
+      ].concat(TimelineWire.has() ? [
+        // Companion track: where the Tidstavle puts Andersen on that date.
+        { key: 'tl', label: 'Chronology',
+          value: function (r) { return TimelineWire.plain(isoOf(r)); } }
+      ] : []), { initialSort: 'dato', initialDir: 'asc',
            afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } });
     }
     tableViewCtrl.render(currentRows());
@@ -500,6 +511,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function firstMonthWithEntries(year) {
     for (var m = 0; m < 12; m++) { if (monthEntries(year, m).length) return m; }
+    // Years before the diaries start (1805-1824) have only the Tidstavle.
+    if (TimelineWire.has()) {
+      for (var t = 0; t < 12; t++) { if (TimelineWire.inMonth(year, t).length) return t; }
+    }
     return 0;
   }
 
@@ -563,6 +578,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var dayCell = document.createElement('button');
       var dateKey = formatDateKey(year, month, day);
       var dayEntries = diaryDateMap[dateKey] || [];
+      var tlDay = TimelineWire.has() ? TimelineWire.dayInfo(dateKey) : null;
 
       dayCell.type = 'button';
       dayCell.style.cssText = 'padding:8px;text-align:center;font-size:0.85rem;border:1px solid var(--color-border);background:var(--color-surface);cursor:pointer;position:relative;min-height:40px;display:flex;align-items:center;justify-content:center';
@@ -580,6 +596,18 @@ document.addEventListener('DOMContentLoaded', function () {
         countBadge.textContent = dayEntries.length;
         dayCell.appendChild(countBadge);
       }
+
+      // Companion track: bar = stay/journey covers the day, dot = event on
+      // the day (styled in css/style.css), plus a hover/aria summary.
+      if (dayEntries.length > 0) dayCell.dataset.dp = '1';
+      if (tlDay) {
+        if (tlDay.stay) dayCell.dataset.tlStay = '1';
+        if (tlDay.event) dayCell.dataset.tlEvent = '1';
+        dayCell.title = tlDay.label;
+      }
+      dayCell.setAttribute('aria-label', dateLabel(dateKey) +
+        (dayEntries.length ? ' — ' + dayEntries.length + ' diary pages' : '') +
+        (tlDay && tlDay.label ? ' — Chronology: ' + tlDay.label : ''));
 
       if (selectedDate === dateKey) {
         dayCell.style.outline = '2px solid var(--color-accent)';
@@ -607,6 +635,20 @@ document.addEventListener('DOMContentLoaded', function () {
     var label = day ? MONTH_NAMES[month] + ' ' + day + ', ' + year : MONTH_NAMES[month] + ' ' + year;
     title.textContent = label;
     calendarEntries.appendChild(title);
+
+    // Companion track (Tidstavle): the day's stay/journey and events, or the
+    // whole month. Shown whether or not the day has a diary page.
+    if (TimelineWire.has()) {
+      var tlBox = document.createElement('div');
+      calendarEntries.appendChild(tlBox);
+      if (selectedDate) {
+        TimelineWire.mount(tlBox, TimelineWire.onDay(selectedDate), { day: selectedDate });
+      } else {
+        TimelineWire.mount(tlBox, TimelineWire.inMonth(year, month), {
+          pickDay: [formatDateKey(year, month, 1), formatDateKey(year, month, getDaysInMonth(year, month))]
+        });
+      }
+    }
 
     var entries = selectedDate ? (diaryDateMap[selectedDate] || []) : monthEntries(year, month);
 
@@ -763,12 +805,33 @@ document.addEventListener('DOMContentLoaded', function () {
   yearSel.hidden = true;
 
   // Populate calendar year selector
+  // The Tidstavle reaches back before the diaries start (1805-), so those
+  // years get a calendar too — but the calendar still opens on the first
+  // diary year.
+  var firstDiaryYear = yearList[0];
+  var tlYears = TimelineWire.years();
+  if (tlYears) {
+    for (var ty = tlYears[0]; ty <= tlYears[1]; ty++) {
+      if (yearList.indexOf(String(ty)) === -1) yearList.push(String(ty));
+    }
+    yearList.sort();
+  }
   yearList.forEach(function (y) {
     var o = document.createElement('option');
     o.value = y;
     o.textContent = y;
     calYearSel.appendChild(o);
   });
+
+  if (firstDiaryYear) calYearSel.value = firstDiaryYear;
+
+  // A date button in the month's Tidstavle list jumps to that day.
+  calendarEntries.addEventListener('click', function (ev) {
+    var b = ev.target.closest && ev.target.closest('[data-tl-day]');
+    if (b) jumpToDate(b.getAttribute('data-tl-day'));
+  });
+  var calLegend = document.getElementById('cal-legend');
+  if (calLegend && TimelineWire.has()) calLegend.hidden = false;
 
   // Calendar month/year change handlers
   calYearSel.addEventListener('change', function () {
