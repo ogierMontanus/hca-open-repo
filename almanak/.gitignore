@@ -1,0 +1,5 @@
+# Maskinelle udtræk og PDF-tekstlagscache: kan genskabes med
+# almanak/scripts/analysis/*.py og er ikke autoritative — se almanak/README.md.
+# (Teksten må gerne publiceres; data/review/ og data/build/ committes.)
+data/extracted/
+data/cache/
