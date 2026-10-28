@@ -134,7 +134,11 @@ def fetch_check(url: str, born: str, died: str):
     body = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
     text = unescape(re.sub(r"<[^>]+>", " ", body))
     text = re.sub(r"\s+", " ", text)
-    lead = title + " " + text[:3500]
+    # Lead = the title plus the first 1500 characters of the article body (after the first
+    # <h1>), so a namesake whose article merely MENTIONS the years elsewhere is not confirmed.
+    h1 = re.search(r"<h1[^>]*>", body, re.I)
+    lead_text = re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", body[h1.start():]))) if h1 else text
+    lead = title + " " + lead_text[:1500]
     found = sorted(set(re.findall(r"\b(1[4-9]\d\d)\b", lead)))
     ok_b = bool(born and born in lead)
     ok_d = bool(died and died in lead)

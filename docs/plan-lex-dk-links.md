@@ -79,6 +79,13 @@ for kongelige og varianter (Napoleon 1. → *Napoleon Bonaparte*).
 * **Omkostning:** ≈ 1 download à 45 MB + ca. 2–5 verificeringsforespørgsler pr. person i A/B
   (≈ 3.300 personer × ~3 = ca. 10.000 sidekald ≈ 3 timer ved 1/sek.). Ingen chatbot, ingen tokens.
 
+> **Målt 2026-10-28** ([`data-model/lex-dk-sitemap-results.md`](data-model/lex-dk-sitemap-results.md)):
+> hele niveau A (1.315) kørt trinvis 30 → 90 → 270 → 810 → 1.315 mod sitemap'et. **532 bekræftet
+> (40 %), DBL 326 (25 %)**, 1.727 sidekald (≈ 40 min), ingen chatbot. Danskere/umarkerede 55 %,
+> udlændinge 25 % (Lex staver dem på dansk) — de 683 uden slug (heraf 447 udenlandsk markerede) er
+> restmængden til Rute 2. Estimatet «≈ 30 % rest» længere nede er dermed for lavt: **regn med
+> ≈ 500–680 personer til chatbotten** (≈ 5–6 timer, 3 dage ved loftet på 200/dag).
+
 ### Rute 2 — Lex' chatbot, kun til resten i niveau A
 
 * Anvendes for personer, hvor Rute 1 ikke finder en slug (navnevarianter, udlændinge med ikke-
