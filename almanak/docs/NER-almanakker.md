@@ -23,7 +23,8 @@ Arbejdet tager udgangspunkt i to kilder:
 - Antag ikke, at databasen har de samme indholdsregistre, metadata eller redaktionelle funktioner som den trykte kilde.
 
 **B. PDF-kilden**
-- Indeholder en digital gengivelse af den trykte almanak.
+- Er udgivet af DSL på stien https://tekstnet.dk/books/andersen-hc_almanakker/. Er også gemt og committet i repositoriet.
+-  Indeholder en digital gengivelse af den trykte almanak.
 - Siden er den grundlæggende visuelle enhed, mens tekst og indhold kan være organiseret i mindre afsnit.
 - Undersøg PDF'ens faktiske struktur, tekstlag, sideinddeling og eventuelle problemer med OCR eller tekstudtræk.
 - Brug PDF'en som kilde til at kontrollere databasens indhold og struktur.
