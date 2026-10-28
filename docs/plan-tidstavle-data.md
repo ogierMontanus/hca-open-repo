@@ -45,7 +45,7 @@ for en xlsx-posts interval, 660 med samme startdato. De to kilder **supplerer** 
 
 ## Del 1 — Interne data
 
-### Trin 1.0 — Inventar af den lokale database *(forudsætning for resten)*
+### Trin 1.0 — Inventar af den lokale database *(forudsætning for resten)* — **udført 2026-10-28**, se [`data-model/sql-database-inventory.md`](data-model/sql-database-inventory.md)
 
 1. Find `hca_db.sql` (eller den kørende database). Notér motor, version, tegnsæt
    (filen er UTF-8 trods latin-1-header, jf. scriptet).
@@ -57,18 +57,18 @@ for en xlsx-posts interval, 660 med samme startdato. De to kilder **supplerer** 
 Færdig når: der er en tabel over alle tabeller, og hver er markeret «bruges» / «ikke
 brugt, relevant for Tidstavle» / «irrelevant».
 
-### Trin 1.1 — ID-hygiejne *(lille, gør først)*
+### Trin 1.1 — ID-hygiejne *(lille, gør først)* — **udført 2026-10-28**
 
 Problem: `build_timeline.py` giver løbende id'er `T0001…`, som kolliderer med alle 1.446
 `event_id` i SQL-tidstavlen, og de er ustabile (ændres, hvis en række indsættes i xlsx).
 
-* Skift til stabil nøgle: `TV{bind:02d}{række:04d}` plus hash af `(Fra, Til, tekst)`
-  som `content_key`, så redigerede rækker kan genkendes på tværs af versioner.
+* Skift til stabil nøgle: `TV{bind:02d}{række:04d}` (række = regnearkets fysiske række) plus hash af `(Fra, Til, tekst)`
+  som `content_key` (felt `c` i `timeline.js`), så redigerede rækker kan genkendes på tværs af versioner.
 * Behold SQL-id'erne `T####` uændret.
 * Test i `tests/test_timeline_build.py`: ingen id i `timeline.js` findes i
   `timeline.csv`; ingen dubletter.
 
-### Trin 1.2 — Krydsforbindelse mellem de to tidstavler
+### Trin 1.2 — Krydsforbindelse mellem de to tidstavler — **første pas udført 2026-10-28** (`data/curated/timeline_crosswalk.csv`; dækning i [`tidstavle-krydsforbindelser.md`](data-model/tidstavle-krydsforbindelser.md); reviewer-køen er ikke afgjort). **Hård datogrænse 31.12.1875** gælder hele begivenhedsmapningen (`scripts/normalization/event_bounds.py`)
 
 * Byg `data/curated/timeline_crosswalk.csv`:
   `xlsx_id, sql_event_id, match` (`samme_dato` · `indeholdt` · `ingen`), `reviewer`.
@@ -86,7 +86,7 @@ Problem: `build_timeline.py` giver løbende id'er `T0001…`, som kolliderer med
 Færdig når: hver SQL-begivenhed har et match eller en dokumenteret «ingen», og dækningen
 er opgjort i `tidstavle-krydsforbindelser.md`.
 
-### Trin 1.3 — Mål og forbedr navnelinkningen *(mangler i dag: recall)*
+### Trin 1.3 — Mål og forbedr navnelinkningen *(mangler i dag: recall)* — **værktøj klar 2026-10-28, annotering mangler** (`scripts/qa/timeline_gold.py`, `data/curated/timeline_gold.csv`, `tests/test_timeline_gold.py`)
 
 * Træk en stratificeret stikprøve på ca. 300 poster (pr. bind, pr. type:
   rejse/ophold/begivenhed). Annotér *alle* personer, steder og værker i dem manuelt
@@ -102,7 +102,7 @@ er opgjort i `tidstavle-krydsforbindelser.md`.
   3. Værker: genkend titler uden `»«`-citationstegn kun mod eksakt værktitel.
 * Gem metode og konfidens pr. link i data (se trin 1.7), ikke kun resultatet.
 
-### Trin 1.4 — Redaktionelle køer fra krydsforbindelserne
+### Trin 1.4 — Redaktionelle køer fra krydsforbindelserne — **køer bygget 2026-10-28, afgørelser mangler** (`build_timeline_queues.py`, `data/curated/queue_timeline_*.csv`)
 
 Hver kø er en CSV i `data/curated/` med kolonner for *forslag*, *beslutning*, *beslutter*:
 
@@ -115,7 +115,7 @@ Hver kø er en CSV i `data/curated/` med kolonner for *forslag*, *beslutning*, *
 En afgjort post rettes i registret (ikke i tidstavlen), og tidstavlen forbliver den
 trykte kilde, som den er.
 
-### Trin 1.5 — Dagbogens huller og temporal modellering
+### Trin 1.5 — Dagbogens huller og temporal modellering — **udført 2026-10-28** (`scripts/qa/report_timeline_gaps.py`, `build_entity_dates.py`; det gamle hultal 54 % var et artefakt, nu 9 %)
 
 * Skriv `scripts/qa/report_timeline_gaps.py`: dage/perioder med opholdspost men uden
   dagbogsside (5.509 af 10.159 dage), grupperet pr. bind og sammenholdt med
@@ -210,7 +210,7 @@ fuldt verificérbar mængde at lære på.
   maskinlæsbare brevdata, kan «breve skrevet i perioden/på stedet» blive et fjerde
   ledsagespor. **Ikke undersøgt endnu** — første skridt er at afklare adgang og licens.
 
-### Trin 2.3 — Kilde-links (KB) og facsimiler
+### Trin 2.3 — Kilde-links (KB) og facsimiler — **link-check udført 2026-10-28** (92 af 92 svarer 200; facsimile-afstemning mod `kb_diary_links.csv` ikke gjort)
 
 * De 1.745 poster peger på 92 forskellige EPUB-sider hos Det Kgl. Bibliotek.
   Kør et sjældent link-check (HEAD, høflig rate) og gem status i
@@ -219,7 +219,7 @@ fuldt verificérbar mængde at lære på.
 * Overvej at afstemme med `kb_diary_links.csv` (facsimile pr. dagbogsside), så en
   læser kan gå fra tidstavlepost → dagbogsside → facsimile.
 
-### Trin 2.4 — Licens, proveniens og policy
+### Trin 2.4 — Licens, proveniens og policy — **første udgave 2026-10-28** (`data/curated/EXTERNAL_SOURCES.md`; mangler `om.html`-kreditering, når GeoNames tages i brug)
 
 * For hvert eksternt datasæt: kilde-URL, licens, hentedato, version i
   `data/curated/EXTERNAL_SOURCES.md`. Wikidata er CC0; GeoNames CC BY — kræver
