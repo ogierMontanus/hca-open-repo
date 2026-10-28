@@ -92,7 +92,8 @@ venter på den nye OCR.
 
 * **Formål:** trykkets registre som strukturerede data.
 * **Eksisterende:** `parse_personregister_xi.py` (metode), `match_collin_persons_to_register.py` (matchtrin), `name_normalize.py`.
-* **Nyt:** `parse_register_persons.py`, `parse_register_works.py`
+* **Prototype findes:** `scripts/parse_register.py` (tovejs-spalter, 2.022 + 333 opslag, ≈9.300 læsbare henvisninger). Mangler: korrekturlæsning, frigivelse af id'er, OCR-rettelse af årstal.
+* **Nyt:** produktionsversion af `parse_register_persons.py`, `parse_register_works.py`
   (henvisningsgrammatik `år d.m`, `Bag i almanakken`, `Bagsiden af <måned>`,
   `(?)`, `+`); årstalsrettelse mod eksisterende poster.
 * **Output:** `data/build/almanak_register_ref.csv`, registeropslag med `headword_id`.

@@ -3,3 +3,6 @@
 # (Teksten må gerne publiceres; data/review/ og data/build/ committes.)
 data/extracted/
 data/cache/
+
+# Genereret annotationsside (indeholder sidebilleder og tekst); bygges med annotation/build_annotation_page.py
+annotation/out/

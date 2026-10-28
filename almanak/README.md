@@ -43,12 +43,15 @@ almanak/
 ├── sources/baseline-*.json  måletal for OCR-kvalitet (til vurdering af ny scanning)
 ├── docs/                  analyse, model, plan
 ├── config/                (trin 1) stier, sideintervaller, OCR-regler — data, ikke kode
+├── annotation/            human NER-annoteringsside: template.html + build_annotation_page.py (out/ er gitignoreret)
 ├── scripts/
+│   ├── parse_register.py  person- og værkregister (s. 328–388) -> data/register/, lokale id'er ALMP…/ALMW…
 │   ├── analysis/          undersøgelsesværktøjer (findes nu)
 │   └── …                  (trin 1–5) almanakspecifik pipeline
 └── data/
     ├── extracted/         maskinelt udtræk — reproducerbart, IKKE autoritativt (gitignoreret)
     ├── cache/             PDF-tekstlagscache (gitignoreret)
+    ├── register/          almanakkens register som CSV (foreløbigt, maskinlæst, committet — id'erne ALMP/ALMW er lokale)
     ├── review/            (trin 2–5) menneskelige beslutninger — AUTORITATIVT, i git
     └── build/             (trin 3–5) deterministisk byg af udtræk + review
 ```
@@ -87,6 +90,20 @@ python almanak/scripts/analysis/compare_sources.py
 Output i `almanak/data/extracted/`: `aligned.csv` (alle datoer side om side
 med lighedsmål og side), `date_discrepancies.csv`, `letter_direction.csv`,
 `summary.json`. PDF-udtrækket tager ≈1 min første gang.
+
+## Register og annotering (prøve)
+
+* `scripts/parse_register.py` læser PDF'ens tekstlag og skriver `data/register/almanak_register_{persons,works,refs}.csv`:
+  2.022 personopslag (ALMP0001…), 333 værkopslag (ALMW0001…) og ≈9.500 henvisninger (≈9.300 med læsbar dato).
+  Nøglerne følger rækkefølgen i det nuværende OCR-lag og er **foreløbige**: ved ny OCR skal de frigives via en crosswalk.
+  Kendte svagheder: OCR i navne («WulfT»), sammensmeltede tal («18388.6»), ~420 opslag uden læsbar henvisning (heraf ≈210 krydshenvisninger).
+* `annotation/build_annotation_page.py` bygger annotationssiden (s. 35–36) med registerkandidater pr. dag
+  (henvisning til datoen, evt. bekræftet af navnet i teksten) og rulleliste + fritekst i redigeringen af en markering.
+
+```powershell
+python almanak/scripts/parse_register.py --pdf $env:HCA_ALMANAK_PDF
+python almanak/annotation/build_annotation_page.py --pdf $env:HCA_ALMANAK_PDF --pages 35 36
+```
 
 ## Afhængigheder til eksisterende kode
 

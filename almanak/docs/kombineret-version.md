@@ -92,7 +92,7 @@ Det bevares, men blandes ikke ind i 1990-teksten.
 `ref_id, register (person|work), headword_raw, headword_id, ref_raw, year, day, month,
 target (post_id eller blok), flags (uncertain "(?)", not_in_xi "+"), resolution, entity_id`
 
-* `headword_id`: stabil id for registeropslaget (`ALMP0001`, `ALMW0001`).
+* `headword_id`: id for registeropslaget (`ALMP0001`, `ALMW0001`). Prototypen findes (`scripts/parse_register.py`, `data/register/`); id'erne er foreløbige, indtil registret er korrekturlæst og OCR'en endeligt valgt.
 * `entity_id`: kandidat i projektets egne registre (`Reg…` for personer og
   værker, via Dagbøger XI-opslaget; nye personer markeret »+« får egne id'er).
 * `resolution`: `exact` · `ocr_year_corrected` (fx »1833 11.7« → 1855, fordi
