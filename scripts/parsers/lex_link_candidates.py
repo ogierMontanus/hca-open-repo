@@ -96,7 +96,7 @@ PARTICLES = {"von", "van", "af", "de", "der", "den", "du", "la", "le", "zu", "i"
 def name_tokens(query_name: str):
     """'Niels W. Gade (1817–1890), komponist' → ['niels', 'w', 'gade']."""
     head = re.split(r"[(,]", query_name)[0]
-    toks = [t for t in re.split(r"[\s.]+", fold(head)) if t and t not in PARTICLES]
+    toks = [t for t in re.split(r"[\s.\-]+", fold(head)) if t and t not in PARTICLES]
     return toks
 
 
@@ -109,9 +109,11 @@ def slug_matches(url: str, toks) -> bool:
     for t in toks:
         if t in st:
             continue
-        if len(t) >= 3 and t[0] in singles:   # Hans Christian → H.C.
+        if len(t) >= 3 and t[0] in singles:        # Hans Christian → H.C.
             continue
-        if len(t) == 1 and t in st:
+        if len(t) >= 3 and any(len(x) >= 2 and t.startswith(x) for x in st):   # Fr. → Frederik
+            continue
+        if len(t) == 1 and any(x.startswith(t) for x in st):                    # C. E. → Carl Emil
             continue
         return False
     return True
@@ -149,17 +151,18 @@ def main():
     ap.add_argument("--sample", default=str(REPO / "data/curated/lex/persons_sample100.csv"))
     ap.add_argument("--out", default=str(OUT))
     ap.add_argument("--no-fetch", action="store_true")
+    ap.add_argument("--cache", help="JSON file caching page checks, so re-runs make no repeat requests")
     args = ap.parse_args()
 
     sample = {r["rid"]: r for r in csv.DictReader(open(args.sample, encoding="utf-8"))}
     qname = {q["rid"]: q["name"] for q in json.load(open(args.queries, encoding="utf-8"))}
     today = date.today().isoformat()
     rows, persons = [], 0
-    cache = {}
+    cache = json.load(open(args.cache, encoding="utf-8")) if args.cache and Path(args.cache).exists() else {}
     for line in open(args.raw, encoding="utf-8"):
         rec = json.loads(line)
         s = sample.get(rec["rid"])
-        if not s:
+        if not s or not rec.get("ok"):      # skip persons whose query errored
             continue
         persons += 1
         born, died = life_years(s["label"])
@@ -182,6 +185,8 @@ def main():
                          "priority": w[2], "url": url, "page_title": chk["title"], "http": chk["status"],
                          "years_found": chk["years"], "verdict": chk["verdict"], "queried_on": today})
 
+    if args.cache:
+        json.dump(cache, open(args.cache, "w", encoding="utf-8"), ensure_ascii=False)
     order = {"confirmed": 0, "likely": 1, "unchecked": 1, "mismatch": 2, "dead": 3}
     rows.sort(key=lambda r: (r["rid"], order[r["verdict"]], r["priority"]))
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
