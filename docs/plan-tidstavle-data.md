@@ -45,7 +45,7 @@ for en xlsx-posts interval, 660 med samme startdato. De to kilder **supplerer** 
 
 ## Del 1 — Interne data
 
-### Trin 1.0 — Inventar af den lokale database *(forudsætning for resten)*
+### Trin 1.0 — Inventar af den lokale database *(forudsætning for resten)* — **udført 2026-10-28**, se [`data-model/sql-database-inventory.md`](data-model/sql-database-inventory.md)
 
 1. Find `hca_db.sql` (eller den kørende database). Notér motor, version, tegnsæt
    (filen er UTF-8 trods latin-1-header, jf. scriptet).
@@ -57,13 +57,13 @@ for en xlsx-posts interval, 660 med samme startdato. De to kilder **supplerer** 
 Færdig når: der er en tabel over alle tabeller, og hver er markeret «bruges» / «ikke
 brugt, relevant for Tidstavle» / «irrelevant».
 
-### Trin 1.1 — ID-hygiejne *(lille, gør først)*
+### Trin 1.1 — ID-hygiejne *(lille, gør først)* — **udført 2026-10-28**
 
 Problem: `build_timeline.py` giver løbende id'er `T0001…`, som kolliderer med alle 1.446
 `event_id` i SQL-tidstavlen, og de er ustabile (ændres, hvis en række indsættes i xlsx).
 
-* Skift til stabil nøgle: `TV{bind:02d}{række:04d}` plus hash af `(Fra, Til, tekst)`
-  som `content_key`, så redigerede rækker kan genkendes på tværs af versioner.
+* Skift til stabil nøgle: `TV{bind:02d}{række:04d}` (række = regnearkets fysiske række) plus hash af `(Fra, Til, tekst)`
+  som `content_key` (felt `c` i `timeline.js`), så redigerede rækker kan genkendes på tværs af versioner.
 * Behold SQL-id'erne `T####` uændret.
 * Test i `tests/test_timeline_build.py`: ingen id i `timeline.js` findes i
   `timeline.csv`; ingen dubletter.

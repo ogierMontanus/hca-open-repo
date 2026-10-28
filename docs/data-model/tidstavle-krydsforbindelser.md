@@ -38,6 +38,7 @@ besøgte, hvad der udkom — ikke dagbogsteksten. Derfor behandles den som et
 * **Stedregisteret mangler enkelte steder** (fx Genua), som derfor ikke linkes.
 * **Poster med periode > 1 dag** tæller som dækkende hver dag i perioden;
   nøstede poster (et ophold og et delophold med samme tekst) vises begge.
-* **ID-kollision:** de løbende id'er `T0001…` i `mockup/data/timeline.js`
-  kolliderer med `event_id` i `data/normalized_v092/timeline.csv` (alle 1.446).
-  Skal rettes, før de to tidstavler samles — se planens trin 1.1.
+* **ID-kollision (rettet 2026-10-28, plan trin 1.1):** xlsx-tidstavlens id'er var
+  løbende `T0001…` og kolliderede med `event_id` i
+  `data/normalized_v092/timeline.csv` (alle 1.446). De er nu `TV{bind:02d}{regnearksrække:04d}`
+  (fx `TV010005`) med `content_key` (`c`) i `timeline.js`; SQL-id'erne er uændrede.

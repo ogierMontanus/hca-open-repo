@@ -71,3 +71,58 @@ def test_bare_first_names_and_genitives_stay_unlinked():
     m = bt.Matcher()
     segs = m.link("Carl kom og Italiens nationaldag.", 5, 1861)
     assert not any(isinstance(s, list) for s in segs)
+
+
+# ── stable ids (plan-tidstavle-data.md step 1.1) ──────────────────────────
+
+def _sql_timeline_ids():
+    import csv
+    path = REPO / "data" / "normalized_v092" / "timeline.csv"
+    with path.open(encoding="utf-8-sig", newline="") as f:
+        return {r["event_id"] for r in csv.DictReader(f)}
+
+
+def test_ids_have_the_stable_tv_form():
+    for r in _rows():
+        assert re.fullmatch(r"TV\d{2}\d{4}", r["id"]), r["id"]
+        assert r["id"] == bt.entry_id(r["v"], int(r["id"][4:])), r["id"]
+
+
+def test_ids_are_unique():
+    ids = [r["id"] for r in _rows()]
+    assert len(ids) == len(set(ids))
+
+
+def test_ids_do_not_collide_with_the_sql_timeline():
+    sql_ids = _sql_timeline_ids()
+    assert len(sql_ids) == 1446 and all(i.startswith("T") and i[1:].isdigit() for i in sql_ids)
+    clash = {r["id"] for r in _rows()} & sql_ids
+    assert not clash, sorted(clash)[:5]
+
+
+def test_id_does_not_depend_on_other_volumes():
+    # Inserting a row in bind 1 must not renumber bind 2: the id is built from
+    # the volume and the row *within* the sheet, never a running counter.
+    assert bt.entry_id(2, 5) == "TV020005"
+    assert bt.entry_id(10, 1234) == "TV101234"
+
+
+def test_content_key_ignores_position_but_not_wording():
+    k = bt.content_key("1845-11-01", "1845-11-10", "Glorup.")
+    assert k == bt.content_key("1845-11-01", "1845-11-10", "  Glorup.  ")
+    assert k == bt.content_key("1845-11-01", "1845-11-10", "Glorup.")
+    assert k != bt.content_key("1845-11-01", "1845-11-10", "Glorup. Besøg.")
+    assert k != bt.content_key("1845-11-01", "1845-11-11", "Glorup.")
+    assert re.fullmatch(r"[0-9a-f]{12}", k)
+    # an absent end date is part of the key, not an error
+    assert bt.content_key("1845-11-01", None, "x") == bt.content_key("1845-11-01", "", "x")
+
+
+def test_every_row_has_a_content_key_and_edits_change_it():
+    rows = _rows()
+    assert all(re.fullmatch(r"[0-9a-f]{12}", r["key"]) for r in rows)
+    # distinct rows are (almost) always distinct content; the known identical
+    # source duplicates (audit §2C) are the only allowed repeats.
+    from collections import Counter
+    repeats = sum(n - 1 for n in Counter(r["key"] for r in rows).values() if n > 1)
+    assert repeats <= 5, repeats
