@@ -545,6 +545,16 @@ def classify(text: str, segs) -> str:
 
 # ── main ───────────────────────────────────────────────────────────────────
 
+def dead_urls() -> set:
+    """KB pages that scripts/qa/check_kb_links.py found gone (404 / 410).
+    Unreachable ("error:…") or other statuses are not proof, so they stay."""
+    path = REPO_ROOT / "data" / "curated" / "kb_link_status.csv"
+    if not path.exists():
+        return set()
+    with path.open(encoding="utf-8", newline="") as f:
+        return {r["url"] for r in csv.DictReader(f) if r["status"] in ("404", "410")}
+
+
 def find_workbook() -> Path:
     cands = sorted(DATA.glob("HCA_Tidstavler_bind_1-10_*.xlsx"))
     if not cands:
@@ -561,6 +571,7 @@ def main():
     print(f"Reading {src.name} …")
     rows = read_workbook(src)
     mt = Matcher()
+    dead = dead_urls()
 
     entries, st = [], Counter()
     unresolved = Counter()
@@ -577,7 +588,7 @@ def main():
         e["k"] = classify(r["text"], segs)
         e["x"] = segs if any(isinstance(s, list) for s in segs) else r["text"]
         e["p"] = "–".join(dict.fromkeys(r["pages"]))
-        if r["url"]:
+        if r["url"] and r["url"].split("#")[0] not in dead:
             e["u"] = r["url"]
         if r["orig"]:
             e["o"] = r["orig"]

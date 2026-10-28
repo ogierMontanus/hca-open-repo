@@ -126,3 +126,17 @@ def test_every_row_has_a_content_key_and_edits_change_it():
     from collections import Counter
     repeats = sum(n - 1 for n in Counter(r["key"] for r in rows).values() if n > 1)
     assert repeats <= 5, repeats
+
+
+# ── KB link status (plan 2.3) ────────────────────────────────────────────
+
+def test_link_status_covers_every_workbook_url_and_dead_ones_are_dropped():
+    import csv
+    status = bt.REPO_ROOT / "data" / "curated" / "kb_link_status.csv"
+    with status.open(encoding="utf-8", newline="") as f:
+        rows = {r["url"]: r for r in csv.DictReader(f)}
+    urls = {r["url"].split("#")[0] for r in bt.read_workbook(bt.find_workbook()) if r["url"]}
+    assert urls == set(rows)
+    assert all(r["checked_on"] and r["n_entries"] for r in rows.values())
+    # dead_urls() keeps anything that is not a definite 404/410
+    assert bt.dead_urls() == {u for u, r in rows.items() if r["status"] in ("404", "410")}
