@@ -68,7 +68,7 @@ Problem: `build_timeline.py` giver løbende id'er `T0001…`, som kolliderer med
 * Test i `tests/test_timeline_build.py`: ingen id i `timeline.js` findes i
   `timeline.csv`; ingen dubletter.
 
-### Trin 1.2 — Krydsforbindelse mellem de to tidstavler
+### Trin 1.2 — Krydsforbindelse mellem de to tidstavler — **første pas udført 2026-10-28** (`data/curated/timeline_crosswalk.csv`; dækning i [`tidstavle-krydsforbindelser.md`](data-model/tidstavle-krydsforbindelser.md); reviewer-køen er ikke afgjort). **Hård datogrænse 31.12.1875** gælder hele begivenhedsmapningen (`scripts/normalization/event_bounds.py`)
 
 * Byg `data/curated/timeline_crosswalk.csv`:
   `xlsx_id, sql_event_id, match` (`samme_dato` · `indeholdt` · `ingen`), `reviewer`.

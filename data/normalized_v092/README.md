@@ -112,3 +112,17 @@ When V0.9x grows a `WorkData-PQ` workbook, drop V0.82 entirely and merge
 this folder into `data/normalized/`.
 
 See also: [`docs/data-model/v0.92-structural-diff.md`](../../docs/data-model/v0.92-structural-diff.md).
+
+## Event files from hca_db.sql (2026-10-28)
+
+Written by `scripts/migration/migrate_bibliografi_publications.py` (reads
+`raw/hca_db.sql`). Nothing dated after **1875-12-31** is included
+(`scripts/normalization/event_bounds.py`, see `CLAUDE.md`).
+
+| File | Rows | Notes |
+|---|---:|---|
+| `publication_events.csv` | 614 | First publications / editions / translations / reviews with `date_start`–`date_end` + `precision` (d/m/y, **p** = period). Single poems and small prints are **collected per work**: `grouping=collected`, id `BG{container vid}`, `n_members`, `member_vids`; otherwise `grouping=single`, id `BP{BibRelID:05d}`. `reg_id` only when the title match is unique (`reg_match`). |
+| `vid_reg_candidates.csv` | 1,508 | Old work-register `vid` → `Reg…` candidates by main-title match (`unique` 248 · `ambiguous` 25 · `none` 1,235). Not a verified crosswalk. |
+
+The SQL↔Tidstavle crosswalk built on these lives in
+`data/curated/timeline_crosswalk.csv` (`docs/data-model/tidstavle-krydsforbindelser.md`).

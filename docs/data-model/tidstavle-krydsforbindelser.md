@@ -42,3 +42,38 @@ besøgte, hvad der udkom — ikke dagbogsteksten. Derfor behandles den som et
   løbende `T0001…` og kolliderede med `event_id` i
   `data/normalized_v092/timeline.csv` (alle 1.446). De er nu `TV{bind:02d}{regnearksrække:04d}`
   (fx `TV010005`) med `content_key` (`c`) i `timeline.js`; SQL-id'erne er uændrede.
+
+## Krydsforbindelse SQL-tidstavle ↔ xlsx-tidstavle (plan trin 1.2)
+
+Målt 2026-10-28. Fil: `data/curated/timeline_crosswalk.csv`, bygget af
+`python scripts/normalization/build_timeline_crosswalk.py [--report]`; guard:
+`tests/test_timeline_crosswalk.py`. **Hård datogrænse 31.12.1875**
+(`scripts/normalization/event_bounds.py`): ingen af de to kilder har poster efter
+grænsen, så intet blev droppet — men grænsen håndhæves, og testen fejler hvis en ny
+kilde bryder den.
+
+Metode: kandidater er xlsx-poster hvis periode indeholder SQL-begivenhedens dag.
+Tekststøtte måles på idf-vægtede ordstammer (cosinus-agtig `score`; `cover` =
+hvor meget af xlsx-teksten SQL-teksten dækker). Et enkelt stednavn («København.»)
+giver derfor *ikke* et match, kun kontekst. Upræcise SQL-datoer (måned/år) matches
+aldrig alene på dato.
+
+| `status` | SQL-begivenheder | Betydning |
+|---|---:|---|
+| `auto` | 212 | samme dag + tydelig tekststøtte + klar vinder; ækvivalens hævdet |
+| `review` | 179 | samme dag + delvis tekststøtte, ikke entydig — **synlig kø** (op til 5 rækker pr. begivenhed; udfyld `reviewer` og `decision` = `ja`/`nej`) |
+| `kontekst` | 190 | begivenheden finder sted under en xlsx-post (ophold/rejse) hvis tekst den dækker — *ikke* samme begivenhed |
+| `ingen` | 865 | dokumenteret i `note`: `ingen_kandidat` 201 · `ingen_tekststøtte` 444 · `upræcis_dato` 219 · `ingen_dato` 1 |
+
+I alt 1.464 rækker for 1.446 begivenheder; xlsx-poster med en `auto`-partner: 212 af
+1.745. 178 rækker er desuden koblet til en udgivelsesbegivenhed fra `bibliografi`
+(`bp_event_id`, ±1 år; fx T0233 *Improvisatoren* ↔ BP00797 på samme dag; `BG…` = samlet
+begivenhed for småtryk, matchet via medlemsværkernes `vid`, 0 dage = datoen ligger i perioden).
+`context_xlsx_id` på `ingen`-rækker peger på den xlsx-periode, begivenheden falder i.
+Håndvalgte `reviewer`/`decision` bevares ved genkørsel (nøgle: `xlsx_key` + `sql_event_id`).
+
+**Kendt begrænsning:** tærsklerne (`AUTO` 0,4 · `REVIEW` 0,25 · `COVER` 0,5) er
+kalibreret ved stikprøve, ikke mod en gold-standard; `auto` ser pålidelig ud, men
+andelen af korrekte er ikke målt (jf. trin 1.3). 444 `ingen_tekststøtte` er en
+blanding af ægte «ingen» og begivenheder, hvor SQL- og xlsx-teksten er formuleret så
+forskelligt, at ordoverlap ikke fanger dem.

@@ -45,6 +45,27 @@ har 1–2 rækker.
   manuel afgørelse. De 1.235 uden match er ikke fejl: tabellen dækker også
   oversættelser, bibliografisk materiale og andre ikke-registerværker.
   (Dette er en *første måling*; den er ikke et færdigt crosswalk — trin 1.2.)
+* **Udnyttet siden (2026-10-28):** `bibliografi` + `bibliografi_rel` + `vaerktitler` er
+  migreret af `scripts/migration/migrate_bibliografi_publications.py` til
+  `data/normalized_v092/publication_events.csv` (**614 begivenheder**) og
+  `vid_reg_candidates.csv` (alle 1.508 `vid` med titelmatch → `Reg…`).
+  * **Hård datogrænse 31.12.1875** (se `CLAUDE.md`): 460 relationer droppet — 248 af de
+    1.510 «førsteudgivelse af» er posthume førstetryk, resten moderne udgaver og
+    oversættelser (202 af 206 engelske er fra efter 1875).
+  * **Enkeltdigte og småtryk samles pr. værk** (beslutning 2026-10-28): en bibliografipost, der
+    er førstetryk af værk A og `del af` et andet værk B (digt → «Digte, gamle og nye», eventyr →
+    «Eventyr. 1850»), er ikke egen begivenhed; alle poster under samme B bliver
+    **én** begivenhed `BG{B}` (`grouping=collected`; `date_start`–`date_end` spænder
+    medlemmernes førstetryk, `precision=p`; `n_members`, `bib_ids`, `member_vids`).
+    Resultat: 105 samlede + 433 enkeltværker (førstetryk), 16 udgaver, 4 oversættelser,
+    56 anmeldelser. 749 poster er samlet væk. Poster uden container (romaner,
+    skuespil, bøger — ca. en tredjedel af førstetrykkene) forbliver enkeltværker.
+  * **Kildeuoverensstemmelse:** 11 værker er markeret «førsteudgivelse» i to poster med
+    forskellige datoer (én i en samling, én alene, fx *Kometen* 1868/1869). Begge bevares;
+    skal afgøres redaktionelt.
+  * `del af`, `anbefalet udgave af` og `JdMs nudanske digtudgave af` er ikke begivenheder.
+    `reg_id` er kun sat ved entydigt titelmatch (116 af 614; samlede begivenheder bruger
+    containerens titel).
 * **Største uudnyttede fund for Tidstavle/begivenheder:**
   `bibliografi` + `bibliografi_rel` (udgivelsesdatoer for værker, koblet til `vid`),
   `brev` + `brev_person` (13.585 breve med dato — et fjerde ledsagespor),
@@ -164,9 +185,11 @@ adgangsoplysninger og **aldrig** må eksporteres til repoet.
 1. **Trin 1.2 (krydsforbindelse):** `vid`→`Reg…` kan bygges som kandidatmatch på
    `vaerktitler`-hovedtitler (149 af de 196 `vid` i tidstavlen har straks én
    kandidat). De 12 med flere kandidater og de 35 uden skal i en redaktionel kø.
-2. **Udgivelsesbegivenheder:** `bibliografi.UdgivDato` + `bibliografi_rel` (*førsteudgivelse
-   af*, 1.510 `vid`) giver en struktureret udgivelsesdato pr. værk — langt bedre end de
-   ~77 heuristiske poster i SQL-tidstavlen (audit §3). Sted mangler (`UdgivStedID` = 0).
+2. **Udgivelsesbegivenheder:** udtrukket og samlet pr. værk (se §2): 614 efter
+   datogrænsen, mod de ~77 heuristiske poster i SQL-tidstavlen (audit §3). Sted mangler
+   (`UdgivStedID` = 0). 178 SQL-tidstavlerækker er koblet til en `bp_event_id`
+   i `timeline_crosswalk.csv` (for samlede begivenheder via medlemsværkerne og på
+   periodeniveau: 0 dage = datoen ligger i perioden).
 3. **Breve:** `brev` har dato for 13.446 breve, men sted for under 1 % — brevsporet
    bliver et *dato-/person*spor, ikke et stedsspor, medmindre `brevmetatekst` kan
    udnyttes.
