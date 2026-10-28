@@ -1,0 +1,647 @@
+<title>Almanak-annotering</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: guide on top, then one tab per printed page; facsimile left (sticky), entries right; type bar fixed at the bottom.
+   Colour: cool slate neutrals; five entity hues, each also carried by a letter so colour is never the only signal. */
+:root {
+  --bg: #f4f6f9; --surface: #ffffff; --fg: #1c2430; --muted: #596577; --line: #d8dee7; --ink: #1c2430; --ink-fg: #ffffff;
+  --focus: #2b5fd9; --warn: #a4380b; --ok: #1c7a4d;
+  --c-P: #2a64d4; --bg-P: rgba(42,100,212,.15);
+  --c-S: #1b8556; --bg-S: rgba(27,133,86,.16);
+  --c-V: #94379f; --bg-V: rgba(148,55,159,.15);
+  --c-I: #b3690b; --bg-I: rgba(179,105,11,.17);
+  --c-A: #657083; --bg-A: rgba(101,112,131,.18);
+  --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #13171e; --surface: #1b212b; --fg: #e5e8ee; --muted: #9aa5b6; --line: #2b3340; --ink: #e5e8ee; --ink-fg: #13171e;
+  --focus: #7ea6ff; --warn: #ff9a6b; --ok: #5ccf97;
+  --c-P: #7fa9ff; --bg-P: rgba(127,169,255,.22);
+  --c-S: #55cb92; --bg-S: rgba(85,203,146,.2);
+  --c-V: #d994ea; --bg-V: rgba(217,148,234,.2);
+  --c-I: #eaa84f; --bg-I: rgba(234,168,79,.2);
+  --c-A: #a2acbd; --bg-A: rgba(162,172,189,.2);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #13171e; --surface: #1b212b; --fg: #e5e8ee; --muted: #9aa5b6; --line: #2b3340; --ink: #e5e8ee; --ink-fg: #13171e;
+  --focus: #7ea6ff; --warn: #ff9a6b; --ok: #5ccf97;
+  --c-P: #7fa9ff; --bg-P: rgba(127,169,255,.22);
+  --c-S: #55cb92; --bg-S: rgba(85,203,146,.2);
+  --c-V: #d994ea; --bg-V: rgba(217,148,234,.2);
+  --c-I: #eaa84f; --bg-I: rgba(234,168,79,.2);
+  --c-A: #a2acbd; --bg-A: rgba(162,172,189,.2);
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--ui); margin: 0;
+  padding-block: 20px 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
+h1 { font-size: 1.5rem; line-height: 1.2; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+h2 { font-size: 1.05rem; margin: 0 0 8px; text-wrap: balance; }
+p { margin: 0; }
+.sub { color: var(--muted); margin-top: 4px; max-width: 70ch; }
+.top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between; }
+.progress { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; }
+.progress strong { color: var(--fg); }
+.bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 6px; width: 240px; max-width: 100%; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--ink); transition: width .2s; }
+details.card, section.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+details.card > summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::after { content: "Skjul"; font-weight: 400; color: var(--muted); font-size: .85rem; }
+details.card:not([open]) > summary::after { content: "Vis"; }
+.card-body { padding: 4px 16px 16px; display: grid; gap: 16px; }
+.cols { display: grid; gap: 16px 28px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.cols > * { min-width: 0; }
+ol.steps { margin: 0; padding-left: 1.25em; display: grid; gap: 6px; }
+ol.steps li::marker { font-weight: 600; color: var(--muted); }
+ul.rules { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+.types { display: grid; gap: 6px; }
+.trow { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; align-items: baseline; }
+.trow dt { margin: 0; } .trow dd { margin: 0; color: var(--muted); }
+dl.types { margin: 0; }
+.example { font-family: var(--serif); font-size: 1.02rem; background: var(--bg); border: 1px dashed var(--line); border-radius: 6px; padding: 10px 12px; display: grid; gap: 4px; }
+.small { font-size: .86rem; color: var(--muted); }
+.open-q li { margin-bottom: 2px; }
+
+/* marks */
+mark.m { background: var(--bg-A); color: inherit; border-bottom: 2px solid var(--c-A); padding: 0 1px; border-radius: 2px; cursor: pointer; }
+mark.m[data-t="P"] { background: var(--bg-P); border-color: var(--c-P); }
+mark.m[data-t="S"] { background: var(--bg-S); border-color: var(--c-S); }
+mark.m[data-t="V"] { background: var(--bg-V); border-color: var(--c-V); }
+mark.m[data-t="I"] { background: var(--bg-I); border-color: var(--c-I); }
+mark.m[data-t="A"] { background: var(--bg-A); border-color: var(--c-A); }
+mark.m::after { font: 600 .6em/1 var(--ui); vertical-align: super; margin-left: 2px; }
+mark.m[data-t="P"]::after { content: "P"; color: var(--c-P); }
+mark.m[data-t="S"]::after { content: "S"; color: var(--c-S); }
+mark.m[data-t="V"]::after { content: "V"; color: var(--c-V); }
+mark.m[data-t="I"]::after { content: "I"; color: var(--c-I); }
+mark.m[data-t="A"]::after { content: "A"; color: var(--c-A); }
+mark.m.unsure { border-bottom-style: dotted; }
+mark.m.unsure::after { content: attr(data-t) "?"; }
+mark.m.editing { outline: 2px solid var(--focus); outline-offset: 1px; }
+mark.m:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+/* tabs */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab { font: 500 .95rem var(--ui); padding: 8px 14px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--ink-fg); border-color: var(--ink); }
+.tab small { opacity: .75; margin-left: 6px; font-variant-numeric: tabular-nums; }
+.tab:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.panel { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .panel { grid-template-columns: 400px minmax(0, 1fr); align-items: start; } .facs { position: sticky; top: 12px; } }
+.facs { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px; min-width: 0; }
+.facs summary { cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.facs-img { overflow: auto; max-height: 78vh; border: 1px solid var(--line); border-radius: 4px; background: #fff; }
+.facs-img img { display: block; width: 100%; height: auto; }
+.facs-img.zoom img { width: 190%; max-width: none; }
+.facs button.z { font: 500 .8rem var(--ui); border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 4px; padding: 2px 8px; cursor: pointer; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .facs-img img { filter: invert(.9) hue-rotate(180deg); } }
+:root[data-theme="dark"] .facs-img img { filter: invert(.9) hue-rotate(180deg); }
+
+/* entries */
+.entries { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; min-width: 0; }
+.main { display: grid; gap: 16px; min-width: 0; }
+.reg { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; font-size: .78rem; color: var(--muted); margin-top: 2px; }
+.chip { border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; background: var(--bg); color: var(--fg); white-space: nowrap; }
+.chip small { color: var(--muted); font-size: .85em; }
+.chip[data-k="P"] { border-color: var(--c-P); } .chip[data-k="W"] { border-color: var(--c-V); }
+.chip.weak { border-style: dashed; font-style: italic; opacity: .85; }
+.chip.on { background: color-mix(in srgb, var(--ok) 14%, var(--surface)); border-color: var(--ok); }
+.reginfo { font-size: .8rem; color: var(--muted); min-height: 1.2em; }
+.editor select { font: 400 .95rem var(--ui); padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); color: var(--fg); width: 100%; }
+.regcard > summary .cnt { font-weight: 400; color: var(--muted); font-size: .85rem; margin-left: auto; margin-right: 12px; }
+.regt td, .regt th { text-align: left; vertical-align: top; }
+.regt td:last-child, .regt th:last-child { text-align: right; }
+.regt .weak { font-style: italic; opacity: .8; }
+.regt .k { font: 600 .72rem var(--ui); border-radius: 3px; padding: 0 5px; }
+.regt .k[data-k="P"] { background: var(--bg-P); color: var(--c-P); } .regt .k[data-k="W"] { background: var(--bg-V); color: var(--c-V); }
+.month { font: 600 .78rem var(--ui); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 10px 16px 6px; border-top: 1px solid var(--line); background: var(--bg); }
+.month:first-child { border-top: 0; border-radius: 8px 8px 0 0; }
+.entry { display: grid; grid-template-columns: 3.6em minmax(0, 1fr); gap: 4px 10px; padding: 10px 16px; border-top: 1px solid var(--line); }
+.month + .entry { border-top: 0; }
+.entry.done { background: color-mix(in srgb, var(--ok) 6%, var(--surface)); }
+.date { font: 500 .82rem var(--ui); color: var(--muted); font-variant-numeric: tabular-nums; padding-top: .3em; text-transform: uppercase; letter-spacing: .04em; }
+.date b { color: var(--fg); font-size: 1.05rem; margin-left: 2px; letter-spacing: 0; }
+.txt { font: 400 1.12rem/1.75 var(--serif); margin: 0; overflow-wrap: anywhere; cursor: text; }
+.txt::selection, .txt *::selection { background: color-mix(in srgb, var(--focus) 30%, transparent); }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: center; font-size: .82rem; color: var(--muted); }
+.meta label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.meta input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--ink); }
+.cont-note { font-size: .82rem; color: var(--muted); font-style: italic; }
+.var { font-size: .82rem; color: var(--muted); }
+.var summary { cursor: pointer; }
+.var ul { margin: 4px 0 0; padding-left: 1.1em; }
+.var .a { font-family: var(--serif); color: var(--fg); } .var .b { font-family: var(--serif); color: var(--warn); }
+.editor { grid-column: 2; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: grid; gap: 8px; margin-top: 4px; }
+.editor .head { font-family: var(--serif); font-size: 1.05rem; }
+.editor .head small { font: 400 .78rem var(--ui); color: var(--muted); margin-left: 8px; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button { font: 500 .85rem var(--ui); padding: 4px 10px; border-radius: 5px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--ink-fg); border-color: var(--ink); }
+.editor label.f { display: grid; gap: 2px; font-size: .8rem; color: var(--muted); }
+.editor input[type=text] { font: 400 .95rem var(--ui); padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); color: var(--fg); width: 100%; }
+.editor .row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.btn { font: 500 .88rem var(--ui); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.btn.primary { background: var(--ink); color: var(--ink-fg); border-color: var(--ink); }
+.btn.danger { color: var(--warn); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+/* type bar */
+.typebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); box-shadow: 0 -4px 14px rgba(0,0,0,.08); }
+.typebar-in { max-width: 1120px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.pick { font-size: .9rem; color: var(--muted); min-width: 0; flex: 1 1 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pick q { font-family: var(--serif); color: var(--fg); font-size: 1.02rem; quotes: "»" "«"; }
+.pick.warn { color: var(--warn); white-space: normal; }
+.tbtns { display: flex; flex-wrap: wrap; gap: 6px; }
+.tb { font: 500 .9rem var(--ui); border-radius: 6px; padding: 7px 11px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.tb i { font-style: normal; display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.tb kbd { font: 500 .72rem var(--ui); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; color: var(--muted); }
+.tb:disabled { opacity: .4; cursor: not-allowed; }
+.tb[data-t="P"] i { background: var(--c-P); } .tb[data-t="S"] i { background: var(--c-S); } .tb[data-t="V"] i { background: var(--c-V); }
+.tb[data-t="I"] i { background: var(--c-I); } .tb[data-t="A"] i { background: var(--c-A); }
+
+/* export */
+.status { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .9rem; }
+.status th, .status td { text-align: right; padding: 4px 8px; border-bottom: 1px solid var(--line); }
+.status th:first-child, .status td:first-child { text-align: left; }
+.status th { font-weight: 600; color: var(--muted); font-size: .8rem; }
+.tablewrap { overflow-x: auto; }
+.field { display: grid; gap: 2px; font-size: .85rem; color: var(--muted); max-width: 320px; }
+.field input { font: 400 1rem var(--ui); padding: 7px 9px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); }
+textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace, Consolas, monospace; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
+.msg { font-size: .88rem; min-height: 1.3em; color: var(--ok); }
+.msg.err { color: var(--warn); }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Almanak-annotering</h1>
+      <p class="sub">H.C. Andersens almanakker 1833–1873 (DSL 1990), trykt side 35–36, 29. januar – 23. februar 1840. Prøveopgave: mærk personer, steder og værker i selve teksten.</p>
+    </div>
+    <div class="progress" aria-live="polite">
+      <div><strong id="p-done">0</strong> af <strong id="p-total">0</strong> poster gennemgået · <strong id="p-marks">0</strong> markeringer</div>
+      <div class="bar"><i id="p-bar"></i></div>
+    </div>
+  </header>
+
+  <details class="card" id="guide" open>
+    <summary>Sådan gør du</summary>
+    <div class="card-body">
+      <div class="cols">
+        <div>
+          <h2>Fremgangsmåde</h2>
+          <ol class="steps">
+            <li>Skriv dit navn nederst på siden, så jeres resultater kan sammenlignes bagefter.</li>
+            <li>Vælg en side. Sidebilledet er facit; teksten ved siden af er maskinlæst og rettet. Ved tvivl om en stavemåde: se billedet.</li>
+            <li>Læs en post ad gangen. <b>Markér</b> et navn eller en titel med musen (eller fingeren). Markeringen udvides selv til hele ord.</li>
+            <li>Tryk på typen i bundlinjen, eller på tasterne <kbd>1</kbd>–<kbd>5</kbd>.</li>
+            <li>Klik på markeringen for at <b>vælge registerpost</b> i listen (eller skrive en identifikation selv), tilføje en note eller sætte «usikker». Under hver post står de registerposter, som trykkets register knytter til dagen.</li>
+            <li>Sæt flueben ved <b>Gennemgået</b>, når posten er færdig, også hvis den ikke indeholder noget at mærke. Så kan vi se forskel på «ingenting» og «ikke set».</li>
+            <li>Gør det <b>uafhængigt</b> af din kollega. I sammenligner først bagefter.</li>
+            <li>Til sidst: kopiér resultatet (afsnittet «Resultat») og send det.</li>
+          </ol>
+          <p class="small" style="margin-top:8px">Alt gemmes automatisk i din browser på denne enhed. Du kan lukke siden og fortsætte senere.</p>
+        </div>
+        <div>
+          <h2>Typer</h2>
+          <dl class="types">
+            <div class="trow"><dt><mark class="m" data-t="P">Person</mark></dt><dd>Navn, efternavn, fornavn, initialer, familie («Collins»), og titel der peger på en bestemt person («Kongen»).</dd></div>
+            <div class="trow"><dt><mark class="m" data-t="S">Sted</mark></dt><dd>By, land, landsted, gade, egn.</dd></div>
+            <div class="trow"><dt><mark class="m" data-t="V">Værk</mark></dt><dd>Titel på skuespil, digt, bog, musikstykke, billede; også forkortet, som Andersen skriver den.</dd></div>
+            <div class="trow"><dt><mark class="m" data-t="I">Institution</mark></dt><dd>Teater, kirke, forening, hof, slot som bygning eller organisation.</dd></div>
+            <div class="trow"><dt><mark class="m" data-t="A">Andet</mark></dt><dd>Det, der ligner et navn men ikke passer i de andre, eller hvor du er i tvivl om typen. Skriv hvorfor i noten.</dd></div>
+          </dl>
+          <div class="example" style="margin-top:12px" aria-label="Eksempel">
+            <div>Prøve paa <mark class="m" data-t="V">Mulatten</mark>. I <mark class="m" data-t="I">Slotskirken</mark> min Cantate.</div>
+            <div>Fik Brev fra <mark class="m" data-t="P">Hansen</mark> om han maatte dedicere mig sin Roman.</div>
+            <div>Middag hos <mark class="m unsure" data-t="P">Collins</mark>, med <mark class="m" data-t="P">Heibergs</mark> og <mark class="m" data-t="P">Holst</mark>.</div>
+          </div>
+          <p class="small" style="margin-top:6px">Punkteret understreg og «?» betyder usikker.</p>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div>
+          <h2>Foreløbige regler</h2>
+          <p class="small" style="margin-bottom:6px">Forslag, der skal afprøves. Skriv til os, hvor de ikke holder.</p>
+          <ul class="rules">
+            <li><b>Mærk strengen, som den står.</b> Ret ikke stavning. «Schacspears» forbliver «Schacspears».</li>
+            <li><b>Titel og rang medtages</b>, når de står lige foran navnet: «Pastor Boye», «Etatsraad Neergaard», «Prof: Guldberg».</li>
+            <li><b>Endelsen medtages</b>: «Collins», «Wulffs», «Hornemanns» er hele ord. Skriv i Identifikation, hvis det er en familie eller et hus.</li>
+            <li><b>Kun en rolle:</b> «Kongen», «Kronprindsessen» mærkes som Person. Skriv i Identifikation, hvem det er, hvis du er sikker; ellers lad feltet stå tomt.</li>
+            <li><b>Udgiverens klammer</b> ([t], [nær]) ignoreres, men et navn med klamme mærkes hele: «Carstens[k]jold».</li>
+            <li><b>Identifikation er valgfri.</b> Vælg en registerpost i listen, hvis den passer. Hvis ingen passer, så skriv selv (fritekst), eller lad stå tomt. Gæt ikke.</li>
+            <li><b>Registret</b> er almanakkens eget (trykt s. 328–388), maskinlæst fra PDF'en og derfor ikke fejlfrit («WulfT»). ID'erne ALMP… (personer) og ALMW… (værker) er lokale for almanakken og foreløbige. Almanakken har intet stedregister.</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Uafklaret, giv gerne jeres vurdering</h2>
+          <ul class="rules open-q">
+            <li>«Fædrelandet» (avis): Værk eller Institution?</li>
+            <li>«Foreningen» (Studenterforeningen) og «Theatret»: Institution, eller ingen markering?</li>
+            <li>«Collins», «Wulffs»: familie, eller en bestemt person?</li>
+            <li>Titlen alene, når personen ikke kan afgøres («Kongen»): skal den mærkes?</li>
+            <li>Roller i dagligdagen («Skuespiller Nielsen»): hele strengen eller kun navnet?</li>
+          </ul>
+          <h2 style="margin-top:16px">Databasens læsning</h2>
+          <p class="small">Under nogle poster står «Afviger i databasen». Det er den gamle indtastning (hca_db), som i enkelte ord afviger fra trykket. Den vises kun til orientering; annotér altid teksten, som den står her.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <div class="tabs" role="tablist" aria-label="Side" id="tabs"></div>
+  <div id="panels"></div>
+
+  <section class="card" id="result" aria-labelledby="res-h">
+    <div class="card-body" style="padding-top:16px">
+      <h2 id="res-h">Resultat</h2>
+      <div class="tablewrap"><table class="status" id="status"></table></div>
+      <label class="field" for="annotator">Dit navn
+        <input id="annotator" type="text" autocomplete="name" placeholder="Fornavn">
+      </label>
+      <div class="btns">
+        <button class="btn primary" id="copy-tsv" type="button">Kopiér som tabel (TSV)</button>
+        <button class="btn" id="copy-json" type="button">Kopiér som JSON</button>
+        <button class="btn danger" id="reset" type="button">Slet alle mine markeringer</button>
+      </div>
+      <div class="msg" id="msg" role="status"></div>
+      <textarea class="out" id="out" readonly hidden aria-label="Eksporteret resultat"></textarea>
+      <p class="small">Send det kopierede til Holger. Resultatet indeholder dine markeringer, hvilke poster du har gennemgået, og tegnpositioner i den viste tekst.</p>
+    </div>
+  </section>
+</div>
+
+<div class="typebar" role="toolbar" aria-label="Vælg type for markeret tekst">
+  <div class="typebar-in">
+    <div class="pick" id="pick" aria-live="polite">Markér et navn i teksten.</div>
+    <div class="tbtns">
+      <button class="tb" data-t="P" type="button" disabled><i></i>Person <kbd>1</kbd></button>
+      <button class="tb" data-t="S" type="button" disabled><i></i>Sted <kbd>2</kbd></button>
+      <button class="tb" data-t="V" type="button" disabled><i></i>Værk <kbd>3</kbd></button>
+      <button class="tb" data-t="I" type="button" disabled><i></i>Institution <kbd>4</kbd></button>
+      <button class="tb" data-t="A" type="button" disabled><i></i>Andet <kbd>5</kbd></button>
+      <button class="btn" id="undo" type="button" disabled>Fortryd sidste</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ENTRIES = __ENTRIES__;
+const REG = __REG__;
+const IMG = __IMGS__;
+const TYPES = { P: "Person", S: "Sted", V: "Værk", I: "Institution", A: "Andet" };
+const KEYS = { "1": "P", "2": "S", "3": "V", "4": "I", "5": "A" };
+const MONTHS = ["Januar","Februar","Marts","April","Maj","Juni","Juli","August","September","Oktober","November","December"];
+const STORE = "almanak-annotering-v1";
+const TEXT_VERSION = "ocr-2023-rettet-mod-sidebillede-2026-10-27";
+const PAGES = __PAGES__;
+
+let state = { annotator: "", ann: [], reviewed: {} };
+try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && Array.isArray(s.ann)) state = Object.assign(state, s); } catch (e) {}
+function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const byId = Object.fromEntries(ENTRIES.map(e => [e.id, e]));
+
+let pending = null, editingId = null, activePage = PAGES[0];
+const rows = {};   // entry id -> {root, txt, reg, body, cb}
+
+/* ---------- build ---------- */
+function build() {
+  const tabs = $("#tabs"), panels = $("#panels");
+  PAGES.forEach(pg => {
+    const b = document.createElement("button");
+    b.className = "tab"; b.type = "button"; b.id = "tab-" + pg; b.setAttribute("role", "tab");
+    b.setAttribute("aria-controls", "panel-" + pg);
+    b.innerHTML = "Side " + pg + "<small></small>";
+    b.addEventListener("click", () => showPage(pg));
+    tabs.appendChild(b);
+
+    const panel = document.createElement("div");
+    panel.className = "panel"; panel.id = "panel-" + pg; panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", "tab-" + pg);
+    panel.innerHTML =
+      '<details class="facs"' + (matchMedia("(min-width: 900px)").matches ? " open" : "") + '><summary>Sidebillede, s. ' + pg +
+      ' <button class="z" type="button">Forstør</button></summary><div class="facs-img"><img alt="Trykt side ' + pg + ' i almanakudgaven" src="' + IMG[pg] + '"></div></details>' +
+      '<div class="main"><div class="entries" id="entries-' + pg + '"></div><details class="card regcard" id="reg-' + pg + '"></details></div>';
+    panels.appendChild(panel);
+    $(".z", panel).addEventListener("click", ev => { ev.preventDefault(); ev.stopPropagation(); $(".facs-img", panel).classList.toggle("zoom"); ev.target.textContent = $(".facs-img", panel).classList.contains("zoom") ? "Normal" : "Forstør"; });
+
+    const host = $("#entries-" + pg, panel);
+    let lastMonth = null;
+    ENTRIES.filter(e => e.page === pg).forEach(e => {
+      const mo = +e.date.slice(5, 7);
+      if (mo !== lastMonth) { const m = document.createElement("div"); m.className = "month"; m.textContent = MONTHS[mo - 1] + " " + e.date.slice(0, 4); host.appendChild(m); lastMonth = mo; }
+      host.appendChild(buildEntry(e));
+    });
+    const carried = ENTRIES.filter(e => e.cont && e.page === pg - 1);
+    if (carried.length) {
+      const n = document.createElement("div"); n.className = "month";
+      n.textContent = "Fortsat fra side " + (pg - 1) + ": " + carried.map(e => (+e.date.slice(8)) + ". " + MONTHS[+e.date.slice(5, 7) - 1].toLowerCase()).join(", ") + " annoteres under side " + (pg - 1);
+      host.insertBefore(n, host.children[1] || null);
+    }
+  });
+  showPage(PAGES[0]);
+}
+function buildEntry(e) {
+  const root = document.createElement("article"); root.className = "entry"; root.id = e.id;
+  const d = document.createElement("div"); d.className = "date";
+  d.innerHTML = esc(e.wd) + "<b>" + (+e.date.slice(8)) + "</b>";
+  const body = document.createElement("div");
+  const txt = document.createElement("p"); txt.className = "txt";
+  const meta = document.createElement("div"); meta.className = "meta";
+  const lab = document.createElement("label");
+  const cb = document.createElement("input"); cb.type = "checkbox"; cb.id = "rev-" + e.id;
+  cb.addEventListener("change", () => { if (cb.checked) state.reviewed[e.id] = true; else delete state.reviewed[e.id]; save(); root.classList.toggle("done", cb.checked); stats(); });
+  lab.appendChild(cb); lab.appendChild(document.createTextNode("Gennemgået"));
+  meta.appendChild(lab);
+  if (e.cont) { const c = document.createElement("span"); c.className = "cont-note"; c.textContent = "fortsætter på side " + e.cont; meta.appendChild(c); }
+  const regEl = document.createElement("div"); regEl.className = "reg";
+  body.appendChild(txt); body.appendChild(regEl); body.appendChild(meta);
+  if (e.dbdiff.length) {
+    const v = document.createElement("details"); v.className = "var";
+    v.innerHTML = "<summary>Afviger i databasen (" + e.dbdiff.length + ")</summary><ul>" +
+      e.dbdiff.map(x => '<li><span class="a">' + esc(x[0] || "(intet)") + '</span> &rarr; <span class="b">' + esc(x[1] || "(intet)") + "</span></li>").join("") + "</ul>";
+    body.appendChild(v);
+  }
+  root.appendChild(d); root.appendChild(body);
+  rows[e.id] = { root, txt, reg: regEl, body, cb };
+  cb.checked = !!state.reviewed[e.id]; root.classList.toggle("done", cb.checked);
+  renderText(e);
+  root.addEventListener("click", ev => {
+    const m = ev.target.closest("mark.m");
+    if (m && getSelection().isCollapsed) openEditor(e.id, m.dataset.id);
+  });
+  root.addEventListener("keydown", ev => {
+    const m = ev.target.closest && ev.target.closest("mark.m");
+    if (m && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); openEditor(e.id, m.dataset.id); }
+  });
+  return root;
+}
+function renderText(e) {
+  const anns = state.ann.filter(a => a.entry === e.id).sort((a, b) => a.start - b.start);
+  let html = "", pos = 0;
+  anns.forEach(a => {
+    html += esc(e.text.slice(pos, a.start));
+    html += '<mark class="m' + (a.unsure ? " unsure" : "") + (a.id === editingId ? " editing" : "") + '" data-t="' + a.type + '" data-id="' + a.id +
+      '"' + (a.reg ? ' title="' + esc(optLabel(a.reg)) + '"' : "") + ' tabindex="0" role="button" aria-label="' + TYPES[a.type] + (a.unsure ? ", usikker" : "") + ': ' + esc(a.text) + '. Åbn for at ændre">' + esc(e.text.slice(a.start, a.end)) + "</mark>";
+    pos = a.end;
+  });
+  html += esc(e.text.slice(pos));
+  rows[e.id].txt.innerHTML = html;
+  renderChips(e);
+}
+const short = (s, n) => s.length <= n ? s : s.slice(0, n - 1).trimEnd() + "…";
+function optLabel(id) { const r = REG[id]; return r.l + (r.k === "P" && r.d ? " – " + short(r.d, 44) : "") + " · " + id; }
+const BASIS = { "ref+navn": "henvisning til dagen, og navnet står i teksten", "ref": "henvisning til dagen; navnet er ikke fundet i teksten", "navn": "navnet står i teksten; ingen henvisning til dagen" };
+function renderChips(e) {
+  const el = rows[e.id].reg;
+  el.hidden = e.c.length === 0;
+  if (!e.c.length) { el.innerHTML = ""; return; }
+  const linked = new Set(state.ann.filter(a => a.entry === e.id && a.reg).map(a => a.reg));
+  const key = id => fold(REG[id].l).split(/\s+/)[0];
+  const strong = new Set(e.c.filter(c => c[1] !== "navn").map(c => key(c[0])));
+  const shown = e.c.filter(c => c[1] !== "navn" || !strong.has(key(c[0])));   // navnematch skjules, når en henvisning allerede dækker samme efternavn
+  el.innerHTML = '<span>Register nævner:</span>' + shown.map(([id, b]) => {
+    const r = REG[id], on = linked.has(id);
+    return '<span class="chip' + (b === "navn" ? " weak" : "") + (on ? " on" : "") + '" data-k="' + r.k + '" title="' + esc(optLabel(id) + " (" + BASIS[b] + ")") + '">' +
+      (on ? "✓ " : "") + esc(short(r.l, 26)) + " <small>" + id + "</small></span>";
+  }).join("");
+}
+
+/* ---------- pages ---------- */
+function showPage(pg) {
+  activePage = pg;
+  PAGES.forEach(p => {
+    $("#panel-" + p).hidden = p !== pg;
+    $("#tab-" + p).setAttribute("aria-selected", p === pg ? "true" : "false");
+  });
+}
+
+/* ---------- selection ---------- */
+const WORD = /[A-Za-zÆØÅæøåÄÖÜäöüÉéÈè0-9]/;
+function txtOf(node) { const el = node.nodeType === 1 ? node : node.parentElement; return el ? el.closest(".txt") : null; }
+function offsetIn(p, node, off) { const r = document.createRange(); r.selectNodeContents(p); r.setEnd(node, off); return r.toString().length; }
+document.addEventListener("selectionchange", () => {
+  const sel = getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) { setPending(null); return; }
+  const r = sel.getRangeAt(0);
+  const p = txtOf(r.startContainer), p2 = txtOf(r.endContainer);
+  if (!p || p !== p2) { setPending(null, p || p2 ? "Markér inden for én post." : null); return; }
+  const id = p.closest(".entry").id, t = byId[id].text;
+  let s = offsetIn(p, r.startContainer, r.startOffset), en = offsetIn(p, r.endContainer, r.endOffset);
+  const isW = (i, dir) => { const c = t[i]; if (c === undefined) return false; if (WORD.test(c)) return true; return (c === "[" || c === "]") && t[i + dir] !== undefined && WORD.test(t[i + dir]); };
+  while (s > 0 && isW(s - 1, -1)) s--;
+  while (en < t.length && isW(en, 1)) en++;
+  const P = /[\s.,;:!?»«()]/;
+  while (s < en && P.test(t[s])) s++;
+  while (en > s && P.test(t[en - 1])) en--;
+  if (en <= s) { setPending(null); return; }
+  setPending({ entry: id, start: s, end: en, text: t.slice(s, en) });
+});
+function setPending(p, warn) {
+  pending = p;
+  const pick = $("#pick");
+  pick.classList.toggle("warn", !!warn);
+  if (p) pick.innerHTML = "Markeret: <q>" + esc(p.text) + "</q> Vælg type.";
+  else pick.textContent = warn || (flash.text || "Markér et navn i teksten.");
+  document.querySelectorAll(".tb").forEach(b => b.disabled = !p);
+}
+const flash = { text: "" };
+function say(t) { flash.text = t; $("#pick").classList.remove("warn"); $("#pick").textContent = t; }
+
+function apply(type) {
+  if (!pending) return;
+  const clash = state.ann.find(a => a.entry === pending.entry && a.start < pending.end && pending.start < a.end);
+  if (clash) { $("#pick").classList.add("warn"); $("#pick").textContent = "Overlapper en eksisterende markering. Klik på den for at ændre eller slette."; return; }
+  const a = { id: uid(), entry: pending.entry, start: pending.start, end: pending.end, text: pending.text, type, reg: "", ident: "", unsure: false, note: "", t: Date.now() };
+  state.ann.push(a); save();
+  const e = byId[a.entry];
+  getSelection().removeAllRanges(); pending = null;
+  renderText(e); stats();
+  say("Markeret «" + a.text + "» som " + TYPES[type] + ".");
+  document.querySelectorAll(".tb").forEach(b => b.disabled = true);
+  $("#undo").disabled = false;
+}
+document.querySelectorAll(".tb").forEach(b => {
+  b.addEventListener("pointerdown", ev => ev.preventDefault());
+  b.addEventListener("mousedown", ev => ev.preventDefault());
+  b.addEventListener("click", () => apply(b.dataset.t));
+});
+$("#undo").addEventListener("click", () => {
+  const last = state.ann.slice().sort((a, b) => b.t - a.t)[0];
+  if (!last) return;
+  state.ann = state.ann.filter(a => a.id !== last.id); save();
+  if (editingId === last.id) closeEditor();
+  renderText(byId[last.entry]); stats(); say("Fortrød «" + last.text + "».");
+  $("#undo").disabled = state.ann.length === 0;
+});
+document.addEventListener("keydown", ev => {
+  const tag = (ev.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea") return;
+  if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
+  if (KEYS[ev.key] && pending) { ev.preventDefault(); apply(KEYS[ev.key]); }
+  if (ev.key === "Escape") { getSelection().removeAllRanges(); closeEditor(); }
+});
+
+/* ---------- editor ---------- */
+function closeEditor() {
+  const old = document.querySelector(".editor");
+  const prev = editingId; editingId = null;
+  if (old) old.remove();
+  if (prev) { const a = state.ann.find(x => x.id === prev); if (a) renderText(byId[a.entry]); }
+}
+const fold = x => x.toLowerCase().replace(/[^a-zæøåäöü0-9 ]/g, "");
+function related(a, id) {
+  const ta = fold(a.text).split(/\s+/).filter(x => x.length >= 3), tb = fold(REG[id].l.split(" (")[0]).split(/\s+/).filter(x => x.length >= 3);
+  return ta.some(x => tb.some(y => { const n = Math.min(x.length, y.length, 5); return x.slice(0, n) === y.slice(0, n); }));
+}
+function pageIds(pg) { const s2 = new Set(); ENTRIES.filter(e => e.page === pg).forEach(e => e.c.forEach(c => s2.add(c[0]))); return [...s2]; }
+function kindOf(type) { return type === "P" ? "P" : type === "V" ? "W" : null; }
+function fillSelect(sel, a, e) {
+  const kind = kindOf(a.type);
+  sel.innerHTML = "";
+  const none = document.createElement("option"); none.value = "";
+  none.textContent = kind ? "– ingen valgt –" : "(almanakken har intet register for denne type)";
+  sel.appendChild(none);
+  sel.disabled = !kind;
+  if (!kind) { a.reg = ""; return; }
+  const day = e.c.filter(c => REG[c[0]].k === kind).map(c => c[0]);
+  const page = pageIds(e.page).filter(id => REG[id].k === kind && !day.includes(id));
+  const match = day.concat(page).filter(id => related(a, id));
+  const group = (label, ids) => {
+    if (!ids.length) return;
+    const g = document.createElement("optgroup"); g.label = label;
+    ids.forEach(id => { const o = document.createElement("option"); o.value = id; o.textContent = optLabel(id); g.appendChild(o); });
+    sel.appendChild(g);
+  };
+  group("Passer til »" + a.text + "«", match);
+  group("Registeret nævner denne dag", day.filter(id => !match.includes(id)));
+  group("Øvrige på siden", page.filter(id => !match.includes(id)));
+  const seen = new Set(day.concat(page));
+  group("Andre i registret, der ligner »" + a.text + "«", Object.keys(REG).filter(id => REG[id].k === kind && !seen.has(id) && related(a, id)).slice(0, 30));
+  sel.value = [...sel.options].some(o => o.value === a.reg) ? a.reg : "";
+  if (sel.value !== a.reg) a.reg = "";
+}
+function regInfo(a) {
+  if (!a.reg) return "Ingen registerpost valgt.";
+  const r = REG[a.reg];
+  return a.reg + " · " + r.l + (r.d ? " · " + r.d : "") + (r.x ? " · står ikke i Dagbøgernes personregister" : "") + " · trykt s. " + r.pp;
+}
+function openEditor(entryId, annId) {
+  closeEditor();
+  const a = state.ann.find(x => x.id === annId); if (!a) return;
+  const e = byId[entryId];
+  editingId = annId; renderText(e);
+  const root = rows[entryId].root;
+  const ed = document.createElement("div"); ed.className = "editor";
+  ed.innerHTML =
+    '<div class="head">»' + esc(a.text) + '«<small>tegn ' + a.start + '–' + a.end + '</small></div>' +
+    '<div class="seg" role="group" aria-label="Type">' + Object.keys(TYPES).map(k => '<button type="button" data-t="' + k + '" aria-pressed="' + (a.type === k) + '">' + TYPES[k] + "</button>").join("") + "</div>" +
+    '<label class="f" for="ed-reg">Registerpost (vælg i listen)<select id="ed-reg"></select></label>' +
+    '<div class="reginfo" id="ed-info" aria-live="polite"></div>' +
+    '<label class="f" for="ed-ident">…eller skriv identifikationen selv (fritekst)<input type="text" id="ed-ident" placeholder="fx Collin, Edvard, eller en person der ikke står i registret"></label>' +
+    '<label class="f" for="ed-note">Note<input type="text" id="ed-note" placeholder="fx familien, ikke Edvard alene"></label>' +
+    '<div class="row"><label class="meta" for="ed-unsure" style="cursor:pointer"><input type="checkbox" id="ed-unsure" style="width:16px;height:16px;accent-color:var(--ink)"> Usikker</label>' +
+    '<span class="btns"><button class="btn danger" type="button" id="ed-del">Slet markering</button><button class="btn primary" type="button" id="ed-close">Luk</button></span></div>';
+  root.appendChild(ed);
+  const sel = $("#ed-reg", ed), info = $("#ed-info", ed);
+  fillSelect(sel, a, e); info.textContent = regInfo(a);
+  $("#ed-ident", ed).value = a.ident; $("#ed-note", ed).value = a.note; $("#ed-unsure", ed).checked = a.unsure;
+  const touch = () => { save(); renderText(e); stats(); };
+  ed.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+    a.type = b.dataset.t; ed.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    fillSelect(sel, a, e); info.textContent = regInfo(a); touch();
+  }));
+  sel.addEventListener("change", () => { a.reg = sel.value; info.textContent = regInfo(a); touch(); });
+  $("#ed-ident", ed).addEventListener("input", ev => { a.ident = ev.target.value; save(); });
+  $("#ed-note", ed).addEventListener("input", ev => { a.note = ev.target.value; save(); });
+  $("#ed-unsure", ed).addEventListener("change", ev => { a.unsure = ev.target.checked; touch(); });
+  $("#ed-del", ed).addEventListener("click", () => { state.ann = state.ann.filter(x => x.id !== a.id); save(); closeEditor(); renderText(e); stats(); });
+  $("#ed-close", ed).addEventListener("click", closeEditor);
+  sel.focus({ preventScroll: true });
+}
+
+/* ---------- status + export ---------- */
+function stats() {
+  const total = ENTRIES.length, done = ENTRIES.filter(e => state.reviewed[e.id]).length;
+  $("#p-total").textContent = total; $("#p-done").textContent = done; $("#p-marks").textContent = state.ann.length;
+  $("#p-bar").style.width = (100 * done / total) + "%";
+  PAGES.forEach(pg => {
+    const n = ENTRIES.filter(e => e.page === pg), d = n.filter(e => state.reviewed[e.id]).length;
+    $("#tab-" + pg + " small").textContent = d + "/" + n.length;
+  });
+  const types = Object.keys(TYPES);
+  let h = "<thead><tr><th>Side</th><th>Gennemgået</th>" + types.map(t => "<th>" + TYPES[t] + "</th>").join("") + "<th>Usikre</th><th>Koblet til register</th></tr></thead><tbody>";
+  PAGES.forEach(pg => {
+    const ids = new Set(ENTRIES.filter(e => e.page === pg).map(e => e.id)), as = state.ann.filter(a => ids.has(a.entry));
+    h += "<tr><td>" + pg + "</td><td>" + [...ids].filter(i => state.reviewed[i]).length + "/" + ids.size + "</td>" +
+      types.map(t => "<td>" + as.filter(a => a.type === t).length + "</td>").join("") + "<td>" + as.filter(a => a.unsure).length + "</td><td>" + as.filter(a => a.reg).length + "</td></tr>";
+  });
+  $("#status").innerHTML = h + "</tbody>";
+  renderRegs();
+  $("#undo").disabled = state.ann.length === 0;
+}
+function renderRegs() {
+  PAGES.forEach(pg => {
+    const host = $("#reg-" + pg); if (!host) return;
+    const dates = {};
+    ENTRIES.filter(e => e.page === pg).forEach(e => e.c.forEach(([id, b]) => { (dates[id] = dates[id] || []).push([e.date, b]); }));
+    const ids = Object.keys(dates).sort((x, y) => REG[x].k === REG[y].k ? x.localeCompare(y) : REG[x].k === "P" ? -1 : 1);
+    const linked = {}; state.ann.forEach(a => { if (a.reg && byId[a.entry].page === pg) linked[a.reg] = (linked[a.reg] || 0) + 1; });
+    const n = ids.filter(id => linked[id]).length;
+    const dm = d => (+d.slice(8)) + "." + (+d.slice(5, 7));
+    host.innerHTML = '<summary>Registerposter for side ' + pg + '<span class="cnt">' + n + "/" + ids.length + " koblet</span></summary>" +
+      '<div class="card-body"><p class="small">Poster i almanakkens register med en henvisning til en dag på siden (fast skrift) eller hvor navnet står i teksten (kursiv). Brug listen til at kontrollere, om hver registerpost er fundet i teksten.</p>' +
+      '<div class="tablewrap"><table class="status regt"><thead><tr><th></th><th>Opslag</th><th>ID</th><th>Datoer</th><th>Koblet</th></tr></thead><tbody>' +
+      ids.map(id => { const r = REG[id];
+        return '<tr><td><span class="k" data-k="' + r.k + '">' + (r.k === "P" ? "P" : "V") + '</span></td><td>' + esc(r.l) + (r.d ? '<br><span class="small">' + esc(r.d) + "</span>" : "") + (r.x ? ' <span class="small">(ikke i Dagbøgerne)</span>' : "") +
+          "</td><td>" + id + "</td><td>" + dates[id].map(([d, b]) => '<span' + (b === "navn" ? ' class="weak"' : "") + ">" + dm(d) + "</span>").join(", ") + "</td><td>" + (linked[id] || "") + "</td></tr>"; }).join("") +
+      "</tbody></table></div></div>";
+  });
+}
+function sortedAnn() { return state.ann.slice().sort((a, b) => a.entry < b.entry ? -1 : a.entry > b.entry ? 1 : a.start - b.start); }
+function clean(s) { return String(s).replace(/[\t\r\n]+/g, " "); }
+function tsv() {
+  const head = ["annotator", "post_id", "print_page", "start", "end", "string", "type", "reg_id", "reg_label", "identification_free", "unsure", "note"];
+  const lines = [head.join("\t")];
+  sortedAnn().forEach(a => lines.push([state.annotator, a.entry, byId[a.entry].page, a.start, a.end, a.text, TYPES[a.type], a.reg, a.reg ? REG[a.reg].l : "", a.ident, a.unsure ? "ja" : "", a.note].map(clean).join("\t")));
+  return lines.join("\n");
+}
+function json() {
+  return JSON.stringify({
+    meta: { annotator: state.annotator, exported: new Date().toISOString(), text_version: TEXT_VERSION, source: "andersen-hc_almanakker.pdf, trykt s. 35-36", register: "almanak-lokalt register (ALMP/ALMW), foreløbige id'er, maskinlæst fra PDF", offsets: "tegnpositioner i post-teksten som vist, 0-baseret, slut eksklusiv" },
+    reviewed: ENTRIES.filter(e => state.reviewed[e.id]).map(e => e.id),
+    annotations: sortedAnn().map(a => ({ post_id: a.entry, start: a.start, end: a.end, string: a.text, type: TYPES[a.type], reg_id: a.reg, reg_label: a.reg ? REG[a.reg].l : "", identification_free: a.ident, unsure: a.unsure, note: a.note }))
+  }, null, 1);
+}
+function setMsg(t, err) { const m = $("#msg"); m.textContent = t; m.classList.toggle("err", !!err); }
+async function out(text, what) {
+  if (!state.annotator.trim()) { setMsg("Skriv dit navn først.", true); $("#annotator").focus(); return; }
+  const ta = $("#out"); ta.hidden = false; ta.value = text; ta.focus(); ta.select();
+  try { await navigator.clipboard.writeText(text); setMsg(what + " er kopieret (" + state.ann.length + " markeringer). Indsæt det i en mail eller besked."); }
+  catch (e) { setMsg("Kopiering blev afvist. Teksten er markeret i feltet: kopiér med Ctrl+C.", true); }
+}
+$("#copy-tsv").addEventListener("click", () => { state.annotator = $("#annotator").value; save(); out(tsv(), "Tabellen"); });
+$("#copy-json").addEventListener("click", () => { state.annotator = $("#annotator").value; save(); out(json(), "JSON"); });
+$("#annotator").addEventListener("input", ev => { state.annotator = ev.target.value; save(); });
+$("#annotator").value = state.annotator;
+let armed = false;
+$("#reset").addEventListener("click", ev => {
+  if (!armed) { armed = true; ev.target.textContent = "Tryk igen for at slette alt"; setTimeout(() => { armed = false; ev.target.textContent = "Slet alle mine markeringer"; }, 4000); return; }
+  state.ann = []; state.reviewed = {}; save(); armed = false; ev.target.textContent = "Slet alle mine markeringer";
+  closeEditor(); ENTRIES.forEach(e => { renderText(e); rows[e.id].cb.checked = false; rows[e.id].root.classList.remove("done"); }); stats(); setMsg("Alle markeringer er slettet.");
+});
+
+build(); stats();
+</script>

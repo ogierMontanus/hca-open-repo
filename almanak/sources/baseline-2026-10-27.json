@@ -1,0 +1,55 @@
+{
+ "generated": "2026-10-27",
+ "pdf_source": "SRC-PDF",
+ "pdf_sha256": "9e80b7fa87a1f5d22112d3e431ae856d740193d3967abcfb20585302e8e05a0c",
+ "db_sha256": "56f01944e4cd73208e4e3cad39c3e9699f69d19be9a494573135b4fce8441af3",
+ "note": "Basislinje for at vurdere en ny OCR (SRC-PDF2): kør de tre analysescripts mod den nye PDF og sammenlign. Højere token_identical og færre ocr_artifacts/weekday_inferred = bedre.",
+ "segmentation": {
+  "entries": 5186,
+  "how": {
+   "ocr+weekday": 5081,
+   "ocr_no_weekday": 64,
+   "weekday_inferred": 22,
+   "ocr_weekday_mismatch": 18,
+   "order_break": 1
+  },
+  "undated_lines": 588,
+  "issues": 1
+ },
+ "ocr_artifacts": {
+  "iste_for_1ste": 36,
+  "4-_for_plus": 62,
+  "-I-_for_plus": 14,
+  "Mokke_for_Moltke": 19,
+  "l_for_I_(laften/lgaar/ldag)": 15,
+  "Hoicks_for_Holcks": 13,
+  "f_for_dagger_before_year": 2,
+  "replacement_char": 0
+ },
+ "collation_vs_db": {
+  "db_rows": 5163,
+  "pdf_entries": 5185,
+  "both": 5133,
+  "db_only": 30,
+  "pdf_only": 52,
+  "loose_ratio_ge": {
+   "1.0": 3836,
+   "0.98": 4751,
+   "0.95": 5018,
+   "0.9": 5063,
+   "0.8": 5086
+  },
+  "strict_identical": 2758,
+  "token_identical": 2840,
+  "token_diff_ops_total": 3340,
+  "date_discrepancies": 43,
+  "letter_direction_conflicts": 9,
+  "markers": {
+   "trykte_almanaktekst_db": 73,
+   "trykte_almanaktekst_pdf": 88,
+   "square_brackets_db": 113,
+   "square_brackets_pdf": 187,
+   "html_in_db": 2
+  }
+ }
+}

@@ -1,0 +1,44 @@
+db_date,same_date_ratio,pdf_date,pdf_ratio,pdf_page,print_page,pdf_how,db_text
+1833-02-16,0.0,,,,,,brev til Henriette Wulff
+1833-08-24,0.0,1833-08-25,1.0,15,3,ocr+weekday,kom jeg til Locle 1833
+1834-01-06,0.0,,,,,,Kom Brevet
+1834-02-15,0.0,,,,,,Capua. indtraf i Neapel
+1834-02-16,0.0,,,,,,saa første Gang Vesuvs røde Lava.
+1834-02-21,0.0,,,,,,"Portici og Resina, saae Herkulanum."
+1834-02-24,0.0,,,,,,Besteeg Vesuv.
+1834-03-04,0.0,,,,,,Pestum.
+1834-03-05,0.0,,,,,,Amalfi.
+1834-03-06,0.0,,,,,,Capri
+1834-03-07,0.0,,,,,,Sorrent. Castelmare.
+1834-03-14,0.0,,,,,,Pozzuoli. Hunde­grotten. Solfatara. Lucrener og Averner-søen. Vajæ. Ischia
+1834-03-15,0.0,,,,,,Tog fra Ischia til Neapel.
+1834-03-20,0.0,,,,,,"Forlod Neapel. Caserta, Capua."
+1834-03-21,0.0,,,,,,"Fondi, Mola di gaeta, Itri, Terrazina."
+1834-03-22,0.0,,,,,,Sumpene og Velletri
+1834-03-23,0.0,,,,,,Kom til Rom anden Gang.
+1834-04-05,0.3,1834-04-04,0.94,19,7,ocr_no_weekday,Siena. Stabiæ og Poggibonsi.
+1834-04-17,0.0,,,,,,Fra Bologne til Ferrara
+1838-09-10,0.3,1838-09-09,0.99,36,24,ocr+weekday,Kjørt ind om Aftenen. Marmiers Vesitkort fald ned fra Speilet som om det betød n
+1844-06-26,0.35,1844-06-25,1.0,142,130,ocr+weekday,Paa Bibliotheket. Aften hos Storhertugen og Storhertuginden paa Slottet Belveder
+1844-06-27,0.35,1844-06-26,1.0,142,130,ocr+weekday,Besøgt Fru Gross (Amalie Winther). Om Aftenen paa Ettersburg hos Arvehertugen.
+1844-06-28,0.43,1844-06-27,1.0,142,130,ocr+weekday,Vesitter. Middag hos Kansler Müller; Aften hos Baron Maltitz.
+1844-06-29,0.22,1844-06-28,1.0,142,130,ocr+weekday,Musæum. Taffel hos Storhertugen: Aften hos Arvehertugen.
+1844-06-30,0.0,1844-06-29,1.0,142,130,ocr+weekday,Ved Göthes og Schillers Kister.
+1844-11-28,0.37,1844-11-29,1.0,151,139,weekday_inferred,Middag hjemme. Sandselig +. En Vise om Pandebeen; Epilog til Jomf Zrza.
+1844-11-29,0.31,1844-11-30,1.0,151,139,weekday_inferred,Samlede Eventyr fra Reutscher. Middag hos Ludvig Zinn. Ikke ret rask.
+1846-02-09,0.54,1846-02-08,0.95,183,171,ocr+weekday,Besøg hos Stampe. Middag Frohmann. Aften Mickelsen.
+1846-09-27,0.22,1846-09-28,1.0,194,182,ocr+weekday,Oversat med Meyer. Aften hos Wederkopps.
+1846-09-28,0.32,1846-09-29,1.0,194,182,ocr+weekday,Aften Fru von Scharnhorst
+1849-04-00,0.0,1849-04-04,1.0,216,204,ocr+weekday,Hos Ferrini. Drevet. Læst Comedien hos Kocks.
+1854-12-00,0.0,,,,,,I Vel og Vee Guds Villie skee
+1854-12-30,0.0,1854-12-31,1.0,242,230,ocr+weekday,Meer end Perler og Guld - (Casino)
+1855-01-07,0.56,1855-01-12,0.99,243,231,ocr+weekday,I Casino:  En Nat i Roeskilde. I Det kongelige Theater Den ny Barselsstue.
+1855-01-12,0.56,1855-01-07,1.0,243,231,ocr+weekday,I Casino:  En Nat i Roeskilde.
+1855-03-14,0.52,1855-03-18,1.0,245,233,ocr+weekday,I Casino: Den Usynlige paa Sprogø. 3 Fodgjængere over Isen fra Malmø. Middag hos
+1856-06-17,0.0,,,,,,Milano
+1856-06-18,0.0,,,,,,Milano
+1856-06-20,0.0,1856-06-21,0.88,259,247,ocr+weekday,Flüellen
+1856-12-17,0.0,1856-12-16,1.0,261,249,ocr+weekday,holdt mig inde for den vedvarende Forkjølelse.
+1857-04-28,0.0,,,,,,Fru Serres Fødselsdag
+1858-12-28,0.51,1858-12-30,1.0,281,269,ocr+weekday,Brev til Lieutenant Giørup i Fredericia.
+1859-12-04,0.0,1859-12-09,1.0,292,280,ocr+weekday,Udkom 4 Hefte Eventyr og Historier.
