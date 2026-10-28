@@ -1,0 +1,26 @@
+{
+ "db_rows": 5163,
+ "pdf_entries": 5185,
+ "both": 5133,
+ "db_only": 30,
+ "pdf_only": 52,
+ "loose_ratio_ge": {
+  "1.0": 3836,
+  "0.98": 4751,
+  "0.95": 5018,
+  "0.9": 5063,
+  "0.8": 5086
+ },
+ "strict_identical": 2758,
+ "token_identical": 2840,
+ "token_diff_ops_total": 3340,
+ "date_discrepancies": 43,
+ "letter_direction_conflicts": 9,
+ "markers": {
+  "trykte_almanaktekst_db": 73,
+  "trykte_almanaktekst_pdf": 88,
+  "square_brackets_db": 113,
+  "square_brackets_pdf": 187,
+  "html_in_db": 2
+ }
+}
