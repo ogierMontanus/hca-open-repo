@@ -150,3 +150,12 @@ The mockup currently shows the seam without yet honouring the distinction:
 
 See §11 of `ai-context/coding_agent_plan.md` for the UI requirements that
 follow from this model.
+
+## Se også
+
+* [`events-research-basis.md`](events-research-basis.md) og
+  [`events-data-audit.md`](events-data-audit.md) — begivenheder som selvstændig
+  entitetstype. Den foreslåede `entity_event`-tabel ovenfor er en delmængde af den
+  model, og tallene for `year_derived`/`date_derived` (2,9 % / 1,4 %) er ved
+  revisionen 2026-10-28 målt til 12,7 % / 6,1 % af værkerne — afstem, før
+  tabellen bygges.

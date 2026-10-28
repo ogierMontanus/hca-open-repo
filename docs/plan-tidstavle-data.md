@@ -254,3 +254,9 @@ tid pr. post, før hele mængden planlægges.
    en tidstavle-uenighed, eller skal de bekræftes mod dagbogsfacsimilen?
 4. Er der licens-/samarbejdsaftaler (SDU/KB) at tage hensyn til ved at hente
    eksterne brevdata (trin 2.2)?
+
+## Se også
+
+* [`data-model/events-research-basis.md`](data-model/events-research-basis.md) og
+  [`data-model/events-data-audit.md`](data-model/events-data-audit.md) — begivenhedsmodel
+  og datarevision. Revisionens §8 (næste skridt) bygger på trin 1.0 og 1.2 her.
