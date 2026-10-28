@@ -15,7 +15,8 @@ Opret en særskilt mappe til almanakprojektet i repositoryet. Almanakkens data o
 Arbejdet tager udgangspunkt i to kilder:
 
 **A. Den eksisterende database**
-- Indeholder almanakrelaterede data i en større database.
+- den ligger i sharepoint: mappe sql/hca_db.sql.
+- Tabellen "almanak" indeholder almanakrelaterede data i en større database.
 - De enkelte dage udgør den grundlæggende strukturelle enhed.
 - Undersøg, hvordan almanakkens afsnit og underafsnit er repræsenteret i databasen.
 - Undersøg databasens struktur, felter, metadata, hierarkier og eventuelle relationer til andre data.
