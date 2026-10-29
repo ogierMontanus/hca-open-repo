@@ -51,7 +51,7 @@ til opslag.** Andelen falder jævnt med faldende dagbogs-omtale (73 % ved ≥ 20
 | Ingen slug i sitemap'et | 683 |
 
 Bekræftede personer pr. værk: lex.dk 352 · DBL 326 · Weilbach 103 · Dansk Kvindebiografisk 27 ·
-Teaterleksikon 9.
+Gyldendals Teaterleksikon 3 (kun personer uden bekræftet DBL-artikel — brugerbeslutning 2026-10-29; tidligere 9).
 
 | Opdeling | n | Bekræftet | DBL | Ingen slug |
 |---|---:|---:|---:|---:|

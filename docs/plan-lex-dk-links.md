@@ -1,6 +1,6 @@
 # Plan: lex.dk-links til danskere og kendte udlændinge i personregistret
 
-Status: forslag, revideret 2026-10-29 (nationalitet fra Lex-sider; profession-målrettet søgning) · bygger på pilotens resultater i
+Status: forslag, revideret 2026-10-29 (nationalitet fra Lex-sider; profession-målrettet søgning; beslutninger indarbejdet, se §8) · bygger på pilotens resultater i
 [`data-model/lex-dk-links-pilot.md`](data-model/lex-dk-links-pilot.md) og
 [`data-model/lex-dk-sitemap-results.md`](data-model/lex-dk-sitemap-results.md) ·
 hører sammen med [`plan-tidstavle-data.md`](plan-tidstavle-data.md) (del 2: eksterne data)
@@ -16,7 +16,9 @@ værker. **Perifere personer udelades bevidst.** Kun links gemmes; ingen Lex-tek
 | Faktakontrol (`CLAUDE.md`) | Intet link skrives, før både navn *og* begge levedatoer er set på artiklens egen side. Chatbottens svar er et forslag, aldrig en kilde. |
 | Kun kilde-kort, aldrig fritekst-URL'er | Piloten viste, at chatbotten opfinder slugs, når den bedes om et «link». |
 | Ingen Lex-indhold i repoet | Rå svar og sidetekst committes ikke. Gem: URL, værk, sidetitel, verifikationsflag, dato — og **afledte fakta-tags** (nationalitet, erhvervsord, fødested-land), aldrig Lex' sætninger. |
-| Lex-fakta er «tilføjet» data | Nationalitet/erhverv fra Lex overskriver aldrig registerets egne felter; de gemmes i egne kolonner med kilderegel og konfidens og vises som *tilføjet* (`docs/external-links.md` §2a). |
+| Lex-fakta er «tilføjet» data | Nationalitet/erhverv fra Lex overskriver aldrig registerets egne felter; de gemmes i egne kolonner med kilderegel og konfidens og vises som *tilføjet* (`docs/external-links.md` §2a). **Det gælder også nationalitet udledt af DBL** (brugerbeslutning 2026-10-29). |
+| Konvention: umarkeret = dansk | Registrets nationalitetsfelt er tomt for danskere; konventionen **fastholdes** (brugerbeslutning 2026-10-29). Lex-fund af en *anden* nationalitet hos en umarkeret person registreres som tilføjet undtagelse — de ændrer ikke konventionen og skriver ikke i registrets eget felt. |
+| Teaterleksikon kun som reserve | Gyldendals Teaterleksikon forsøges **kun for personer uden bekræftet DBL-artikel** (brugerbeslutning 2026-10-29); koden springer værket over, når DBL er bekræftet. |
 | Værksnavne er ikke fakta om personen | «Dansk Biografisk Leksikon» i titel/brødkrumme er ikke *dansk*; værksnavne og faste sektionsnavne filtreres fra, før et ord tolkes som nationalitet (fanget i test, se §3b). |
 | Eksterne links | Nyt faneblad, diskret, `.sr-only`-varsling (`docs/external-links.md`); vises i «Autoritetslinks»-blokken på persons-siden. |
 | Hentning ved build, ikke i browseren | Ingen runtime-kald fra siden; resultatet er en committet CSV (som `works_wikidata.csv`). CSP uændret. |
@@ -64,11 +66,11 @@ delmængde, spildes forespørgsler på personer, der ikke kan være der:
 | Person | Prøv (i rækkefølge) | Spring over |
 |---|---|---|
 | Dansk/nordisk, kunstner (maler, billedhugger, tegner, grafiker, arkitekt, fotograf) | DBL → **Weilbach** → lex.dk | Teaterleksikon |
-| Dansk/nordisk, scene (skuespiller, sanger, danser, balletmester, instruktør, teaterchef, dramatiker, kapelmester) | DBL → **Teaterleksikon** → lex.dk | Weilbach |
+| Dansk/nordisk, scene (skuespiller, sanger, danser, balletmester, instruktør, teaterchef, dramatiker, kapelmester) | DBL → **Teaterleksikon, kun hvis ingen bekræftet DBL-artikel** → lex.dk | Weilbach; Teaterleksikon når DBL er bekræftet |
 | Dansk kvinde (uanset erhverv) | DBL → **Dansk Kvindebiografisk** → fagværk → lex.dk | — |
 | Dansk, øvrige (forfatter, embedsmand, politiker, lærd, officer …) | DBL → lex.dk | Weilbach, Teaterleksikon |
 | Udenlandsk (markeret, eller fastlagt af Lex, §3b) | **lex.dk-hoved** (Den Store Danske) → Rute 2 (chatbot) | DBL (9 af 159 bekræftede udlændinge er i DBL), Weilbach |
-| Nationalitet ukendt | som dansk, men mærk resultatet; ret ruten, når §3b har fastlagt nationaliteten | — |
+| Nationalitet umarkeret | **dansk** (registrets konvention, fastholdt); ret ruten, hvis §3b finder en anden nationalitet (tilføjet undtagelse) | — |
 
 Nationalitet og profession kommer fra registret (`person_ethnic_descriptors.csv`, `person_role.csv`,
 beskrivelse) — og **for personer uden nationalitetsmarkering fra selve Lex-siden** (§3b).
@@ -128,8 +130,8 @@ afbildet på registrets `nationality_key`):
 | **R1** | «var en/er en {adj}» eller «, {adj} {erhverv}» i de første ca. 220 tegn af meta (lex.dk-hoved, Teaterleksikon) | høj | Brug *tegnvindue*, ikke «første sætning» — initialer («C.E. Frijs») bryder sætningsdelingen (fanget i test). |
 | **R2** | brødkrumme «{Adj} litteratur/billedkunst/…», «Danske {erhverv}» efter fjernelse af værksnavne | middel | «Nordens billedkunst» → *nordisk*, ikke dansk. |
 | **R3** | faktaboks «Født …, {sted}» (lex.dk-hoved) | middel | sted → land via stedregisteret/GeoNames; kun forslag. |
-| **R4** | DBL-meta «Født i {sted}» | lav–middel | fødested ≠ nationalitet (Franz Neruda: født i Brno, død i Kbh.); gemmes som `fødested`, aldrig som `nationalitet`. |
-| **R5** | blot *forekomst* i DBL/DKBL/Weilbach/Teaterleksikon | svag | betyder **«Danmark-tilknyttet»**, ikke dansk statsborger → eget felt `lex_dk_tilknyttet`. |
+| **R4** | DBL-meta «Født i {sted}» (+ «død i {sted}») | lav–middel | fødested ≠ nationalitet (Franz Neruda: født i Brno, død i Kbh.); `fødested`/`fødeland` gemmes som tilføjede data; er fødelandet udenlandsk, flages rækken til gennemgang i stedet for at få nationalitet. |
+| **R5** | blot *forekomst* i DBL (evt. DKBL/Weilbach/Teaterleksikon) | svag | **Beslutning 2026-10-29:** nationalitet udledt af DBL angives som **tilføjede data** — `nationalitet = dansk`, `nat_basis = dbl_optagelse`, vist som «tilføjet (DBL)». Konfidensen er svag og feltet er adskilt fra registrets eget; DBL rummer også udenlandsk fødte (Neruda), og de flages via R4. |
 
 **Målt udbytte** (stikprøve, ikke endeligt): af de **661** personer i niveau A *uden* nationalitetsmarkering
 har 366 et bekræftet link: **204** på lex.dk-hoved/Teaterleksikon (→ R1/R2), **135** kun i DBL (→ R4/R5),
@@ -138,9 +140,10 @@ I en stikprøve på 18 lex.dk-hoved-sider gav R1 eller R2 nationalitet for 13 (7
 («første sætning»); på 5 Teaterleksikon-sider 5 af 5. DBL: 17 af 32 sider havde «Født i …». Forventning:
 **≈ 200–300 af de 661 får en eksplicit nationalitet** (R1+R2), ≈ 70 yderligere et fødested (R4).
 
-**Registrets «umarkeret = dansk»-antagelse er falsk** (nu *målt* i stedet for forudsat): blandt
-umarkerede persons Lex-sider fandtes bl.a. *Samuel Johnson* (britisk) — så udbyttet skal også bruges til at
-opgøre, hvor stor en andel af de umarkerede der er udlændinge (opgøres i fase 2b).
+**Konventionen «umarkeret = dansk» fastholdes** (brugerbeslutning 2026-10-29). Stikprøven viste dog
+undtagelser blandt de umarkerede (fx *Samuel Johnson*, britisk på Lex) — de registreres som **tilføjede
+undtagelser** (`nationalitet_lex ≠ dansk`, `conflict_with_register = umarkeret`) og opgøres i fase 2b, uden at
+konventionen eller registrets felt ændres.
 
 **Implementering:**
 * `fetch_check()` i `lex_link_candidates.py` udvides til også at returnere `nat_hint`, `nat_rule` (R1–R5),
@@ -153,7 +156,8 @@ opgøre, hvor stor en andel af de umarkerede der er udlændinge (opgøres i fase
   Hvor registret allerede har en markering, gemmes Lex' som kontrol (`conflict_with_register`), aldrig som
   overskrivning.
 * Tilbagekobling: `nat_lex` styrer ruten i §2 (udlænding → lex.dk-hoved/chatbot, ikke DBL/Weilbach) og
-  kan senere fodre `person_ethnic_descriptors`/nationalitetsfacetten som *tilføjet* data efter gennemgang.
+  kan fodre `person_ethnic_descriptors`/nationalitetsfacetten som *tilføjet* data efter 10 %-stikprøve af R1/R2
+  (**godkendt 2026-10-29**); DBL-udledt nationalitet (R5) vises som «tilføjet (DBL)».
 * Bivirkning at holde øje med: værksnavne i titel/brødkrumme («Dansk Biografisk Leksikon» → «dansk») gav i
   en test **falsk «dansk» på alle DBL-sider**; filteret (`Biografisk|Leksikon|^Lex$|Weilbach|Kunst og kultur`)
   er derfor del af reglen og dækkes af en test.
@@ -167,7 +171,7 @@ opgøre, hvor stor en andel af de umarkerede der er udlændinge (opgøres i fase
 | `lex.dk` (Den Store Danske m.fl.) | 170.669 | leksikon, alle fag | hoved for udlændinge og øvrige |
 | `biografiskleksikon` (DBL) | 14.134 | danske biografier | primær for danskere |
 | `weilbach` (Weilbachs Kunstnerleksikon) | 7.827 | danske/nordiske billedkunstnere og arkitekter | **kunstnere** |
-| `teaterleksikon` (**Gyldendals** Teaterleksikon, 2007) | 2.072 | teater, skuespillere, instruktører, dramatikere, scenografer | **scenepersoner** |
+| `teaterleksikon` (**Gyldendals** Teaterleksikon, 2007) | 2.072 | teater, skuespillere, instruktører, dramatikere, scenografer | **scenepersoner — kun hvis de ikke findes i DBL** (beslutning 2026-10-29) |
 | `kvindebiografiskleksikon` | 1.940 | danske kvinder | **kvinder** |
 | `dansklitteraturshistorie` | 1.148 | **kapitler/perioder** (fx «Patos og satire – F. Paludan-Müller») | kun som sekundært «kapitel om forfatterskabet», ikke personartikel |
 | `bornelitteratur` | 172 | børnebøger | evt. børnebogsforfattere |
@@ -184,7 +188,8 @@ Teaterleksikon** — rettes i `WORKS`/`HOSTS`-listerne.)
 
 **Målt loft** (2026-10-29): af de **783** niveau A-personer uden bekræftet link har **354** et kunstner- eller
 sceneerhverv (255 kunstnere, 105 scene), men kun **58** (Weilbach) og **24** (Teaterleksikon) har overhovedet
-et slug med deres efternavn; de øvrige findes ikke i de værker. Et forsøg (55 sidekald, kandidater begrænset
+et slug med deres efternavn; de øvrige findes ikke i de værker. Med den nye Teaterleksikon-regel faldt Teaterleksikon-bekræftelserne i niveau A fra 9 til **3 personer** (ingen
+havde DBL); samlet dækning uændret (532). Et forsøg (55 sidekald, kandidater begrænset
 til de relevante værter, top 3 pr. person) gav **14 nye bekræftede** (Weilbach og Teaterleksikon; +1 procentpoint
 af A: 532 → ≈ 546) — ca. ¼ bekræftelse pr. sidekald. **Konklusion:** målrettet søgning er billig og præcis,
 men har lavt loft — dens værdi er (a) de ≈ 15–25 ekstra personer, (b) færre spildte sidekald og mindre støj i
@@ -294,8 +299,8 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 | **0** | Skriv til Lex (tilladelse til små kørsler + sitemap-brug; vilkår/licens for links og titler) | Skriftligt svar, eller beslutning om kun Rute 1 + manuel | — |
 | 1 | `screen_persons_for_lex.py`; manuelle søgenavne for ≈ 60 personer | `persons_tiers.csv` med A/B/C; tjek af 30 tilfældige C (er de rigtigt udeladt?) | — |
 | 2 | Rute 1: hent sitemap, byg slug-indeks, match A+B, verificér | Dækningsrapport pr. niveau/køn/nationalitet | 1 (+0 for download-omfang) |
-| **2b** | **Nationalitet fra Lex-sider:** udvid `fetch_check`, genhent ≈ 640 sider, byg `person_nationality_lex.csv`, opgør andelen af udenlandske blandt umarkerede, stikprøvetjek 10 % af R1/R2 | tags for alle bekræftede sider; konflikter med registret listet; test grøn | 2 |
-| **2c** | **Profession-målrettet søgning:** `prof_target` + nationalitetsstyret rute; Teaterleksikon-profil (meta-årstal); kør kun relevante værter | ≈ +15–25 bekræftede; `relaxed`-rækker markeret | 2, 2b |
+| **2b** | **Nationalitet fra Lex-sider:** udvid `fetch_check`, genhent én side pr. bekræftet person, byg `person_nationality_lex.csv` (R1–R5, alle som *tilføjet*), opgør de umarkerede, der ikke er danske (tilføjede undtagelser), stikprøvetjek 10 % af R1/R2 | tags for alle bekræftede sider; konflikter med registret listet; test grøn | 2 |
+| **2c** | **Profession-målrettet søgning:** `prof_target` + nationalitetsstyret rute; Teaterleksikon-profil (meta-årstal) **og kun for personer uden bekræftet DBL** (implementeret i `lex_sitemap_match.py`); kør kun relevante værter | ≈ +15–25 bekræftede; `relaxed`-rækker markeret | 2, 2b |
 | 3 | Rute 2 for rest i A (≤ 200/dag), **nationalitetstilpasset prompt** | A-rest behandlet eller loft nået | 0, 2b, 2c |
 | 4 | Rute 3 (Wayback) for danskere (nu også **fastlagt** af §3b) uden DBL | `archive_url` på de relevante rækker | 2–3 |
 | 5 | Gennemgang → `person_lex.csv` → build + visning + test | Persons-sider viser links; tests grønne | 2–4 |
@@ -324,8 +329,19 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 4. Hvem gennemgår «likely»/«mismatch» (pilot: 8 af 95 kandidater)?
 5. Skal links også gælde *værker* og *steder* (lex.dk har artikler om begge)? — samme metode kan
    genbruges, men er ikke omfattet af denne plan.
-6. **Nationalitet fra Lex:** må R1/R2 (eksplicit adjektiv) fodre nationalitetsfacetten som *tilføjet* data
-   efter 10 %-stikprøve? Skal R4/R5 (fødested, «Danmark-tilknyttet») overhovedet vises?
-7. Må registrets antagelse «umarkeret = dansk» opgives, når §3b har målt andelen af udlændinge?
-8. Er afledte *fakta* (nationalitet, erhvervsord, fødested-land) fra Lex-sider omfattet af Lex' vilkår på
-   samme måde som tekst? (Fase 0 bør spørge direkte.)
+6. ~~Nationalitet fra Lex~~ — **besluttet, se nedenfor.**
+7. ~~Registrets «umarkeret = dansk»~~ — **besluttet, se nedenfor.**
+8. ~~Vilkår for afledte fakta~~ — **besluttet, se nedenfor.**
+
+### Besluttet 2026-10-29
+
+| Spørgsmål | Svar | Konsekvens i planen |
+|---|---|---|
+| Må R1/R2 (eksplicit nationalitetsadjektiv fra Lex) fodre nationalitetsfacetten som *tilføjet* data efter 10 %-stikprøve? | **Ja** | §3b; fase 2b |
+| Skal R4/R5 (fødested, DBL-optagelse) vises? | **Ja — nationalitet indhentet fra DBL angives som tilføjede data** | R5 giver `dansk` med `nat_basis = dbl_optagelse`, vist som «tilføjet (DBL)»; udenlandsk fødeland flages (R4) |
+| Må «umarkeret = dansk» opgives? | **Nej — konventionen fastholdes** (registrets antagelse: dansk = umarkeret) | Lex-fund af anden nationalitet hos umarkerede registreres som tilføjede undtagelser, ikke som ændring af konventionen |
+| Skal Lex' vilkår for afledte fakta (nationalitet, erhvervsord, fødested-land) afklares ved henvendelsen? | **Ja** | Fase 0 spørger direkte (`chatbot@lex.dk`) |
+| *(tillæg)* Gyldendals Teaterleksikon | **Kun for personer uden bekræftet DBL-artikel** | §2, §3c; indbygget i `lex_sitemap_match.py` |
+
+Fortolkning: «de fire beslutninger» er læst som de fire spørgsmål, der blev tilføjet i revisionen
+2026-10-29 (punkt 6 med to delspørgsmål, 7 og 8). De fem ældre punkter (1–5 ovenfor) er stadig åbne.

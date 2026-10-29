@@ -188,6 +188,10 @@ def main():
             key = HOSTS[host][0]
             if per_work[key] >= MAX_VERIFY_PER_WORK or verified >= MAX_VERIFY_TOTAL:
                 continue
+            # Brugerbeslutning 2026-10-29: Gyldendals Teaterleksikon kun for personer UDEN bekræftet DBL-artikel
+            # (DBL kommer først i prioritetsrækkefølgen, så `have` er afgjort her).
+            if key == "teater" and have:
+                continue
             if key != "dbl" and any(r["rid"] == p["rid"] and r["verdict"] == "confirmed" and r["work"] == key for r in rows):
                 continue                          # one confirmed link per work is enough
             if args.no_fetch:
