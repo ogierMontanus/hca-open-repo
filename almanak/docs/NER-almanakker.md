@@ -15,14 +15,16 @@ Opret en særskilt mappe til almanakprojektet i repositoryet. Almanakkens data o
 Arbejdet tager udgangspunkt i to kilder:
 
 **A. Den eksisterende database**
-- Indeholder almanakrelaterede data i en større database.
+- den ligger i sharepoint: mappe sql/hca_db.sql.
+- Tabellen "almanak" indeholder almanakrelaterede data i en større database.
 - De enkelte dage udgør den grundlæggende strukturelle enhed.
 - Undersøg, hvordan almanakkens afsnit og underafsnit er repræsenteret i databasen.
 - Undersøg databasens struktur, felter, metadata, hierarkier og eventuelle relationer til andre data.
 - Antag ikke, at databasen har de samme indholdsregistre, metadata eller redaktionelle funktioner som den trykte kilde.
 
 **B. PDF-kilden**
-- Indeholder en digital gengivelse af den trykte almanak.
+- Er udgivet af DSL på stien https://tekstnet.dk/books/andersen-hc_almanakker/. Er også gemt og committet i repositoriet.
+-  Indeholder en digital gengivelse af den trykte almanak.
 - Siden er den grundlæggende visuelle enhed, mens tekst og indhold kan være organiseret i mindre afsnit.
 - Undersøg PDF'ens faktiske struktur, tekstlag, sideinddeling og eventuelle problemer med OCR eller tekstudtræk.
 - Brug PDF'en som kilde til at kontrollere databasens indhold og struktur.
