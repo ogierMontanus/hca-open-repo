@@ -35,13 +35,15 @@ from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lex_link_candidates import fetch_check, fold, life_years, name_tokens, slug_matches  # noqa: E402
+from lex_link_candidates import fetch_check, fold, judge, life_years, name_tokens, slug_matches  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
 RAW = REPO / "data" / "raw" / "lex"
 TIERS = REPO / "data" / "curated" / "lex" / "persons_tiers.csv"
 OUT = REPO / "data" / "curated" / "lex" / "persons_lex_sitemap.csv"
 CACHE = RAW / "page_cache.json"
+LEGACY = RAW / "legacy_invalid_urls.json"
+LEGACY_INVALID = set(json.load(open(LEGACY, encoding="utf-8"))) if LEGACY.exists() else set()
 
 # host → (key, label, priority, max extra slug tokens beyond the name)
 HOSTS = {
@@ -123,10 +125,10 @@ def slug_score(given, sur, st, name_part=None):
         # Every full first-name word in the slug's NAME part (before a "_-_ disambiguator") must be
         # explained by the person's own given names — "Carl_Berendt_Lorck" is not Carl Julius Lorck.
         for x in name_part:
-            if len(x) >= 3 and x not in sur and x not in {"jr", "sen", "den", "ældre", "yngre"} \
-                    and not any(x == g or (len(g) >= 3 and (x.startswith(g) or g.startswith(x)))
+            if len(x) >= 2 and x not in sur and x not in {"jr", "sen", "den", "ældre", "yngre"} \
+                    and not any(x == g or (len(g) >= 2 and (x.startswith(g) or g.startswith(x)))
                                 or (len(g) == 1 and x.startswith(g)) for g in given):
-                return None
+                return None          # "J._Th._Reinhardt" is not J. Reinhardt: "Th." is unexplained
         gi = {g[0] for g in given if g}
         if initials_slug and (any(i not in gi for i in initials_slug) or len(initials_slug) > len(given)):
             return None            # "C.C._Hall" has two initials; "Carl Hall" supplies one
@@ -161,7 +163,8 @@ def candidates(name: str, entries, index):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tier", default="A")
+    ap.add_argument("--tier", default="A", help="A | B | C | all (all = every person with life dates and a given name)")
+    ap.add_argument("--hosts", default="", help="comma-separated work keys to try, e.g. dbl (phase 2d: DBL only)")
     ap.add_argument("--limit", type=int, default=30)
     ap.add_argument("--offset", type=int, default=0)
     ap.add_argument("--out", default=str(OUT))
@@ -169,7 +172,14 @@ def main():
     ap.add_argument("--merge", action="store_true", help="keep rows of earlier runs for other rids")
     args = ap.parse_args()
 
-    persons = [r for r in csv.DictReader(open(TIERS, encoding="utf-8")) if r["tier"] == args.tier]
+    allp = list(csv.DictReader(open(TIERS, encoding="utf-8")))
+    if args.tier == "all":
+        # Phase 2d: everyone who CAN be verified against DBL (life dates + given name).
+        persons = [r for r in allp if r["reason"] not in ("ingen levetid", "intet fornavn", "henvisning")]
+        persons.sort(key=lambda r: ({"A": 0, "B": 1, "C": 2}[r["tier"]], -int(r["refs"]), r["rid"]))
+    else:
+        persons = [r for r in allp if r["tier"] == args.tier]
+    only = {k for k in args.hosts.split(",") if k}
     persons = persons[args.offset:args.offset + args.limit]
     entries, index = load_index()
     print(f"index: {len(entries):,} candidate articles on {len(HOSTS)} hosts; persons: {len(persons)}")
@@ -186,6 +196,8 @@ def main():
         have = False
         for prio, extra, host, url in cands:
             key = HOSTS[host][0]
+            if only and key not in only:
+                continue
             if per_work[key] >= MAX_VERIFY_PER_WORK or verified >= MAX_VERIFY_TOTAL:
                 continue
             # Brugerbeslutning 2026-10-29: Gyldendals Teaterleksikon kun for personer UDEN bekræftet DBL-artikel
@@ -197,12 +209,18 @@ def main():
             if args.no_fetch:
                 chk = {"status": "", "title": "", "years": "", "verdict": "unchecked"}
             else:
-                ck = url + "#v2"                         # v2: lead window after the first <h1>
-                if ck not in cache:
+                ck = url + ("#v3" if "biografiskleksikon" in url else "#v2")   # v3: DBL years from the article's own meta
+                ent = cache.get(ck)
+                # Legacy entries (no "ys") hold a verdict computed for whichever person asked first. They are
+                # only valid for URLs no other person with different life years asked about; the shared
+                # ones (data/raw/lex/legacy_invalid_urls.json, found 2026-10-29) are fetched again.
+                if ent is None or ("ys" not in ent and url in LEGACY_INVALID):
                     time.sleep(1.0)
                     cache[ck] = fetch_check(url, born, died)
                     requests_made += 1
-                chk = cache[ck]
+                chk = dict(cache[ck])
+                if "ys" in chk:                       # per-person verdict from the cached years
+                    chk["verdict"], chk["years"] = judge(chk["ys"], born, died, chk.get("note", ""))
             per_work[key] += 1
             verified += 1
             rows.append({"rid": p["rid"], "tier": p["tier"], "label": p["label"], "search_name": p["search_name"],

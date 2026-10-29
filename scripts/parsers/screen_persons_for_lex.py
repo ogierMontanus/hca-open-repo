@@ -95,7 +95,9 @@ def main():
     for rid, e in ents.items():
         lab, desc, rl = e["label"], e["description"] or "", role.get(rid, "")
         reason, tier = "", "C"
-        if not re.search(r"\((?:ca\.\s*)?\d{4}\s*[–-]\s*\d{4}\)", lab):
+        if re.match(r"^\s*[–-]|Se også", lab):
+            reason = "henvisning"                       # "– Se også: Wulff, Ida (1845–1924)." is a pointer, not a person
+        elif not re.search(r"\((?:ca\.\s*)?\d{4}\s*[–-]\s*\d{4}\)", lab):
             reason = "ingen levetid"
         elif "," not in lab:
             reason = "intet fornavn"

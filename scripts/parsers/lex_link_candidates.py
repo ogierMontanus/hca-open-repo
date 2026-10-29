@@ -139,13 +139,38 @@ def fetch_check(url: str, born: str, died: str):
     h1 = re.search(r"<h1[^>]*>", body, re.I)
     lead_text = re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", body[h1.start():]))) if h1 else text
     lead = title + " " + lead_text[:1500]
-    found = sorted(set(re.findall(r"\b(1[4-9]\d\d)\b", lead)))
-    ok_b = bool(born and born in lead)
-    ok_d = bool(died and died in lead)
+    # DBL: the article's OWN life dates are the first thing in <meta name="description">
+    # ("Franz Neruda, Franz Xaver Victor Neruda, 3.12.1843-20.3.1915, musiker. Født i …"), whereas the
+    # lead window also contains the PARENTS' years (Forældre: …) and so confirmed relatives. Use the
+    # meta for DBL; fall back to the window (marked "~") only if the meta carries no year at all.
+    meta_note = ""
+    if "biografiskleksikon" in url:
+        md = re.search(r'<meta[^>]+name="description"[^>]+content="([^"]*)"', html) or \
+             re.search(r'<meta[^>]+content="([^"]*)"[^>]+name="description"', html)
+        meta = unescape(md.group(1)) if md else ""
+        head = meta[:240]
+        if re.search(r"\b1[4-9]\d\d\b", head):
+            lead = title + " " + head
+        else:
+            meta_note = "~"
+    ordered = list(dict.fromkeys(re.findall(r"\b(1[4-9]\d\d)\b", lead)))   # order of appearance
+    found = sorted(ordered)
+    verdict, yrs = judge(found, born, died, meta_note)
+    # yo = years in order of appearance: an article's OWN life dates come first, relatives' later
+    return {"status": status, "title": title, "ys": found, "yo": ordered[:8], "note": meta_note,
+            "years": yrs, "verdict": verdict}
+
+
+def judge(found, born, died, note=""):
+    """Verdict for ONE person from the years found on an article. The page check (cache) stores the
+    years, never a verdict: relatives share articles ("Jens Baggesen" / his son), so a verdict cached
+    for the first person who asked would wrongly confirm the next."""
+    ok_b = bool(born and born in found)
+    ok_d = bool(died and died in found)
     verdict = "confirmed" if (ok_b and ok_d) else "likely"
     if (born and died) and found and not ok_b and not ok_d and len(found) >= 2:
         verdict = "mismatch"
-    return {"status": status, "title": title, "years": f"{'F' if ok_b else '-'}{'D' if ok_d else '-'}", "verdict": verdict}
+    return verdict, f"{'F' if ok_b else '-'}{'D' if ok_d else '-'}{note}"
 
 
 def main():
@@ -184,7 +209,9 @@ def main():
                 if l["href"] not in cache:
                     time.sleep(1.0)
                     cache[l["href"]] = fetch_check(l["href"], born, died)
-                chk = cache[l["href"]]
+                chk = dict(cache[l["href"]])
+                if "ys" in chk:                       # verdict is per person, never cached
+                    chk["verdict"], chk["years"] = judge(chk["ys"], born, died, chk.get("note", ""))
             rows.append({"rid": rec["rid"], "label": s["label"], "work": w[0], "work_label": w[1],
                          "priority": w[2], "url": url, "page_title": chk["title"], "http": chk["status"],
                          "years_found": chk["years"], "verdict": chk["verdict"], "queried_on": today})

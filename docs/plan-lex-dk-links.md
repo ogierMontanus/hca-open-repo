@@ -259,7 +259,7 @@ indgå i den bucket.
 
 | Basis (`nat_basis`) | Betingelse | Antal (målt) |
 |---|---|---:|
-| `dbl_optagelse` | bekræftet DBL-artikel (navn + begge levetidsår) | niveau A: **326**; hele registret: se fase 2d |
+| `dbl_optagelse` | bekræftet DBL-artikel (navn + begge levetidsår på artiklens egen metabeskrivelse) | **885** (A 324 · B 333 · C 228) — **målt i fase 2d**, se `lex-dk-dbl-bucket-results.md` |
 | `register_beskrivelse` | registrets egen beskrivelse har *dansk* som ledende nationalitetsord (`person_ethnic_descriptors.csv`) | **87** personer (17 i A, heraf 7 også i DBL) — **min læsning, bekræftes** |
 | *(ingen)* | Lex-sider siger «dansk» (R1/R2) men personen er ikke i DBL | **ikke** i bucketen; lægges i `data/curated/lex/queue_dansk_uden_dbl.csv` til gennemgang |
 | *(ingen)* | umarkeret og ikke i DBL | **uoplyst** — ingen nationalitet |
@@ -268,8 +268,8 @@ indgå i den bucket.
   *tysk*, Denner *tysk*, Bravo *holstensk* …); de får **både** deres egen nationalitet og «Dansk\*» — netop
   «bosat der i længere årrække».
 * **Mangler levetid** (3.034 poster): kan ikke verificeres mod DBL (årstalskontrol) og kommer derfor ikke i bucketen.
-* **Størrelse:** i dag 87 personer har *dansk* i facetten. Med DBL-grænsen over hele registret (fase 2d) skønnes
-  ca. **700–900** (326 i A + en del af de 484 i B og 561 i C, der har et DBL-slug; **skøn**, ikke målt).
+* **Størrelse (målt 2026-10-29):** i dag 87 personer har *dansk* i facetten. DBL over hele registret gav **885**; med
+  registrets egne 87 (15 overlap) er bucketen **957**. 19 af de 885 har også en udenlandsk registermarkering.
 
 **Data:** `data/curated/person_nationality_added.csv` — `rid, nationality_key, nat_basis, source_url, verified_on,
 conflict_with_register`. Rækker med `nat_basis = dbl_optagelse` er *tilføjede data* og må kun oprettes ved
@@ -340,7 +340,7 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 | 2 | Rute 1: hent sitemap, byg slug-indeks, match A+B, verificér | Dækningsrapport pr. niveau/køn/nationalitet | 1 (+0 for download-omfang) |
 | **2b** | **Nationalitet fra Lex-sider:** udvid `fetch_check`, genhent én side pr. bekræftet person, byg `person_nationality_lex.csv` (R1–R5, alle som *tilføjet*), opgør de umarkerede, der ikke er danske (tilføjede undtagelser), stikprøvetjek 10 % af R1/R2 | tags for alle bekræftede sider; konflikter med registret listet; test grøn | 2 |
 | **2c** | **Profession-målrettet søgning:** `prof_target` + nationalitetsstyret rute; Teaterleksikon-profil (meta-årstal) **og kun for personer uden bekræftet DBL** (implementeret i `lex_sitemap_match.py`); kør kun relevante værter | ≈ +15–25 bekræftede; `relaxed`-rækker markeret | 2, 2b |
-| **2d** | **DBL for hele registret:** match + verificér *alle* personer med levetid og fornavn mod DBL (ikke kun A/B) — ≈ 1.449 har et DBL-slug, ≈ 2.000 sidekald (≈ 35 min); byg `person_nationality_added.csv`; opgør «Dansk\*»-bucketen; stikprøve 10 % | «Dansk\*» fastlagt for alle verificérbare; bucketstørrelse målt | 2 |
+| **2d** ✔ | **DBL for hele registret** — *udført 2026-10-29:* 7.122 personer slået op, 903 bekræftet, 885 efter delt-artikel-regel, ≈ 2.900 sidekald; fem fejl fundet og rettet (cache pr. URL, slægtninge, pseudo-poster …); 10 %-stikprøve (88 rækker) venter på gennemgang | `person_nationality_added.csv` (885); `queue_dbl_review.csv` (143); `qa_dbl_sample.csv`; resultatnote | 2 |
 | **2e** | **Kode og visning:** `build_persons_extra.py`, `facet-engine.js`, `persons*.html`, `nation.html`, tests (§3d-tabellen) | Stjerne + mouseover i facetten; tests grønne | 2d |
 | 3 | Rute 2 for rest i A (≤ 200/dag), **nationalitetstilpasset prompt** | A-rest behandlet eller loft nået | 0, 2b, 2c |
 | 4 | Rute 3 (Wayback) for danskere (nu også **fastlagt** af §3b) uden DBL | `archive_url` på de relevante rækker | 2–3 |
@@ -359,7 +359,7 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 * **Nationalitet (§3b):** ≈ 200–300 af de 661 umarkerede i A får en eksplicit nationalitet fra Lex
   (R1/R2), ≈ 70 yderligere et fødested; opgørelsen af, hvor mange umarkerede der er udlændinge, er
   i sig selv et resultat. For B (≈ 2.030 umarkerede) afhænger det af B's linkdækning (ikke målt).
-* **«Dansk\*» (§3d):** i dag 87 personer med *dansk*; DBL-grænsen over hele registret skønnes at give ≈ 700–900.
+* **«Dansk\*» (§3d):** i dag 87 personer med *dansk*; DBL-grænsen over hele registret gav **885** (957 med registrets egne) — fase 2d udført.
 * **Profession-målrettet (§3c):** ≈ +15–25 bekræftede personer (målt +14 på 55 sidekald).
 
 ## 8. Åbne beslutninger

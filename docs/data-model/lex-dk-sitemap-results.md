@@ -32,10 +32,14 @@ Hver kørsel dækker de første N personer i niveau A; tallene er fra kørslen m
 | 270 | 213 | **186 (69 %)** | 150 | 346 | 8,6 min |
 | 810 | 538 | **439 (54 %)** | 293 | 764 | 18 min |
 | 1.315 (alle) | 741 | **594 (45 %)** | 346 | 320 | 8 min |
-| 1.315, efter stramning* | 632 | **532 (40 %)** | **326** | 74 | 2 min |
+| 1.315, efter stramning* | 632 | 532 (40 %) | 326 | 74 | 2 min |
+| 1.315, **efter cache-rettelse†** | 624 | **523 (39,8 %)** | **324** | 16 + 204 | – |
 
 \* Stikprøvekontrol af 60 bekræftede links afslørede relationer/navnebrødre (se «Justeringer»); de
-fjernes af de stramme regler. Det endelige tal er **532 af 1.315 (40,5 %)**, DBL 326 (24,8 %).
+fjernes af de stramme regler. † **Korrektion 2026-10-29:** sidecachen gemte *verdiktet* pr. URL, ikke pr. person, så en
+slægtning, der slog samme artikel op, arvede den første persons «bekræftet» (*Jens Baggesen* → hans søn). Cachen
+gemmer nu artiklens årstal, og verdiktet beregnes pr. person (se `lex-dk-dbl-bucket-results.md`). **Endeligt tal:
+523 af 1.315 (39,8 %), DBL 324 (24,6 %).**
 Samlet **1.727 sidekald** (≈ 40 min ved 1/sek.) + én download à 45 MB. **Ingen chatbot, ingen tokens
 til opslag.** Andelen falder jævnt med faldende dagbogs-omtale (73 % ved ≥ 20 referencer → 28 % ved < 5).
 
@@ -43,28 +47,28 @@ til opslag.** Andelen falder jævnt med faldende dagbogs-omtale (73 % ved ≥ 20
 
 | Status | Personer |
 |---|---:|
-| Bekræftet i DBL (evt. også andre værker) | 326 |
-| Bekræftet kun i andet værk (lex.dk, Weilbach, Kvindebiografisk, Teaterleksikon) | 206 |
-| **Bekræftet i alt** | **532** |
-| «Sandsynlig» (navn passer, kun ét eller intet årstal) — manuel gennemgang | 55 |
+| Bekræftet i DBL (evt. også andre værker) | 324 |
+| Bekræftet kun i andet værk (lex.dk, Weilbach, Kvindebiografisk, Teaterleksikon) | 199 |
+| **Bekræftet i alt** | **523** |
+| «Sandsynlig» (navn passer, kun ét eller intet årstal) — manuel gennemgang | 56 |
 | Kun «uoverensstemmelse» (navnebror med andre år) — manuel gennemgang/afvis | 45 |
-| Ingen slug i sitemap'et | 683 |
+| Ingen slug i sitemap'et | 691 |
 
-Bekræftede personer pr. værk: lex.dk 352 · DBL 326 · Weilbach 103 · Dansk Kvindebiografisk 27 ·
+Bekræftede personer pr. værk: lex.dk 349 · DBL 324 · Weilbach 102 · Dansk Kvindebiografisk 17 ·
 Gyldendals Teaterleksikon 3 (kun personer uden bekræftet DBL-artikel — brugerbeslutning 2026-10-29; tidligere 9).
 
 | Opdeling | n | Bekræftet | DBL | Ingen slug |
 |---|---:|---:|---:|---:|
-| Dansk / ingen nationalitetsmarkering | 676 | **373 (55 %)** | 317 | 236 |
-| Udenlandsk markeret | 639 | 159 (25 %) | 9 | 447 |
-| Mænd | 1.148 | 484 (42 %) | 296 | 579 |
-| Kvinder | 166 | 48 (29 %) | 30 | 103 |
-| ≥ 20 dagbogsreferencer | 131 | 96 (73 %) | 82 | 23 |
-| 10–19 | 178 | 101 (57 %) | 73 | 60 |
-| 5–9 | 383 | 162 (42 %) | 111 | 187 |
-| < 5 (forfatter/kunstner) | 623 | 173 (28 %) | 60 | 413 |
+| Dansk / ingen nationalitetsmarkering | 676 | **371 (55 %)** | 317 | 237 |
+| Udenlandsk markeret | 639 | 152 (24 %) | 7 | 454 |
+| Mænd | 1.148 | 477 (42 %) | 294 | 587 |
+| Kvinder | 166 | 46 (28 %) | 30 | 103 |
+| ≥ 20 dagbogsreferencer | 131 | 95 (73 %) | 82 | 23 |
+| 10–19 | 178 | 101 (57 %) | 72 | 60 |
+| 5–9 | 383 | 157 (41 %) | 110 | 189 |
+| < 5 (forfatter/kunstner) | 623 | 170 (27 %) | 60 | 419 |
 
-27 af 166 kvinder har en bekræftet Dansk Kvindebiografisk-artikel (48 har et bekræftet link i alt).
+17 af 166 kvinder har en bekræftet Dansk Kvindebiografisk-artikel (46 har et bekræftet link i alt).
 
 ## Justeringer undervejs (efter hvert trin)
 
