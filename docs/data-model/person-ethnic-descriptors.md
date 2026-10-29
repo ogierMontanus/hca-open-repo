@@ -229,6 +229,18 @@ const. The facet itself is rendered by the shared `js/facet-engine.js`
 (`data-facet-source="nationality"`), with an "Uoplyst" bucket for the
 8,259 persons carrying no leading match.
 
+**«Dansk\*» — added value, and «Uoplyst» ≠ «dansk» (2026-10-29).** No nationality
+descriptor does *not* mean Danish; the assumption was dropped. The key `dansk` is
+shown as **«Dansk\*»** (tooltip + screen-reader text + visible footnote: *Født i
+Danmark eller bosat der i længere årrække* / *Born in Denmark or resident there for
+many years*), and its population is the register's own leading `dansk` (87)
+**plus** every person with a confirmed Dansk Biografisk Leksikon article
+(`data/curated/person_nationality_added.csv`, `nat_basis = dbl_optagelse`; added
+data, kept apart from the register's descriptors). A person can carry both a
+foreign register nationality and «Dansk\*». The same bucket feeds `nation.html`
+(`build_nation_index.py`, umbrella `dansk`, `note_da`/`note_en`). Background:
+`docs/plan-lex-dk-links.md` §3d; guard: `tests/test_person_nationality_added.py`.
+
 `build_nation_index.py` joins the same data to the place register and
 emits `mockup/data/nation-index.js`, which powers `nation.html` — one
 nation's persons, places, and the nation's own register entry in a

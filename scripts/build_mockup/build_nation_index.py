@@ -61,9 +61,19 @@ UMBRELLAS      = os.path.join(ROOT, "data", "curated", "nation_umbrellas_da.csv"
 ENTITIES       = os.path.join(ROOT, "data", "normalized", "entities.csv")
 PERSON_MATCHES = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
 WORK_LANGS     = os.path.join(ROOT, "data", "normalized", "work_languages.csv")
+ADDED_NAT      = os.path.join(ROOT, "data", "curated", "person_nationality_added.csv")
 PLACES_EXTRA   = os.path.join(ROOT, "mockup", "data", "places-extra.js")
 COUNTRY_TO_NATION = os.path.join(ROOT, "data", "curated", "steder_country_to_nation_da.csv")
 OUT            = os.path.join(ROOT, "mockup", "data", "nation-index.js")
+
+# «Dansk*» — user decision 2026-10-29: "unmarked" is NOT "Danish"; Danish status is shown only for the
+# register's own explicit «dansk» plus persons with a confirmed Dansk Biografisk Leksikon article
+# (added data, person_nationality_added.csv). Same wording as build_persons_extra.py.
+DANSK_LABEL   = "Dansk*"
+DANSK_NOTE_DA = ("* Født i Danmark eller bosat der i længere årrække. Kriterium for de tilføjede personer: "
+                 "optaget i Dansk Biografisk Leksikon (oplysningen er tilføjet, ikke registerets egen).")
+DANSK_NOTE_EN = ("* Born in Denmark or resident there for many years. Criterion for the added persons: "
+                 "entry in Dansk Biografisk Leksikon (added data, not the register's own).")
 
 # Which nationality key a work's LANGUAGE routes to. This is a language →
 # nation mapping, and it is not the same claim as the person descriptors:
@@ -85,7 +95,20 @@ def load_adjectives(path):
     with open(path, encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
             out[row["key"]] = {"label_da": row["label_da"], "category": row["category"]}
+    # «Dansk*»: the star marks the added, DBL-based part of the bucket (see DANSK_NOTE_*).
+    if "dansk" in out:
+        out["dansk"]["label_da"] = DANSK_LABEL
     return out
+
+
+def load_added_dansk(path):
+    """Register ids that docs/plan-lex-dk-links.md §3d adds to «Dansk*» (confirmed DBL article).
+    Empty when the file is absent."""
+    if not os.path.exists(path):
+        return set()
+    with open(path, encoding="utf-8", newline="") as f:
+        return {r["rid"] for r in csv.DictReader(f)
+                if r.get("nat_basis") == "dbl_optagelse" and r.get("nationality_key") == "dansk"}
 
 
 def load_nation_labels(path):
@@ -246,6 +269,10 @@ def main():
         key = m["nationality_key"]
         bucket = persons_certain if m["position_type"] == "leading" else persons_possible
         bucket.setdefault(key, set()).add(m["entity_id"])
+    added_dansk = load_added_dansk(ADDED_NAT)
+    persons_certain.setdefault("dansk", set()).update(added_dansk)
+    print(f"  «Dansk*»: {len(added_dansk):,} persons added from Dansk Biografisk Leksikon "
+          f"({len(persons_certain['dansk']):,} certain in total)")
 
     index = {}
     resolved, unresolved = [], []
@@ -354,10 +381,12 @@ def main():
                                       if r != country_entity_id]
 
         grouped[ukey] = {
-            "label_da": ulabel, "category": "umbrella",
+            "label_da": DANSK_LABEL if ukey == "dansk" else ulabel, "category": "umbrella",
             "country_label": country_label, "country_entity_id": country_entity_id,
             "members": member_blocks, **union,
         }
+        if ukey == "dansk":
+            grouped[ukey]["note_da"], grouped[ukey]["note_en"] = DANSK_NOTE_DA, DANSK_NOTE_EN
 
     # Keys no umbrella claims stay top-level, as their own single-member
     # group, so nothing is lost by clustering. This is where "does this key

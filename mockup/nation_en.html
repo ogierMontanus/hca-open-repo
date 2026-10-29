@@ -506,7 +506,7 @@
 
     document.getElementById('js-h1').textContent = n.label_da;
     document.getElementById('js-sub').textContent =
-      'Persons, places and works connected to "' + n.label_da + '" (' + n.category + ').';
+      'Persons, places and works connected to "' + n.label_da + '" (' + n.category + ').' + (n.note_en ? ' ' + n.note_en : '');
 
     var memEl = document.getElementById('js-nation-members');
     var mem = (n.members || []).filter(function (m) { return m.key !== key; });
