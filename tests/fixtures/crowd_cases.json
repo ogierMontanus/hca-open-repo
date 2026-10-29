@@ -1,0 +1,2556 @@
+{
+ "today": "2026-10-29",
+ "cases": [
+  {
+   "name": "valid",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  },
+  {
+   "name": "no person id",
+   "payload": {
+    "person_id": "abc",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "person_id",
+     "invalid_person_id"
+    ]
+   ]
+  },
+  {
+   "name": "no status",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "identification.status",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "duplicate needs same_as",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "duplicate",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "identification.same_as",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "duplicate of itself",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "duplicate",
+     "summary": "",
+     "same_as": "Reg0030030"
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "identification.same_as",
+     "invalid"
+    ]
+   ]
+  },
+  {
+   "name": "duplicate ok",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "duplicate",
+     "summary": "",
+     "same_as": "Reg0030040"
+    },
+    "overall_confidence": "",
+    "fields": [],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  },
+  {
+   "name": "not_individual needs reason",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "not_individual",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "",
+    "fields": [],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "identification.summary",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "identified needs overall confidence",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "overall_confidence",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "identified without fields",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "no sources",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [],
+    "sources": [],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields",
+     "required"
+    ],
+    [
+     "sources",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "source needs type+citation",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "",
+      "citation": "x",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].sources",
+     "weak_sources"
+    ],
+    [
+     "sources[0].citation",
+     "required"
+    ],
+    [
+     "sources[0].type",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "web source needs url",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources[0].url",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "bad url",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "ftp://x.dk/a",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources[0].url",
+     "invalid_url"
+    ]
+   ]
+  },
+  {
+   "name": "javascript url",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "javascript:alert(1)",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources[0].url",
+     "invalid_url"
+    ]
+   ]
+  },
+  {
+   "name": "print source needs locator or url",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "tryk",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources[0].locator",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "print source with locator ok",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "tryk",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "",
+      "locator": "s. 211",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  },
+  {
+   "name": "future access date",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2027-01-01",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources[0].accessed",
+     "future_date"
+    ]
+   ]
+  },
+  {
+   "name": "bad access date",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "28/10/2026",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources[0].accessed",
+     "invalid_date"
+    ]
+   ]
+  },
+  {
+   "name": "impossible access date",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-02-30",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources[0].accessed",
+     "invalid_date"
+    ]
+   ]
+  },
+  {
+   "name": "bad result",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "maybe",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].sources",
+     "weak_sources"
+    ],
+    [
+     "sources[0].result",
+     "invalid"
+    ]
+   ]
+  },
+  {
+   "name": "bad birth date",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "3. maj 1820",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[1].value",
+     "invalid_date"
+    ]
+   ]
+  },
+  {
+   "name": "implausible year",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1999",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[1].value",
+     "implausible_date"
+    ]
+   ]
+  },
+  {
+   "name": "impossible day",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-02-30",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[1].value",
+     "invalid_date"
+    ]
+   ]
+  },
+  {
+   "name": "ca. prefix ok",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "ca. 1820",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  },
+  {
+   "name": "death before birth",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "death_date",
+      "value": "1810",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields",
+     "death_before_birth"
+    ]
+   ]
+  },
+  {
+   "name": "field without value",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": " ",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].value",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "field without confidence",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].confidence",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "field without source",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": []
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].sources",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "field source out of range",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       3
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].sources",
+     "invalid"
+    ]
+   ]
+  },
+  {
+   "name": "probable needs strong source",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "personlig",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].sources",
+     "weak_sources"
+    ]
+   ]
+  },
+  {
+   "name": "probable needs supporting source",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "intet_fund",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].sources",
+     "weak_sources"
+    ]
+   ]
+  },
+  {
+   "name": "proposed may rest on personal knowledge",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "personlig",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  },
+  {
+   "name": "duplicate field",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[2].field",
+     "duplicate"
+    ]
+   ]
+  },
+  {
+   "name": "unknown field",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "shoe_size",
+      "value": "42",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[2].field",
+     "invalid"
+    ]
+   ]
+  },
+  {
+   "name": "bad wikidata id",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "wikidata",
+      "value": "12345",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[2].value",
+     "invalid_qid"
+    ]
+   ]
+  },
+  {
+   "name": "good wikidata id",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "wikidata",
+      "value": "Q42",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  },
+  {
+   "name": "bad gender",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "gender",
+      "value": "Ukendt",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[2].value",
+     "invalid"
+    ]
+   ]
+  },
+  {
+   "name": "authority url must be http(s)",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "authority_other",
+      "value": "www.",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[2].value",
+     "invalid_url"
+    ]
+   ]
+  },
+  {
+   "name": "comment too long",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "fields[0].comment",
+     "too_long"
+    ]
+   ]
+  },
+  {
+   "name": "unidentifiable needs a negative search",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "unidentifiable",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "",
+    "fields": [],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources",
+     "required_negative"
+    ]
+   ]
+  },
+  {
+   "name": "unidentifiable documented",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "unidentifiable",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "",
+    "fields": [],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "intet_fund",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  },
+  {
+   "name": "no name",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "contributor.name",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "no consent",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": false
+   },
+   "errors": [
+    [
+     "consent",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "consent must be literally true",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": "yes"
+   },
+   "errors": [
+    [
+     "consent",
+     "required"
+    ]
+   ]
+  },
+  {
+   "name": "too many sources",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Peder",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     },
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": [
+    [
+     "sources",
+     "too_many"
+    ]
+   ]
+  },
+  {
+   "name": "control characters are stripped",
+   "payload": {
+    "person_id": "Reg0030030",
+    "identification": {
+     "status": "identified",
+     "summary": "",
+     "same_as": ""
+    },
+    "overall_confidence": "probable",
+    "fields": [
+     {
+      "field": "given_names",
+      "value": "Pe\u0000der",
+      "confidence": "probable",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     },
+     {
+      "field": "birth_date",
+      "value": "1820-05-03",
+      "confidence": "proposed",
+      "comment": "",
+      "sources": [
+       0
+      ]
+     }
+    ],
+    "sources": [
+     {
+      "type": "web",
+      "citation": "Dansk Demografisk Database, folketælling 1860",
+      "url": "https://www.ddd.dda.dk/x",
+      "locator": "",
+      "accessed": "2026-10-28",
+      "result": "stoetter",
+      "note": ""
+     }
+    ],
+    "comment": "",
+    "contributor": {
+     "name": "Test Slægtsforsker",
+     "public_credit": true
+    },
+    "consent": true
+   },
+   "errors": []
+  }
+ ]
+}

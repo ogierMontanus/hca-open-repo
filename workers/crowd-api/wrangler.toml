@@ -1,0 +1,23 @@
+# Cloudflare Worker: GitHub OAuth proxy + /api/crowd/ for the crowd pages.
+# Setup (PowerShell): see README.md in this folder.
+name = "hca-crowd-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+# Origins that may call the API and receive a login (comma separated, no path).
+ALLOWED_ORIGINS = "https://ogiermontanus.github.io"
+# Login redirects are only sent to URLs under this path on an allowed origin.
+RETURN_PATH_PREFIX = "/hca-open-repo/"
+# GitHub OAuth App (client id is public; the SECRET is set with `wrangler secret put`).
+GITHUB_CLIENT_ID = ""
+# Editors: GitHub numeric user ids (preferred — logins can be renamed) or logins, comma separated.
+ADMINS = ""
+# PRIVATE repository that stores the contributions, "owner/name". Empty = in-memory (dev only).
+DATA_REPO = ""
+DATA_BRANCH = "main"
+
+# Secrets (never in this file):
+#   GITHUB_CLIENT_SECRET   OAuth App client secret
+#   SESSION_SECRET         ≥ 32 random chars; signs the session tokens
+#   DATA_TOKEN             fine-grained PAT, "Contents: read and write" on DATA_REPO only

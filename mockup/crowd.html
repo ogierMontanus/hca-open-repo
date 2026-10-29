@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Hjælp med at identificere personer — HCA's Hvem-hvad-hvor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/crowd.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body data-section="hvem">
+
+<div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
+    <form class="search-form" role="search" data-no-submit>
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="persons.html">Personregister</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Hjælp med at identificere</span>
+      </nav>
+      <h1>Hjælp med at identificere personer</h1>
+      <p>Mange af dem, Andersen nævner i sine dagbøger, optræder kun med et efternavn eller en enkelt linje i Topsøe-Jensens register.
+         Måske kan du stedkendskab, slægtsforskning eller lokalhistorie sætte navn, årstal og sted på nogle af dem.</p>
+      <div id="js-hero-meta" class="page-hero__meta"></div>
+    </div>
+  </div>
+
+  <section class="section crowd-intro-section">
+    <div class="container">
+      <div id="js-mode-note" class="crowd-note" role="status"></div>
+
+      <div class="crowd-intro">
+        <ol class="crowd-steps">
+          <li><strong>Find en person.</strong> Filtrér efter land, lokalitet, omtaleår eller hvilken oplysning der mangler.</li>
+          <li><strong>Læs i dagbogen.</strong> Hver post fører direkte til de dagbogssider, hvor navnet står.</li>
+          <li><strong>Bidrag med kilder.</strong> Udfyld det, du kan dokumentere, med sikkerhedsgrad og kilde til hvert felt. En redaktør gennemgår alt, før det indgår.</li>
+        </ol>
+        <div class="crowd-me" id="js-me" aria-live="polite"></div>
+      </div>
+
+      <details class="crowd-details" id="js-categories">
+        <summary>Hvad betyder kategorierne?</summary>
+        <div id="js-categories-body" class="crowd-categories"></div>
+      </details>
+
+      <section id="js-mine-section" class="crowd-mine" hidden>
+        <h2 class="section-title">Mine bidrag</h2>
+        <div id="js-mine"></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="section section--light">
+    <div class="container">
+      <div class="browse-layout">
+        <aside class="facet-panel">
+          <div class="facet-panel__header">
+            <span class="facet-panel__title">Filtrér</span>
+            <button class="facet-panel__clear" type="button">Nulstil</button>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Manglende oplysninger <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="gap"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Dokumentationsniveau <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="level"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Antal omtaler <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="mentions"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Flygtig omtale <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="fleeting"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Formodet land <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body"
+                 data-facet-source="country"
+                 data-facet-limit="10"
+                 data-facet-empty-label="Uoplyst"
+                 data-facet-more-label="Vis alle"
+                 data-facet-fewer-label="Vis færre"
+                 data-facet-sort-count-label="Antal"
+                 data-facet-sort-alpha-label="A-Å"></div>
+            <div class="crowd-facet-note">En formodning, ikke en oplysning fra registret — se »Grundlag«.</div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Formodet lokalitet <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body"
+                 data-facet-source="locality"
+                 data-facet-limit="10"
+                 data-facet-empty-label="Uoplyst"
+                 data-facet-more-label="Vis alle"
+                 data-facet-fewer-label="Vis færre"
+                 data-facet-sort-count-label="Antal"
+                 data-facet-sort-alpha-label="A-Å"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Grundlag for formodningen <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="basis"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Omtaleår <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-range="years">
+              <div class="crowd-range">
+                <input type="number" data-range-from min="1825" max="1875" placeholder="1825" aria-label="Fra år">
+                <span>–</span>
+                <input type="number" data-range-to min="1825" max="1875" placeholder="1875" aria-label="Til år">
+              </div>
+            </div>
+            <div class="crowd-facet-note">Året for den dagbogsside, hvor navnet står.</div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Årti <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="decade"></div>
+          </div>
+
+          <div class="facet-group">
+            <div class="facet-group__header">Status <span class="facet-group__toggle">▲</span></div>
+            <div class="facet-group__body" data-facet-source="state"></div>
+          </div>
+        </aside>
+
+        <div>
+          <div class="results-header">
+            <span class="results-count"><strong id="js-count">–</strong> personer i arbejdskøen</span>
+            <label class="crowd-sort">Sortér
+              <select id="js-sort">
+                <option value="name">Efternavn A–Å</option>
+                <option value="gaps">Flest huller først</option>
+                <option value="first">Tidligst omtalt</option>
+                <option value="few">Færrest omtaler først</option>
+              </select>
+            </label>
+          </div>
+          <div class="crowd-search">
+            <input type="search" id="js-q" placeholder="Søg i navn og beskrivelse …" aria-label="Søg i arbejdskøen">
+          </div>
+          <div id="js-results" class="crowd-results"></div>
+          <div class="crowd-more">
+            <button id="js-more" class="layout-switcher__btn" type="button" hidden>Vis flere</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype &nbsp;·&nbsp; Udarbejdet i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+    &nbsp;·&nbsp; <a href="crowd-review.html" style="color:inherit">Redaktion</a>
+  </div>
+</footer>
+
+<script src="data/crowd-queue.js"></script>
+<script src="data/crowd-approved.js"></script>
+<script src="js/crowd-validate.js"></script>
+<script src="js/crowd-config.js"></script>
+<script src="js/crowd-store.js"></script>
+<script src="js/crowd-common.js"></script>
+<script src="js/facet-overlay.js"></script>
+<script src="js/filter-logic.js"></script>
+<script src="js/facet-engine.js"></script>
+<script src="js/crowd-browse.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

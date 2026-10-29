@@ -14,6 +14,7 @@
     }
     .wd-badge:hover { background: #d4e8f5; border-color: #3a7fb5; color: #1a4a72; }
   </style>
+  <link rel="stylesheet" href="css/crowd.css">
   <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body data-section="hvem">
@@ -173,6 +174,12 @@
                Nationalitet facet is narrowed to exactly one value. Empty
                otherwise. -->
           <div id="js-nation-link"></div>
+
+          <!-- Pointer to the crowdsourcing work queue (docs/crowdsourcing.md). -->
+          <p style="font-size:0.8rem;color:var(--color-text-muted);margin:0 0 var(--sp3)">
+            Kan du hjælpe med at identificere flygtigt omtalte personer?
+            <a href="crowd.html">Se arbejdskøen →</a>
+          </p>
 
           <!-- Persons list — data-driven from PERSONS_EXTRA (js/persons-extra.js).
                Reused as the render target for both layouts (Liste/Tabel), same
@@ -902,6 +909,8 @@
   facets.apply();
 })();
 </script>
+<script src="data/crowd-approved.js"></script>
+<script src="js/crowd-link.js"></script>
 <script src="js/nav.js"></script>
 </body>
 </html>

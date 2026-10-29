@@ -92,6 +92,9 @@ STAGES_AFTER_INGEST = [
     ("4d", "search-index.js (typeahead)",  "scripts/build_mockup/build_search_index.py", False),
     ("4e", "cooccurrence.js (reciprocal)", "scripts/build_mockup/build_cooccurrence.py", False),
     ("4f", "nation-index.js (nation mashup)", "scripts/build_mockup/build_nation_index.py", True),
+    # Crowdsourcing work queue + approved contributions (docs/crowdsourcing.md).
+    # Reads the same CSVs as 4b/4c and reuses build_persons_extra's loaders.
+    ("4g", "crowd-queue.js (crowdsourcing queue)", "scripts/build_mockup/build_crowd_queue.py", False),
 ]
 
 V082_INGESTER = "scripts/normalization/hca_xlsx_to_csv.py"

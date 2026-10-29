@@ -160,6 +160,7 @@ Regler:
 | `HCAC` | H.C. Andersen Centret |
 | `BDA` | Bibliografisk/biografisk opslagsværk (præciseres i `source_detail`) |
 | `WD` | Wikidata (Q-nummer i `source_detail`; verificeres jf. `wikidata-verify`-skill) |
+| `CROWD` | Bidrag fra frivillige, godkendt af en redaktør (`scripts/crowdsource/`, se [`../crowdsourcing.md`](../crowdsourcing.md)); `source_detail` samler bidragets egne kilder |
 | `REG` | Registret selv modsiger sig andetsteds — fx `Asbjømsen` i labelen mod korrekt `Asbjørnsen` i en værktitel i samme datasæt |
 
 `REG` er værd at have, fordi den slags rettelse ikke kræver en ekstern

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Bidrag til identifikation — HCA's Hvem-hvad-hvor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/crowd.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body data-section="hvem">
+
+<div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
+    <form class="search-form" role="search" data-no-submit>
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="crowd.html">Hjælp med at identificere</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current" id="js-crumb" style="font-family:monospace"></span>
+      </nav>
+      <h1 id="js-h1">Bidrag til identifikation</h1>
+      <p id="js-sub">Tilføj det, du kan dokumentere. Alt gennemgås af en redaktør, før det indgår i registret.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="crowd-layout">
+      <div id="js-main">
+        <p class="crowd-dim">Indlæser …</p>
+      </div>
+      <aside class="crowd-side" id="js-side" aria-label="Kontekst"></aside>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Prototype &nbsp;·&nbsp; Udarbejdet i samarbejde med
+    <a href="https://www.sdu.dk/hca" style="color:inherit">H.C. Andersen Centret, Syddansk Universitet, Odense</a>
+    &nbsp;·&nbsp; <a href="om.html" style="color:inherit">Vores kilder</a>
+  </div>
+</footer>
+
+<script src="data/crowd-queue.js"></script>
+<script src="data/crowd-approved.js"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/diary-refs.js"></script>
+<script src="data/diary-refs-overflow.js"></script>
+<script src="js/diary-wire.js"></script>
+<script src="js/crowd-validate.js"></script>
+<script src="js/crowd-config.js"></script>
+<script src="js/crowd-store.js"></script>
+<script src="js/crowd-common.js"></script>
+<script src="js/crowd-form.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

@@ -47,6 +47,17 @@ today lands on a fully Danish detail page — the single biggest remaining
 seam in the English experience; unlike the person side, there is no
 partial workaround for either.
 
+### Crowdsourcing pages (prototype, Danish only)
+
+`crowd.html`, `crowd-contribute.html` and `crowd-review.html` (docs/crowdsourcing.md)
+have no `_en.html` twins yet — the prototype is tested with a Danish-speaking
+genealogist. The shared labels all come from `scripts/crowdsource/taxonomy.py`
+(every category already carries an `en` string), so an English twin is a
+template copy plus swapping the `da` strings; the form's validation messages
+live in `validate.py` / `crowd-validate.js` and would need translating in both.
+The pointer on `persons.html` and the `js/crowd-link.js` block are likewise
+Danish-only (`persons_en.html` does not load them).
+
 ### Wing / category pages (Work Register sub-divisions)
 
 | Page | Lines | Live JS |

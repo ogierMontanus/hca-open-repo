@@ -56,5 +56,17 @@ mockup/data/nation-index.js
 # Natural Earth download cache for scripts/build_mockup/build_basemap.py
 .cache/
 
-# lex.dk sitemap + page-check caches (scripts/parsers/lex_*) — regenerate; contain Lex content/metadata
-data/raw/lex/
+# Crowdsourcing (docs/crowdsourcing.md). The queue/approved JS is derived from
+# the normalised CSVs and data/curated/person_crowd_approved.tsv — regenerate
+# with scripts/build_mockup/build_crowd_queue.py (stage 4g).
+mockup/data/crowd-queue.js
+mockup/data/crowd-approved.js
+# Runtime state of scripts/crowdsource/server.py: contributors' names and
+# contact details, submissions awaiting review, attachments. What an editor
+# approves leaves it through export_approved.py into data/curated/ (tracked).
+data/crowdsource/
+
+# Cloudflare Worker (workers/crowd-api)
+workers/crowd-api/node_modules/
+workers/crowd-api/.wrangler/
+workers/crowd-api/.dev.vars

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Redaktionens gennemgang — HCA's Hvem-hvad-hvor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/crowd.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body data-section="hvem">
+
+<div id="icon-sprite"></div>
+<script src="js/no-submit.js"></script>
+<script src="js/icons.js"></script>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="site-logo">HCA's Hvem-hvad-hvor</a>
+    <form class="search-form" role="search" data-no-submit>
+      <input type="search" placeholder="Søg i registre, dagbøger, steder…" class="search-input">
+      <button type="submit" class="search-btn">Søg</button>
+    </form>
+    <span id="js-cart-badge"></span>
+  </div>
+</header>
+
+<main>
+  <div class="page-hero page-hero--sm">
+    <div class="container">
+      <nav class="breadcrumb" style="opacity:0.72;margin-bottom:6px">
+        <a href="index.html">Forside</a>
+        <span class="breadcrumb__sep">›</span>
+        <a href="crowd.html">Hjælp med at identificere</a>
+        <span class="breadcrumb__sep">›</span>
+        <span class="breadcrumb__current">Redaktion</span>
+      </nav>
+      <h1>Redaktionens gennemgang</h1>
+      <p>Hvert felt i et bidrag godkendes, rettes eller afvises for sig. Først efter godkendelse kan oplysningerne indgå i den autoritative data.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div id="js-mode-note" class="crowd-note" role="status"></div>
+      <div id="js-gate" class="crowd-sec" hidden>
+        <h2>Redaktør-adgang</h2>
+        <p class="crowd-lede">Skriv redaktør-nøglen (<code>HCA_CROWD_ADMIN_TOKEN</code>, eller den der blev udskrevet, da serveren startede). Den gemmes kun i denne fane.</p>
+        <div class="crowd-token"><input type="text" id="js-token" autocomplete="off" aria-label="Redaktør-nøgle">
+          <button type="button" class="crowd-btn crowd-btn--primary" id="js-login">Fortsæt</button></div>
+        <p id="js-gate-err" class="crowd-err" hidden></p>
+      </div>
+    </div>
+
+    <div id="js-app" hidden>
+      <div class="container" style="margin-bottom:var(--sp5)">
+        <div class="crowd-tools">
+          <label class="crowd-sort">Status
+            <select id="js-status">
+              <option value="submitted">Afventer</option>
+              <option value="needs_changes">Bedt om uddybning</option>
+              <option value="approved">Godkendt</option>
+              <option value="partially_approved">Delvist godkendt</option>
+              <option value="rejected">Afvist</option>
+              <option value="">Alle</option>
+            </select></label>
+          <label class="crowd-sort">Dit navn som redaktør <input type="text" id="js-reviewer" style="width:180px" placeholder="fx Holger"></label>
+          <span id="js-export-tools" class="crowd-tools"></span>
+        </div>
+      </div>
+      <div class="crowd-review">
+        <div>
+          <div id="js-list" class="crowd-queue-list" aria-label="Bidrag"></div>
+          <details class="crowd-details" style="margin-top:var(--sp5)"><summary>Bidragydere</summary><div id="js-contribs"></div></details>
+        </div>
+        <div id="js-detail" class="crowd-rv"><p class="crowd-dim">Vælg et bidrag til venstre.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Prototype &nbsp;·&nbsp; <a href="crowd.html" style="color:inherit">Arbejdskøen</a></div>
+</footer>
+
+<script src="data/crowd-queue.js"></script>
+<script src="data/persons-extra.js"></script>
+<script src="data/diary-refs.js"></script>
+<script src="data/diary-refs-overflow.js"></script>
+<script src="js/diary-wire.js"></script>
+<script src="js/crowd-validate.js"></script>
+<script src="js/crowd-config.js"></script>
+<script src="js/crowd-store.js"></script>
+<script src="js/crowd-common.js"></script>
+<script src="js/crowd-review.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

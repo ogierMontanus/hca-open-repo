@@ -210,14 +210,14 @@ scrollbar i stedet via `scrollbar-width: none` +
 
 ---
 
-## Begivenheder — hård datogrænse 31.12.1875
+## Crowdsourcing — bidrag er et lag, ikke en rettelse
 
-**Brugerbeslutning (2026-10-28):** Intet dateret efter **31. december 1875**
-mappes som begivenhed — hverken i tidstavle-krydsforbindelsen,
-udgivelsesbegivenheder fra `bibliografi` eller noget bygget oven på dem.
-Andersen døde 4.8.1875; senere førstetryk, moderne udgaver og
-forskningslitteratur ligger uden for omfanget. Grænsen er kodet ét sted:
-`scripts/normalization/event_bounds.py` (`CUTOFF`, `check()`); nye
-begivenhedsscripts skal importere den frem for at hardkode datoen. Perioder
-der starter før og slutter efter grænsen beskæres; perioder der starter efter
-droppes (og tælles i scriptets log). Guard: `tests/test_timeline_crosswalk.py`.
+Frivilliges bidrag (`mockup/crowd*.html`, `scripts/crowdsource/`, se
+`docs/crowdsourcing.md`) skrives **aldrig** ind i registerfelterne, i
+`entities.csv`, `data/normalized/` eller master1/master2. De godkendes
+felt for felt af en redaktør og lægges som et attribueret lag i
+`data/curated/person_crowd_approved.tsv` (kildekode `CROWD`). Kategorier,
+felter og grænser defineres ét sted — `scripts/crowdsource/taxonomy.py` — og
+valideringsreglerne findes i både `validate.py` og `mockup/js/crowd-validate.js`
+(delt testsæt `tests/fixtures/crowd_cases.json`): ændr dem begge eller ingen.
+`data/crowdsource/` er runtime-data med personoplysninger og skal ikke i git.
