@@ -11,6 +11,8 @@ on:
       - 'scripts/normalization/**'
       - 'scripts/build_web/**'
       - 'scripts/build_mockup/**'
+      - 'scripts/crowdsource/**'
+      - 'data/curated/person_crowd_approved.tsv'   # editor-approved crowd contributions
       - 'web/**'
       - 'mockup/**'
       - '.github/workflows/build-mockup.yml'
@@ -135,6 +137,12 @@ jobs:
       - name: Stage 4f — nation-index.js (nation mashup)
         run: python scripts/build_mockup/build_nation_index.py
         continue-on-error: true
+
+      # Stage 4g — the crowdsourcing work queue (crowd.html) and the approved
+      # contributions shown on persons.html. Reads the same CSVs as 4b and
+      # data/curated/person_crowd_approved.tsv. Gitignored output.
+      - name: Stage 4g — crowd-queue.js + crowd-approved.js
+        run: python scripts/build_mockup/build_crowd_queue.py
 
       - name: Lint — no stale person.html link targets
         run: python tests/test_no_stale_person_refs.py

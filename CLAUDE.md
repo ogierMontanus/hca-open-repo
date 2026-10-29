@@ -207,3 +207,17 @@ der har en `position: fixed`-efterkommer et andet sted i koden. Skjul en
 scrollbar i stedet via `scrollbar-width: none` +
 `::-webkit-scrollbar { display: none }` — det ændrer ikke
 `overflow`-værdien og udløser derfor ikke fælden.
+
+---
+
+## Crowdsourcing — bidrag er et lag, ikke en rettelse
+
+Frivilliges bidrag (`mockup/crowd*.html`, `scripts/crowdsource/`, se
+`docs/crowdsourcing.md`) skrives **aldrig** ind i registerfelterne, i
+`entities.csv`, `data/normalized/` eller master1/master2. De godkendes
+felt for felt af en redaktør og lægges som et attribueret lag i
+`data/curated/person_crowd_approved.tsv` (kildekode `CROWD`). Kategorier,
+felter og grænser defineres ét sted — `scripts/crowdsource/taxonomy.py` — og
+valideringsreglerne findes i både `validate.py` og `mockup/js/crowd-validate.js`
+(delt testsæt `tests/fixtures/crowd_cases.json`): ændr dem begge eller ingen.
+`data/crowdsource/` er runtime-data med personoplysninger og skal ikke i git.

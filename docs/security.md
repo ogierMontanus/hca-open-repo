@@ -78,6 +78,26 @@ HTML built in script escapes every value taken from data or from the URL
   the build job has a read-only token, and only the separate `deploy` job
   holds the Pages/OIDC write scopes and runs no repository code.
 
+## Crowdsourcing server (optional)
+
+The static site stays as described above. `scripts/crowdsource/server.py`
+is an *optional*, separately run process (docs/crowdsourcing.md §8–9) that
+serves `mockup/` and a JSON API under `/api/crowd/` — it is not part of the
+Pages deployment, and without it the crowd pages fall back to a browser-local
+mode. The pages remain CSP-clean: same-origin `fetch` only (`connect-src 'self'`),
+no inline handlers, all data through `esc()`.
+
+* Contributions are validated server-side (`validate.py`): schema, lengths,
+  `http(s)`-only URLs, whitelisted attachment types and size, sanitised file
+  names; ids are matched against a fixed pattern before touching the file system.
+* Review and export endpoints need the editor key (`HCA_CROWD_ADMIN_TOKEN`,
+  compared in constant time); contributor tokens are stored only as SHA-256.
+* The prototype binds to `127.0.0.1`, speaks plain HTTP, runs one process and
+  has no rate limiting: **put TLS, an identity provider and a rate limit in
+  front of it before exposing it.**
+* `data/crowdsource/` holds names, contact details and unreviewed claims and is
+  git-ignored; only editor-approved rows reach `data/curated/`.
+
 ## Not covered
 
 * `web/` is the original prototype; its `index.html` is replaced by the

@@ -19,11 +19,12 @@ static HTML file or a `*.js` file that defines a global via a plain
 | `build_places_extra.py`  | `entities.csv`, `references.csv`, `places.csv`, `rejser.tsv` | `mockup/data/places-extra.js`  (2,433 places, 2,421 geocoded) + `places-stats.js` (the place counts on index.html) | **no — gitignored** |
 | `build_search_index.py`  | `entities.csv`, `references.csv`                            | `mockup/data/search-index.js`  (~16,400 entities, ref-sorted) | **no — gitignored** |
 | `build_cooccurrence.py`  | `entities.csv`, `references.csv`                            | `mockup/data/cooccurrence.js` (top-12 peers per person/place, count ≥ 2) | **no — gitignored** |
+| `build_crowd_queue.py`   | `entities.csv`, `references.csv`, `diary.csv`, `diary_html.csv`, `places.csv`, `kb_diary_links.csv`, person_*.csv, `data/curated/person_crowd_approved.tsv` | `mockup/data/crowd-queue.js` (arbejdskø: persons med for tyndt register + hultyper + formodet sted), `crowd-approved.js` | **no — gitignored** (stage 4g; se `docs/crowdsourcing.md`) |
 | `build_diary_print.py`   | `diary_html.csv`, `diary.csv`, `references.csv`, `entities.csv`, `kb_diary_links.csv` | `mockup/data/diary-print/vol-*.js` (per-page text + names for the cart PDF) | **no — gitignored** |
 | `build_kb_links.py`      | `raw/1-KBDiaryLinkData-PQ-links-active.xlsm`                | `data/normalized/kb_diary_links.csv` (KB facsimile link per diary page) | **yes — one-off, committed**; not in `build_all.py` or CI (needs the raw workbook) |
 | `build_pdf_assets.py`    | `vendor/pdfmake.min.js` + system Liberation fonts           | `mockup/vendor/pdfmake/pdf-assets.js` (PDF library + subset fonts as strings, for the cart PDF worker) | **yes — one-off, committed** (needs `pip install fonttools`) |
 
-The eight generated outputs (the gitignored rows above) are fully derived
+The nine generated outputs (the gitignored rows above) are fully derived
 from the normalised CSVs, so they are excluded from git. The two
 **committed** rows are one-off vendoring/parsing steps that are not part
 of the pipeline: re-run them only when their input changes. The committed mockup pages **degrade
