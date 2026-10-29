@@ -370,6 +370,11 @@ JS-testene, hvis det er installeret). CI bygger køen som trin 4g og kører
 testene. Bemærk: `tests/test_build_diary_pdf.py::test_pdf` fejler allerede på
 `main` og er ikke berørt af denne gren.
 
+**Kendt svaghed — navnestrengen på siden.** Linket til dagbogsposten bygger på et
+ordmatch af efternavnet, som kun rammer ca. 57 % af omtalerne (22 % kan slet
+ikke findes). Måling, årsager og plan for et lærende grounding-trin:
+[`plan-streng-grounding.md`](plan-streng-grounding.md).
+
 ## 11. Vej til flere bidragydere
 
 Prototypen er bygget, så intet af det følgende kræver omskrivning af
