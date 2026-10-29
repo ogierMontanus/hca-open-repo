@@ -57,7 +57,8 @@ def test_manual_review_rows_are_traceable(rows):
         pytest.skip("no review decisions")
     with open(decisions, encoding="utf-8", newline="") as f:
         acc = {d["rid"] for d in csv.DictReader(f) if d["decision"] in ("accept", "accept_alias")}
-    assert {r["rid"] for r in rows if r["confirmed_by"] == "manual_review"} == acc
+    # every manual row comes from an accept decision (an accepted person may meanwhile have become automatic)
+    assert {r["rid"] for r in rows if r["confirmed_by"] == "manual_review"} <= acc
 
 
 def test_rids_exist_as_persons(rows):
