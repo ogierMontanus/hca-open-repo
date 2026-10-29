@@ -5,6 +5,30 @@ Status: forslag, revideret 2026-10-29 (nationalitet fra Lex-sider; profession-m�
 [`data-model/lex-dk-sitemap-results.md`](data-model/lex-dk-sitemap-results.md) ·
 hører sammen med [`plan-tidstavle-data.md`](plan-tidstavle-data.md) (del 2: eksterne data)
 
+## Status og genoptagelse (2026-10-29, ved kontekstskifte)
+
+| Fase | Status |
+|---|---|
+| 0 Henvendelse til Lex | **ikke gjort** (sitemap hentet og ≈ 4.600 sidekald/50 chatbot-spørgsmål kørt uden aftale) |
+| 1 Screening | ✔ `persons_tiers.csv` (A 1.315 · B 2.030 · C 6.883) |
+| 2 Sitemap-opslag, niveau A | ✔ 523 bekræftet (DBL 324) — `lex-dk-sitemap-results.md` |
+| **2d** DBL for hele registret | ✔ **885** i «Dansk\*» (+ registrets 87 = 957) — `lex-dk-dbl-bucket-results.md` |
+| 2b Nationalitet fra Lex-sider · 2c profession-målret søgning · **2e kode/visning** · 3 chatbot-rest · 4 Wayback · 5 promovering | **ikke gjort** |
+
+**Næste skridt:** (1) udfyld `data/curated/lex/qa_dbl_sample.csv` (88 rækker) og mål præcisionen; (2) gennemgå
+`queue_dbl_review.csv` (143); (3) fase 2e: stjerne + mouseover i facetten, `build_persons_extra.py`,
+`facet-engine.js`, `persons*.html`, `nation.html`, tests (§3d-tabellen); (4) fase 0, før noget kører i større skala.
+
+**Lokalt (PowerShell):** `data/raw/lex/` er gitignoreret og skal genskabes — sitemap + cache:
+```powershell
+New-Item -ItemType Directory -Force data/raw/lex | Out-Null
+foreach ($i in 1..6) { Invoke-WebRequest "https://lex.dk/.sitemap/sitemap$i.xml" -OutFile "data/raw/lex/sitemap$i.xml" }
+python scripts/parsers/screen_persons_for_lex.py
+python scripts/parsers/lex_sitemap_match.py --tier all --limit 20000 --hosts dbl --out data/curated/lex/persons_dbl.csv
+python scripts/parsers/build_person_nationality_added.py
+```
+(Genkørsel uden cachen koster ≈ 2.900 sidekald ≈ 75 min; ingen af scriptene er dækket af tests endnu.)
+
 **Mål:** en verificeret, diskret ekstern henvisning fra en persons side til den mest udførlige
 lex.dk-artikel om vedkommende — *Dansk Biografisk Leksikon* (DBL) først, derefter andre udførlige
 værker. **Perifere personer udelades bevidst.** Kun links gemmes; ingen Lex-tekst kopieres.
