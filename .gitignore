@@ -55,3 +55,6 @@ mockup/data/nation-index.js
 
 # Natural Earth download cache for scripts/build_mockup/build_basemap.py
 .cache/
+
+# lex.dk sitemap + page-check caches (scripts/parsers/lex_*) — regenerate; contain Lex content/metadata
+data/raw/lex/

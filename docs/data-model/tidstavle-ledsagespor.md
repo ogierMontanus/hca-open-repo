@@ -64,3 +64,10 @@ stedet ikke nævnt i selve posten, hentes det fra det opholdsled, der dækker
 datoen (markeret «ifølge opholdet»). Personer uden poster får ingen sektion.
 Samme `TimelineWire.mountEntity(el, 's'|'p'|'w', rid)` kan genbruges til
 `place.html` og `work.html`.
+
+## Se også
+
+* [`tidstavle-krydsforbindelser.md`](tidstavle-krydsforbindelser.md) — målte
+  krydsforbindelser og kendte begrænsninger.
+* [`../plan-tidstavle-data.md`](../plan-tidstavle-data.md) — plan for videre
+  arbejde med interne og eksterne data (udføres lokalt).

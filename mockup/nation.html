@@ -499,7 +499,7 @@
 
     document.getElementById('js-h1').textContent = n.label_da;
     document.getElementById('js-sub').textContent =
-      'Personer, steder og værker forbundet med "' + n.label_da + '" (' + n.category + ').';
+      'Personer, steder og værker forbundet med "' + n.label_da + '" (' + n.category + ').' + (n.note_da ? ' ' + n.note_da : '');
 
     var memEl = document.getElementById('js-nation-members');
     var mem = (n.members || []).filter(function (m) { return m.key !== key; });

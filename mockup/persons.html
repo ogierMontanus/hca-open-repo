@@ -95,6 +95,7 @@
                  data-facet-fewer-label="Vis færre"
                  data-facet-sort-count-label="Antal"
                  data-facet-sort-alpha-label="A-Å"></div>
+            <p class="facet-note" id="nat-note" hidden>* Dansk*: født i Danmark eller bosat der i længere årrække. Tilføjet oplysning — kriterium: optaget i Dansk Biografisk Leksikon. «Uoplyst» betyder ikke «dansk».</p>
           </div>
 
           <!-- Køn — AFLEDT facet, ikke en registreret oplysning. Værdierne
@@ -836,6 +837,10 @@
     });
   }
 
+  // «Dansk*»-fodnoten vises kun, når bygget har leveret en note (persons-extra.js).
+  var natNote = document.getElementById('nat-note');
+  if (natNote && typeof NATIONALITY_NOTES !== 'undefined' && NATIONALITY_NOTES.dansk) natNote.hidden = false;
+
   var facets = FacetEngine.create({
     panel: document.querySelector('.facet-panel'),
     items: ALL,
@@ -849,6 +854,9 @@
     // data/curated/person_role_bucket_order.csv (udsendt i persons-extra.js).
     fixedOrder: {
       role: typeof PERSON_ROLE_ORDER !== 'undefined' ? PERSON_ROLE_ORDER : []
+    },
+    notes: {
+      nationality: function (k) { return (typeof NATIONALITY_NOTES !== 'undefined' && NATIONALITY_NOTES[k]) || ''; }
     },
     labels: {
       nationality: function (k) { return natLabels[k] || k; },

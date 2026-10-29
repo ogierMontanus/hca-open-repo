@@ -81,6 +81,7 @@
  *       person:  function (p) { return p.personRids; } // …or array
  *     },
  *     labels:   { person: function (rid) { return NAMES[rid]; } },
+ *     notes:    { nationality: function (k) { return NOTES[k] || ''; } },  // optional tooltip per value
  *     sortKeys: { person: surnameKey },   // tiebreak when counts are equal
  *     fixedOrder: { role: ['A', 'B'] },   // optional: fixed display order
  *     onChange: function (filtered, state) { render(filtered); }  // state.expr: see filter-logic.js
@@ -114,6 +115,7 @@ window.FacetEngine = (function () {
     var accessors = opts.accessors || {};
     var labels    = opts.labels || {};
     var sortKeys  = opts.sortKeys || {};
+    var notes     = opts.notes || {};     // field → function (value) → tooltip text (e.g. «Dansk*»)
     var fixedOrder = opts.fixedOrder || {};
     var onChange  = opts.onChange || function () {};
     if (!panel) return null;
@@ -346,9 +348,14 @@ window.FacetEngine = (function () {
 
       var rowsHtml = renderRows.map(function (r) {
         var checked = checkedVals[r.value] ? ' checked' : '';
-        return '<label class="facet-item"><input type="checkbox" data-facet="' +
+        // Optional per-value note: mouseover (title) AND screen-reader text, since title alone does
+        // not reach touch or keyboard users (the page also shows a visible footnote).
+        var note = notes[field] ? (notes[field](r.value) || '') : '';
+        return '<label class="facet-item"' + (note ? ' title="' + esc(note) + '" data-note="' + esc(note) + '"' : '') +
+          '><input type="checkbox" data-facet="' +
           esc(field) + '" data-match="' + esc(r.value) + '"' + checked + '>' +
-          '<span class="facet-item__label">' + esc(r.label) + '</span>' +
+          '<span class="facet-item__label">' + esc(r.label) +
+          (note ? '<span class="sr-only"> (' + esc(note) + ')</span>' : '') + '</span>' +
           '<span class="facet-item__count">' + num(r.n) + '</span></label>';
       }).join('');
 
@@ -471,7 +478,7 @@ window.FacetEngine = (function () {
           if (item) {
             item.style.opacity = dim ? '0.4' : '';
             item.style.cursor  = dim ? 'not-allowed' : '';
-            item.title = dim ? 'Ingen resultater under de øvrige filtre' : '';
+            item.title = dim ? 'Ingen resultater under de øvrige filtre' : (item.getAttribute('data-note') || '');
           }
         }
       }

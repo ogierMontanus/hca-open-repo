@@ -18,8 +18,15 @@ Register (for linking names in the descriptions):
 
 Writes (gitignored — regenerate with this script, like diary-index.js):
   mockup/data/timeline.js
-      const TIMELINE = [ {i, v, a, b, pa, pb, q, k, x, p, u, o, n}, … ]
-        i  "T0001"                running id, sheet order
+      const TIMELINE = [ {i, c, v, a, b, pa, pb, q, k, x, p, u, o, n}, … ]
+        i  "TV010005"             stable id: TV + volume (2 digits) + worksheet
+                                  row (4 digits); never collides with the
+                                  "T0001…" event_ids of the SQL timeline
+                                  (data/normalized_v092/timeline.csv)
+        c  "3f9a1c07b2de"         content_key: hash of (Fra, Til, text), so a
+                                  row whose id moved (rows inserted above it)
+                                  or whose wording was edited can be matched
+                                  across workbook versions
         v  1..10                  diary volume (sheet)
         a  "1845-11-01"           first day  (inclusive, always a full date)
         b  "1845-11-10"           last day   (inclusive, always a full date)
@@ -45,6 +52,7 @@ Run from the repo root:
 import argparse
 import calendar
 import csv
+import hashlib
 import json
 import math
 import re
@@ -149,6 +157,18 @@ def parse_date(raw: str, end: bool):
     return f"{y:04d}-{mo_i:02d}-{d_i:02d}", prec, q
 
 
+def entry_id(vol: int, row: int) -> str:
+    """Stable timeline id: TV + volume + worksheet row (e.g. TV010005)."""
+    return f"TV{vol:02d}{row:04d}"
+
+
+def content_key(fra, til, text) -> str:
+    """12-hex hash of the three source cells (whitespace-normalised), so an
+    entry can be recognised after its row number or id has changed."""
+    norm = "".join(" ".join(str(x or "").split()) for x in (fra, til, text))
+    return hashlib.sha1(norm.encode("utf-8")).hexdigest()[:12]
+
+
 def read_workbook(path: Path):
     wb = openpyxl.load_workbook(path)
     out = []
@@ -168,7 +188,9 @@ def read_workbook(path: Path):
             if a > b:
                 a, b = b, a
             q = list(dict.fromkeys(qa + qb))
-            out.append(dict(v=vol, a=a, b=b, pa=pa, pb=pb, q=q,
+            out.append(dict(id=entry_id(vol, row[0].row),
+                            key=content_key(fra, til, desc),
+                            v=vol, a=a, b=b, pa=pa, pb=pb, q=q,
                             text=str(desc).strip(), pages=pages, url=url,
                             orig=orig, note=edn))
     return out
@@ -523,6 +545,16 @@ def classify(text: str, segs) -> str:
 
 # ── main ───────────────────────────────────────────────────────────────────
 
+def dead_urls() -> set:
+    """KB pages that scripts/qa/check_kb_links.py found gone (404 / 410).
+    Unreachable ("error:…") or other statuses are not proof, so they stay."""
+    path = REPO_ROOT / "data" / "curated" / "kb_link_status.csv"
+    if not path.exists():
+        return set()
+    with path.open(encoding="utf-8", newline="") as f:
+        return {r["url"] for r in csv.DictReader(f) if r["status"] in ("404", "410")}
+
+
 def find_workbook() -> Path:
     cands = sorted(DATA.glob("HCA_Tidstavler_bind_1-10_*.xlsx"))
     if not cands:
@@ -539,23 +571,24 @@ def main():
     print(f"Reading {src.name} …")
     rows = read_workbook(src)
     mt = Matcher()
+    dead = dead_urls()
 
     entries, st = [], Counter()
     unresolved = Counter()
-    for i, r in enumerate(rows, 1):
+    for r in rows:
         year = int(r["a"][:4])
         segs = mt.link(r["text"], r["v"], year)
         for s in segs:
             if isinstance(s, list):
                 st["link_" + s[1]] += 1
-        e = dict(i=f"T{i:04d}", v=r["v"], a=r["a"], b=r["b"], pa=r["pa"],
-                 pb=r["pb"])
+        e = dict(i=r["id"], c=r["key"], v=r["v"], a=r["a"], b=r["b"],
+                 pa=r["pa"], pb=r["pb"])
         if r["q"]:
             e["q"] = r["q"]
         e["k"] = classify(r["text"], segs)
         e["x"] = segs if any(isinstance(s, list) for s in segs) else r["text"]
         e["p"] = "–".join(dict.fromkeys(r["pages"]))
-        if r["url"]:
+        if r["url"] and r["url"].split("#")[0] not in dead:
             e["u"] = r["url"]
         if r["orig"]:
             e["o"] = r["orig"]

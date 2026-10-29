@@ -207,3 +207,17 @@ der har en `position: fixed`-efterkommer et andet sted i koden. Skjul en
 scrollbar i stedet via `scrollbar-width: none` +
 `::-webkit-scrollbar { display: none }` — det ændrer ikke
 `overflow`-værdien og udløser derfor ikke fælden.
+
+---
+
+## Begivenheder — hård datogrænse 31.12.1875
+
+**Brugerbeslutning (2026-10-28):** Intet dateret efter **31. december 1875**
+mappes som begivenhed — hverken i tidstavle-krydsforbindelsen,
+udgivelsesbegivenheder fra `bibliografi` eller noget bygget oven på dem.
+Andersen døde 4.8.1875; senere førstetryk, moderne udgaver og
+forskningslitteratur ligger uden for omfanget. Grænsen er kodet ét sted:
+`scripts/normalization/event_bounds.py` (`CUTOFF`, `check()`); nye
+begivenhedsscripts skal importere den frem for at hardkode datoen. Perioder
+der starter før og slutter efter grænsen beskæres; perioder der starter efter
+droppes (og tælles i scriptets log). Guard: `tests/test_timeline_crosswalk.py`.

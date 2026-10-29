@@ -47,6 +47,12 @@ ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")
 ENTITIES   = os.path.join(ROOT, "data", "normalized", "entities.csv")
 REFS       = os.path.join(ROOT, "data", "normalized", "references.csv")
 ETHNIC     = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors.csv")
+# ADDED nationality «Dansk*» (DBL-bekræftet) — scripts/parsers/build_person_nationality_added.py,
+# docs/plan-lex-dk-links.md §3d. Added data: never written into the register's own fields.
+ADDED_NAT  = os.path.join(ROOT, "data", "curated", "person_nationality_added.csv")
+DANSK_LABEL   = "Dansk*"
+DANSK_NOTE_DA = "Født i Danmark eller bosat der i længere årrække"
+DANSK_NOTE_EN = "Born in Denmark or resident there for many years"
 ADJECTIVES = os.path.join(ROOT, "data", "curated", "ethnic_adjectives_da.csv")
 UMBRELLAS  = os.path.join(ROOT, "data", "curated", "nation_umbrellas_da.csv")
 GENDER     = os.path.join(ROOT, "data", "normalized", "person_gender.csv")
@@ -119,7 +125,29 @@ def load_nationalities():
                 keys.append(key)
             used_keys.add(key)
 
-    return by_person, {k: labels[k] for k in used_keys if k in labels}
+    # «Dansk*»: persons with a CONFIRMED Dansk Biografisk Leksikon article (hard criterion, user decision
+    # 2026-10-29) get `dansk` in addition to whatever the register itself says. Unmarked persons are NOT
+    # assumed Danish — the old "unmarked = Danish" convention is abandoned.
+    for rid, key in load_added_nationalities():
+        keys = by_person.setdefault(rid, [])
+        if key not in keys:
+            keys.append(key)
+        used_keys.add(key)
+
+    out_labels = {k: labels[k] for k in used_keys if k in labels}
+    if "dansk" in out_labels:
+        out_labels["dansk"] = DANSK_LABEL      # the star; definition in NATIONALITY_NOTES below
+    return by_person, out_labels
+
+
+def load_added_nationalities():
+    """[(entity_id, nationality_key)] from data/curated/person_nationality_added.csv (DBL-confirmed
+    only). Empty when the file is absent — the facet then shows the register's own values only."""
+    if not os.path.exists(ADDED_NAT):
+        return []
+    with open(ADDED_NAT, encoding="utf-8", newline="") as f:
+        return [(r["rid"], r["nationality_key"]) for r in csv.DictReader(f)
+                if r.get("nat_basis") == "dbl_optagelse" and r.get("nationality_key")]
 
 
 def load_gender() -> dict:
@@ -415,16 +443,11 @@ def bio_search_links(label, born, died, nationalities, roles, umbrellas):
     date_bits = [d for d in (born, died) if d]
     query = " ".join([name] + date_bits)
 
-    # Unverified nationality (nothing recorded at all) also defaults to
-    # Lex.dk, per an explicit follow-up instruction — NOT the same thing
-    # as inferring a nationality from the name, which the brief's own
-    # principle 4 forbids. This register is itself Danish-centric (H.C.
-    # Andersen's own diaries): its editorial convention marks nationality
-    # explicitly only when a person is NOT Danish, so an unmarked person
-    # defaulting to a Danish search is a reasonable resource choice, not
-    # an assertion that the person IS Danish. 8,259 of 10,228 persons
-    # carry no nationality tag at all and fall into this branch.
-    if not nationalities:
+    # Nationality UNKNOWN (nothing recorded, and not confirmed in DBL) also gets a Lex.dk search. This is a
+    # RESOURCE choice, not a nationality inference: Lex.dk covers Danish and foreign persons alike. (The
+    # earlier justification — "the register is Danish-centric, so unmarked means Danish" — was abandoned
+    # 2026-10-29; unmarked now means *uoplyst*, see docs/plan-lex-dk-links.md §3d.)
+    if not nationalities:        # nationality UNKNOWN (not assumed Danish) — Lex.dk is a resource choice only
         return [{
             "label": "Søg på Lex.dk",
             "url": "https://lex.dk/.search?query=" + urllib.parse.quote(name),
@@ -674,6 +697,14 @@ def main() -> None:
         f.write(";\n")
         f.write("const NATIONALITY_LABELS = ")
         f.write(json.dumps(nationality_labels, ensure_ascii=False, separators=(",", ":")))
+        f.write(";\n")
+        # Tooltip/footnote text for starred nationality values (facet-engine `notes`).
+        f.write("const NATIONALITY_NOTES = ")
+        f.write(json.dumps({"dansk": DANSK_NOTE_DA} if "dansk" in nationality_labels else {},
+                           ensure_ascii=False, separators=(",", ":")))
+        f.write(";\nconst NATIONALITY_NOTES_EN = ")
+        f.write(json.dumps({"dansk": DANSK_NOTE_EN} if "dansk" in nationality_labels else {},
+                           ensure_ascii=False, separators=(",", ":")))
         f.write(";\n")
         # Erhvervsgren-facettens faste, tematiske rækkefølge (FacetEngine
         # fixedOrder) — data/curated/person_role_bucket_order.csv.
