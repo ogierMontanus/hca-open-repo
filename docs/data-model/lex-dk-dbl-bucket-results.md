@@ -75,8 +75,19 @@ længere årrække» — det er en definitionssag (se grænsetilfældene).
 har ingen årstal) og er derfor aldrig kommet i bucketen — men `lex_sitemap_match.py` bør fremover genkende «, se X»
 og enten følge henvisningen eller droppe kandidaten, så de ikke fylder køen.
 
+**Rettelse af matcheren (samme dag, efter kø-gennemgangen).** `lex_sitemap_match.py` springer nu DBL-henvisningssider over
+(116 stk.; `redir`-flag i sidecachen) — ellers kunne en stub bestå på sine årstal («Christian Wulff, 1810-1856 se Peter
+Wulff»), og den rigtige, disambiguerede artikel («Carl_Bruun_-_søofficer») blev aldrig prøvet. Samtidig viste en genkørsel,
+at årstalsgenkendelsen i DBL's meta missede døds­året, når det står klistret til erhvervet («27.7.1875bladudgiver») og alle
+årstal før 1400 (Margrete 1., Valdemar den Store); begge er rettet, og sidecachen gemmer nu metabeskrivelsens begyndelse
+(`mh`), så fremtidige ændringer af årstalsreglen ikke kræver nye sidekald. Efter to fulde genkørsler (≈ 3.200 sidekald):
+**893** bekræftede DBL-personer (før: 903 inkl. stubbe/delte), ingen af de tidligere fjernet, **8 kommet til**
+(*Carl Adolph Bruun*, *Christian Frederik Danneskiold-Samsøe*, *J.P. Hartmann* (læge), *Niels Juel*, *Carl Løvenskiold*,
+*Frederik Moltke*, *P.E. Müller* (1776–1834), *A.S. Ørsted* (botaniker)) — i alle otte var den tidligere kandidat en
+slægtning med samme navn. Reviewkøen er nu tom (to nye navnebrødre afvist).
+
 Resultat: **905** rækker i `person_nationality_added.csv` (885 automatiske + 20 efter manuel gennemgang; ny kolonne
-`confirmed_by` og `alias_of`); bucketen «Dansk\*» = **976** med registrets egne 87 (16 overlap).
+`confirmed_by` og `alias_of`) — **efter matcher-rettelsen 913** (894 automatiske + 15 manuelt godkendt + 4 alias); bucketen «Dansk\*» = **984** med registrets egne 87 (16 overlap).
 
 ## Begrænsninger
 
