@@ -64,7 +64,7 @@ WORKS = [  # (host fragment, key, label, priority)
     ("weilbach", "weilbach", "Weilbachs Kunstnerleksikon", 3),
     ("denstoredanske.lex.dk", "dsd", "Den Store Danske", 4),
     ("danmarkshistorien.lex.dk", "dh", "Danmarkshistorien", 5),
-    ("teaterleksikon", "teater", "Dansk Teaterleksikon", 5),
+    ("teaterleksikon", "teater", "Gyldendals Teaterleksikon", 5),
 ]
 
 

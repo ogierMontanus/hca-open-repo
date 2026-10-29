@@ -18,7 +18,7 @@ Outputs
   data/raw/lex/page_cache.json               page checks (gitignored) — re-runs repeat no request
 
 Works in priority order: DBL > Dansk Kvindebiografisk > Weilbach > lex.dk (Den Store Danske et al.)
-> Dansk Teaterleksikon > Danmarkshistorien / Dansk litteraturs historie. Women: Kvindebiografisk
+> Gyldendals Teaterleksikon > Danmarkshistorien / Dansk litteraturs historie. Women: Kvindebiografisk
 is tried before Weilbach/lex.dk (and DBL still first when present).
 A proposal is never promoted automatically (CLAUDE.md "Faktakontrol").
 """
@@ -49,7 +49,7 @@ HOSTS = {
     "kvindebiografiskleksikon.lex.dk": ("dkbl", "Dansk Kvindebiografisk Leksikon", 2, 2),
     "weilbach.lex.dk": ("weilbach", "Weilbachs Kunstnerleksikon", 3, 2),
     "lex.dk": ("lex", "lex.dk (Den Store Danske m.fl.)", 4, 1),
-    "teaterleksikon.lex.dk": ("teater", "Dansk Teaterleksikon", 5, 1),
+    "teaterleksikon.lex.dk": ("teater", "Gyldendals Teaterleksikon", 5, 1),
     "danmarkshistorien.lex.dk": ("dh", "Danmarkshistorien", 6, 1),
     "dansklitteraturshistorie.lex.dk": ("dlh", "Dansk litteraturs historie", 6, 1),
 }
