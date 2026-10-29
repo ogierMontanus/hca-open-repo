@@ -130,20 +130,23 @@ def main():
         for d in csv.DictReader(open(DECISIONS, encoding="utf-8")):
             decided[(d["rid"], d["url"])] = d
     have = {r["rid"] for r in added}
-    qrow = {(r["rid"], r["url"]): r for r in review}
     for key, d in decided.items():
-        if d["decision"] not in ("accept", "accept_alias") or key not in qrow or key[0] in have:
+        rid = key[0]
+        if d["decision"] not in ("accept", "accept_alias") or rid in have or rid not in tiers:
             continue
-        q, fin = qrow[key], d["final_url"] or key[1]
+        fin = d["final_url"] or key[1]
+        t = tiers[rid]
+        # independent of the live queue: a stub that is no longer queued (it is skipped as a cross-reference)
+        # must not lose its reviewed decision
         title = unquote(fin.rsplit("/", 1)[-1]).replace("_", " ") + " – Dansk Biografisk Leksikon | Lex"
         added.append({
             "confirmed_by": "manual_review", "alias_of": d["alias_of"],
-            "rid": q["rid"], "label": q["label"], "nationality_key": "dansk", "nat_basis": "dbl_optagelse",
-            "source_url": fin, "page_title": q["page_title"] if fin == key[1] else title,
-            "tier": q.get("tier", ""), "verified_on": today,
-            "conflict_with_register": ";".join(sorted(k for k in reg.get(q["rid"], set()) if k != "dansk")),
+            "rid": rid, "label": t["label"], "nationality_key": "dansk", "nat_basis": "dbl_optagelse",
+            "source_url": fin, "page_title": title,
+            "tier": t.get("tier", ""), "verified_on": today,
+            "conflict_with_register": ";".join(sorted(k for k in reg.get(rid, set()) if k != "dansk")),
         })
-        have.add(q["rid"])
+        have.add(rid)
     review = [r for r in review
               if decided.get((r["rid"], r.get("url", "")), {}).get("decision") not in ("accept", "accept_alias", "reject")]
     added.sort(key=lambda r: (r["tier"], r["rid"]))

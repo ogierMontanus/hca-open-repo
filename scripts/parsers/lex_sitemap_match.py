@@ -214,9 +214,9 @@ def main():
                 # Legacy entries (no "ys") hold a verdict computed for whichever person asked first. They are
                 # only valid for URLs no other person with different life years asked about; the shared
                 # ones (data/raw/lex/legacy_invalid_urls.json, found 2026-10-29) are fetched again.
-                # DBL entries cached before the cross-reference check ("redir") are fetched again.
+                # DBL entries cached before the cross-reference check and the glued-year fix ("mh" = stored meta head) are fetched again.
                 if ent is None or ("ys" not in ent and url in LEGACY_INVALID) or \
-                        ("redir" not in ent and "biografiskleksikon" in url and ent.get("status") == 200):
+                        ("mh" not in ent and "biografiskleksikon" in url and ent.get("status") == 200):
                     time.sleep(1.0)
                     cache[ck] = fetch_check(url, born, died)
                     requests_made += 1

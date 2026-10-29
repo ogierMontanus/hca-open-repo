@@ -90,6 +90,7 @@ def life_years(label: str):
     return (m.group(1), m.group(2)) if m else (None, None)
 
 
+DBL_YEAR = re.compile(r"(?<!\d)(1\d{3}|20\d\d)(?!\d)")
 PARTICLES = {"von", "van", "af", "de", "der", "den", "du", "la", "le", "zu", "i", "og"}
 
 
@@ -145,26 +146,32 @@ def fetch_check(url: str, born: str, died: str):
     # meta for DBL; fall back to the window (marked "~") only if the meta carries no year at all.
     meta_note = ""
     redir = False
+    wide = False
+    mh = ""
     if "biografiskleksikon" in url:
         md = re.search(r'<meta[^>]+name="description"[^>]+content="([^"]*)"', html) or \
              re.search(r'<meta[^>]+content="([^"]*)"[^>]+name="description"', html)
         meta = unescape(md.group(1)) if md else ""
         head = meta[:240]
+        mh = head
         # A DBL cross-reference stub ("C.F. Aagaard, se Johan Aagaard.", "Christian Wulff, 1810-1856se Peter
         # Wulff") is no article: its short meta merely names the target. Found 2026-10-29: 86 of the 128 "likely"
         # candidates in the DBL review queue were such stubs (and one could pass as "confirmed" on its years).
         redir = len(meta) < 140 and bool(re.search(r"(?:^|[\s,.\d])se\s+[A-ZÆØÅ]", meta)) \
             and not re.search(r"Født|født|død|begravet", meta)
-        if re.search(r"\b1[4-9]\d\d\b", head):
+        if DBL_YEAR.search(head):
             lead = title + " " + head
+            wide = True
         else:
             meta_note = "~"
-    ordered = list(dict.fromkeys(re.findall(r"\b(1[4-9]\d\d)\b", lead)))   # order of appearance
+    # DBL's meta glues the death year to the occupation ("27.7.1875bladudgiver") and has medieval
+    # persons ("1353-28.10.1412"), so its years are matched without \b and from 1000 (fixed 2026-10-29).
+    ordered = list(dict.fromkeys((DBL_YEAR if wide else re.compile(r"\b(1[4-9]\d\d)\b")).findall(lead)))   # order of appearance
     found = sorted(ordered)
     verdict, yrs = judge(found, born, died, meta_note)
     # yo = years in order of appearance: an article's OWN life dates come first, relatives' later
     return {"status": status, "title": title, "ys": found, "yo": ordered[:8], "note": meta_note,
-            "years": yrs, "verdict": verdict, "redir": redir}
+            "years": yrs, "verdict": verdict, "redir": redir, "mh": mh}
 
 
 def judge(found, born, died, note=""):
