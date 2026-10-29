@@ -144,11 +144,17 @@ def fetch_check(url: str, born: str, died: str):
     # lead window also contains the PARENTS' years (Forældre: …) and so confirmed relatives. Use the
     # meta for DBL; fall back to the window (marked "~") only if the meta carries no year at all.
     meta_note = ""
+    redir = False
     if "biografiskleksikon" in url:
         md = re.search(r'<meta[^>]+name="description"[^>]+content="([^"]*)"', html) or \
              re.search(r'<meta[^>]+content="([^"]*)"[^>]+name="description"', html)
         meta = unescape(md.group(1)) if md else ""
         head = meta[:240]
+        # A DBL cross-reference stub ("C.F. Aagaard, se Johan Aagaard.", "Christian Wulff, 1810-1856se Peter
+        # Wulff") is no article: its short meta merely names the target. Found 2026-10-29: 86 of the 128 "likely"
+        # candidates in the DBL review queue were such stubs (and one could pass as "confirmed" on its years).
+        redir = len(meta) < 140 and bool(re.search(r"(?:^|[\s,.\d])se\s+[A-ZÆØÅ]", meta)) \
+            and not re.search(r"Født|født|død|begravet", meta)
         if re.search(r"\b1[4-9]\d\d\b", head):
             lead = title + " " + head
         else:
@@ -158,7 +164,7 @@ def fetch_check(url: str, born: str, died: str):
     verdict, yrs = judge(found, born, died, meta_note)
     # yo = years in order of appearance: an article's OWN life dates come first, relatives' later
     return {"status": status, "title": title, "ys": found, "yo": ordered[:8], "note": meta_note,
-            "years": yrs, "verdict": verdict}
+            "years": yrs, "verdict": verdict, "redir": redir}
 
 
 def judge(found, born, died, note=""):

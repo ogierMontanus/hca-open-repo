@@ -51,7 +51,7 @@ nedenfor) + 12 til at afgøre delte artikler. Ingen chatbot, ingen 429/5xx.
 ### Gennemgang af stikprøven (2026-10-29) — 88 af 88 rigtige personer
 
 Hver række er holdt op mod artiklens egen metabeskrivelse i DBL (navn, begge levetidsår, erhverv) og registrets
-beskrivelse. **85 `ok`, 3 `ok_grænse`, 0 forkerte.** De tre grænsetilfælde er korrekt *identificeret*, men «dansk» er
+beskrivelse. **88 `ok` (heraf 3 grænsetilfælde, som brugeren har godkendt 2026-10-29), 0 forkerte.** De tre grænsetilfælde er korrekt *identificeret*, men «dansk» er
 et skøn: *C.F. Rumohr* (født og død i Dresden), *F.L. Torp* (Flensborg → Reinbek) og *Emil Jonas* (Schwerin → Berlin;
 registret har *tysk* — personen får begge værdier). De kommer med, fordi kriteriet er DBL-optagelse, ikke fødested.
 
