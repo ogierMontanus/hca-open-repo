@@ -63,13 +63,13 @@ længere årrække» — det er en definitionssag (se grænsetilfældene).
 ## Gennemgangskøen (143 personer) — afgjort
 
 `dbl_review_decisions.csv` (én række pr. kø-række) styrer byggeren: `accept`/`accept_alias` tilføjer personen,
-`reject` fjerner rækken fra køen, `open` bliver stående. Udfald: **16 accepteret, 4 alias, 125 afvist, 1 åben.**
+`reject` fjerner rækken fra køen, `open` bliver stående. Udfald: **16 accepteret, 4 alias, 126 afvist, 0 åbne.**
 
 | Gruppe | Rækker | Afgørelse |
 |---|---:|---|
 | **Henvisningssider** (DBL-stubbe «X, se Y») | 79 personer | Målartiklen hentet og årstal sammenlignet: 4 er *samme person under anden registerpost* (fx *Afzelius, Augusta f. Nielsen* → *Augusta Nielsen*; *Brenøe, Anna* → *Anna Nielsen*; *Lange, Agnes* → *Agnes Nyrop*; *Price, Amalie* → *Amalie Hagen*) = `accept_alias`; 2 nye (*Gad, P.G. Stenersen* → *P.C. Stenersen Gad*; *Lange, Julie f. Lumbye* → *Julie Hansen*) = `accept` med målets URL; de øvrige 73 peger på en anden person (en far, søn, ægtefælle eller navnebror) → afvist |
 | **Navnebror med andre år** | 41 + 18 delte | afvist, bortset fra 14 hvor kun ét årstal afviger med 1–2 år (eller registret har tastefejl, fx *Lützow* 1748 for 1784), og erhverv/sted stemmer → `accept` |
-| **Åben** | 1 | *Ida Wulff* (1806–1876, datter af P.F.W., g. Koch) mod DBL-sangerinden *Ida Wulff* (1808–1876) — muligvis to personer |
+| *Ida Wulff* | 1 | registrets Ida Wulff (1806–1876, datter af P.F.W., g. Koch) og DBL-sangerinden Ida Wulff (1808–1876) er **ikke identiske** — forskellige forældres efternavne (brugerafgørelse) → afvist |
 
 **Opdagelse:** 86 af de 128 «likely»-rækker var **henvisningssider**, ikke artikler. De kan ikke blive «confirmed» (metabeskrivelsen
 har ingen årstal) og er derfor aldrig kommet i bucketen — men `lex_sitemap_match.py` bør fremover genkende «, se X»

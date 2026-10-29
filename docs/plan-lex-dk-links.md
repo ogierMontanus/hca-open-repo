@@ -17,11 +17,11 @@ hører sammen med [`plan-tidstavle-data.md`](plan-tidstavle-data.md) (del 2: eks
 | 2b Nationalitet fra Lex-sider · 2c profession-målret søgning · 3 chatbot-rest · 4 Wayback · 5 promovering | **ikke gjort** |
 
 **Udført 2026-10-29:** stikprøven (88 rækker) gennemgået — 88/88 rigtige personer, 3 grænsetilfælde (maskinel gennemgang,
-ikke menneskelig); gennemgangskøen afgjort (16 accepteret, 4 alias, 125 afvist, 1 åben) → **905** rækker, bucket **976**.
+ikke menneskelig); gennemgangskøen afgjort (16 accepteret, 4 alias, 126 afvist) → **905** rækker, bucket **976**.
 Se `lex-dk-dbl-bucket-results.md`.
 
 **Næste skridt:** (1) fase 0, før noget kører i større skala; (2) fase 2b/2c; (3) lad `lex_sitemap_match.py` genkende
-henvisningssider («, se X»); (4) evt. menneskelig stikprøve af de 3 grænsetilfælde + *Ida Wulff*.
+henvisningssider («, se X»); (4) ~~menneskelig stikprøve af grænsetilfælde og Ida Wulff~~ — afgjort af brugeren 2026-10-29 (grænsetilfælde godkendt; de to Wulff er ikke identiske).
 
 **Lokalt (PowerShell):** `data/raw/lex/` er gitignoreret og skal genskabes — sitemap + cache:
 ```powershell
