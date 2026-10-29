@@ -23,7 +23,7 @@ def test_crowd_js_unit_tests(tmp_path):
     tax = tmp_path / "taxonomy.json"
     tax.write_text(json.dumps(taxonomy.taxonomy_for_js(), ensure_ascii=False), encoding="utf-8")
     result = subprocess.run(
-        ["node", "--test", "tests/js/crowd-validate.test.js", "tests/js/crowd-store.test.js"],
+        ["node", "--test", "tests/js/crowd-validate.test.js", "tests/js/crowd-store.test.js", "tests/js/crowd-auth.test.js"],
         cwd=ROOT, capture_output=True, text=True, timeout=120,
         env={**os.environ, "CROWD_TAXONOMY_JSON": str(tax)},
     )

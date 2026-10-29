@@ -382,7 +382,7 @@ grænsefladen — kun bagenden:
 
 | Behov | Næste skridt |
 |---|---|
-| Rigtige konti | Erstat bidragyder-token med login (ORCID/SSO/e-mail); `contributor.id` er allerede nøglen til tilskrivning og optælling |
+| Rigtige konti | **Bygget, ikke udgivet:** GitHub-login via OAuth-proxy og privat datarepo — [`workers/crowd-api/`](../workers/crowd-api/README.md), [`crowdsourcing-login-plan.md`](crowdsourcing-login-plan.md). Aktiveres ved at sætte `apiBase` i `mockup/js/crowd-config.js`; `contributor.id` (`gh-<id>`) er fortsat nøglen til tilskrivning og optælling |
 | Flere redaktører, roller | `review.reviewer` er et felt; tilføj roller (bidragyder / redaktør / administrator) og kræv to godkendelser for *Sikker* |
 | Samtidighed og skala | Skift `FileStore` ud med PostgreSQL (dokumentformerne svarer til tabeller; se `postgresql-migration.md`); behold API'et |
 | Misbrug | Hastighedsbegrænsning, e-mailbekræftelse, spam-filter på fritekst |

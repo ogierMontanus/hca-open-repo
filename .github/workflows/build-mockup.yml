@@ -12,6 +12,7 @@ on:
       - 'scripts/build_web/**'
       - 'scripts/build_mockup/**'
       - 'scripts/crowdsource/**'
+      - 'workers/crowd-api/**'   # login Worker: its tests run with the rest
       - 'data/curated/person_crowd_approved.tsv'   # editor-approved crowd contributions
       - 'web/**'
       - 'mockup/**'

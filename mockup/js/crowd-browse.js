@@ -193,7 +193,7 @@
     });
     var done = ALL.filter(function (it) { return approvedPersons[it.id]; }).length;
     var pct = Math.round(100 * done / ALL.length);
-    var html = '<h2 class="crowd-me__title">Fremdrift</h2>' +
+    var html = U.authBox(S) + '<h2 class="crowd-me__title">Fremdrift</h2>' +
       '<p class="crowd-me__progress"><strong>' + done.toLocaleString('da-DK') + '</strong> af ' + ALL.length.toLocaleString('da-DK') +
       ' poster i køen har fået godkendte bidrag.</p>' +
       '<div class="crowd-bar" role="img" aria-label="' + pct + ' procent"><span style="width:' + Math.max(pct, done ? 1 : 0) + '%"></span></div>';
