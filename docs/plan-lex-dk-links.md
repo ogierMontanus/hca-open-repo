@@ -17,7 +17,7 @@ værker. **Perifere personer udelades bevidst.** Kun links gemmes; ingen Lex-tek
 | Kun kilde-kort, aldrig fritekst-URL'er | Piloten viste, at chatbotten opfinder slugs, når den bedes om et «link». |
 | Ingen Lex-indhold i repoet | Rå svar og sidetekst committes ikke. Gem: URL, værk, sidetitel, verifikationsflag, dato — og **afledte fakta-tags** (nationalitet, erhvervsord, fødested-land), aldrig Lex' sætninger. |
 | Lex-fakta er «tilføjet» data | Nationalitet/erhverv fra Lex overskriver aldrig registerets egne felter; de gemmes i egne kolonner med kilderegel og konfidens og vises som *tilføjet* (`docs/external-links.md` §2a). **Det gælder også nationalitet udledt af DBL** (brugerbeslutning 2026-10-29). |
-| Konvention: umarkeret = dansk | Registrets nationalitetsfelt er tomt for danskere; konventionen **fastholdes** (brugerbeslutning 2026-10-29). Lex-fund af en *anden* nationalitet hos en umarkeret person registreres som tilføjet undtagelse — de ændrer ikke konventionen og skriver ikke i registrets eget felt. |
+| Ingen standardnationalitet | **Antagelsen «umarkeret = dansk» er opgivet** (brugerbeslutning 2026-10-29, ændret samme dag). Et tomt nationalitetsfelt betyder *uoplyst*, ikke dansk. Værdien **«Dansk\*»** er en afgrænset bucket med hård DBL-grænse, se §3d. |
 | Teaterleksikon kun som reserve | Gyldendals Teaterleksikon forsøges **kun for personer uden bekræftet DBL-artikel** (brugerbeslutning 2026-10-29); koden springer værket over, når DBL er bekræftet. |
 | Værksnavne er ikke fakta om personen | «Dansk Biografisk Leksikon» i titel/brødkrumme er ikke *dansk*; værksnavne og faste sektionsnavne filtreres fra, før et ord tolkes som nationalitet (fanget i test, se §3b). |
 | Eksterne links | Nyt faneblad, diskret, `.sr-only`-varsling (`docs/external-links.md`); vises i «Autoritetslinks»-blokken på persons-siden. |
@@ -70,7 +70,7 @@ delmængde, spildes forespørgsler på personer, der ikke kan være der:
 | Dansk kvinde (uanset erhverv) | DBL → **Dansk Kvindebiografisk** → fagværk → lex.dk | — |
 | Dansk, øvrige (forfatter, embedsmand, politiker, lærd, officer …) | DBL → lex.dk | Weilbach, Teaterleksikon |
 | Udenlandsk (markeret, eller fastlagt af Lex, §3b) | **lex.dk-hoved** (Den Store Danske) → Rute 2 (chatbot) | DBL (9 af 159 bekræftede udlændinge er i DBL), Weilbach |
-| Nationalitet umarkeret | **dansk** (registrets konvention, fastholdt); ret ruten, hvis §3b finder en anden nationalitet (tilføjet undtagelse) | — |
+| Nationalitet uoplyst | **DBL først for alle** (hård grænse for «Dansk\*», §3d) → derefter lex.dk-hoved; ret ruten, når §3b finder en nationalitet | — |
 
 Nationalitet og profession kommer fra registret (`person_ethnic_descriptors.csv`, `person_role.csv`,
 beskrivelse) — og **for personer uden nationalitetsmarkering fra selve Lex-siden** (§3b).
@@ -131,7 +131,7 @@ afbildet på registrets `nationality_key`):
 | **R2** | brødkrumme «{Adj} litteratur/billedkunst/…», «Danske {erhverv}» efter fjernelse af værksnavne | middel | «Nordens billedkunst» → *nordisk*, ikke dansk. |
 | **R3** | faktaboks «Født …, {sted}» (lex.dk-hoved) | middel | sted → land via stedregisteret/GeoNames; kun forslag. |
 | **R4** | DBL-meta «Født i {sted}» (+ «død i {sted}») | lav–middel | fødested ≠ nationalitet (Franz Neruda: født i Brno, død i Kbh.); `fødested`/`fødeland` gemmes som tilføjede data; er fødelandet udenlandsk, flages rækken til gennemgang i stedet for at få nationalitet. |
-| **R5** | blot *forekomst* i DBL (evt. DKBL/Weilbach/Teaterleksikon) | svag | **Beslutning 2026-10-29:** nationalitet udledt af DBL angives som **tilføjede data** — `nationalitet = dansk`, `nat_basis = dbl_optagelse`, vist som «tilføjet (DBL)». Konfidensen er svag og feltet er adskilt fra registrets eget; DBL rummer også udenlandsk fødte (Neruda), og de flages via R4. |
+| **R5** | **forekomst i DBL** (bekræftet: navn + begge levetidsår) | **hård** for «Dansk\*» | Definerer bucketen **«Dansk\*» = født i Danmark eller bosat der i længere årrække** (§3d). DBL-udledt nationalitet angives som **tilføjede data** (`nat_basis = dbl_optagelse`). Forekomst i *andre* værker (DKBL, Weilbach, Teaterleksikon, lex.dk) er **ikke** nok. |
 
 **Målt udbytte** (stikprøve, ikke endeligt): af de **661** personer i niveau A *uden* nationalitetsmarkering
 har 366 et bekræftet link: **204** på lex.dk-hoved/Teaterleksikon (→ R1/R2), **135** kun i DBL (→ R4/R5),
@@ -140,10 +140,9 @@ I en stikprøve på 18 lex.dk-hoved-sider gav R1 eller R2 nationalitet for 13 (7
 («første sætning»); på 5 Teaterleksikon-sider 5 af 5. DBL: 17 af 32 sider havde «Født i …». Forventning:
 **≈ 200–300 af de 661 får en eksplicit nationalitet** (R1+R2), ≈ 70 yderligere et fødested (R4).
 
-**Konventionen «umarkeret = dansk» fastholdes** (brugerbeslutning 2026-10-29). Stikprøven viste dog
-undtagelser blandt de umarkerede (fx *Samuel Johnson*, britisk på Lex) — de registreres som **tilføjede
-undtagelser** (`nationalitet_lex ≠ dansk`, `conflict_with_register = umarkeret`) og opgøres i fase 2b, uden at
-konventionen eller registrets felt ændres.
+**Antagelsen «umarkeret = dansk» er opgivet** (brugerbeslutning 2026-10-29): 8.259 af 10.228 personer har intet
+nationalitetsfelt, og stikprøven viste udlændinge blandt dem (fx *Samuel Johnson*, britisk på Lex). Umarkeret betyder
+derfor *uoplyst*. «Dansk» får i stedet en afgrænset betydning med hård kilde (§3d).
 
 **Implementering:**
 * `fetch_check()` i `lex_link_candidates.py` udvides til også at returnere `nat_hint`, `nat_rule` (R1–R5),
@@ -157,7 +156,7 @@ konventionen eller registrets felt ændres.
   overskrivning.
 * Tilbagekobling: `nat_lex` styrer ruten i §2 (udlænding → lex.dk-hoved/chatbot, ikke DBL/Weilbach) og
   kan fodre `person_ethnic_descriptors`/nationalitetsfacetten som *tilføjet* data efter 10 %-stikprøve af R1/R2
-  (**godkendt 2026-10-29**); DBL-udledt nationalitet (R5) vises som «tilføjet (DBL)».
+  (**godkendt 2026-10-29**); R5 (DBL) definerer «Dansk\*» (§3d).
 * Bivirkning at holde øje med: værksnavne i titel/brødkrumme («Dansk Biografisk Leksikon» → «dansk») gav i
   en test **falsk «dansk» på alle DBL-sider**; filteret (`Biografisk|Leksikon|^Lex$|Weilbach|Kunst og kultur`)
   er derfor del af reglen og dækkes af en test.
@@ -249,6 +248,45 @@ Formål: (a) **fallback**, når en DBL-artikel ikke kan findes på lex.dk men ty
 * Ikke antaget: at indholdet i det arkiverede DBL er identisk med dagens. Levetid og navn
   verificeres også her (arkiv-sidens titel).
 
+### §3d — Nationalitetsværdien «Dansk\*» (DBL som hård grænse)
+
+**Beslutning (2026-10-29):** antagelsen «umarkeret = dansk» opgives. Værdien *dansk* i nationalitetsfacetten
+får en **stjerne**, og ved mouseover står: **«Født i Danmark eller bosat der i længere årrække»**
+(engelsk: «Born in Denmark or resident there for many years»). **DBL-optagelse er hårdt kriterium** for at
+indgå i den bucket.
+
+**Hvem kommer i «Dansk\*»:**
+
+| Basis (`nat_basis`) | Betingelse | Antal (målt) |
+|---|---|---:|
+| `dbl_optagelse` | bekræftet DBL-artikel (navn + begge levetidsår) | niveau A: **326**; hele registret: se fase 2d |
+| `register_beskrivelse` | registrets egen beskrivelse har *dansk* som ledende nationalitetsord (`person_ethnic_descriptors.csv`) | **87** personer (17 i A, heraf 7 også i DBL) — **min læsning, bekræftes** |
+| *(ingen)* | Lex-sider siger «dansk» (R1/R2) men personen er ikke i DBL | **ikke** i bucketen; lægges i `data/curated/lex/queue_dansk_uden_dbl.csv` til gennemgang |
+| *(ingen)* | umarkeret og ikke i DBL | **uoplyst** — ingen nationalitet |
+
+* **Flere værdier er tilladt.** 8 af DBL-bekræftede i A har en udenlandsk registermarkering (Tullin *norsk*, Wolfhagen
+  *tysk*, Denner *tysk*, Bravo *holstensk* …); de får **både** deres egen nationalitet og «Dansk\*» — netop
+  «bosat der i længere årrække».
+* **Mangler levetid** (3.034 poster): kan ikke verificeres mod DBL (årstalskontrol) og kommer derfor ikke i bucketen.
+* **Størrelse:** i dag 87 personer har *dansk* i facetten. Med DBL-grænsen over hele registret (fase 2d) skønnes
+  ca. **700–900** (326 i A + en del af de 484 i B og 561 i C, der har et DBL-slug; **skøn**, ikke målt).
+
+**Data:** `data/curated/person_nationality_added.csv` — `rid, nationality_key, nat_basis, source_url, verified_on,
+conflict_with_register`. Rækker med `nat_basis = dbl_optagelse` er *tilføjede data* og må kun oprettes ved
+bekræftet DBL-link. Registrets egne felter ændres ikke.
+
+**Ændringer i koden (udføres efter fase 2d):**
+
+| Fil | Ændring |
+|---|---|
+| `scripts/build_mockup/build_persons_extra.py` | `nationalities` = registrets ledende match ∪ `{dansk}` for rækker i `person_nationality_added.csv`; `NATIONALITY_LABELS['dansk'] = 'Dansk*'`; ny `NATIONALITY_NOTES = {'dansk': 'Født i Danmark eller bosat der i længere årrække'}` |
+| `mockup/persons.html`, `persons_en.html` | facetrækken «Dansk\*» med `title`-tooltip (mouseover) **og** synlig fodnote i facetgruppen + `.sr-only`-tekst, så touch/tastatur/skærmlæser også får definitionen; facetkommentaren «Uoplyst» opdateres (8.259 → antal efter fase 2d) |
+| `mockup/js/facet-engine.js` | understøt en valgfri `data-facet-note-<nøgle>`/`NATIONALITY_NOTES`-tooltip pr. række (i dag findes kun label og antal) |
+| `mockup/nation.html`, `nation-index.js`, `nation_umbrellas_da.csv` | paraplyen *dansk* får samme stjerne og tooltip; regionale nøgler (jysk, sjællandsk …) og kolonial (grønlandsk) er allerede under den |
+| `build_persons_extra.py` → `bio_search_links()` | kommentaren «uoplyst nationalitet → Lex.dk-søgning» begrundes ikke længere med «dansk-centreret register»; standardlinket til Lex.dk forbliver en *ressourcevalg* (Lex dækker både danske og udenlandske), ikke en nationalitetsantagelse |
+| `docs/data-model/person-ethnic-descriptors.md` | note: «umarkeret ≠ dansk»; «Dansk\*»-definitionen |
+| tests | ingen person får `dansk` fra DBL uden bekræftet DBL-række; `NATIONALITY_NOTES` findes for alle værdier med stjerne; ingen standardværdi for uoplyst |
+
 ## 4. Token- og forespørgselsbudget
 
 | Post | Størrelse | Håndtering |
@@ -271,6 +309,7 @@ persons (entities.csv + role + gender + nationality + refs)
          │          ▲  nat_lex (tilbagekobling: udlænding → anden rute)
          │          └──────────── lex_page_facts (§3b: nat/erhverv/fødested-tags fra verifikationssiden)
          │                                         └─► data/curated/lex/person_nationality_lex.csv (forslag)
+         │          DBL-bekræftet ──► data/curated/person_nationality_added.csv  («Dansk*», tilføjede data)
          ├─ lex_sitemap_match.py (Rute 1 + 1c: profession-/nationalitetsstyret) ──┐
          ├─ lex_chatbot_query.js (Rute 2) ──┼─► lex_link_candidates.py ──► persons_lex_links.csv (forslag)
          └─ wayback_dbl_lookup.py (Rute 3) ─┘        (slug-filter + 1 sidekald pr. kandidat)
@@ -301,6 +340,8 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 | 2 | Rute 1: hent sitemap, byg slug-indeks, match A+B, verificér | Dækningsrapport pr. niveau/køn/nationalitet | 1 (+0 for download-omfang) |
 | **2b** | **Nationalitet fra Lex-sider:** udvid `fetch_check`, genhent én side pr. bekræftet person, byg `person_nationality_lex.csv` (R1–R5, alle som *tilføjet*), opgør de umarkerede, der ikke er danske (tilføjede undtagelser), stikprøvetjek 10 % af R1/R2 | tags for alle bekræftede sider; konflikter med registret listet; test grøn | 2 |
 | **2c** | **Profession-målrettet søgning:** `prof_target` + nationalitetsstyret rute; Teaterleksikon-profil (meta-årstal) **og kun for personer uden bekræftet DBL** (implementeret i `lex_sitemap_match.py`); kør kun relevante værter | ≈ +15–25 bekræftede; `relaxed`-rækker markeret | 2, 2b |
+| **2d** | **DBL for hele registret:** match + verificér *alle* personer med levetid og fornavn mod DBL (ikke kun A/B) — ≈ 1.449 har et DBL-slug, ≈ 2.000 sidekald (≈ 35 min); byg `person_nationality_added.csv`; opgør «Dansk\*»-bucketen; stikprøve 10 % | «Dansk\*» fastlagt for alle verificérbare; bucketstørrelse målt | 2 |
+| **2e** | **Kode og visning:** `build_persons_extra.py`, `facet-engine.js`, `persons*.html`, `nation.html`, tests (§3d-tabellen) | Stjerne + mouseover i facetten; tests grønne | 2d |
 | 3 | Rute 2 for rest i A (≤ 200/dag), **nationalitetstilpasset prompt** | A-rest behandlet eller loft nået | 0, 2b, 2c |
 | 4 | Rute 3 (Wayback) for danskere (nu også **fastlagt** af §3b) uden DBL | `archive_url` på de relevante rækker | 2–3 |
 | 5 | Gennemgang → `person_lex.csv` → build + visning + test | Persons-sider viser links; tests grønne | 2–4 |
@@ -318,6 +359,7 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 * **Nationalitet (§3b):** ≈ 200–300 af de 661 umarkerede i A får en eksplicit nationalitet fra Lex
   (R1/R2), ≈ 70 yderligere et fødested; opgørelsen af, hvor mange umarkerede der er udlændinge, er
   i sig selv et resultat. For B (≈ 2.030 umarkerede) afhænger det af B's linkdækning (ikke målt).
+* **«Dansk\*» (§3d):** i dag 87 personer med *dansk*; DBL-grænsen over hele registret skønnes at give ≈ 700–900.
 * **Profession-målrettet (§3c):** ≈ +15–25 bekræftede personer (målt +14 på 55 sidekald).
 
 ## 8. Åbne beslutninger
@@ -338,10 +380,14 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 | Spørgsmål | Svar | Konsekvens i planen |
 |---|---|---|
 | Må R1/R2 (eksplicit nationalitetsadjektiv fra Lex) fodre nationalitetsfacetten som *tilføjet* data efter 10 %-stikprøve? | **Ja** | §3b; fase 2b |
-| Skal R4/R5 (fødested, DBL-optagelse) vises? | **Ja — nationalitet indhentet fra DBL angives som tilføjede data** | R5 giver `dansk` med `nat_basis = dbl_optagelse`, vist som «tilføjet (DBL)»; udenlandsk fødeland flages (R4) |
-| Må «umarkeret = dansk» opgives? | **Nej — konventionen fastholdes** (registrets antagelse: dansk = umarkeret) | Lex-fund af anden nationalitet hos umarkerede registreres som tilføjede undtagelser, ikke som ændring af konventionen |
+| Skal R4/R5 (fødested, DBL-optagelse) vises? | **Ja — nationalitet indhentet fra DBL angives som tilføjede data** | R5 giver «Dansk\*» (`nat_basis = dbl_optagelse`) — **præciseret samme dag**, se §3d; udenlandsk fødeland flages (R4) |
+| Må «umarkeret = dansk» opgives? | **Ja — antagelsen er opgivet** (ændret 2026-10-29: først «fastholdes», senere «opgiv») | Umarkeret = *uoplyst*; «Dansk\*» er en afgrænset bucket med DBL som hård grænse, se §3d |
+| «Dansk\*»: stjerne + mouseover «Født i Danmark eller bosat der i længere årrække» | **Besluttet** | §3d; kodeændringer i fase 2e |
+| DBL som hårdt kriterium for «Dansk\*» | **Besluttet** | Lex-fund af «dansk» uden DBL-artikel kommer ikke i bucketen, men i en gennemgangskø |
 | Skal Lex' vilkår for afledte fakta (nationalitet, erhvervsord, fødested-land) afklares ved henvendelsen? | **Ja** | Fase 0 spørger direkte (`chatbot@lex.dk`) |
 | *(tillæg)* Gyldendals Teaterleksikon | **Kun for personer uden bekræftet DBL-artikel** | §2, §3c; indbygget i `lex_sitemap_match.py` |
 
-Fortolkning: «de fire beslutninger» er læst som de fire spørgsmål, der blev tilføjet i revisionen
+Fortolkninger at bekræfte: (a) registrets egne 87 personer med *dansk* som ledende nationalitetsord regnes med i
+«Dansk\*» (`register_beskrivelse`) — er DBL i stedet *eneste* vej ind, skal de ud; (b) personer med udenlandsk
+registermarkering, der også står i DBL, får begge værdier. — Øvrigt: «de fire beslutninger» er læst som de fire spørgsmål, der blev tilføjet i revisionen
 2026-10-29 (punkt 6 med to delspørgsmål, 7 og 8). De fem ældre punkter (1–5 ovenfor) er stadig åbne.
