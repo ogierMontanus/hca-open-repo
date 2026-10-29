@@ -1,0 +1,480 @@
+{
+ "attachmentTypes": {
+  "application/pdf": ".pdf",
+  "image/gif": ".gif",
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp"
+ },
+ "badges": [
+  {
+   "da": "Første godkendte bidrag",
+   "desc": "Et bidrag med kildeangivelse er godkendt af redaktionen.",
+   "key": "first_accepted"
+  },
+  {
+   "da": "Fem godkendte med kilder",
+   "desc": "Fem godkendte bidrag, hver med mindst én stærk kilde.",
+   "key": "five_sourced"
+  },
+  {
+   "da": "Dokumenteret negativt fund",
+   "desc": "Et godkendt »søgt uden resultat« — sparer andre for at gentage søgningen.",
+   "key": "negative_result"
+  },
+  {
+   "da": "Lokalkender",
+   "desc": "Fem godkendte bidrag om personer knyttet til samme land eller lokalitet.",
+   "key": "local_expert"
+  },
+  {
+   "da": "Besvarede registrets tvivl",
+   "desc": "Et godkendt bidrag til en post, hvor registret selv var i tvivl.",
+   "key": "resolved_doubt"
+  }
+ ],
+ "bases": [
+  {
+   "da": "Nationalitet i registret",
+   "en": "Nationality in the register",
+   "key": "nat"
+  },
+  {
+   "da": "Sted i registrets beskrivelse",
+   "en": "Place in the register description",
+   "key": "beskr"
+  },
+  {
+   "da": "Sted på samme dagbogsside",
+   "en": "Place on the same diary page",
+   "key": "side"
+  },
+  {
+   "da": "Intet grundlag",
+   "en": "No basis",
+   "key": ""
+  }
+ ],
+ "confidence": [
+  {
+   "da": "Sikker",
+   "en": "Certain",
+   "guidance": "Dokumenteret i en primær kilde; ingen rimelig tvivl (omtrent over 95 %).",
+   "key": "certain"
+  },
+  {
+   "da": "Sandsynlig",
+   "en": "Probable",
+   "guidance": "Stærkt underbygget, men en slutning — fx navn, sted og tid passer (omtrent 70–95 %).",
+   "key": "probable"
+  },
+  {
+   "da": "Forslag",
+   "en": "Proposed",
+   "guidance": "Kvalificeret gæt, som andre bør efterprøve (omtrent 30–70 %). Under det: skriv en kommentar i stedet for et felt.",
+   "key": "proposed"
+  }
+ ],
+ "fields": [
+  {
+   "da": "Efternavn (korrekt stavning)",
+   "emend": "surname",
+   "key": "surname",
+   "kind": "text",
+   "wb": null
+  },
+  {
+   "da": "Fornavn(e)",
+   "emend": "given_names",
+   "key": "given_names",
+   "kind": "text",
+   "wb": null
+  },
+  {
+   "da": "Andre stavemåder / navneformer",
+   "emend": null,
+   "key": "name_variants",
+   "kind": "text",
+   "wb": null
+  },
+  {
+   "da": "Fødselsdato (ÅÅÅÅ, ÅÅÅÅ-MM eller ÅÅÅÅ-MM-DD)",
+   "emend": "birth_year",
+   "key": "birth_date",
+   "kind": "date",
+   "wb": "BirthYear"
+  },
+  {
+   "da": "Fødested",
+   "emend": null,
+   "key": "birth_place",
+   "kind": "text",
+   "wb": null
+  },
+  {
+   "da": "Dødsdato (ÅÅÅÅ, ÅÅÅÅ-MM eller ÅÅÅÅ-MM-DD)",
+   "emend": "death_year",
+   "key": "death_date",
+   "kind": "date",
+   "wb": "DeathYear"
+  },
+  {
+   "da": "Dødssted",
+   "emend": null,
+   "key": "death_place",
+   "kind": "text",
+   "wb": null
+  },
+  {
+   "da": "Køn",
+   "emend": null,
+   "key": "gender",
+   "kind": "select",
+   "wb": "Gender"
+  },
+  {
+   "da": "Nationalitet",
+   "emend": null,
+   "key": "nationality",
+   "kind": "text",
+   "wb": "Nationality"
+  },
+  {
+   "da": "Bosted / lokalitet (sted og land)",
+   "emend": null,
+   "key": "residence",
+   "kind": "text",
+   "wb": null
+  },
+  {
+   "da": "Erhverv / titel",
+   "emend": null,
+   "key": "occupation",
+   "kind": "text",
+   "wb": null
+  },
+  {
+   "da": "Erhvervsgren",
+   "emend": null,
+   "key": "role_bucket",
+   "kind": "select",
+   "wb": "Role/Occupation"
+  },
+  {
+   "da": "Slægtskab og relationer",
+   "emend": null,
+   "key": "relations",
+   "kind": "longtext",
+   "wb": null
+  },
+  {
+   "da": "Supplerende beskrivelse (kort, i registrets stil)",
+   "emend": "description",
+   "key": "description",
+   "kind": "longtext",
+   "wb": null
+  },
+  {
+   "da": "Wikidata Q-nummer",
+   "emend": null,
+   "key": "wikidata",
+   "kind": "qid",
+   "wb": null
+  },
+  {
+   "da": "Andet autoritetslink / ID (VIAF, GND, DBL, FamilySearch …)",
+   "emend": null,
+   "key": "authority_other",
+   "kind": "url_or_id",
+   "wb": null
+  }
+ ],
+ "fleetingMax": 2,
+ "gaps": [
+  {
+   "da": "Hvem er personen? (uidentificeret)",
+   "en": "Identity unknown",
+   "fields": [
+    "given_names",
+    "birth_date",
+    "death_date",
+    "occupation",
+    "description",
+    "wikidata"
+   ],
+   "key": "identity"
+  },
+  {
+   "da": "Fornavn mangler",
+   "en": "Given name missing",
+   "fields": [
+    "given_names"
+   ],
+   "key": "given_names"
+  },
+  {
+   "da": "Fødselsår mangler",
+   "en": "Birth date missing",
+   "fields": [
+    "birth_date",
+    "birth_place"
+   ],
+   "key": "birth"
+  },
+  {
+   "da": "Dødsår mangler",
+   "en": "Death date missing",
+   "fields": [
+    "death_date",
+    "death_place"
+   ],
+   "key": "death"
+  },
+  {
+   "da": "Tynd eller manglende beskrivelse",
+   "en": "Thin or missing description",
+   "fields": [
+    "description",
+    "occupation",
+    "relations"
+   ],
+   "key": "description"
+  },
+  {
+   "da": "Erhverv ukendt",
+   "en": "Occupation unknown",
+   "fields": [
+    "occupation",
+    "role_bucket"
+   ],
+   "key": "occupation"
+  },
+  {
+   "da": "Nationalitet ukendt",
+   "en": "Nationality unknown",
+   "fields": [
+    "nationality",
+    "residence"
+   ],
+   "key": "nationality"
+  },
+  {
+   "da": "Køn ubestemt",
+   "en": "Gender undetermined",
+   "fields": [
+    "gender"
+   ],
+   "key": "gender"
+  },
+  {
+   "da": "Registret er selv i tvivl",
+   "en": "Register itself is unsure",
+   "fields": [
+    "surname",
+    "name_variants",
+    "given_names"
+   ],
+   "key": "doubt"
+  }
+ ],
+ "genderValues": [
+  "Mandlig",
+  "Kvindelig",
+  "Andet"
+ ],
+ "identification": [
+  {
+   "da": "Jeg har identificeret personen",
+   "en": "I have identified the person",
+   "key": "identified",
+   "needs": "fields"
+  },
+  {
+   "da": "Jeg har en kandidat, men er ikke sikker",
+   "en": "I have a candidate",
+   "key": "candidate",
+   "needs": "fields"
+  },
+  {
+   "da": "Jeg kan supplere enkelte oplysninger, ikke identificere",
+   "en": "I can add some details",
+   "key": "partial",
+   "needs": "fields"
+  },
+  {
+   "da": "Samme person som en anden registerpost",
+   "en": "Same person as another entry",
+   "key": "duplicate",
+   "needs": "same_as"
+  },
+  {
+   "da": "Posten er ikke en enkeltperson (familie, firma, gruppe …)",
+   "en": "Not an individual",
+   "key": "not_individual",
+   "needs": "comment"
+  },
+  {
+   "da": "Jeg har søgt uden resultat",
+   "en": "Searched without result",
+   "key": "unidentifiable",
+   "needs": "sources"
+  }
+ ],
+ "levels": [
+  {
+   "anchors": 3,
+   "da": "Dokumenteret",
+   "en": "Documented",
+   "key": "dokumenteret"
+  },
+  {
+   "anchors": 2,
+   "da": "Delvist dokumenteret",
+   "en": "Partly documented",
+   "key": "delvist"
+  },
+  {
+   "anchors": 1,
+   "da": "Fragmentarisk",
+   "en": "Fragmentary",
+   "key": "fragmentarisk"
+  },
+  {
+   "anchors": 0,
+   "da": "Navn alene",
+   "en": "Name only",
+   "key": "navn_alene"
+  }
+ ],
+ "limits": {
+  "attachment_bytes": 4194304,
+  "citation": 600,
+  "comment": 3000,
+  "contact": 200,
+  "locator": 200,
+  "longtext": 2000,
+  "max_attachments": 5,
+  "max_fields": 16,
+  "max_sources": 12,
+  "name": 120,
+  "summary": 2000,
+  "text": 200,
+  "url": 500
+ },
+ "mentionBuckets": [
+  {
+   "da": "1 omtale",
+   "en": "1 mention",
+   "hi": 1,
+   "key": "1",
+   "lo": 1
+  },
+  {
+   "da": "2–3 omtaler",
+   "en": "2–3 mentions",
+   "hi": 3,
+   "key": "2-3",
+   "lo": 2
+  },
+  {
+   "da": "4 eller flere",
+   "en": "4 or more",
+   "hi": 1000000,
+   "key": "4+",
+   "lo": 4
+  }
+ ],
+ "queuedLevels": [
+  "delvist",
+  "fragmentarisk",
+  "navn_alene"
+ ],
+ "schema": "hca-crowd-submission/1",
+ "sourceResults": [
+  {
+   "da": "Understøtter oplysningerne",
+   "key": "stoetter"
+  },
+  {
+   "da": "Søgt, intet fund",
+   "key": "intet_fund"
+  }
+ ],
+ "sourceTypes": [
+  {
+   "da": "Arkivalie (kirkebog, folketælling, skifte, ...)",
+   "en": "Archival record",
+   "key": "arkiv",
+   "needsUrl": false,
+   "strong": true
+  },
+  {
+   "da": "Trykt publikation (bog, tidsskrift, opslagsværk)",
+   "en": "Printed publication",
+   "key": "tryk",
+   "needsUrl": false,
+   "strong": true
+  },
+  {
+   "da": "Webside eller database",
+   "en": "Web page / database",
+   "key": "web",
+   "needsUrl": true,
+   "strong": true
+  },
+  {
+   "da": "Billede eller skærmbillede",
+   "en": "Image / screenshot",
+   "key": "billede",
+   "needsUrl": false,
+   "strong": true
+  },
+  {
+   "da": "PDF",
+   "en": "PDF",
+   "key": "pdf",
+   "needsUrl": false,
+   "strong": true
+  },
+  {
+   "da": "Autoritetsregister (Wikidata, VIAF, GND ...)",
+   "en": "Authority record",
+   "key": "register",
+   "needsUrl": true,
+   "strong": true
+  },
+  {
+   "da": "Personlig viden, familietradition, mundtlig",
+   "en": "Personal knowledge",
+   "key": "personlig",
+   "needsUrl": false,
+   "strong": false
+  }
+ ],
+ "statuses": [
+  {
+   "da": "Indsendt – afventer redaktionen",
+   "key": "submitted"
+  },
+  {
+   "da": "Redaktionen beder om uddybning",
+   "key": "needs_changes"
+  },
+  {
+   "da": "Godkendt",
+   "key": "approved"
+  },
+  {
+   "da": "Delvist godkendt",
+   "key": "partially_approved"
+  },
+  {
+   "da": "Afvist",
+   "key": "rejected"
+  },
+  {
+   "da": "Trukket tilbage",
+   "key": "withdrawn"
+  }
+ ]
+}

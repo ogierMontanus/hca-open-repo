@@ -17,7 +17,9 @@ Policy (see docs/security.md for the reasoning):
   - the cart pages additionally allow blob: (the in-browser PDF export runs
     pdfmake from a Blob worker / Blob script)
   - connect/img/font: same-origin (+ data:/blob:, and the Creative Commons
-    badge host for images); nothing can phone home
+    badge host for images); nothing can phone home. The crowd pages (those
+    loading crowd-store.js) may in addition call the one https origin set as
+    apiBase in mockup/js/crowd-config.js
   - object-src none, base-uri/form-action self
 
 `mockup/irrelevant/` is frozen (CLAUDE.md) and skipped.
@@ -56,17 +58,36 @@ def inline_script_hashes(html):
     return sorted(out)
 
 
+_CROWD_CONFIG = pathlib.Path(__file__).resolve().parents[2] / "mockup" / "js" / "crowd-config.js"
+_API_BASE = re.compile(r"""apiBase\s*:\s*(['"])(.*?)\1""")
+
+
+def crowd_api_origin():
+    """Origin of the crowd API Worker from mockup/js/crowd-config.js ('' = same
+    origin). Only an https origin is accepted; anything else is ignored, so a
+    typo can never widen connect-src."""
+    try:
+        m = _API_BASE.search(_CROWD_CONFIG.read_text(encoding="utf-8"))
+    except OSError:
+        return ""
+    o = re.fullmatch(r"(https://[a-z0-9.-]+(?::\d+)?)/*", (m.group(2) if m else "").strip().lower())
+    return o.group(1) if o else ""
+
+
 def policy_for(html):
     script_src = ["'self'"] + inline_script_hashes(html)
     if "cart-pdf.js" in html:
         script_src.append("blob:")
+    connect_src = "connect-src 'self'"
+    if "crowd-store.js" in html and crowd_api_origin():
+        connect_src += " " + crowd_api_origin()          # the GitHub-login Worker (docs/security.md)
     return "; ".join([
         "default-src 'self'",
         "script-src " + " ".join(script_src),
         "style-src 'self' 'unsafe-inline'",
         "img-src 'self' data: blob: https://licensebuttons.net",
         "font-src 'self' data:",
-        "connect-src 'self'",
+        connect_src,
         "worker-src 'self' blob:",
         "object-src 'none'",
         "base-uri 'self'",

@@ -65,3 +65,8 @@ mockup/data/crowd-approved.js
 # contact details, submissions awaiting review, attachments. What an editor
 # approves leaves it through export_approved.py into data/curated/ (tracked).
 data/crowdsource/
+
+# Cloudflare Worker (workers/crowd-api)
+workers/crowd-api/node_modules/
+workers/crowd-api/.wrangler/
+workers/crowd-api/.dev.vars

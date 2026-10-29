@@ -223,3 +223,7 @@
   .crowd-review input[type="text"], .crowd-review select, .crowd-review textarea { font-size: 16px; }
 }
 @media print { .crowd-actions, .crowd-side { display: none; } }
+
+/* ── sign-in box (GitHub Worker back-end) ─────────────────────────────── */
+.crowd-auth { margin: 0 0 var(--sp3); font-size: 0.9rem; }
+.crowd-auth .crowd-dim { font-size: 0.8rem; margin-left: 6px; }

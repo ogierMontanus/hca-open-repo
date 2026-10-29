@@ -28,6 +28,12 @@
   /* ── gate ─────────────────────────────────────────────────────────────── */
   function showGate(msg) {
     $('js-gate').hidden = false; $('js-app').hidden = true;
+    if (S.auth.enabled()) {                 // GitHub Worker: sign in instead of typing a key
+      $('js-gate').innerHTML = '<h2>Redaktør-adgang</h2>' +
+        '<p class="crowd-lede">Redaktører logger ind med den GitHub-konto, der er registreret som redaktør.</p>' + U.authBox(S) +
+        (msg ? '<p class="crowd-err">' + U.esc(msg) + '</p>' : '');
+      return;
+    }
     var err = $('js-gate-err'); err.hidden = !msg; err.textContent = msg || '';
   }
 
@@ -41,14 +47,18 @@
       $('js-gate').hidden = true; $('js-app').hidden = false;
       tools(); refreshList();
     }).catch(function (e) {
-      if (e && e.status === 401) showGate(S.admin.token() ? 'Nøglen blev ikke godkendt.' : '');
+      if (e && e.status === 403 && S.auth.enabled()) showGate('Din GitHub-konto er ikke registreret som redaktør.');
+      else if (e && e.status === 401) showGate(S.auth.enabled() ? '' : S.admin.token() ? 'Nøglen blev ikke godkendt.' : '');
       else showGate('Kunne ikke hente bidrag: ' + ((e && e.message) || 'ukendt fejl'));
     });
   }
 
   function tools() {
     var box = $('js-export-tools');
-    if (S.mode() === 'api') {
+    if (S.mode() === 'api' && S.auth.enabled()) {
+      box.innerHTML = '<button type="button" class="crowd-btn" data-dl="json">Hent alle bidrag og afgørelser (JSON)</button> ' +
+        '<span class="crowd-dim">Indlæsning i den autoritative data: <code>python scripts/crowdsource/export_approved.py --import-json fil.json --write</code></span>';
+    } else if (S.mode() === 'api') {
       box.innerHTML = '<button type="button" class="crowd-btn" data-dl="tsv">Hent godkendte (TSV)</button> ' +
         '<button type="button" class="crowd-btn" data-dl="xlsx">Hent godkendte (Excel)</button> ' +
         '<span class="crowd-dim">Indlæsning i den autoritative data: <code>python scripts/crowdsource/export_approved.py --write</code></span>';
@@ -245,7 +255,7 @@
         .catch(function () { window.alert('Bilaget kunne ikke hentes.'); });
     } else if (t.getAttribute && t.getAttribute('data-dl')) {
       var fmt = t.getAttribute('data-dl');
-      S.admin.download(fmt).then(function (blob) { U.download('person_crowd_approved.' + fmt, blob); })
+      S.admin.download(fmt).then(function (blob) { U.download(fmt === 'json' ? 'hca-crowd-bidrag-' + new Date().toISOString().slice(0, 10) + '.json' : 'person_crowd_approved.' + fmt, blob); })
         .catch(function (e) { window.alert('Eksport mislykkedes: ' + (e && e.message)); });
     } else if (t.id === 'js-export-all') {
       U.download('hca-crowd-afgoerelser-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(S.admin.exportJSON(false), null, 2));

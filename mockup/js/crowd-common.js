@@ -130,8 +130,29 @@ window.CrowdUI = (function () {
       'Når du er færdig, henter du dem som en fil og sender den til redaktionen — se »Mine bidrag«.';
   }
 
+  /* Sign-in box for the GitHub Worker; '' with any other back-end. The login
+   * link is a same-tab navigation on purpose: the OAuth round trip returns to
+   * this page (an exception to the new-tab rule for external links). */
+  function authBox(S) {
+    if (!S.auth.enabled()) return '';
+    var se = S.auth.session(), err = S.auth.error();
+    var msg = err ? '<p class="crowd-err" role="alert">Login mislykkedes' + (err === 'denied' ? ' (adgang afvist hos GitHub)' : '') + '. Prøv igen.</p>' : '';
+    if (se) {
+      return '<p class="crowd-auth">Logget ind som <strong>' + esc(se.name) + '</strong> <span class="crowd-dim">(' + esc(se.login) + ' på GitHub)</span> · ' +
+        '<button type="button" class="crowd-link" data-auth="logout">Log ud</button></p>' + msg;
+    }
+    return '<div class="crowd-auth">' + msg + '<a class="crowd-btn crowd-btn--primary" href="' + esc(S.auth.loginUrl()) + '">Log ind med GitHub</a> ' +
+      '<span class="crowd-dim">Kræver en gratis GitHub-konto. Vi gemmer kun dit navn, brugernavn og id — aldrig din adgangskode.</span></div>';
+  }
+  document.addEventListener('click', function (ev) {
+    var t = ev.target;
+    if (t && t.getAttribute && t.getAttribute('data-auth') === 'logout' && window.CrowdStore) {
+      window.CrowdStore.auth.logout(); window.location.reload();
+    }
+  });
+
   return {
-    T: T, esc: esc, collator: collator, find: find, label: label, fmtDate: fmtDate, fmtStamp: fmtStamp,
+    authBox: authBox, T: T, esc: esc, collator: collator, find: find, label: label, fmtDate: fmtDate, fmtStamp: fmtStamp,
     pageLabel: pageLabel, surnameOf: surnameOf, diaryHref: diaryHref, externalLink: externalLink, safeUrl: safeUrl,
     levelBadge: levelBadge, gapChips: gapChips, statusPill: statusPill, confPill: confPill,
     queueRecord: queueRecord, badgesHtml: badgesHtml, badgeInfo: badgeInfo, download: download, modeNote: modeNote

@@ -99,12 +99,13 @@
     var st = state.fields[f.key] || {};
     var filled = !!(st.value && st.value.trim());
     var says = registerSays(f.key);
-    var help = f.key === 'wikidata' ? 'Slå personen op på wikidata.org og skriv Q-nummeret. Redaktionen kontrollerer det.' :
-      f.key === 'birth_date' || f.key === 'death_date' ? 'Skriv det, du kan dokumentere: kun år er fint. »ca. 1820« er tilladt.' : '';
+    var helpHtml = f.key === 'wikidata'
+      ? 'Slå personen op på ' + U.externalLink('https://www.wikidata.org/', 'wikidata.org') + ' og skriv Q-nummeret. Redaktionen kontrollerer det.' : '';
+    var help = f.key === 'birth_date' || f.key === 'death_date' ? 'Skriv det, du kan dokumentere: kun år er fint. »ca. 1820« er tilladt.' : '';
     return '<div class="crowd-fld' + (wanted[f.key] ? ' crowd-fld--wanted' : '') + (filled ? ' crowd-fld--filled' : '') + '" data-row="' + f.key + '">' +
       '<div class="crowd-fld__head"><label class="crowd-field-label" for="f-' + f.key + '">' + esc(f.da) + '</label>' +
       (says ? '<span class="crowd-fld__reg">Registret: ' + esc(says) + '</span>' : '') + '</div>' +
-      fieldInput(f, st.value) + (help ? '<p class="crowd-help">' + esc(help) + '</p>' : '') +
+      fieldInput(f, st.value) + (helpHtml ? '<p class="crowd-help">' + helpHtml + '</p>' : help ? '<p class="crowd-help">' + esc(help) + '</p>' : '') +
       '<div class="crowd-fld__meta">' +
         '<div><div class="crowd-field-label">Hvor sikker er du?</div><div class="crowd-conf-choice">' +
           T.confidence.map(function (c) {
@@ -223,7 +224,7 @@
   function renderAll() {
     var restored = state._restored ? '<div class="crowd-note crowd-note--warn">Din kladde fra ' + esc(U.fmtStamp(state._restored)) + ' er genoprettet. <button type="button" class="crowd-link" id="js-discard">Start forfra</button></div>' : '';
     $('js-main').innerHTML = '<div class="crowd-form" id="js-form">' + restored +
-      '<div class="crowd-note" role="status">' + U.modeNote(S.mode()) + '</div>' +
+      '<div class="crowd-note" role="status">' + U.modeNote(S.mode()) + '</div>' + U.authBox(S) +
       '<section class="crowd-sec crowd-person"><p class="crowd-dim" style="margin:0">Registerpost</p><h2 class="crowd-person__name">' + esc(LABEL) + '</h2>' +
         '<p class="crowd-person__desc">' + (DESC ? esc(DESC) : '<span class="crowd-dim">Ingen beskrivelse i registret</span>') + '</p>' +
         (REC ? '<div class="crowd-card__tags">' + U.levelBadge(REC.lv) + (REC.fl ? '<span class="crowd-badge crowd-badge--fleeting">Flygtig omtale</span>' : '') + '</div>' +
@@ -422,7 +423,8 @@
       comment: state.comment,
       contributor: state.contributor,
       consent: state.consent === true,
-      context: { area: (REC && (REC.c || REC.lc)) || '', doubt: !!(REC && REC.g.indexOf('doubt') >= 0), level: REC ? REC.lv : '', gaps: REC ? REC.g : [] }
+      context: { area: (REC && (REC.c || REC.lc)) || '', doubt: !!(REC && REC.g.indexOf('doubt') >= 0), level: REC ? REC.lv : '', gaps: REC ? REC.g : [],
+                 label: LABEL, description: DESC }
     };
   }
   function validateNow() { return V.validate(buildPayload(), T); }
@@ -460,6 +462,10 @@
   }
 
   function send() {
+    if (S.auth.enabled() && !S.auth.session()) {
+      $('js-errors').innerHTML = '<div class="crowd-summary-errors" role="alert"><strong>Log ind først.</strong> Brug knappen »Log ind med GitHub« øverst på siden — din kladde bliver liggende.</div>';
+      return;
+    }
     live = true;
     var errs = validateNow();
     showErrors(errs, true);

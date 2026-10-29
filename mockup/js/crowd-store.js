@@ -2,9 +2,12 @@
  *
  * Two interchangeable back-ends behind one Promise API, chosen at start-up:
  *
- *   api    the reference server (scripts/crowdsource/server.py) answers
- *          GET api/crowd/health → contributions are stored on the server in
- *          data/crowdsource/ and an editor reviews them there.
+ *   api    a server answers GET api/crowd/health → contributions are stored
+ *          there and an editor reviews them there. Two servers speak this API:
+ *          the reference server (scripts/crowdsource/server.py, per-browser
+ *          tokens) and the GitHub-login Worker (workers/crowd-api; its address
+ *          is CROWD_CONFIG.apiBase, people sign in with GitHub and the session
+ *          token comes back in the URL fragment #hca_session=…).
  *   local  no server (file://, GitHub Pages): contributions are kept in this
  *          browser's localStorage and travel to the editors as a JSON file
  *          (exportJSON → scripts/crowdsource/export_approved.py --import-json).
@@ -25,8 +28,14 @@
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof self !== 'undefined' ? self : this), function (root) {
   'use strict';
 
-  var API = 'api/crowd/';
   var LS = 'hca-crowd/v1/';
+  var SESSION = 'session';
+  /* '' = same origin; otherwise the Worker's origin (read late so tests can set it). */
+  function apiBase() {
+    var b = root.CROWD_CONFIG && root.CROWD_CONFIG.apiBase;
+    return b ? String(b).replace(/\/+$/, '') + '/' : '';
+  }
+  function API() { return apiBase() + 'api/crowd/'; }
   var mem = {};
 
   function tax() { return root.CROWD_TAXONOMY; }
@@ -69,7 +78,7 @@
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
 
   /* ── mode detection ───────────────────────────────────────────────────── */
-  var mode = 'local', readyP = null;
+  var mode = 'local', authMode = '', readyP = null;
 
   function withTimeout(p, ms) {
     return new Promise(function (resolve, reject) {
@@ -78,25 +87,81 @@
     });
   }
 
+  /* The Worker sends the browser back with #hca_session=<token> (or #hca_error=…).
+   * Keep the token and remove the fragment so it is not bookmarked or shared. */
+  var authError = '';
+  function takeSessionFromHash() {
+    try {
+      var h = (root.location && root.location.hash) || '';
+      var t = /[#&]hca_session=([\w.\-]+)/.exec(h), e = /[#&]hca_error=(\w+)/.exec(h);
+      if (!t && !e) return;
+      if (t) lsSet(SESSION, t[1]);
+      if (e) authError = e[1];
+      root.history.replaceState(null, '', root.location.pathname + root.location.search);
+    } catch (err) { /* no history API: harmless */ }
+  }
+
   function init() {
     if (readyP) return readyP;
-    // file:// cannot reach an API (and would log a console error trying).
-    if (typeof root.fetch !== 'function' || (root.location && root.location.protocol === 'file:')) {
+    takeSessionFromHash();
+    // file:// cannot reach a same-origin API (and would log a console error trying);
+    // a configured remote API can be reached from file:// when it allows the origin.
+    if (typeof root.fetch !== 'function' || (!apiBase() && root.location && root.location.protocol === 'file:')) {
       mode = 'local'; return (readyP = Promise.resolve(mode));
     }
-    readyP = withTimeout(root.fetch(API + 'health', { cache: 'no-store' }), 2500)
+    readyP = withTimeout(root.fetch(API() + 'health', { cache: 'no-store' }), 2500)
       .then(function (r) { if (!r.ok) throw new Error('no api'); return r.json(); })
-      .then(function (j) { mode = (j && j.mode === 'api') ? 'api' : 'local'; return mode; })
+      .then(function (j) {
+        mode = (j && j.mode === 'api') ? 'api' : 'local';
+        authMode = (mode === 'api' && j.auth === 'github') ? 'github' : '';
+        return mode;
+      })
       .catch(function () { mode = 'local'; return mode; });
     return readyP;
   }
 
+  /* ── sign-in (GitHub Worker only) ─────────────────────────────────────── */
+  function b64urlJson(part) {
+    var b = String(part).replace(/-/g, '+').replace(/_/g, '/');
+    var bin = root.atob(b + '==='.slice((b.length + 3) % 4));
+    return JSON.parse(decodeURIComponent(Array.prototype.map.call(bin, function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join('')));
+  }
+  /* For display only — the Worker verifies the signature; no role is read from here. */
+  function session() {
+    var tok = lsGet(SESSION, null);
+    if (!tok) return null;
+    try {
+      var p = b64urlJson(String(tok).split('.')[0]);
+      if (!p || p.exp * 1000 <= Date.now()) { lsDel(SESSION); return null; }
+      return { id: p.sub, login: p.login, name: p.name || p.login, expires: p.exp };
+    } catch (e) { lsDel(SESSION); return null; }
+  }
+  var auth = {
+    enabled: function () { return authMode === 'github'; },
+    session: session,
+    loginUrl: function (returnTo) {
+      return apiBase() + 'auth/login?return=' + encodeURIComponent(returnTo || String(root.location.href).split('#')[0]);
+    },
+    logout: function () { lsDel(SESSION); },
+    /* 'denied' | 'exchange' | 'profile' once after a failed sign-in, else '' */
+    error: function () { var e = authError; authError = ''; return e; }
+  };
+
   /* ── API transport ────────────────────────────────────────────────────── */
+  /* GitHub Worker: one session token for contributors and editors alike (the
+   * server decides the role). Reference server: a per-browser contributor
+   * token, or the editor key typed into the review page. */
+  function credential(admin) {
+    if (authMode === 'github') return session() ? lsGet(SESSION, null) : null;
+    return admin ? sessGet('admin-token') : lsGet('token', null);
+  }
   function api(method, path, body, admin) {
     var headers = { 'Content-Type': 'application/json' };
-    var tok = admin ? sessGet('admin-token') : lsGet('token', null);
+    var tok = credential(admin);
     if (tok) headers.Authorization = 'Bearer ' + tok;
-    return root.fetch(API + path, {
+    return root.fetch(API() + path, {
       method: method, headers: headers, cache: 'no-store',
       body: body === undefined ? undefined : JSON.stringify(body)
     }).then(function (r) {
@@ -109,7 +174,10 @@
 
   /* ── profile, drafts ──────────────────────────────────────────────────── */
   function profile() {
-    return lsGet('profile', { name: '', contact: '', affiliation: '', expertise: '', public_credit: false });
+    var p = lsGet('profile', { name: '', contact: '', affiliation: '', expertise: '', public_credit: false });
+    var se = authMode === 'github' ? session() : null;
+    if (se && !p.name) p = Object.assign({}, p, { name: se.name });     // pre-fill from the GitHub profile
+    return p;
   }
   function saveProfile(p) {
     var cur = profile();
@@ -134,13 +202,10 @@
     });
   }
 
-  function localCreate(payload, editId, ctx) {
-    var errs = V().validate(payload, tax());
-    if (errs.length) return Promise.reject({ status: 422, error: 'invalid', message: 'Bidraget har fejl.', errors: errs });
-    var p = saveProfile(payload.contributor);
-    var list = localSubs(), sub;
-    var snapshot = Object.assign({}, ctx || {});
-    var core = {
+  /* The stored form of a *validated* payload: normalised text, no attachments.
+   * Shared with the Worker (workers/crowd-api), so both back-ends store the same shape. */
+  function buildCore(payload) {
+    return {
       schema: tax().schema, person_id: payload.person_id.trim(), person_label: payload.person_label || '',
       identification: { status: payload.identification.status, summary: V().normalise(payload.identification.summary, true),
                         same_as: payload.identification.status === 'duplicate' ? payload.identification.same_as.trim() : '' },
@@ -155,6 +220,15 @@
       }),
       comment: V().normalise(payload.comment, true), consent: true
     };
+  }
+
+  function localCreate(payload, editId, ctx) {
+    var errs = V().validate(payload, tax());
+    if (errs.length) return Promise.reject({ status: 422, error: 'invalid', message: 'Bidraget har fejl.', errors: errs });
+    var p = saveProfile(payload.contributor);
+    var list = localSubs(), sub;
+    var snapshot = Object.assign({}, ctx || {});
+    var core = buildCore(payload);
     if (editId) {
       sub = list.filter(function (s) { return s.id === editId; })[0];
       if (!sub) return Promise.reject({ status: 404, error: 'not_found' });
@@ -351,7 +425,7 @@
 
   function mine() {
     if (mode === 'api') {
-      return lsGet('token', null) ? api('GET', 'mine') : Promise.resolve({ submissions: [], me: null });
+      return credential(false) ? api('GET', 'mine') : Promise.resolve({ submissions: [], me: null });
     }
     var id = profile().localId;
     var subs = localSubs().filter(function (s) { return s.contributor.id === id; });
@@ -387,7 +461,7 @@
 
   var admin = {
     /* api mode: needs a token (kept for this tab only); local mode: always allowed. */
-    token: function () { return sessGet('admin-token'); },
+    token: function () { return credential(true); },
     setToken: function (t) { sessSet('admin-token', t || null); },
     list: function (filter) {
       filter = filter || {};
@@ -427,13 +501,13 @@
     },
     /* Fetch an attachment (api mode only) as a blob URL — it needs the admin header. */
     attachment: function (sid, file) {
-      return root.fetch(API + 'admin/attachments/' + sid + '/' + encodeURIComponent(file),
-        { headers: { Authorization: 'Bearer ' + (sessGet('admin-token') || '') } })
+      return root.fetch(API() + 'admin/attachments/' + sid + '/' + encodeURIComponent(file),
+        { headers: { Authorization: 'Bearer ' + (credential(true) || '') } })
         .then(function (r) { if (!r.ok) throw new Error('attachment'); return r.blob(); })
         .then(function (b) { return root.URL.createObjectURL(b); });
     },
     download: function (format) {
-      return root.fetch(API + 'admin/export?format=' + format, { headers: { Authorization: 'Bearer ' + (sessGet('admin-token') || '') } })
+      return root.fetch(API() + 'admin/export?format=' + format, { headers: { Authorization: 'Bearer ' + (credential(true) || '') } })
         .then(function (r) { if (!r.ok) throw new Error('export ' + r.status); return r.blob(); });
     },
     /* local mode: take in a contribution file sent by a contributor */
@@ -470,9 +544,9 @@
   function exportMine() { return admin.exportJSON(true); }
 
   return {
-    init: init, mode: function () { return mode; }, profile: profile, saveProfile: saveProfile, draft: draft,
+    init: init, mode: function () { return mode; }, auth: auth, profile: profile, saveProfile: saveProfile, draft: draft,
     submit: submit, mine: mine, withdraw: withdraw, stats: stats, admin: admin, exportMine: exportMine,
-    /* exposed for tests */ _reviewSub: reviewSub, _computeStats: computeStats, _conflictsFor: conflictsFor,
-    _setMode: function (m) { mode = m; }, _normaliseImported: normaliseImported
+    /* exposed for tests and the Worker */ _buildCore: buildCore, _personStatus: personStatus, _reviewSub: reviewSub, _computeStats: computeStats, _conflictsFor: conflictsFor,
+    _setMode: function (m, a) { mode = m; authMode = a || ''; }, _normaliseImported: normaliseImported
   };
 });

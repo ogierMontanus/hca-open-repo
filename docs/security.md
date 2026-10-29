@@ -98,6 +98,27 @@ no inline handlers, all data through `esc()`.
 * `data/crowdsource/` holds names, contact details and unreviewed claims and is
   git-ignored; only editor-approved rows reach `data/curated/`.
 
+### GitHub-login Worker (optional, `workers/crowd-api/`)
+
+An alternative back-end for the same API (docs/crowdsourcing-login-plan.md). The
+pages then call one extra origin: `scripts/build_mockup/apply_csp.py` reads
+`apiBase` from `mockup/js/crowd-config.js` and adds exactly that **https** origin
+to `connect-src` on pages that load `crowd-store.js` (anything else in the file —
+`http:`, paths, extra directives — is ignored). The rest of the policy is unchanged.
+
+* OAuth `client secret`, the data-repo token and the session-signing key live only
+  as Worker secrets. The GitHub access token is used once for `GET /user` and discarded.
+* Login: signed `state` bound to a `HttpOnly; Secure; SameSite=Lax` nonce cookie (login CSRF),
+  return URL restricted to the configured origin + path prefix (no open redirect), session handed
+  back in the URL **fragment** (never sent to a server or logged), 7-day HMAC-signed token.
+* Authorisation: bearer token only (no cookies on the API, so no CSRF); the editor role is derived
+  from `ADMINS` on every request, never from the token; contributors can read and change only their
+  own submissions; 30 open submissions per account, 256 kB per request.
+* Storage: a **private** repository — the branches of a public repository are public — written only
+  with the Worker's fine-grained token (Contents, that one repository).
+* The session token sits in `localStorage` (like the reference server's contributor token); an XSS
+  would expose it, which is why the script/CSP rules above matter for these pages.
+
 ## Not covered
 
 * `web/` is the original prototype; its `index.html` is replaced by the
