@@ -45,8 +45,38 @@ nedenfor) + 12 til at afgøre delte artikler. Ingen chatbot, ingen 429/5xx.
 
 * Tilfældige rækker blev læst igennem (etiket mod DBL-titel): 40 + 35 før rettelserne (fandt fejl 1, 3 og 4) og 35 + 25
   efter rettelse 2–5 — i de sidste 60 **ingen kendte fejl** (ét afvigende fornavn: *Ross, Sir John* → «John Ross», titlen «Sir» — ok).
-* `data/curated/lex/qa_dbl_sample.csv` er en **tilfældig 10 %-stikprøve (88 rækker)** med tom `decision`-kolonne
-  til menneskelig gennemgang; **præcisionen er ikke målt, før den er udfyldt.**
+* `data/curated/lex/qa_dbl_sample.csv` er en **tilfældig 10 %-stikprøve (88 rækker)**, trukket én gang (seed 2026) og
+  bevaret ved genkørsler.
+
+### Gennemgang af stikprøven (2026-10-29) — 88 af 88 rigtige personer
+
+Hver række er holdt op mod artiklens egen metabeskrivelse i DBL (navn, begge levetidsår, erhverv) og registrets
+beskrivelse. **85 `ok`, 3 `ok_grænse`, 0 forkerte.** De tre grænsetilfælde er korrekt *identificeret*, men «dansk» er
+et skøn: *C.F. Rumohr* (født og død i Dresden), *F.L. Torp* (Flensborg → Reinbek) og *Emil Jonas* (Schwerin → Berlin;
+registret har *tysk* — personen får begge værdier). De kommer med, fordi kriteriet er DBL-optagelse, ikke fødested.
+
+**Præcisionen af *identiteten* er 88/88; 95 %-konfidensgrænsen nedad er ≈ 96 %** (Wilson). Forbehold: gennemgangen er
+**maskinel** (Claude mod DBL-metabeskrivelsen), ikke menneskelig, og et så lille antal kan ikke udelukke en fejlrate på
+et par procent. Den afprøver heller ikke, om «optaget i DBL» er et godt mål for «født i Danmark eller bosat der i
+længere årrække» — det er en definitionssag (se grænsetilfældene).
+
+## Gennemgangskøen (143 personer) — afgjort
+
+`dbl_review_decisions.csv` (én række pr. kø-række) styrer byggeren: `accept`/`accept_alias` tilføjer personen,
+`reject` fjerner rækken fra køen, `open` bliver stående. Udfald: **16 accepteret, 4 alias, 125 afvist, 1 åben.**
+
+| Gruppe | Rækker | Afgørelse |
+|---|---:|---|
+| **Henvisningssider** (DBL-stubbe «X, se Y») | 79 personer | Målartiklen hentet og årstal sammenlignet: 4 er *samme person under anden registerpost* (fx *Afzelius, Augusta f. Nielsen* → *Augusta Nielsen*; *Brenøe, Anna* → *Anna Nielsen*; *Lange, Agnes* → *Agnes Nyrop*; *Price, Amalie* → *Amalie Hagen*) = `accept_alias`; 2 nye (*Gad, P.G. Stenersen* → *P.C. Stenersen Gad*; *Lange, Julie f. Lumbye* → *Julie Hansen*) = `accept` med målets URL; de øvrige 73 peger på en anden person (en far, søn, ægtefælle eller navnebror) → afvist |
+| **Navnebror med andre år** | 41 + 18 delte | afvist, bortset fra 14 hvor kun ét årstal afviger med 1–2 år (eller registret har tastefejl, fx *Lützow* 1748 for 1784), og erhverv/sted stemmer → `accept` |
+| **Åben** | 1 | *Ida Wulff* (1806–1876, datter af P.F.W., g. Koch) mod DBL-sangerinden *Ida Wulff* (1808–1876) — muligvis to personer |
+
+**Opdagelse:** 86 af de 128 «likely»-rækker var **henvisningssider**, ikke artikler. De kan ikke blive «confirmed» (metabeskrivelsen
+har ingen årstal) og er derfor aldrig kommet i bucketen — men `lex_sitemap_match.py` bør fremover genkende «, se X»
+og enten følge henvisningen eller droppe kandidaten, så de ikke fylder køen.
+
+Resultat: **905** rækker i `person_nationality_added.csv` (885 automatiske + 20 efter manuel gennemgang; ny kolonne
+`confirmed_by` og `alias_of`); bucketen «Dansk\*» = **976** med registrets egne 87 (16 overlap).
 
 ## Begrænsninger
 

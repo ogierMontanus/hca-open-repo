@@ -16,8 +16,12 @@ hører sammen med [`plan-tidstavle-data.md`](plan-tidstavle-data.md) (del 2: eks
 | **2e** Kode og visning | ✔ stjerne + mouseover + fodnote i `persons*.html`, note på `nation*.html`; `tests/test_person_nationality_added.py` |
 | 2b Nationalitet fra Lex-sider · 2c profession-målret søgning · 3 chatbot-rest · 4 Wayback · 5 promovering | **ikke gjort** |
 
-**Næste skridt:** (1) udfyld `data/curated/lex/qa_dbl_sample.csv` (88 rækker) og mål præcisionen; (2) gennemgå
-`queue_dbl_review.csv` (143); (3) fase 0, før noget kører i større skala; (4) fase 2b/2c.
+**Udført 2026-10-29:** stikprøven (88 rækker) gennemgået — 88/88 rigtige personer, 3 grænsetilfælde (maskinel gennemgang,
+ikke menneskelig); gennemgangskøen afgjort (16 accepteret, 4 alias, 125 afvist, 1 åben) → **905** rækker, bucket **976**.
+Se `lex-dk-dbl-bucket-results.md`.
+
+**Næste skridt:** (1) fase 0, før noget kører i større skala; (2) fase 2b/2c; (3) lad `lex_sitemap_match.py` genkende
+henvisningssider («, se X»); (4) evt. menneskelig stikprøve af de 3 grænsetilfælde + *Ida Wulff*.
 
 **Lokalt (PowerShell):** `data/raw/lex/` er gitignoreret og skal genskabes — sitemap + cache:
 ```powershell
@@ -364,7 +368,7 @@ Arkivlink som lille «arkiveret»-tilføjelse. **Ingen** Lex-uddrag på siden.
 | 2 | Rute 1: hent sitemap, byg slug-indeks, match A+B, verificér | Dækningsrapport pr. niveau/køn/nationalitet | 1 (+0 for download-omfang) |
 | **2b** | **Nationalitet fra Lex-sider:** udvid `fetch_check`, genhent én side pr. bekræftet person, byg `person_nationality_lex.csv` (R1–R5, alle som *tilføjet*), opgør de umarkerede, der ikke er danske (tilføjede undtagelser), stikprøvetjek 10 % af R1/R2 | tags for alle bekræftede sider; konflikter med registret listet; test grøn | 2 |
 | **2c** | **Profession-målrettet søgning:** `prof_target` + nationalitetsstyret rute; Teaterleksikon-profil (meta-årstal) **og kun for personer uden bekræftet DBL** (implementeret i `lex_sitemap_match.py`); kør kun relevante værter | ≈ +15–25 bekræftede; `relaxed`-rækker markeret | 2, 2b |
-| **2d** ✔ | **DBL for hele registret** — *udført 2026-10-29:* 7.122 personer slået op, 903 bekræftet, 885 efter delt-artikel-regel, ≈ 2.900 sidekald; fem fejl fundet og rettet (cache pr. URL, slægtninge, pseudo-poster …); 10 %-stikprøve (88 rækker) venter på gennemgang | `person_nationality_added.csv` (885); `queue_dbl_review.csv` (143); `qa_dbl_sample.csv`; resultatnote | 2 |
+| **2d** ✔ | **DBL for hele registret** — *udført 2026-10-29 (efter gennemgang af stikprøve og kø: 905 rækker, bucket 976):* 7.122 personer slået op, 903 bekræftet, 885 efter delt-artikel-regel, ≈ 2.900 sidekald; fem fejl fundet og rettet (cache pr. URL, slægtninge, pseudo-poster …); 10 %-stikprøve 88/88 rigtige | `person_nationality_added.csv` (905); `dbl_review_decisions.csv` (143 afgjort); `qa_dbl_sample.csv`; resultatnote | 2 |
 | **2e** ✔ | **Kode og visning** *(udført 2026-10-29: `title` + sr-only i `facet-engine.js` (`notes`-option, bevares ved dæmpning), fodnote `#nat-note` vist kun når `NATIONALITY_NOTES` leveres, `nation.html` viser `note_da/en` under undertitlen, `Dansk*` også som paraplymærkat; 956 af 957 i facetten — Reg0110030 Salomonsen findes ikke i persons-extra)*: `build_persons_extra.py`, `facet-engine.js`, `persons*.html`, `nation.html`, tests (§3d-tabellen) | Stjerne + mouseover i facetten; tests grønne | 2d |
 | 3 | Rute 2 for rest i A (≤ 200/dag), **nationalitetstilpasset prompt** | A-rest behandlet eller loft nået | 0, 2b, 2c |
 | 4 | Rute 3 (Wayback) for danskere (nu også **fastlagt** af §3b) uden DBL | `archive_url` på de relevante rækker | 2–3 |

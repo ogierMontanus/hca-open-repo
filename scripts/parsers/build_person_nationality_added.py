@@ -42,6 +42,7 @@ REPO = Path(__file__).resolve().parents[2]
 LEX = REPO / "data" / "curated" / "lex"
 N = REPO / "data" / "normalized"
 OUT = REPO / "data" / "curated" / "person_nationality_added.csv"
+DECISIONS = LEX / "dbl_review_decisions.csv"
 
 
 def main():
@@ -71,6 +72,7 @@ def main():
             c = conf[0]
             foreign = sorted(k for k in reg.get(rid, set()) if k != "dansk")
             added.append({
+                "confirmed_by": "auto", "alias_of": "",
                 "rid": rid, "label": c["label"], "nationality_key": "dansk", "nat_basis": "dbl_optagelse",
                 "source_url": c["url"], "page_title": c["page_title"], "tier": tiers.get(rid, {}).get("tier", ""),
                 "verified_on": c.get("queried_on") or today,
@@ -118,9 +120,35 @@ def main():
                                "verdict": "confirmed", "why": "delt artikel: personens levetid er ikke artiklens egne første årstal"})
     if fetched:
         json.dump(cache, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False)
+    # Manual review of the queue (data/curated/lex/dbl_review_decisions.csv, one row per queued
+    # (rid, url)): `accept` adds the person (final_url = the article, which for a DBL cross-reference
+    # page is the TARGET article); `accept_alias` is the same person under a second register entry
+    # (maiden/married name), so the article is deliberately shared and alias_of names the other rid;
+    # `reject` / `open` change nothing and `reject` is not queued again.
+    decided = {}
+    if DECISIONS.exists():
+        for d in csv.DictReader(open(DECISIONS, encoding="utf-8")):
+            decided[(d["rid"], d["url"])] = d
+    have = {r["rid"] for r in added}
+    qrow = {(r["rid"], r["url"]): r for r in review}
+    for key, d in decided.items():
+        if d["decision"] not in ("accept", "accept_alias") or key not in qrow or key[0] in have:
+            continue
+        q, fin = qrow[key], d["final_url"] or key[1]
+        title = unquote(fin.rsplit("/", 1)[-1]).replace("_", " ") + " – Dansk Biografisk Leksikon | Lex"
+        added.append({
+            "confirmed_by": "manual_review", "alias_of": d["alias_of"],
+            "rid": q["rid"], "label": q["label"], "nationality_key": "dansk", "nat_basis": "dbl_optagelse",
+            "source_url": fin, "page_title": q["page_title"] if fin == key[1] else title,
+            "tier": q.get("tier", ""), "verified_on": today,
+            "conflict_with_register": ";".join(sorted(k for k in reg.get(q["rid"], set()) if k != "dansk")),
+        })
+        have.add(q["rid"])
+    review = [r for r in review
+              if decided.get((r["rid"], r.get("url", "")), {}).get("decision") not in ("accept", "accept_alias", "reject")]
     added.sort(key=lambda r: (r["tier"], r["rid"]))
     cols = ["rid", "label", "nationality_key", "nat_basis", "source_url", "page_title", "tier",
-            "verified_on", "conflict_with_register"]
+            "verified_on", "conflict_with_register", "confirmed_by", "alias_of"]
     with open(OUT, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=cols)
         w.writeheader()
@@ -131,13 +159,18 @@ def main():
             w = csv.DictWriter(f, fieldnames=rcols, extrasaction="ignore")
             w.writeheader()
             w.writerows(sorted(review, key=lambda r: r["rid"]))
-    random.seed(2026)
-    sample = random.sample(added, max(1, len(added) // 10)) if added else []
-    with open(LEX / "qa_dbl_sample.csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=cols + ["decision", "reviewer"])
-        w.writeheader()
-        for r in sample:
-            w.writerow({**r, "decision": "", "reviewer": ""})
+    # The 10 % QA sample is drawn ONCE (seed 2026) and then kept: it carries the reviewer's decisions
+    # and a re-run must not overwrite them. Delete the file to draw a fresh sample.
+    qa = LEX / "qa_dbl_sample.csv"
+    sample = []
+    if not qa.exists():
+        random.seed(2026)
+        sample = random.sample([r for r in added if r["confirmed_by"] == "auto"], max(1, len(added) // 10)) if added else []
+        with open(qa, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=cols + ["decision", "reviewer"])
+            w.writeheader()
+            for r in sample:
+                w.writerow({**r, "decision": "", "reviewer": ""})
 
     explicit = {k for k, v in reg.items() if "dansk" in v}
     ids = {r["rid"] for r in added}
@@ -146,7 +179,7 @@ def main():
     print(f"  with a foreign register nationality as well: {sum(1 for r in added if r['conflict_with_register'])}")
     print(f"  register-explicit 'dansk' (leading): {len(explicit)}; of them in DBL: {len(explicit & ids)}")
     print(f"  bucket «Dansk*» = DBL ∪ register-explicit: {len(ids | explicit)}")
-    print(f"  review queue rows: {len(review)} (persons: {len({r['rid'] for r in review})}); QA sample: {len(sample)}")
+    print(f"  review queue rows: {len(review)} (persons: {len({r['rid'] for r in review})}); QA sample: {'kept' if not sample else len(sample)}")
 
 
 if __name__ == "__main__":
