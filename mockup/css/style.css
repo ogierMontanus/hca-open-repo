@@ -1437,3 +1437,22 @@ span.tl-item__src { color: var(--color-text-muted); }
 }
 .kort-routes-ctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .kort-routes-ctl[hidden] { display: none; }
+
+/* kort.html: besøg vs. omtale. Solid dot = visited, hollow ring = only mentioned
+   (shape + colour, so the distinction survives colour-blindness and print).
+   Clusters are a donut: solid arc = share visited, the rest = mentioned. */
+:root { --color-visit: var(--color-accent); --color-mention: #b2640f; }
+.kort-pin { display: block; box-sizing: border-box; border-radius: 50%; width: 14px; height: 14px; }
+.kort-pin--visit { background: var(--color-visit); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--color-visit), 0 1px 3px rgba(0,0,0,.35); }
+.kort-pin--mention { background: #fff; border: 3px solid var(--color-mention); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.kort-cluster { display: grid; place-items: center; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+.kort-cluster > span {
+  display: grid; place-items: center; width: calc(100% - 10px); height: calc(100% - 10px);
+  border-radius: 50%; background: #fff; color: var(--color-text); font: 700 0.78rem/1 var(--font-sans, system-ui, sans-serif);
+}
+.kort-legend { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kort-legend__item { display: inline-flex; align-items: center; gap: 5px; }
+.kort-legend .kort-pin { flex: none; }
+.kort-visit-tag { font-size: 0.78rem; font-weight: 600; }
+.kort-visit-tag--visit { color: var(--color-visit); }
+.kort-visit-tag--mention { color: var(--color-mention); }

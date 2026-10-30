@@ -321,6 +321,24 @@ def place_from_teater_title(title, place_labels):
     return None, None
 
 
+def venue_rid_for(venue, city, labels_by_cf):
+    """LOC id of the register place a work's venue names, or None. The venue
+    string comes from the title's parenthetical ("Belvedere"); the register
+    qualifies such labels with a parenthesis ("Belvedere (ved Wien)"), so
+    this accepts an exact label or "<venue> (…)" and, when more than one
+    qualifies, keeps the one whose label also names the city. Anything still
+    ambiguous stays unlinked rather than guessed. Almost every venue is
+    absent from the register altogether (it holds few buildings)."""
+    if not venue:
+        return None
+    vcf = venue.strip().strip(".").casefold()
+    cands = [(lab, rid) for lab, rid in labels_by_cf if lab == vcf or lab.startswith(vcf + " (")]
+    if len(cands) > 1 and city:
+        ccf = city.strip().casefold()
+        cands = [(lab, rid) for lab, rid in cands if ccf in lab]
+    return cands[0][1] if len(cands) == 1 else None
+
+
 def format_place(city, venue):
     """"City" alone, or "City — Venue" — chosen so that a plain alphabetical
     sort of the formatted string already clusters every venue under its city
@@ -719,6 +737,12 @@ def main():
         for r in all_rows if r["entity_type"] == "place" and r["label"]
     }
     print(f"  {len(place_labels):,} place labels loaded for artist-extraction filtering")
+    # Same register, keyed for linking a work's Sted to its place page.
+    place_rid_by_cf = {
+        r["label"].strip().casefold(): r["entity_id"]
+        for r in all_rows if r["entity_type"] == "place" and r["label"]
+    }
+    place_labels_rid = sorted(place_rid_by_cf.items())
 
     ref_count = defaultdict(int)
     if os.path.exists(REFS):
@@ -913,6 +937,13 @@ def main():
             # separate field from the CSV's internal `notes` column.
             "attributionNote": attribution_note,
             "place": format_place(place_city, place_venue),
+            # LOC ids behind "place" (city) and, where the register has the
+            # building at all, its venue -- place.html?reg=<id> targets for
+            # category-catalogue.js's Sted column. None = no register entry.
+            **{k: v for k, v in (
+                ("placeRid", place_rid_by_cf.get(place_city.strip().casefold()) if place_city else None),
+                ("venueRid", venue_rid_for(place_venue, place_city, place_labels_rid)),
+            ) if v},
             "diary": [],
             "related": [],
             "coPlaces": [],
@@ -1000,6 +1031,14 @@ def main():
         with_place = sum(1 for w in billedkunst if w["place"])
         print(f"  BILLEDKUNST Sted coverage: {with_place}/{len(billedkunst)} "
               f"({with_place / len(billedkunst):.0%})")
+
+    with_venue = [w for w in generated.values() if w["place"] and " — " in w["place"]]
+    if with_venue:
+        linked = sum(1 for w in with_venue if w.get("venueRid"))
+        missing = sorted({w["place"] for w in with_venue if not w.get("venueRid")})
+        print(f"  Sted with a venue: {len(with_venue)} works; {linked} link to a register "
+              f"building, {len(missing)} distinct city — venue pairs have no register entry "
+              f"(hence no coordinates)")
 
     teater = [w for w in generated.values() if w["wing"] == "teater-musik.html"]
     if teater:

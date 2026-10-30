@@ -110,7 +110,7 @@
       refs: w.refs || 0, init: initialOf(w.title),
       h2: w.h2 || '', h3: w.h3 || '', author: w.author || '',
       authors: authors, authorKeys: authors.map(authorKey),
-      place: w.place || ''
+      place: w.place || '', placeRid: w.placeRid || '', venueRid: w.venueRid || ''
     });
     return acc;
   }, []);
@@ -217,6 +217,20 @@
     } catch (e) { /* ignore */ }
     return wing === 'billedkunst.html' ? 'list' : 'table';
   })();
+  // Sted cell: "City" or "City — Venue" (build_works_extra.py), the city linked
+  // to its place page and the venue too where the register holds the building
+  // (venueRid); other venues stay plain text — the register has few buildings.
+  function placeLink(rid, text) {
+    return rid ? '<a href="place.html?reg=' + esc(rid) + '">' + esc(text) + '</a>' : esc(text);
+  }
+  function placeCellHtml(w) {
+    if (!w.place) return '';
+    var i = w.place.indexOf(' — ');
+    if (i < 0) return placeLink(w.placeRid, w.place);
+    return placeLink(w.placeRid, w.place.slice(0, i)) + ' — ' +
+      placeLink(w.venueRid, w.place.slice(i + 3));
+  }
+
   var tableView = (typeof TableView !== 'undefined') ? TableView.create(grid, [
     { key: 'select', label: '', sortable: false,
       html: function (w) { return '<label class="result-card__select"><input type="checkbox" data-cart-type="work" data-cart-rid="' +
@@ -228,7 +242,8 @@
     { key: 'author', label: t('colAuthor', 'Forfatter'), value: function (w) { return w.author || ''; },
       sortValue: function (w) { return surnameKey(w.author || ''); } },
     { key: 'category', label: t('colCategory', 'Kategori'), value: function (w) { return w.h3 || w.h2 || ''; } },
-    { key: 'place', label: t('colPlace', 'Sted'), value: function (w) { return w.place || ''; } },
+    { key: 'place', label: t('colPlace', 'Sted'), value: function (w) { return w.place || ''; },
+      html: placeCellHtml },
     { key: 'refs', label: t('colRefs', 'Refs.'), numeric: true, value: function (w) { return w.refs; } }
   ], { initialSort: 'refs', initialDir: 'desc',
        afterRender: function (c) { if (typeof Cart !== 'undefined') Cart.syncCheckboxes(c); } }) : null;

@@ -77,6 +77,16 @@
           </select>
         </label>
         <span>·</span>
+        <label style="display:flex;align-items:center;gap:6px">
+          Visit/mention:
+          <select id="kort-visit-select"
+                  style="padding:4px 8px;border:1px solid var(--color-border);border-radius:var(--radius);font:inherit;font-size:0.82rem">
+            <option value="">All</option>
+          </select>
+        </label>
+        <span>·</span>
+        <span class="kort-legend" id="kort-legend" role="group" aria-label="Key"></span>
+        <span>·</span>
         <span id="kort-routes-ctl" class="kort-routes-ctl" hidden>
           <label style="display:flex;align-items:center;gap:6px">
             <input type="checkbox" id="kort-routes-on"> Andersen's journeys (Chronology)
@@ -167,6 +177,7 @@
         lon: p.lon,
         country: p.country_da || '',
         category: p.category || '',
+        visit: p.visit === 'Besøgt' ? 'visit' : (p.visit === 'Omtalt' ? 'mention' : ''),
         refs: p.refs || 0
       });
     }
@@ -234,26 +245,70 @@
   var cluster = L.markerClusterGroup({
     showCoverageOnHover: false,
     spiderfyOnMaxZoom: true,
-    maxClusterRadius: 50
+    maxClusterRadius: 50,
+    iconCreateFunction: clusterIcon
   });
 
   // Keep marker references so a #reg=… hash can pan/open the right popup.
   var markersByRid = Object.create(null);
+
+  // Besøg/omtale: PLACES_EXTRA.visit is Besøgt (Andersen was there) or Omtalt
+  // (only mentioned). Solid dot vs. hollow ring — see css/style.css.
+  var VISIT_LABEL = { visit: 'Visited', mention: 'Mentioned only' };
+  var VISIT_TITLE = { visit: 'Andersen visited the place', mention: 'The place is only mentioned in the diaries' };
+  var visitCounts = { visit: 0, mention: 0 };
+  geocoded.forEach(function (p) { if (p.visit) visitCounts[p.visit]++; });
+  var visitSelect = document.getElementById('kort-visit-select');
+  ['visit', 'mention'].forEach(function (k) {
+    var o = document.createElement('option');
+    o.value = k;
+    o.textContent = VISIT_LABEL[k] + ' (' + visitCounts[k].toLocaleString('en-US') + ')';
+    visitSelect.appendChild(o);
+  });
+  var legendEl = document.getElementById('kort-legend');
+  ['visit', 'mention'].forEach(function (k) {
+    legendEl.insertAdjacentHTML('beforeend', '<span class="kort-legend__item" title="' + esc(VISIT_TITLE[k]) +
+      '"><i class="kort-pin kort-pin--' + k + '" aria-hidden="true"></i>' + esc(VISIT_LABEL[k]) + '</span>');
+  });
+
+  function pinIcon(visit) {
+    return L.divIcon({
+      className: '', html: '<i class="kort-pin kort-pin--' + (visit || 'mention') + '"></i>',
+      iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -9]
+    });
+  }
+
+  // Donut cluster: conic-gradient ring split visited / mentioned, count inside.
+  function clusterIcon(c) {
+    var kids = c.getAllChildMarkers(), v = 0;
+    kids.forEach(function (m) { if (m.options.visit === 'visit') v++; });
+    var pct = Math.round(100 * v / kids.length);
+    var size = kids.length < 10 ? 34 : (kids.length < 100 ? 40 : 46);
+    return L.divIcon({
+      className: '',
+      html: '<div class="kort-cluster" style="width:' + size + 'px;height:' + size + 'px;background:conic-gradient(' +
+        'var(--color-visit) 0 ' + pct + '%, var(--color-mention) ' + pct + '% 100%)"><span>' + kids.length + '</span></div>',
+      iconSize: [size, size]
+    });
+  }
 
   // Rebuilds the cluster layer for the given category ('' = all, INCLUDING
   // the uncategorized places the disclaimer above describes — a filter
   // choice, not a gap: picking a specific category is the only way to
   // exclude them, matching how places_en.html's own facet leaves
   // "Unclassified" as an explicit opt-in bucket rather than hiding it
-  // by default).
-  function renderMarkers(category) {
+  // by default) and visit kind ('' = both).
+  function renderMarkers(category, visit) {
     cluster.clearLayers();
     markersByRid = Object.create(null);
-    var subset = category ? geocoded.filter(function (p) { return p.category === category; }) : geocoded;
+    var subset = geocoded.filter(function (p) {
+      return (!category || p.category === category) && (!visit || p.visit === visit);
+    });
     subset.forEach(function (p) {
-      var m = L.marker([p.lat, p.lon], { title: p.label });
+      var m = L.marker([p.lat, p.lon], { title: p.label, icon: pinIcon(p.visit), visit: p.visit });
       var html = '<strong>' + esc(p.label) + '</strong>' +
         (p.country ? '<br><span style="color:var(--color-text-muted)">' + esc(p.country) + '</span>' : '') +
+        (p.visit ? '<br><span class="kort-visit-tag kort-visit-tag--' + p.visit + '">' + esc(VISIT_LABEL[p.visit]) + '</span>' : '') +
         '<br><a href="place.html?reg=' + esc(p.rid) + '">Open place page →</a>' +
         (p.refs ? ' <span style="color:var(--color-text-muted);font-size:0.78rem">· ' + p.refs + ' refs.</span>' : '');
       m.bindPopup(html);
@@ -264,16 +319,18 @@
     return subset.length;
   }
 
-  renderMarkers('');
+  renderMarkers('', '');
   map.addLayer(cluster);
 
   // Fit to all markers, with a small padding so border points aren't clipped.
   map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
 
-  catSelect.addEventListener('change', function () {
-    var n = renderMarkers(catSelect.value);
+  function refilter() {
+    var n = renderMarkers(catSelect.value, visitSelect.value);
     if (n) map.fitBounds(cluster.getBounds(), { padding: [24, 24] });
-  });
+  }
+  catSelect.addEventListener('change', refilter);
+  visitSelect.addEventListener('change', refilter);
 
   // Deep-link via #reg=LOC1000500 → pan, zoom in enough to break the cluster
   // open, then open the popup. Used by the link from per-place pages.
