@@ -126,6 +126,18 @@ tastaturbrugere. Derfor:
 | H.C. Andersen Centret, bibliografisøgning (personer og værker, ikke steder) | `Sekundærlitteratur` |
 | Lex.dk-søgning (personregister, ingen registreret nationalitet) | `Søg på Lex.dk` |
 
+Søgehjælp på crowd-bidragssiden (`crowd-contribute.html`, 2026-10-29) —
+vises for alle personer, uafhængigt af nationalitet:
+
+| Mål | Linktekst |
+|-----|-----------|
+| GND Explorer-søgning | `Søg i GND Explorer` |
+| Wikidata-søgning (`w/index.php?search=`) | `Søg på Wikidata` |
+| Slægtsforskernes Bibliotek (nu Danskernes Historie Online), fritekstsiden | `Søg i Slægtsforskernes Bibliotek` |
+
+Slægtsforskernes Bibliotek søger via et JavaScript-felt (SiteSearch360) og har
+ingen kendt URL-parameter, så linket går til søgesiden uden forudfyldt navn.
+
 Ny type ekstern kilde: tilføj den her, så teksten er ens på tværs af sider.
 
 De søgelinks ovenfor er en anden underkategori end resten af tabellen:

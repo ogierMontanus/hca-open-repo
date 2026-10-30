@@ -305,15 +305,15 @@
       $('js-mentions').innerHTML = pages.map(mention).join('');
     });
 
-    // Search help — the links the person page already offers (docs/external-links.md)
-    if (P && (P.bioLinks || []).length) {
-      var q = encodeURIComponent(P.searchName || LABEL);
-      $('js-side').insertAdjacentHTML('beforeend', '<div class="info-block info-block--enriched"><div class="info-block__header">Søgehjælp <span class="info-block__tag">tilføjet</span></div><div class="info-block__body" style="font-size:0.84rem">' +
-        '<p class="crowd-dim" style="margin-top:0">Søgninger, ikke identifikationer.</p><div style="display:flex;flex-direction:column;gap:6px">' +
-        P.bioLinks.map(function (l) { return U.externalLink(l.url, l.label); }).join('') +
-        U.externalLink('https://museumodense.dk/alle-udgivelser/?artikel_navn=' + q.replace(/%20/g, '+'), 'Anderseniana') +
-        '</div></div></div>');
-    }
+    // Search help (docs/external-links.md §4): searches, not identifications. The name is
+    // the person page's "Fornavn Efternavn" form where known, else the register label.
+    var q = encodeURIComponent((P && P.searchName) || LABEL);
+    $('js-side').insertAdjacentHTML('beforeend', '<div class="info-block info-block--enriched"><div class="info-block__header">Søgehjælp <span class="info-block__tag">tilføjet</span></div><div class="info-block__body" style="font-size:0.84rem">' +
+      '<p class="crowd-dim" style="margin-top:0">Søgninger, ikke identifikationer.</p><div style="display:flex;flex-direction:column;gap:6px">' +
+      U.externalLink('https://explore.gnd.network/en/search?term=' + q + '&rows=25', 'Søg i GND Explorer') +
+      U.externalLink('https://www.wikidata.org/w/index.php?search=' + q.replace(/%20/g, '+'), 'Søg på Wikidata') +
+      U.externalLink('https://slaegtsbibliotek.dk/soeg-efter-boeger/fritekst', 'Søg i Slægtsforskernes Bibliotek') +
+      '</div><p class="crowd-dim" style="margin:var(--sp2) 0 0">Slægtsforskernes Bibliotek (nu Danskernes Historie Online) har ingen søgelink med forudfyldt navn — skriv navnet i feltet dér.</p></div></div>');
 
     if (APPROVED.length) {
       $('js-side').insertAdjacentHTML('beforeend', '<div class="info-block info-block--enriched"><div class="info-block__header">Allerede godkendt <span class="info-block__tag">tilføjet</span></div><div class="info-block__body">' +
