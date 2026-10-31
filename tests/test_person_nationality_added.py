@@ -39,8 +39,26 @@ def test_rows_are_dbl_confirmed_danish(rows):
 def test_no_duplicate_person_or_shared_article(rows):
     rids = [r["rid"] for r in rows]
     assert len(rids) == len(set(rids))
-    urls = [r["source_url"] for r in rows]
-    assert len(urls) == len(set(urls)), "one DBL article claimed by several register persons"
+    # one DBL article belongs to ONE register person — except a reviewed alias (the same person under a
+    # second register entry, e.g. maiden name), which must name the entry that holds the article
+    by_url = {}
+    for r in rows:
+        by_url.setdefault(r["source_url"], []).append(r)
+    for url, rs in by_url.items():
+        if len(rs) > 1:
+            owners = {r["rid"] for r in rs if not r["alias_of"]}
+            assert len(owners) == 1, f"{url} claimed by several register persons: {[r['rid'] for r in rs]}"
+            assert all(r["alias_of"] in owners and r["confirmed_by"] == "manual_review" for r in rs if r["alias_of"])
+
+
+def test_manual_review_rows_are_traceable(rows):
+    decisions = ROOT / "data" / "curated" / "lex" / "dbl_review_decisions.csv"
+    if not decisions.exists():
+        pytest.skip("no review decisions")
+    with open(decisions, encoding="utf-8", newline="") as f:
+        acc = {d["rid"] for d in csv.DictReader(f) if d["decision"] in ("accept", "accept_alias")}
+    # every manual row comes from an accept decision (an accepted person may meanwhile have become automatic)
+    assert {r["rid"] for r in rows if r["confirmed_by"] == "manual_review"} <= acc
 
 
 def test_rids_exist_as_persons(rows):

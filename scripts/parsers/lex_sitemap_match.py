@@ -185,7 +185,7 @@ def main():
     print(f"index: {len(entries):,} candidate articles on {len(HOSTS)} hosts; persons: {len(persons)}")
     cache = json.load(open(CACHE, encoding="utf-8")) if CACHE.exists() else {}
     today = date.today().isoformat()
-    requests_made, rows = 0, []
+    requests_made, redirects, rows = 0, 0, []
     t0 = time.time()
     for p in persons:
         born, died = life_years(p["label"])
@@ -214,13 +214,18 @@ def main():
                 # Legacy entries (no "ys") hold a verdict computed for whichever person asked first. They are
                 # only valid for URLs no other person with different life years asked about; the shared
                 # ones (data/raw/lex/legacy_invalid_urls.json, found 2026-10-29) are fetched again.
-                if ent is None or ("ys" not in ent and url in LEGACY_INVALID):
+                # DBL entries cached before the cross-reference check and the glued-year fix ("mh" = stored meta head) are fetched again.
+                if ent is None or ("ys" not in ent and url in LEGACY_INVALID) or \
+                        ("mh" not in ent and "biografiskleksikon" in url and ent.get("status") == 200):
                     time.sleep(1.0)
                     cache[ck] = fetch_check(url, born, died)
                     requests_made += 1
                 chk = dict(cache[ck])
                 if "ys" in chk:                       # per-person verdict from the cached years
                     chk["verdict"], chk["years"] = judge(chk["ys"], born, died, chk.get("note", ""))
+                if chk.get("redir"):                  # cross-reference stub, not an article: never a candidate
+                    redirects += 1
+                    continue
             per_work[key] += 1
             verified += 1
             rows.append({"rid": p["rid"], "tier": p["tier"], "label": p["label"], "search_name": p["search_name"],
@@ -279,7 +284,7 @@ def main():
     conf = sum(1 for p in persons if any(x["verdict"] == "confirmed" for x in by[p["rid"]]))
     dbl = sum(1 for p in persons if any(x["verdict"] == "confirmed" and x["work"] == "dbl" for x in by[p["rid"]]))
     print(f"persons {n}: with slug candidate {anyc} · confirmed any {conf} · confirmed DBL {dbl} · "
-          f"page requests {requests_made} · {time.time() - t0:0.0f}s")
+          f"page requests {requests_made} · DBL cross-reference stubs skipped {redirects} · {time.time() - t0:0.0f}s")
     miss = [p for p in persons if not any(x["verdict"] == "confirmed" for x in by[p["rid"]])]
     print("no confirmed link:")
     for p in miss[:60]:

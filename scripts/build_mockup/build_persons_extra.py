@@ -50,6 +50,9 @@ ETHNIC     = os.path.join(ROOT, "data", "normalized", "person_ethnic_descriptors
 # ADDED nationality «Dansk*» (DBL-bekræftet) — scripts/parsers/build_person_nationality_added.py,
 # docs/plan-lex-dk-links.md §3d. Added data: never written into the register's own fields.
 ADDED_NAT  = os.path.join(ROOT, "data", "curated", "person_nationality_added.csv")
+# Verified direct lex.dk articles (load_lex_direct_links()) — override the Lex.dk search link.
+LEX_LINK_FILES = [os.path.join(ROOT, "data", "curated", "lex", n)
+                  for n in ("persons_lex_sitemap.csv", "persons_lex_links.csv")]
 DANSK_LABEL   = "Dansk*"
 DANSK_NOTE_DA = "Født i Danmark eller bosat der i længere årrække"
 DANSK_NOTE_EN = "Born in Denmark or resident there for many years"
@@ -148,6 +151,74 @@ def load_added_nationalities():
     with open(ADDED_NAT, encoding="utf-8", newline="") as f:
         return [(r["rid"], r["nationality_key"]) for r in csv.DictReader(f)
                 if r.get("nat_basis") == "dbl_optagelse" and r.get("nationality_key")]
+
+
+def load_lex_direct_links() -> dict:
+    """{entity_id: [{"label", "url", "direct": True}, ...]} — verified direct lex.dk articles.
+
+    These replace the Lex.dk *search* link in «Biografiske opslag» (bio_search_links()). A link is
+    only emitted where name AND both life years were seen on the article itself (verdict
+    `confirmed`); `likely`/`mismatch`/`dead` rows never get here.
+      * Dansk Biografisk Leksikon: the reviewed final set in person_nationality_added.csv (includes the
+        manual accept/accept_alias decisions and the shared-article rule), not the raw match files.
+      * Other lex.dk works: `confirmed` rows of persons_lex_sitemap.csv / persons_lex_links.csv. Danmarks-
+        historien chapters (`dh`) are skipped (chapters, not biographies). An article claimed by several
+        register persons is dropped (ambiguous → the search link stays); where one person has several
+        articles in the same work (`Niels_W._Gade` vs `Niels_W._Gade_i_erindringen`) the shortest slug wins.
+    Order: DBL, Dansk Kvindebiografisk, Weilbach, Teaterleksikon, Den Store Danske / lex.dk.
+    Degrades to {} when the curated files are absent."""
+    order = ["dbl", "dkbl", "weilbach", "teater", "dsd", "lex"]
+    names = {
+        "dbl":      "Dansk Biografisk Leksikon",
+        "dkbl":     "Dansk Kvindebiografisk Leksikon",
+        "weilbach": "Weilbachs Kunstnerleksikon",
+        "teater":   "Gyldendals Teaterleksikon",
+        "dsd":      "Den Store Danske",
+        "lex":      "Den Store Danske",
+    }
+    found: dict[str, dict[str, str]] = {}      # rid -> {work: decoded url}
+    if os.path.exists(ADDED_NAT):
+        with open(ADDED_NAT, encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                if r.get("nat_basis") == "dbl_optagelse" and r.get("source_url"):
+                    found.setdefault(r["rid"], {})["dbl"] = r["source_url"]
+
+    cand: dict[tuple, list] = defaultdict(list)    # (rid, work) -> [url]
+    claimed: dict[str, set] = defaultdict(set)     # url -> {rid}
+    for path in LEX_LINK_FILES:
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                if r["verdict"] != "confirmed" or r["work"] not in names or r["work"] == "dbl":
+                    continue
+                cand[(r["rid"], r["work"])].append(r["url"])
+                claimed[r["url"]].add(r["rid"])
+    for (rid, work), urls in cand.items():
+        urls = [u for u in set(urls) if len(claimed[u]) == 1]
+        if urls:
+            found.setdefault(rid, {})[work] = min(urls, key=lambda u: (len(u), u))
+
+    out = {}
+    for rid, by_work in found.items():
+        links, seen = [], set()
+        for work in order:
+            url = by_work.get(work)
+            if not url:
+                continue
+            url = urllib.parse.quote(url, safe=":/._-~%")     # CSVs hold the decoded form
+            if url in seen:
+                continue
+            seen.add(url)
+            links.append({"label": names[work], "url": url, "direct": True})
+        # dsd and lex share a label; one «Den Store Danske» line is enough
+        dedup, labels = [], set()
+        for l in links:
+            if l["label"] not in labels:
+                labels.add(l["label"])
+                dedup.append(l)
+        out[rid] = dedup
+    return out
 
 
 def load_gender() -> dict:
@@ -436,7 +507,19 @@ def surname_from_label(label: str) -> str:
 # ARCHIVED URLS (no longer in use):
 #   VIAF (replaced by GND Explorer for all non-Danish/German/Norwegian persons):
 #                           https://viaf.org/en/viaf/search?field=cql.any+all&index=VIAF&searchTerms=...
-def bio_search_links(label, born, died, nationalities, roles, umbrellas):
+def bio_search_links(label, born, died, nationalities, roles, umbrellas, direct=()):
+    """Direct (verified) lex.dk articles come first and REPLACE the Lex.dk search link; the other
+    resources' search links (Deutsche Biographie, SNL, GND) are unaffected."""
+    links = _bio_search_links(label, born, died, nationalities, roles, umbrellas)
+    if direct:
+        links = [l for l in links if not l["url"].startswith(LEX_SEARCH)]
+    return list(direct) + links
+
+
+LEX_SEARCH = "https://lex.dk/.search?query="
+
+
+def _bio_search_links(label, born, died, nationalities, roles, umbrellas):
     name = full_name_from_label(label)
     if not name:
         return []
@@ -612,6 +695,8 @@ def main() -> None:
               f"correspondence link (data/curated/breve_person_crosswalk.csv)")
     umbrellas = load_nation_umbrellas()
     bio_links_count = 0
+    lex_direct = load_lex_direct_links()
+    direct_count = 0
 
     # Emit one entry per person. Unlike work.html/place.html, persons.html
     # has no hand-curated override object in front of this data (that
@@ -643,9 +728,14 @@ def main() -> None:
         # applies when no authority-file link already exists (wd here, or
         # a future persons_wikidata.csv entry — see load_person_wikidata()).
         # See docs/data-model/person-bio-search-links.md for the full rule.
-        bio_links = [] if wd else bio_search_links(label, born, died, nats, roles, umbrellas)
+        # Verified direct lex.dk articles are not search links and do not duplicate an authority link,
+        # so they are kept even when `wd` is set.
+        direct = lex_direct.get(rid, [])
+        bio_links = list(direct) if wd else bio_search_links(label, born, died, nats, roles, umbrellas, direct)
         if bio_links:
             bio_links_count += 1
+        if direct:
+            direct_count += 1
 
         generated[rid] = {
             "label":         label,
@@ -682,6 +772,8 @@ def main() -> None:
     print(f"  generated {len(generated):,} entries")
     print(f"  {bio_links_count:,} persons with a suggested biographical search link "
           f"(docs/data-model/person-bio-search-links.md)")
+    print(f"  {direct_count:,} persons with a verified direct lex.dk article "
+          f"(replacing the Lex.dk search link)")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:

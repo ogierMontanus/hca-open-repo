@@ -45,8 +45,49 @@ nedenfor) + 12 til at afgøre delte artikler. Ingen chatbot, ingen 429/5xx.
 
 * Tilfældige rækker blev læst igennem (etiket mod DBL-titel): 40 + 35 før rettelserne (fandt fejl 1, 3 og 4) og 35 + 25
   efter rettelse 2–5 — i de sidste 60 **ingen kendte fejl** (ét afvigende fornavn: *Ross, Sir John* → «John Ross», titlen «Sir» — ok).
-* `data/curated/lex/qa_dbl_sample.csv` er en **tilfældig 10 %-stikprøve (88 rækker)** med tom `decision`-kolonne
-  til menneskelig gennemgang; **præcisionen er ikke målt, før den er udfyldt.**
+* `data/curated/lex/qa_dbl_sample.csv` er en **tilfældig 10 %-stikprøve (88 rækker)**, trukket én gang (seed 2026) og
+  bevaret ved genkørsler.
+
+### Gennemgang af stikprøven (2026-10-29) — 88 af 88 rigtige personer
+
+Hver række er holdt op mod artiklens egen metabeskrivelse i DBL (navn, begge levetidsår, erhverv) og registrets
+beskrivelse. **88 `ok` (heraf 3 grænsetilfælde, som brugeren har godkendt 2026-10-29), 0 forkerte.** De tre grænsetilfælde er korrekt *identificeret*, men «dansk» er
+et skøn: *C.F. Rumohr* (født og død i Dresden), *F.L. Torp* (Flensborg → Reinbek) og *Emil Jonas* (Schwerin → Berlin;
+registret har *tysk* — personen får begge værdier). De kommer med, fordi kriteriet er DBL-optagelse, ikke fødested.
+
+**Præcisionen af *identiteten* er 88/88; 95 %-konfidensgrænsen nedad er ≈ 96 %** (Wilson). Forbehold: gennemgangen er
+**maskinel** (Claude mod DBL-metabeskrivelsen), ikke menneskelig, og et så lille antal kan ikke udelukke en fejlrate på
+et par procent. Den afprøver heller ikke, om «optaget i DBL» er et godt mål for «født i Danmark eller bosat der i
+længere årrække» — det er en definitionssag (se grænsetilfældene).
+
+## Gennemgangskøen (143 personer) — afgjort
+
+`dbl_review_decisions.csv` (én række pr. kø-række) styrer byggeren: `accept`/`accept_alias` tilføjer personen,
+`reject` fjerner rækken fra køen, `open` bliver stående. Udfald: **16 accepteret, 4 alias, 126 afvist, 0 åbne.**
+
+| Gruppe | Rækker | Afgørelse |
+|---|---:|---|
+| **Henvisningssider** (DBL-stubbe «X, se Y») | 79 personer | Målartiklen hentet og årstal sammenlignet: 4 er *samme person under anden registerpost* (fx *Afzelius, Augusta f. Nielsen* → *Augusta Nielsen*; *Brenøe, Anna* → *Anna Nielsen*; *Lange, Agnes* → *Agnes Nyrop*; *Price, Amalie* → *Amalie Hagen*) = `accept_alias`; 2 nye (*Gad, P.G. Stenersen* → *P.C. Stenersen Gad*; *Lange, Julie f. Lumbye* → *Julie Hansen*) = `accept` med målets URL; de øvrige 73 peger på en anden person (en far, søn, ægtefælle eller navnebror) → afvist |
+| **Navnebror med andre år** | 41 + 18 delte | afvist, bortset fra 14 hvor kun ét årstal afviger med 1–2 år (eller registret har tastefejl, fx *Lützow* 1748 for 1784), og erhverv/sted stemmer → `accept` |
+| *Ida Wulff* | 1 | registrets Ida Wulff (1806–1876, datter af P.F.W., g. Koch) og DBL-sangerinden Ida Wulff (1808–1876) er **ikke identiske** — forskellige forældres efternavne (brugerafgørelse) → afvist |
+
+**Opdagelse:** 86 af de 128 «likely»-rækker var **henvisningssider**, ikke artikler. De kan ikke blive «confirmed» (metabeskrivelsen
+har ingen årstal) og er derfor aldrig kommet i bucketen — men `lex_sitemap_match.py` bør fremover genkende «, se X»
+og enten følge henvisningen eller droppe kandidaten, så de ikke fylder køen.
+
+**Rettelse af matcheren (samme dag, efter kø-gennemgangen).** `lex_sitemap_match.py` springer nu DBL-henvisningssider over
+(116 stk.; `redir`-flag i sidecachen) — ellers kunne en stub bestå på sine årstal («Christian Wulff, 1810-1856 se Peter
+Wulff»), og den rigtige, disambiguerede artikel («Carl_Bruun_-_søofficer») blev aldrig prøvet. Samtidig viste en genkørsel,
+at årstalsgenkendelsen i DBL's meta missede døds­året, når det står klistret til erhvervet («27.7.1875bladudgiver») og alle
+årstal før 1400 (Margrete 1., Valdemar den Store); begge er rettet, og sidecachen gemmer nu metabeskrivelsens begyndelse
+(`mh`), så fremtidige ændringer af årstalsreglen ikke kræver nye sidekald. Efter to fulde genkørsler (≈ 3.200 sidekald):
+**893** bekræftede DBL-personer (før: 903 inkl. stubbe/delte), ingen af de tidligere fjernet, **8 kommet til**
+(*Carl Adolph Bruun*, *Christian Frederik Danneskiold-Samsøe*, *J.P. Hartmann* (læge), *Niels Juel*, *Carl Løvenskiold*,
+*Frederik Moltke*, *P.E. Müller* (1776–1834), *A.S. Ørsted* (botaniker)) — i alle otte var den tidligere kandidat en
+slægtning med samme navn. Reviewkøen er nu tom (to nye navnebrødre afvist).
+
+Resultat: **905** rækker i `person_nationality_added.csv` (885 automatiske + 20 efter manuel gennemgang; ny kolonne
+`confirmed_by` og `alias_of`) — **efter matcher-rettelsen 913** (894 automatiske + 15 manuelt godkendt + 4 alias); bucketen «Dansk\*» = **984** med registrets egne 87 (16 overlap).
 
 ## Begrænsninger
 

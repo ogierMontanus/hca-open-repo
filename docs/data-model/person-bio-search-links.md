@@ -211,3 +211,22 @@ python scripts/build_mockup/build_persons_extra.py
 ```
 
 Udskriver antal personer med et foreslået link ved hver kørsel.
+
+## Direkte lex.dk-artikler erstatter Lex.dk-søgningen (2026-10-31)
+
+Hvor en person har en **verificeret** artikel på lex.dk (navn *og* begge levetidsår set på artiklens
+egen side, `verdict = confirmed`), viser «Biografiske opslag» et direkte link til artiklen i stedet for
+`Søg på Lex.dk`. Søgelinks til andre ressourcer (Deutsche Biographie, SNL, GND) berøres ikke; en
+dansk-tysk person kan altså få DBL-artiklen + Deutsche Biographie-søgningen.
+Implementeret i `load_lex_direct_links()` og `bio_search_links(..., direct=)` i
+`build_persons_extra.py`; JSON-feltet `bioLinks[].direct = true` gør, at `persons*.html` viser dem i
+egen gruppe med egen forklaring («navn og begge årstal er kontrolleret mod artiklen»), før søgelinks.
+
+| Værk | Kilde | Bemærkning |
+|---|---|---|
+| Dansk Biografisk Leksikon | `data/curated/person_nationality_added.csv` (913) | den gennemgåede endelige mængde, ikke de rå matchfiler |
+| Kvindebiografisk · Weilbach · Teaterleksikon · Den Store Danske | `confirmed`-rækker i `lex/persons_lex_sitemap.csv` og `lex/persons_lex_links.csv` | ét link pr. værk (korteste slug, fx `Niels_W._Gade` frem for `…_i_erindringen`); en artikel, to registerpersoner gør krav på, droppes → søgelinket bliver stående |
+
+Udeladt bevidst: Danmarkshistorien-kapitler (`dh`, ikke biografier), `likely`/`mismatch`/`dead`.
+Direkte links vises også, når `wd` er sat (de er ikke søgninger og dublerer ikke et autoritetslink).
+Guard: `tests/test_person_lex_direct_links.py`.

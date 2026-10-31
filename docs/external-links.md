@@ -125,6 +125,7 @@ tastaturbrugere. Derfor:
 | Museum Odense, artikelsøgning (personregister, alle personer) | `Anderseniana` |
 | H.C. Andersen Centret, bibliografisøgning (personer og værker, ikke steder) | `Sekundærlitteratur` |
 | Lex.dk-søgning (personregister, ingen registreret nationalitet) | `Søg på Lex.dk` |
+| Direkte, verificeret lex.dk-artikel (personregister) — **erstatter** Lex.dk-søgningen | værkets navn: `Dansk Biografisk Leksikon`, `Dansk Kvindebiografisk Leksikon`, `Weilbachs Kunstnerleksikon`, `Gyldendals Teaterleksikon`, `Den Store Danske` |
 
 Søgehjælp på crowd-bidragssiden (`crowd-contribute.html`, 2026-10-29) —
 vises for alle personer, uafhængigt af nationalitet:
