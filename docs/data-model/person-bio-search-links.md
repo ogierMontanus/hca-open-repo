@@ -230,3 +230,21 @@ egen gruppe med egen forklaring («navn og begge årstal er kontrolleret mod art
 Udeladt bevidst: Danmarkshistorien-kapitler (`dh`, ikke biografier), `likely`/`mismatch`/`dead`.
 Direkte links vises også, når `wd` er sat (de er ikke søgninger og dublerer ikke et autoritetslink).
 Guard: `tests/test_person_lex_direct_links.py`.
+
+## Wikidata via lex.dk-artiklen (2026-10-31)
+
+`scripts/parsers/build_person_wikidata.py` fylder `data/curated/persons_wikidata.csv` (`entity_id, wd, wd_label,
+basis, born, died, verified_on`) — den fil `load_person_wikidata()` ventede på. Forbindelsen er en
+**identifikator-lighed**, ikke et navnegæt: Wikidata registrerer selv, hvilken lex.dk-artikel der hører til hvilket
+menneske (P8341 DBL · P7939 Kvindebiografisk · P14992 Weilbach · P9466 Teaterleksikon · P8313 Lex ID), og
+artiklens slug slås op live via Wikidata Query Service (cache `data/raw/wikidata/lex_props.json`, `--refresh`).
+
+En række skrives kun, når slug'en findes på præcis ét menneske (Q5), **både fødsels- og dødsår** ligger inden for ±1 år af registrets (brugerbeslutning 2026-10-31; afvigelsen står i kolonnen `year_diff`),
+Q-nummeret ikke deles af flere registerpersoner, og flere lex-værker ikke peger på forskellige Q-numre.
+Afviste kandidater (årstal afviger med mere end ét år, fx Peter Rørdam 1808 vs. 1806; alias-par som Anna Brenøe/Anna Nielsen f. Brenøe
+deler ét Q) ligger i `data/curated/lex/queue_wikidata_review.csv`. Resultat: **1.009** personer (6 med en årsforskel på ét år).
+Stikprøve på 40 rækker mod et uafhængigt `wbgetentities`-kald: 40/40 rigtige.
+
+Konsekvens i visningen: en person med `wd` får Wikidata i «Autoritetslinks», og — jf. reglen i §0 — kun de
+direkte lex.dk-artikler i «Biografiske opslag» (søgelinks undertrykkes). Kør
+`python scripts/parsers/build_person_wikidata.py` efter ændringer i lex-linkene, derefter `build_persons_extra.py`.

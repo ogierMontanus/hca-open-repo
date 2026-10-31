@@ -74,3 +74,21 @@ def test_direct_replaces_lex_search_but_keeps_other_resources(mod):
     assert both[0] == d[0] and len(both) == 2 and "deutsche-biographie" in both[1]["url"]
     unknown = mod.bio_search_links("Test, Ole (1800–1860)", "1800", "1860", [], [], umb, d)
     assert unknown == d
+
+
+WIKIDATA = ROOT / "data" / "curated" / "persons_wikidata.csv"
+
+
+@pytest.mark.skipif(not WIKIDATA.exists(), reason="persons_wikidata.csv not built")
+def test_persons_wikidata_rows_are_traceable_and_unique(direct):
+    import re
+    with open(WIKIDATA, encoding="utf-8", newline="") as f:
+        rows = list(csv.DictReader(f))
+    assert rows
+    assert len({r["entity_id"] for r in rows}) == len(rows)
+    assert len({r["wd"] for r in rows}) == len(rows), "a Q-number may belong to one register person only"
+    for r in rows:
+        assert re.fullmatch(r"Q\d+", r["wd"]), r
+        assert r["entity_id"] in direct, r          # only persons with a verified lex.dk article
+        assert re.fullmatch(r"P\d+=\S+", r["basis"].split()[0]), r
+        assert r["born"].isdigit() and r["died"].isdigit(), r

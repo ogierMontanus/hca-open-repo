@@ -437,9 +437,11 @@
         sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Authority links' +
           '<span class="info-block__tag">added</span></div>' +
           '<div class="info-block__body" style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">' +
-          '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) + '" target="_blank" rel="noopener" ' +
+          '<a href="https://www.wikidata.org/wiki/' + esc(p.wd) + '" target="_blank" rel="noopener noreferrer" ' +
           'style="display:flex;align-items:center;gap:6px"><span class="wd-badge">wd:' + esc(p.wd) + '</span>' +
-          '<span style="color:var(--color-text-muted)">Wikidata</span></a></div></div>';
+          '<span style="color:var(--color-text-muted)">Wikidata</span>' +
+          '<span class="external-link__icon" aria-hidden="true">↗</span>' +
+          '<span class="sr-only"> (opens in a new tab)</span></a></div></div>';
       }
       // Biografiske opslag — søgelinks, ikke identifikationer. Kun udfyldt
       // når personen IKKE har et autoritetslink ovenfor (se bio_search_links()
