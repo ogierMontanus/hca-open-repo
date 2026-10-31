@@ -381,20 +381,28 @@
       // i build_persons_extra.py) — de to blokke udelukker derfor hinanden i
       // praksis, men begge if'er er uafhængige for robusthedens skyld.
       // Se docs/data-model/person-bio-search-links.md.
+      // Direkte, verificerede lex.dk-artikler (l.direct) vises i stedet for Lex.dk-søgelinket.
       if (p.bioLinks && p.bioLinks.length) {
-        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Biografiske opslag' +
-          '<span class="info-block__tag">tilføjet</span></div>' +
-          '<div class="info-block__body">' +
-          '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' +
-          'Søgelinks til eksterne opslagsværker ud fra navn og nationalitet — ' +
-          'ikke en bekræftet identifikation af personen.</p>' +
-          '<div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">';
-        p.bioLinks.forEach(function (l) {
-          sbH += '<a class="external-link" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' +
+        var bioItem = function (l) {
+          return '<a class="external-link" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' +
             esc(l.label) + '<span class="external-link__icon" aria-hidden="true">↗</span>' +
             '<span class="sr-only"> (åbner i nyt faneblad)</span></a>';
+        };
+        var bioNote = function (t) {
+          return '<p style="font-size:0.76rem;color:var(--color-text-muted);line-height:1.5;margin-bottom:10px">' + t + '</p>';
+        };
+        var bioDirect = p.bioLinks.filter(function (l) { return l.direct; });
+        var bioSearch = p.bioLinks.filter(function (l) { return !l.direct; });
+        sbH += '<div class="info-block info-block--enriched"><div class="info-block__header">Biografiske opslag' +
+          '<span class="info-block__tag">tilføjet</span></div>' +
+          '<div class="info-block__body">';
+        [[bioDirect, 'Artikler om personen i opslagsværker på Lex.dk — navn og begge årstal er kontrolleret mod artiklen.'], [bioSearch, 'Søgelinks til eksterne opslagsværker ud fra navn og nationalitet — ikke en bekræftet identifikation af personen.']].forEach(function (g, i) {
+          if (!g[0].length) return;
+          sbH += bioNote(g[1]) +
+            '<div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem' + (i === 0 && bioSearch.length ? ';margin-bottom:14px' : '') + '">' +
+            g[0].map(bioItem).join('') + '</div>';
         });
-        sbH += '</div></div></div>';
+        sbH += '</div></div>';
       }
       // Anderseniana (Museum Odense) — artikelsøgning på navn. Ikke en
       // bekræftet identifikation; se docs/external-links.md §4.
