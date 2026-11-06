@@ -96,7 +96,7 @@ siden; en reel tvetydighed afspejles i scoren, ikke ved dobbelt tildeling.
 |---|---|---|
 | 0. Ret reglerne | genitiv, bøjning, stavevarianter, forbogstaver (»Hr. G.«), titler (»Etatsraad X«); genbrug `ner_page_grounding.py`; udvid det til bind I–V og VIII–X | Genmål restmængden; sænk fra 22 % |
 | 1. Guldstandard | Stikprøve (fx 300 sider på tværs af bind og årtier) markeret af mennesker; også *negative* eksempler (»navnet står ikke på siden«) | Evalueringssæt, aldrig brugt til træning |
-| 2. Kandidatgenerering | Alle n-grammer (1–4 ord) med stort begyndelsesbogstav/titel/forbogstaver som kandidater; regler som baseline | Recall på guldstandarden |
+| 2. Kandidatgenerering | Alle n-grammer (1–4 ord) som kandidater, *uden* at kræve stort begyndelsesbogstav (1800-tals-retskrivning skriver alle navneord med stort, se §3.8); regler som baseline | Recall på guldstandarden |
 | 3. Model | Rangering af kandidater; træk: ordform, kapitalisering, position, omgivende ord (titel, »Fru«, »Hr.«, relationsord), afstand til andre kendte navne, entitetens egne attributter (køn, nationalitet, erhverv, beskrivelse), bind/periode, stavevarianter mod registeretiketten. Start simpelt (gradient boosting på træk), før der overvejes sekvensmodeller | Top-3-recall > baseline |
 | 4. Aktiv læring | Modellen sender de mest *usikre* og de mest *informative* tilfælde til menneskelig udvælgelse | Færrest mulige menneskelige valg pr. procentpoint forbedring |
 | 5. Iteration | Hvert valg → træningsdata; gentræn; mål på guldstandarden | Præcision pr. runde |
@@ -152,6 +152,47 @@ decided_by, decided_at, decision (picked | none | manual), source (model | rule 
 
 Menneskets valg gemmes i et eget lag (som crowdsourcing-bidragene), ikke ved at
 overskrive modellens kandidater, så hver runde kan genskabes.
+
+### 3.8 Første annoteringsdata: almanakken, 26 poster (Søren Dall-Hansen, 2026-11)
+
+Annoteringssiden `almanak/annotation/` (s. 35–36 i 1990-udgaven, 29. jan.–23. feb.
+1840) har givet den første håndmarkerede facitliste: 89 spans (58 Person, 21 Værk,
+9 Institution, 1 Sted, 0 Andet) i alle 26 poster; kolonnerne `annotator, post_id,
+print_page, start, end, string, type, reg_id, reg_label, identification_free,
+unsure, note`. Format og indhold passer til §3.2/§3.7.
+
+**Kontrol.** Alle 89 spans stemmer tegn for tegn med postteksten i annoteringssiden
+(`text[start:end] == string`, `end` eksklusiv, positioner i den rettede tekst
+`TEXT_VERSION = ocr-2023-rettet-mod-sidebillede-2026-10-27`). Offsets er kun gyldige
+mod netop den tekstversion og skal gemmes sammen med den.
+
+**Hvad den kan bruges til:** pilot-guldstandard og test af annoteringsvejledning;
+facit til at måle regelmatchet (9 af 58 personstrenge, 16 %, er bøjede:
+*Collins, Heibergs, Hartmanns, Pallesens, Holsts, Wulffs, Hornemanns* — præcis
+det, §2 fandt, at efternavnsmatchet mister).
+
+**Hvad den ikke kan (endnu):** træne en model — 26 poster, én måned, ét stykke
+(*Mulatten*s premiere), én annotator, ingen overlap med dagbøgerne (diary.csv har
+ingen rækker for jan.–feb. 1840). `reg_id`/`reg_label`/`unsure`/`note` er tomme:
+det er spans og typer, ikke identifikation.
+
+**Nye fund.**
+
+* **Stort begyndelsesbogstav er ikke et navnesignal i denne retskrivning:** 131 af 235
+  ord med stort (56 %) ligger uden for annoteringerne (*Middag, Prøve, Brev, Billet …*).
+  Modellen må lære kontekst (*hos, af, med, Fru, Pastor, Prof:*), ikke kapitalisering.
+* **Annoteringsregler mangler.** Titel med i spannet i nogle tilfælde (*Fru Colbjørnsen,
+  Pastor Boye, Etatsraad Neergaard, Prof: Guldberg*), ikke i andre (*Eduard, Hansen*);
+  én streng for to personer (*Carl og Otto Moltke*); forkortelse med
+  (*Skues: Holst*); almindelige navneord som Værk (*Roman, Consert, 2 Billeder*);
+  rolle som person (*Kongen, Kronprindsessen*); to stavemåder af samme navn
+  (*Wilstrup/Vilstrup*, *Fædrenelandet/Fædrelandet*).
+* **Sandsynlige huller** (kan gennemgås med annotatoren): *Les Epaves* (02-06),
+  *Masaniello* og *Faaborg* (02-20), *Foreningen* (02-17, 02-23).
+
+**Konsekvens:** brug almanakken til at *skrive vejledningen* og afprøve
+målemetoden, og få mindst en anden annotator på de samme 26 poster (enighed), før
+tallene bruges som mål for modellen.
 
 ## 4. Anbefalet rækkefølge
 
