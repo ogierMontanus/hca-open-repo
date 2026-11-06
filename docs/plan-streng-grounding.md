@@ -224,8 +224,10 @@ ca. 4.400–7.000 tegn pr. blok, så ingen blok er tung.
 
 Tegntal efter rensning af teksterne (se nedenfor).
 
-**Annoteringssiden er bygget** (`almanak/annotation/build_overlap_page.py` + `template-overlap.html`; output
-`almanak/annotation/out/overlap-annotering.html`, en enkelt fil, der åbnes i en browser):
+**Annoteringssiden er bygget** (`almanak/annotation/build_overlap_page.py` + `template-overlap.html`; en enkelt fil, der åbnes i en browser).
+Publiceret på <https://ogiermontanus.github.io/hca-open-repo/mockup/overlap-annotering.html> (`mockup/overlap-annotering.html`,
+ikke indekseret, ingen eksterne skrifttyper; genbygges med `python almanak/annotation/build_overlap_page.py --out mockup/overlap-annotering.html`;
+markeringerne gemmes i browseren pr. adresse, så brug samme adresse hele vejen):
 
 * fire faner (blok A–D), hver dag viser almanakposten og dagbogsteksten under hinanden, med link til Det Kgl.
   Biblioteks faksimile for hver dagbogsside (ny fane);
