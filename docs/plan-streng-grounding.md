@@ -194,6 +194,53 @@ det er spans og typer, ikke identifikation.
 målemetoden, og få mindst en anden annotator på de samme 26 poster (enighed), før
 tallene bruges som mål for modellen.
 
+### 3.9 Næste stikprøve: overlap mellem dagbog og almanak (uden anden annotator)
+
+**Overlap** (`almanak/data/extracted/aligned.csv` mod `diary.csv`, dage med tekst i begge): 1.878 dage
+mellem 1833 og 1873; dagbogen har 8.204 dateret dage, almanakken 5.213. Størst i
+1841 (175 dage), 1846 (251), 1860 (179), 1861 (148), 1866 (112), 1843–44 (~100 pr. år) og
+1855 (87). Længste sammenhængende forløb: 31.10.1840–14.6.1841 (227 dage),
+31.10.1845–20.2.1846 (113), 1.5.–13.8.1846 (105), 30.1.–30.4.1843 (91), 17.7.–21.9.1855 (67).
+Jan.–feb. 1840 (Sørens første 26 poster) har *intet* overlap; dagbogen starter først
+31.10.1840. Almanakposter er korte (median 55 tegn), dagbogsdage ca. 11× længere
+(median 629).
+
+**Anbefalet størrelse: 4 blokke × 8 sammenhængende overlapdage = 32 dage**, hver dag med
+både almanakpost og dagbogstekst:
+
+| Blok | Dage | Bind | Almanak (tegn) | Dagbog (tegn) | Sider | Personer i registret på siderne |
+|---|---|---|---:|---:|---|---:|
+| A | 15.–22.2.1841 | II | 813 | 7.012 | 128–133 | 60 |
+| B | 1.–8.1.1846 | III | 1.009 | 6.999 | 38–42 | 56 |
+| C | 17.–24.7.1855 | IV | 855 | 4.436 | 164–167 | 42 |
+| D | 4.–11.7.1866 | VII | 524 | 6.391 | 134–138 | 22 |
+| **I alt** | **32** | | **3.201** | **24.838** | | |
+
+Valgt for: tre bindperioder og to retskrivningsperioder (1840'erne, 1850–60'erne);
+sammenhængende dage, så samme navn dukker op flere gange (tvetydighed kan måles); blok D ligger i
+bind VII, hvor `ner_page_grounding.csv` allerede har en automatisk grounding (28 `no_match`,
+15 `surname_only` …), så den kan sammenlignes direkte. Dagbogstekstens længde er holdt på
+ca. 4.400–7.000 tegn pr. blok, så ingen blok er tung.
+
+**Forventet udbytte:** ca. 60 almanakspans + 100–150 dagbogsspans, i alt ca. 150–200 personspans
+(skøn, ikke målt). Det er nok til at se forskelle på ≳ 10 procentpoint mellem to metoder
+(±5 point ved 90 %) — ikke nok til at træne en model.
+
+**Tidsforbrug.** Volumen er ca. 28.000 tegn, dvs. ca. 6× det, Søren allerede har gjort (4.400 tegn,
+89 spans). Tiden er *ikke målt*; mit skøn er 1½–2½ time i alt, delt i fire sessioner på 30–40 min
+(en blok ad gangen). **Bed Søren notere tiden på blok A og afgør derefter:** er den over ca. 45 min,
+skæres til blokkene B og D (16 dage, ca. halvdelen).
+
+**I stedet for en anden annotator:** *adjudikering af uenigheder.* Reglerne/modellen markerer
+selv teksten; kun de steder, hvor de og Søren er uenige (typisk 20–40 tilfælde), lægges
+tilbage til ham som »enig/uenig« — få minutter, og det afdækker både hans huller og
+reglernes fejl. Det måler ikke annotatorenighed, så tallene må ikke præsenteres som sådan.
+
+**Forudsætninger (min side):** annoteringssiden skal kunne vise en dagbogsdag ved siden af
+almanakposten (i dag kun almanak), og begge tekster skal fryses med en `TEXT_VERSION`
+(dagbogen: linjetags fjernet, orddeling over linjeskift samlet) før første markering — ellers
+mister offsets deres betydning.
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i
