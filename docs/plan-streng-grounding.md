@@ -181,7 +181,7 @@ det er spans og typer, ikke identifikation.
 * **Stort begyndelsesbogstav er ikke et navnesignal i denne retskrivning:** 131 af 235
   ord med stort (56 %) ligger uden for annoteringerne (*Middag, Prøve, Brev, Billet …*).
   Modellen må lære kontekst (*hos, af, med, Fru, Pastor, Prof:*), ikke kapitalisering.
-* **Annoteringsregler mangler.** Titel med i spannet i nogle tilfælde (*Fru Colbjørnsen,
+* **Reglerne dækker ikke alle tilfælde.** Annoteringssiden havde allerede »foreløbige regler« (titel og endelse medtages) og en liste over uafklarede spørgsmål; Søren fulgte dem. Men titel er med i nogle tilfælde (*Fru Colbjørnsen,
   Pastor Boye, Etatsraad Neergaard, Prof: Guldberg*), ikke i andre (*Eduard, Hansen*);
   én streng for to personer (*Carl og Otto Moltke*); forkortelse med
   (*Skues: Holst*); almindelige navneord som Værk (*Roman, Consert, 2 Billeder*);
@@ -210,17 +210,41 @@ både almanakpost og dagbogstekst:
 
 | Blok | Dage | Bind | Almanak (tegn) | Dagbog (tegn) | Sider | Personer i registret på siderne |
 |---|---|---|---:|---:|---|---:|
-| A | 15.–22.2.1841 | II | 813 | 7.012 | 128–133 | 60 |
-| B | 1.–8.1.1846 | III | 1.009 | 6.999 | 38–42 | 56 |
-| C | 17.–24.7.1855 | IV | 855 | 4.436 | 164–167 | 42 |
-| D | 4.–11.7.1866 | VII | 524 | 6.391 | 134–138 | 22 |
-| **I alt** | **32** | | **3.201** | **24.838** | | |
+| A | 15.–22.2.1841 | II | 813 | 6.874 | 128–133 | 60 |
+| B | 1.–8.1.1846 | III | 1.009 | 6.871 | 38–42 | 56 |
+| C | 17.–24.7.1855 | IV | 855 | 4.318 | 164–167 | 42 |
+| D | 4.–11.7.1866 | VII | 524 | 6.263 | 134–138 | 22 |
+| **I alt** | **32** | | **3.201** | **24.326** | | |
 
 Valgt for: tre bindperioder og to retskrivningsperioder (1840'erne, 1850–60'erne);
 sammenhængende dage, så samme navn dukker op flere gange (tvetydighed kan måles); blok D ligger i
 bind VII, hvor `ner_page_grounding.csv` allerede har en automatisk grounding (28 `no_match`,
 15 `surname_only` …), så den kan sammenlignes direkte. Dagbogstekstens længde er holdt på
 ca. 4.400–7.000 tegn pr. blok, så ingen blok er tung.
+
+Tegntal efter rensning af teksterne (se nedenfor).
+
+**Annoteringssiden er bygget** (`almanak/annotation/build_overlap_page.py` + `template-overlap.html`; output
+`almanak/annotation/out/overlap-annotering.html`, en enkelt fil, der åbnes i en browser):
+
+* fire faner (blok A–D), hver dag viser almanakposten og dagbogsteksten under hinanden, med link til Det Kgl.
+  Biblioteks faksimile for hver dagbogsside (ny fane);
+* samme markering som Sørens side (type på tasterne 1–5, usikker, note), men **identifikation er flyttet bag en
+  foldet »valgfri«-boks**: det er strengene, vi skal bruge;
+* siden måler selv **aktiv tid pr. blok** (kun mens fanen er synlig og brugt inden for 60 s) og sender den med
+  resultatet; så afgøres »skær til to blokke« på data, ikke på skøn;
+* resultatet kopieres som JSON (med gennemgåede dage, også dem uden markeringer) eller TSV (de tolv kendte
+  kolonner + `source`, `block`, `text_version`, `block_active_seconds`);
+* `check_annotations.py` kontrollerer et resultat mod siden (`text[start:end] == string`, overlap, typer,
+  gennemgåede dage, tid), og virker også på Sørens første side.
+
+**Tekstversioner** (skrives i hver række; offsets gælder kun mod dem):
+almanak `ocr-2023-ukontrolleret-2026-11` (PDF-tekstlaget, *ikke* kontrolleret mod sidebilledet, i modsætning til
+s. 35–36); dagbog `diary.csv-2026-11-linjetags-fjernet-orddeling-samlet` (linjetag fjernet, linjeskift = mellemrum,
+bindestreg ved linjeskift fjernet før lille bogstav og ellers bevaret, en dags rækker på flere sider sat sammen).
+
+Nye forslag til reglerne, markeret som sådan i siden: to navne i én frase mærkes hver for sig (*Carl* og *Otto Moltke*);
+almindelige navneord er ikke værker (*Roman*, *Concert*).
 
 **Forventet udbytte:** ca. 60 almanakspans + 100–150 dagbogsspans, i alt ca. 150–200 personspans
 (skøn, ikke målt). Det er nok til at se forskelle på ≳ 10 procentpoint mellem to metoder
@@ -235,11 +259,6 @@ skæres til blokkene B og D (16 dage, ca. halvdelen).
 selv teksten; kun de steder, hvor de og Søren er uenige (typisk 20–40 tilfælde), lægges
 tilbage til ham som »enig/uenig« — få minutter, og det afdækker både hans huller og
 reglernes fejl. Det måler ikke annotatorenighed, så tallene må ikke præsenteres som sådan.
-
-**Forudsætninger (min side):** annoteringssiden skal kunne vise en dagbogsdag ved siden af
-almanakposten (i dag kun almanak), og begge tekster skal fryses med en `TEXT_VERSION`
-(dagbogen: linjetags fjernet, orddeling over linjeskift samlet) før første markering — ellers
-mister offsets deres betydning.
 
 ## 4. Anbefalet rækkefølge
 
