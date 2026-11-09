@@ -262,6 +262,44 @@ selv teksten; kun de steder, hvor de og Søren er uenige (typisk 20–40 tilfæl
 tilbage til ham som »enig/uenig« — få minutter, og det afdækker både hans huller og
 reglernes fejl. Det måler ikke annotatorenighed, så tallene må ikke præsenteres som sådan.
 
+### 3.10 Navn og omtale: annotatoren mærker hele omtalen, skriptet deler den
+
+Grounding-modellen (§3.2) skal finde både *navne* (»Hansen«, »Collins«) og *omtaler uden navn*
+(»Kongen«, »min Moder«): begge er rigtige svar for en given entitet, men de findes ad hver sin vej
+(stavemåde mod registeretiketten vs. rolle og periode). Skellet bruges til at måle recall
+separat, så gode navnetal ikke skjuler svage omtaletal.
+
+**Annotatorerne får ikke en ekstra type.** Begge annoteringssider har nu faste regler i stedet for
+de to åbne spørgsmål: *omtale uden navn* mærkes som Person, når den peger på én bestemt person
+(også når annotatoren ikke ved, hvem); stedord og grupper i flertal mærkes ikke; *titel, rang og
+erhverv medtages altid* foran navnet. Det, som et skript ikke kan genskabe, er en omtale, der
+aldrig blev mærket; derfor er det reglen, ikke typen, der skal være fast.
+
+**Opdelingen** laves bagefter af `almanak/annotation/split_mentions.py`:
+
+| `mention_kind` | Eksempel | Navnekerne (`name_start`/`name_end`) |
+|---|---|---|
+| `navn` | Collins, Humbold[t], H. C. Ørsted | hele strengen |
+| `titel+navn` | Pastor Boye, Prof: Guldberg, Skues: Holst | Boye, Guldberg, Holst |
+| `omtale` | Kongen, Kronprindsessen, min Moder | — |
+| `flere` | Carl og Otto Moltke | — (deles i hånden) |
+| `tvivl` | ukendt ord, eller navn der også er navneord | gennemgås i hånden |
+
+Navnelisten er for- og efternavne fra personregistret og almanakkens register (ä/æ, ö/ø, aa/å
+foldet; genitiv- og familie-s fjernet). Titler og roller er faste ordlister i skriptet. Et
+registernavn, der i dagbøgerne står efter en bestemmer i mindst 20 % af forekomsterne (Svane,
+Fisker, Munk, Engel …), giver `tvivl`, fordi stort begyndelsesbogstav ikke skiller navn fra
+navneord i denne retskrivning. Står en titel foran et ord, der ikke er i registret
+(»Prof: Schlessinger«), regnes det som `titel+navn` med begrundelsen »navn ikke i registret«.
+
+**Afprøvet** på de 31 eksempelstrenge fra §3.8 og §3.9 (Sørens resultatfil ligger ikke i repoet):
+16 navn, 9 titel+navn, 4 omtale, 1 flere, 1 tvivl (»Vilstrup«, en stavevariant, der ikke står i
+registret). Den reelle tvivlsmængde skal måles på Sørens 89 spans:
+
+```
+python almanak/annotation/split_mentions.py soren.tsv
+```
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i
