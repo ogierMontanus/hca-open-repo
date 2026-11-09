@@ -14,7 +14,7 @@
   --c-P: #2a64d4; --bg-P: rgba(42,100,212,.15);
   --c-S: #1b8556; --bg-S: rgba(27,133,86,.16);
   --c-V: #94379f; --bg-V: rgba(148,55,159,.15);
-  --c-I: #b3690b; --bg-I: rgba(179,105,11,.17);
+  --c-L: #b3690b; --bg-L: rgba(179,105,11,.17);
   --c-A: #657083; --bg-A: rgba(101,112,131,.18);
   --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -25,7 +25,7 @@
   --c-P: #7fa9ff; --bg-P: rgba(127,169,255,.22);
   --c-S: #55cb92; --bg-S: rgba(85,203,146,.2);
   --c-V: #d994ea; --bg-V: rgba(217,148,234,.2);
-  --c-I: #eaa84f; --bg-I: rgba(234,168,79,.2);
+  --c-L: #eaa84f; --bg-L: rgba(234,168,79,.2);
   --c-A: #a2acbd; --bg-A: rgba(162,172,189,.2);
   color-scheme: dark; } }
 :root[data-theme="dark"] {
@@ -34,7 +34,7 @@
   --c-P: #7fa9ff; --bg-P: rgba(127,169,255,.22);
   --c-S: #55cb92; --bg-S: rgba(85,203,146,.2);
   --c-V: #d994ea; --bg-V: rgba(217,148,234,.2);
-  --c-I: #eaa84f; --bg-I: rgba(234,168,79,.2);
+  --c-L: #eaa84f; --bg-L: rgba(234,168,79,.2);
   --c-A: #a2acbd; --bg-A: rgba(162,172,189,.2);
   color-scheme: dark; }
 * { box-sizing: border-box; }
@@ -74,13 +74,13 @@ mark.m { background: var(--bg-A); color: inherit; border-bottom: 2px solid var(-
 mark.m[data-t="P"] { background: var(--bg-P); border-color: var(--c-P); }
 mark.m[data-t="S"] { background: var(--bg-S); border-color: var(--c-S); }
 mark.m[data-t="V"] { background: var(--bg-V); border-color: var(--c-V); }
-mark.m[data-t="I"] { background: var(--bg-I); border-color: var(--c-I); }
+mark.m[data-t="L"] { background: var(--bg-L); border-color: var(--c-L); }
 mark.m[data-t="A"] { background: var(--bg-A); border-color: var(--c-A); }
 mark.m::after { font: 600 .6em/1 var(--ui); vertical-align: super; margin-left: 2px; }
 mark.m[data-t="P"]::after { content: "P"; color: var(--c-P); }
 mark.m[data-t="S"]::after { content: "S"; color: var(--c-S); }
 mark.m[data-t="V"]::after { content: "V"; color: var(--c-V); }
-mark.m[data-t="I"]::after { content: "I"; color: var(--c-I); }
+mark.m[data-t="L"]::after { content: "L"; color: var(--c-L); }
 mark.m[data-t="A"]::after { content: "A"; color: var(--c-A); }
 mark.m.unsure { border-bottom-style: dotted; }
 mark.m.unsure::after { content: attr(data-t) "?"; }
@@ -165,7 +165,7 @@ mark.m:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .tb kbd { font: 500 .72rem var(--ui); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; color: var(--muted); }
 .tb:disabled { opacity: .4; cursor: not-allowed; }
 .tb[data-t="P"] i { background: var(--c-P); } .tb[data-t="S"] i { background: var(--c-S); } .tb[data-t="V"] i { background: var(--c-V); }
-.tb[data-t="I"] i { background: var(--c-I); } .tb[data-t="A"] i { background: var(--c-A); }
+.tb[data-t="L"] i { background: var(--c-L); } .tb[data-t="A"] i { background: var(--c-A); }
 
 /* export */
 .status { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .9rem; }
@@ -183,7 +183,7 @@ textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace,
 /* overlap-siden: to tekster pr. dag */
 .day { display: grid; gap: 10px; min-width: 0; }
 .src { border-left: 3px solid var(--line); padding-left: 10px; min-width: 0; }
-.src[data-src="almanak"] { border-left-color: var(--c-I); }
+.src[data-src="almanak"] { border-left-color: var(--c-L); }
 .src[data-src="dagbog"] { border-left-color: var(--c-P); }
 .srclab { font: 600 .74rem var(--ui); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 2px; }
 .srclab .kb { text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 6px; }
@@ -228,17 +228,18 @@ textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace,
           <h2>Typer</h2>
           <dl class="types">
             <div class="trow"><dt><mark class="m" data-t="P">Person</mark></dt><dd>Navn, efternavn, fornavn, initialer, familie («Collins»), og titel der peger på en bestemt person («Kongen»).</dd></div>
-            <div class="trow"><dt><mark class="m" data-t="S">Sted</mark></dt><dd>By, land, landsted, gade, egn.</dd></div>
+            <div class="trow"><dt><mark class="m" data-t="S">Sted</mark></dt><dd>By, land, landsted, egn, ø, bjerg, flod: den slags sted, Topsøe-Jensens stedregister har med. Institutioner hører under steder og har ingen egen type.</dd></div>
             <div class="trow"><dt><mark class="m" data-t="V">Værk</mark></dt><dd>Titel på skuespil, digt, bog, musikstykke, billede; også forkortet, som Andersen skriver den.</dd></div>
-            <div class="trow"><dt><mark class="m" data-t="I">Institution</mark></dt><dd>Teater, kirke, forening, hof, slot som bygning eller organisation.</dd></div>
+            <div class="trow"><dt><mark class="m" data-t="L">Lokalitet</mark></dt><dd><b>Reserveret til steder udeladt af registret:</b> gade, plads, bygning, kirke, teater, slot, hotel, have og andre lokaliteter, typisk inden for en by.</dd></div>
             <div class="trow"><dt><mark class="m" data-t="A">Andet</mark></dt><dd>Det, der ligner et navn men ikke passer i de andre, eller hvor du er i tvivl om typen. Skriv hvorfor i noten.</dd></div>
           </dl>
           <div class="example" style="margin-top:12px" aria-label="Eksempel">
-            <div>Prøve paa <mark class="m" data-t="V">Mulatten</mark>. I <mark class="m" data-t="I">Slotskirken</mark> min Cantate.</div>
+            <div>Prøve paa <mark class="m" data-t="V">Mulatten</mark>. I <mark class="m" data-t="L">Slotskirken</mark> min Cantate.</div>
             <div>Fik Brev fra <mark class="m" data-t="P">Hansen</mark> om han maatte dedicere mig sin Roman.</div>
             <div>Middag hos <mark class="m unsure" data-t="P">Collins</mark>, med <mark class="m" data-t="P">Heibergs</mark> og <mark class="m" data-t="P">Holst</mark>.</div>
           </div>
           <p class="small" style="margin-top:6px">Punkteret understreg og «?» betyder usikker.</p>
+          <p class="small" style="margin-top:6px"><b>Om Sted og Lokalitet:</b> Registrene skelner ikke mellem steder og institutioner; et sagregister med institutioner indgår ikke i det digitale register. Topsøe-Jensen udelod i sit stedregister af pragmatiske årsager typisk gader, bygninger og andre lokaliteter, oftest inden for byerne. Dem mærker vi som <i>Lokalitet</i>, så vi kan se, hvor meget stedstof registret ikke dækker. Er du i tvivl, så vælg Sted.</p>
         </div>
       </div>
 
@@ -260,8 +261,8 @@ textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace,
         <div>
           <h2>Uafklaret, giv gerne jeres vurdering</h2>
           <ul class="rules open-q">
-            <li>Aviser og tidsskrifter («Fædrelandet»): Værk eller Institution?</li>
-            <li>«Foreningen», «Theatret», «Operaen»: Institution, eller ingen markering?</li>
+            <li>Aviser og tidsskrifter («Fædrelandet»): Værk eller Andet?</li>
+            <li>«Foreningen», «Theatret», «Operaen»: Lokalitet, eller ingen markering?</li>
             <li>«Collins», «Wulffs»: familie, eller en bestemt person?</li>
             <li>Rollen alene, når personen ikke kan afgøres («Kongen»): skal den mærkes?</li>
             <li>«Skuespiller Nielsen»: hele strengen eller kun navnet?</li>
@@ -303,7 +304,7 @@ textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace,
       <button class="tb" data-t="P" type="button" disabled><i></i>Person <kbd>1</kbd></button>
       <button class="tb" data-t="S" type="button" disabled><i></i>Sted <kbd>2</kbd></button>
       <button class="tb" data-t="V" type="button" disabled><i></i>Værk <kbd>3</kbd></button>
-      <button class="tb" data-t="I" type="button" disabled><i></i>Institution <kbd>4</kbd></button>
+      <button class="tb" data-t="L" type="button" disabled><i></i>Lokalitet <kbd>4</kbd></button>
       <button class="tb" data-t="A" type="button" disabled><i></i>Andet <kbd>5</kbd></button>
       <button class="btn" id="undo" type="button" disabled>Fortryd sidste</button>
     </div>
@@ -315,14 +316,16 @@ const ENTRIES = __ENTRIES__;
 const REG = __REG__;
 const BLOCKS = __BLOCKS__;
 const TV = { almanak: "__TV_ALM__", dagbog: "__TV_DAG__" };
-const TYPES = { P: "Person", S: "Sted", V: "Værk", I: "Institution", A: "Andet" };
-const KEYS = { "1": "P", "2": "S", "3": "V", "4": "I", "5": "A" };
+const TYPES = { P: "Person", S: "Sted", V: "Værk", L: "Lokalitet", A: "Andet" };
+const KEYS = { "1": "P", "2": "S", "3": "V", "4": "L", "5": "A" };
 const MONTHS = ["Januar","Februar","Marts","April","Maj","Juni","Juli","August","September","Oktober","November","December"];
 const STORE = "almanak-dagbog-overlap-annotering-v1";   // adskilt fra den første annoteringsside
 const MAX_CHIPS = 12;
 
 let state = { annotator: "", ann: [], reviewed: {}, active: {} };   // reviewed: dato -> true; active: blok -> aktive sekunder
 try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && Array.isArray(s.ann)) state = Object.assign(state, s); } catch (e) {}
+// Typen Institution (I) er nedlagt; gemte markeringer flyttes til Lokalitet (bygninger, teatre, kirker).
+state.ann.forEach(a => { if (a.type === "I") a.type = "L"; });
 function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
