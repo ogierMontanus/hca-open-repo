@@ -23,7 +23,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-TYPES = {"Person", "Sted", "Værk", "Lokalitet", "Institution", "Andet"}  # Institution: almanak-siden og ældre overlap-resultater
+TYPES = {"Person", "Sted", "Værk", "Lokalitet", "Institution", "Andet"}  # Institution: kun ældre resultater
 
 
 def load_entries(html_path):
