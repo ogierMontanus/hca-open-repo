@@ -6,7 +6,7 @@ Hver markering er (post_id, start, end, string). Den er kun meningsfuld mod neto
 lavet på; skriptet henter teksterne fra selve HTML-siden (ENTRIES) og kontrollerer, at
   * text[start:end] == string            (offsets passer, slut eksklusiv)
   * markeringer i samme post ikke overlapper
-  * type er en af Person/Sted/Værk/Institution/Andet
+  * type er en af Person/Sted/Værk/Lokalitet/Andet (Institution kun i ældre resultater)
   * (JSON fra overlap-siden) hvilke dage der er gennemgået, og aktiv tid pr. blok
 
 Brug (PowerShell, fra repo-roden):
@@ -23,7 +23,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-TYPES = {"Person", "Sted", "Værk", "Institution", "Andet"}
+TYPES = {"Person", "Sted", "Værk", "Lokalitet", "Institution", "Andet"}  # Institution: almanak-siden og ældre overlap-resultater
 
 
 def load_entries(html_path):
