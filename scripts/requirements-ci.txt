@@ -2,5 +2,5 @@
 # Listed in a file (not inline `pip install`) so Dependabot and the
 # security-audit workflow can see them.
 openpyxl>=3.1
-pytest>=8.0
-fonttools>=4.50
+pytest>=9.2.0
+fonttools>=4.68.0
