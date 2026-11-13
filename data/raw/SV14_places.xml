@@ -6,7 +6,7 @@
      xmlns:TEI="http://www.tei-c.org/ns/1.0"
      xml:id="pb-places"
      xml:lang="da">
-   <teiHeader>
+   <teiHeader> 
       <fileDesc>
          <titleStmt>
             <title>Local Authority File: Place register</title>
