@@ -32,6 +32,8 @@ import build_annotation_page as bap  # noqa: E402
 import build_overlap_page as bop  # noqa: E402
 from context import Context  # noqa: E402
 import predict as P  # noqa: E402
+import gold as G  # noqa: E402
+from noun_filter import NounFilter, allow_from_gold  # noqa: E402
 
 REVIEW_BLOCKS = [
     ("E", "1838-09-26", "1838-10-03", ""),
@@ -78,13 +80,16 @@ def main(argv=None):
                                                                require_diary=False, diary_ctx=True)
     ctx = Context()
     m = P.load_model()
+    G_entries, G_gold = G.load_entries(), G.load_gold()
+    nf = NounFilter(ctx, allow_from_gold((G_entries[a["post_id"]]["text"], {(a["start"], a["end"]): a["type"]})
+                                         for a in G_gold if a["post_id"] in G_entries))
     prefill, stats = [], {"forslag": 0, "med registerpost": 0}
     for e in entries:
         if e["src"] != "almanak":
             continue
         assert ctx.alm[e["date"]]["text"] == e["text"], e["id"]
         linked = set()
-        for s in P.annotate(ctx, m, e["date"], e["text"], low=LOW):
+        for s in P.annotate(ctx, m, e["date"], e["text"], low=LOW, nf=nf):
             rid = s["reg"]
             if rid and rid not in REG and rid in ents:
                 REG[rid] = bop.reg_entry(ents[rid], "", place_info)

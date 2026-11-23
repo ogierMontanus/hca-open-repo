@@ -136,6 +136,12 @@ class DayFeatures:
               float(cc in self.other_grd or cl in self.other_grd)]
         gk = self.other_grd.get(cc) or self.other_grd.get(cl)
         f += [1.0 if gk == k else 0.0 for k in KINDS]
+        # navneord fra moderniseringsrepoet (samtidig stavning + ODS): er ordene i spændet kendte fællesnavne?
+        en = self.ctx.ext_nouns
+        isn = lambda w: canon(w) in en or degen(canon(w)) in en
+        words = [w for w in ctoks if nm.fold(w) not in PARTICLES]
+        f += [float(isn(last)), float(isn(first)), float(bool(words) and all(isn(w) for w in words)),
+              float(en.get(canon(last)) == "hca")]
         return f
 
 
@@ -147,6 +153,7 @@ FEATURE_NAMES = (
     + [f"{g}_{x}" for g in ("own_idx", "other_idx", "alm_glob", "dia_glob")
        for x in ["full", "last", "anytok"] + [f"kind_{k}" for k in KINDS]]
     + ["other_txt_core", "other_txt_last", "other_grd"] + [f"other_grd_{k}" for k in KINDS]
+    + ["ext_noun_last", "ext_noun_first", "ext_noun_all", "ext_noun_hca"]
 )
 
 

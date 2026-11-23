@@ -46,6 +46,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 OUT = REPO_ROOT / "almanak" / "data" / "register"
 WORK_PAGES = range(340, 351)      # 1-baserede PDF-sider
 PERSON_PAGES = range(351, 401)
@@ -157,47 +158,168 @@ def parse_year(tok):
     return None
 
 
-def split_refs(text):
-    """-> (head, not_in_xi, [ref dicts]). Henvisningerne begynder ved første årstal
-    efterfulgt af en dato, eller ved »Bagsiden af«, »Bag i almanakken«, »Foran i almanakken«."""
-    toks = text.split(" ")
-    start = None
-    for i, t in enumerate(toks):
-        tt = t.rstrip(",.")
-        nxt = toks[i + 1] if i + 1 < len(toks) else ""
-        if YEAR_TOK.match(tt) and DM_TOK.match(nxt.rstrip(",")) and (parse_year(tt) or tt[:2].lower() in ("18", "i8", "l8", "&8")):
-            start = i
-            break
-        if tt.lower() in ("bagsiden", "bag", "foran") and re.match(r"(?i)(af|i)$", nxt.rstrip(".,")):
-            start = i
-            break
-        if DM_TOK.match(tt) and i > 0 and YEAR_TOK.match(toks[i - 1].rstrip(",.")):
-            start = i - 1
-            break
-    head = " ".join(toks[:start]) if start is not None else text
-    tail = " ".join(toks[start:]) if start is not None else ""
-    not_in_xi = bool(PLUS.search(head)) or bool(PLUS.search(tail[:6]))
-    head = PLUS.sub("", head).strip(" ,;")
-    refs, year, year_raw = [], None, ""
-    tl = tail.replace("\xad", "")
-    for m in re.finditer(
-            rf"(?i)(?P<pos>(?:bagsiden af|bag i almanakken+|foran i almanakken)\s*(?P<mon>{MONTH_RE})?)"
-            rf"|(?P<yr>(?<![\w.]){'[' + YEAR_CHARS + ']'}{{4}})(?![\w])"
-            rf"|(?P<dm>(?<![\w])[{YEAR_CHARS}]{{1,2}}\s?[.,\-]\s?[{YEAR_CHARS}]{{1,2}}(?![\w]))", tl):
-        if m.group("yr"):
-            year_raw = m.group("yr")
-            year = parse_year(year_raw)
-        elif m.group("pos"):
-            p = m.group("pos").lower()
-            kind = "bagside" if p.startswith("bagsiden") else "bag" if p.startswith("bag i") else "foran"
-            refs.append(dict(year=year, year_raw=year_raw, day="", month=MONTHS.get((m.group("mon") or "").lower(), ""), kind=kind,
-                             raw=m.group("pos"), valid=int(year is not None)))
+# --- v2 (2026-11-23): tolerant parsing of references ----------------------------------------------
+# OCR reads ».« as »-« (»1843 7-5-«), hangs noise on (»21.3.-«, »27.6$«) and glues numbers together
+# (»183825.7.«, »17.8.1845«). Before 2026-11-23 the parser therefore dropped every reference in ~170 entries
+# (n_refs=0). Unreadable tokens are kept as valid=0 with `raw`; nothing is guessed beyond what is below.
+QUOTES = "‘’'`^/•■*"
+DM_MAP = str.maketrans({"i": "1", "I": "1", "l": "1", "L": "1", "!": "1", "|": "1", "o": "0", "O": "0", "°": "0",
+                        "g": "9", "q": "9", "z": "2", "Z": "2", "J": "1", "B": "8", "ß": "8"})
+DM_OK = re.compile(r"^(?:[0-9iIlL!|oO°gqzZJBß]{1,2}|[nhH])$")
+LOOSE_DM = re.compile(r"^[^\s\w]{0,2}([\w!|°^$&#]{1,3})\s?[.\-,]\s?([\w!|°^$&#]{1,3})(?:\(\?\))?[.,\-;>»$*’'‘]*$")
+_Q = re.escape(QUOTES)
+GLUED_Y_DM = re.compile(rf"^([{_Q}]?[\w!$#&@%£}}{{]{{3,4}}?)([{_Q}]?[0-9iIl!]{{1,2}}[.\-][0-9iIl!]{{1,2}}[.,\-]*)$")
+GLUED_DM_Y = re.compile(r"^([0-9iIl!]{1,2}[.\-][0-9iIl!]{1,2})[.,\-]((?:18|i8|l8)[3-7][0-9gGiIlOo])[.,]*$")
+POS_RE = re.compile(rf"(?i)(bagsiden af|bag i almanakken+|foran i almanakken)\s*({MONTH_RE})?")
+_DAYS = {1: 31, 2: 29, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
+
+
+def _num(tok, hi):
+    t = tok.strip(QUOTES + " ")
+    t = "11" if t in ("n", "h", "H") else t.translate(DM_MAP)
+    return int(t) if t.isdigit() and 1 <= int(t) <= hi else None
+
+
+def _dm(tok):
+    """»7-5-«, »19.5,« -> (7, 5); None if not unambiguously readable."""
+    m = LOOSE_DM.match(tok)
+    if not m:
+        return None
+    a, b = m.group(1).strip(QUOTES), m.group(2)
+    if not (DM_OK.match(a) and DM_OK.match(b)):
+        return None
+    d, mo = _num(a, 31), _num(b, 12)
+    if d and mo and d <= _DAYS[mo]:
+        return d, mo
+    return None
+
+
+def _year(tok):
+    """-> (year | None, corrected?). Clean 4-digit reading; otherwise the last two digits (»‘845«, »/#70«) if the rest is noise."""
+    t = tok.strip(",.;:>»$ ")
+    core = t.replace("°", "0").translate(DIG)
+    if re.fullmatch(r"[0-9]{4}", core) and 1833 <= int(core) <= 1873:
+        return int(core), False
+    u = t.strip(QUOTES).replace("'", "")
+    if 3 <= len(u) <= 5 and re.fullmatch(r"[0-9iIljhoOgqzZ&]{2}", u[-2:]) and 33 <= int(u[-2:].translate(DIG)) <= 73 \
+            and re.fullmatch(r"[^\w]*[\w!$#&@%£}{^/]{1,3}[0-9iIlgoO&]{2}", u):
+        return 1800 + int(u[-2:].translate(DIG)), True
+    return None, False
+
+
+def _yearish(tok):
+    """4 characters that read as a year but fall outside 1833-1873 (OCR 3/5/8/9 confusions): repaired later by name check."""
+    t = tok.strip(",.;:>»$ ").replace("°", "0").translate(DIG)
+    return t if re.fullmatch(r"1[0-9]{3}", t) and not (1833 <= int(t) <= 1873) else ""
+
+
+def _tokens(text):
+    out = []
+    for tok in re.sub(r"(?<=[0-9iIl!.])[,;](?=[0-9iIl!])", ", ", text.replace("\xad", "")).split():
+        m = GLUED_DM_Y.match(tok)
+        if m:
+            out += [m.group(1), m.group(2)]
+            continue
+        m = GLUED_Y_DM.match(tok)
+        if m and (_year(m.group(1))[0] or re.match(r"^[0-9iIl&]{3,4}$", m.group(1).strip(QUOTES))):
+            out += [m.group(1), m.group(2)]
+            continue
+        out.append(tok)
+    # »26.« + »10.«, »i.« + »11,«, »19.« + »i.« (two tokens, one date)
+    j, merged = 0, []
+    while j < len(out):
+        t = out[j]
+        n = out[j + 1] if j + 1 < len(out) else ""
+        if re.fullmatch(r"[0-9iIlL!|oO°]{1,2}\.", t) and re.fullmatch(r"[0-9iIlL!|oO°]{1,2}[.,]?", n) \
+                and not _year(t)[0] and not _year(n)[0] and _dm(t + n):
+            merged.append(t + n)
+            j += 2
         else:
-            raw = m.group("dm")
-            a, b = re.split(r"[.,\-]\s?", raw.strip(" ."), maxsplit=1)
-            d, mo = to_int(a, 31), to_int(b, 12)
-            refs.append(dict(year=year, year_raw=year_raw, day=d or "", month=mo or "", kind="date", raw=raw,
-                             valid=int(bool(year and d and mo))))
+            merged.append(t)
+            j += 1
+    return merged
+
+
+def _first_ref_index(toks):
+    for i, t in enumerate(toks):
+        nxt = toks[i + 1] if i + 1 < len(toks) else ""
+        if (_year(t)[0] or _yearish(t)) and (_dm(nxt) or LOOSE_DM.match(nxt)):
+            return i
+        if t.startswith("§"):
+            return i
+        if _dm(t) and i > 0 and _year(toks[i - 1])[0]:
+            return i - 1
+    return None
+
+
+_RANGE = re.compile(r"(?<![\w.])(\d{1,2})\.\s?[-–]\s?(\d{1,2})\.(\d{1,2})\.?\s?(1[8][3-7]\d)")
+_LIST = re.compile(r"((?:\d{1,2}\.\d{1,2}\.?\s?(?:og|,)?\s?)+?)\s?(1[8][3-7]\d)(?!\d)")
+
+
+def label_dates(head):
+    """Dates in the entry heading itself (»Arrebo, 14.6.1840«, »Romanen, 26.9. og 29.9.1838«, »27.-30.6.1838«)."""
+    out, taken = [], []
+    for m in _RANGE.finditer(head):
+        a, b, mo, y = (int(x) for x in m.groups())
+        taken.append(m.span())
+        if 1 <= a <= b <= 31 and b - a <= 7 and 1 <= mo <= 12:
+            out += [(y, mo, d, m.group(0)) for d in range(a, b + 1)]
+    for m in _LIST.finditer(head):
+        if any(a <= m.start() < b for a, b in taken):
+            continue
+        y = int(m.group(2))
+        for dm in re.finditer(r"(\d{1,2})\.(\d{1,2})", m.group(1)):
+            d, mo = int(dm.group(1)), int(dm.group(2))
+            if 1 <= mo <= 12 and 1 <= d <= _DAYS[mo]:
+                out.append((y, mo, d, dm.group(0) + "." + m.group(2)))
+    return out
+
+
+def split_refs(text):
+    """-> (head, not_in_xi, [ref dicts]). The references begin at the first year followed by a date, or at
+    »Bagsiden af«, »Bag i almanakken«, »Foran i almanakken«. Each ref has `src` (tail = the reference series,
+    label = date in the heading) and `fix` (empty, or what was read outside the strict form)."""
+    text = POS_RE.sub(lambda m: "§" + m.group(1).replace(" ", "_") + ("_" + m.group(2) if m.group(2) else "") + "§", text)
+    all_t = _tokens(text)
+    start = _first_ref_index(all_t)
+    head = " ".join(all_t[:start]) if start is not None else " ".join(all_t)
+    head = re.sub(r"(\d{1,2}[.\-]\d{1,2}) (?=(?:18|i8|l8)\d\d\b)", r"\1.", head)     # »2.2.1842« blev delt af _tokens
+    tail_toks = all_t[start:] if start is not None else []
+    not_in_xi = bool(PLUS.search(head)) or bool(PLUS.search(" ".join(tail_toks)[:6]))
+    head = PLUS.sub("", head).strip(" ,;")
+    refs, year, year_raw, year_fix = [], None, "", ""
+    for t in tail_toks:
+        if t.startswith("§"):
+            body = t.strip("§").lower()
+            kind = "bagside" if body.startswith("bagsiden") else "bag" if body.startswith("bag_i") else "foran"
+            mon = next((MONTHS[k] for k in MONTHS if body.endswith(k)), "")
+            refs.append(dict(year=year, year_raw=year_raw, day="", month=mon, kind=kind, raw=t.strip("§").replace("_", " "),
+                             valid=int(year is not None), src="tail", fix=year_fix))
+            continue
+        dm = _dm(t)
+        if dm:
+            refs.append(dict(year=year, year_raw=year_raw, day=dm[0], month=dm[1], kind="date", raw=t.strip(",;>»$"),
+                             valid=int(year is not None), src="tail", fix=year_fix))
+            continue
+        y, fixed = _year(t)
+        if y and not re.search(r"[.\-]", t.strip(".,-")):
+            year, year_raw, year_fix = y, t, ("år-fra-sidste-to-cifre" if fixed else "")
+            continue
+        if _yearish(t) and not re.search(r"[.\-]", t.strip(".,-")):
+            year, year_raw, year_fix = None, _yearish(t), ""
+            continue
+        if LOOSE_DM.match(t) and re.search(r"\d", t) and not re.match(r"(?i)^(se|jf)\b", t):
+            refs.append(dict(year=year, year_raw=year_raw, day="", month="", kind="date", raw=t, valid=0, src="tail", fix=""))
+    # a corrected year that falls backwards in the series is probably misread
+    prev = 0
+    for r in refs:
+        if r["year"] and r["fix"] and r["year"] < prev:
+            r["valid"] = 0
+        elif r["year"] and not r["fix"]:
+            prev = max(prev, r["year"])
+    if not any(r["valid"] for r in refs):
+        for y, mo, d, raw in label_dates(text):
+            refs.append(dict(year=y, year_raw=str(y), day=d, month=mo, kind="date", raw=raw, valid=1, src="label", fix="dato-i-opslagsord"))
     return head, not_in_xi, refs
 
 
@@ -242,6 +364,13 @@ def main() -> int:
                 persons.append(row)
             for r in refs:
                 refs_out.append(dict(reg_id=rid, register=kind, **r))
+
+    import register_repair as rr
+    n_names = rr.apply_name_corrections(persons) + rr.apply_name_corrections(works)
+    fixed, unresolved = rr.repair_years(persons, works, refs_out)
+    print(f"OCR-rettelser: {n_names} navnefelter; {fixed} henvisninger fik år ved navnekontrol, {unresolved} med ulæseligt år er uløste")
+    for r in refs_out:
+        r["valid"] = int(r["valid"])
 
     def dump(name, rows):
         with open(args.out / name, "w", newline="", encoding="utf-8") as f:

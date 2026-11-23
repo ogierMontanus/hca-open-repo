@@ -433,6 +433,44 @@ pr. blok; afviste og tildelte usikre forslag gemmes. **Senere:** modellen får s
 heuristik og menneskets valgfrie angivelse), og koblingen af omtaler (»Kongen« → Christian VIII) behandles som en
 egen opgave, ikke som navneopslag.
 
+### 3.13 OCR-rettelser i almanakregistret og fællesnavne ud af forslagene (2026-11-23)
+
+*Aftale med Holger efter første gennemsyn af maskinforslagene.*
+
+**Registrets datoer blev ikke brugt konsekvent — årsagen var OCR.** Tre fejl i `parse_register.py`:
+(1) OCR læser «.» som «-» (`1843 7-5-`) og hænger støj på (`21.3.-`, `27.6$`); ca. 170 opslag fik derfor *ingen* henvisninger;
+(2) en henvisning med ulæseligt årstal (`‘859`, `1830`, `1899`) arvede stiltiende året fra forrige henvisning;
+(3) datoer, der står i selve opslagsordet (`Romanen, 26.9. og 29.9.1838`), blev slet ikke læst — derfor kunne gennemsynssiden kun koble «Romanen»
+til 26.9., ikke 29.9. Rettet i `parse_register.py` + `register_repair.py`; kolonnerne `src` og `fix` i `refs.csv` viser, hvad der er gjort ved hver henvisning.
+Et ødelagt årstal får kun et nyt år, hvis personens/værkets navn står i almanakposten på netop den dato (98 henvisninger; fx 1830→1850: 51, 1899→1859: 13).
+
+| | før | efter |
+|---|---:|---:|
+| henvisninger med læsbar dato | 9.283 | 9.774 |
+| …hvor navnet kan ses i almanakposten på datoen | 4.974 | 5.529 |
+| ulæselige datoer (valid=0) | 209 | 90 |
+| opslag uden henvisning (ikke krydshenvisninger) | 177 | 56 |
+
+**Navne:** 70 håndholdte rettelser i `data/register/ocr_corrections.tsv` (`WulfT`→`Wulff`, `Nccrgaard`→`Neergaard`, `Billc-Brahc`→`Bille-Brahe` …; mønstre: «c» læst for «e»,
+«fT/lT» for «ff»). Den oprindelige etiket er bevaret i `label_ocr`, OCR-teksten i `raw`. `python almanak/scripts/register_repair.py suggest` foreslår nye linjer.
+Registerets labels bruges til kobling, så «Commandeur Wulff» nu kobles til «Wulff, Peter Frederik» og ikke «WulfT».
+
+**Fællesnavne.** «Tænderne», «Fluen», «Gratiale» blev foreslået som navne. Alle navneord er stort begyndt i tidens retskrivning, så store bogstaver siger intet.
+Nu bruges moderniseringsrepoets (`hca2modernDanish`) ordlister som træk og som filter (`build_lexicon.py`, `noun_filter.py`):
+eventyrenes ordliste (samtidig stavning; ord mærket «noun»/«lowercase») og ODS-opslagsord (navneord, tillægsord, udsagnsord) bøjet mekanisk.
+*Filteret:* et forslag, hvor alle ord er kendte fællesord, udelades, medmindre et register støtter det, det har titel, eller ordet står på listen over navnelignende fællesnavne
+(`data/entity_like_nouns.txt` + ord, der står alene som markering hos Søren). Det sidste er nødvendigt: 19 % af Sørens markeringer består kun af kendte navneord («Kongen», «Theatret», «Kirken», «Corso»).
+
+| almanakken, krydsvalideret (træningsblokkene bygger listen) | præcision | recall | F1 |
+|---|---:|---:|---:|
+| model uden filter | 0,783 | 0,794 | 0,788 |
+| model + fællesnavnsfilter | 0,829 | 0,787 | 0,808 |
+| dagbogen: uden → med filter | 0,669 → 0,729 | 0,632 → 0,627 | 0,650 → 0,674 |
+
+Forbehold: ét hold annotationer, små tal (95 %-intervallerne overlapper); gevinsten er størst på præcisionen, som er det, gennemsynet mærker.
+I stikprøven E–H forsvinder «Fluen», «Tænderne», «Gratiale», «Lidenskabelig», «Russisk»; 148 → 142 forslag. Ikke løst: «Skrevet 1ste Capitel» (modellen tager et udsagnsord med),
+og typen af uklare fællesnavne («Theatret»: sted eller institution?) — det er en redaktionel afgørelse. `LOW` (0,4) er ikke genkalibreret efter filteret (`model.py tiers`).
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i

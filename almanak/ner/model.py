@@ -29,7 +29,8 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import gold as G  # noqa: E402
 from context import Context, canon, nm  # noqa: E402
-import features as F  # noqa: E402
+import features as F
+from noun_filter import NounFilter, allow_from_gold  # noqa: E402
 
 OUT = HERE / "out"
 TYPES = ["Person", "Sted", "Lokalitet", "Værk", "Andet"]
@@ -250,9 +251,14 @@ def cmd_eval(args):
         for name, fn in systems.items():
             for d in test:
                 preds[name][d["pid"]] = fn(None, d)
+        # navneordsfilter (noun_filter.py): listen over navnelignende fællesnavne bygges kun af træningsblokkene
+        nf = NounFilter(ctx, allow_from_gold((d["text"], d["gold"]) for d in data if d["block"] != b))
+        for d in test:
+            preds["model logreg + navneordsfilter"][d["pid"]] = [
+                x for x in preds["model logreg (begge kilder)"][d["pid"]] if nf.keep(d["text"][x[0]:x[1]])]
     for src in ("almanak", "dagbog"):
         items = {p: d for p, d in by_pid.items() if d["src"] == src}
-        for name in list(systems) + list(variants):
+        for name in list(systems) + list(variants) + ["model logreg + navneordsfilter"]:
             r = score(items, preds[name])
             r["exact_f1_ci95"] = bootstrap_f1(items, preds[name], n=500)
             results.setdefault(src, {})[name] = r
@@ -295,6 +301,7 @@ ABLATIONS = {
     "alt": [],
     "uden dagbogen (other_*)": ["other_"],
     "uden almanakkens register (own_idx)": ["own_idx"],
+    "uden eksterne navneord (moderniseringsrepoet)": ["ext_noun"],
     "uden registre og dagbog (kun form og kontekst)": ["other_", "own_idx", "alm_glob", "dia_glob", "given_plus",
                                                        "only_given", "only_sur"],
 }

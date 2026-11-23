@@ -147,6 +147,19 @@ class Context:
         # navneord og ordfrekvens (begge korpora)
         texts = [v["text"] for v in self.alm.values()] + [r["text"] for r in rows]
         self.nouns = {canon(w) for w in nm.corpus_nouns(texts)}
+        # navneord fra moderniseringsrepoet (eventyrenes ordliste + ODS bøjet), se build_lexicon.py
+        self.ext_nouns = {}
+        lex = HERE / "data" / "common_nouns.tsv"
+        if lex.exists():
+            for line in open(lex, encoding="utf-8"):
+                f, src, _ = line.rstrip(chr(10)).split(chr(9))
+                self.ext_nouns[f] = src
+        self.ext_words = dict(self.ext_nouns)       # + øvrige fællesord, til noun_filter.py
+        lex = HERE / "data" / "common_words.tsv"
+        if lex.exists():
+            for line in open(lex, encoding="utf-8"):
+                f, src, _ = line.rstrip(chr(10)).split(chr(9))
+                self.ext_words.setdefault(f, src)
         self.freq = collections.Counter()
         for t in texts:
             for w in re.findall(r"[A-ZÆØÅ][a-zæøåäöü]+", t):

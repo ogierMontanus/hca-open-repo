@@ -96,7 +96,14 @@ med lighedsmål og side), `date_discrepancies.csv`, `letter_direction.csv`,
 * `scripts/parse_register.py` læser PDF'ens tekstlag og skriver `data/register/almanak_register_{persons,works,refs}.csv`:
   2.022 personopslag (ALMP0001…), 333 værkopslag (ALMW0001…) og ≈9.500 henvisninger (≈9.300 med læsbar dato).
   Nøglerne følger rækkefølgen i det nuværende OCR-lag og er **foreløbige**: ved ny OCR skal de frigives via en crosswalk.
-  Kendte svagheder: OCR i navne («WulfT»), sammensmeltede tal («18388.6»), ~420 opslag uden læsbar henvisning (heraf ≈210 krydshenvisninger).
+  **OCR-rettelser (2026-11-23):** (1) `scripts/register_repair.py` + den håndholdte `data/register/ocr_corrections.tsv` retter
+  åbenlyse OCR-fejl i navne (`WulfT`→`Wulff`, `Nccrgaard`→`Neergaard`, …) i `label`/`description`/`see`; OCR-teksten ligger uændret i `raw`,
+  den oprindelige etiket i `label_ocr`. (2) Parseren læser nu «.» som «-», snavs efter datoen, sammenlimede tal («183825.7.», «17.8.1845»)
+  og datoer i selve opslagsordet («Romanen, 26.9. og 29.9.1838»); før blev ca. 170 opslag uden henvisning og mange år arvet fra forrige år.
+  (3) Et årstal OCR har ødelagt («1830», «1899») får kun et år, hvis personens/værkets navn står i almanakposten på netop den dato.
+  `refs.csv` har to nye kolonner: `src` (tail/label) og `fix` (hvad der er rettet). Resultat: henvisninger, hvor navnet kan ses i
+  almanakposten på datoen, 4.974 → 5.529; ulæselige henvisninger 209 → 90; opslag uden henvisning (ikke krydshenvisninger) 177 → 56.
+  Kendte svagheder: sammensmeltede tal uden skilletegn, enkelte ulæselige datoer (valid=0, `raw` bevaret), opslag uden dato (krydshenvisninger).
 * `annotation/build_annotation_page.py` bygger annotationssiden (s. 35–36) med registerkandidater pr. dag
   (henvisning til datoen, evt. bekræftet af navnet i teksten) og rulleliste + fritekst i redigeringen af en markering.
 

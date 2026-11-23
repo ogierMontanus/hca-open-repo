@@ -59,8 +59,8 @@ def link(ctx, date, span_text, typ, g_date=None, g_page=None):
     return "", "", []
 
 
-def annotate(ctx, m, date, text, low=None):
-    """Forslag i posten. low=None: kun sikre (p >= modellens tærskel). low=0.2: også usikre (tier='usikker'),
+def annotate(ctx, m, date, text, low=None, nf=None):
+    """Forslag i posten. nf: NounFilter, der udelader fællesnavne uden støtte. low=None: kun sikre (p >= modellens tærskel). low=0.2: også usikre (tier='usikker'),
     som ikke skal markeres i teksten, men tildeles i en tredje runde."""
     import numpy as np
     from candidates import mention_kind
@@ -74,6 +74,8 @@ def annotate(ctx, m, date, text, low=None):
     for tier, items in (("sikker", conf), ("usikker", unc)):
         for s, e, typ, pr in items:
             rid, src, cands = link(ctx, date, text[s:e], typ, g_date, g_page)
+            if nf is not None and not nf.keep(text[s:e], linked=bool(rid or cands)):
+                continue     # åbenlyst fællesnavn uden støtte i registrene (noun_filter.py)
             out.append(dict(start=s, end=e, text=text[s:e], type=str(typ), p=round(float(pr), 3), reg=rid, link_src=src,
                             link_candidates=cands, tier=tier, mkind=mention_kind(text[s:e])))
     return sorted(out, key=lambda x: x["start"])

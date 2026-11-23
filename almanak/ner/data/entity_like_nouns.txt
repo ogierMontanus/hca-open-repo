@@ -1,0 +1,47 @@
+# Fællesnavne, der i almanak og dagbog ofte er navn på rolle, institution, bygning eller sted.
+# Håndholdt; ét ord pr. linje (grundform eller bestemt form), # kommentar. Tilføj/fjern frit.
+# Roller (omtale af bestemt person)
+Kongen
+Dronningen
+Kronprindsen
+Kronprindsessen
+Prindsen
+Prindsessen
+Hertugen
+Hertuginden
+Storhertugen
+Storhertuginden
+Arveprindsen
+Kejseren
+Keiseren
+Paven
+Fyrsten
+Greven
+Grevinden
+Baronen
+Baronessen
+Præsten
+Doctoren
+Maleren
+Digteren
+Faderen
+Moderen
+Datteren
+Sønnen
+# Institutioner, bygninger, steder
+Theatret
+Operaen
+Kirken
+Slottet
+Borgen
+Universitetet
+Kastellet
+Klosteret
+Fjorden
+Tivoli
+Corso
+Banken
+Hoffet
+Regjeringen
+Posthuset
+Vandkunsten
