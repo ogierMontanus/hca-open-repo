@@ -329,6 +329,80 @@ Skønnet i §3.9 (150–200 personspans) holdt ikke: 328.
 Sendes til Søren som »enig/uenig«; svarene lægges i `almanak/data/review/`, ikke ved at rette eksportfilen.
 Test: `tests/test_adjudication_queue.py`.
 
+### 3.11 Trin 2–3: skærpede regler og en første rangeringsmodel (2026-11-23)
+
+Søren spørges ikke igen nu; adjudikeringslisten (§3.10) ligger klar, men er ikke sendt.
+
+**Trin 2 — reglerne** (`scripts/parsers/name_matching.py`, brugt af `ner_page_grounding.py`; detaljer i
+[`ner-page-task.md`](data-model/ner-page-task.md)). Genkørt på alle bind (4.410 sider). Samme tekst, gammel mod ny regel:
+
+| | gammel | ny |
+|---|---:|---:|
+| (side, entitet)-par uden fund, alle bind | 49,5 % | **31,2 %** |
+| præcision mod Sørens dagbogsspans (32 dage) | 96 % | 95 % |
+| recall Person / Sted | 39 % / 60 % | **60 % / 82 %** |
+| fund med præcis samme grænser som Søren | 63 % | 78 % |
+
+Af de ny regels 10 »fejl« på de 32 dage er 7 huller hos annotatoren (*Dresden, Wien, Hof, Skotland, Kjøbenhavn,
+Lorcks*, *Heibergs*), én registerfejl (*Roed Harlequin*), én værktitel (*Korrinna*), én stavevariant uden markering
+(*Würtemberg*). Kontrol af 25 tilfældige `surname_variant`/`place_variant` over alle bind: få fejl, bl.a. *Billet* →
+Bille (rettet: korpusnavneord afvises) og *Brandes* → Brandis (står tilbage: at afvise alle registrerede navne kostede
+flere rigtige fund, *Block* → Carl Bloch, *Gerhard* → Gerhardt). Måling: `almanak/ner/eval_grounding.py`.
+
+**Trin 3 — model og gennemsyn i stedet for markering fra bunden** (`almanak/ner/`, README dér).
+Kandidatspænd (1–5 ord, første og sidste med stort) → logistisk regression på ~80 træk → grådig afkodning over en
+tærskel, valgt i indre krydsvalidering → typeklassifikator → kobling til almanakregistrets datohenvisning eller
+dagbogsregistret for dagens side. Trækkene er kildesymmetriske, så dagbogens 383 spans også er træningsdata.
+
+*Blokvis krydsvalidering* (træn på tre blokke, test på den fjerde; 136 almanakspans, 95 %-interval ved bootstrap over poster):
+
+| Almanakken | præcision | recall | **F1 (eksakt)** | 95 %-int. | F1 typet | F1 overlap |
+|---|---:|---:|---:|---|---:|---:|
+| Store bogstaver, ikke navneord | 0,42 | 0,54 | 0,47 | 0,39–0,55 | 0,26 | 0,89 |
+| Regel: registernavne for datoen (trin 2 på almanakken) | 0,87 | 0,50 | 0,64 | 0,56–0,71 | 0,62 | 0,72 |
+| **Model** (logistisk regression, begge kilder) | 0,77 | 0,79 | **0,78** | 0,71–0,85 | 0,74 | 0,90 |
+| Gradient boosting, begge kilder / kun almanak | | | 0,74 / 0,79 | | | |
+
+Person-recall (eksakt): regel 51 %, model 89 %. Sted er let for begge (91–96 %). Lokalitet (44 %) og Værk (0 af 6)
+er svage: for få eksempler, og mange er små bogstaver eller almindelige navneord (*Theatret*, *Opera*). Kandidatloftet
+er 98 % (almanak) / 93 % (dagbog). På dagbogen: regel 0,51, model 0,64.
+
+*Ablation — holder »diary2almanac«?* (træk sat til 0, samme krydsvalidering):
+
+| | F1 eksakt | F1 typet |
+|---|---:|---:|
+| alle træk | 0,78 | 0,74 |
+| uden dagbogen samme dag (`other_*`) | 0,77 | 0,71 |
+| uden almanakkens eget register (`own_idx`) | 0,79 | 0,74 |
+| uden registre og dagbog (kun form og kontekst) | 0,78 | **0,55** |
+
+**At *finde* strengene i almanakken kræver næsten ikke dagbogen eller registrene**: korte poster, hvor næsten hvert
+ord med stort, der ikke er et navneord, er et navn; form, navneordsliste og nabo-ord bærer det. Viden fra registre og
+dagbog bruges til at bestemme **typen** (0,55 → 0,74) og til at **koble** til en registerpost. Dagbogens bidrag til
+spændene (+0,01) ligger inden for usikkerheden. Hypotesen holder altså for typning og identifikation, ikke (målbart)
+for afgrænsning.
+
+*Hele almanakken* (`predict.py all`, 5.213 poster; ingen facit, så kun »sølv«): modellen foreslår 10.998 spænd
+(8.052 Person, 1.491 Lokalitet, 1.141 Sted, 294 Værk), reglen 5.722. Af almanakregistrets 7.091 personhenvisninger til en
+dato får 61,5 % et modelspænd koblet til netop den person, mod 56,2 % for reglen (målet er bygget af registrets egne
+navne og favoriserer derfor reglen). 3.228 Person- og 1.472 Lokalitet-spænd matcher ingen registerpost: enten huller i
+registret (personer uden opslag, alle lokaliteter) eller modelfejl. Hvilket, viser kun gennemsynet.
+
+**Forbehold.** Én annotator; trækkene blev revideret én gang efter at have set fejlene i krydsvalideringen
+(navnestruktur: fornavn + efternavn, nabo-ord med stort, bestemt form), så tallene er let optimistiske. Den
+ærlige test er den nye stikprøve nedenfor. Modelvalget (logistisk regression frem for gradient boosting) er
+truffet på samme data; forskellen ligger inden for usikkerheden.
+
+**Ny stikprøve til gennemsyn (Søren og Ole):** `mockup/almanak-gennemsyn.html` (bygges af
+`almanak/ner/build_review_page.py`): blok E 26.9.–3.10.1838 og G 20.–27.7.1853 uden dagbog, F 19.–26.4.1843 (bind II)
+og H 28.6.–5.7.1861 (bind V) med dagbogen som kontekst. 32 almanakposter (ca. 3.700 tegn), 119 forslag (95 Person, 15 Sted,
+7 Lokalitet, 2 Værk), 69 med foreslået registerpost. Allerede synlige fejl ved stikprøvekontrol (ikke rettet, for ikke
+at tilpasse modellen til testsættet): *Jettes Barnagtighed* som ét spænd, *Fribourg* som Person, *Commandeur Wulff* og
+*Fad: Collin* uden titel. Forslagene står stiplet; reviewerne retter type,
+sletter, tilføjer og sætter flueben. Eksporten indeholder både de godkendte, de rettede og de slettede forslag, så
+`almanak/ner/eval_review.py` kan måle præcision, recall, tid pr. blok og — når begge har gennemgået — enigheden mellem
+Søren og Ole (det første mål for annotatorenighed). Blokkene uden dagbog viser, om modellen klarer sig uden den.
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i

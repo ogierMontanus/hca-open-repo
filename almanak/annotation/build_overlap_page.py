@@ -184,30 +184,28 @@ def diary_candidates(text, pages, refs, ents):
     return sorted(([k, v] for k, v in out.items()), key=lambda c: (order[c[1]], c[0]))
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    ap.add_argument("--aligned", type=Path, default=REPO_ROOT / "almanak" / "data" / "extracted" / "aligned.csv")
-    ap.add_argument("--out", type=Path, default=HERE / "out" / "overlap-annotering.html")
-    args = ap.parse_args()
+def build_entries(blocks_spec, al, reg_alm, by_date, year_n, require_diary=True, diary_ctx=False):
+    """ENTRIES, BLOCKS og REG for blokkene (id, første, sidste, bind).
 
-    reg_alm, by_date, year_n = bap.load_register()
-    al = {r["date"]: r for r in csv.DictReader(open(args.aligned, encoding="utf-8"))}
+    require_diary=True: hver dag skal have både almanak og dagbog (overlap-stikprøven).
+    require_diary=False: alle dage med almanaktekst; dagbogen tages med, hvor den findes.
+    diary_ctx=True: dagbogsteksten vises kun som kontekst (markeres ikke)."""
     kb = load_kb()
-
+    place_info = load_place_info()
     entries, blocks, REG = [], [], {}
     all_pages = []
     diary_by_block = {}
-    for key, a, b, vol in BLOCKS:
+    for key, a, b, vol in blocks_spec:
         diary_by_block[key] = load_diary(a, b)
         for _, pg in diary_by_block[key].values():
             all_pages += pg
     refs, ents = load_page_refs(all_pages)
-    place_info = load_place_info()
 
-    for key, first, last, vol in BLOCKS:
+    for key, first, last, vol in blocks_spec:
         diary = diary_by_block[key]
-        days = sorted(set(diary) & {d for d, r in al.items() if (r["pdf_text"] or r["db_text"]).strip()})
-        if len(days) != 8:
+        alm_days = {d for d, r in al.items() if first <= d <= last and (r["pdf_text"] or r["db_text"]).strip()}
+        days = sorted(set(diary) & alm_days) if require_diary else sorted(alm_days)
+        if require_diary and len(days) != 8:
             sys.exit(f"Blok {key}: {len(days)} dage med både dagbog og almanak (forventede 8)")
         blocks.append(dict(id=key, first=first, last=last, vol=vol, n=len(days)))
         for d in days:
@@ -223,11 +221,13 @@ def main() -> int:
             ea = dict(id="ALM-" + d, date=d, wd=bap._weekday(d), src="almanak", block=key, tv=TV_ALM,
                       page=f"{r['print_page']}", pages=[], text=text, dbdiff=diff)
             ea["c"] = bap.candidates(ea, reg_alm, by_date, year_n)
+            entries.append(ea)
+            if d not in diary:
+                continue
             dtext, dpages = diary[d]
             # Almanakken har intet stedregister, og dens værk-/personregister er ikke dagbogens. Derfor
             # tilføjes dagbogsregistrets poster for dagens dagbogssider, når navnet står i almanakposten.
             ea["c"] += [[eid, "dag+navn"] for eid, b in diary_candidates(text, dpages, refs, ents) if b == "ref+navn"]
-            entries.append(ea)
 
             pages = []
             for p in dpages:
@@ -237,6 +237,8 @@ def main() -> int:
                       page=f"{pages[0]['v']}:{pages[0]['p']}" + (f"-{pages[-1]['p']}" if len(pages) > 1 else ""),
                       pages=pages, text=dtext, dbdiff=[])
             ed["c"] = diary_candidates(dtext, [(p["v"], p["p"]) for p in pages], refs, ents)
+            if diary_ctx:
+                ed["ctx"] = True
             entries.append(ed)
 
     # registerposter, som valglisten må kende: almanakkens eget + dagbogens poster på blokkenes sider
@@ -247,23 +249,55 @@ def main() -> int:
         if e["src"] != "dagbog":
             continue
         for eid, _ in e["c"]:
-            en = ents[eid]
-            if eid in REG:
-                continue
-            if en["entity_type"] == "person":
-                REG[eid] = dict(k="P", l=en["label"], d=bap.short(en["description"], 110), x=0, pp=e["page"])
-            elif en["entity_type"] == "place":
-                REG[eid] = dict(k="S", l=en["label"], d=place_info.get(eid, ""), x=0, pp=e["page"])
-            else:
-                REG[eid] = dict(k="W", l=re.sub(r"[*]", "", en["label"]), d="", x=0, pp=e["page"])
+            if eid not in REG:
+                REG[eid] = reg_entry(ents[eid], e["page"], place_info)
+    return entries, blocks, REG, ents, place_info
 
+
+def reg_entry(en, page, place_info):
+    if en["entity_type"] == "person":
+        return dict(k="P", l=en["label"], d=bap.short(en["description"], 110), x=0, pp=page)
+    if en["entity_type"] == "place":
+        return dict(k="S", l=en["label"], d=place_info.get(en["entity_id"], ""), x=0, pp=page)
+    return dict(k="W", l=re.sub(r"[*]", "", en["label"]), d="", x=0, pp=page)
+
+
+OVERLAP_PAGE = dict(
+    store="almanak-dagbog-overlap-annotering-v1",
+    title="Annotering: dagbog og almanak, samme dage",
+    sub="Fire blokke på otte dage (1841, 1846, 1855, 1866). Hver dag har både almanakposten og dagbogsteksten. "
+        "Mærk personer, steder og værker i selve teksten.",
+    reviewed_label="Dagen gennemgået (almanak og dagbog)",
+    guide_extra="",
+    mode="overlap",
+)
+
+
+def render(entries, REG, blocks, out, prefill=(), page=OVERLAP_PAGE):
     tpl = (HERE / "template-overlap.html").read_text(encoding="utf-8")
     html = (tpl.replace("__ENTRIES__", json.dumps(entries, ensure_ascii=False))
                .replace("__REG__", json.dumps(REG, ensure_ascii=False))
                .replace("__BLOCKS__", json.dumps(blocks))
+               .replace("__PREFILL__", json.dumps(list(prefill), ensure_ascii=False))
+               .replace("__STORE__", page["store"]).replace("__MODE__", page["mode"])
+               .replace("__TITLE__", page["title"]).replace("__SUB__", page["sub"])
+               .replace("__REVIEWED_LABEL__", page["reviewed_label"]).replace("__GUIDE_EXTRA__", page["guide_extra"])
                .replace("__TV_ALM__", TV_ALM).replace("__TV_DAG__", TV_DAG))
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(html, encoding="utf-8")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(html, encoding="utf-8")
+    return html
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
+    ap.add_argument("--aligned", type=Path, default=REPO_ROOT / "almanak" / "data" / "extracted" / "aligned.csv")
+    ap.add_argument("--out", type=Path, default=HERE / "out" / "overlap-annotering.html")
+    args = ap.parse_args()
+
+    reg_alm, by_date, year_n = bap.load_register()
+    al = {r["date"]: r for r in csv.DictReader(open(args.aligned, encoding="utf-8"))}
+    entries, blocks, REG, _, _ = build_entries(BLOCKS, al, reg_alm, by_date, year_n)
+    html = render(entries, REG, blocks, args.out)
     n_a = sum(1 for e in entries if e["src"] == "almanak"); n_d = len(entries) - n_a
     ch_a = sum(len(e["text"]) for e in entries if e["src"] == "almanak"); ch_d = sum(len(e["text"]) for e in entries if e["src"] == "dagbog")
     print(f"{n_a} almanakposter ({ch_a} tegn), {n_d} dagbogsdage ({ch_d} tegn), {len(REG)} registerposter; {len(html) // 1024} KB -> {args.out}")

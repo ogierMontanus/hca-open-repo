@@ -166,7 +166,19 @@ entitet. Output: `data/normalized/ner_page_grounding.csv` (alle
 forslagsrækker) og `data/normalized/ner_page_grounding_review.csv`
 (rækker under `--min-conf`, default 0,6).
 
-**Dækningsbegrænsning:** `data/normalized/diary.csv` indeholder pt.
+**Revision 2026-11** ([`plan-streng-grounding.md`](../plan-streng-grounding.md) §3.11): `diary.csv`
+dækker nu 4.410 af de 4.534 sider med facit-entiteter (alle bind), og reglerne er skærpet via
+`scripts/parsers/name_matching.py`: søgning i løbende tekst (linjetags og orddeling væk; offsets stadig i
+den rå tekst), stavevarianter (aa/å, kj/k/c, w/v, ö/ø, accenter, O’Neill/O Neill, genitiv-s), stort
+begyndelsesbogstav krævet (»hans« ≠ Hans), fuldt navn kun ved nabostilling, én-tegns-varianter for navne
+≥ 5 bogstaver (ikke korpusnavneord som »Billet«), varianter i parentes (»Ahrens (Arenz)«) og titel
+medtaget. Andelen af (side, entitet)-par uden fund faldt fra 49,5 % til 31,2 % (samme tekst, alle bind);
+mod Sørens dagbogsspans steg recall for Person fra 39 % til 60 % og for Sted fra 60 % til 82 % ved uændret
+præcision (95–96 %). Nye metodenavne: `full_name`, `surname_only`, `surname_variant`, `given_name_only`,
+`place_label`, `place_variant`, `place_first_word`, `no_match`, `cross_reference_unresolved`.
+Tallene i de to følgende afsnit er fra den oprindelige kørsel (bind VI–VII).
+
+**Dækningsbegrænsning (oprindelig kørsel):** `data/normalized/diary.csv` indeholdt dengang
 kun transskriberet tekst for 751 af de 4.549 sider, der optræder i
 `references.csv` — de resterende ~47.500 facit-rækker kan ikke
 groundes endnu og springes eksplicit over (rapporteret særskilt i

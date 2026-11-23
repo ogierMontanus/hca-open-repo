@@ -1,0 +1,54 @@
+{
+ "alt": {
+  "exact": {
+   "p": 0.771,
+   "r": 0.794,
+   "f1": 0.783
+  },
+  "typed_f1": 0.739,
+  "ci95": [
+   0.714,
+   0.846
+  ],
+  "n_features_zeroed": 0
+ },
+ "uden dagbogen (other_*)": {
+  "exact": {
+   "p": 0.763,
+   "r": 0.779,
+   "f1": 0.771
+  },
+  "typed_f1": 0.713,
+  "ci95": [
+   0.714,
+   0.823
+  ],
+  "n_features_zeroed": 12
+ },
+ "uden almanakkens register (own_idx)": {
+  "exact": {
+   "p": 0.784,
+   "r": 0.801,
+   "f1": 0.793
+  },
+  "typed_f1": 0.742,
+  "ci95": [
+   0.729,
+   0.851
+  ],
+  "n_features_zeroed": 6
+ },
+ "uden registre og dagbog (kun form og kontekst)": {
+  "exact": {
+   "p": 0.761,
+   "r": 0.794,
+   "f1": 0.777
+  },
+  "typed_f1": 0.554,
+  "ci95": [
+   0.709,
+   0.832
+  ],
+  "n_features_zeroed": 33
+ }
+}

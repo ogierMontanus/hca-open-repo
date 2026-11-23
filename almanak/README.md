@@ -105,6 +105,13 @@ python almanak/scripts/parse_register.py --pdf $env:HCA_ALMANAK_PDF
 python almanak/annotation/build_annotation_page.py --pdf $env:HCA_ALMANAK_PDF --pages 35 36
 ```
 
+## Navnegenkendelse (NER) — model og gennemsyn
+
+Håndannoteringen (overlap-stikprøven, `annotation/Opmærkning til Holger.json`) bruges til en lille, lokal
+rangeringsmodel i [`ner/`](ner/README.md), der finder navnestrenge i almanakposterne og foreslår registerposter,
+og til en gennemsynsside med maskinforslag til en ny stikprøve (`mockup/almanak-gennemsyn.html`). Målinger og
+forbehold: [`docs/plan-streng-grounding.md`](../docs/plan-streng-grounding.md) §3.10–3.11.
+
 ## Afhængigheder til eksisterende kode
 
 | Bruges af | Eksisterende komponent |

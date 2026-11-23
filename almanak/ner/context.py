@@ -60,6 +60,13 @@ class Gazetteer:
 
     def lookup(self, s, fuzzy=True):
         """-> (score, {(eid, kind, role)}); 1.0 eksakt/variant, 0.6 én tegnforskel."""
+        key = (s, fuzzy)
+        cache = self.__dict__.setdefault("_cache", {})
+        if key not in cache:
+            cache[key] = self._lookup(s, fuzzy)
+        return cache[key]
+
+    def _lookup(self, s, fuzzy):
         c = canon(s)
         for k in (c, degen(c)):
             if k in self.full:
@@ -67,7 +74,7 @@ class Gazetteer:
         if fuzzy and " " not in c and len(c) >= 5:
             for k in (c, degen(c)):
                 for L in (len(k) - 1, len(k), len(k) + 1):
-                    for f in self.by_len.get(L, ()):
+                    for f in sorted(self.by_len.get(L, ())):
                         if f[0] == k[0] and nm.edit1(f, k):
                             return 0.6, self.full[f]
         return 0.0, set()
@@ -78,8 +85,9 @@ def entity_forms(label, kind):
     if kind == "person":
         sur, given = nm.person_forms(label)
         out = [(s, "sur") for s in sur] + [(g, "given") for g in given]
-        if sur and given:
-            out.append((given[0] + " " + sur[0], "full"))
+        for g in given:
+            for sn in sur[:2]:
+                out.append((g + " " + sn, "full"))
         return out
     if kind == "place":
         forms, _ = nm.place_forms(label)
@@ -162,14 +170,14 @@ class Context:
     def page_gazetteer(self, date):
         g = Gazetteer()
         for pg in self.diary_pages(date):
-            for eid in self.page_refs.get(pg, ()):
+            for eid in sorted(self.page_refs.get(pg, ())):
                 for f, role in self.ent_forms[eid]:
                     g.add(eid, self.ents[eid]["entity_type"], f, role)
         return g
 
     def alm_date_gazetteer(self, date):
         g = Gazetteer()
-        for rid in self.alm_by_date.get(date, ()):
+        for rid in sorted(self.alm_by_date.get(date, ())):
             info = self.alm_reg[rid]
             kind = "person" if info["k"] == "P" else "work"
             for f, role in entity_forms(info["l"], kind):

@@ -76,6 +76,11 @@ mark.m[data-t="S"] { background: var(--bg-S); border-color: var(--c-S); }
 mark.m[data-t="V"] { background: var(--bg-V); border-color: var(--c-V); }
 mark.m[data-t="L"] { background: var(--bg-L); border-color: var(--c-L); }
 mark.m[data-t="A"] { background: var(--bg-A); border-color: var(--c-A); }
+mark.m.sug { border-bottom-style: dashed; outline: 1px dashed var(--muted); outline-offset: 1px; }
+.ctx { margin-top: 2px; }
+.ctx > summary { cursor: pointer; font-size: .82rem; color: var(--muted); }
+.ctx .ctxtxt { font-size: .92rem; color: var(--muted); margin-top: 4px; }
+.modelnote { border: 1px dashed var(--line); border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; font-size: .92rem; }
 mark.m::after { font: 600 .6em/1 var(--ui); vertical-align: super; margin-left: 2px; }
 mark.m[data-t="P"]::after { content: "P"; color: var(--c-P); }
 mark.m[data-t="S"]::after { content: "S"; color: var(--c-S); }
@@ -203,8 +208,8 @@ textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace,
 <div class="wrap">
   <header class="top">
     <div>
-      <h1>Annotering: dagbog og almanak, samme dage</h1>
-      <p class="sub">Fire blokke på otte dage (1841, 1846, 1855, 1866). Hver dag har både almanakposten og dagbogsteksten. Mærk personer, steder og værker i selve teksten.</p>
+      <h1>__TITLE__</h1>
+      <p class="sub">__SUB__</p>
     </div>
     <div class="progress" aria-live="polite">
       <div><strong id="p-done">0</strong> af <strong id="p-total">0</strong> dage gennemgået · <strong id="p-marks">0</strong> markeringer</div>
@@ -214,7 +219,7 @@ textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace,
 
   <details class="card" id="guide" open>
     <summary>Sådan gør du</summary>
-    <div class="card-body">
+    <div class="card-body">__GUIDE_EXTRA__
       <div class="cols">
         <div>
           <h2>Fremgangsmåde</h2>
@@ -325,16 +330,27 @@ const TV = { almanak: "__TV_ALM__", dagbog: "__TV_DAG__" };
 const TYPES = { P: "Person", S: "Sted", V: "Værk", L: "Lokalitet", A: "Andet" };
 const KEYS = { "1": "P", "2": "S", "3": "V", "4": "L", "5": "A" };
 const MONTHS = ["Januar","Februar","Marts","April","Maj","Juni","Juli","August","September","Oktober","November","December"];
-const STORE = "almanak-dagbog-overlap-annotering-v1";   // adskilt fra den første annoteringsside
+const STORE = "__STORE__";   // pr. side: overlap-siden beholder sin nøgle, så gemte markeringer bevares
+const PREFILL = __PREFILL__;   // maskinforslag (gennemsynssiden); tom på overlap-siden
+const MODE = "__MODE__";
 
 let state = { annotator: "", ann: [], reviewed: {}, active: {} };   // reviewed: dato -> true; active: blok -> aktive sekunder
 try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && Array.isArray(s.ann)) state = Object.assign(state, s); } catch (e) {}
 // Typen Institution (I) er nedlagt; gemte markeringer flyttes til Lokalitet (bygninger, teatre, kirker).
 state.ann.forEach(a => { if (a.type === "I") a.type = "L"; });
+// Maskinforslag lægges ind én gang; de står stiplet, til dagen er gennemgået. Et forslag, der står tilbage på en
+// gennemgået dag, regnes som godkendt; slettede forslag gemmes i state.rejected (bruges til at måle præcision).
+function prefill() {
+  if (!PREFILL.length || state.prefilled) return;
+  PREFILL.forEach(p => state.ann.push(Object.assign({ id: uid(), reg: "", ident: "", unsure: false, note: "", t: 0, origin: "model", edited: false }, p)));
+  state.prefilled = true; state.rejected = [];
+}
+state.rejected = state.rejected || [];
 function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+prefill(); save();
 const byId = Object.fromEntries(ENTRIES.map(e => [e.id, e]));
 const blockOf = Object.fromEntries(BLOCKS.map(b => [b.id, b]));
 const short = (s, n) => s.length <= n ? s : s.slice(0, n - 1).trimEnd() + "…";
@@ -368,7 +384,7 @@ function build() {
     panel.className = "panel"; panel.id = "panel-" + b.id; panel.setAttribute("role", "tabpanel"); panel.setAttribute("aria-labelledby", "tab-" + b.id);
     const host = document.createElement("div"); host.className = "entries";
     const h = document.createElement("div"); h.className = "month";
-    h.textContent = (+b.first.slice(8)) + ". " + MONTHS[+b.first.slice(5, 7) - 1].toLowerCase() + " – " + (+b.last.slice(8)) + ". " + MONTHS[+b.last.slice(5, 7) - 1].toLowerCase() + " " + b.last.slice(0, 4) + " · dagbogens bind " + b.vol;
+    h.textContent = (+b.first.slice(8)) + ". " + MONTHS[+b.first.slice(5, 7) - 1].toLowerCase() + " – " + (+b.last.slice(8)) + ". " + MONTHS[+b.last.slice(5, 7) - 1].toLowerCase() + " " + b.last.slice(0, 4) + (b.vol ? " · dagbogens bind " + b.vol : " · ingen dagbog for disse dage");
     host.appendChild(h);
     daysOf(b.id).forEach(d => host.appendChild(buildDay(d)));
     panel.appendChild(host);
@@ -389,6 +405,13 @@ function buildDay(date) {
   const body = document.createElement("div"); body.className = "day";
   ["almanak", "dagbog"].forEach(src => {
     const e = byId[(src === "almanak" ? "ALM-" : "DAG-") + date];
+    if (!e) return;
+    if (e.ctx) {   // dagbogen som kontekst: vises, men markeres ikke
+      const c = document.createElement("details"); c.className = "src ctx"; c.dataset.src = src;
+      c.innerHTML = '<summary>Dagbogen samme dag (kontekst, skal ikke markeres)</summary><div class="srclab">' + srcLabel(e) + '</div><p class="ctxtxt">' + esc(e.text) + "</p>";
+      body.appendChild(c);
+      return;
+    }
     const box = document.createElement("div"); box.className = "src"; box.dataset.src = src;
     const lab = document.createElement("div"); lab.className = "srclab"; lab.innerHTML = srcLabel(e);
     const txt = document.createElement("p"); txt.className = "txt"; txt.dataset.eid = e.id;
@@ -406,12 +429,12 @@ function buildDay(date) {
   const meta = document.createElement("div"); meta.className = "meta";
   const lab = document.createElement("label");
   const cb = document.createElement("input"); cb.type = "checkbox"; cb.id = "rev-" + date;
-  cb.addEventListener("change", () => { if (cb.checked) state.reviewed[date] = true; else delete state.reviewed[date]; save(); root.classList.toggle("done", cb.checked); stats(); });
-  lab.appendChild(cb); lab.appendChild(document.createTextNode("Dagen gennemgået (almanak og dagbog)"));
+  cb.addEventListener("change", () => { if (cb.checked) state.reviewed[date] = true; else delete state.reviewed[date]; save(); root.classList.toggle("done", cb.checked); ["ALM-", "DAG-"].forEach(k => { const x = byId[k + date]; if (x && !x.ctx) renderText(x); }); stats(); });
+  lab.appendChild(cb); lab.appendChild(document.createTextNode("__REVIEWED_LABEL__"));
   meta.appendChild(lab); body.appendChild(meta);
   root.appendChild(d); root.appendChild(body);
   cb.checked = !!state.reviewed[date]; root.classList.toggle("done", cb.checked);
-  renderText(byId["ALM-" + date]); renderText(byId["DAG-" + date]);
+  ["ALM-", "DAG-"].forEach(k => { const e = byId[k + date]; if (e && !e.ctx) renderText(e); });
   root.addEventListener("click", ev => {
     const m = ev.target.closest("mark.m");
     if (m && !selInText()) openEditor(m.closest(".txt").dataset.eid, m.dataset.id);
@@ -427,8 +450,8 @@ function renderText(e) {
   let html = "", pos = 0;
   anns.forEach(a => {
     html += esc(e.text.slice(pos, a.start));
-    html += '<mark class="m' + (a.unsure ? " unsure" : "") + (a.id === editingId ? " editing" : "") + '" data-t="' + a.type + '" data-id="' + a.id +
-      '"' + (a.reg ? ' title="' + esc(optLabel(a.reg)) + '"' : "") + ' tabindex="0" role="button" aria-label="' + TYPES[a.type] + (a.unsure ? ", usikker" : "") + ': ' + esc(a.text) + '. Åbn for at ændre">' + esc(e.text.slice(a.start, a.end)) + "</mark>";
+    html += '<mark class="m' + (a.unsure ? " unsure" : "") + (a.origin === "model" && !a.edited && !state.reviewed[e.date] ? " sug" : "") + (a.id === editingId ? " editing" : "") + '" data-t="' + a.type + '" data-id="' + a.id +
+      '"' + (a.reg || a.origin === "model" ? ' title="' + esc((a.origin === "model" ? "Maskinforslag (sikkerhed " + (a.p || 0).toFixed(2) + ")" + (a.reg ? " · " : "") : "") + (a.reg ? optLabel(a.reg) : "")) + '"' : "") + ' tabindex="0" role="button" aria-label="' + TYPES[a.type] + (a.unsure ? ", usikker" : "") + ': ' + esc(a.text) + '. Åbn for at ændre">' + esc(e.text.slice(a.start, a.end)) + "</mark>";
     pos = a.end;
   });
   html += esc(e.text.slice(pos));
@@ -620,14 +643,14 @@ function openEditor(entryId, annId) {
   $("#ed-ident", ed).value = a.ident; $("#ed-note", ed).value = a.note; $("#ed-unsure", ed).checked = a.unsure;
   const touch = () => { save(); renderText(e); stats(); };
   ed.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
-    a.type = b.dataset.t; ed.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    a.type = b.dataset.t; a.edited = true; ed.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
     fillSelect(sel, a, e); info.textContent = regInfo(a); touch();
   }));
-  sel.addEventListener("change", () => { a.reg = sel.value; info.textContent = regInfo(a); touch(); });
+  sel.addEventListener("change", () => { a.reg = sel.value; a.edited = true; info.textContent = regInfo(a); touch(); });
   $("#ed-ident", ed).addEventListener("input", ev => { a.ident = ev.target.value; save(); });
   $("#ed-note", ed).addEventListener("input", ev => { a.note = ev.target.value; save(); });
   $("#ed-unsure", ed).addEventListener("change", ev => { a.unsure = ev.target.checked; touch(); });
-  $("#ed-del", ed).addEventListener("click", () => { state.ann = state.ann.filter(x => x.id !== a.id); save(); closeEditor(); renderText(e); stats(); });
+  $("#ed-del", ed).addEventListener("click", () => { if (a.origin === "model") state.rejected.push(Object.assign({}, a, { rejected: Date.now() })); state.ann = state.ann.filter(x => x.id !== a.id); save(); closeEditor(); renderText(e); stats(); });
   $("#ed-close", ed).addEventListener("click", closeEditor);
 }
 
@@ -652,21 +675,23 @@ function stats() {
 function sortedAnn() { return state.ann.slice().sort((a, b) => a.entry < b.entry ? -1 : a.entry > b.entry ? 1 : a.start - b.start); }
 function clean(s) { return String(s).replace(/[\t\r\n]+/g, " "); }
 function tsv() {
-  const head = ["annotator", "post_id", "print_page", "start", "end", "string", "type", "reg_id", "reg_label", "identification_free", "unsure", "note", "source", "block", "text_version", "block_active_seconds"];
+  const head = ["annotator", "post_id", "print_page", "start", "end", "string", "type", "reg_id", "reg_label", "identification_free", "unsure", "note", "source", "block", "text_version", "block_active_seconds", "origin", "model_p", "model_type", "edited"];
   const lines = [head.join("\t")];
   sortedAnn().forEach(a => { const e = byId[a.entry];
-    lines.push([state.annotator, a.entry, e.page, a.start, a.end, a.text, TYPES[a.type], a.reg, a.reg ? REG[a.reg].l : "", a.ident, a.unsure ? "ja" : "", a.note, e.src, e.block, e.tv, state.active[e.block] || 0].map(clean).join("\t")); });
+    lines.push([state.annotator, a.entry, e.page, a.start, a.end, a.text, TYPES[a.type], a.reg, a.reg ? REG[a.reg].l : "", a.ident, a.unsure ? "ja" : "", a.note, e.src, e.block, e.tv, state.active[e.block] || 0, a.origin || "human", a.p === undefined ? "" : a.p, a.mtype ? TYPES[a.mtype] : "", a.edited ? "ja" : ""].map(clean).join("\t")); });
   return lines.join("\n");
 }
 function json() {
   return JSON.stringify({
     meta: { annotator: state.annotator, exported: new Date().toISOString(), text_versions: TV,
       sources: "almanak: andersen-hc_almanakker.pdf (DSL 1990), maskinlæst; dagbog: data/normalized/diary.csv",
-      blocks: BLOCKS, active_seconds_by_block: state.active,
+      blocks: BLOCKS, active_seconds_by_block: state.active, mode: MODE,
       offsets: "tegnpositioner i teksten som vist, 0-baseret, slut eksklusiv; post_id ALM-<dato> = almanakpost, DAG-<dato> = dagbogsdag" },
     reviewed_days: Object.keys(state.reviewed).sort(),
     annotations: sortedAnn().map(a => { const e = byId[a.entry];
-      return { post_id: a.entry, source: e.src, block: e.block, print_page: e.page, start: a.start, end: a.end, string: a.text, type: TYPES[a.type], reg_id: a.reg, reg_label: a.reg ? REG[a.reg].l : "", identification_free: a.ident, unsure: a.unsure, note: a.note }; })
+      return { post_id: a.entry, source: e.src, block: e.block, print_page: e.page, start: a.start, end: a.end, string: a.text, type: TYPES[a.type], reg_id: a.reg, reg_label: a.reg ? REG[a.reg].l : "", identification_free: a.ident, unsure: a.unsure, note: a.note,
+        origin: a.origin || "human", model_p: a.p, model_type: a.mtype ? TYPES[a.mtype] : undefined, edited: a.origin === "model" ? !!a.edited : undefined }; }),
+    rejected_suggestions: MODE === "review" ? state.rejected.map(a => ({ post_id: a.entry, start: a.start, end: a.end, string: a.text, model_type: TYPES[a.mtype || a.type], model_p: a.p, reg_id: a.reg })) : undefined
   }, null, 1);
 }
 function setMsg(t, err) { const m = $("#msg"); m.textContent = t; m.classList.toggle("err", !!err); }
@@ -683,8 +708,8 @@ $("#annotator").value = state.annotator;
 let armed = false;
 $("#reset").addEventListener("click", ev => {
   if (!armed) { armed = true; ev.target.textContent = "Tryk igen for at slette alt"; setTimeout(() => { armed = false; ev.target.textContent = "Slet alle mine markeringer"; }, 4000); return; }
-  state.ann = []; state.reviewed = {}; state.active = {}; save(); armed = false; ev.target.textContent = "Slet alle mine markeringer";
-  closeEditor(); ENTRIES.forEach(e => renderText(e)); document.querySelectorAll(".entry input[type=checkbox]").forEach(c => { c.checked = false; c.closest(".entry").classList.remove("done"); }); stats(); setMsg("Alle markeringer er slettet.");
+  state.ann = []; state.reviewed = {}; state.active = {}; state.prefilled = false; state.rejected = []; prefill(); save(); armed = false; ev.target.textContent = "Slet alle mine markeringer";
+  closeEditor(); ENTRIES.filter(e => !e.ctx).forEach(e => renderText(e)); document.querySelectorAll(".entry input[type=checkbox]").forEach(c => { c.checked = false; c.closest(".entry").classList.remove("done"); }); stats(); setMsg("Alle markeringer er slettet.");
 });
 
 build(); stats();

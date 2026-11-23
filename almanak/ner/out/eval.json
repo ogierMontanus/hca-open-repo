@@ -1,0 +1,1029 @@
+{
+ "candidate_ceiling_exact": {
+  "almanak": 0.978,
+  "dagbog": 0.93
+ },
+ "thresholds": {
+  "model logreg (begge kilder)": {
+   "A": 0.5499999999999999,
+   "B": 0.49999999999999994,
+   "C": 0.5999999999999999,
+   "D": 0.49999999999999994
+  },
+  "model gbm (begge kilder)": {
+   "A": 0.5999999999999999,
+   "B": 0.39999999999999997,
+   "C": 0.49999999999999994,
+   "D": 0.39999999999999997
+  },
+  "model gbm (kun almanak)": {
+   "A": 0.2,
+   "B": 0.3,
+   "C": 0.25,
+   "D": 0.3
+  }
+ },
+ "results": {
+  "almanak": {
+   "regel (registernavne)": {
+    "n_gold": 136,
+    "n_pred": 78,
+    "exact": {
+     "p": 0.872,
+     "r": 0.5,
+     "f1": 0.636
+    },
+    "typed": {
+     "p": 0.846,
+     "r": 0.485,
+     "f1": 0.617
+    },
+    "overlap": {
+     "p": 1.0,
+     "r": 0.566,
+     "f1": 0.723
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 2,
+      "exact": 0.0,
+      "overlap": 0.0
+     },
+     "Lokalitet": {
+      "n": 16,
+      "exact": 0.062,
+      "overlap": 0.125
+     },
+     "Person": {
+      "n": 89,
+      "exact": 0.506,
+      "overlap": 0.596
+     },
+     "Sted": {
+      "n": 23,
+      "exact": 0.913,
+      "overlap": 0.913
+     },
+     "Værk": {
+      "n": 6,
+      "exact": 0.167,
+      "overlap": 0.167
+     }
+    },
+    "exact_f1_ci95": [
+     0.556,
+     0.713
+    ]
+   },
+   "store bogstaver": {
+    "n_gold": 136,
+    "n_pred": 174,
+    "exact": {
+     "p": 0.42,
+     "r": 0.537,
+     "f1": 0.471
+    },
+    "typed": {
+     "p": 0.23,
+     "r": 0.294,
+     "f1": 0.258
+    },
+    "overlap": {
+     "p": 0.862,
+     "r": 0.912,
+     "f1": 0.886
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 2,
+      "exact": 0.5,
+      "overlap": 0.5
+     },
+     "Lokalitet": {
+      "n": 16,
+      "exact": 0.562,
+      "overlap": 0.938
+     },
+     "Person": {
+      "n": 89,
+      "exact": 0.449,
+      "overlap": 0.933
+     },
+     "Sted": {
+      "n": 23,
+      "exact": 0.913,
+      "overlap": 0.913
+     },
+     "Værk": {
+      "n": 6,
+      "exact": 0.333,
+      "overlap": 0.667
+     }
+    },
+    "exact_f1_ci95": [
+     0.39,
+     0.553
+    ]
+   },
+   "model logreg (begge kilder)": {
+    "n_gold": 136,
+    "n_pred": 140,
+    "exact": {
+     "p": 0.771,
+     "r": 0.794,
+     "f1": 0.783
+    },
+    "typed": {
+     "p": 0.729,
+     "r": 0.75,
+     "f1": 0.739
+    },
+    "overlap": {
+     "p": 0.886,
+     "r": 0.912,
+     "f1": 0.899
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 2,
+      "exact": 0.0,
+      "overlap": 1.0
+     },
+     "Lokalitet": {
+      "n": 16,
+      "exact": 0.438,
+      "overlap": 0.688
+     },
+     "Person": {
+      "n": 89,
+      "exact": 0.888,
+      "overlap": 0.978
+     },
+     "Sted": {
+      "n": 23,
+      "exact": 0.957,
+      "overlap": 0.957
+     },
+     "Værk": {
+      "n": 6,
+      "exact": 0.0,
+      "overlap": 0.333
+     }
+    },
+    "exact_f1_ci95": [
+     0.714,
+     0.846
+    ]
+   },
+   "model gbm (begge kilder)": {
+    "n_gold": 136,
+    "n_pred": 131,
+    "exact": {
+     "p": 0.756,
+     "r": 0.728,
+     "f1": 0.742
+    },
+    "typed": {
+     "p": 0.71,
+     "r": 0.684,
+     "f1": 0.697
+    },
+    "overlap": {
+     "p": 0.924,
+     "r": 0.86,
+     "f1": 0.891
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 2,
+      "exact": 0.0,
+      "overlap": 0.5
+     },
+     "Lokalitet": {
+      "n": 16,
+      "exact": 0.188,
+      "overlap": 0.5
+     },
+     "Person": {
+      "n": 89,
+      "exact": 0.82,
+      "overlap": 0.933
+     },
+     "Sted": {
+      "n": 23,
+      "exact": 1.0,
+      "overlap": 1.0
+     },
+     "Værk": {
+      "n": 6,
+      "exact": 0.0,
+      "overlap": 0.333
+     }
+    },
+    "exact_f1_ci95": [
+     0.677,
+     0.795
+    ]
+   },
+   "model gbm (kun almanak)": {
+    "n_gold": 136,
+    "n_pred": 143,
+    "exact": {
+     "p": 0.769,
+     "r": 0.809,
+     "f1": 0.789
+    },
+    "typed": {
+     "p": 0.706,
+     "r": 0.743,
+     "f1": 0.724
+    },
+    "overlap": {
+     "p": 0.881,
+     "r": 0.926,
+     "f1": 0.903
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 2,
+      "exact": 0.0,
+      "overlap": 1.0
+     },
+     "Lokalitet": {
+      "n": 16,
+      "exact": 0.625,
+      "overlap": 0.875
+     },
+     "Person": {
+      "n": 89,
+      "exact": 0.854,
+      "overlap": 0.955
+     },
+     "Sted": {
+      "n": 23,
+      "exact": 1.0,
+      "overlap": 1.0
+     },
+     "Værk": {
+      "n": 6,
+      "exact": 0.167,
+      "overlap": 0.333
+     }
+    },
+    "exact_f1_ci95": [
+     0.735,
+     0.839
+    ]
+   }
+  },
+  "dagbog": {
+   "regel (registernavne)": {
+    "n_gold": 383,
+    "n_pred": 190,
+    "exact": {
+     "p": 0.774,
+     "r": 0.384,
+     "f1": 0.513
+    },
+    "typed": {
+     "p": 0.768,
+     "r": 0.381,
+     "f1": 0.51
+    },
+    "overlap": {
+     "p": 0.937,
+     "r": 0.46,
+     "f1": 0.617
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 8,
+      "exact": 0.0,
+      "overlap": 0.0
+     },
+     "Lokalitet": {
+      "n": 48,
+      "exact": 0.0,
+      "overlap": 0.021
+     },
+     "Person": {
+      "n": 239,
+      "exact": 0.431,
+      "overlap": 0.54
+     },
+     "Sted": {
+      "n": 55,
+      "exact": 0.691,
+      "overlap": 0.691
+     },
+     "Værk": {
+      "n": 33,
+      "exact": 0.182,
+      "overlap": 0.242
+     }
+    },
+    "exact_f1_ci95": [
+     0.449,
+     0.579
+    ]
+   },
+   "store bogstaver": {
+    "n_gold": 383,
+    "n_pred": 790,
+    "exact": {
+     "p": 0.261,
+     "r": 0.538,
+     "f1": 0.351
+    },
+    "typed": {
+     "p": 0.147,
+     "r": 0.303,
+     "f1": 0.198
+    },
+    "overlap": {
+     "p": 0.563,
+     "r": 0.927,
+     "f1": 0.701
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 8,
+      "exact": 0.125,
+      "overlap": 0.5
+     },
+     "Lokalitet": {
+      "n": 48,
+      "exact": 0.562,
+      "overlap": 0.958
+     },
+     "Person": {
+      "n": 239,
+      "exact": 0.485,
+      "overlap": 0.929
+     },
+     "Sted": {
+      "n": 55,
+      "exact": 0.927,
+      "overlap": 0.982
+     },
+     "Værk": {
+      "n": 33,
+      "exact": 0.333,
+      "overlap": 0.879
+     }
+    },
+    "exact_f1_ci95": [
+     0.306,
+     0.405
+    ]
+   },
+   "model logreg (begge kilder)": {
+    "n_gold": 383,
+    "n_pred": 388,
+    "exact": {
+     "p": 0.631,
+     "r": 0.64,
+     "f1": 0.636
+    },
+    "typed": {
+     "p": 0.593,
+     "r": 0.601,
+     "f1": 0.597
+    },
+    "overlap": {
+     "p": 0.799,
+     "r": 0.775,
+     "f1": 0.787
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 8,
+      "exact": 0.0,
+      "overlap": 0.125
+     },
+     "Lokalitet": {
+      "n": 48,
+      "exact": 0.479,
+      "overlap": 0.583
+     },
+     "Person": {
+      "n": 239,
+      "exact": 0.699,
+      "overlap": 0.833
+     },
+     "Sted": {
+      "n": 55,
+      "exact": 0.873,
+      "overlap": 0.909
+     },
+     "Værk": {
+      "n": 33,
+      "exact": 0.212,
+      "overlap": 0.576
+     }
+    },
+    "exact_f1_ci95": [
+     0.58,
+     0.696
+    ]
+   },
+   "model gbm (begge kilder)": {
+    "n_gold": 383,
+    "n_pred": 403,
+    "exact": {
+     "p": 0.615,
+     "r": 0.648,
+     "f1": 0.631
+    },
+    "typed": {
+     "p": 0.568,
+     "r": 0.598,
+     "f1": 0.583
+    },
+    "overlap": {
+     "p": 0.789,
+     "r": 0.807,
+     "f1": 0.798
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 8,
+      "exact": 0.125,
+      "overlap": 0.25
+     },
+     "Lokalitet": {
+      "n": 48,
+      "exact": 0.292,
+      "overlap": 0.458
+     },
+     "Person": {
+      "n": 239,
+      "exact": 0.745,
+      "overlap": 0.887
+     },
+     "Sted": {
+      "n": 55,
+      "exact": 0.873,
+      "overlap": 0.964
+     },
+     "Værk": {
+      "n": 33,
+      "exact": 0.212,
+      "overlap": 0.606
+     }
+    },
+    "exact_f1_ci95": [
+     0.58,
+     0.69
+    ]
+   },
+   "model gbm (kun almanak)": {
+    "n_gold": 383,
+    "n_pred": 457,
+    "exact": {
+     "p": 0.538,
+     "r": 0.642,
+     "f1": 0.586
+    },
+    "typed": {
+     "p": 0.398,
+     "r": 0.475,
+     "f1": 0.433
+    },
+    "overlap": {
+     "p": 0.683,
+     "r": 0.791,
+     "f1": 0.733
+    },
+    "recall_by_type": {
+     "Andet": {
+      "n": 8,
+      "exact": 0.0,
+      "overlap": 0.125
+     },
+     "Lokalitet": {
+      "n": 48,
+      "exact": 0.562,
+      "overlap": 0.729
+     },
+     "Person": {
+      "n": 239,
+      "exact": 0.699,
+      "overlap": 0.828
+     },
+     "Sted": {
+      "n": 55,
+      "exact": 0.855,
+      "overlap": 0.927
+     },
+     "Værk": {
+      "n": 33,
+      "exact": 0.152,
+      "overlap": 0.545
+     }
+    },
+    "exact_f1_ci95": [
+     0.533,
+     0.646
+    ]
+   }
+  }
+ },
+ "logreg_top_features": [
+  [
+   "lower_mid",
+   -1.13
+  ],
+  [
+   "prev=<start>",
+   -0.92
+  ],
+  [
+   "prev=fru",
+   -0.75
+  ],
+  [
+   "next_namelike",
+   -0.72
+  ],
+  [
+   "lognchar",
+   0.63
+  ],
+  [
+   "dia_glob_anytok",
+   0.49
+  ],
+  [
+   "ntok",
+   -0.48
+  ],
+  [
+   "prev=i",
+   0.47
+  ],
+  [
+   "own_idx_full",
+   0.46
+  ],
+  [
+   "own_idx_kind_person",
+   0.45
+  ],
+  [
+   "own_idx_last",
+   -0.45
+  ],
+  [
+   "other_idx_last",
+   -0.43
+  ],
+  [
+   "prev=til",
+   0.39
+  ],
+  [
+   "prev_namelike",
+   -0.38
+  ],
+  [
+   "last_noun",
+   -0.37
+  ],
+  [
+   "dia_glob_full",
+   0.35
+  ],
+  [
+   "other_txt_core",
+   0.33
+  ],
+  [
+   "own_idx_anytok",
+   -0.32
+  ],
+  [
+   "particle_mid",
+   -0.32
+  ],
+  [
+   "given_plus_sur",
+   0.31
+  ]
+ ],
+ "n_candidates": {
+  "almanak": 600,
+  "dagbog": 2426
+ },
+ "best": "model gbm (kun almanak)",
+ "almanak_errors_best": [
+  [
+   "mangler",
+   "ALM-1841-02-15",
+   "Theater Alibert",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-15",
+   "Besøgt",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-15",
+   "Ingen Reise-Udsigter",
+   "Værk"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-15",
+   "Theater",
+   "Lokalitet"
+  ],
+  [
+   "mangler",
+   "ALM-1841-02-16",
+   "Vers",
+   "Værk"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-16",
+   "Carnevalet",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-17",
+   "Carneval",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-17",
+   "Besøgt",
+   "Lokalitet"
+  ],
+  [
+   "forkert type",
+   "ALM-1841-02-18",
+   "Peters Kuppelen",
+   "Person (guld Lokalitet)"
+  ],
+  [
+   "mangler",
+   "ALM-1841-02-18",
+   "Theater Alibert",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-18",
+   "Theater",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-18",
+   "Alibert",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-20",
+   "Pontmolle",
+   "Værk"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-21",
+   "Nonnerne",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-21",
+   "Enden",
+   "Sted"
+  ],
+  [
+   "forkert type",
+   "ALM-1841-02-22",
+   "Villa Albano",
+   "Person (guld Lokalitet)"
+  ],
+  [
+   "mangler",
+   "ALM-1841-02-22",
+   "Lucien Bonapartes Datter",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1841-02-22",
+   "det venesianske Palai",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-22",
+   "Lucien Bonapartes",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1841-02-22",
+   "Hestene",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-02",
+   "Maleren",
+   "Andet"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-02",
+   "Opera",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1846-01-02",
+   "Maleren. Middag",
+   "Værk"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-03",
+   "Chamissos Børn",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-03",
+   "Kongen",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-03",
+   "Dronningen",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1846-01-03",
+   "Chamissos",
+   "Person"
+  ],
+  [
+   "forkert type",
+   "ALM-1846-01-04",
+   "Berlin",
+   "Sted (guld Lokalitet)"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-04",
+   "Prindsessen af Preusen",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1846-01-04",
+   "Preusen",
+   "Person"
+  ],
+  [
+   "forkert type",
+   "ALM-1846-01-05",
+   "Frøken Bedua",
+   "Lokalitet (guld Person)"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-06",
+   "Prindsessen af Preusen",
+   "Person"
+  ],
+  [
+   "forkert type",
+   "ALM-1846-01-06",
+   "Pückler-Moskau",
+   "Lokalitet (guld Person)"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-06",
+   "Ridder af den røde Ørn",
+   "Andet"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-06",
+   "Jette",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1846-01-06",
+   "Fru Bournonville",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1846-01-06",
+   "Preusen",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1846-01-06",
+   "Ridder",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1846-01-06",
+   "Bournonville",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1855-07-17",
+   "Jette Collin",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1855-07-17",
+   "Hertugen af Weimar",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-17",
+   "Weimar",
+   "Person"
+  ],
+  [
+   "forkert type",
+   "ALM-1855-07-18",
+   "Rabenhorst",
+   "Lokalitet (guld Person)"
+  ],
+  [
+   "mangler",
+   "ALM-1855-07-18",
+   "Dem dänischen Schwane",
+   "Værk"
+  ],
+  [
+   "mangler",
+   "ALM-1855-07-19",
+   "Theatret",
+   "Lokalitet"
+  ],
+  [
+   "mangler",
+   "ALM-1855-07-19",
+   "Idomeneus",
+   "Værk"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-19",
+   "Haven",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-19",
+   "Theatret Idomeneus",
+   "Værk"
+  ],
+  [
+   "mangler",
+   "ALM-1855-07-20",
+   "Ich bleibe ledig",
+   "Værk"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-20",
+   "Slottet",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-22",
+   "Indbydelse",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-22",
+   "Cavalererne",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1855-07-23",
+   "golden Hirsch",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-23",
+   "Maven",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1855-07-23",
+   "Hirsch",
+   "Person"
+  ],
+  [
+   "forkert type",
+   "ALM-1866-07-04",
+   "Arabida",
+   "Person (guld Sted)"
+  ],
+  [
+   "forkert type",
+   "ALM-1866-07-04",
+   "Troja",
+   "Lokalitet (guld Sted)"
+  ],
+  [
+   "overskud",
+   "ALM-1866-07-04",
+   "Kysten ud paa Oceanet",
+   "Værk"
+  ],
+  [
+   "mangler",
+   "ALM-1866-07-06",
+   "Georges 0 Neill",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1866-07-06",
+   "Georges",
+   "Person"
+  ],
+  [
+   "mangler",
+   "ALM-1866-07-08",
+   "Georg 0 Neill",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1866-07-08",
+   "Georg",
+   "Person"
+  ],
+  [
+   "forkert type",
+   "ALM-1866-07-09",
+   "Toulon",
+   "Lokalitet (guld Sted)"
+  ],
+  [
+   "mangler",
+   "ALM-1866-07-09",
+   "Figaro",
+   "Værk"
+  ],
+  [
+   "overskud",
+   "ALM-1866-07-09",
+   "Krydsbaand",
+   "Lokalitet"
+  ],
+  [
+   "mangler",
+   "ALM-1866-07-11",
+   "Carlos 0 Neill",
+   "Person"
+  ],
+  [
+   "overskud",
+   "ALM-1866-07-11",
+   "Portrætter",
+   "Lokalitet"
+  ],
+  [
+   "overskud",
+   "ALM-1866-07-11",
+   "Carlos",
+   "Person"
+  ]
+ ]
+}

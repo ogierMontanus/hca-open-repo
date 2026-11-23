@@ -6,3 +6,9 @@ data/cache/
 
 # Genereret annotationsside (indeholder sidebilleder og tekst); bygges med annotation/build_annotation_page.py
 annotation/out/
+
+# NER-model: trænet model og fuld forudsigelse kan genskabes (almanak/ner/README.md); eval-/dæknings-JSON committes
+ner/out/*.pkl
+ner/out/*.jsonl
+ner/out/review_prefill.json
+ner/__pycache__/

@@ -1,0 +1,22 @@
+{
+ "entries": 5213,
+ "almanac_index_person_refs": 7091,
+ "index_coverage_model": 0.615,
+ "index_coverage_rule": 0.562,
+ "spans_model": 10998,
+ "spans_rule": 5722,
+ "model_spans_by_type": {
+  "Person": 8052,
+  "Lokalitet": 1491,
+  "Sted": 1141,
+  "Værk": 294,
+  "Andet": 20
+ },
+ "model_spans_without_register_match": {
+  "Person": 3228,
+  "Lokalitet": 1472,
+  "Sted": 156,
+  "Værk": 141,
+  "Andet": 20
+ }
+}
