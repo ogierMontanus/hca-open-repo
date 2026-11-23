@@ -275,6 +275,60 @@ selv teksten; kun de steder, hvor de og Søren er uenige (typisk 20–40 tilfæl
 tilbage til ham som »enig/uenig« — få minutter, og det afdækker både hans huller og
 reglernes fejl. Det måler ikke annotatorenighed, så tallene må ikke præsenteres som sådan.
 
+### 3.10 Resultat af overlap-stikprøven (Søren Dall-Hansen, eksport 2026-11-23)
+
+Fil: `almanak/annotation/Opmærkning til Holger.json` (JSON fra siden, tekstversioner som i §3.9).
+
+**Kontrol** (`check_annotations.py` mod både `annotation/out/` og `mockup/`, samme ENTRIES): **OK** —
+519 spans i 64 poster, `text[start:end] == string` for alle, ingen overlap, kendte typer, 32 af 32 dage
+gennemgået. Ingen `unsure`, noter eller identifikationer (som bedt om).
+
+| | Person | Sted | Lokalitet | Værk | Andet | I alt | pr. 1000 tegn |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Almanak (3.201 tegn) | 89 | 23 | 16 | 6 | 2 | 136 | 42,5 |
+| Dagbog (24.326 tegn) | 239 | 55 | 48 | 33 | 8 | 383 | 15,7 |
+
+Skønnet i §3.9 (150–200 personspans) holdt ikke: 328.
+
+**Tid.** Kun blok A har målt tid: 161 min (grænsen var 45 min); B–D har 0. Enten er 161 min den samlede tid
+(målingen har ikke skiftet blok), eller tiden for B–D er tabt. *Spørg Søren.*
+
+**Fund.**
+
+1. **Almanakken er et komprimeret navneregister over dagbogsdagen.** Den er 2,7× tættere på navne pr. tegn;
+   105 af 136 almanakspans (77 %) har nøgleordet i samme dags dagbogstekst, og 102 af dem (97 %) er også
+   markeret dér. Annotatoren er altså konsekvent på tværs af kilderne, og almanakken kan bruges som
+   *fjern supervision* for dagbogen (og omvendt).
+2. **Registerreglen er præcis, men dækker lidt.** Hvor et registernavn (dagens side) står i teksten, har
+   Søren markeret det i 149 af 158 dagbogstilfælde og 124 af 124 almanaktilfælde. De 9 uenigheder: 5 er huller
+   hos annotatoren (*Skotland, Dresden, Wien, Hof, Kjøbenhavn*), 1 er registerfejl (*Roed Harlequin* = rød, ikke
+   Jørgen Roed), 3 er *Eventyr* (almindeligt navneord, vejledningen siger nej). Men kun 37 % af dagbogens og
+   51 % af almanakkens spans (38 % / 52 % af Person) har et registernavn bag sig. Resten — enkeltnavne
+   (*Ingeborg, Jette, Eduard*), titel + navn, roller (*Kongen, Faderen*), relationelle beskrivelser
+   (*Dahl[s] Datter Fru Bull*), og alle Lokaliteter — er netop det, en model skal tage.
+3. **Stort begyndelsesbogstav er stadig ikke et signal:** 41 % (almanak) og 61 % (dagbog) af ordene med stort
+   ligger uden for markeringerne (*Brev, Middag, Klokken, Aftenen …*). Bekræfter §3.8.
+4. **Blok D mod `ner_page_grounding.csv`** (VII 134–138): af de 35 automatiske forankringer bekræfter
+   menneskets spans 33; én ligger uden for de otte dage (*Arthur*), én er en fejl (`given_name_only` »hans«
+   = pronomen, koblet til Hans Henrik Koch). Af de 15 entiteter med `no_match` har Søren markeret mindst 10
+   under en anden stavemåde (*Setubal/Setúbal, Palmella/Palmela, Troja/Troia, Arabida/Arrábida,
+   St Louis/San Luis, Tajofloden/Tajo, Brancanas/Brancanes, O Neill/O’Neill*). Fase 0 (§3.3):
+   accent- og afstandstolerant match mod registeretiketten, og stopord for små fornavne.
+5. **Lokalitet virker:** 64 spans, ingen i registret (*Corso, Lepre, Theater Alibert, Villa Albani, Ripetta,
+   Hotel de Brandenburg, im goldnen Hirz …*). Kandidater til en udvidelse af stedregistret.
+6. **Vejledningen følges, de facto-afgørelser af de åbne spørgsmål:** titel medtages (83 spans; ingen
+   titel udeladt lige foran et navn), genitiv medtages (21), klammer medtages (9); aviser → Andet
+   (*Hamborger Aviser*), men *Dagbladene* → Værk; ordener og skibe → Andet; roller → Person (*Kongen* 8×),
+   men *Maleren* → Andet. Uafklaret: relationelle beskrivelser (*Carlos O Neill hans Kones Søster*) som ét spænd.
+7. **OCR-spor i almanakteksten:** *0 Neill* (nul for O), *Sommematsdrøm*. Spans står på den ukontrollerede
+   tekst; ved ny OCR skal de flyttes via en crosswalk.
+
+**Adjudikering** (`almanak/annotation/adjudication_queue.py` → `adjudikering-overlap-2026-11.tsv`, 33 tilfælde:
+15 umarkerede gentagelser/registernavne, 6 typekonflikter som *Berlin* = Person og *Rabenhorst* = Person,
+4 afgrænsninger som *Improvisatoren og* og *Platon ligger*, 8 regelafvigelser som *Bog/Vers/Digt* og *Maleren*).
+Sendes til Søren som »enig/uenig«; svarene lægges i `almanak/data/review/`, ikke ved at rette eksportfilen.
+Test: `tests/test_adjudication_queue.py`.
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i
