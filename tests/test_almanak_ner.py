@@ -3,6 +3,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "almanak" / "ner"))
 import candidates as C  # noqa: E402
@@ -24,7 +26,8 @@ def test_candidates_cover_titles_full_names_particles_and_ocr_zero():
 
 
 def test_score_counts_exact_typed_and_overlap():
-    sys.path.insert(0, str(ROOT / "almanak" / "ner"))
+    pytest.importorskip("numpy")          # CI-runneren har ikke numpy/scikit-learn; modellen køres lokalt
+    pytest.importorskip("sklearn")
     import importlib
     M = importlib.import_module("model")
     items = {"x": {"gold": {(0, 5): "Person", (10, 15): "Sted"}}}
