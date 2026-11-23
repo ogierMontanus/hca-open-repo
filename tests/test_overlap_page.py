@@ -73,3 +73,44 @@ def test_checker_accepts_good_and_rejects_bad_offsets(built, tmp_path):
                            {"post_id": e["id"], "start": i + 2, "end": i + 5, "string": "gge", "type": "Person"}]
     f.write_text(json.dumps(good), encoding="utf-8")
     assert chk.main(["x", str(out), str(f)]) == 1                                            # overlap
+
+
+def test_every_register_place_and_work_on_the_days_pages_is_offered(built):
+    """Annotatoren (S. Dall-Hansen) savnede steder og så værker kun 'ikke konsekvent': siden må vise ALLE
+    steder og værker, som dagbogsregistret knytter til dagens sider, uanset om navnet står i teksten.
+    Sammenlignes direkte med references.csv/entities.csv, ikke med byggerens egen kandidatliste."""
+    import csv
+    import re
+    out, entries = built
+    ents = {r["entity_id"]: r["entity_type"] for r in csv.DictReader(
+        open(ROOT / "data" / "normalized" / "entities.csv", encoding="utf-8", newline=""))}
+    by_page = {}
+    for r in csv.DictReader(open(ROOT / "data" / "normalized" / "references.csv", encoding="utf-8", newline="")):
+        by_page.setdefault((r["vol"], r["page"]), set()).add(r["entity_id"])
+    html = out.read_text(encoding="utf-8")
+    reg = json.loads(re.search(r"const REG = (\{.*?\});\n", html, re.S).group(1))
+    n_places = n_works = 0
+    for e in entries.values():
+        if e["src"] != "dagbog":
+            continue
+        offered = {c[0] for c in e["c"]}
+        for p in e["pages"]:
+            for eid in by_page.get((p["v"], p["p"]), ()):
+                if ents.get(eid) in ("place", "work"):
+                    assert eid in offered, f"{e['id']}: {eid} ({ents[eid]}) knyttet til side {p['v']}:{p['p']} men ikke vist"
+                    assert reg[eid]["k"] == ("S" if ents[eid] == "place" else "W")
+                    n_places += ents[eid] == "place"
+                    n_works += ents[eid] == "work"
+    assert n_places > 100 and n_works > 50          # stikprøven indeholder faktisk begge dele
+    assert all(r["l"] for r in reg.values() if r["k"] == "S")
+    assert any(i.startswith("LOC") for i in reg)    # det gældende stedregister (LOC-id'er)
+
+
+def test_name_matching_ignores_accents_and_uses_spelling_variants():
+    import build_overlap_page as b
+    tf = b.nfold("Kjøbenhavn og Setubal, Galati og Maxen")
+    assert b.mentioned("Setúbal", "place", tf)
+    assert b.mentioned("København", "place", tf)
+    assert b.mentioned("Galatz (Galati)", "place", tf)
+    assert b.mentioned("Rabenhorst, Maxen", "place", tf)
+    assert not b.mentioned("Dresden", "place", tf)

@@ -245,6 +245,19 @@ almanak `ocr-2023-ukontrolleret-2026-11` (PDF-tekstlaget, *ikke* kontrolleret mo
 s. 35–36); dagbog `diary.csv-2026-11-linjetags-fjernet-orddeling-samlet` (linjetag fjernet, linjeskift = mellemrum,
 bindestreg ved linjeskift fjernet før lille bogstav og ellers bevaret, en dags rækker på flere sider sat sammen).
 
+**Registerlabels under hver dag (rettet 2026-11-23, efter Sørens tilbagemelding).** Første version viste kun
+personer og værker, og for dagbogen kun dem, hvis navn stod ordret i dagens tekst; *steder* var udeladt helt,
+og værker kom derfor kun med, når titlen tilfældigvis stod i teksten (inkonsekvent). Nu vises under hver
+dagbogsdag **alle** steder og værker, som dagbogsregisteret (`data/normalized/entities.csv` + `references.csv`,
+stederne fra det gældende stedregister `HCA_Steder_GÆLDENDE_21102026…`, LOC-id'er) knytter til dagens side(r):
+fuldt optrukket ramme = navnet (også uden accenter, med genitiv-s, parentesvariant eller »Kjøbenhavn«) står i
+teksten, stiplet = knyttet til siden, men navnet er ikke fundet. Personer: dem, hvis efternavn står i teksten;
+resten i en foldet liste. Almanakken har intet stedregister, så almanakposten får dagbogsregistrets poster
+(steder, værker, personer) for dagens dagbogsside(r), når navnet står i almanakteksten. Sted-markeringer kan nu
+knyttes til en registerpost i valglisten. Kendt begrænsning: registeret knytter til **sider**, ikke til dage;
+ligger flere dage på samme side, deler de samme labels. Teksterne og tegnpositionerne er uændrede (offsets og
+gemte markeringer gælder stadig). Test: `tests/test_overlap_page.py`.
+
 Nye forslag til reglerne, markeret som sådan i siden: to navne i én frase mærkes hver for sig (*Carl* og *Otto Moltke*);
 almindelige navneord er ikke værker (*Roman*, *Concert*).
 

@@ -8,8 +8,9 @@ Indlæser:
   almanak/data/extracted/aligned.csv    almanakposter (PDF-tekst + databasens tekst)
   almanak/data/register/*.csv           almanakkens eget register (genbrug fra build_annotation_page.py)
   data/normalized/diary.csv             dagbogstekst (bind I–X)
-  data/normalized/references.csv        hvilke registerposter der knyttes til hvilke dagbogssider
-  data/normalized/entities.csv          etiketter
+  data/normalized/references.csv        hvilke registerposter (personer, værker OG steder) der knyttes til hvilke dagbogssider
+  data/normalized/entities.csv          etiketter (steder: det gældende stedregister, LOC…-id'er)
+  data/normalized/places.csv            kategori og land for stederne
   data/normalized/kb_diary_links.csv    link til Det Kgl. Biblioteks faksimile pr. dagbogsside
 
 Tekstversioner (offsets gælder KUN mod netop disse tekster — de skrives i hver række i resultatet):
@@ -97,11 +98,13 @@ def load_kb():
 
 
 def load_page_refs(pages):
-    """{(bind, side): [entity_id, ...]} for personer og værker (ikke steder)."""
+    """{(bind, side): [entity_id, ...]} for personer, værker og steder, samt {entity_id: række}.
+    Alle tre typer medtages: annotatoren skal kunne se, hvad registret knytter til siden, også når
+    ordet står i en anden stavemåde i teksten (Setúbal/Setubal, Kjøbenhavn/København)."""
     ents = {}
     with open(NORM / "entities.csv", encoding="utf-8", newline="") as f:
         for r in csv.DictReader(f):
-            if r["entity_type"] in ("person", "work"):
+            if r["entity_type"] in ("person", "work", "place"):
                 ents[r["entity_id"]] = r
     want = set(pages)
     refs = collections.defaultdict(list)
@@ -110,6 +113,47 @@ def load_page_refs(pages):
             if (r["vol"], r["page"]) in want and r["entity_id"] in ents and r["entity_id"] not in refs[(r["vol"], r["page"])]:
                 refs[(r["vol"], r["page"])].append(r["entity_id"])
     return refs, ents
+
+
+def load_place_info():
+    """{LOC-id: 'By, Italien · besøgt'} fra places.csv (kategori, land, besøgt/omtalt)."""
+    out = {}
+    with open(NORM / "places.csv", encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            bits = [x for x in (r["category_da"], r["country"]) if x]
+            vs = (r.get("visit_status") or "").strip().lower()
+            out[r["entity_id"]] = ", ".join(bits) + (" · " + vs if vs else "")
+    return out
+
+
+_ACCENT = str.maketrans("áàâãéèêëíìîïóòôõúùûñçšž", "aaaaeeeeiiiioooouuuucsz")
+
+
+def nfold(s):
+    """Som bap.fold, men uden accenter (Setúbal = Setubal); æ, ø, å, ä, ö, ü bevares."""
+    return bap.fold(s.lower().translate(_ACCENT))
+
+
+def name_keys(label, kind):
+    """Strenge, der – hvis de står som helt ord i teksten – viser, at registerposten nævnes."""
+    if kind == "person":
+        return [surname(label)]
+    base = title_key(label)
+    keys = [base]
+    if kind == "place":
+        m = re.search(r"\(([^)]*)\)\s*$", label)                 # »Galatz (Galati)«, »Tajo (Tejo)«
+        if m:
+            keys.append(m.group(1))
+        keys += [x.strip() for x in base.split(",")]               # »Rabenhorst, Maxen«
+        if base.lower() == "københavn":
+            keys.append("Kjøbenhavn")                              # tidens stavemåde
+    return keys
+
+
+def mentioned(label, kind, tf):
+    """Står registerpostens navn (eller en variant) i den affoldede tekst tf (nfold)?"""
+    need = 3 if kind in ("person", "place") else 5
+    return any(len(nfold(k)) >= need and re.search(rf"\b{re.escape(nfold(k))}s?\b", tf) for k in name_keys(label, kind))
 
 
 def surname(label):
@@ -125,16 +169,15 @@ def title_key(label):
 
 
 def diary_candidates(text, pages, refs, ents):
-    """Registerposter knyttet til dagens sider; 'ref+navn' når efternavn/titel også står i teksten
-    (med eller uden bøjnings-s). Forslag til annotatoren, ikke afgørelser."""
-    tf = bap.fold(text)
+    """Registerposter (personer, værker, steder) knyttet til dagens sider; 'ref+navn' når navnet også
+    står i teksten (med eller uden bøjnings-s, uden hensyn til accenter), ellers 'ref'.
+    Forslag til annotatoren, ikke afgørelser."""
+    tf = nfold(text)
     out = {}
     for p in pages:
         for eid in refs.get(p, ()):
             e = ents[eid]
-            key = surname(e["label"]) if e["entity_type"] == "person" else title_key(e["label"])
-            ok = len(key) >= (3 if e["entity_type"] == "person" else 5) and \
-                re.search(rf"\b{re.escape(bap.fold(key))}s?\b", tf)
+            ok = mentioned(e["label"], e["entity_type"], tf)
             if eid not in out or ok:
                 out[eid] = "ref+navn" if ok else "ref"
     order = {"ref+navn": 0, "ref": 1}
@@ -159,6 +202,7 @@ def main() -> int:
         for _, pg in diary_by_block[key].values():
             all_pages += pg
     refs, ents = load_page_refs(all_pages)
+    place_info = load_place_info()
 
     for key, first, last, vol in BLOCKS:
         diary = diary_by_block[key]
@@ -179,9 +223,12 @@ def main() -> int:
             ea = dict(id="ALM-" + d, date=d, wd=bap._weekday(d), src="almanak", block=key, tv=TV_ALM,
                       page=f"{r['print_page']}", pages=[], text=text, dbdiff=diff)
             ea["c"] = bap.candidates(ea, reg_alm, by_date, year_n)
+            dtext, dpages = diary[d]
+            # Almanakken har intet stedregister, og dens værk-/personregister er ikke dagbogens. Derfor
+            # tilføjes dagbogsregistrets poster for dagens dagbogssider, når navnet står i almanakposten.
+            ea["c"] += [[eid, "dag+navn"] for eid, b in diary_candidates(text, dpages, refs, ents) if b == "ref+navn"]
             entries.append(ea)
 
-            dtext, dpages = diary[d]
             pages = []
             for p in dpages:
                 if p not in [(x["v"], x["p"]) for x in pages]:
@@ -205,6 +252,8 @@ def main() -> int:
                 continue
             if en["entity_type"] == "person":
                 REG[eid] = dict(k="P", l=en["label"], d=bap.short(en["description"], 110), x=0, pp=e["page"])
+            elif en["entity_type"] == "place":
+                REG[eid] = dict(k="S", l=en["label"], d=place_info.get(eid, ""), x=0, pp=e["page"])
             else:
                 REG[eid] = dict(k="W", l=re.sub(r"[*]", "", en["label"]), d="", x=0, pp=e["page"])
 

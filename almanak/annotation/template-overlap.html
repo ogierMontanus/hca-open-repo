@@ -110,7 +110,12 @@ mark.m:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .reg { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; font-size: .78rem; color: var(--muted); margin-top: 2px; }
 .chip { border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; background: var(--bg); color: var(--fg); white-space: nowrap; }
 .chip small { color: var(--muted); font-size: .85em; }
-.chip[data-k="P"] { border-color: var(--c-P); } .chip[data-k="W"] { border-color: var(--c-V); }
+.chip[data-k="P"] { border-color: var(--c-P); } .chip[data-k="W"] { border-color: var(--c-V); } .chip[data-k="S"] { border-color: var(--c-S); }
+.reg .grp { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; flex-basis: 100%; }
+.reg .grp > b { font-weight: 600; color: var(--muted); min-width: 4.6em; }
+.reg details.more { flex-basis: 100%; }
+.reg details.more > summary { cursor: pointer; color: var(--muted); }
+.reg details.more > .grp { margin-top: 4px; }
 .chip.weak { border-style: dashed; font-style: italic; opacity: .85; }
 .chip.on { background: color-mix(in srgb, var(--ok) 14%, var(--surface)); border-color: var(--ok); }
 .reginfo { font-size: .8rem; color: var(--muted); min-height: 1.2em; }
@@ -120,7 +125,7 @@ mark.m:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .regt td:last-child, .regt th:last-child { text-align: right; }
 .regt .weak { font-style: italic; opacity: .8; }
 .regt .k { font: 600 .72rem var(--ui); border-radius: 3px; padding: 0 5px; }
-.regt .k[data-k="P"] { background: var(--bg-P); color: var(--c-P); } .regt .k[data-k="W"] { background: var(--bg-V); color: var(--c-V); }
+.regt .k[data-k="P"] { background: var(--bg-P); color: var(--c-P); } .regt .k[data-k="W"] { background: var(--bg-V); color: var(--c-V); } .regt .k[data-k="S"] { background: var(--bg-S); color: var(--c-S); }
 .month { font: 600 .78rem var(--ui); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 10px 16px 6px; border-top: 1px solid var(--line); background: var(--bg); }
 .month:first-child { border-top: 0; border-radius: 8px 8px 0 0; }
 .entry { display: grid; grid-template-columns: 3.6em minmax(0, 1fr); gap: 4px 10px; padding: 10px 16px; border-top: 1px solid var(--line); }
@@ -218,6 +223,7 @@ textarea.out { width: 100%; min-height: 150px; font: 400 .8rem/1.4 ui-monospace,
             <li><b>Tag en blok ad gangen</b> (ca. 30–40 minutter). Du behøver ikke gøre alle fire i ét hug; siden gemmer alt i din browser, og du kan lukke den og fortsætte.</li>
             <li>For hver dag: læs den korte <b>almanakpost</b> først, derefter <b>dagbogsteksten</b>. Samme begivenheder står ofte begge steder.</li>
             <li><b>Markér</b> et navn eller en titel med musen (eller fingeren). Markeringen udvides selv til hele ord. Tryk på typen i bundlinjen eller på tasterne <kbd>1</kbd>–<kbd>5</kbd>.</li>
+            <li><b>Registerposterne under hver tekst</b> er dagbogsudgavens register (personer, <b>steder</b> og <b>værker</b>) for dagens dagbogsside(r) og vises som hjælp til at genkende navne. Fuldt optrukket ramme: navnet står i teksten. Stiplet: posten er knyttet til siden, men navnet er ikke fundet i dagens tekst (andet navn eller en anden stavemåde, eller en anden dag på samme side). Almanakken har intet stedregister; under almanakposten vises derfor dagbogsregistrets poster, hvis navn står i posten.</li>
             <li><b>Spring identifikationen over.</b> Registerposter og fritekst er valgfrie. Vi har først og fremmest brug for strengene og deres typer. Klik på en markering, hvis du vil sætte «usikker» eller skrive en note.</li>
             <li>Sæt flueben ved <b>Dagen gennemgået</b>, når begge tekster er set, også hvis der intet var at mærke.</li>
             <li>Til sidst: kopiér resultatet (afsnittet «Resultat», helst som JSON) og send det.</li>
@@ -320,7 +326,6 @@ const TYPES = { P: "Person", S: "Sted", V: "Værk", L: "Lokalitet", A: "Andet" }
 const KEYS = { "1": "P", "2": "S", "3": "V", "4": "L", "5": "A" };
 const MONTHS = ["Januar","Februar","Marts","April","Maj","Juni","Juli","August","September","Oktober","November","December"];
 const STORE = "almanak-dagbog-overlap-annotering-v1";   // adskilt fra den første annoteringsside
-const MAX_CHIPS = 12;
 
 let state = { annotator: "", ann: [], reviewed: {}, active: {} };   // reviewed: dato -> true; active: blok -> aktive sekunder
 try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && Array.isArray(s.ann)) state = Object.assign(state, s); } catch (e) {}
@@ -430,28 +435,45 @@ function renderText(e) {
   rows[e.id].txt.innerHTML = html;
   renderChips(e);
 }
-function optLabel(id) { const r = REG[id]; return r.l + (r.k === "P" && r.d ? " – " + short(r.d, 44) : "") + " · " + id; }
+function optLabel(id) { const r = REG[id]; return r.l + ((r.k === "P" || r.k === "S") && r.d ? " – " + short(r.d, 44) : "") + " · " + id; }
 const BASIS = {
-  almanak: { "ref+navn": "henvisning til dagen, og navnet står i teksten", "ref": "henvisning til dagen; navnet er ikke fundet i teksten", "navn": "navnet står i teksten; ingen henvisning til dagen" },
-  dagbog: { "ref+navn": "knyttet til dagens side, og navnet står i teksten", "ref": "knyttet til dagens side; navnet er ikke fundet i teksten" }
+  almanak: { "ref+navn": "henvisning til dagen, og navnet står i teksten", "ref": "henvisning til dagen; navnet er ikke fundet i teksten", "navn": "navnet står i teksten; ingen henvisning til dagen",
+             "dag+navn": "dagbogsregistrets post for dagens dagbogsside(r), og navnet står i almanakteksten" },
+  dagbog: { "ref+navn": "knyttet til dagens side, og navnet står i teksten", "ref": "knyttet til dagens side; navnet er ikke fundet i teksten (andet navn eller stavemåde?)" }
 };
+const GROUPS = [["S", "Steder"], ["W", "Værker"], ["P", "Personer"]];
+function chipHtml(e, id, b, on) {
+  const r = REG[id];
+  return '<span class="chip' + (b === "navn" || b === "ref" ? " weak" : "") + (on ? " on" : "") + '" data-k="' + r.k + '" title="' + esc(optLabel(id) + " (" + BASIS[e.src][b] + ")") + '">' +
+    (on ? "✓ " : "") + esc(short(r.l, 26)) + " <small>" + id + "</small></span>";
+}
 function renderChips(e) {
   const el = rows[e.id].reg;
-  let shown;
-  if (e.src === "dagbog") shown = e.c.filter(c => c[1] === "ref+navn").slice(0, MAX_CHIPS);   // siden har mange poster: kun dem, hvis navn står i teksten
-  else {
-    const key = id => fold(REG[id].l).split(/\s+/)[0];
-    const strong = new Set(e.c.filter(c => c[1] !== "navn").map(c => key(c[0])));
-    shown = e.c.filter(c => c[1] !== "navn" || !strong.has(key(c[0])));
-  }
-  el.hidden = shown.length === 0;
-  if (!shown.length) { el.innerHTML = ""; return; }
   const linked = new Set(state.ann.filter(a => a.entry === e.id && a.reg).map(a => a.reg));
-  el.innerHTML = '<span>' + (e.src === "dagbog" ? "Registret knytter til siden:" : "Register nævner:") + "</span>" + shown.map(([id, b]) => {
-    const r = REG[id], on = linked.has(id);
-    return '<span class="chip' + (b === "navn" ? " weak" : "") + (on ? " on" : "") + '" data-k="' + r.k + '" title="' + esc(optLabel(id) + " (" + BASIS[e.src][b] + ")") + '">' +
-      (on ? "✓ " : "") + esc(short(r.l, 26)) + " <small>" + id + "</small></span>";
-  }).join("");
+  const grp = (title, items) => items.length ? '<span class="grp"><b>' + title + '</b>' + items.map(([id, b]) => chipHtml(e, id, b, linked.has(id))).join("") + "</span>" : "";
+  let html = "";
+  if (e.src === "dagbog") {
+    // Steder og værker vises ALLE (de er få, og stavemåden i teksten afviger ofte fra registeret); stiplet = navnet er ikke fundet i teksten.
+    // Personer: dem, hvis efternavn står i teksten, vises; resten (ofte 10–30 pr. side) ligger i en foldet liste.
+    GROUPS.forEach(([k, title]) => {
+      const all = e.c.filter(c => REG[c[0]].k === k);
+      if (k !== "P") { html += grp(title, all); return; }
+      const hit = all.filter(c => c[1] === "ref+navn"), rest = all.filter(c => c[1] !== "ref+navn");
+      html += grp(title, hit);
+      if (rest.length) html += '<details class="more"><summary>Øvrige personer knyttet til siden (' + rest.length + ')</summary>' + grp("", rest) + "</details>";
+    });
+    if (html) html = '<span>Registret knytter til dagens side(r):</span>' + html;
+  } else {
+    const key = id => fold(REG[id].l).split(/\s+/)[0];
+    const own = e.c.filter(c => c[1] !== "dag+navn"), dag = e.c.filter(c => c[1] === "dag+navn");
+    const strong = new Set(own.filter(c => c[1] !== "navn").map(c => key(c[0])));
+    const shown = own.filter(c => c[1] !== "navn" || !strong.has(key(c[0])));
+    if (shown.length) html += '<span>Almanakkens register nævner:</span>' + grp("", shown);
+    if (dag.length) html += '<span>Dagbogens register, navnet står her (almanakken har intet stedregister):</span>' +
+      GROUPS.map(([k, title]) => grp(title, dag.filter(c => REG[c[0]].k === k))).join("");
+  }
+  el.hidden = !html;
+  el.innerHTML = html;
 }
 
 /* ---------- blokke ---------- */
@@ -543,7 +565,7 @@ function related(a, id) {
 }
 const srcOfId = id => /^ALM/.test(id) ? "almanak" : "dagbog";
 function blockIds(e) { const s2 = new Set(); ENTRIES.filter(x => x.block === e.block && x.src === e.src).forEach(x => x.c.forEach(c => s2.add(c[0]))); return [...s2]; }
-function kindOf(type) { return type === "P" ? "P" : type === "V" ? "W" : null; }
+function kindOf(type) { return type === "P" ? "P" : type === "V" ? "W" : type === "S" ? "S" : null; }
 function fillSelect(sel, a, e) {
   const kind = kindOf(a.type);
   sel.innerHTML = "";
@@ -562,7 +584,7 @@ function fillSelect(sel, a, e) {
     sel.appendChild(g);
   };
   group("Passer til »" + a.text + "«", match);
-  group(e.src === "dagbog" ? "Knyttet til dagens sider" : "Registeret nævner denne dag", day.filter(id => !match.includes(id)));
+  group(e.src === "dagbog" ? "Knyttet til dagens sider" : "Registrene nævner denne dag", day.filter(id => !match.includes(id)));
   group("Øvrige i blokken", page.filter(id => !match.includes(id)));
   const seen = new Set(day.concat(page));
   group("Andre i registret, der ligner »" + a.text + "«", Object.keys(REG).filter(id => srcOfId(id) === e.src && REG[id].k === kind && !seen.has(id) && related(a, id)).slice(0, 30));
