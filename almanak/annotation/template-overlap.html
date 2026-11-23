@@ -80,6 +80,10 @@ mark.m.sug { border-bottom-style: dashed; outline: 1px dashed var(--muted); outl
 .ctx { margin-top: 2px; }
 .ctx > summary { cursor: pointer; font-size: .82rem; color: var(--muted); }
 .ctx .ctxtxt { font-size: .92rem; color: var(--muted); margin-top: 4px; }
+.pass2, .unc { margin-top: 6px; font-size: .88rem; }
+.unc .uc { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; border: 1px dashed var(--line); border-radius: 6px; padding: 5px 8px; margin-top: 4px; }
+.unc .ctxs { flex: 1 1 260px; min-width: 0; }
+.unc .btn { padding: 2px 8px; font-size: .8rem; }
 .modelnote { border: 1px dashed var(--line); border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; font-size: .92rem; }
 mark.m::after { font: 600 .6em/1 var(--ui); vertical-align: super; margin-left: 2px; }
 mark.m[data-t="P"]::after { content: "P"; color: var(--c-P); }
@@ -342,10 +346,14 @@ state.ann.forEach(a => { if (a.type === "I") a.type = "L"; });
 // gennemgået dag, regnes som godkendt; slettede forslag gemmes i state.rejected (bruges til at måle præcision).
 function prefill() {
   if (!PREFILL.length || state.prefilled) return;
-  PREFILL.forEach(p => state.ann.push(Object.assign({ id: uid(), reg: "", ident: "", unsure: false, note: "", t: 0, origin: "model", edited: false }, p)));
+  PREFILL.forEach(p => {
+    if (p.tier === "usikker") state.unc.push(Object.assign({ uid: uid(), decision: "" }, p));
+    else state.ann.push(Object.assign({ id: uid(), reg: "", ident: "", unsure: false, note: "", t: 0, origin: "model", edited: false, mk0: p.mkind }, p));
+  });
   state.prefilled = true; state.rejected = [];
 }
 state.rejected = state.rejected || [];
+state.unc = state.unc || [];   // usikre forslag: holdes ude af teksten og tildeles i runde 3
 function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -429,13 +437,17 @@ function buildDay(date) {
   const meta = document.createElement("div"); meta.className = "meta";
   const lab = document.createElement("label");
   const cb = document.createElement("input"); cb.type = "checkbox"; cb.id = "rev-" + date;
-  cb.addEventListener("change", () => { if (cb.checked) state.reviewed[date] = true; else delete state.reviewed[date]; save(); root.classList.toggle("done", cb.checked); ["ALM-", "DAG-"].forEach(k => { const x = byId[k + date]; if (x && !x.ctx) renderText(x); }); stats(); });
+  cb.addEventListener("change", () => {
+    if (cb.checked && state.unc.some(u => u.entry === "ALM-" + date && !u.decision)) { cb.checked = false; say("Tag først stilling til de usikre forslag (runde 3)."); return; }
+    if (cb.checked) state.reviewed[date] = true; else delete state.reviewed[date]; save(); root.classList.toggle("done", cb.checked); ["ALM-", "DAG-"].forEach(k => { const x = byId[k + date]; if (x && !x.ctx) renderText(x); }); stats(); });
   lab.appendChild(cb); lab.appendChild(document.createTextNode("__REVIEWED_LABEL__"));
   meta.appendChild(lab); body.appendChild(meta);
   root.appendChild(d); root.appendChild(body);
   cb.checked = !!state.reviewed[date]; root.classList.toggle("done", cb.checked);
   ["ALM-", "DAG-"].forEach(k => { const e = byId[k + date]; if (e && !e.ctx) renderText(e); });
   root.addEventListener("click", ev => {
+    const b = ev.target.closest && ev.target.closest("button[data-uk]");
+    if (b) { const u = state.unc.find(x => x.uid === b.closest(".uc").dataset.u); if (u) resolveUnc(u, b.dataset.uk); return; }
     const m = ev.target.closest("mark.m");
     if (m && !selInText()) openEditor(m.closest(".txt").dataset.eid, m.dataset.id);
   });
@@ -450,7 +462,7 @@ function renderText(e) {
   let html = "", pos = 0;
   anns.forEach(a => {
     html += esc(e.text.slice(pos, a.start));
-    html += '<mark class="m' + (a.unsure ? " unsure" : "") + (a.origin === "model" && !a.edited && !state.reviewed[e.date] ? " sug" : "") + (a.id === editingId ? " editing" : "") + '" data-t="' + a.type + '" data-id="' + a.id +
+    html += '<mark class="m' + (a.unsure ? " unsure" : "") + (a.origin === "model" && !a.edited && a.tier !== "usikker" && !state.reviewed[e.date] ? " sug" : "") + (a.id === editingId ? " editing" : "") + '" data-t="' + a.type + '" data-id="' + a.id +
       '"' + (a.reg || a.origin === "model" ? ' title="' + esc((a.origin === "model" ? "Maskinforslag (sikkerhed " + (a.p || 0).toFixed(2) + ")" + (a.reg ? " · " : "") : "") + (a.reg ? optLabel(a.reg) : "")) + '"' : "") + ' tabindex="0" role="button" aria-label="' + TYPES[a.type] + (a.unsure ? ", usikker" : "") + ': ' + esc(a.text) + '. Åbn for at ændre">' + esc(e.text.slice(a.start, a.end)) + "</mark>";
     pos = a.end;
   });
@@ -495,8 +507,35 @@ function renderChips(e) {
     if (dag.length) html += '<span>Dagbogens register, navnet står her (almanakken har intet stedregister):</span>' +
       GROUPS.map(([k, title]) => grp(title, dag.filter(c => REG[c[0]].k === k))).join("");
   }
+  if (MODE === "review" && e.src === "almanak") {
+    const um = (e.um || []).filter(id => REG[id] && !linked.has(id));
+    if (um.length) html += '<div class="pass2"><span><b>Runde 2:</b> Registret nævner disse for dagen, men ingen markering peger på dem. Er de omtalt uden navn («Kongen», «Faderen», «hans Datter»)? Markér omtalen og angiv omtaleform.</span>' +
+      um.map(id => chipHtml(e, id, "ref", false)).join("") + "</div>";
+    const unc = state.unc.filter(u => u.entry === e.id && !u.decision);
+    if (unc.length) html += '<div class="unc"><span><b>Runde 3:</b> Usikre forslag. De er ikke markeret i teksten; tag stilling til hver.</span>' + unc.map(u => uncHtml(e, u)).join("") + "</div>";
+  }
   el.hidden = !html;
   el.innerHTML = html;
+}
+function uncHtml(e, u) {
+  const t = e.text;
+  return '<div class="uc" data-u="' + u.uid + '"><span class="ctxs">…' + esc(t.slice(Math.max(0, u.start - 30), u.start)) + "<b>" + esc(u.text) + "</b>" + esc(t.slice(u.end, u.end + 30)) + "…</span>" +
+    "<small>forslag: " + TYPES[u.mtype] + ", sikkerhed " + (u.p || 0).toFixed(2) + "</small>" +
+    Object.keys(TYPES).map(k => '<button type="button" class="btn" data-uk="' + k + '">' + TYPES[k] + "</button>").join("") +
+    '<button type="button" class="btn danger" data-uk="-">Ikke et navn</button></div>';
+}
+function resolveUnc(u, k) {
+  const e = byId[u.entry];
+  if (k === "-") {
+    u.decision = "rejected";
+    state.rejected.push({ entry: u.entry, start: u.start, end: u.end, text: u.text, mtype: u.mtype, p: u.p, reg: u.reg, uncertain: true });
+  } else {
+    if (state.ann.find(a => a.entry === u.entry && a.start < u.end && u.start < a.end)) { say("Overlapper en eksisterende markering. Slet den først."); return; }
+    u.decision = "accepted";
+    state.ann.push({ id: uid(), entry: u.entry, start: u.start, end: u.end, text: u.text, type: k, mtype: u.mtype, p: u.p, reg: u.reg || "", ident: "", unsure: false, note: "",
+      t: Date.now(), origin: "model", tier: "usikker", edited: k !== u.mtype, mkind: u.mkind, mk0: u.mkind });
+  }
+  save(); renderText(e); stats();
 }
 
 /* ---------- blokke ---------- */
@@ -629,6 +668,7 @@ function openEditor(entryId, annId) {
   ed.innerHTML =
     '<div class="head">»' + esc(a.text) + '«<small>tegn ' + a.start + '–' + a.end + '</small></div>' +
     '<div class="seg" role="group" aria-label="Type">' + Object.keys(TYPES).map(k => '<button type="button" data-t="' + k + '" aria-pressed="' + (a.type === k) + '">' + TYPES[k] + "</button>").join("") + "</div>" +
+    '<label class="f" for="ed-kind">Omtaleform (valgfri)<select id="ed-kind"><option value="">– ikke angivet –</option><option value="navn">Egennavn («Jette Wulff»)</option><option value="omtale">Omtale uden navn (rolle, slægtskab: «Kongen», «hans Datter»)</option><option value="pronomen">Pronomen</option></select></label>' +
     '<div class="row"><label class="meta" for="ed-unsure" style="cursor:pointer"><input type="checkbox" id="ed-unsure" style="width:16px;height:16px;accent-color:var(--ink)"> Usikker</label>' +
     '<span class="btns"><button class="btn danger" type="button" id="ed-del">Slet markering</button><button class="btn primary" type="button" id="ed-close">Luk</button></span></div>' +
     '<label class="f" for="ed-note">Note (valgfri)<input type="text" id="ed-note" placeholder="fx familien, ikke Edvard alene"></label>' +
@@ -640,6 +680,8 @@ function openEditor(entryId, annId) {
   const sel = $("#ed-reg", ed), info = $("#ed-info", ed);
   fillSelect(sel, a, e); info.textContent = regInfo(a);
   if (a.reg || a.ident) $(".opt", ed).open = true;
+  $("#ed-kind", ed).value = a.mkind || "";
+  $("#ed-kind", ed).addEventListener("change", ev => { a.mkind = ev.target.value; save(); });
   $("#ed-ident", ed).value = a.ident; $("#ed-note", ed).value = a.note; $("#ed-unsure", ed).checked = a.unsure;
   const touch = () => { save(); renderText(e); stats(); };
   ed.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
@@ -675,10 +717,10 @@ function stats() {
 function sortedAnn() { return state.ann.slice().sort((a, b) => a.entry < b.entry ? -1 : a.entry > b.entry ? 1 : a.start - b.start); }
 function clean(s) { return String(s).replace(/[\t\r\n]+/g, " "); }
 function tsv() {
-  const head = ["annotator", "post_id", "print_page", "start", "end", "string", "type", "reg_id", "reg_label", "identification_free", "unsure", "note", "source", "block", "text_version", "block_active_seconds", "origin", "model_p", "model_type", "edited"];
+  const head = ["annotator", "post_id", "print_page", "start", "end", "string", "type", "reg_id", "reg_label", "identification_free", "unsure", "note", "source", "block", "text_version", "block_active_seconds", "origin", "model_p", "model_type", "edited", "tier", "mention_kind"];
   const lines = [head.join("\t")];
   sortedAnn().forEach(a => { const e = byId[a.entry];
-    lines.push([state.annotator, a.entry, e.page, a.start, a.end, a.text, TYPES[a.type], a.reg, a.reg ? REG[a.reg].l : "", a.ident, a.unsure ? "ja" : "", a.note, e.src, e.block, e.tv, state.active[e.block] || 0, a.origin || "human", a.p === undefined ? "" : a.p, a.mtype ? TYPES[a.mtype] : "", a.edited ? "ja" : ""].map(clean).join("\t")); });
+    lines.push([state.annotator, a.entry, e.page, a.start, a.end, a.text, TYPES[a.type], a.reg, a.reg ? REG[a.reg].l : "", a.ident, a.unsure ? "ja" : "", a.note, e.src, e.block, e.tv, state.active[e.block] || 0, a.origin || "human", a.p === undefined ? "" : a.p, a.mtype ? TYPES[a.mtype] : "", a.edited ? "ja" : "", a.tier || "", a.mkind || ""].map(clean).join("\t")); });
   return lines.join("\n");
 }
 function json() {
@@ -690,8 +732,10 @@ function json() {
     reviewed_days: Object.keys(state.reviewed).sort(),
     annotations: sortedAnn().map(a => { const e = byId[a.entry];
       return { post_id: a.entry, source: e.src, block: e.block, print_page: e.page, start: a.start, end: a.end, string: a.text, type: TYPES[a.type], reg_id: a.reg, reg_label: a.reg ? REG[a.reg].l : "", identification_free: a.ident, unsure: a.unsure, note: a.note,
-        origin: a.origin || "human", model_p: a.p, model_type: a.mtype ? TYPES[a.mtype] : undefined, edited: a.origin === "model" ? !!a.edited : undefined }; }),
-    rejected_suggestions: MODE === "review" ? state.rejected.map(a => ({ post_id: a.entry, start: a.start, end: a.end, string: a.text, model_type: TYPES[a.mtype || a.type], model_p: a.p, reg_id: a.reg })) : undefined
+        origin: a.origin || "human", model_p: a.p, model_type: a.mtype ? TYPES[a.mtype] : undefined, edited: a.origin === "model" ? !!a.edited : undefined,
+        tier: a.tier, mention_kind: a.mkind || "", model_mention_kind: a.mk0 }; }),
+    rejected_suggestions: MODE === "review" ? state.rejected.map(a => ({ post_id: a.entry, start: a.start, end: a.end, string: a.text, model_type: TYPES[a.mtype || a.type], model_p: a.p, reg_id: a.reg, uncertain: !!a.uncertain })) : undefined,
+    uncertain_open: MODE === "review" ? state.unc.filter(u => !u.decision).length : undefined
   }, null, 1);
 }
 function setMsg(t, err) { const m = $("#msg"); m.textContent = t; m.classList.toggle("err", !!err); }
@@ -708,7 +752,7 @@ $("#annotator").value = state.annotator;
 let armed = false;
 $("#reset").addEventListener("click", ev => {
   if (!armed) { armed = true; ev.target.textContent = "Tryk igen for at slette alt"; setTimeout(() => { armed = false; ev.target.textContent = "Slet alle mine markeringer"; }, 4000); return; }
-  state.ann = []; state.reviewed = {}; state.active = {}; state.prefilled = false; state.rejected = []; prefill(); save(); armed = false; ev.target.textContent = "Slet alle mine markeringer";
+  state.ann = []; state.reviewed = {}; state.active = {}; state.prefilled = false; state.rejected = []; state.unc = []; prefill(); save(); armed = false; ev.target.textContent = "Slet alle mine markeringer";
   closeEditor(); ENTRIES.filter(e => !e.ctx).forEach(e => renderText(e)); document.querySelectorAll(".entry input[type=checkbox]").forEach(c => { c.checked = false; c.closest(".entry").classList.remove("done"); }); stats(); setMsg("Alle markeringer er slettet.");
 });
 

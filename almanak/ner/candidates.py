@@ -55,3 +55,32 @@ def generate(text):
             if _cap(toks[j][2]) and toks[j][2] != "0":
                 out.append((s, toks[j][1]))
     return out
+
+
+# ---- omtaleform (egennavn / omtale / pronomen) --------------------------------------------------
+ROLE_WORDS = {"kongen", "dronningen", "kronprindsen", "kronprindsessen", "prindsen", "prindsessen", "hertugen",
+              "fyrsten", "maleren", "faderen", "moderen", "verten", "ministeren", "digteren", "skuespilleren",
+              "konen", "manden", "damen", "svensken", "ridder", "familie", "familien"}
+RELATION_WORDS = {"datter", "søster", "søstre", "frue", "kone", "søn", "sønnerne", "børn", "barn", "svigersøn",
+                  "svigerfader", "fader", "moder", "broder", "enke"}
+PRONOUNS = {"han", "hun", "ham", "hende", "den", "det", "de", "dem", "sig", "sin", "sit", "hans", "hendes"}
+
+
+def mention_kind(span_text):
+    """'navn' hvis spændet indeholder et egennavn; 'omtale' hvis det er en rolle (»Kongen«, »Maleren«) eller en
+    relationel beskrivelse (»Lucien Bonapartes Datter«, »Fru O Neill og Sønnerne«); 'pronomen' hvis et pronomen.
+    Heuristik til forslag og til rapportering pr. type; en menneskelig angivelse går forud."""
+    toks = [t for t in re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ'’]+", span_text)]
+    f = [nm.fold(t) for t in toks]
+    if not f:
+        return "navn"
+    if len(f) == 1 and f[0] in PRONOUNS:
+        return "pronomen"
+    names = [t for t, x in zip(toks, f) if t[:1].isupper() and x not in nm.TITLES and x not in ROLE_WORDS
+             and x not in RELATION_WORDS and x not in {"af", "von", "van", "de"}]
+    if not names:
+        return "omtale"
+    if any(x in RELATION_WORDS for x in f[1:]) or (f[0] in ROLE_WORDS and f[0] not in nm.TITLES and len(f) > 1
+                                                 and nm.fold(names[0]) not in {"af"}):
+        return "omtale" if any(x in RELATION_WORDS for x in f[1:]) else "navn"
+    return "navn"

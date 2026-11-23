@@ -403,6 +403,36 @@ sletter, tilføjer og sætter flueben. Eksporten indeholder både de godkendte, 
 `almanak/ner/eval_review.py` kan måle præcision, recall, tid pr. blok og — når begge har gennemgået — enigheden mellem
 Søren og Ole (det første mål for annotatorenighed). Blokkene uden dagbog viser, om modellen klarer sig uden den.
 
+### 3.12 Egennavn og omtale — vi skal skelne, og i tre runder (2026-11-23)
+
+**Skellet.** *Navnegenkendelse* (NER) finder en *egennavnestreng* og giver den en type (»Jette Wulff«, »Setubal«).
+*Omtale* (mention) er enhver henvisning til en bestemt person, et sted eller et værk, også uden navn: rolle (»Kongen«,
+»Maleren«), slægtskab (»Lucien Bonapartes Datter«, »hans Kones Søster«) eller pronomen (»han«). Omtalen peger på en
+entitet, men strengen er ikke et navn, og den kan kun kobles til en registerpost via konteksten.
+
+**Status.** Indtil nu er begge dele markeret under samme type (regel: rolle alene = Person; titel medtages) uden at
+skelne dem, og modellen kobler kun via navneopslag. Af Sørens 328 personspans er 26 (8 %) omtaler uden egennavn
+(heuristik: `candidates.mention_kind`), og de driver recall for Person ned: de skal ikke måles sammen med egennavnene.
+Pronomener er aldrig markeret, og samme persons kortform (»Jette« → »Jette Wulff«) er ikke koblet (ingen coreference).
+
+**Rækkefølge (vedtaget):**
+1. *Runde 1, egennavne:* modellens sikre forslag (p ≥ 0,70) markeres i teksten; reviewer retter og tilføjer.
+2. *Runde 2, omtaler:* for hver dag vises de registerposter (almanakregistrets datohenvisninger), som ingen markering peger
+   på. Reviewer leder efter omtalen uden navn (»Kongen«, »Faderen«) og angiver *omtaleform* (egennavn / omtale uden navn / pronomen).
+3. *Runde 3, usikre:* strenge med 0,40 ≤ p < 0,70 **markeres ikke i teksten**, men står i en kø under posten; reviewer
+   skal vælge type eller »Ikke et navn« for hver, og dagen kan ikke afsluttes, før køen er tom. Så får usikre gæt ikke
+   status af facit ved at stå tilbage, og modellens usikre område bliver menneskelige afgørelser (de mest informative eksempler).
+
+**Hvad det kostede at måle.** I krydsvalideringen (`model.py tiers`) er præcisionen 77 % for de sikre forslag og 33 % for
+de usikre (p 0,4–0,7: 12 forslag, 4 rigtige); de usikre løfter kun recall fra 79 % til 82 %, så runde 3 er lille (ca. 1
+element pr. post, 39 i stikprøven) og lønner sig mest som kontrol. Båndet er en tærskelmodel over *spændets* sandsynlighed;
+usikkerhed om *typen* og om *koblingen* til registerposten er endnu ikke et eget lag.
+
+**Eksport og måling** (`almanak/ner/eval_review.py`): præcision og recall pr. lag (sikre/usikre), pr. omtaleform og
+pr. blok; afviste og tildelte usikre forslag gemmes. **Senere:** modellen får selv omtaleformen som mål (i dag kun
+heuristik og menneskets valgfrie angivelse), og koblingen af omtaler (»Kongen« → Christian VIII) behandles som en
+egen opgave, ikke som navneopslag.
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i

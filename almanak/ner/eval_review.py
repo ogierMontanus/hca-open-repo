@@ -2,13 +2,14 @@
 """
 eval_review.py — mål modellen på en returneret gennemsyns-eksport (build_review_page.py).
 
-For hver gennemgået almanakpost:
-  godkendt         forslag står uændret tilbage
-  type rettet      forslag står tilbage med anden type
-  slettet          forslag slettet (ikke et navn, eller forkert afgrænsning)
-  tilføjet         menneskets egne markeringer = det, modellen overså
-Præcision = godkendt / forslag; typet præcision = godkendt uden typeskift / forslag;
-recall = (godkendt + type rettet) / (godkendt + type rettet + tilføjet).
+For hver gennemgået almanakpost, adskilt i sikre forslag (runde 1, markeret i teksten) og usikre (runde 3, tildelt fra en kø):
+  godkendt         forslag står uændret tilbage / tildelt med modellens type
+  type rettet      forslag står tilbage / tildelt med anden type
+  slettet / afvist forslag slettet eller afvist (ikke et navn, eller forkert afgrænsning)
+  tilføjet         menneskets egne markeringer (runde 1–2) = det, modellen overså
+Præcision (sikre) = (godkendt + type rettet) / forslag; typet præcision = godkendt / forslag;
+recall = fundet af modellen / (fundet + tilføjet), også med de usikre medregnet.
+pr_omtaleform: samme tælling opdelt i egennavn / omtale / pronomen (menneskets angivelse, ellers heuristikken).
 Med to eksporter (Søren og Ole) måles også enighed om de endelige spænd (exact-F1 mellem dem).
 
   python almanak/ner/eval_review.py soren.json [ole.json]
@@ -29,25 +30,43 @@ def load(path):
     return j, reviewed, ann, rej
 
 
+def kind_of(a):
+    """Menneskets angivelse af omtaleform, ellers heuristikken (candidates.mention_kind)."""
+    import candidates
+    return a.get("mention_kind") or candidates.mention_kind(a["string"])
+
+
 def measure(path):
     j, reviewed, ann, rej = load(path)
     c = collections.Counter()
+    kinds = collections.defaultdict(collections.Counter)
     by_block = collections.defaultdict(collections.Counter)
     for a in ann:
         blk = a.get("block", "?")
         if a.get("origin") == "model":
-            k = "godkendt" if a["type"] == a.get("model_type") else "type rettet"
+            tier = "usikre" if a.get("tier") == "usikker" else "sikre"
+            k = f"{tier}: godkendt" if a["type"] == a.get("model_type") else f"{tier}: type rettet"
+            found = True
         else:
-            k = "tilføjet"
+            k, found = "tilføjet", False
         c[k] += 1; by_block[blk][k] += 1
+        kinds[kind_of(a)]["fundet af modellen" if found else "tilføjet"] += 1
     for r in rej:
-        c["slettet"] += 1
-    sug = c["godkendt"] + c["type rettet"] + c["slettet"]
-    found = c["godkendt"] + c["type rettet"]
-    res = dict(annotator=j["meta"].get("annotator"), dage=len(reviewed), **c,
-               praecision=round(found / sug, 3) if sug else None,
-               typet_praecision=round(c["godkendt"] / sug, 3) if sug else None,
-               recall=round(found / (found + c["tilføjet"]), 3) if found + c["tilføjet"] else None,
+        c["usikre: afvist" if r.get("uncertain") else "sikre: slettet"] += 1
+
+    def rate(num, den):
+        return round(num / den, 3) if den else None
+    ok_s = c["sikre: godkendt"] + c["sikre: type rettet"]
+    ok_u = c["usikre: godkendt"] + c["usikre: type rettet"]
+    n_s, n_u = ok_s + c["sikre: slettet"], ok_u + c["usikre: afvist"]
+    res = dict(annotator=j["meta"].get("annotator"), dage=len(reviewed), uafgjorte_usikre=j.get("uncertain_open"),
+               tællinger=dict(sorted(c.items())),
+               sikre_forslag=dict(n=n_s, praecision=rate(ok_s, n_s), typet_praecision=rate(c["sikre: godkendt"], n_s)),
+               usikre_forslag=dict(n=n_u, andel_der_var_navne=rate(ok_u, n_u)),
+               recall_sikre=rate(ok_s, ok_s + c["tilføjet"]), recall_med_usikre=rate(ok_s + ok_u, ok_s + ok_u + c["tilføjet"]),
+               pr_omtaleform={k: {"fundet af modellen": v["fundet af modellen"], "tilføjet": v["tilføjet"],
+                                  "recall": rate(v["fundet af modellen"], v["fundet af modellen"] + v["tilføjet"])}
+                              for k, v in sorted(kinds.items())},
                aktiv_tid_min={k: round(v / 60) for k, v in j["meta"].get("active_seconds_by_block", {}).items()},
                pr_blok={b: dict(v) for b, v in sorted(by_block.items())})
     return res, {(a["post_id"], a["start"], a["end"]): a["type"] for a in ann}, reviewed

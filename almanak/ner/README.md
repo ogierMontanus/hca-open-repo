@@ -14,7 +14,7 @@ almanakposterne og foreslår en registerpost. Baggrund, målinger og forbehold:
 | `model.py` | `eval` (blokvis krydsvalidering + to grundlinjer + bootstrap-interval), `ablate` (bidrag fra dagbog og registre), `train` |
 | `predict.py` | `all`: annotér alle almanakposter, kobl til registerpost, mål dækning af almanakregistret |
 | `build_review_page.py` | gennemsynsside med maskinforslag til en ny stikprøve (blok E–H) |
-| `eval_review.py` | mål modellen på en returneret gennemsyns-eksport; enighed mellem to gennemsyn |
+| `eval_review.py` | mål modellen på en returneret gennemsyns-eksport pr. lag (sikre/usikre) og omtaleform; enighed mellem to gennemsyn |
 
 Kør (PowerShell, fra repo-roden; kræver `numpy` og `scikit-learn`):
 
@@ -23,6 +23,7 @@ python scripts/parsers/ner_page_grounding.py          # dagbogens regelforankrin
 python almanak/ner/eval_grounding.py data/normalized/ner_page_grounding.csv
 python almanak/ner/model.py eval
 python almanak/ner/model.py ablate
+python almanak/ner/model.py tiers                     # sikre vs usikre forslag, bestemmer båndet i gennemsynssiden
 python almanak/ner/model.py train
 python almanak/ner/predict.py all
 python almanak/ner/build_review_page.py --out mockup/almanak-gennemsyn.html
@@ -36,3 +37,7 @@ sorterede opslag), uanset `PYTHONHASHSEED`.
 **Modelvalg.** Logistisk regression på ~80 håndlavede træk (scikit-learn), trænet på begge kilder.
 Gradient boosting blev afprøvet og var ikke bedre inden for usikkerheden. Ingen ekstern tjeneste
 eller sprogmodel; teksten forlader ikke maskinen.
+
+**Egennavn og omtale.** Gennemsynssiden arbejder i tre runder (egennavne → omtaler af endnu ikke dækkede registerposter →
+usikre forslag, som ikke markeres, men tildeles fra en kø) og har et valgfrit felt *Omtaleform*. Se
+[`docs/plan-streng-grounding.md`](../../docs/plan-streng-grounding.md) §3.12.

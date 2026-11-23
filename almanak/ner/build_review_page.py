@@ -41,18 +41,21 @@ REVIEW_BLOCKS = [
 ]
 SAMPLE_ID = "review-2026-11-E-H"
 
-GUIDE = """<div class="modelnote"><b>Gennemsyn af maskinforslag.</b> Denne gang er teksten <i>allerede markeret</i> af en lille
-model, der er trænet på Sørens markeringer fra 1841–66. Forslagene har stiplet ramme; hold musen over et forslag for at se
-modellens sikkerhed og den registerpost, den foreslår.
+GUIDE = """<div class="modelnote"><b>Gennemsyn af maskinforslag i tre runder.</b> Teksten er <i>allerede markeret</i> af en lille
+model, trænet på Sørens markeringer fra 1841–66. <b>Kun almanakposten markeres.</b> Dagbogen samme dag kan foldes ud som hjælp (blok F og H).
 <ol class="steps" style="margin-top:6px">
-<li><b>Kun almanakposten markeres.</b> Dagbogen samme dag kan foldes ud som hjælp (blok F og H); i blok E og G findes ingen dagbog.</li>
-<li><b>Forkert type:</b> klik på forslaget og vælg den rigtige. <b>Ikke et navn:</b> klik og «Slet markering». <b>Forkert afgrænsning</b>
-(for meget eller for lidt med): slet forslaget og markér strengen selv.</li>
-<li><b>Overset:</b> markér det selv, som før.</li>
-<li>Sæt flueben ved <b>Almanakposten gennemgået</b>. Forslag, der står tilbage på en gennemgået dag, regnes som godkendt.</li>
-<li>Registerposten er kun et forslag; ret den gerne, men det er valgfrit.</li>
+<li><b>Runde 1, egennavne.</b> Forslag med høj sikkerhed står stiplet i teksten. Ret typen (klik og vælg), slet det, der ikke er et navn,
+og markér selv det oversete. Er et forslag afgrænset forkert, så slet det og markér strengen selv.</li>
+<li><b>Runde 2, omtaler.</b> Under hver post står de registerposter for dagen, som endnu ingen markering peger på. Er de omtalt uden navn
+(«Kongen», «Faderen», «Lucien Bonapartes Datter»)? Markér omtalen, og vælg <i>Omtaleform</i> i markeringens redigering (egennavn / omtale uden navn / pronomen).
+Angivelsen er valgfri, men meget nyttig.</li>
+<li><b>Runde 3, usikre forslag.</b> Modellen er i tvivl om nogle strenge. De er <i>ikke</i> markeret i teksten, men står som en liste under posten.
+Vælg en type eller «Ikke et navn» for hver. Dagen kan først afsluttes, når listen er tom.</li>
+<li>Sæt flueben ved <b>Almanakposten gennemgået</b>. Forslag, der står tilbage, regnes som godkendt. Registerposten er kun et forslag; at rette den er valgfrit.</li>
 </ol>
 Søren og Ole gennemgår de samme poster hver for sig, så vi også kan se, hvor I er uenige. Siden måler aktiv tid pr. blok.</div>"""
+
+LOW = 0.4   # under dette: intet forslag; mellem LOW og modellens tærskel: »usikker« (runde 3); `model.py tiers`
 
 REVIEW_PAGE = dict(
     store="almanak-gennemsyn-maskinforslag-v1",
@@ -80,7 +83,8 @@ def main(argv=None):
         if e["src"] != "almanak":
             continue
         assert ctx.alm[e["date"]]["text"] == e["text"], e["id"]
-        for s in P.annotate(ctx, m, e["date"], e["text"]):
+        linked = set()
+        for s in P.annotate(ctx, m, e["date"], e["text"], low=LOW):
             rid = s["reg"]
             if rid and rid not in REG and rid in ents:
                 REG[rid] = bop.reg_entry(ents[rid], "", place_info)
@@ -88,15 +92,20 @@ def main(argv=None):
                 rid = ""
             k = P.TYPE_KEY[s["type"]]
             prefill.append(dict(entry=e["id"], start=s["start"], end=s["end"], text=s["text"], type=k, mtype=k,
-                                p=s["p"], reg=rid))
+                                p=s["p"], reg=rid, tier=s["tier"], mkind=s["mkind"]))
+            linked |= {rid} | set(s["link_candidates"])
+            stats[s["tier"]] = stats.get(s["tier"], 0) + 1
             stats["forslag"] += 1
             stats["med registerpost"] += bool(rid)
+        # runde 2: almanakregistrets poster for datoen, som ingen forslag peger på
+        e["um"] = [r for r in sorted(ctx.alm_by_date.get(e["date"], ())) if r not in linked and r in REG]
     html = bop.render(entries, REG, blocks, args.out, prefill=prefill, page=REVIEW_PAGE)
     P.M.OUT.mkdir(exist_ok=True)
     (P.M.OUT / "review_prefill.json").write_text(
         json.dumps({"sample": SAMPLE_ID, "blocks": blocks, "prefill": prefill}, ensure_ascii=False, indent=1), encoding="utf-8")
     n = sum(1 for e in entries if e["src"] == "almanak")
-    print(f"{n} almanakposter, {stats['forslag']} forslag ({stats['med registerpost']} med registerpost); "
+    print(f"{n} almanakposter, {stats['forslag']} forslag ({stats.get('sikker', 0)} sikre, {stats.get('usikker', 0)} usikre; "
+          f"{stats['med registerpost']} med registerpost); "
           f"{len(html) // 1024} KB -> {args.out}")
 
 

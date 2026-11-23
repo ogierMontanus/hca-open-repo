@@ -59,17 +59,24 @@ def link(ctx, date, span_text, typ, g_date=None, g_page=None):
     return "", "", []
 
 
-def annotate(ctx, m, date, text):
-    d = {"spans": [], "X": None}
+def annotate(ctx, m, date, text, low=None):
+    """Forslag i posten. low=None: kun sikre (p >= modellens tærskel). low=0.2: også usikre (tier='usikker'),
+    som ikke skal markeres i teksten, men tildeles i en tredje runde."""
+    import numpy as np
+    from candidates import mention_kind
     spans, X = F.featurize(ctx, date, "almanak", text)
-    d.update(spans=spans, X=X)
     out = []
+    if not len(spans):
+        return out
     g_date, g_page = ctx.alm_date_gazetteer(date), ctx.page_gazetteer(date)
-    for s, e, typ, p in m.predict(d):
-        rid, src, cands = link(ctx, date, text[s:e], typ, g_date, g_page)
-        out.append(dict(start=s, end=e, text=text[s:e], type=str(typ), p=round(p, 3), reg=rid, link_src=src,
-                        link_candidates=cands))
-    return out
+    p = m.m.predict_proba(X)[:, 1]
+    conf, unc = M.decode_tiers(spans, p, m.threshold, low if low is not None else 2.0, X, m.tm)
+    for tier, items in (("sikker", conf), ("usikker", unc)):
+        for s, e, typ, pr in items:
+            rid, src, cands = link(ctx, date, text[s:e], typ, g_date, g_page)
+            out.append(dict(start=s, end=e, text=text[s:e], type=str(typ), p=round(float(pr), 3), reg=rid, link_src=src,
+                            link_candidates=cands, tier=tier, mkind=mention_kind(text[s:e])))
+    return sorted(out, key=lambda x: x["start"])
 
 
 def cmd_all():

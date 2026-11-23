@@ -37,18 +37,28 @@ def test_score_counts_exact_typed_and_overlap():
     assert r["overlap"]["r"] == 1.0 and r["typed"]["p"] == round(1 / 3, 3)
 
 
-def test_eval_review_counts_accept_retype_reject_add(tmp_path):
-    exp = {"meta": {"annotator": "T", "active_seconds_by_block": {"E": 600}},
-           "reviewed_days": ["1838-09-26"],
-           "annotations": [
-               {"post_id": "ALM-1838-09-26", "source": "almanak", "block": "E", "start": 0, "end": 5, "type": "Person", "origin": "model", "model_type": "Person"},
-               {"post_id": "ALM-1838-09-26", "source": "almanak", "block": "E", "start": 9, "end": 14, "type": "Sted", "origin": "model", "model_type": "Person"},
-               {"post_id": "ALM-1838-09-26", "source": "almanak", "block": "E", "start": 20, "end": 24, "type": "Person", "origin": "human"},
-               {"post_id": "ALM-1838-09-27", "source": "almanak", "block": "E", "start": 0, "end": 3, "type": "Person", "origin": "model", "model_type": "Person"}],
-           "rejected_suggestions": [{"post_id": "ALM-1838-09-26", "start": 30, "end": 35}]}
+def test_mention_kind_heuristic():
+    for text, want in [("Jette Wulff", "navn"), ("Prof: Schlessinger", "navn"), ("Kongen", "omtale"), ("Maleren", "omtale"),
+                       ("Lucien Bonapartes Datter", "omtale"), ("Fru O Neill og Sønnerne", "omtale"), ("han", "pronomen")]:
+        assert C.mention_kind(text) == want, text
+
+
+def test_eval_review_tiers_and_mention_kind(tmp_path):
+    def a(s, e, typ, **kw):
+        return {"post_id": "ALM-1838-09-26", "source": "almanak", "block": "E", "start": s, "end": e, "string": "Kongen" if kw.pop("k", 0) else "Jette Wulff",
+                "type": typ, **kw}
+    exp = {"meta": {"annotator": "T", "active_seconds_by_block": {"E": 600}}, "reviewed_days": ["1838-09-26"],
+           "uncertain_open": 0,
+           "annotations": [a(0, 5, "Person", origin="model", model_type="Person", tier="sikker"),
+                           a(9, 14, "Sted", origin="model", model_type="Person", tier="sikker"),
+                           a(20, 24, "Person", origin="human", k=1, mention_kind="omtale"),
+                           a(30, 35, "Person", origin="model", model_type="Person", tier="usikker")],
+           "rejected_suggestions": [{"post_id": "ALM-1838-09-26", "start": 40, "end": 45},
+                                    {"post_id": "ALM-1838-09-26", "start": 50, "end": 55, "uncertain": True}]}
     p = tmp_path / "r.json"
     p.write_text(json.dumps(exp), encoding="utf-8")
     res, final, days = R.measure(p)
-    assert (res["godkendt"], res["type rettet"], res["slettet"], res["tilføjet"]) == (1, 1, 1, 1)
-    assert res["praecision"] == round(2 / 3, 3) and res["recall"] == round(2 / 3, 3)
-    assert len(final) == 3                                         # ugennemgået dag tælles ikke
+    assert res["sikre_forslag"] == {"n": 3, "praecision": round(2 / 3, 3), "typet_praecision": round(1 / 3, 3)}
+    assert res["usikre_forslag"] == {"n": 2, "andel_der_var_navne": 0.5}
+    assert res["recall_sikre"] == round(2 / 3, 3) and res["recall_med_usikre"] == 0.75
+    assert res["pr_omtaleform"]["omtale"] == {"fundet af modellen": 0, "tilføjet": 1, "recall": 0.0}

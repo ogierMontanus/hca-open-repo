@@ -1,0 +1,70 @@
+{
+ "0.2": {
+  "gold": 136,
+  "sikre": [
+   140,
+   108,
+   102
+  ],
+  "usikre": [
+   41,
+   6,
+   4
+  ],
+  "praecision_sikre": 0.771,
+  "praecision_usikre": 0.146,
+  "recall_sikre": 0.794,
+  "recall_alle": 0.838
+ },
+ "0.3": {
+  "gold": 136,
+  "sikre": [
+   140,
+   108,
+   102
+  ],
+  "usikre": [
+   24,
+   4,
+   3
+  ],
+  "praecision_sikre": 0.771,
+  "praecision_usikre": 0.167,
+  "recall_sikre": 0.794,
+  "recall_alle": 0.824
+ },
+ "0.4": {
+  "gold": 136,
+  "sikre": [
+   140,
+   108,
+   102
+  ],
+  "usikre": [
+   12,
+   4,
+   3
+  ],
+  "praecision_sikre": 0.771,
+  "praecision_usikre": 0.333,
+  "recall_sikre": 0.794,
+  "recall_alle": 0.824
+ },
+ "0.5": {
+  "gold": 136,
+  "sikre": [
+   140,
+   108,
+   102
+  ],
+  "usikre": [
+   5,
+   2,
+   2
+  ],
+  "praecision_sikre": 0.771,
+  "praecision_usikre": 0.4,
+  "recall_sikre": 0.794,
+  "recall_alle": 0.809
+ }
+}
