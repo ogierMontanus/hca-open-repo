@@ -18,9 +18,8 @@ Kilder:
                                        flere rækker (afsnit/sektioner);
                                        de sammenkædes i filens rækkefølge.
 
-VIGTIGT: diary.csv indeholder pt. kun transskriberet tekst for et
-mindretal af siderne i references.csv (751 af 4.549 sider ved
-seneste tælling). Kun referencerækker, hvor sidens tekst rent faktisk
+diary.csv dækkede først kun 751 sider (bind VI–VII); 2026-11 har den
+tekst for 4.412 af de 4.541 sider i references.csv (alle bind). Kun referencerækker, hvor sidens tekst rent faktisk
 findes i diary.csv, kan groundes — resten springes stiltiende over
 (rapporteret i opsummeringen, ikke skrevet som "no_match", da fravær
 af kildetekst er noget andet end et forgæves match-forsøg).
@@ -60,7 +59,15 @@ Kør:
     python scripts/parsers/ner_page_grounding.py
     python scripts/parsers/ner_page_grounding.py --min-conf 0.7
 
-Kun standardbiblioteket.
+Kun standardbiblioteket (+ name_matching.py i samme mappe).
+
+Revision 2026-11 (docs/plan-streng-grounding.md §3.11): søgningen sker i en
+løbende version af teksten (linjetags fjernet, orddeling samlet) via
+name_matching.py, med stavevarianter, krav om stort begyndelsesbogstav,
+fuldt navn kun ved nabostilling, én-tegns-varianter og titel medtaget.
+Offsets skrives stadig i sidens rå tekst. Metoderne hedder nu
+full_name, surname_only, surname_variant, given_name_only, place_label,
+place_variant, place_first_word, no_match, cross_reference_unresolved.
 """
 
 from __future__ import annotations
@@ -72,6 +79,9 @@ import re
 import sys
 from collections import defaultdict
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import name_matching as nm  # noqa: E402
+
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 REFERENCES = os.path.join(ROOT, "data", "normalized", "references.csv")
 ENTITIES = os.path.join(ROOT, "data", "normalized", "entities.csv")
@@ -82,112 +92,78 @@ OUT_REVIEW = os.path.join(ROOT, "data", "normalized", "ner_page_grounding_review
 
 IN_SCOPE_TYPES = {"person", "place"}
 
-WORDCHAR = r"A-Za-zÀ-ÖØ-öø-ÿ"
-FULL_NAME_PROXIMITY = 80  # max chars between surname and given-name hit to merge
 MAX_MENTIONS_PER_ENTITY_DEFAULT = 5
-MIN_TOKEN_LEN = 3  # given-name/surname tokens shorter than this are too weak alone
-
-TRAILING_YEARS = re.compile(r"\s*\([^)]*\)\s*$")
+FULL_NAME_GAP = re.compile(r"^(?:\s+|\s*[A-ZÆØÅ][a-zæøå]*\.?\s*){0,2}$")  # fornavn [mellemnavn/initial] efternavn
 CROSS_REF = re.compile(r",?\s*se:\s*", re.IGNORECASE)
 
 
-def strip_years(label: str) -> str:
-    return TRAILING_YEARS.sub("", label).strip()
+REJECT: set[str] = set()   # sættes i main(): korpusnavneord (»en Billet«)
 
 
-def word_pattern(form: str) -> "re.Pattern[str]":
-    return re.compile(
-        rf"(?<![{WORDCHAR}]){re.escape(form)}(?![{WORDCHAR}])",
-        re.IGNORECASE,
-    )
+def candidate_mentions(entity_id: str, entity_label: str, entity_type: str, view: nm.TextView):
+    """Yield (start, end, confidence, method) i view-koordinater (løbende tekst).
 
-
-def person_search_forms(label: str) -> tuple[str | None, str | None]:
-    """Return (surname, given_first) search forms for a person label."""
-    core = strip_years(label)
-    if "," not in core:
-        surname = core.strip()
-        return (surname if len(surname) >= MIN_TOKEN_LEN else None, None)
-    surname, rest = core.split(",", 1)
-    surname = surname.strip()
-    given_tokens = [t for t in re.split(r"[\s.]+", rest.strip()) if t]
-    given_first = given_tokens[0] if given_tokens else None
-    if given_first and (len(given_first) < MIN_TOKEN_LEN or not given_first.isalpha()):
-        given_first = None
-    if len(surname) < MIN_TOKEN_LEN:
-        surname = None
-    return surname, given_first
-
-
-def place_search_forms(label: str) -> tuple[str, str | None]:
-    core = strip_years(label)
-    words = core.split()
-    fallback = words[0] if len(words) > 1 and len(words[0]) >= MIN_TOKEN_LEN else None
-    return core, fallback
-
-
-def find_all(pattern: "re.Pattern[str]", text: str) -> list[tuple[int, int]]:
-    return [(m.start(), m.end()) for m in pattern.finditer(text)]
-
-
-def candidate_mentions(entity_id: str, entity_label: str, entity_type: str, text: str):
-    """Yield (start, end, mention_text, confidence, method) candidates."""
-    if CROSS_REF.search(entity_label):
-        yield None, None, "", 0.0, "cross_reference_unresolved"
+    Regler (rev. 2026-11, docs/plan-streng-grounding.md §3.10–3.11):
+      * stavevarianter aa/å, kj/k/c, w/v, ph/f, th/t, ö/ø, accenter, O’Neill/O Neill, genitiv-s
+      * navnet skal stå med stort begyndelsesbogstav (»hans« er ikke fornavnet Hans)
+      * fuldt navn kun når fornavn og efternavn står ved siden af hinanden (højst en initial imellem)
+      * én tegnforskel (Brun/Bruun) for navne ≥ 5 bogstaver, lavere sikkerhed
+      * titel/rolle lige foran medtages i spændet
+    """
+    if CROSS_REF.search(entity_label) and entity_type == "person" and "," not in entity_label.split("se:")[0]:
+        yield None, None, 0.0, "cross_reference_unresolved"
         return
-
     if entity_type == "person":
-        surname, given = person_search_forms(entity_label)
-        surname_hits = find_all(word_pattern(surname), text) if surname else []
-        given_hits = find_all(word_pattern(given), text) if given else []
-
-        used_given = set()
-        for s, e in surname_hits:
-            best_given = None
-            for gi, (gs, ge) in enumerate(given_hits):
-                if gi in used_given:
-                    continue
-                if abs(gs - s) <= FULL_NAME_PROXIMITY or abs(ge - e) <= FULL_NAME_PROXIMITY:
-                    best_given = gi
-                    break
-            if best_given is not None:
-                used_given.add(best_given)
-                gs, ge = given_hits[best_given]
-                span = (min(s, gs), max(e, ge))
-                yield span[0], span[1], text[span[0]:span[1]], 0.90, "full_name_proximity"
+        surnames, given = nm.person_forms(entity_label)
+        s_hits = sorted({h for f in surnames for h in nm.find(view, f)})
+        g_hits = sorted({h for f in given for h in nm.find(view, f)})
+        used = set()
+        for s, e in s_hits:
+            full = None
+            for gi, (gs, ge) in enumerate(g_hits):
+                if gi not in used and ge <= s and FULL_NAME_GAP.match(view.text[ge:s]):
+                    full = gi
+            if full is not None:
+                used.add(full)
+                yield g_hits[full][0], e, 0.90, "full_name"
             else:
-                conf = 0.55 if len(surname) > 5 else 0.45
-                yield s, e, text[s:e], conf, "surname_only"
-
-        for gi, (gs, ge) in enumerate(given_hits):
-            if gi in used_given:
-                continue
-            yield gs, ge, text[gs:ge], 0.30, "given_name_only"
-
-        if not surname_hits and not given_hits:
-            return
+                yield s, e, (0.55 if len(surnames[0]) > 5 else 0.45), "surname_only"
+        for gi, (gs, ge) in enumerate(g_hits):
+            if gi not in used:
+                yield gs, ge, 0.30, "given_name_only"
+        if not s_hits:
+            for f in surnames:
+                for s, e in nm.fuzzy_find(view, f, exclude=g_hits, reject=REJECT):
+                    yield s, e, 0.35, "surname_variant"
     elif entity_type == "place":
-        full, fallback = place_search_forms(entity_label)
-        full_hits = find_all(word_pattern(full), text)
-        for s, e in full_hits:
-            yield s, e, text[s:e], 0.85, "place_full_label"
-        if not full_hits and fallback:
-            for s, e in find_all(word_pattern(fallback), text):
-                yield s, e, text[s:e], 0.50, "place_first_word"
+        forms, fallback = nm.place_forms(entity_label)
+        hits = sorted({h for f in forms for h in nm.find(view, f)})
+        for s, e in hits:
+            yield s, e, 0.85, "place_label"
+        if not hits:
+            fz = sorted({h for f in forms for h in nm.fuzzy_find(view, f, reject=REJECT)})
+            for s, e in fz:
+                yield s, e, 0.45, "place_variant"
+            if not fz and fallback:
+                for s, e in nm.find(view, fallback):
+                    yield s, e, 0.50, "place_first_word"
 
 
 def ground_page(entities_on_page: list[dict], text: str, max_mentions: int) -> list[dict]:
-    """entities_on_page: list of {entity_id, entity_label, entity_type, ref_page_id}."""
+    """entities_on_page: list of {entity_id, entity_label, entity_type, ref_page_id}.
+    start/end i resultatet er offsets i sidens rå `text` (linjetags medregnet)."""
+    view = nm.TextView(text)
     raw = []
     for ent in entities_on_page:
-        for start, end, mention, conf, method in candidate_mentions(
-            ent["entity_id"], ent["entity_label"], ent["entity_type"], text
+        for start, end, conf, method in candidate_mentions(
+            ent["entity_id"], ent["entity_label"], ent["entity_type"], view
         ):
-            raw.append({**ent, "start": start, "end": end, "mention": mention,
-                        "confidence": conf, "method": method})
+            if start is not None and ent["entity_type"] == "person":
+                start = nm.extend_title(view, start)
+            raw.append({**ent, "start": start, "end": end, "confidence": conf, "method": method})
 
     matched = [r for r in raw if r["start"] is not None]
-    unmatched_special = [r for r in raw if r["start"] is None]  # cross-reference etc.
+    unmatched_special = [r for r in raw if r["start"] is None]
 
     matched.sort(key=lambda r: (-r["confidence"], -(r["end"] - r["start"])))
     consumed: list[tuple[int, int]] = []
@@ -205,11 +181,13 @@ def ground_page(entities_on_page: list[dict], text: str, max_mentions: int) -> l
     for ent in entities_on_page:
         rows = accepted_by_entity.get(ent["entity_id"], [])
         if rows:
-            out.extend(rows)
+            for r in sorted(rows, key=lambda r: r["start"]):
+                rs, re_ = view.raw_span(r["start"], r["end"])
+                out.append({**r, "start": rs, "end": re_, "mention": text[rs:re_]})
             continue
         special = [r for r in unmatched_special if r["entity_id"] == ent["entity_id"]]
         if special:
-            out.append(special[0])
+            out.append({**special[0], "mention": ""})
         else:
             out.append({**ent, "start": None, "end": None, "mention": "",
                         "confidence": 0.0, "method": "no_match"})
@@ -265,6 +243,11 @@ def main():
     entity_types = load_entity_types()
     refs_by_page = load_references_by_page(entity_types)
     diary_text_by_page = load_diary_text_by_page()
+
+    # Kun korpusnavneord afvises som varianter. Andre registrerede navne afvises IKKE: registret knytter
+    # netop denne entitet til siden, så »Block« på en side med Bloch, Carl er sandsynligvis Bloch
+    # (afprøvet 2026-11: at afvise kendte navne kostede flere rigtige end forkerte fund).
+    REJECT.update(nm.corpus_nouns(diary_text_by_page.values()))
 
     groundable_pages = [k for k in refs_by_page if k in diary_text_by_page]
     ungroundable_ref_rows = sum(
