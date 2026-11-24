@@ -107,6 +107,7 @@ med lighedsmål og side), `date_discrepancies.csv`, `letter_direction.csv`,
   **Registertegnet »÷« (2026-11-24):** person: ikke i Dagbøger XI / ikke identificeret (`not_in_xi`); værk: ikke i Birger Frank Nielsens
   bibliografi (`not_in_bfn`). OCR læser det som «4-», «-r», «+», «-5-» … eller taber det, så det aflæses i billedet
   (`scripts/register_glyphs.py` → `data/register/register_divsign.csv`): 369 personer (tekstlaget: 341) og 50 værker (tekstlaget: 2).
+  Personerne skelnes i `xi_status`: `i_xi` 1.653, `ikke_i_xi` 263 (levetid eller fornavn, `xi_basis`), `uidentificeret` 106.
   Se `docs/registertegn.md`, også for planen for samkøringen med Dagbøgernes register og de 719 årstal, OCR har forvekslet inden for gyldige år.
 * `annotation/build_annotation_page.py` bygger annotationssiden (s. 35–36) med registerkandidater pr. dag
   (henvisning til datoen, evt. bekræftet af navnet i teksten) og rulleliste + fritekst i redigeringen af en markering.

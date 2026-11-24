@@ -17,8 +17,17 @@ fortæller altså, om et almanakopslag *skal* have et modstykke i vores register
 
 Placering: i personregistret står »÷.« lige før henvisningerne (»Moltke, grevinde. ÷. *1845* 21.7.«). I værkregistret
 står det oftest *efter* henvisningerne (»Sang til Bregentved. *1845* 18.9. ÷«), og ét opslag har det foran flere
-årstalsgrupper (»Til Jonas Collin«, 4 gange). Værkregistret har desuden et ægte »+« (»+ Bagsiden af Februar«,
-»+ Bag i almanakken«, ved linjeslut), som ikke er divisionstegnet; dets betydning er ikke forklaret i udgaven.
+årstalsgrupper (»Til Jonas Collin«, 4 gange); vi antager, at tegnet dækker alle titler i opslaget (beslutning 2026-11-24).
+
+**Det ægte »+«** (kun i værkregistret, 9 steder; ikke forklaret i udgaven) står *altid* foran en henvisning uden dato —
+»Bagsiden af <måned>« eller »Bag i almanakken« — og knytter den til den foregående årstalsgruppe: »*1860* 16.11.
++ Bagsiden af Februar« = i almanakken for 1860 dels 16.11., dels bagsiden af februarbladet. Hvor stedet står lige
+efter et årstal, er der intet »+« (»*1845* Bag i almanakken«). »+« betyder altså »samt, i samme årgang«. De 9 steder:
+Fjerde Samling (1859, »+ Bagsiden af October og December«), Bispen paa Børglum (1860, februar), Nytaarsmorgen
+(1860, februar), Lidén Kirsten (1859, »+ Bagsiden af Maj og N…«), en titel på s. 348 (1845, bag i almanakken), Nøkken (1845),
+en oversættelsesliste på s. 349 (1860), Improvisatoren (1845) og Bertel Thorvaldsen (1845). Parseren gør det samme:
+stedhenvisningen arver årstallet fra gruppen foran (`kind` = `bagside`/`bag`). OCR læser det som »+« eller »-I-«; det er
+ikke divisionstegnet og påvirker ikke `not_in_bfn`.
 
 ## 2. Hvad OCR'en har gjort ved tegnet
 
@@ -72,6 +81,17 @@ fjernes nu fra `description`/`label` (305 beskrivelser og 10 etiketter blev rene
 | uden ÷ (står i Dagbøger XI) | 999 | 393 |
 | med ÷ (ikke i XI, eller ikke identificeret) | 73 | 296 |
 
+**»Ikke i XI« og »ikke identificeret« skelnes** (beslutning 2026-11-24) i kolonnerne `xi_status` og `xi_basis`:
+
+| `xi_status` | regel | antal |
+|---|---|---:|
+| `i_xi` | intet ÷ | 1.653 |
+| `ikke_i_xi` | ÷ og identificeret: levetid/dødsår i parentes (`xi_basis` = `levetid`, 217) eller et fornavn/initial efter efternavnet, ikke en titel eller rolle (`fornavn`, 46: »Balling, Jonathan«, »Palm, A.«) | 263 |
+| `uidentificeret` | ÷ uden noget af det: »Blome, frøken«, »Schmidt, grosserer«, »Wulff, »Kunstnerne W.«« | 106 |
+
+Reglen er en tolkning af udgavens »eller ikke er identificeret«; grænsetilfælde som »Poulsen, brygger (død 1838)«
+(identificeret via dødsår) og »Meyer, A., Glücksborg« (via initial) står på `xi_basis`, så de kan sorteres.
+
 ## 4. Fund ved den optiske kontrol: årstallene er også fejllæst — og ikke kun, hvor året er umuligt
 
 Henvisningernes årstal står i *kursiv med gammeldags tal*, hvor 3, 5 og 9 går under linjen og ligner hinanden.
@@ -98,8 +118,8 @@ Målet er en kobling `ALMP… → Reg…` (personer) og `ALMW… → værk` (væ
 |---|---|---|
 | uden ÷, uden oplysninger (999) | *skal* have netop én `Reg` i XI; navnet er nøglen («For navne uden oplysninger henvises til …») | efternavn + fornavne mod XI-etiketten; **datosammenfald**: personen står i XI på den dagbogsside, der dækker almanakdatoen |
 | uden ÷, med oplysninger (393) | *skal* have én `Reg`; oplysningerne (levetid, titel, slægtskab) skærper | som ovenfor + levetid mod XI |
-| med ÷, med oplysninger (296) | *må ikke* kobles til `Reg`; ny person med eget id (`ALMP…`); Wikidata/VIAF efter skill `wikidata-verify` | — |
-| med ÷, uden oplysninger (73) | uidentificeret; intet id ud over `ALMP…` | — |
+| `ikke_i_xi` (263) | *må ikke* kobles til `Reg`; ny person med eget id (`ALMP…`); Wikidata/VIAF efter skill `wikidata-verify` | — |
+| `uidentificeret` (106) | ingen identitet; intet id ud over `ALMP…`; kan senere identificeres (crowdsourcing) | — |
 
 - **Kontrol af koblingen:** et ÷-opslag, som matcheren alligevel vil koble til en `Reg`, er en fejl i matcheren —
   eller en navnebror, Topsøe-Jensen har skilt fra. Det samme gælder et opslag *uden* ÷, som ikke får en `Reg`: OCR i
@@ -116,14 +136,11 @@ Målet er en kobling `ALMP… → Reg…` (personer) og `ALMW… → værk` (væ
 ### 5.2 Værker
 
 - Uden ÷ (283): titlen findes hos Birger Frank Nielsen (BFN) → koble til værkets BFN-nummer/vores værkpost på titel.
-- Med ÷ (50): ikke i BFN; titlen beholdes som egen post. Tegnet efter enkelte årstalsgrupper (»Til Jonas Collin«)
-  tyder på, at tegnet kan gælde *det enkelte digt*, ikke opslaget; derfor gemmes antal tegn i `register_divsign.csv`,
-  og opslag med flere tegn gennemses i hånden.
-- Det ægte »+« i værkregistret skal have en forklaring, før det bruges.
+- Med ÷ (50): ikke i BFN; titlen beholdes som egen post. Står tegnet flere gange i et opslag (»Til Jonas Collin«),
+  gælder det alle titler i opslaget.
+- Det ægte »+« (§1) er en stedhenvisning i samme årgang og bruges som henvisning, ikke som tegn.
 
 ### 5.3 Åbne spørgsmål
 
-1. Skelner vi i data mellem »ikke i XI« og »ikke identificeret« for ÷-personer? Udgaven gør ikke; et forslag er
-   *identificeret* = levetid eller fuldt navn med stilling, ellers *uidentificeret*.
-2. Skal ÷-personer med oplysninger have `Reg`-lignende id'er i hovedregistret eller blive i `ALMP…`-rummet?
-3. Rækkefølge: genlæsning af årstal (§4) før samkøringen anbefales.
+1. Skal ÷-personer med oplysninger have `Reg`-lignende id'er i hovedregistret eller blive i `ALMP…`-rummet?
+2. Rækkefølge: genlæsning af årstal (§4) før samkøringen anbefales.

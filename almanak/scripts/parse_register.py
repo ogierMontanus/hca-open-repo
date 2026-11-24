@@ -338,6 +338,33 @@ def label_of(head):
     return h.strip(" ,.;")
 
 
+TITLES = {"fru", "frue", "frøken", "frøknerne", "jomfru", "mad", "madame", "mme", "mlle", "demoiselle", "hr", "herr", "dr",
+          "prof", "professor", "baron", "baronesse", "greve", "grevinde", "general", "kaptajn", "pastor", "mr", "mrs", "miss",
+          "monsieur", "signor", "signora", "fräulein", "frau", "en", "familien", "brødrene", "søstrene", "sen", "jun"}
+LIFE = re.compile(r"\((?:[^()]*?)(?:1[5-9]\d\d|død|f\.\s*1[5-9]\d\d)[^()]*\)|\(død[^)]*\)")
+
+
+def identification(head, label):
+    """-> 'levetid' | 'fornavn' | '' — hvad der gør en person identificeret ud over efternavnet.
+    'levetid': levetid eller dødsår i parentes; 'fornavn': et fornavn eller initial efter efternavnet
+    (»Balling, Jonathan«, »Palm, A.«), ikke en titel eller rolle (»Blome, frøken«, »Walte, tysk maler«)."""
+    if LIFE.search(head):
+        return "levetid"
+    rest = label.split(",", 1)[1].strip() if "," in label else ""
+    tok = re.match(r"([A-ZÆØÅÄÖÜÉ][\wæøåäöüéèçñ\-]*\.?)", rest)
+    if tok and tok.group(1).rstrip(".").lower() not in TITLES:
+        return "fornavn"
+    return ""
+
+
+def xi_status(sign, head, label):
+    """Personregistrets »÷« skelnes: i_xi (intet tegn), ikke_i_xi (tegn, men identificeret), uidentificeret."""
+    if not sign:
+        return "i_xi", ""
+    basis = identification(head, label)
+    return ("ikke_i_xi" if basis else "uidentificeret"), basis
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--pdf", type=Path, default=os.environ.get("HCA_ALMANAK_PDF"))
@@ -370,6 +397,8 @@ def main() -> int:
             m2 = re.search(r"\((?:ca\.\s*)?(\d{4})\s*[-–—]\s*(\d{4})\)", head)
             rid = f"{prefix}{i:04d}"
             flag = {"not_in_xi" if kind == "person" else "not_in_bfn": int(sign), "divsign_ocr": int(sign_ocr)}
+            if kind == "person":
+                flag["xi_status"], flag["xi_basis"] = xi_status(sign, head, label_of(head))
             row = dict(reg_id=rid, label=label_of(head), description=head, see=see, **flag,
                        birth=m2.group(1) if m2 else "", death=m2.group(2) if m2 else "",
                        n_refs=len(refs), pdf_page=pg, print_page=pg - PAGE_OFFSET, raw=text)

@@ -113,3 +113,13 @@ def test_divsign_is_assigned_by_line_height_not_x():
                    (130.0, 130.0, 135.0, 134.5)]}                        # alene på en linje under opslag 2 -> opslag 2
     counts, orphans = rg.assign(signs, entries)
     assert counts == [0, 2, 1] and orphans == []
+
+
+def test_xi_status_separates_not_in_xi_from_unidentified():
+    cases = {"Balling, Jonathan, fra Norge, (død 1846)": ("ikke_i_xi", "levetid"),
+             "Palm, A., f. Liedberg (i Lund), enkefrue": ("ikke_i_xi", "fornavn"),
+             "Blome, frøken": ("uidentificeret", ""), "Walte, tysk maler": ("uidentificeret", ""),
+             "Spåth, Mad., København": ("uidentificeret", ""), "Ginnerups": ("uidentificeret", "")}
+    for head, want in cases.items():
+        assert pr.xi_status(True, head, pr.label_of(head)) == want, head
+    assert pr.xi_status(False, "Blome, frøken", "Blome, frøken") == ("i_xi", "")
