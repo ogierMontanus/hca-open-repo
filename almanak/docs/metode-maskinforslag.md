@@ -59,6 +59,28 @@ værket *En Comedie i det Grønne* omtalt som »Skuespilleren mod sin Villie«, 
 Seks af de elleve tilføjelser foreslås nu (som usikre). I hele almanakken stiger andelen af registrets personhenvisninger,
 som et forslag kobler til, fra 0,67 til 0,71.
 
+## Titel + af + stednavn er en person (omtale)
+
+»Hertuginden af Augustenborg«, »Arvehertugen af Weimar«, »Dronningen af Bayern«, »Prindsessen af Preusen« omtaler én bestemt
+person; stednavnet i dem er ikke et sted i teksten. Reglen (`almanak/ner/titles.py`) samler strengen til ét spænd af typen
+Person og omtaleformen *omtale*, markerer det som sikkert, og fjerner de spænd, modellen ellers ville foreslå inde i det
+(»Augustenborg« som sted, »Hertuginden« alene).
+
+- **Titellisten er udledt, ikke gættet** (`almanak/ner/build_titles.py` → `data/ruler_titles.tsv`, 67 former af 26 grundtitler).
+  Kilde 1 er personregistret til Dagbøgerne: etiketterne har formen »Berri, Louise, Prinsesse af – (1819–1864)«, og titlen er
+  ordet foran »af«, kun for poster med rollen *Adel/Kongelig/Hof* i søjlen `roller` (1.528 af 10.228 personer). En titel optages,
+  hvis mindst to sådanne personer har den, og de er i overtal; derfor falder »Søn af«, »Datter af«, »Plejedatter af« og fornavnet
+  »Jarl« fra. Kilde 2 er Sørens markeringer (»Prindsessen af Preusen«, »Hertugen af Weimar«, »Dronningen af Sardinien«); »Statue af
+  Æsop« blev ikke optaget. Bøjede former og tidens stavemåder (*prinds*, *keiser*) tilføjes mekanisk; syv håndholdte
+  (*Arvehertug*, *Erkehertug*, *Kong* …) står i skriptet.
+- Mønsteret er `Titel [1–2 egennavne eller romertal] af Stednavn`, så »Dronning Victoria af Storbritannien« og »Kong Christian IX af
+  Danmark« samles også.
+- **Måling** (krydsvalidering, grænser 0,75/0,6): alle 9 herskerspænd i Sørens markeringer rammes eksakt og med typen Person. Sikre
+  forslag i almanakken: præcision 0,90 → 0,93, recall 0,71 → 0,73; i dagbogen 0,76 → 0,78 og 0,55 → 0,56. Titlen *Prindsessen* findes
+  også uafhængigt i registret (52 personer), så målingen er ikke ren cirkelslutning, men tallene er små.
+- **Gennemsyn 3** (dagbog, bind III s. 178–179): »Hertuginden af Augustenborg« (to gange) og »Arvestorhertugen af Weimar« er nu hver ét
+  personspænd. Før var »Augustenborg« og »Weimar« foreslået som personer og »Arvestorhertugen« som lokalitet.
+
 ## Ikke løst — og hvor det hører hjemme
 
 - **Omtaler af værker** (»Skuespilleren«, »Vaudevillen«): registret har værket på dagen, men intet i teksten ligner titlen.

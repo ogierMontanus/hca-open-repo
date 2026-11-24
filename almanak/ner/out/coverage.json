@@ -1,30 +1,30 @@
 {
  "entries": 5213,
  "almanac_index_person_refs": 8282,
- "index_coverage_model": 0.706,
+ "index_coverage_model": 0.705,
  "index_coverage_rule": 0.615,
- "spans_model": 11614,
+ "spans_model": 11553,
  "spans_rule": 6685,
  "thresholds": {
   "high": 0.75,
   "low": 0.6
  },
  "model_spans_by_tier": {
-  "sikker": 9993,
-  "usikker": 1621
+  "sikker": 9967,
+  "usikker": 1586
  },
  "model_spans_by_type": {
-  "Person": 8820,
-  "Lokalitet": 1144,
-  "Sted": 1215,
-  "Værk": 421,
+  "Person": 8781,
+  "Lokalitet": 1128,
+  "Sted": 1212,
+  "Værk": 418,
   "Andet": 14
  },
  "model_spans_without_register_match": {
-  "Person": 2709,
-  "Lokalitet": 1123,
+  "Person": 2682,
+  "Lokalitet": 1107,
   "Sted": 190,
-  "Værk": 151,
+  "Værk": 148,
   "Andet": 13
  }
 }

@@ -68,6 +68,10 @@ PRONOUNS = {"han", "hun", "ham", "hende", "den", "det", "de", "dem", "sig", "sin
 
 
 def mention_kind(span_text):
+    import titles as _T
+    sp = _T.ruler_spans(span_text)
+    if sp and sp[0] == (0, len(span_text)):
+        return "omtale"          # »Hertuginden af Augustenborg«: titel + af + sted = en omtale af en person (titles.py)
     """'navn' hvis spændet indeholder et egennavn; 'omtale' hvis det er en rolle (»Kongen«, »Maleren«) eller en
     relationel beskrivelse (»Lucien Bonapartes Datter«, »Fru O Neill og Sønnerne«); 'pronomen' hvis et pronomen.
     Heuristik til forslag og til rapportering pr. type; en menneskelig angivelse går forud."""

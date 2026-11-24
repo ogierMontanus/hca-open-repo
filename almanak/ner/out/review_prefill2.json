@@ -1486,26 +1486,14 @@
   {
    "entry": "ALM-1860-06-24",
    "start": 39,
-   "end": 49,
-   "text": "Dronningen",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.406,
-   "reg": "ALMP0102",
-   "tier": "usikker",
-   "mkind": "omtale"
-  },
-  {
-   "entry": "ALM-1860-06-24",
-   "start": 53,
    "end": 59,
-   "text": "Bayern",
+   "text": "Dronningen af Bayern",
    "type": "P",
    "mtype": "P",
-   "p": 0.874,
+   "p": 0.75,
    "reg": "ALMP0102",
    "tier": "sikker",
-   "mkind": "navn"
+   "mkind": "omtale"
   },
   {
    "entry": "ALM-1860-06-24",

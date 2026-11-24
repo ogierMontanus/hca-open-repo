@@ -30,7 +30,8 @@ sys.path.insert(0, str(HERE))
 import gold as G  # noqa: E402
 from context import Context, canon, nm  # noqa: E402
 import features as F
-from noun_filter import NounFilter, allow_from_gold  # noqa: E402
+from noun_filter import NounFilter, allow_from_gold
+import titles as TT  # noqa: E402
 
 OUT = HERE / "out"
 TYPES = ["Person", "Sted", "Lokalitet", "Værk", "Andet"]
@@ -333,6 +334,7 @@ def cmd_tiers(args):
                         continue
                     c = cnt[(str(thr), low)]
                     conf, unc = decode_tiers(d["spans"], p, t, low, d["X"], m.tm)
+                    conf, unc, _ = TT.apply(d["text"], conf, unc, t)      # Titel af Sted = person (titles.py)
                     conf = [x for x in conf if nf.keep(d["text"][x[0]:x[1]])]
                     unc = [x for x in unc if nf.keep(d["text"][x[0]:x[1]])]
                     c["gold"] += len(g)

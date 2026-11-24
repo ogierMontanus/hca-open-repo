@@ -28,6 +28,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from context import Context  # noqa: E402
 import features as F  # noqa: E402
+import titles as T  # noqa: E402
 import model as M  # noqa: E402
 
 TYPE_KEY = {"Person": "P", "Sted": "S", "Værk": "V", "Lokalitet": "L", "Andet": "A"}
@@ -108,9 +109,15 @@ def annotate(ctx, m, date, text, low=None, nf=None, high=None, src="almanak"):
     thr = high if high is not None else m.threshold
     floor = min(low, LOW_LINKED) if low is not None else 2.0
     conf, unc = M.decode_tiers(spans, p, thr, floor, X, m.tm)
+    conf, unc, _ = T.apply(text, conf, unc, thr)          # »Hertuginden af Augustenborg« = én person (omtale), ikke et sted
+    rule_spans = set(T.ruler_spans(text))
     for tier, items in (("sikker", conf), ("usikker", unc)):
         for s, e, typ, pr in items:
             rid, src, cands = link(ctx, date, text[s:e], typ, g_date, g_page)
+            if (s, e) in rule_spans:
+                out.append(dict(start=s, end=e, text=text[s:e], type="Person", p=round(float(pr), 3), reg=rid, link_src=src,
+                                link_candidates=cands, tier="sikker", mkind="omtale", rule="titel-af-sted"))
+                continue
             if tier == "usikker" and pr < low and not (rid or cands):
                 continue     # under LOW kun med støtte i registrene
             if nf is not None and not nf.keep(text[s:e], linked=bool(rid or cands)):

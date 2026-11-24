@@ -14,6 +14,7 @@ almanakposterne og foreslår en registerpost. Baggrund, målinger og forbehold:
 | `model.py` | `eval` (blokvis krydsvalidering + to grundlinjer + bootstrap-interval), `ablate` (bidrag fra dagbog og registre), `train` |
 | `predict.py` | `all`: annotér alle almanakposter, kobl til registerpost, mål dækning af almanakregistret |
 | `build_lexicon.py`, `noun_filter.py` | fællesnavneliste fra moderniseringsrepoet og filter, der holder «Tænderne», «Fluen» ude af forslagene (§3.13) |
+| `build_titles.py`, `titles.py` | herskertitler udledt af personregistret (rolle Adel/Kongelig/Hof) og guldet; «Titel (navn) af Sted» = én person (omtale), ikke et sted |
 | `build_review_page.py` | gennemsynsside med maskinforslag til en ny stikprøve (blok E–H) |
 | `eval_review.py` | mål modellen på en returneret gennemsyns-eksport pr. lag (sikre/usikre) og omtaleform; enighed mellem to gennemsyn |
 

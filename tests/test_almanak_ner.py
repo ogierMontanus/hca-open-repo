@@ -103,3 +103,30 @@ def test_role_link_uses_the_register_of_the_day_and_the_reign_year():
     assert P.role_link(_C, "1838-05-01", "Kongen") == ""          # prins, endnu ikke konge
     assert P.role_link(_C, "1849-01-01", "Kongen") == ""          # to mulige: ingen afgørelse
     assert P.role_link(_C, "1840-05-01", "Maleren") == ""
+
+
+def test_title_af_place_is_one_person_mention_not_a_place():
+    import titles as T
+    t = "Besøg af Hertuginden af Augustenborg og Arvehertugen af Weimar. Prindsessen af Preusen. Dronning Victoria af Storbritannien. Søn af Hansen."
+    got = [t[s:e] for s, e in T.ruler_spans(t)]
+    assert got == ["Hertuginden af Augustenborg", "Arvehertugen af Weimar", "Prindsessen af Preusen", "Dronning Victoria af Storbritannien"]
+    assert T.ruler_spans("Fru af Hannover. Datter af Hansen. Konsul af Preston") == []      # ingen herskertitel
+    assert C.mention_kind("Hertuginden af Augustenborg") == "omtale"
+
+
+def test_title_rule_replaces_model_spans_inside_the_string():
+    import titles as T
+    text = "Hos Hertuginden af Augustenborg i dag."
+    s = text.index("Hertuginden")
+    e = s + len("Hertuginden af Augustenborg")
+    a = text.index("Augustenborg")
+    conf = [(s, s + 11, "Person", 0.78), (a, e, "Sted", 0.9)]
+    out, unc, n = T.apply(text, conf, [(a, e, "Sted", 0.65)], 0.75)
+    assert n == 1 and out == [(s, e, "Person", 0.75)] and unc == []
+
+
+def test_ruler_title_list_is_derived_not_guessed():
+    import titles as T
+    forms = T.title_forms()
+    assert {"hertuginden", "arvehertugen", "prindsessen", "kongen", "dronningen", "prins", "prinds"} <= forms
+    assert not forms & {"søn", "datter", "sønnen", "hertugens", "statue", "jarl"}
