@@ -498,6 +498,28 @@ Det løses ikke af en tærskel; kandidatgeneratoren laver ikke spænd over «af�
 **Allerede startede gennemsyn:** siden lægger maskinforslagene ind én gang pr. browser. Nu har forslagene et fingeraftryk (`PREFILL_V`); ved et nyt fingeraftryk
 udskiftes de urørte forslag på dage, der *ikke* er gennemgået. Rettede, slettede og tildelte forslag, alle menneskelige markeringer og gennemgåede dage bevares.
 
+### 3.15 Registerhenvisninger til dage uden almanakpost: årstallet var forvekslet (2026-11-24)
+
+*Spørgsmål fra Holger: er registrets datoer koblet til dagen, ikke kun til siden? Ja — men 1.226 af 9.743 gyldige datoer ramte ingen almanakpost.*
+
+Årsag: OCR forveksler **3/5/9/8 i årstallet**, også når den forkerte form selv er et gyldigt årstal («1833» for 1853 eller 1855, «1836» for 1856,
+«1839» for 1859). Det kan ses direkte: almanakken har ingen årgange for 1835–36, 1839, 1848 m.fl., og 1833 kun feb.–apr., men registret havde 158 henvisninger til
+1836, 193 til 1839 og 425 til 1833. En henvisning til en dag, der ikke findes, er derfor en fejl i *året*, ikke i dagen.
+`register_repair.repair_unmatched_years` (kaldt fra `parse_register.py`) prøver de årstal, hvor kun cifrene 3/5/8/9 er byttet, og vælger det, hvor
+personens/værkets navn står i posten på netop den dato (854 henvisninger). Er navnet flertydigt eller mangler i teksten, bruges årstallet fra de øvrige henvisninger i samme
+årstalsgruppe (120). `fix` på hver henvisning viser, hvad der er gjort (`år-rettet-ved-navnekontrol (1833→1853)` / `år-rettet-via-gruppe …`).
+
+| | før | efter |
+|---|---:|---:|
+| gyldige datoer, der rammer en almanakpost | 8.517 af 9.743 | **9.491 af 9.743** |
+| person-henvisninger på almanakdage (`coverage.json`) | 7.469 | 8.282 |
+| modellens personspænd uden registertræf | 3.301 | 2.752 |
+
+Usikkerhed: en tilfældig anden årgang har navnet på samme dag i 7 % af tilfældene (målt på de bekræftede henvisninger), så ca. 1–2 % af de navnebekræftede rettelser kan
+være forkerte; de 120 via gruppen er svagere (navnet er ikke bekræftet). Begge kan sorteres fra på `fix`. **252 datoer er uløste**: navnet står ikke i en almanakpost
+på dagen i nogen kandidatårgang (176), er flertydigt uden gruppeafgørelse (40), eller kandidaten er ikke en 3/5/8/9-forveksling (36, fx 1863→1866). De kræver et blik i trykket.
+Modellen er trænet igen (registerfladerne ændrer trækkene); grænserne 0,75/0,6 giver samme præcision/recall som før (§3.14).
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i

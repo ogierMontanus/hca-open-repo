@@ -55,3 +55,38 @@ def test_name_corrections_whole_word_and_label_ocr(tmp_path):
     rr.apply_name_corrections(rows, f)
     assert rows[0]["label"] == "Wulff, Peter" and rows[0]["label_ocr"] == "WulfT, Peter"
     assert rows[1]["label"] == "Blicher, Steen" and rows[2]["label"] == "Bücher, X"
+
+
+def test_confusable_years_only_swap_3_5_8_9():
+    c = rr.confusable_years(1833)
+    assert 1853 in c and 1855 in c and 1839 in c and 1838 in c
+    assert 1843 not in c and 1834 not in c           # 4 og 3->4 er ikke en kendt forveksling
+
+
+def _aligned(tmp_path, days):
+    f = tmp_path / "aligned.csv"
+    f.write_text("date,pdf_text,db_text\n" + "".join(f"{d},{t},\n" for d, t in days), encoding="utf-8")
+    return f
+
+
+def _ref(rid, year, raw, day, month):
+    return dict(reg_id=rid, register="person", year=year, year_raw=raw, day=day, month=month, kind="date", raw=f"{day}.{month}.", valid=1, src="tail", fix="")
+
+
+def test_unmatched_year_is_repaired_by_name_and_group(tmp_path):
+    al = _aligned(tmp_path, [("1853-07-05", "Besøg af Zinn og Hahn"), ("1853-08-09", "Middag hos Zinn"), ("1853-10-01", "Intet"),
+                             ("1855-07-05", "Intet"), ("1855-08-09", "Intet")])
+    persons = [dict(reg_id="ALMP1", label="Zinn, Ludvig"), dict(reg_id="ALMP2", label="Hahn, Ida")]
+    r = [_ref("ALMP1", 1833, "1833", 5, 7), _ref("ALMP1", 1833, "1833", 9, 8),            # 1833 findes ikke: 1853 har navnet
+         _ref("ALMP2", 1833, "1833", 5, 7), _ref("ALMP2", 1833, "1833", 1, 10)]          # 1.10.: ingen navnekontrol, gruppen peger på 1853
+    by_name, by_group, left = rr.repair_unmatched_years(persons, [], r, al)
+    assert [x["year"] for x in r] == [1853, 1853, 1853, 1853]
+    assert (by_name, by_group, left) == (3, 1, 0)
+    assert r[0]["fix"] == "år-rettet-ved-navnekontrol (1833→1853)" and r[3]["fix"] == "år-rettet-via-gruppe (1833→1853)"
+
+
+def test_unmatched_year_is_left_when_name_supports_two_years_and_no_group_decides(tmp_path):
+    al = _aligned(tmp_path, [("1853-07-05", "Zinn"), ("1855-07-05", "Zinn")])
+    r = [_ref("ALMP1", 1833, "1833", 5, 7)]
+    out = rr.repair_unmatched_years([dict(reg_id="ALMP1", label="Zinn, Ludvig")], [], r, al)
+    assert r[0]["year"] == 1833 and out == (0, 0, 1)

@@ -14,6 +14,12 @@ To trin (begge kaldes fra parse_register.py; begge efterlader sporet i data):
    fra den læste form med ét ciffer, og et kandidatår accepteres kun, hvis personens (værkets) navn
    står i almanakposten på netop den dato — og kun hvis ét år vinder. `fix` på henvisningen siger,
    hvad der er gjort. Ingenting gættes uden kontrol mod teksten.
+
+3. Datoer, der læses, men ikke findes i almanakken (`repair_unmatched_years`): OCR forveksler 3/5/9/8 i årstallet
+   (»1833« for 1853 eller 1855, »1836« for 1856), også når den forkerte form selv er et gyldigt årstal. Almanakken har
+   slet ingen årgange for 1835–36, 1839, 1848 m.fl., og 1833 kun feb.–apr.; en henvisning til en dag, der ikke findes,
+   er derfor en fejl i år, ikke i dag. Kandidatårene er de, hvor kun cifrene 3/5/8/9 er byttet om; et år vælges, hvis personens
+   (værkets) navn står i posten på netop den dato, og ellers ud fra naboerne i samme årstalsgruppe.
 """
 from __future__ import annotations
 
@@ -131,6 +137,85 @@ def repair_years(persons, works, refs, aligned=ALIGNED):
                 continue
         unresolved += len(rs)
     return fixed, unresolved
+
+
+CONFUSABLE = set("3589")
+
+
+def confusable_years(y):
+    """Årstal 1833-1873, der adskiller sig fra y i ét eller to cifre, hvor begge cifre er blandt 3/5/8/9 (OCR-forvekslinger)."""
+    s = str(y)
+    out = []
+    for yy in range(1833, 1874):
+        d = [(a, b) for a, b in zip(s, str(yy)) if a != b]
+        if 1 <= len(d) <= 2 and all(a in CONFUSABLE and b in CONFUSABLE for a, b in d):
+            out.append(yy)
+    return out
+
+
+def repair_unmatched_years(persons, works, refs, aligned=ALIGNED):
+    """Gyldige datoer uden almanakpost: ret årstallet (3/5/8/9-forveksling), når navnet bekræfter det eller naboerne peger entydigt.
+    Returnerer (rettet ved navn, rettet via gruppe, uløst)."""
+    texts = _entry_texts(aligned)
+    rows = {r["reg_id"]: (r, "person") for r in persons}
+    rows.update({r["reg_id"]: (r, "work") for r in works})
+
+    def key(y, m, d):
+        return f"{int(y):04d}-{int(m):02d}-{int(d):02d}"
+
+    todo = [r for r in refs if r["valid"] and r["kind"] == "date" and r["src"] == "tail" and r["day"] and r["month"]
+            and r["year"] and key(r["year"], r["month"], r["day"]) not in texts]
+    todo_ids = {id(r) for r in todo}
+    groups, last, cur = [], None, []
+    for r in refs:                                   # årstalsgrupper: på hinanden følgende henvisninger med samme årstalsstreng
+        k = (r["reg_id"], r["year_raw"], r["src"])
+        if k != last:
+            if cur:
+                groups.append(cur)
+            cur, last = [], k
+        cur.append(r)
+    groups.append(cur)
+
+    name_fixed = group_fixed = 0
+    forms_cache = {}
+    for g in groups:
+        pending = [r for r in g if id(r) in todo_ids]
+        if not pending:
+            continue
+        rid = g[0]["reg_id"]
+        if rid not in forms_cache:
+            row, kind = rows[rid]
+            forms_cache[rid] = _forms(row, kind)
+        forms = forms_cache[rid]
+        resolved, ambiguous = {}, {}
+        for r in pending:
+            cands = [yy for yy in confusable_years(r["year"]) if key(yy, r["month"], r["day"]) in texts]
+            named = [yy for yy in cands if forms and _has_name(texts[key(yy, r["month"], r["day"])], forms)]
+            if len(named) == 1:
+                resolved[id(r)] = named[0]
+            else:
+                ambiguous[id(r)] = (named, cands)
+        votes = {}
+        for y in resolved.values():
+            votes[y] = votes.get(y, 0) + 1
+        gy = max(votes, key=votes.get) if votes and list(votes.values()).count(max(votes.values())) == 1 else None
+        for r in pending:
+            raw = r["year"]
+            if id(r) in resolved:
+                y, how = resolved[id(r)], "år-rettet-ved-navnekontrol"
+            else:
+                named, cands = ambiguous[id(r)]
+                if gy and gy in (named or cands) and (not named or gy in named):
+                    y, how = gy, "år-rettet-via-gruppe"
+                else:
+                    continue
+            r["year"], r["valid"], r["fix"] = y, 1, f"{how} ({raw}→{y})"
+            if how == "år-rettet-ved-navnekontrol":
+                name_fixed += 1
+            else:
+                group_fixed += 1
+    unresolved = sum(1 for r in todo if key(r["year"], r["month"], r["day"]) not in texts)
+    return name_fixed, group_fixed, unresolved
 
 
 # --------------------------------------------------------------------------------------------------

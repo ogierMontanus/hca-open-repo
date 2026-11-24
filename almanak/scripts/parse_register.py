@@ -369,6 +369,8 @@ def main() -> int:
     n_names = rr.apply_name_corrections(persons) + rr.apply_name_corrections(works)
     fixed, unresolved = rr.repair_years(persons, works, refs_out)
     print(f"OCR-rettelser: {n_names} navnefelter; {fixed} henvisninger fik år ved navnekontrol, {unresolved} med ulæseligt år er uløste")
+    by_name, by_group, no_entry = rr.repair_unmatched_years(persons, works, refs_out)
+    print(f"Årstal 3/5/8/9: {by_name} henvisninger rettet ved navnekontrol, {by_group} via årstalsgruppen; {no_entry} datoer uden almanakpost er uløste")
     for r in refs_out:
         r["valid"] = int(r["valid"])
 
