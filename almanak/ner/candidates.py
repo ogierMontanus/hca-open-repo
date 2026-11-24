@@ -60,7 +60,8 @@ def generate(text):
 # ---- omtaleform (egennavn / omtale / pronomen) --------------------------------------------------
 ROLE_WORDS = {"kongen", "dronningen", "kronprindsen", "kronprindsessen", "prindsen", "prindsessen", "hertugen",
               "fyrsten", "maleren", "faderen", "moderen", "verten", "ministeren", "digteren", "skuespilleren",
-              "konen", "manden", "damen", "svensken", "ridder", "familie", "familien"}
+              "konen", "manden", "damen", "svensken", "ridder", "familie", "familien",
+              "baronessen", "baronen", "grevinden", "greven", "portugiseren", "foreningen", "stykket"}
 RELATION_WORDS = {"datter", "søster", "søstre", "frue", "kone", "søn", "sønnerne", "børn", "barn", "svigersøn",
                   "svigerfader", "fader", "moder", "broder", "enke"}
 PRONOUNS = {"han", "hun", "ham", "hende", "den", "det", "de", "dem", "sig", "sin", "sit", "hans", "hendes"}

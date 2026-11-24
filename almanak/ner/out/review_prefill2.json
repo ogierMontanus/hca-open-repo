@@ -149,6 +149,18 @@
    "p": 0.631,
    "reg": "",
    "tier": "usikker",
+   "mkind": "omtale"
+  },
+  {
+   "entry": "ALM-1840-05-01",
+   "start": 66,
+   "end": 77,
+   "text": "Thorvaldsen",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.529,
+   "reg": "ALMP1824",
+   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -177,6 +189,30 @@
   },
   {
    "entry": "ALM-1840-05-01",
+   "start": 110,
+   "end": 116,
+   "text": "Kongen",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.447,
+   "reg": "ALMP0421",
+   "tier": "usikker",
+   "mkind": "omtale"
+  },
+  {
+   "entry": "ALM-1840-05-01",
+   "start": 120,
+   "end": 130,
+   "text": "Dronningen",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.431,
+   "reg": "ALMP0419",
+   "tier": "usikker",
+   "mkind": "omtale"
+  },
+  {
+   "entry": "ALM-1840-05-01",
    "start": 133,
    "end": 141,
    "text": "Theatret",
@@ -186,6 +222,30 @@
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1840-05-01",
+   "start": 176,
+   "end": 182,
+   "text": "Kongen",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.307,
+   "reg": "ALMP0421",
+   "tier": "usikker",
+   "mkind": "omtale"
+  },
+  {
+   "entry": "ALM-1840-05-02",
+   "start": 4,
+   "end": 10,
+   "text": "Kongen",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.42,
+   "reg": "ALMP0421",
+   "tier": "usikker",
+   "mkind": "omtale"
   },
   {
    "entry": "ALM-1840-05-02",
@@ -246,6 +306,18 @@
    "reg": "ALMP0011",
    "tier": "sikker",
    "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1840-05-04",
+   "start": 9,
+   "end": 19,
+   "text": "Foreningen",
+   "type": "L",
+   "mtype": "L",
+   "p": 0.674,
+   "reg": "",
+   "tier": "usikker",
+   "mkind": "omtale"
   },
   {
    "entry": "ALM-1840-05-05",
@@ -501,6 +573,18 @@
   },
   {
    "entry": "ALM-1844-01-24",
+   "start": 68,
+   "end": 74,
+   "text": "Henrik",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.343,
+   "reg": "ALMP1759",
+   "tier": "usikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1844-01-24",
    "start": 97,
    "end": 103,
    "text": "Emilie",
@@ -609,6 +693,30 @@
   },
   {
    "entry": "ALM-1844-01-27",
+   "start": 12,
+   "end": 17,
+   "text": "Wulff",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.505,
+   "reg": "ALMP1975",
+   "tier": "usikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1844-01-27",
+   "start": 36,
+   "end": 39,
+   "text": "Ida",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.572,
+   "reg": "",
+   "tier": "usikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1844-01-27",
    "start": 120,
    "end": 126,
    "text": "Eduard",
@@ -665,6 +773,18 @@
    "p": 0.908,
    "reg": "ALMP0145",
    "tier": "sikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1844-01-28",
+   "start": 113,
+   "end": 119,
+   "text": "Henrik",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.572,
+   "reg": "ALMP1759",
+   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1064,6 +1184,18 @@
    "mkind": "navn"
   },
   {
+   "entry": "ALM-1857-07-02",
+   "start": 44,
+   "end": 55,
+   "text": "Piccolomini",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.562,
+   "reg": "ALMP1393",
+   "tier": "usikker",
+   "mkind": "navn"
+  },
+  {
    "entry": "ALM-1860-06-17",
    "start": 4,
    "end": 12,
@@ -1350,6 +1482,18 @@
    "reg": "ALMP0791",
    "tier": "sikker",
    "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1860-06-24",
+   "start": 39,
+   "end": 49,
+   "text": "Dronningen",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.406,
+   "reg": "ALMP0102",
+   "tier": "usikker",
+   "mkind": "omtale"
   },
   {
    "entry": "ALM-1860-06-24",

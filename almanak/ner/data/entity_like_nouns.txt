@@ -35,6 +35,7 @@ Kirken
 Slottet
 Borgen
 Universitetet
+Foreningen   # Studenterforeningen (gennemsyn 2, 1840-05-04)
 Kastellet
 Klosteret
 Fjorden

@@ -20,6 +20,7 @@ from __future__ import annotations
 import collections
 import json
 import pickle
+import re
 import sys
 from pathlib import Path
 
@@ -44,6 +45,10 @@ def load_model(path=M.OUT / "model.pkl"):
 def link(ctx, date, span_text, typ, g_date=None, g_page=None):
     """-> (reg_id | '', kilde, [kandidater])"""
     core, _ = F._core(span_text)
+    if typ == "Person":
+        rid = role_link(ctx, date, core)
+        if rid:
+            return rid, "alm-dato-rolle", [rid]
     toks = core.split()
     g_date = g_date or ctx.alm_date_gazetteer(date)
     g_page = g_page or ctx.page_gazetteer(date)
@@ -65,6 +70,27 @@ def link(ctx, date, span_text, typ, g_date=None, g_page=None):
 # LOW 0,4 til 17 (8 falske) — men samlet falder de falske fra 27 til 19 ved samme samlede recall (0,79).
 HIGH = 0.75   # p >= HIGH: sikkert forslag, markeres stiplet i teksten (runde 1)
 LOW = 0.6     # LOW <= p < HIGH: usikkert forslag, ikke i teksten, tildeles i runde 3 (senere: LLM-trin, docs/plan-llm-trin.md)
+LOW_LINKED = 0.3   # usikkert forslag allerede fra 0,3, hvis registret for datoen/dagbogssiden støtter det (gennemsyn 2:
+                   # »Thorvaldsen« 0,53, »Kongen« 0,31–0,45; krydsvalidering: 3 af 4 sådanne var navne mod 4 af 14 uden støtte)
+
+# Roller, der omtaler én bestemt person: »Kongen« på en dato er den konge, almanakregistret har på datoen.
+# Beskrivelsen siger »1839 konge af«; før det år er personen ikke konge.
+ROLES = {"kongen": "konge", "dronningen": "dronning", "kronprindsen": "kronprins", "kronprinsen": "kronprins",
+         "kronprindsessen": "kronprinsesse", "kronprinsessen": "kronprinsesse"}
+
+
+def role_link(ctx, date, core):
+    """-> reg_id for en rolle (»Kongen«) ud fra almanakregistrets poster på datoen, eller ''."""
+    role = ROLES.get(core.strip().lower())
+    if not role:
+        return ""
+    hits = []
+    for rid in ctx.alm_by_date.get(date, ()):
+        info = ctx.alm_reg.get(rid, {})
+        m = re.search(r"(?:(\d{4})\s+)?(?:fra\s+\d{4}\s+)?" + role + r"\b", info.get("d", ""))
+        if m and not (m.group(1) and int(date[:4]) < int(m.group(1))):
+            hits.append(rid)
+    return hits[0] if len(hits) == 1 else ""
 
 
 def annotate(ctx, m, date, text, low=None, nf=None, high=None):
@@ -80,10 +106,13 @@ def annotate(ctx, m, date, text, low=None, nf=None, high=None):
     g_date, g_page = ctx.alm_date_gazetteer(date), ctx.page_gazetteer(date)
     p = m.m.predict_proba(X)[:, 1]
     thr = high if high is not None else m.threshold
-    conf, unc = M.decode_tiers(spans, p, thr, low if low is not None else 2.0, X, m.tm)
+    floor = min(low, LOW_LINKED) if low is not None else 2.0
+    conf, unc = M.decode_tiers(spans, p, thr, floor, X, m.tm)
     for tier, items in (("sikker", conf), ("usikker", unc)):
         for s, e, typ, pr in items:
             rid, src, cands = link(ctx, date, text[s:e], typ, g_date, g_page)
+            if tier == "usikker" and pr < low and not (rid or cands):
+                continue     # under LOW kun med støtte i registrene
             if nf is not None and not nf.keep(text[s:e], linked=bool(rid or cands)):
                 continue     # åbenlyst fællesnavn uden støtte i registrene (noun_filter.py)
             out.append(dict(start=s, end=e, text=text[s:e], type=str(typ), p=round(float(pr), 3), reg=rid, link_src=src,

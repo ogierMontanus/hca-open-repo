@@ -87,3 +87,19 @@ def test_noun_filter_drops_common_nouns_unless_supported():
     assert nf.keep("Fluen", linked=True)               # kobles til en registerpost
     assert nf.keep("Munks")                            # formen findes i registret
     assert nf.keep("Jette Wulff") and nf.keep("Frøken Tænderne")   # ikke kun fællesnavne / har titel
+
+
+def test_role_link_uses_the_register_of_the_day_and_the_reign_year():
+    pytest.importorskip("numpy")
+    pytest.importorskip("sklearn")
+    import predict as P
+
+    class _C:
+        alm_by_date = {"1840-05-01": ["K8", "Q", "W"], "1838-05-01": ["K8"], "1849-01-01": ["K8", "F7"]}
+        alm_reg = {"K8": {"d": "(VIII), prins, 1839 konge af"}, "Q": {"d": "prinsesse, 1839 dronning af"},
+                   "W": {"d": "kaptajn"}, "F7": {"d": "(VII), kronprins, 1848 konge af"}}
+    assert P.role_link(_C, "1840-05-01", "Kongen") == "K8"
+    assert P.role_link(_C, "1840-05-01", "Dronningen") == "Q"
+    assert P.role_link(_C, "1838-05-01", "Kongen") == ""          # prins, endnu ikke konge
+    assert P.role_link(_C, "1849-01-01", "Kongen") == ""          # to mulige: ingen afgørelse
+    assert P.role_link(_C, "1840-05-01", "Maleren") == ""

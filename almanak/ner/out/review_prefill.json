@@ -45,6 +45,18 @@
   },
   {
    "entry": "ALM-1838-09-27",
+   "start": 9,
+   "end": 25,
+   "text": "Commandeur Wulff",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.549,
+   "reg": "",
+   "tier": "usikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1838-09-27",
    "start": 50,
    "end": 69,
    "text": "Jettes Barnagtighed",
@@ -77,6 +89,18 @@
    "p": 0.999,
    "reg": "ALMP0297",
    "tier": "sikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1838-09-28",
+   "start": 6,
+   "end": 15,
+   "text": "Andersens",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.537,
+   "reg": "ALMP0039",
+   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -477,6 +501,18 @@
   },
   {
    "entry": "ALM-1843-04-26",
+   "start": 9,
+   "end": 14,
+   "text": "Jette",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.316,
+   "reg": "Reg0130560",
+   "tier": "usikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1843-04-26",
    "start": 22,
    "end": 36,
    "text": "Faderen Collin",
@@ -545,6 +581,18 @@
    "p": 0.911,
    "reg": "ALMP1884",
    "tier": "sikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1843-04-26",
+   "start": 133,
+   "end": 138,
+   "text": "Vigni",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.384,
+   "reg": "ALMP1884",
+   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -821,6 +869,18 @@
    "p": 0.993,
    "reg": "ALMP0478",
    "tier": "sikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1853-07-24",
+   "start": 12,
+   "end": 19,
+   "text": "Drevsen",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.51,
+   "reg": "ALMP0471",
+   "tier": "usikker",
    "mkind": "navn"
   },
   {
