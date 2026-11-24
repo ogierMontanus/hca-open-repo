@@ -337,6 +337,7 @@ const MONTHS = ["Januar","Februar","Marts","April","Maj","Juni","Juli","August",
 const STORE = "__STORE__";   // pr. side: overlap-siden beholder sin nøgle, så gemte markeringer bevares
 const PREFILL = __PREFILL__;   // maskinforslag (gennemsynssiden); tom på overlap-siden
 const MODE = "__MODE__";
+const PREFILL_V = "__PREFILL_V__";   // fingeraftryk af maskinforslagene
 
 let state = { annotator: "", ann: [], reviewed: {}, active: {} };   // reviewed: dato -> true; active: blok -> aktive sekunder
 try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && Array.isArray(s.ann)) state = Object.assign(state, s); } catch (e) {}
@@ -344,13 +345,24 @@ try { const s = JSON.parse(localStorage.getItem(STORE) || "null"); if (s && Arra
 state.ann.forEach(a => { if (a.type === "I") a.type = "L"; });
 // Maskinforslag lægges ind én gang; de står stiplet, til dagen er gennemgået. Et forslag, der står tilbage på en
 // gennemgået dag, regnes som godkendt; slettede forslag gemmes i state.rejected (bruges til at måle præcision).
+// Nyere maskinforslag (ny PREFILL_V): på dage, der ikke er gennemgået, udskiftes de forslag, ingen har rørt; rettede,
+// slettede og tildelte forslag og alle menneskelige markeringer bevares.
 function prefill() {
-  if (!PREFILL.length || state.prefilled) return;
-  PREFILL.forEach(p => {
+  if (!PREFILL.length || (state.prefilled && state.prefill_v === PREFILL_V)) return;
+  let fresh = () => true;
+  if (state.prefilled) {
+    const done = id => !!state.reviewed[id.replace(/^[A-Z]+-/, "")];
+    state.ann = state.ann.filter(a => a.origin !== "model" || a.edited || a.tier === "usikker" || done(a.entry));
+    state.unc = state.unc.filter(u => u.decision || done(u.entry));
+    const hit = (xs, p) => xs.some(a => a.entry === p.entry && a.start < p.end && p.start < a.end);
+    fresh = p => !done(p.entry) && !hit(state.ann, p) && !hit(state.unc, p) && !hit(state.rejected || [], p);
+  }
+  PREFILL.filter(fresh).forEach(p => {
     if (p.tier === "usikker") state.unc.push(Object.assign({ uid: uid(), decision: "" }, p));
     else state.ann.push(Object.assign({ id: uid(), reg: "", ident: "", unsure: false, note: "", t: 0, origin: "model", edited: false, mk0: p.mkind }, p));
   });
-  state.prefilled = true; state.rejected = [];
+  if (!state.prefilled) state.rejected = [];
+  state.prefilled = true; state.prefill_v = PREFILL_V;
 }
 state.rejected = state.rejected || [];
 state.unc = state.unc || [];   // usikre forslag: holdes ude af teksten og tildeles i runde 3

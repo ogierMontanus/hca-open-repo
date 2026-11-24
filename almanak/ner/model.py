@@ -308,33 +308,51 @@ ABLATIONS = {
 
 
 def cmd_tiers(args):
-    """To lag: sikre forslag markeres i teksten, usikre holdes ude og tildeles i en tredje runde.
-    Måler præcision og recall pr. lag i blokvis krydsvalidering (almanakken)."""
+    """To lag: sikre forslag (p >= tærskel) markeres i teksten; usikre (low <= p < tærskel) holdes ude og
+    tildeles i en tredje runde. Gitter over begge grænser i blokvis krydsvalidering (almanakken), med
+    navneordsfilteret (listen bygges kun af træningsblokkene). »auto« = tærsklen tunet på bedste F1."""
     ctx = Context()
     data = build_dataset(ctx, G.load_entries(), G.load_gold())
-    res = {}
-    for low in (0.2, 0.3, 0.4, 0.5):
-        c = collections.Counter()
-        for b in BLOCKS:
-            m = SpanModel(args.kind).fit([d for d in data if d["block"] != b])
-            for d in data:
-                if d["block"] != b or d["src"] != "almanak" or not len(d["spans"]):
-                    continue
-                p = m.m.predict_proba(d["X"])[:, 1]
-                conf, unc = decode_tiers(d["spans"], p, m.threshold, low, d["X"], m.tm)
-                g = d["gold"]
-                c["gold"] += len(g)
-                for name, tier in (("sikre", conf), ("usikre", unc)):
-                    c[name + "_n"] += len(tier)
-                    c[name + "_ok"] += sum(1 for s, e, *_ in tier if (s, e) in g)
-                    c[name + "_typed"] += sum(1 for s, e, t, _ in tier if g.get((s, e)) == t)
-        res[str(low)] = {"gold": c["gold"], "sikre": [c["sikre_n"], c["sikre_ok"], c["sikre_typed"]],
-                         "usikre": [c["usikre_n"], c["usikre_ok"], c["usikre_typed"]],
-                         "praecision_sikre": round(c["sikre_ok"] / c["sikre_n"], 3),
-                         "praecision_usikre": round(c["usikre_ok"] / c["usikre_n"], 3) if c["usikre_n"] else None,
-                         "recall_sikre": round(c["sikre_ok"] / c["gold"], 3),
-                         "recall_alle": round((c["sikre_ok"] + c["usikre_ok"]) / c["gold"], 3)}
-        print(low, res[str(low)])
+    thrs = ("auto", 0.6, 0.65, 0.7, 0.75, 0.8, 0.85)
+    lows = (0.3, 0.4, 0.5, 0.6, 0.7)   # med »auto« og low >= tærsklen er der ingen usikre i den blok
+    cnt = collections.defaultdict(collections.Counter)
+    auto = {}
+    for b in BLOCKS:
+        m = SpanModel(args.kind).fit([d for d in data if d["block"] != b])
+        auto[b] = round(m.threshold, 2)
+        nf = NounFilter(ctx, allow_from_gold((d["text"], d["gold"]) for d in data if d["block"] != b))
+        for d in data:
+            if d["block"] != b or d["src"] != "almanak" or not len(d["spans"]):
+                continue
+            p = m.m.predict_proba(d["X"])[:, 1]
+            g = d["gold"]
+            for thr in thrs:
+                t = m.threshold if thr == "auto" else thr
+                for low in lows:
+                    if thr != "auto" and low >= t:
+                        continue
+                    c = cnt[(str(thr), low)]
+                    conf, unc = decode_tiers(d["spans"], p, t, low, d["X"], m.tm)
+                    conf = [x for x in conf if nf.keep(d["text"][x[0]:x[1]])]
+                    unc = [x for x in unc if nf.keep(d["text"][x[0]:x[1]])]
+                    c["gold"] += len(g)
+                    for name, tier in (("sikre", conf), ("usikre", unc)):
+                        c[name + "_n"] += len(tier)
+                        c[name + "_ok"] += sum(1 for s, e, *_ in tier if (s, e) in g)
+                        c[name + "_overlap"] += sum(1 for s, e, *_ in tier if any(s < ge and gs < e for gs, ge in g))
+    res = {"auto_threshold_by_block": auto, "grid": []}
+    for (thr, low), c in cnt.items():
+        r = {"thr": thr, "low": low, "gold": c["gold"],
+             "sikre_n": c["sikre_n"], "sikre_falske": c["sikre_n"] - c["sikre_ok"],
+             "sikre_forkert_graense": c["sikre_overlap"] - c["sikre_ok"],
+             "praecision_sikre": round(c["sikre_ok"] / c["sikre_n"], 3) if c["sikre_n"] else None,
+             "recall_sikre": round(c["sikre_ok"] / c["gold"], 3),
+             "usikre_n": c["usikre_n"], "usikre_falske": c["usikre_n"] - c["usikre_ok"],
+             "praecision_usikre": round(c["usikre_ok"] / c["usikre_n"], 3) if c["usikre_n"] else None,
+             "recall_alle": round((c["sikre_ok"] + c["usikre_ok"]) / c["gold"], 3)}
+        res["grid"].append(r)
+        print(r)
+    print("auto-tærskler pr. blok:", auto)
     OUT.mkdir(exist_ok=True)
     (OUT / "tiers.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
 

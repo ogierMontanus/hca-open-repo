@@ -24,7 +24,7 @@ python scripts/parsers/ner_page_grounding.py          # dagbogens regelforankrin
 python almanak/ner/eval_grounding.py data/normalized/ner_page_grounding.csv
 python almanak/ner/model.py eval
 python almanak/ner/model.py ablate
-python almanak/ner/model.py tiers                     # sikre vs usikre forslag, bestemmer båndet i gennemsynssiden
+python almanak/ner/model.py tiers                     # gitter over HIGH/LOW (sikre/usikre); valgt i predict.py, se docs/plan-streng-grounding.md §3.14
 python almanak/ner/model.py train
 python almanak/ner/predict.py all
 python almanak/ner/build_review_page.py --out mockup/almanak-gennemsyn.html

@@ -469,7 +469,34 @@ eventyrenes ordliste (samtidig stavning; ord mærket «noun»/«lowercase») og 
 
 Forbehold: ét hold annotationer, små tal (95 %-intervallerne overlapper); gevinsten er størst på præcisionen, som er det, gennemsynet mærker.
 I stikprøven E–H forsvinder «Fluen», «Tænderne», «Gratiale», «Lidenskabelig», «Russisk»; 148 → 142 forslag. Ikke løst: «Skrevet 1ste Capitel» (modellen tager et udsagnsord med),
-og typen af uklare fællesnavne («Theatret»: sted eller institution?) — det er en redaktionel afgørelse. `LOW` (0,4) er ikke genkalibreret efter filteret (`model.py tiers`).
+og typen af uklare fællesnavne («Theatret»: sted eller institution?) — det er en redaktionel afgørelse. `LOW` (0,4) er ikke genkalibreret efter filteret (`model.py tiers`) — se §3.14.
+
+### 3.14 Strammere grænser: færre falske forslag (2026-11-24)
+
+*Ønske fra Holger: færre falske positive, både blandt de markerede (sikre) og de usikre forslag.*
+
+`model.py tiers` måler nu et gitter over begge grænser i blokvis krydsvalidering med fællesnavnsfilteret (almanakken, 136 guldspænd).
+Udvalgte rækker (falske = forslag, der ikke rammer en guldmarkering eksakt):
+
+| sikker fra | usikker fra | sikre (falske) | præcision sikre | recall sikre | usikre (falske) | falske i alt | recall i alt |
+|---|---|---:|---:|---:|---:|---:|---:|
+| modellens egen (0,55–0,65) | 0,4 (før) | 129 (22) | 0,829 | 0,787 | 11 (5) | 27 | 0,831 |
+| 0,70 | 0,6 | 115 (15) | 0,870 | 0,735 | 11 (4) | 19 | 0,787 |
+| **0,75** | **0,6** | **109 (11)** | **0,899** | **0,721** | **17 (8)** | **19** | **0,787** |
+| 0,80 | 0,7 | 101 (10) | 0,901 | 0,669 | 14 (5) | 15 | 0,735 |
+
+Valgt: **HIGH 0,75, LOW 0,6** (`almanak/ner/predict.py`; bruges af gennemsynssiden og `predict.py all`). De falske blandt de markerede halveres (22 → 11),
+og de falske i alt falder fra 27 til 19. Prisen: den samlede recall falder fra 0,83 til 0,79 — 6 rigtige forslag med p 0,4–0,6 forsvinder
+(i stikprøven E–H bl.a. «Commandeur Wulff», p 0,52, som Holger havde godkendt). Dem skal LLM-trinnet samle op (`docs/plan-llm-trin.md`).
+I stikprøven E–H: 142 → 127 forslag (127 → 115 sikre, 15 → 12 usikre); 12 forslag flytter fra markeret til usikker («Skrevet 1ste Capitel», «Theatret», «Odense» …).
+
+**Halvdelen af de falske sikre er forkerte grænser, ikke forkerte navne** (14 af 22 ved den gamle tærskel): spændet er for kort i forhold til Sørens markering —
+«Prindsessen»/«Preusen» for «Prindsessen af Preusen», «Georg» for «Georg 0 Neill» (OCR for O'Neill), «Alibert» for «Theater Alibert», «Chamissos» for «Chamissos Børn».
+Det løses ikke af en tærskel; kandidatgeneratoren laver ikke spænd over «af» og «0 Neill». Det er en opgave for LLM-trinnet, men først skal vi beslutte konventionen
+(skal «Chamissos Børn» og «Lucien Bonapartes Datter» markeres som én omtale?).
+
+**Allerede startede gennemsyn:** siden lægger maskinforslagene ind én gang pr. browser. Nu har forslagene et fingeraftryk (`PREFILL_V`); ved et nyt fingeraftryk
+udskiftes de urørte forslag på dage, der *ikke* er gennemgået. Rettede, slettede og tildelte forslag, alle menneskelige markeringer og gennemgåede dage bevares.
 
 ## 4. Anbefalet rækkefølge
 

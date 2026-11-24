@@ -57,7 +57,6 @@ Vælg en type eller «Ikke et navn» for hver. Dagen kan først afsluttes, når 
 </ol>
 Søren og Ole gennemgår de samme poster hver for sig, så vi også kan se, hvor I er uenige. Siden måler aktiv tid pr. blok.</div>"""
 
-LOW = 0.4   # under dette: intet forslag; mellem LOW og modellens tærskel: »usikker« (runde 3); `model.py tiers`
 
 REVIEW_PAGE = dict(
     store="almanak-gennemsyn-maskinforslag-v1",
@@ -89,7 +88,7 @@ def main(argv=None):
             continue
         assert ctx.alm[e["date"]]["text"] == e["text"], e["id"]
         linked = set()
-        for s in P.annotate(ctx, m, e["date"], e["text"], low=LOW, nf=nf):
+        for s in P.annotate(ctx, m, e["date"], e["text"], low=P.LOW, nf=nf, high=P.HIGH):
             rid = s["reg"]
             if rid and rid not in REG and rid in ents:
                 REG[rid] = bop.reg_entry(ents[rid], "", place_info)
