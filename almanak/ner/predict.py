@@ -59,9 +59,18 @@ def link(ctx, date, span_text, typ, g_date=None, g_page=None):
     return "", "", []
 
 
-def annotate(ctx, m, date, text, low=None):
-    """Forslag i posten. low=None: kun sikre (p >= modellens tærskel). low=0.2: også usikre (tier='usikker'),
-    som ikke skal markeres i teksten, men tildeles i en tredje runde."""
+# Grænserne for gennemsynet (`model.py tiers`, blokvis krydsvalidering med navneordsfilter, 2026-11-24):
+# modellens egen tærskel (tunet på bedste F1, 0,55-0,65) giver 17 % falske blandt de sikre; HIGH 0,75 halverer dem
+# (22 -> 11 af 129/109) for 7 point recall, som flyttes ned i de usikre. LOW 0,6 tager de usikre fra 11 (5 falske) ved
+# LOW 0,4 til 17 (8 falske) — men samlet falder de falske fra 27 til 19 ved samme samlede recall (0,79).
+HIGH = 0.75   # p >= HIGH: sikkert forslag, markeres stiplet i teksten (runde 1)
+LOW = 0.6     # LOW <= p < HIGH: usikkert forslag, ikke i teksten, tildeles i runde 3 (senere: LLM-trin, docs/plan-llm-trin.md)
+
+
+def annotate(ctx, m, date, text, low=None, nf=None, high=None):
+    """Forslag i posten. nf: NounFilter, der udelader fællesnavne uden støtte. high=None: modellens egen tærskel.
+    low=None: kun sikre (p >= high). low=0.6: også usikre (tier='usikker'), som ikke skal markeres i teksten,
+    men tildeles i en tredje runde."""
     import numpy as np
     from candidates import mention_kind
     spans, X = F.featurize(ctx, date, "almanak", text)
@@ -70,25 +79,34 @@ def annotate(ctx, m, date, text, low=None):
         return out
     g_date, g_page = ctx.alm_date_gazetteer(date), ctx.page_gazetteer(date)
     p = m.m.predict_proba(X)[:, 1]
-    conf, unc = M.decode_tiers(spans, p, m.threshold, low if low is not None else 2.0, X, m.tm)
+    thr = high if high is not None else m.threshold
+    conf, unc = M.decode_tiers(spans, p, thr, low if low is not None else 2.0, X, m.tm)
     for tier, items in (("sikker", conf), ("usikker", unc)):
         for s, e, typ, pr in items:
             rid, src, cands = link(ctx, date, text[s:e], typ, g_date, g_page)
+            if nf is not None and not nf.keep(text[s:e], linked=bool(rid or cands)):
+                continue     # åbenlyst fællesnavn uden støtte i registrene (noun_filter.py)
             out.append(dict(start=s, end=e, text=text[s:e], type=str(typ), p=round(float(pr), 3), reg=rid, link_src=src,
                             link_candidates=cands, tier=tier, mkind=mention_kind(text[s:e])))
     return sorted(out, key=lambda x: x["start"])
 
 
 def cmd_all():
+    import gold as G
+    from noun_filter import NounFilter, allow_from_gold
     ctx = Context()
     m = load_model()
+    ge = G.load_entries()
+    nf = NounFilter(ctx, allow_from_gold((ge[a["post_id"]]["text"], {(a["start"], a["end"]): a["type"]})
+                                         for a in G.load_gold() if a["post_id"] in ge))
+    by_tier = collections.Counter()
     cov = collections.Counter()
     unlinked = collections.Counter()
     by_type = collections.Counter()
     M.OUT.mkdir(exist_ok=True)
     with open(M.OUT / "almanac_predictions.jsonl", "w", encoding="utf-8") as fh:
         for i, (date, v) in enumerate(sorted(ctx.alm.items())):
-            pred = annotate(ctx, m, date, v["text"])
+            pred = annotate(ctx, m, date, v["text"], low=LOW, nf=nf, high=HIGH)
             rule = M.baseline_rule(ctx, {"date": date, "text": v["text"]})
             fh.write(json.dumps({"date": date, "text": v["text"], "spans": pred}, ensure_ascii=False) + "\n")
             persons = {rid for rid in ctx.alm_by_date.get(date, ()) if ctx.alm_reg[rid]["k"] == "P"}
@@ -104,6 +122,7 @@ def cmd_all():
             cov["model_spans"] += len(pred)
             cov["rule_spans"] += len(rule)
             for p in pred:
+                by_tier[p["tier"]] += 1
                 by_type[p["type"]] += 1
                 if not p["reg"] and not p["link_candidates"]:
                     unlinked[p["type"]] += 1
@@ -113,6 +132,7 @@ def cmd_all():
            "index_coverage_model": round(cov["model_linked"] / cov["index_refs"], 3),
            "index_coverage_rule": round(cov["rule_linked"] / cov["index_refs"], 3),
            "spans_model": cov["model_spans"], "spans_rule": cov["rule_spans"],
+           "thresholds": {"high": HIGH, "low": LOW}, "model_spans_by_tier": dict(by_tier),
            "model_spans_by_type": dict(by_type), "model_spans_without_register_match": dict(unlinked)}
     (M.OUT / "coverage.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps(res, ensure_ascii=False, indent=1))

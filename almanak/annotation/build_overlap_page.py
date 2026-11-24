@@ -30,6 +30,7 @@ import argparse
 import collections
 import csv
 import difflib
+import hashlib
 import json
 import re
 import sys
@@ -279,6 +280,7 @@ def render(entries, REG, blocks, out, prefill=(), page=OVERLAP_PAGE):
                .replace("__REG__", json.dumps(REG, ensure_ascii=False))
                .replace("__BLOCKS__", json.dumps(blocks))
                .replace("__PREFILL__", json.dumps(list(prefill), ensure_ascii=False))
+               .replace("__PREFILL_V__", hashlib.sha1(json.dumps(list(prefill), sort_keys=True).encode()).hexdigest()[:10])
                .replace("__STORE__", page["store"]).replace("__MODE__", page["mode"])
                .replace("__TITLE__", page["title"]).replace("__SUB__", page["sub"])
                .replace("__REVIEWED_LABEL__", page["reviewed_label"]).replace("__GUIDE_EXTRA__", page["guide_extra"])

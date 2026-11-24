@@ -38,45 +38,9 @@
    "text": "Andersens",
    "type": "P",
    "mtype": "P",
-   "p": 0.85,
+   "p": 0.905,
    "reg": "ALMP0039",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-09-26",
-   "start": 28,
-   "end": 33,
-   "text": "Fluen",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.657,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-09-26",
-   "start": 63,
-   "end": 76,
-   "text": "Lidenskabelig",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.567,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-09-27",
-   "start": 9,
-   "end": 25,
-   "text": "Commandeur Wulff",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.582,
-   "reg": "ALMP1976",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -84,23 +48,11 @@
    "start": 50,
    "end": 69,
    "text": "Jettes Barnagtighed",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.836,
-   "reg": "",
-   "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-09-27",
-   "start": 78,
-   "end": 89,
-   "text": "Naragtighed",
    "type": "V",
    "mtype": "V",
-   "p": 0.459,
+   "p": 0.932,
    "reg": "",
-   "tier": "usikker",
+   "tier": "sikker",
    "mkind": "navn"
   },
   {
@@ -110,7 +62,7 @@
    "text": "Thorvaldsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.765,
+   "p": 0.755,
    "reg": "ALMP1824",
    "tier": "sikker",
    "mkind": "navn"
@@ -128,61 +80,13 @@
    "mkind": "navn"
   },
   {
-   "entry": "ALM-1838-09-27",
-   "start": 137,
-   "end": 145,
-   "text": "Theatret",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.625,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-09-28",
-   "start": 6,
-   "end": 15,
-   "text": "Andersens",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.412,
-   "reg": "ALMP0039",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-09-28",
-   "start": 24,
-   "end": 26,
-   "text": "De",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.473,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "pronomen"
-  },
-  {
-   "entry": "ALM-1838-09-28",
-   "start": 30,
-   "end": 40,
-   "text": "Grenaderer",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.509,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
    "entry": "ALM-1838-09-29",
    "start": 4,
    "end": 13,
    "text": "Fru Bügel",
    "type": "P",
    "mtype": "P",
-   "p": 0.99,
+   "p": 0.989,
    "reg": "ALMP0297",
    "tier": "sikker",
    "mkind": "navn"
@@ -194,7 +98,7 @@
    "text": "Thorvaldsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.976,
+   "p": 0.977,
    "reg": "ALMP1824",
    "tier": "sikker",
    "mkind": "navn"
@@ -204,9 +108,9 @@
    "start": 67,
    "end": 87,
    "text": "Skrevet 1ste Capitel",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.591,
+   "type": "L",
+   "mtype": "L",
+   "p": 0.63,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -218,19 +122,7 @@
    "text": "Min Ven X",
    "type": "P",
    "mtype": "P",
-   "p": 0.688,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-09-30",
-   "start": 49,
-   "end": 62,
-   "text": "Kannikestræde",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.568,
+   "p": 0.71,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -242,45 +134,9 @@
    "text": "Munks",
    "type": "P",
    "mtype": "P",
-   "p": 0.822,
+   "p": 0.849,
    "reg": "ALMP1263",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-10-01",
-   "start": 56,
-   "end": 62,
-   "text": "Opiums",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.48,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-10-01",
-   "start": 96,
-   "end": 104,
-   "text": "Gratiale",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.61,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-10-01",
-   "start": 131,
-   "end": 136,
-   "text": "Hødts",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.64,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -288,21 +144,9 @@
    "start": 144,
    "end": 157,
    "text": "Børne-Eventyr",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.665,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-10-01",
-   "start": 194,
-   "end": 201,
-   "text": "Russisk",
    "type": "P",
    "mtype": "P",
-   "p": 0.443,
+   "p": 0.624,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -326,32 +170,8 @@
    "text": "Barfods",
    "type": "P",
    "mtype": "P",
-   "p": 0.949,
+   "p": 0.951,
    "reg": "ALMP0097",
-   "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-10-02",
-   "start": 50,
-   "end": 60,
-   "text": "Romergilde",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.502,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-10-03",
-   "start": 14,
-   "end": 22,
-   "text": "Tænderne",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.821,
-   "reg": "",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -362,7 +182,7 @@
    "text": "Meisling",
    "type": "P",
    "mtype": "P",
-   "p": 0.923,
+   "p": 0.911,
    "reg": "ALMP1188",
    "tier": "sikker",
    "mkind": "navn"
@@ -374,7 +194,7 @@
    "text": "Collins",
    "type": "P",
    "mtype": "P",
-   "p": 0.987,
+   "p": 0.988,
    "reg": "ALMP0383",
    "tier": "sikker",
    "mkind": "navn"
@@ -386,7 +206,7 @@
    "text": "Heibergs",
    "type": "P",
    "mtype": "P",
-   "p": 0.975,
+   "p": 0.973,
    "reg": "ALMP0771",
    "tier": "sikker",
    "mkind": "navn"
@@ -398,8 +218,8 @@
    "text": "Freund",
    "type": "P",
    "mtype": "P",
-   "p": 0.886,
-   "reg": "",
+   "p": 0.936,
+   "reg": "ALMP0592",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -410,7 +230,7 @@
    "text": "Thorvaldsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.961,
+   "p": 0.963,
    "reg": "ALMP1824",
    "tier": "sikker",
    "mkind": "navn"
@@ -422,19 +242,7 @@
    "text": "Theatret",
    "type": "L",
    "mtype": "L",
-   "p": 0.723,
-   "reg": "",
-   "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1838-10-03",
-   "start": 194,
-   "end": 202,
-   "text": "Maaneder",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.402,
+   "p": 0.7,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -446,7 +254,7 @@
    "text": "Gottskalk",
    "type": "P",
    "mtype": "P",
-   "p": 0.635,
+   "p": 0.62,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -458,7 +266,7 @@
    "text": "Fru Næboe",
    "type": "P",
    "mtype": "P",
-   "p": 0.997,
+   "p": 0.996,
    "reg": "ALMP1323",
    "tier": "sikker",
    "mkind": "navn"
@@ -470,33 +278,9 @@
    "text": "Eduard",
    "type": "P",
    "mtype": "P",
-   "p": 0.952,
+   "p": 0.954,
    "reg": "ALMP0374",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1843-04-19",
-   "start": 57,
-   "end": 70,
-   "text": "Billedgalleri",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.561,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1843-04-20",
-   "start": 26,
-   "end": 32,
-   "text": "Torden",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.528,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -518,19 +302,7 @@
    "text": "Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.706,
-   "reg": "ALMP0383",
-   "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1843-04-22",
-   "start": 14,
-   "end": 19,
-   "text": "Kjole",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.531,
+   "p": 0.716,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -542,7 +314,7 @@
    "text": "Kalkbrender",
    "type": "P",
    "mtype": "P",
-   "p": 0.99,
+   "p": 0.986,
    "reg": "ALMP0964",
    "tier": "sikker",
    "mkind": "navn"
@@ -554,7 +326,7 @@
    "text": "Tartuffe",
    "type": "V",
    "mtype": "V",
-   "p": 0.956,
+   "p": 0.942,
    "reg": "Reg003190",
    "tier": "sikker",
    "mkind": "navn"
@@ -566,7 +338,7 @@
    "text": "L Avare",
    "type": "V",
    "mtype": "V",
-   "p": 0.974,
+   "p": 0.983,
    "reg": "Reg001964",
    "tier": "sikker",
    "mkind": "navn"
@@ -578,7 +350,7 @@
    "text": "Grevinde Holck",
    "type": "P",
    "mtype": "P",
-   "p": 0.994,
+   "p": 0.993,
    "reg": "ALMP0834",
    "tier": "sikker",
    "mkind": "navn"
@@ -590,7 +362,7 @@
    "text": "Ahlefeldt",
    "type": "P",
    "mtype": "P",
-   "p": 0.942,
+   "p": 0.925,
    "reg": "ALMP0018",
    "tier": "sikker",
    "mkind": "navn"
@@ -600,9 +372,9 @@
    "start": 35,
    "end": 40,
    "text": "Saaby",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.858,
+   "type": "P",
+   "mtype": "P",
+   "p": 0.888,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -614,7 +386,7 @@
    "text": "Hoskjær",
    "type": "P",
    "mtype": "P",
-   "p": 0.623,
+   "p": 0.686,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -638,7 +410,7 @@
    "text": "Wulff",
    "type": "P",
    "mtype": "P",
-   "p": 0.883,
+   "p": 0.887,
    "reg": "ALMP1976",
    "tier": "sikker",
    "mkind": "navn"
@@ -660,33 +432,21 @@
    "start": 93,
    "end": 110,
    "text": "Agnetes Opførelse",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.743,
-   "reg": "",
-   "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1843-04-24",
-   "start": 134,
-   "end": 144,
-   "text": "Freischytz",
    "type": "L",
    "mtype": "L",
-   "p": 0.662,
+   "p": 0.746,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
   },
   {
    "entry": "ALM-1843-04-24",
-   "start": 148,
-   "end": 154,
-   "text": "Gizell",
-   "type": "S",
-   "mtype": "S",
-   "p": 0.466,
+   "start": 128,
+   "end": 144,
+   "text": "Opera Freischytz",
+   "type": "L",
+   "mtype": "L",
+   "p": 0.71,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -710,7 +470,7 @@
    "text": "Billedhuggeren David",
    "type": "P",
    "mtype": "P",
-   "p": 0.997,
+   "p": 0.99,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -722,7 +482,7 @@
    "text": "Faderen Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.91,
+   "p": 0.911,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -734,7 +494,7 @@
    "text": "Delatour",
    "type": "P",
    "mtype": "P",
-   "p": 0.96,
+   "p": 0.962,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -746,7 +506,7 @@
    "text": "Alfred",
    "type": "P",
    "mtype": "P",
-   "p": 0.863,
+   "p": 0.876,
    "reg": "ALMP1884",
    "tier": "sikker",
    "mkind": "navn"
@@ -758,7 +518,7 @@
    "text": "Vigni",
    "type": "P",
    "mtype": "P",
-   "p": 0.84,
+   "p": 0.827,
    "reg": "ALMP1884",
    "tier": "sikker",
    "mkind": "navn"
@@ -770,7 +530,7 @@
    "text": "Barbieri",
    "type": "P",
    "mtype": "P",
-   "p": 0.972,
+   "p": 0.961,
    "reg": "ALMP0087",
    "tier": "sikker",
    "mkind": "navn"
@@ -782,21 +542,9 @@
    "text": "Alfred",
    "type": "P",
    "mtype": "P",
-   "p": 0.913,
+   "p": 0.911,
    "reg": "ALMP1884",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1843-04-26",
-   "start": 133,
-   "end": 138,
-   "text": "Vigni",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.441,
-   "reg": "ALMP1884",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -806,21 +554,9 @@
    "text": "Mad: Reybauld",
    "type": "P",
    "mtype": "P",
-   "p": 0.993,
+   "p": 0.995,
    "reg": "",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1843-04-26",
-   "start": 168,
-   "end": 174,
-   "text": "Soiree",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.606,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -830,7 +566,7 @@
    "text": "Angelos",
    "type": "P",
    "mtype": "P",
-   "p": 0.971,
+   "p": 0.973,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -842,7 +578,7 @@
    "text": "Dr Reistab",
    "type": "P",
    "mtype": "P",
-   "p": 0.807,
+   "p": 0.831,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -854,7 +590,7 @@
    "text": "Rosas",
    "type": "P",
    "mtype": "P",
-   "p": 0.699,
+   "p": 0.744,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -866,7 +602,7 @@
    "text": "Glorup",
    "type": "P",
    "mtype": "P",
-   "p": 0.755,
+   "p": 0.79,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -878,7 +614,7 @@
    "text": "Grev Adam Moltke-Hvidtfeldt",
    "type": "P",
    "mtype": "P",
-   "p": 0.995,
+   "p": 0.993,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -890,7 +626,7 @@
    "text": "Grev Harald",
    "type": "P",
    "mtype": "P",
-   "p": 0.932,
+   "p": 0.936,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -902,7 +638,7 @@
    "text": "Glorup",
    "type": "P",
    "mtype": "P",
-   "p": 0.755,
+   "p": 0.79,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -914,7 +650,7 @@
    "text": "Drewsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.743,
+   "p": 0.78,
    "reg": "ALMP0471",
    "tier": "sikker",
    "mkind": "navn"
@@ -926,8 +662,8 @@
    "text": "Frøken Wulff",
    "type": "P",
    "mtype": "P",
-   "p": 0.994,
-   "reg": "",
+   "p": 0.997,
+   "reg": "ALMP1976",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -938,8 +674,8 @@
    "text": "Mathilde Ørsted",
    "type": "P",
    "mtype": "P",
-   "p": 0.997,
-   "reg": "",
+   "p": 0.999,
+   "reg": "ALMP2015",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -950,21 +686,9 @@
    "text": "Mad: Thyberg",
    "type": "P",
    "mtype": "P",
-   "p": 0.967,
-   "reg": "",
+   "p": 0.984,
+   "reg": "ALMP1833",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1853-07-21",
-   "start": 90,
-   "end": 96,
-   "text": "Natten",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.648,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -974,8 +698,8 @@
    "text": "Faderen Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.987,
-   "reg": "",
+   "p": 0.994,
+   "reg": "ALMP0383",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -986,8 +710,8 @@
    "text": "Louise Lind",
    "type": "P",
    "mtype": "P",
-   "p": 0.988,
-   "reg": "",
+   "p": 0.995,
+   "reg": "ALMP1083",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -998,8 +722,8 @@
    "text": "Fru Ingeborg Drevsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.998,
-   "reg": "",
+   "p": 0.999,
+   "reg": "ALMP0478",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1010,7 +734,7 @@
    "text": "Eduard",
    "type": "P",
    "mtype": "P",
-   "p": 0.883,
+   "p": 0.902,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1022,8 +746,8 @@
    "text": "Elise Mangold",
    "type": "P",
    "mtype": "P",
-   "p": 0.986,
-   "reg": "",
+   "p": 0.967,
+   "reg": "ALMP1154",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1034,8 +758,8 @@
    "text": "Jette Wulff",
    "type": "P",
    "mtype": "P",
-   "p": 0.99,
-   "reg": "",
+   "p": 0.984,
+   "reg": "ALMP1976",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1046,8 +770,8 @@
    "text": "Eduard",
    "type": "P",
    "mtype": "P",
-   "p": 0.947,
-   "reg": "",
+   "p": 0.988,
+   "reg": "ALMP0374",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1058,7 +782,7 @@
    "text": "Faderen Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.994,
+   "p": 0.998,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1066,12 +790,24 @@
   {
    "entry": "ALM-1853-07-23",
    "start": 48,
-   "end": 78,
-   "text": "Christie Collin [o: Hornemann]",
+   "end": 63,
+   "text": "Christie Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.981,
+   "p": 0.841,
    "reg": "",
+   "tier": "sikker",
+   "mkind": "navn"
+  },
+  {
+   "entry": "ALM-1853-07-23",
+   "start": 68,
+   "end": 78,
+   "text": "Hornemann]",
+   "type": "P",
+   "mtype": "P",
+   "p": 0.952,
+   "reg": "ALMP0868",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1082,21 +818,9 @@
    "text": "Ingeborg Drewsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.987,
-   "reg": "",
+   "p": 0.993,
+   "reg": "ALMP0478",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1853-07-24",
-   "start": 12,
-   "end": 19,
-   "text": "Drevsen",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.473,
-   "reg": "ALMP0471",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1106,7 +830,7 @@
    "text": "A. Drevsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.865,
+   "p": 0.879,
    "reg": "ALMP0471",
    "tier": "sikker",
    "mkind": "navn"
@@ -1118,7 +842,7 @@
    "text": "Jette Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.987,
+   "p": 0.989,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1130,33 +854,9 @@
    "text": "Baronesse Giildencrone",
    "type": "P",
    "mtype": "P",
-   "p": 0.976,
+   "p": 0.983,
    "reg": "",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1853-07-25",
-   "start": 73,
-   "end": 85,
-   "text": "Wilhelmsborg",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.567,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1853-07-25",
-   "start": 91,
-   "end": 103,
-   "text": "Postmesteren",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.523,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1164,9 +864,9 @@
    "start": 106,
    "end": 112,
    "text": "Odense",
-   "type": "V",
-   "mtype": "V",
-   "p": 0.629,
+   "type": "S",
+   "mtype": "S",
+   "p": 0.663,
    "reg": "",
    "tier": "usikker",
    "mkind": "navn"
@@ -1178,8 +878,8 @@
    "text": "Jomfru Ibsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.992,
-   "reg": "",
+   "p": 0.998,
+   "reg": "ALMP0911",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1190,7 +890,7 @@
    "text": "Svendborg",
    "type": "L",
    "mtype": "L",
-   "p": 0.955,
+   "p": 0.963,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1202,8 +902,8 @@
    "text": "Malle Drevsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.988,
-   "reg": "",
+   "p": 0.986,
+   "reg": "ALMP0472",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1214,7 +914,7 @@
    "text": "Hertugen af Weimar",
    "type": "P",
    "mtype": "P",
-   "p": 0.98,
+   "p": 0.986,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1226,8 +926,8 @@
    "text": "Malle Drevsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.991,
-   "reg": "",
+   "p": 0.99,
+   "reg": "ALMP0472",
    "tier": "sikker",
    "mkind": "navn"
   },
@@ -1238,21 +938,9 @@
    "text": "Emilie Hornemann",
    "type": "P",
    "mtype": "P",
-   "p": 0.985,
-   "reg": "",
+   "p": 0.992,
+   "reg": "ALMP0870",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1853-07-27",
-   "start": 9,
-   "end": 21,
-   "text": "Postmesteren",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.599,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1262,9 +950,9 @@
    "text": "Odense",
    "type": "V",
    "mtype": "V",
-   "p": 0.697,
+   "p": 0.761,
    "reg": "",
-   "tier": "usikker",
+   "tier": "sikker",
    "mkind": "navn"
   },
   {
@@ -1274,7 +962,7 @@
    "text": "Gottlieb Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.99,
+   "p": 0.991,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1286,7 +974,7 @@
    "text": "Jonna Stampe",
    "type": "P",
    "mtype": "P",
-   "p": 0.984,
+   "p": 0.987,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1298,7 +986,7 @@
    "text": "Montreux",
    "type": "S",
    "mtype": "S",
-   "p": 0.975,
+   "p": 0.981,
    "reg": "LOC1067450",
    "tier": "sikker",
    "mkind": "navn"
@@ -1310,7 +998,7 @@
    "text": "Lausanne",
    "type": "S",
    "mtype": "S",
-   "p": 0.982,
+   "p": 0.991,
    "reg": "LOC1056050",
    "tier": "sikker",
    "mkind": "navn"
@@ -1322,7 +1010,7 @@
    "text": "Amberger",
    "type": "P",
    "mtype": "P",
-   "p": 0.948,
+   "p": 0.941,
    "reg": "ALMP0028",
    "tier": "sikker",
    "mkind": "navn"
@@ -1334,7 +1022,7 @@
    "text": "Basel",
    "type": "L",
    "mtype": "L",
-   "p": 0.973,
+   "p": 0.975,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1346,7 +1034,7 @@
    "text": "Fru Serre",
    "type": "P",
    "mtype": "P",
-   "p": 0.963,
+   "p": 0.965,
    "reg": "ALMP1708",
    "tier": "sikker",
    "mkind": "navn"
@@ -1356,9 +1044,9 @@
    "start": 74,
    "end": 81,
    "text": "Dresden",
-   "type": "L",
-   "mtype": "L",
-   "p": 0.969,
+   "type": "S",
+   "mtype": "S",
+   "p": 0.971,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1366,11 +1054,11 @@
   {
    "entry": "ALM-1861-06-28",
    "start": 105,
-   "end": 114,
-   "text": "Christian",
+   "end": 122,
+   "text": "Christian Winther",
    "type": "P",
    "mtype": "P",
-   "p": 0.915,
+   "p": 0.921,
    "reg": "ALMP1955",
    "tier": "sikker",
    "mkind": "navn"
@@ -1382,9 +1070,9 @@
    "text": "Eduard Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.762,
+   "p": 0.743,
    "reg": "",
-   "tier": "sikker",
+   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1394,7 +1082,7 @@
    "text": "Jette Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.892,
+   "p": 0.884,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1406,7 +1094,7 @@
    "text": "Etatsraad Drevsen",
    "type": "P",
    "mtype": "P",
-   "p": 0.978,
+   "p": 0.983,
    "reg": "ALMP0471",
    "tier": "sikker",
    "mkind": "navn"
@@ -1418,7 +1106,7 @@
    "text": "Fru Lind",
    "type": "P",
    "mtype": "P",
-   "p": 0.97,
+   "p": 0.941,
    "reg": "ALMP1083",
    "tier": "sikker",
    "mkind": "navn"
@@ -1430,7 +1118,7 @@
    "text": "Jette Petersen",
    "type": "P",
    "mtype": "P",
-   "p": 0.98,
+   "p": 0.968,
    "reg": "ALMP1367",
    "tier": "sikker",
    "mkind": "navn"
@@ -1442,7 +1130,7 @@
    "text": "Fru Balling",
    "type": "P",
    "mtype": "P",
-   "p": 0.996,
+   "p": 0.997,
    "reg": "ALMP0080",
    "tier": "sikker",
    "mkind": "navn"
@@ -1454,7 +1142,7 @@
    "text": "Eckard",
    "type": "P",
    "mtype": "P",
-   "p": 0.983,
+   "p": 0.978,
    "reg": "ALMP0507",
    "tier": "sikker",
    "mkind": "navn"
@@ -1466,7 +1154,7 @@
    "text": "Scharff",
    "type": "P",
    "mtype": "P",
-   "p": 0.882,
+   "p": 0.884,
    "reg": "ALMP1624",
    "tier": "sikker",
    "mkind": "navn"
@@ -1478,31 +1166,19 @@
    "text": "Paris",
    "type": "S",
    "mtype": "S",
-   "p": 0.987,
+   "p": 0.991,
    "reg": "LOC1077650",
    "tier": "sikker",
    "mkind": "navn"
   },
   {
    "entry": "ALM-1861-06-28",
-   "start": 274,
-   "end": 286,
-   "text": "Efterretning",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.487,
-   "reg": "",
-   "tier": "usikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1861-06-28",
    "start": 290,
-   "end": 305,
-   "text": "Faderen Collins",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.948,
+   "end": 317,
+   "text": "Faderen Collins Afkræftelse",
+   "type": "L",
+   "mtype": "L",
+   "p": 0.956,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1514,7 +1190,7 @@
    "text": "Eduard Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.976,
+   "p": 0.973,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1526,7 +1202,7 @@
    "text": "Christian Winther",
    "type": "P",
    "mtype": "P",
-   "p": 0.988,
+   "p": 0.99,
    "reg": "ALMP1955",
    "tier": "sikker",
    "mkind": "navn"
@@ -1538,7 +1214,7 @@
    "text": "Amberger",
    "type": "P",
    "mtype": "P",
-   "p": 0.983,
+   "p": 0.982,
    "reg": "ALMP0028",
    "tier": "sikker",
    "mkind": "navn"
@@ -1550,33 +1226,9 @@
    "text": "Jules Jürgensen",
    "type": "P",
    "mtype": "P",
-   "p": 0.995,
+   "p": 0.996,
    "reg": "ALMP0947",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1861-06-29",
-   "start": 38,
-   "end": 48,
-   "text": "Agathe Auf",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.864,
-   "reg": "",
-   "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1861-06-29",
-   "start": 53,
-   "end": 58,
-   "text": "Mauer",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.492,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1586,7 +1238,7 @@
    "text": "Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.647,
+   "p": 0.642,
    "reg": "ALMP0374",
    "tier": "usikker",
    "mkind": "navn"
@@ -1598,7 +1250,7 @@
    "text": "Eckard",
    "type": "P",
    "mtype": "P",
-   "p": 0.983,
+   "p": 0.978,
    "reg": "ALMP0507",
    "tier": "sikker",
    "mkind": "navn"
@@ -1610,7 +1262,7 @@
    "text": "Scharf",
    "type": "P",
    "mtype": "P",
-   "p": 0.884,
+   "p": 0.886,
    "reg": "ALMP1624",
    "tier": "sikker",
    "mkind": "navn"
@@ -1622,7 +1274,7 @@
    "text": "Tang",
    "type": "P",
    "mtype": "P",
-   "p": 0.984,
+   "p": 0.965,
    "reg": "ALMP1807",
    "tier": "sikker",
    "mkind": "navn"
@@ -1634,7 +1286,7 @@
    "text": "Ingemann",
    "type": "P",
    "mtype": "P",
-   "p": 0.909,
+   "p": 0.9,
    "reg": "ALMP0906",
    "tier": "sikker",
    "mkind": "navn"
@@ -1646,7 +1298,7 @@
    "text": "Lausanne",
    "type": "S",
    "mtype": "S",
-   "p": 0.904,
+   "p": 0.936,
    "reg": "LOC1056050",
    "tier": "sikker",
    "mkind": "navn"
@@ -1658,7 +1310,7 @@
    "text": "Fribourg",
    "type": "P",
    "mtype": "P",
-   "p": 0.739,
+   "p": 0.777,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1670,7 +1322,7 @@
    "text": "Freiburg",
    "type": "L",
    "mtype": "L",
-   "p": 0.84,
+   "p": 0.848,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1682,21 +1334,9 @@
    "text": "Bern",
    "type": "S",
    "mtype": "S",
-   "p": 0.975,
+   "p": 0.986,
    "reg": "LOC1009150",
    "tier": "sikker",
-   "mkind": "navn"
-  },
-  {
-   "entry": "ALM-1861-07-01",
-   "start": 22,
-   "end": 27,
-   "text": "Sendt",
-   "type": "P",
-   "mtype": "P",
-   "p": 0.405,
-   "reg": "",
-   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1718,7 +1358,7 @@
    "text": "Louise",
    "type": "P",
    "mtype": "P",
-   "p": 0.835,
+   "p": 0.845,
    "reg": "",
    "tier": "sikker",
    "mkind": "navn"
@@ -1730,7 +1370,7 @@
    "text": "Eduard",
    "type": "P",
    "mtype": "P",
-   "p": 0.841,
+   "p": 0.829,
    "reg": "ALMP0374",
    "tier": "sikker",
    "mkind": "navn"
@@ -1742,7 +1382,7 @@
    "text": "Bern",
    "type": "S",
    "mtype": "S",
-   "p": 0.838,
+   "p": 0.893,
    "reg": "LOC1009150",
    "tier": "sikker",
    "mkind": "navn"
@@ -1754,7 +1394,7 @@
    "text": "Thun",
    "type": "S",
    "mtype": "S",
-   "p": 0.8,
+   "p": 0.842,
    "reg": "LOC1106550",
    "tier": "sikker",
    "mkind": "navn"
@@ -1766,7 +1406,7 @@
    "text": "Interlaken",
    "type": "S",
    "mtype": "S",
-   "p": 0.968,
+   "p": 0.981,
    "reg": "LOC1047050",
    "tier": "sikker",
    "mkind": "navn"
@@ -1778,7 +1418,7 @@
    "text": "Lauterbrunnen",
    "type": "S",
    "mtype": "S",
-   "p": 0.994,
+   "p": 0.996,
    "reg": "LOC1056100",
    "tier": "sikker",
    "mkind": "navn"
@@ -1790,7 +1430,7 @@
    "text": "Grindelwald",
    "type": "S",
    "mtype": "S",
-   "p": 0.978,
+   "p": 0.983,
    "reg": "LOC1037750",
    "tier": "sikker",
    "mkind": "navn"
@@ -1802,7 +1442,7 @@
    "text": "Interlaken",
    "type": "S",
    "mtype": "S",
-   "p": 0.939,
+   "p": 0.963,
    "reg": "LOC1047050",
    "tier": "sikker",
    "mkind": "navn"
@@ -1814,7 +1454,7 @@
    "text": "Brientz",
    "type": "S",
    "mtype": "S",
-   "p": 0.837,
+   "p": 0.811,
    "reg": "LOC1013750",
    "tier": "sikker",
    "mkind": "navn"
@@ -1826,7 +1466,7 @@
    "text": "Luzern",
    "type": "S",
    "mtype": "S",
-   "p": 0.962,
+   "p": 0.975,
    "reg": "LOC1060450",
    "tier": "sikker",
    "mkind": "navn"
@@ -1838,7 +1478,7 @@
    "text": "Luzern",
    "type": "S",
    "mtype": "S",
-   "p": 0.907,
+   "p": 0.925,
    "reg": "LOC1060450",
    "tier": "sikker",
    "mkind": "navn"
@@ -1850,7 +1490,7 @@
    "text": "Brunnen",
    "type": "S",
    "mtype": "S",
-   "p": 0.979,
+   "p": 0.99,
    "reg": "LOC1014350",
    "tier": "sikker",
    "mkind": "navn"
@@ -1862,7 +1502,7 @@
    "text": "Thiele",
    "type": "P",
    "mtype": "P",
-   "p": 0.946,
+   "p": 0.947,
    "reg": "ALMP1821",
    "tier": "sikker",
    "mkind": "navn"
@@ -1874,9 +1514,9 @@
    "text": "Eduard Collin",
    "type": "P",
    "mtype": "P",
-   "p": 0.762,
+   "p": 0.743,
    "reg": "ALMP0374",
-   "tier": "sikker",
+   "tier": "usikker",
    "mkind": "navn"
   },
   {
@@ -1886,7 +1526,7 @@
    "text": "Frøken Bjerring",
    "type": "P",
    "mtype": "P",
-   "p": 0.987,
+   "p": 0.986,
    "reg": "ALMP0172",
    "tier": "sikker",
    "mkind": "navn"
@@ -1898,7 +1538,7 @@
    "text": "Jonna Stampe",
    "type": "P",
    "mtype": "P",
-   "p": 0.991,
+   "p": 0.992,
    "reg": "ALMP1761",
    "tier": "sikker",
    "mkind": "navn"
@@ -1910,7 +1550,7 @@
    "text": "Bille",
    "type": "P",
    "mtype": "P",
-   "p": 0.895,
+   "p": 0.807,
    "reg": "ALMP0153",
    "tier": "sikker",
    "mkind": "navn"
@@ -1922,7 +1562,7 @@
    "text": "Fru Serre",
    "type": "P",
    "mtype": "P",
-   "p": 0.947,
+   "p": 0.943,
    "reg": "ALMP1708",
    "tier": "sikker",
    "mkind": "navn"

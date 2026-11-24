@@ -94,7 +94,7 @@ target (post_id eller blok), flags (uncertain "(?)", not_in_xi "+"), resolution,
 
 * `headword_id`: id for registeropslaget (`ALMP0001`, `ALMW0001`). Prototypen findes (`scripts/parse_register.py`, `data/register/`); id'erne er foreløbige, indtil registret er korrekturlæst og OCR'en endeligt valgt.
 * `entity_id`: kandidat i projektets egne registre (`Reg…` for personer og
-  værker, via Dagbøger XI-opslaget; nye personer markeret »+« får egne id'er).
+  værker, via Dagbøger XI-opslaget; nye personer markeret »÷« får egne id'er; se `registertegn.md`).
 * `resolution`: `exact` · `ocr_year_corrected` (fx »1833 11.7« → 1855, fordi
   kun 1855 har en post den 11.7 med navnet) · `ambiguous` · `unresolved`.
 

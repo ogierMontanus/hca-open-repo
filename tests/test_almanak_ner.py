@@ -62,3 +62,28 @@ def test_eval_review_tiers_and_mention_kind(tmp_path):
     assert res["usikre_forslag"] == {"n": 2, "andel_der_var_navne": 0.5}
     assert res["recall_sikre"] == round(2 / 3, 3) and res["recall_med_usikre"] == 0.75
     assert res["pr_omtaleform"]["omtale"] == {"fundet af modellen": 0, "tilføjet": 1, "recall": 0.0}
+
+
+class _Gaz:
+    def __init__(self, known=()):
+        self.known = set(known)
+
+    def lookup(self, s, fuzzy=True):
+        return (1.0, {("X", "person", "sur")}) if s.lower() in self.known else (0.0, set())
+
+
+class _Ctx:
+    ext_words = {"tænderne": "hca", "fluen": "hca", "theatret": "hca", "kongen": "hca", "lidenskabelig": "hca", "munk": "ods", "munks": "ods"}
+    alm_gaz = _Gaz({"munks"})
+    dia_gaz = _Gaz()
+
+
+def test_noun_filter_drops_common_nouns_unless_supported():
+    import noun_filter as N
+    nf = N.NounFilter(_Ctx(), allow={"theatret"})
+    assert not nf.keep("Tænderne") and not nf.keep("Fluen") and not nf.keep("Lidenskabelig")
+    assert nf.keep("Theatret")                         # navnelignende fællesnavn (på listen)
+    assert nf.keep("Kongen")                           # fra håndlisten data/entity_like_nouns.txt
+    assert nf.keep("Fluen", linked=True)               # kobles til en registerpost
+    assert nf.keep("Munks")                            # formen findes i registret
+    assert nf.keep("Jette Wulff") and nf.keep("Frøken Tænderne")   # ikke kun fællesnavne / har titel

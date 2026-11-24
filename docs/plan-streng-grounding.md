@@ -433,6 +433,93 @@ pr. blok; afviste og tildelte usikre forslag gemmes. **Senere:** modellen får s
 heuristik og menneskets valgfrie angivelse), og koblingen af omtaler (»Kongen« → Christian VIII) behandles som en
 egen opgave, ikke som navneopslag.
 
+### 3.13 OCR-rettelser i almanakregistret og fællesnavne ud af forslagene (2026-11-23)
+
+*Aftale med Holger efter første gennemsyn af maskinforslagene.*
+
+**Registrets datoer blev ikke brugt konsekvent — årsagen var OCR.** Tre fejl i `parse_register.py`:
+(1) OCR læser «.» som «-» (`1843 7-5-`) og hænger støj på (`21.3.-`, `27.6$`); ca. 170 opslag fik derfor *ingen* henvisninger;
+(2) en henvisning med ulæseligt årstal (`‘859`, `1830`, `1899`) arvede stiltiende året fra forrige henvisning;
+(3) datoer, der står i selve opslagsordet (`Romanen, 26.9. og 29.9.1838`), blev slet ikke læst — derfor kunne gennemsynssiden kun koble «Romanen»
+til 26.9., ikke 29.9. Rettet i `parse_register.py` + `register_repair.py`; kolonnerne `src` og `fix` i `refs.csv` viser, hvad der er gjort ved hver henvisning.
+Et ødelagt årstal får kun et nyt år, hvis personens/værkets navn står i almanakposten på netop den dato (98 henvisninger; fx 1830→1850: 51, 1899→1859: 13).
+
+| | før | efter |
+|---|---:|---:|
+| henvisninger med læsbar dato | 9.283 | 9.774 |
+| …hvor navnet kan ses i almanakposten på datoen | 4.974 | 5.529 |
+| ulæselige datoer (valid=0) | 209 | 90 |
+| opslag uden henvisning (ikke krydshenvisninger) | 177 | 56 |
+
+**Navne:** 70 håndholdte rettelser i `data/register/ocr_corrections.tsv` (`WulfT`→`Wulff`, `Nccrgaard`→`Neergaard`, `Billc-Brahc`→`Bille-Brahe` …; mønstre: «c» læst for «e»,
+«fT/lT» for «ff»). Den oprindelige etiket er bevaret i `label_ocr`, OCR-teksten i `raw`. `python almanak/scripts/register_repair.py suggest` foreslår nye linjer.
+Registerets labels bruges til kobling, så «Commandeur Wulff» nu kobles til «Wulff, Peter Frederik» og ikke «WulfT».
+
+**Fællesnavne.** «Tænderne», «Fluen», «Gratiale» blev foreslået som navne. Alle navneord er stort begyndt i tidens retskrivning, så store bogstaver siger intet.
+Nu bruges moderniseringsrepoets (`hca2modernDanish`) ordlister som træk og som filter (`build_lexicon.py`, `noun_filter.py`):
+eventyrenes ordliste (samtidig stavning; ord mærket «noun»/«lowercase») og ODS-opslagsord (navneord, tillægsord, udsagnsord) bøjet mekanisk.
+*Filteret:* et forslag, hvor alle ord er kendte fællesord, udelades, medmindre et register støtter det, det har titel, eller ordet står på listen over navnelignende fællesnavne
+(`data/entity_like_nouns.txt` + ord, der står alene som markering hos Søren). Det sidste er nødvendigt: 19 % af Sørens markeringer består kun af kendte navneord («Kongen», «Theatret», «Kirken», «Corso»).
+
+| almanakken, krydsvalideret (træningsblokkene bygger listen) | præcision | recall | F1 |
+|---|---:|---:|---:|
+| model uden filter | 0,783 | 0,794 | 0,788 |
+| model + fællesnavnsfilter | 0,829 | 0,787 | 0,808 |
+| dagbogen: uden → med filter | 0,669 → 0,729 | 0,632 → 0,627 | 0,650 → 0,674 |
+
+Forbehold: ét hold annotationer, små tal (95 %-intervallerne overlapper); gevinsten er størst på præcisionen, som er det, gennemsynet mærker.
+I stikprøven E–H forsvinder «Fluen», «Tænderne», «Gratiale», «Lidenskabelig», «Russisk»; 148 → 142 forslag. Ikke løst: «Skrevet 1ste Capitel» (modellen tager et udsagnsord med),
+og typen af uklare fællesnavne («Theatret»: sted eller institution?) — det er en redaktionel afgørelse. `LOW` (0,4) er ikke genkalibreret efter filteret (`model.py tiers`) — se §3.14.
+
+### 3.14 Strammere grænser: færre falske forslag (2026-11-24)
+
+*Ønske fra Holger: færre falske positive, både blandt de markerede (sikre) og de usikre forslag.*
+
+`model.py tiers` måler nu et gitter over begge grænser i blokvis krydsvalidering med fællesnavnsfilteret (almanakken, 136 guldspænd).
+Udvalgte rækker (falske = forslag, der ikke rammer en guldmarkering eksakt):
+
+| sikker fra | usikker fra | sikre (falske) | præcision sikre | recall sikre | usikre (falske) | falske i alt | recall i alt |
+|---|---|---:|---:|---:|---:|---:|---:|
+| modellens egen (0,55–0,65) | 0,4 (før) | 129 (22) | 0,829 | 0,787 | 11 (5) | 27 | 0,831 |
+| 0,70 | 0,6 | 115 (15) | 0,870 | 0,735 | 11 (4) | 19 | 0,787 |
+| **0,75** | **0,6** | **109 (11)** | **0,899** | **0,721** | **17 (8)** | **19** | **0,787** |
+| 0,80 | 0,7 | 101 (10) | 0,901 | 0,669 | 14 (5) | 15 | 0,735 |
+
+Valgt: **HIGH 0,75, LOW 0,6** (`almanak/ner/predict.py`; bruges af gennemsynssiden og `predict.py all`). De falske blandt de markerede halveres (22 → 11),
+og de falske i alt falder fra 27 til 19. Prisen: den samlede recall falder fra 0,83 til 0,79 — 6 rigtige forslag med p 0,4–0,6 forsvinder
+(i stikprøven E–H bl.a. «Commandeur Wulff», p 0,52, som Holger havde godkendt). Dem skal LLM-trinnet samle op (`docs/plan-llm-trin.md`).
+I stikprøven E–H: 142 → 127 forslag (127 → 115 sikre, 15 → 12 usikre); 12 forslag flytter fra markeret til usikker («Skrevet 1ste Capitel», «Theatret», «Odense» …).
+
+**Halvdelen af de falske sikre er forkerte grænser, ikke forkerte navne** (14 af 22 ved den gamle tærskel): spændet er for kort i forhold til Sørens markering —
+«Prindsessen»/«Preusen» for «Prindsessen af Preusen», «Georg» for «Georg 0 Neill» (OCR for O'Neill), «Alibert» for «Theater Alibert», «Chamissos» for «Chamissos Børn».
+Det løses ikke af en tærskel; kandidatgeneratoren laver ikke spænd over «af» og «0 Neill». Det er en opgave for LLM-trinnet, men først skal vi beslutte konventionen
+(skal «Chamissos Børn» og «Lucien Bonapartes Datter» markeres som én omtale?).
+
+**Allerede startede gennemsyn:** siden lægger maskinforslagene ind én gang pr. browser. Nu har forslagene et fingeraftryk (`PREFILL_V`); ved et nyt fingeraftryk
+udskiftes de urørte forslag på dage, der *ikke* er gennemgået. Rettede, slettede og tildelte forslag, alle menneskelige markeringer og gennemgåede dage bevares.
+
+### 3.15 Registerhenvisninger til dage uden almanakpost: årstallet var forvekslet (2026-11-24)
+
+*Spørgsmål fra Holger: er registrets datoer koblet til dagen, ikke kun til siden? Ja — men 1.226 af 9.743 gyldige datoer ramte ingen almanakpost.*
+
+Årsag: OCR forveksler **3/5/9/8 i årstallet**, også når den forkerte form selv er et gyldigt årstal («1833» for 1853 eller 1855, «1836» for 1856,
+«1839» for 1859). Det kan ses direkte: almanakken har ingen årgange for 1835–36, 1839, 1848 m.fl., og 1833 kun feb.–apr., men registret havde 158 henvisninger til
+1836, 193 til 1839 og 425 til 1833. En henvisning til en dag, der ikke findes, er derfor en fejl i *året*, ikke i dagen.
+`register_repair.repair_unmatched_years` (kaldt fra `parse_register.py`) prøver de årstal, hvor kun cifrene 3/5/8/9 er byttet, og vælger det, hvor
+personens/værkets navn står i posten på netop den dato (854 henvisninger). Er navnet flertydigt eller mangler i teksten, bruges årstallet fra de øvrige henvisninger i samme
+årstalsgruppe (120). `fix` på hver henvisning viser, hvad der er gjort (`år-rettet-ved-navnekontrol (1833→1853)` / `år-rettet-via-gruppe …`).
+
+| | før | efter |
+|---|---:|---:|
+| gyldige datoer, der rammer en almanakpost | 8.517 af 9.743 | **9.491 af 9.743** |
+| person-henvisninger på almanakdage (`coverage.json`) | 7.469 | 8.282 |
+| modellens personspænd uden registertræf | 3.301 | 2.752 |
+
+Usikkerhed: en tilfældig anden årgang har navnet på samme dag i 7 % af tilfældene (målt på de bekræftede henvisninger), så ca. 1–2 % af de navnebekræftede rettelser kan
+være forkerte; de 120 via gruppen er svagere (navnet er ikke bekræftet). Begge kan sorteres fra på `fix`. **252 datoer er uløste**: navnet står ikke i en almanakpost
+på dagen i nogen kandidatårgang (176), er flertydigt uden gruppeafgørelse (40), eller kandidaten er ikke en 3/5/8/9-forveksling (36, fx 1863→1866). De kræver et blik i trykket.
+Modellen er trænet igen (registerfladerne ændrer trækkene); grænserne 0,75/0,6 giver samme præcision/recall som før (§3.14).
+
 ## 4. Anbefalet rækkefølge
 
 1. Ret genitiv og de oplagte stavevarianter i `entry_anchor()`; ret formuleringen i
