@@ -26,7 +26,7 @@ Det, der gør den dagbogsspecifik — og som almanakken ikke har:
 | `scripts/migration/migrate_tidstavle_sql.py` → `parse_table()` | Udtræk af tabellen `almanak` (bruges allerede af `almanak/scripts/analysis/extract_db.py`). NB: scriptets egen `DEFAULT_SQL` peger på `../hca_db_export/`, ikke `raw/` — vi angiver stien eksplicit |
 | `scripts/correspondence/name_normalize.py` (`primary_keys`, `edge_case_key`) | Navnefoldning ved matchning af almanakkens personregister mod `entities.csv` |
 | `data/normalized/entities.csv`, `places.csv`, `persons-extra`-id'er | Autoritetsmål for person/værk/sted (læses, ændres ikke) |
-| `scripts/parsers/wikidata_lookup.py` + skill `wikidata-verify` | Nye personer (»+« = ikke i Dagbøger XI) |
+| `scripts/parsers/wikidata_lookup.py` + skill `wikidata-verify` | Nye personer (»÷« = ikke i Dagbøger XI) |
 | pytest-opsætningen i `tests/` + CI | Nye `tests/test_almanak_*.py` |
 | Projektregler: UTF-8 uden BOM, original orden rekonstruerbar, »originaldata suppleres, overskrives ikke«, »tvetydighed eskaleres« (`docs/pipeline/stages.md`) | Gælder uændret — almanakmodellen er bygget på dem |
 

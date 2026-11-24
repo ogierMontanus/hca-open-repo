@@ -22,8 +22,11 @@ Målt layout (PDF-side = trykt side + 12; PDF 340–400):
 
 Et opslag er: overskriftsord, evt. beskrivelse, derefter henvisninger
 »år d.m, d.m. år d.m …« (også »Bagsiden af <måned>«, »Bag i almanakken«,
-»Foran i almanakken«). »+« foran henvisningerne (OCR: »4-«, »-I-«, »-r«)
-betyder, at personen ikke findes i Dagbøgernes personregister (bd. XI).
+»Foran i almanakken«). »÷« (divisionstegn) foran henvisningerne betyder i personregistret, at personen
+ikke findes i Dagbøgernes personregister (bd. XI) eller ikke er identificeret (`not_in_xi`); ved en titel i
+værkregistret, at værket ikke findes i Birger Frank Nielsens bibliografi (`not_in_bfn`). OCR læser tegnet som
+»4-«, »-r«, »+«, »-5-« … eller slet ikke; derfor aflæses det i billedet (`register_glyphs.py`), og tekstlagets
+gæt står kun som kontrol i `divsign_ocr`. Se almanak/docs/registertegn.md.
 
 OCR-forvekslinger i tal håndteres, men ikke gættes: et årstal eller en dato,
 der ikke kan læses entydigt, får `valid=0` og beholdes i `raw`.
@@ -61,7 +64,7 @@ DIG = str.maketrans({"i": "1", "I": "1", "l": "1", "j": "1", "h": "1", "o": "0",
 YEAR_CHARS = "0-9iIljhoOgqzZ&"
 YEAR_TOK = re.compile(rf"^[{YEAR_CHARS}]{{4}}$")
 DM_TOK = re.compile(rf"^([{YEAR_CHARS}]{{1,2}})[.,\-]\s?([{YEAR_CHARS}]{{1,2}})[.,]?$")
-PLUS = re.compile(r"(?<!\w)(?:4-|-I-|-r|-i-|\+)(?=[\s.]|$)")
+PLUS = re.compile(r"(?<![\w-])(?:4-|-I-|-r|-i-|\+|-5-|-4-|-4|4\")(?=[\s.,]|$)")   # OCR-former af »÷«
 
 
 def read_lines(pdf, cache):
@@ -129,7 +132,7 @@ def entries_of(pages, page_range, headings):
                 if x <= base + 3.5 and not ref_line and (t[:1].isalpha() or t[:1] in "»«(\"'"):
                     if cur:
                         ents.append(cur)
-                    cur, prev_heading = {"pdf_page": n, "section": section, "parts": [t]}, False
+                    cur, prev_heading = {"pdf_page": n, "section": section, "parts": [t], "boxes": [(n, l["bbox"])]}, False
                 elif x > base + 13 and headings and not ref_line and re.fullmatch(r"[/ ]*[A-Za-zÆØÅæøå .,\-]{3,45}", t):
                     if cur:
                         ents.append(cur)
@@ -138,12 +141,14 @@ def entries_of(pages, page_range, headings):
                     prev_heading = True
                 elif cur:
                     cur["parts"].append(t)
+                    cur["boxes"].append((n, l["bbox"]))
                     prev_heading = False
                 elif ref_line and headings:  # henvisninger direkte under en overskrift
-                    cur, prev_heading = {"pdf_page": n, "section": section, "parts": [section.replace("/ ", "").strip() + ".", t]}, False
+                    cur, prev_heading = {"pdf_page": n, "section": section, "parts": [section.replace("/ ", "").strip() + ".", t],
+                                         "boxes": [(n, l["bbox"])]}, False
     if cur:
         ents.append(cur)
-    return [(e["pdf_page"], e["section"], join_lines(e["parts"])) for e in ents]
+    return [(e["pdf_page"], e["section"], join_lines(e["parts"]), e["boxes"]) for e in ents]
 
 
 def to_int(tok, hi):
@@ -287,6 +292,7 @@ def split_refs(text):
     tail_toks = all_t[start:] if start is not None else []
     not_in_xi = bool(PLUS.search(head)) or bool(PLUS.search(" ".join(tail_toks)[:6]))
     head = PLUS.sub("", head).strip(" ,;")
+    head = re.sub(r"(?:\s*\.){2,}\s*$", ".", head)          # »sproglærer. .«: tegnet er tabt, punktummet efter det står tilbage
     refs, year, year_raw, year_fix = [], None, "", ""
     for t in tail_toks:
         if t.startswith("§"):
@@ -344,9 +350,18 @@ def main() -> int:
     args.out.mkdir(parents=True, exist_ok=True)
 
     persons, works, refs_out = [], [], []
+    import register_glyphs as rg
+    signs = rg.load()          # optisk aflæste »÷« (register_glyphs.py); None: kun tekstlagets gæt
+    if signs is None:
+        print("Advarsel: register_divsign.csv mangler; ÷ læses af tekstlaget (upålideligt)")
     for kind, rng, two_col, prefix in (("person", PERSON_PAGES, False, "ALMP"), ("work", WORK_PAGES, True, "ALMW")):
-        for i, (pg, section, text) in enumerate(entries_of(pages, rng, two_col), 1):
-            head, not_in_xi, refs = split_refs(text)
+        ents = entries_of(pages, rng, two_col)
+        n_signs, orphans = rg.assign({p: v for p, v in (signs or {}).items() if p in rng}, [e[3] for e in ents])
+        if signs is not None and orphans:
+            print(f"Advarsel: {len(orphans)} ÷ i {kind}registret kunne ikke knyttes til en linje: {orphans[:5]}")
+        for i, (pg, section, text, boxes) in enumerate(ents, 1):
+            head, sign_ocr, refs = split_refs(text)
+            sign = n_signs[i - 1] > 0 if signs is not None else sign_ocr
             see = ""
             m = re.search(r"(?:,|\.)?\s*s[ec](?: i reglen| også)?\s*:\s*(.*)$", head)
             if m:
@@ -354,7 +369,8 @@ def main() -> int:
                 head = head[:m.start()].strip(" ,.")
             m2 = re.search(r"\((?:ca\.\s*)?(\d{4})\s*[-–—]\s*(\d{4})\)", head)
             rid = f"{prefix}{i:04d}"
-            row = dict(reg_id=rid, label=label_of(head), description=head, see=see, not_in_xi=int(not_in_xi),
+            flag = {"not_in_xi" if kind == "person" else "not_in_bfn": int(sign), "divsign_ocr": int(sign_ocr)}
+            row = dict(reg_id=rid, label=label_of(head), description=head, see=see, **flag,
                        birth=m2.group(1) if m2 else "", death=m2.group(2) if m2 else "",
                        n_refs=len(refs), pdf_page=pg, print_page=pg - PAGE_OFFSET, raw=text)
             if kind == "work":

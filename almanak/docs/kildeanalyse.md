@@ -161,7 +161,7 @@ eksisterende *stabile* identifikator udadtil.
 | Side | — | ja |
 | Position i almanakken | — | ja (udgivermarkører) |
 | Udgiverens tekstkritiske tegn | delvis | ja |
-| Personer (identifikation, levetid, usikkerhed »(?)«, »+« = ikke i Dagbøger XI) | — | ja, i Personregistret |
+| Personer (identifikation, levetid, usikkerhed »(?)«, »÷« = ikke i Dagbøger XI eller ikke identificeret; OCR: »4-«, »-r«, »+« …, se `registertegn.md`) | — | ja, i Personregistret |
 | Andersens værker (med henvisning til B.F. Nielsens bibliografi) | — | ja, i Værkregistret |
 | Steder | — | — (intet stedregister) |
 | Senere kommentarer, brevkoblinger | få, umarkerede | — |
