@@ -93,13 +93,13 @@ def role_link(ctx, date, core):
     return hits[0] if len(hits) == 1 else ""
 
 
-def annotate(ctx, m, date, text, low=None, nf=None, high=None):
+def annotate(ctx, m, date, text, low=None, nf=None, high=None, src="almanak"):
     """Forslag i posten. nf: NounFilter, der udelader fællesnavne uden støtte. high=None: modellens egen tærskel.
     low=None: kun sikre (p >= high). low=0.6: også usikre (tier='usikker'), som ikke skal markeres i teksten,
     men tildeles i en tredje runde."""
     import numpy as np
     from candidates import mention_kind
-    spans, X = F.featurize(ctx, date, "almanak", text)
+    spans, X = F.featurize(ctx, date, src, text)       # src: almanak | dagbog (samme model, trænet på begge)
     out = []
     if not len(spans):
         return out

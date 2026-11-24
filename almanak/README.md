@@ -125,7 +125,8 @@ rangeringsmodel i [`ner/`](ner/README.md), der finder navnestrenge i almanakpost
 og til gennemsynssider med maskinforslag: stikprøve 1 (`mockup/almanak-gennemsyn.html`, blok E–H) og stikprøve 2
 (`mockup/almanak-gennemsyn2.html`, blok I–L: 1840, 1844, 1857, 1860), bygget med den nye metode — grænser 0,75/0,6,
 fællesnavnsfilter, rettede registerårstal og ÷-mærkningen på registerkortet
-(`python almanak/ner/build_review_page.py --sample 2 --out mockup/almanak-gennemsyn2.html`). Målinger og
+(`python almanak/ner/build_review_page.py --sample 2 --out mockup/almanak-gennemsyn2.html`). Stikprøve 3 (`mockup/gennemsyn_dagbog3.html`) bruger samme metode på
+**dagbogen**: to sider, bind III s. 178–179 (12.–24.9.1846), `--sample 3`. Målinger og
 forbehold: [`docs/plan-streng-grounding.md`](../docs/plan-streng-grounding.md) §3.10–3.15. Kort rapport om metoden: [`docs/metode-maskinforslag.md`](docs/metode-maskinforslag.md).
 
 ## Afhængigheder til eksisterende kode

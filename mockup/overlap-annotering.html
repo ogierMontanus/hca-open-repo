@@ -420,7 +420,7 @@ function srcLabel(e) {
 }
 function buildDay(date) {
   const root = document.createElement("article"); root.className = "entry"; root.id = "day-" + date;
-  const first = byId["ALM-" + date];
+  const first = byId["ALM-" + date] || byId["DAG-" + date];
   const d = document.createElement("div"); d.className = "date"; d.innerHTML = esc(first.wd) + "<b>" + (+date.slice(8)) + "</b>";
   const body = document.createElement("div"); body.className = "day";
   ["almanak", "dagbog"].forEach(src => {
@@ -450,7 +450,7 @@ function buildDay(date) {
   const lab = document.createElement("label");
   const cb = document.createElement("input"); cb.type = "checkbox"; cb.id = "rev-" + date;
   cb.addEventListener("change", () => {
-    if (cb.checked && state.unc.some(u => u.entry === "ALM-" + date && !u.decision)) { cb.checked = false; say("Tag først stilling til de usikre forslag (runde 3)."); return; }
+    if (cb.checked && state.unc.some(u => u.entry.slice(4) === date && !u.decision)) { cb.checked = false; say("Tag først stilling til de usikre forslag (runde 3)."); return; }
     if (cb.checked) state.reviewed[date] = true; else delete state.reviewed[date]; save(); root.classList.toggle("done", cb.checked); ["ALM-", "DAG-"].forEach(k => { const x = byId[k + date]; if (x && !x.ctx) renderText(x); }); stats(); });
   lab.appendChild(cb); lab.appendChild(document.createTextNode("Dagen gennemgået (almanak og dagbog)"));
   meta.appendChild(lab); body.appendChild(meta);
@@ -519,7 +519,7 @@ function renderChips(e) {
     if (dag.length) html += '<span>Dagbogens register, navnet står her (almanakken har intet stedregister):</span>' +
       GROUPS.map(([k, title]) => grp(title, dag.filter(c => REG[c[0]].k === k))).join("");
   }
-  if (MODE === "review" && e.src === "almanak") {
+  if (MODE === "review") {
     const um = (e.um || []).filter(id => REG[id] && !linked.has(id));
     if (um.length) html += '<div class="pass2"><span><b>Runde 2:</b> Registret nævner disse for dagen, men ingen markering peger på dem. Er de omtalt uden navn («Kongen», «Faderen», «hans Datter»)? Markér omtalen og angiv omtaleform.</span>' +
       um.map(id => chipHtml(e, id, "ref", false)).join("") + "</div>";
