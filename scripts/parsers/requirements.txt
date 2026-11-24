@@ -1,2 +1,2 @@
 openpyxl>=3.1.5
-lingua-language-detector>=2.0
+lingua-language-detector>=2.2.0
