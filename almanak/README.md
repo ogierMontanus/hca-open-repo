@@ -104,10 +104,16 @@ med lighedsmål og side), `date_discrepancies.csv`, `letter_direction.csv`,
   `refs.csv` har to nye kolonner: `src` (tail/label) og `fix` (hvad der er rettet). Resultat: henvisninger, hvor navnet kan ses i
   almanakposten på datoen, 4.974 → 5.529; ulæselige henvisninger 209 → 90; opslag uden henvisning (ikke krydshenvisninger) 177 → 56.
   Kendte svagheder: sammensmeltede tal uden skilletegn, enkelte ulæselige datoer (valid=0, `raw` bevaret), opslag uden dato (krydshenvisninger).
+  **Registertegnet »÷« (2026-11-24):** person: ikke i Dagbøger XI / ikke identificeret (`not_in_xi`); værk: ikke i Birger Frank Nielsens
+  bibliografi (`not_in_bfn`). OCR læser det som «4-», «-r», «+», «-5-» … eller taber det, så det aflæses i billedet
+  (`scripts/register_glyphs.py` → `data/register/register_divsign.csv`): 369 personer (tekstlaget: 341) og 50 værker (tekstlaget: 2).
+  Personerne skelnes i `xi_status`: `i_xi` 1.653, `ikke_i_xi` 263 (levetid eller fornavn, `xi_basis`), `uidentificeret` 106.
+  Se `docs/registertegn.md`, også for planen for samkøringen med Dagbøgernes register og de 719 årstal, OCR har forvekslet inden for gyldige år.
 * `annotation/build_annotation_page.py` bygger annotationssiden (s. 35–36) med registerkandidater pr. dag
   (henvisning til datoen, evt. bekræftet af navnet i teksten) og rulleliste + fritekst i redigeringen af en markering.
 
 ```powershell
+python almanak/scripts/register_glyphs.py --pdf $env:HCA_ALMANAK_PDF     # kun når PDF'en/OCR'en skifter
 python almanak/scripts/parse_register.py --pdf $env:HCA_ALMANAK_PDF
 python almanak/annotation/build_annotation_page.py --pdf $env:HCA_ALMANAK_PDF --pages 35 36
 ```

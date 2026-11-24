@@ -1,4 +1,5 @@
 """OCR-rettelser i almanakregistret (almanak/scripts/parse_register.py, register_repair.py). Syntetiske data."""
+import re
 import sys
 from pathlib import Path
 
@@ -90,3 +91,35 @@ def test_unmatched_year_is_left_when_name_supports_two_years_and_no_group_decide
     r = [_ref("ALMP1", 1833, "1833", 5, 7)]
     out = rr.repair_unmatched_years([dict(reg_id="ALMP1", label="Zinn, Ludvig")], [], r, al)
     assert r[0]["year"] == 1833 and out == (0, 0, 1)
+
+
+def test_divsign_ocr_forms_are_stripped_from_the_heading():
+    for text in ("Moltke, grevinde. 4-, 1845 21.7.", "Hjorhøi, tigger. -5-. 1841 1.11.", "Malz, -r. 1844 2.3.",
+                 "Borring, sproglærer. . 1843 31.7."):
+        h, flag, r = pr.split_refs(text)
+        assert not re.search(r"4-|-5-|-r|\. \.", h), h
+        assert r and r[0]["year"] in (1841, 1843, 1844, 1845)
+    assert pr.split_refs("Moltke, grevinde. 4-, 1845 21.7.")[1] is True
+    assert pr.split_refs("Borring, sproglærer. . 1843 31.7.")[1] is False      # tabt tegn: kun billedet kan se det
+
+
+def test_divsign_is_assigned_by_line_height_not_x():
+    import register_glyphs as rg
+    entries = [[(360, (46.0, 100.0, 180.0, 108.0))],                     # opslag 1, venstre spalte
+               [(360, (60.0, 110.0, 150.0, 118.0)), (360, (46.0, 120.0, 120.0, 128.0))],
+               [(360, (199.6, 100.0, 330.0, 108.0))]]                   # højre spalte
+    signs = {360: [(50.0, 112.0, 55.0, 116.5),                           # foran linjens boks (OCR tabte tegnet) -> opslag 2
+                   (205.0, 101.5, 210.0, 106.0),                         # højre spalte -> opslag 3
+                   (130.0, 130.0, 135.0, 134.5)]}                        # alene på en linje under opslag 2 -> opslag 2
+    counts, orphans = rg.assign(signs, entries)
+    assert counts == [0, 2, 1] and orphans == []
+
+
+def test_xi_status_separates_not_in_xi_from_unidentified():
+    cases = {"Balling, Jonathan, fra Norge, (død 1846)": ("ikke_i_xi", "levetid"),
+             "Palm, A., f. Liedberg (i Lund), enkefrue": ("ikke_i_xi", "fornavn"),
+             "Blome, frøken": ("uidentificeret", ""), "Walte, tysk maler": ("uidentificeret", ""),
+             "Spåth, Mad., København": ("uidentificeret", ""), "Ginnerups": ("uidentificeret", "")}
+    for head, want in cases.items():
+        assert pr.xi_status(True, head, pr.label_of(head)) == want, head
+    assert pr.xi_status(False, "Blome, frøken", "Blome, frøken") == ("i_xi", "")
