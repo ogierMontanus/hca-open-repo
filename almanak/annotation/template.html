@@ -539,7 +539,7 @@ function fillSelect(sel, a, e) {
 function regInfo(a) {
   if (!a.reg) return "Ingen registerpost valgt.";
   const r = REG[a.reg];
-  return a.reg + " · " + r.l + (r.d ? " · " + r.d : "") + (r.x ? " · står ikke i Dagbøgernes personregister" : "") + " · trykt s. " + r.pp;
+  return a.reg + " · " + r.l + (r.d ? " · " + r.d : "") + (r.x === 2 ? " · ÷ ikke identificeret" : r.x ? " · ÷ står ikke i Dagbøgernes personregister" : "") + " · trykt s. " + r.pp;
 }
 function openEditor(entryId, annId) {
   closeEditor();
@@ -608,7 +608,7 @@ function renderRegs() {
       '<div class="card-body"><p class="small">Poster i almanakkens register med en henvisning til en dag på siden (fast skrift) eller hvor navnet står i teksten (kursiv). Brug listen til at kontrollere, om hver registerpost er fundet i teksten.</p>' +
       '<div class="tablewrap"><table class="status regt"><thead><tr><th></th><th>Opslag</th><th>ID</th><th>Datoer</th><th>Koblet</th></tr></thead><tbody>' +
       ids.map(id => { const r = REG[id];
-        return '<tr><td><span class="k" data-k="' + r.k + '">' + (r.k === "P" ? "P" : "V") + '</span></td><td>' + esc(r.l) + (r.d ? '<br><span class="small">' + esc(r.d) + "</span>" : "") + (r.x ? ' <span class="small">(ikke i Dagbøgerne)</span>' : "") +
+        return '<tr><td><span class="k" data-k="' + r.k + '">' + (r.k === "P" ? "P" : "V") + '</span></td><td>' + esc(r.l) + (r.d ? '<br><span class="small">' + esc(r.d) + "</span>" : "") + (r.x === 2 ? ' <span class="small">(÷ ikke identificeret)</span>' : r.x ? ' <span class="small">(÷ ikke i Dagbøgerne)</span>' : "") +
           "</td><td>" + id + "</td><td>" + dates[id].map(([d, b]) => '<span' + (b === "navn" ? ' class="weak"' : "") + ">" + dm(d) + "</span>").join(", ") + "</td><td>" + (linked[id] || "") + "</td></tr>"; }).join("") +
       "</tbody></table></div></div>";
   });

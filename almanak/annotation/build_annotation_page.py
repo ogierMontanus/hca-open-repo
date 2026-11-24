@@ -79,7 +79,7 @@ def load_register():
     persons, works, refs = rd("almanak_register_persons.csv"), rd("almanak_register_works.csv"), rd("almanak_register_refs.csv")
     reg = {}
     for p in persons:
-        reg[p["reg_id"]] = dict(k="P", l=p["label"], d=short(p["description"][len(p["label"]):].strip(" ,."), 110), x=int(p["not_in_xi"]),
+        reg[p["reg_id"]] = dict(k="P", l=p["label"], d=short(p["description"][len(p["label"]):].strip(" ,."), 110), x={"ikke_i_xi": 1, "uidentificeret": 2}.get(p.get("xi_status"), int(p["not_in_xi"])),
                                 see=p["see"], pp=p["print_page"])
     for w in works:
         reg[w["reg_id"]] = dict(k="W", l=w["label"], d=short(w["section"], 60), x=0, see=w["see"], pp=w["print_page"])

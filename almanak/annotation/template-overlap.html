@@ -668,7 +668,7 @@ function fillSelect(sel, a, e) {
 function regInfo(a) {
   if (!a.reg) return "Ingen registerpost valgt. (Valgfrit.)";
   const r = REG[a.reg];
-  return a.reg + " · " + r.l + (r.d ? " · " + r.d : "") + (r.x ? " · står ikke i Dagbøgernes personregister" : "") + (srcOfId(a.reg) === "almanak" ? " · trykt s. " : " · dagbog ") + r.pp;
+  return a.reg + " · " + r.l + (r.d ? " · " + r.d : "") + (r.x === 2 ? " · ÷ ikke identificeret" : r.x ? " · ÷ står ikke i Dagbøgernes personregister" : "") + (srcOfId(a.reg) === "almanak" ? " · trykt s. " : " · dagbog ") + r.pp;
 }
 function openEditor(entryId, annId) {
   closeEditor();

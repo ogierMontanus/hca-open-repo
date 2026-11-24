@@ -122,8 +122,11 @@ python almanak/annotation/build_annotation_page.py --pdf $env:HCA_ALMANAK_PDF --
 
 Håndannoteringen (overlap-stikprøven, `annotation/Opmærkning til Holger.json`) bruges til en lille, lokal
 rangeringsmodel i [`ner/`](ner/README.md), der finder navnestrenge i almanakposterne og foreslår registerposter,
-og til en gennemsynsside med maskinforslag til en ny stikprøve (`mockup/almanak-gennemsyn.html`). Målinger og
-forbehold: [`docs/plan-streng-grounding.md`](../docs/plan-streng-grounding.md) §3.10–3.11.
+og til gennemsynssider med maskinforslag: stikprøve 1 (`mockup/almanak-gennemsyn.html`, blok E–H) og stikprøve 2
+(`mockup/almanak-gennemsyn2.html`, blok I–L: 1840, 1844, 1857, 1860), bygget med den nye metode — grænser 0,75/0,6,
+fællesnavnsfilter, rettede registerårstal og ÷-mærkningen på registerkortet
+(`python almanak/ner/build_review_page.py --sample 2 --out mockup/almanak-gennemsyn2.html`). Målinger og
+forbehold: [`docs/plan-streng-grounding.md`](../docs/plan-streng-grounding.md) §3.10–3.15.
 
 ## Afhængigheder til eksisterende kode
 
